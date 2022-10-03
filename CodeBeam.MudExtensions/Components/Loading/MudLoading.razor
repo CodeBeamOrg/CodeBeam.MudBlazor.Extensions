@@ -1,0 +1,43 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+
+@if (Loading == true)
+{
+    if (LoaderType == LoaderType.Circular)
+    {
+        if (LoaderContent != null)
+        {
+            @LoaderContent
+        }
+        else
+        {
+            <MudOverlay Visible="_loading" Absolute="true" DarkBackground="@Darken">
+                <div class="d-flex align-center justify-center">
+                    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+                </div>
+            </MudOverlay>
+        }
+    }
+    else if (LoaderType == LoaderType.Linear)
+    {
+        if (LoaderContent != null)
+        {
+            @LoaderContent
+        }
+        else
+        {
+            <MudProgressLinear Class="mb-2" Color="Color.Primary" Indeterminate="true" />
+            <MudOverlay Visible="_loading" Absolute="true" DarkBackground="@Darken">
+                <div class="d-flex align-center justify-center">
+                
+                </div>
+            </MudOverlay>
+        }
+    }
+}
+
+@if (!Loading || Overlap)
+{
+    @ChildContent
+}

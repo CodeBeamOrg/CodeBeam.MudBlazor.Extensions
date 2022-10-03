@@ -11,6 +11,9 @@
     <Description>MudBlazor extensions from contributors.</Description>
     <Copyright>CodeBeam OpenSource MIT</Copyright>
     <PackageIcon>CodeBeam Purple.jpg</PackageIcon>
+    <PackageProjectUrl>https://github.com/CodeBeamOrg/CodeBeam.MudExtensions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CodeBeamOrg/CodeBeam.MudExtensions</RepositoryUrl>
+    <PackageTags>Blazor; MudBlazor; Component; Extension;</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,12 +1,21 @@
 ﻿@page "/"
 
-<MudScrollbar Width="8" Color="info" />
+<MudScrollbar Width="2" HoverWidth="8" Color="primary" />
 
 <MudContainer Class="pa-4" Style="min-height: 100vh; background: var(--mud-palette-background-grey);" MaxWidth="MaxWidth.False">
+    <div class="d-flex">
+        <MudText Class="my-6 d-flex" Style="font-weight: 900" Typo="Typo.h5">The <MudText Style="font-weight: 900" Color="Color.Secondary" Typo="Typo.h5">Secondary</MudText>NeedsFor<MudText Style="font-weight: 900" Color="Color.Primary" Typo="Typo.h5">Mud</MudText></MudText>
+    </div>
+    
     <MudGrid>
         <MudItem xs="12" sm="6" lg="4">
+            <ComponentCard Title="MudLoading"
+                           Description="Loading indicator for a whole page or a specific component." />
+        </MudItem>
+
+        <MudItem xs="12" sm="6" lg="4">
             <ComponentCard Title="MudPage & MudSection" ComponentName="MudPage"
-                Description="A CSS grid layout component that builds columns and rows, supports ColSpan & RowSpan" />
+                           Description="A CSS grid layout component that builds columns and rows, supports ColSpan & RowSpan" />
         </MudItem>
 
         <MudItem xs="12" sm="6" lg="4">
