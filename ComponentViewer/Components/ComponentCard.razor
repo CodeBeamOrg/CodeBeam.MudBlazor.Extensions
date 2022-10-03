@@ -1,0 +1,31 @@
+﻿
+<MudCard Class="component-card pa-2" Elevation="4" @onclick="NavigateComponentPage">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <div class="d-flex align-center" style="min-height: 120px">
+            <MudText>@Description</MudText>
+        </div>
+        
+    </MudCardContent>
+    <MudCardActions>
+        <MudSpacer />
+        <MudButton Variant="Variant.Outlined" Color="Color.Inherit" OnClick="NavigateComponentPage">Go To Component</MudButton>
+    </MudCardActions>
+</MudCard>
+
+<style>
+    .component-card{
+        background-color: transparent;
+        color: var(--mud-palette-secondary);
+        transition: background-color .6s;
+        transition: color 1s;
+        cursor: pointer;
+    }
+
+    .component-card:hover {
+        color: white;
+        background: linear-gradient(to right, var(--mud-palette-primary) , var(--mud-palette-secondary));
+    }
+</style>

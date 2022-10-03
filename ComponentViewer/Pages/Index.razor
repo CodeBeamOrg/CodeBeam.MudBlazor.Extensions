@@ -1,0 +1,22 @@
+﻿@page "/"
+
+<MudScrollbar Width="8" Color="info" />
+
+<MudContainer Class="pa-4" Style="min-height: 100vh; background: var(--mud-palette-background-grey);" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        <MudItem xs="12" sm="6" lg="4">
+            <ComponentCard Title="MudPage & MudSection" ComponentName="MudPage"
+                Description="A CSS grid layout component that builds columns and rows, supports ColSpan & RowSpan" />
+        </MudItem>
+
+        <MudItem xs="12" sm="6" lg="4">
+            <ComponentCard Title="MudPasswordField"
+                Description="A specialized textfield that designed for working easily with passwords." />
+        </MudItem>
+
+        <MudItem xs="12" sm="6" lg="4">
+            <ComponentCard Title="MudScrollbar"
+                           Description="Handle all or selected scrollbar styles with a Mud component." />
+        </MudItem>
+    </MudGrid>
+</MudContainer>
