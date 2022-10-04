@@ -8,7 +8,7 @@
     <Title>CodeBeam.MudBlazor.Extensions</Title>
     <Authors>CodeBeam</Authors>
     <Company>CodeBeam</Company>
-    <Description>MudBlazor extensions from contributors.</Description>
+    <Description>MudBlazor extension components from contributors.</Description>
     <Copyright>CodeBeam OpenSource MIT</Copyright>
     <PackageIcon>CodeBeam Purple.jpg</PackageIcon>
     <PackageProjectUrl>https://github.com/CodeBeamOrg/CodeBeam.MudExtensions</PackageProjectUrl>
