@@ -11,10 +11,19 @@
 ## Components
 
 - MudLoading
+- MudLoadingButton
 - MudPage
 - MudPasswordField
 - MudScrollbar
 - MudSection
+
+## Installation
+This extension uses MudBlazor features, so only need to add this line described below:<br /><br />
+Add the following to your HTML head section, it's either `index.html` or `_Layout.cshtml`/`_Host.cshtml` depending on whether you're running Server-Side or WASM.
+```
+<link href="_content/CodeBeam.MudExtensions/MudExtensions.min.css" rel="stylesheet" />
+```
+
 
 ## Playground
 https://mudextensions.azurewebsites.net/
