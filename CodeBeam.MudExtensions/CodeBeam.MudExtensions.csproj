@@ -4,14 +4,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>6.0.0</Version>
+    <Version>6.0.1</Version>
     <Title>CodeBeam.MudBlazor.Extensions</Title>
     <Authors>CodeBeam</Authors>
     <Company>CodeBeam</Company>
     <Description>MudBlazor extension components from contributors.</Description>
     <Copyright>CodeBeam OpenSource MIT</Copyright>
     <PackageIcon>CodeBeam Purple.jpg</PackageIcon>
-    <PackageProjectUrl>https://github.com/CodeBeamOrg/CodeBeam.MudExtensions</PackageProjectUrl>
+    <PackageProjectUrl>https://mudextensions.azurewebsites.net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/CodeBeamOrg/CodeBeam.MudExtensions</RepositoryUrl>
     <PackageTags>Blazor; MudBlazor; Component; Extension;</PackageTags>
   </PropertyGroup>
