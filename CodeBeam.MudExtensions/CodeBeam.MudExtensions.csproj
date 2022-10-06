@@ -25,11 +25,28 @@
     <PackageReference Include="MudBlazor" Version="6.0.16" />
   </ItemGroup>
 
+	<Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
+		<Exec Command="dotnet tool restore" StandardOutputImportance="high" />
+	</Target>
+
+	<Target Name="PreBuild" AfterTargets="ToolRestore">
+		<Exec Command="dotnet tool run webcompiler -r Styles/MudExtensions.scss -c excubowebcompiler.json" StandardOutputImportance="high" />
+	</Target>
+
   <ItemGroup>
     <None Include="..\..\..\..\Desktop\Yazılım - Tasarım\CodeBeam\CodeBeam Purple.jpg">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="compilerconfig.json" />
+		<Content Remove="excubowebcompiler.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\" />
+	</ItemGroup>
 
 </Project>
