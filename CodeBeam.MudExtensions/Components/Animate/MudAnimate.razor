@@ -1,0 +1,202 @@
+﻿@namespace MudExtensions
+@using System.Text
+@using MudExtensions.Enums
+@using MudExtensions.Utilities
+@inherits MudComponentBase
+
+@code{
+    Guid _guid = new Guid();
+
+    /// <summary>
+    /// Supports id and class selection. Use "#idName" for id selectors (ex. <Component id="idName" />) or ".idName" for class selectors (ex. <Component Class="idName" />). Leave it null or empty to effect all scrollbars.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Behavior)]
+    public string Selector { get; set; }
+
+    /// <summary>
+    /// The predefined animation type that runs.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public AnimationType AnimationType { get; set; }
+
+    /// <summary>
+    /// The primary value depends on animation type.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public double Value { get; set; }
+
+    /// <summary>
+    /// The secondary value that sets the start value of animation.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public double? ValueSecondary { get; set; }
+
+    /// <summary>
+    /// Sets how long the animation will last.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public double Duration { get; set; } = 1;
+
+    /// <summary>
+    /// The time before animation starts.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public double Delay { get; set; } = 0;
+
+    /// <summary>
+    /// If true, amination runs when hover.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public bool Hover { get; set; }
+
+    /// <summary>
+    /// If true, amination runs contuniously.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public bool Infinite { get; set; }
+
+    /// <summary>
+    /// If true, animation pauses. Set if false again to continue where it pauses.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public bool Paused { get; set; }
+
+    /// <summary>
+    /// How many times the animation repeats in one run. If the value is 0, the animation doesn't run.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public int IterationCount { get; set; } = 1;
+
+    /// <summary>
+    /// The speed curve of the animation.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public AnimationTiming AnimationTiming { get; set; } = AnimationTiming.EaseInOut;
+
+    /// <summary>
+    /// The running line of the animation.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public AnimationDirection AnimationDirection { get; set; } = AnimationDirection.Normal;
+
+    /// <summary>
+    /// Determines the styles which the element has. Forwards for last keyframe, backwards for first keyframe.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public AnimationFillMode AnimationFillMode { get; set; } = AnimationFillMode.None;
+
+    /// <summary>
+    /// Animation keyframe with plain string. For advanced users.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public string KeyframeAdvanced { get; set; }
+
+
+    bool _show = true;
+    public async Task Refresh()
+    {
+        _show = false;
+        await Task.Delay(1);
+        await InvokeAsync(StateHasChanged);
+        _show = true;
+        await Task.Delay(1);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected string GetKeyframeCode()
+    {
+        if (!string.IsNullOrEmpty(KeyframeAdvanced))
+        {
+            return KeyframeAdvanced;
+        }
+
+        List<string> valueList = new List<string>() { ValueSecondary?.ToInvariantString() ?? "0", Value.ToInvariantString() };
+        List<Tuple<string, string>> valueListTuple = new List<Tuple<string, string>>() { new Tuple<string, string>(ValueSecondary?.ToInvariantString() ?? "0", "0"), new Tuple<string, string>(Value.ToInvariantString(), "0.65") };
+
+        if (AnimationType == AnimationType.Rotate)
+        {
+            return KeyframeBuilder.Build(2, valueList, KeyframePreset.Rotate);
+        }
+        else if (AnimationType == AnimationType.Fade)
+        {
+            return KeyframeBuilder.Build(2, valueList, KeyframePreset.Fade);
+        }
+        else if (AnimationType == AnimationType.Flip)
+        {
+            return KeyframeBuilder.Build(2, valueList, KeyframePreset.Flip);
+        }
+        else if (AnimationType == AnimationType.Scale)
+        {
+            return KeyframeBuilder.Build(2, valueList, KeyframePreset.Scale);
+        }
+        else if (AnimationType == AnimationType.SlideX)
+        {
+            return KeyframeBuilder.Build(2, valueList, KeyframePreset.SlideX);
+        }
+        else if (AnimationType == AnimationType.SlideY)
+        {
+            return KeyframeBuilder.Build(2, valueList, KeyframePreset.SlideY);
+        }
+        else if (AnimationType == AnimationType.RotateDiagonal)
+        {
+            return KeyframeBuilder.Build(2, valueList, KeyframePreset.RotateDiagonal);
+        }
+        else if (AnimationType == AnimationType.Blur)
+        {
+            return KeyframeBuilder.Build(2, valueList, KeyframePreset.Blur);
+        }
+        else if (AnimationType == AnimationType.Shadow)
+        {
+            return KeyframeBuilder.Build(2, valueListTuple, KeyframePreset.Shadow);
+        }
+        else if (AnimationType == AnimationType.ShadowInset)
+        {
+            return KeyframeBuilder.Build(2, valueListTuple, KeyframePreset.ShadowInset);
+        }
+        else if (AnimationType == AnimationType.TextShadow)
+        {
+            return KeyframeBuilder.Build(2, valueListTuple, KeyframePreset.TextShadow);
+        }
+        else if (AnimationType == AnimationType.TextSpacing)
+        {
+            return KeyframeBuilder.Build(2, valueList, KeyframePreset.TextSpacing);
+        }
+
+        return $"0% {{ -webkit-transform: rotate({ValueSecondary ?? 0}); transform: rotate({ValueSecondary ?? 0});}} 100% {{ -webkit-transform: rotate({Value}deg); transform: rotate({Value}deg);}}";
+    }
+
+    public string AnimationName => $"mud-ani{Selector?.Remove(0, 1)}-{_guid.ToString()}";
+
+    public string KeyframeCode => GetKeyframeCode();
+}
+
+<style>
+    @(Selector)@(Hover ? ":hover" : null) {
+        @if (_show == true)
+        {
+            @($"animation: {AnimationName} {Duration.ToInvariantString()}s {AnimationTiming.ToDescriptionString()} {(Delay != 0 ? Delay.ToInvariantString() + "s" : null)} {(Infinite ? "infinite" : IterationCount.ToString())} {AnimationDirection.ToDescriptionString()} {(Paused ? "paused" : null)}  {AnimationFillMode.ToDescriptionString()};");
+        }
+        else
+        {
+            @("animation: none;");
+        }
+    }
+    
+    @@keyframes @(AnimationName) {
+        @GetKeyframeCode()
+    }
+</style>

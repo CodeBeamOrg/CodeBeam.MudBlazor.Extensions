@@ -10,7 +10,7 @@
     <Company>CodeBeam</Company>
     <Description>MudBlazor extension components from contributors.</Description>
     <Copyright>CodeBeam OpenSource MIT</Copyright>
-    <PackageIcon>CodeBeam Purple.jpg</PackageIcon>
+    <PackageIcon>Mud_Secondary.png</PackageIcon>
     <PackageProjectUrl>https://mudextensions.azurewebsites.net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/CodeBeamOrg/CodeBeam.MudExtensions</RepositoryUrl>
     <PackageTags>Blazor; MudBlazor; Component; Extension;</PackageTags>
@@ -33,20 +33,16 @@
 		<Exec Command="dotnet tool run webcompiler -r Styles/MudExtensions.scss -c excubowebcompiler.json" StandardOutputImportance="high" />
 	</Target>
 
-  <ItemGroup>
-    <None Include="..\..\..\..\Desktop\Yazılım - Tasarım\CodeBeam\CodeBeam Purple.jpg">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-
 	<ItemGroup>
 		<Content Remove="compilerconfig.json" />
 		<Content Remove="excubowebcompiler.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="wwwroot\" />
+	  <None Include="wwwroot\Mud_Secondary.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>
