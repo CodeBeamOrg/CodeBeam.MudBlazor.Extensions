@@ -10,6 +10,7 @@
 
 ## Components
 
+- MudAnimate
 - MudLoading
 - MudLoadingButton
 - MudPage
@@ -24,9 +25,22 @@ Add the following to your HTML head section, it's either `index.html` or `_Layou
 <link href="_content/CodeBeam.MudExtensions/MudExtensions.min.css" rel="stylesheet" />
 ```
 
+Adding namespace to `_Imports.razor` is not obligatory, but may be useful.
+```
+@using MudExtensions
+```
+
 
 ## Playground
 https://mudextensions.azurewebsites.net/
 
+## Examples
+Each example is recorded in the playground website.
+
+### MudAnimate
+
+https://user-images.githubusercontent.com/78308169/194701300-e4ad517a-8fbb-4a5e-9407-a5a585157685.mp4
+
+
 ## Preparing
-API lists for each extension component are preparing.
+API lists and usage files for each extension component are preparing.
