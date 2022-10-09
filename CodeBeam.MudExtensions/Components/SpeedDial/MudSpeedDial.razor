@@ -1,0 +1,13 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+<div class="absolute" style="@Stylename" @onmouseenter="RootMouseEnter" @onmouseleave="WaitToClose">
+    <MudFab Color="@Color" OnClick="MainButtonClick" Icon="@GetIcon()" Size="@Size" />
+    <MudPopover class="d-flex align-center justify-center" @onmouseenter="PopoverMouseEnter" @onmouseleave="PopoverMouseLeave" Open="@Open" Paper="false" AnchorOrigin="_anchorOrigin" TransformOrigin="_transformOrigin" RelativeWidth="true">
+        <MudStack Class="@StackClassname" Row="_row">
+            @ChildContent
+        </MudStack>
+    </MudPopover>
+    
+    <MudAnimate Selector="@($".speedDial-{_animationGuid}")" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.7" />
+</div>

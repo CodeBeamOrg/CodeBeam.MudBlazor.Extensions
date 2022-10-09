@@ -1,0 +1,108 @@
+﻿@page "/api"
+@using MudBlazor.Extensions
+
+<ExamplePage Title="API">
+    <ExampleCard Title="Api - MudAnimate">
+        <MudTable Items="@(typeof(MudAnimate).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
+    <ExampleCard Title="Api - MudLoading">
+        <MudTable Items="@(typeof(MudLoading).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
+    <ExampleCard Title="Api - MudLoadingButton">
+        <MudTable Items="@(typeof(MudLoadingButton).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
+    <ExampleCard Title="Api - MudPage">
+        <MudTable Items="@(typeof(MudPage).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
+    <ExampleCard Title="Api - MudSection">
+        <MudTable Items="@(typeof(MudSection).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
+    <ExampleCard Title="Api - MudPasswordField">
+        <MudTable Items="@(typeof(MudPasswordField<string>).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
+    <ExampleCard Title="Api - MudScrollbar">
+        <MudTable Items="@(typeof(MudScrollbar).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
+    <ExampleCard Title="Api - MudSpeedDial">
+        <MudTable Items="@(typeof(MudSpeedDial).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+</ExamplePage>
