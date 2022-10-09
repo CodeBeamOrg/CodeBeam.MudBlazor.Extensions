@@ -14,4 +14,10 @@
     <ProjectReference Include="..\CodeBeam.MudExtensions\CodeBeam.MudExtensions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\Components\StepperPage.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>

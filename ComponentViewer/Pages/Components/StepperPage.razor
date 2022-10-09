@@ -1,0 +1,29 @@
+﻿@page "/mudstepper"
+@using MudBlazor.Extensions
+
+<ExamplePage Title="MudStepper">
+    <ExampleCard Title="Usage" Description="">
+        <MudGrid>
+            <MudItem xs="12" sm="8" >
+                <MudStepper Vertical="_vertical">
+                    <MudStep Title="First Step">The first item's content.</MudStep>
+                    <MudStep Title="Second Step">The second item's content.</MudStep>
+                </MudStepper>
+            </MudItem>
+
+            <MudItem xs="12" sm="4">
+                <MudStack Spacing="4">
+                    <MudSwitch @bind-Checked="_vertical" Color="Color.Primary" Label="Vertical" />
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </ExampleCard>
+</ExamplePage>
+
+
+
+@code{
+    bool _vertical;
+
+
+}
