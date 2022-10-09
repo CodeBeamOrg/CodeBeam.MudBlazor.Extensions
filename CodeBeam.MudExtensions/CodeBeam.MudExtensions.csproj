@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>6.0.2</Version>
+    <Version>6.0.3</Version>
     <Title>CodeBeam.MudBlazor.Extensions</Title>
     <Authors>CodeBeam</Authors>
     <Company>CodeBeam</Company>
