@@ -1,0 +1,38 @@
+﻿@page "/mudstepper"
+@using CodeBeam.MudExtensions.Utilities
+@using MudBlazor.Extensions
+
+<ExamplePage Title="MudStepper">
+    <ExampleCard Title="Usage" Description="">
+        <MudGrid Class="cursor-default">
+            <MudItem xs="12" sm="8">
+                <MudStepper Linear="_linear" Vertical="_vertical" Color="Color.Primary" Variant="_variant" DisableHeaderText="_disableHeaderText">
+                    <MudStep Title="First Step">The first item's content.</MudStep>
+                    <MudStep Title="Second Step" Optional="true">The second item's content.</MudStep>
+                    <MudStep Title="Third Step">The third item's content.</MudStep>
+                </MudStepper>
+            </MudItem>
+
+            <MudItem xs="12" sm="4">
+                <MudStack Spacing="4">
+                    <MudCheckBox @bind-Checked="_linear" Color="Color.Primary" Label="Linear" />
+                    <MudCheckBox @bind-Checked="_disableHeaderText" Color="Color.Primary" Label="Disable Header Text" />
+                    <MudSwitch @bind-Checked="_vertical" Color="Color.Primary" Label="Vertical" />
+                    <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant">
+                        @foreach (Variant item in Enum.GetValues<Variant>())
+                        {
+                            <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </ExampleCard>
+</ExamplePage>
+
+@code {
+    bool _vertical;
+    bool _linear;
+    Variant _variant = Variant.Filled;
+    bool _disableHeaderText = false;
+}

@@ -1,0 +1,12 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+<div class="@(MudStepper.Steps[MudStepper.ActiveIndex] == this ? "" : "hidden")">
+    @ChildContent
+</div>

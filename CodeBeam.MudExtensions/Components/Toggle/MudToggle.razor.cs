@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Utilities;
 using System;
@@ -16,6 +17,7 @@ namespace MudExtensions
         protected string Classname => new CssBuilder()
             .AddClass(Class, Toggled == false)
             .AddClass(ClassToggled, Toggled == true)
+            .AddClass(ClassCommon)
             .Build();
 
         protected string GetStyle()
@@ -52,6 +54,9 @@ namespace MudExtensions
         public EventCallback<bool> ToggledChanged { get; set; }
 
         [Parameter]
+        public string ClassCommon { get; set; }
+
+        [Parameter]
         public string ClassToggled { get; set; }
 
         [Parameter]
@@ -62,6 +67,14 @@ namespace MudExtensions
 
         [Parameter]
         public RenderFragment ToggleContent { get; set; }
+
+        [Parameter]
+        public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+        protected async Task HandleOnClick()
+        {
+            await OnClick.InvokeAsync();
+        }
 
     }
 }

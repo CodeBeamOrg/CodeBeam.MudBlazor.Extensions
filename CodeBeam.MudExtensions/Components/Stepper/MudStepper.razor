@@ -1,0 +1,67 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+<CascadingValue Value="this" IsFixed="true">
+    <MudStack Row="Vertical">
+        <MudStack Row="!Vertical" AlignItems="AlignItems.Center">
+            @foreach (MudStep step in _steps)
+            {
+                bool active = IsStepActive(step);
+                <MudToggle Toggled="@active" OnClick="@(Linear ? null : () => SetActiveIndex(step))" ClassCommon="d-flex align-center gap-4" Style="@(Linear ? null : "cursor: pointer;")">
+                    <MudAvatar Color="@(active ? Color : Color.Default)" Variant="@Variant" Size="Size.Small">
+                        @if (Steps.IndexOf(step) < ActiveIndex)
+                        {
+                            <MudIcon Icon="@Icons.Filled.Done" Size="Size.Small" Color="@Color" />
+                        }
+                        else
+                        {
+                            @(Steps.IndexOf(step) + 1)
+                        }
+                    </MudAvatar>
+                @if (DisableHeaderText == false || active)
+                    {
+                        <div>
+                            <MudText Color="@(active ? Color : Color.Default)" Style="@(active ? "font-weight: 900" : null)">@step.Title</MudText>
+                            @if (step.Optional == true)
+                            {
+                                <MudText Typo="Typo.subtitle2" Color="@(active ? Color : Color.Default)" Style="@(active ? "font-weight: 500" : null)">@LocalizedStrings.Optional</MudText>
+                            }
+                        </div>
+                    }
+                </MudToggle>
+
+                if (_steps.Count - 1 != _steps.IndexOf(step))
+                {
+                    <span class="mud-header-step-dash flex-grow-1 mx-auto" style="@($"border-color: black")"></span>
+                }
+
+            }
+        </MudStack>
+        <MudStack Justify="Justify.SpaceBetween" Style="min-height: 500px;">
+            <div class="mud-stepper-ani">
+                @ChildContent
+                <MudText>Content</MudText>
+            </div>
+            
+            <div class="d-flex gap-4">
+                <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(-1))">@LocalizedStrings.Previous</MudButton>
+                <MudSpacer />
+                @if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Optional == true)
+                {
+                    <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(1))">@LocalizedStrings.Skip</MudButton>
+                }
+                <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(1))">@GetNextButtonString()</MudButton>
+            </div>
+        </MudStack>
+    </MudStack>
+</CascadingValue>
+
+<MudAnimate @ref="_animate" Selector=".mud-stepper-ani" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.7" />
+
+<style>
+    .mud-header-step-dash {
+        min-width: 50px;
+        border-bottom: 1px solid;
+        height: 50%;
+    }
+</style>
