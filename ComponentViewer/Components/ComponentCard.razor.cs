@@ -17,7 +17,7 @@ namespace ComponentViewer.Components
 
         private void NavigateComponentPage()
         {
-            NavigationManager.NavigateTo($"/{(string.IsNullOrEmpty(ComponentName) ? Title.ToLower() : ComponentName.ToLower())}");
+            NavigationManager.NavigateTo($"/{(string.IsNullOrEmpty(ComponentName) ? Title.ToLowerInvariant() : ComponentName.ToLowerInvariant())}");
         }
     }
 }
