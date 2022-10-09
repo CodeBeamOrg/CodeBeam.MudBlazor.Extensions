@@ -17,6 +17,7 @@
 - MudPasswordField
 - MudScrollbar
 - MudSection
+- MudSpeedDial
 
 ## Installation
 This extension uses MudBlazor features, so only need to add this line described below:<br /><br />
@@ -30,9 +31,11 @@ Adding namespace to `_Imports.razor` is not obligatory, but may be useful.
 @using MudExtensions
 ```
 
-
 ## Playground
 https://mudextensions.azurewebsites.net/
+
+## API
+https://mudextensions.azurewebsites.net/api
 
 ## Examples
 Each example is recorded in the playground website.
@@ -41,6 +44,12 @@ Each example is recorded in the playground website.
 
 https://user-images.githubusercontent.com/78308169/194701300-e4ad517a-8fbb-4a5e-9407-a5a585157685.mp4
 
+### MudSpeedDial
+
+https://user-images.githubusercontent.com/78308169/194750397-e0dfd08c-c297-426f-bcd6-55ce2e7c4a25.mp4
+
+## Contribution
+Feel free to contribute.
 
 ## Preparing
-API lists and usage files for each extension component are preparing.
+Usage files and trick definitons for each extension component are preparing.
