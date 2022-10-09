@@ -26,8 +26,10 @@
                     <MudSelect @bind-Value="_origin" Variant="Variant.Outlined" Label="Origin">
                         <MudSelectItem Value="Origin.TopLeft">Top - Left</MudSelectItem>
                         <MudSelectItem Value="Origin.TopRight">Top - Right</MudSelectItem>
+                        <MudSelectItem Value="Origin.TopCenter">Top - Center</MudSelectItem>
                         <MudSelectItem Value="Origin.BottomLeft">Bottom - Left</MudSelectItem>
                         <MudSelectItem Value="Origin.BottomRight">Bottom - Right</MudSelectItem>
+                        <MudSelectItem Value="Origin.BottomCenter">Bottom - Center</MudSelectItem>
                     </MudSelect>
                     <MudNumericField @bind-Value="_padding" Variant="Variant.Outlined" Label="Padding" />
                     <MudCheckBox @bind-Checked="_openOnHover" Color="Color.Primary" Label="Open On Hover" />

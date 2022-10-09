@@ -25,6 +25,7 @@ namespace MudExtensions
             .AddStyle("right", $"{Padding}px", !(Origin == Origin.BottomLeft || Origin == Origin.CenterLeft || Origin == Origin.TopLeft))
             .AddStyle("left", $"{Padding}px", Origin == Origin.BottomLeft || Origin == Origin.CenterLeft || Origin == Origin.TopLeft)
             .AddStyle("left", "50%", Origin == Origin.BottomCenter || Origin == Origin.TopCenter || Origin == Origin.CenterCenter)
+            .AddStyle("width", "fit-content")
             .AddStyle(Style)
             .Build();
 
