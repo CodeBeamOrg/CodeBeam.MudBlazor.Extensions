@@ -1,0 +1,13 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+<div class="@Classname" style="@GetStyle()">
+    @if (Toggled && ToggleContent != null)
+    {
+        @ToggleContent
+    }
+    else
+    {
+        @ChildContent
+    }
+</div>
