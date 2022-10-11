@@ -6,10 +6,19 @@
     <ExampleCard Title="Usage" Description="">
         <MudGrid Class="cursor-default">
             <MudItem xs="12" sm="8">
-                <MudStepper Linear="_linear" Vertical="_vertical" Color="Color.Primary" Variant="_variant" DisableHeaderText="_disableHeaderText">
-                    <MudStep Title="First Step">The first item's content.</MudStep>
-                    <MudStep Title="Second Step" Optional="true">The second item's content.</MudStep>
-                    <MudStep Title="Third Step">The third item's content.</MudStep>
+                <MudStepper @ref="_stepper" Linear="_linear" Vertical="_vertical" Color="Color.Primary" Variant="_variant" DisableHeaderText="_disableHeaderText">
+                    <ChildContent>
+                        <MudStep Title="First Step">The first item's content.</MudStep>
+                        <MudStep Title="Second Step" Optional="true">The second item's content.</MudStep>
+                        <MudStep Title="Third Step">The third item's content.</MudStep>
+                        <MudStep Title="Result Step" ResultStep="true">Your request succesfully sent.</MudStep>
+                    </ChildContent>
+                    
+                    <CompletedContent>
+                        <div class="d-flex align-center justify-center" style="height: 200px">
+                            <MudText>Your request succesfully sent.</MudText>
+                        </div>
+                    </CompletedContent>
                 </MudStepper>
             </MudItem>
 
@@ -24,6 +33,7 @@
                             <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                         }
                     </MudSelect>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => _stepper.Reset())">Reset</MudButton>
                 </MudStack>
             </MudItem>
         </MudGrid>
@@ -31,6 +41,7 @@
 </ExamplePage>
 
 @code {
+    MudStepper _stepper;
     bool _vertical;
     bool _linear;
     Variant _variant = Variant.Filled;
