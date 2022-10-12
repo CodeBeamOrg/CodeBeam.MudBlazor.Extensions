@@ -4,7 +4,7 @@
 
 <CascadingValue Value="this" IsFixed="true">
     <MudStack Row="Vertical">
-        <MudStack Row="!Vertical" AlignItems="AlignItems.Center">
+        <MudStack Row="!Vertical" AlignItems="@(HeaderTextView == HeaderTextView.NewLine ? AlignItems.Start : AlignItems.Center)">
             @foreach (MudStep step in _steps)
             {
                 if (step.IsResultStep)
@@ -27,13 +27,13 @@
                             @(Steps.IndexOf(step) + 1)
                         }
                     </MudAvatar>
-                @if (DisableHeaderText == false || active)
+                    @if (HeaderTextView == HeaderTextView.All || HeaderTextView == HeaderTextView.NewLine || (HeaderTextView == HeaderTextView.OnlyActiveText && active))
                     {
                         <div>
-                            <MudText Color="@(active ? Color : Color.Default)" Style="@(active ? "font-weight: 900" : null)">@step.Title</MudText>
+                            <MudText Align="Align.Center" Color="@(active ? Color : Color.Default)" Style="@(active ? "font-weight: 900" : null)">@step.Title</MudText>
                             @if (step.Optional == true)
                             {
-                                <MudText Typo="Typo.subtitle2" Color="@(active ? Color : Color.Default)" Style="@(active ? "font-weight: 500" : null)">@LocalizedStrings.Optional</MudText>
+                                <MudText Align="@(HeaderTextView == HeaderTextView.NewLine ? Align.Center : Align.Start)" Typo="Typo.subtitle2" Color="@(active ? Color : Color.Default)" Style="@(active ? "font-weight: 500" : null)">@LocalizedStrings.Optional</MudText>
                             }
                         </div>
                     }
@@ -41,7 +41,7 @@
 
                 if (_steps.Count - 1 != _steps.IndexOf(step))
                 {
-                    <span class="@(step.Status != StepStatus.Continued ? "mud-stepper-header-dash mud-stepper-header-dash-completed flex-grow-1 mx-auto" : "mud-stepper-header-dash flex-grow-1 mx-auto")"></span>
+                    <span class="@GetDashClassname(step)"></span>
                 }
 
             }
@@ -88,4 +88,8 @@
     </MudStack>
 </CascadingValue>
 
-<MudAnimate @ref="_animate" Selector=".mud-stepper-ani" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.7" />
+@if (DisableAnimation == false)
+{
+    <MudAnimate @ref="_animate" Selector=".mud-stepper-ani" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.7" />
+}
+

@@ -152,13 +152,21 @@
     grid-row-end: 12; }
 
 .mud-stepper-header {
-  min-height: 62px; }
+  min-height: 62px;
+  border-radius: var(--mud-default-borderradius); }
+  .mud-stepper-header.mud-stepper-header-non-linear:hover {
+    background-color: var(--mud-palette-action-default-hover); }
 
 .mud-stepper-header-dash {
   min-width: 50px;
   border-bottom: 1px solid;
+  border-left: none;
   height: 50%;
   border-color: var(--mud-palette-text-primary); }
+  .mud-stepper-header-dash.mud-stepper-header-dash-vertical {
+    border-bottom: none;
+    border-left: 2px solid;
+    border-color: var(--mud-palette-primary); }
   .mud-stepper-header-dash.mud-stepper-header-dash-completed {
     border-bottom: 2px solid;
     border-color: var(--mud-palette-primary); }

@@ -20,12 +20,18 @@ namespace MudExtensions
 
         protected string HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-2")
             .AddClass("mud-ripple", DisableRipple == false && Linear == false)
-            .AddClass("cursor-pointer", Linear == false)
+            .AddClass("cursor-pointer mud-stepper-header-non-linear", Linear == false)
+            .AddClass("flex-column", HeaderTextView == HeaderTextView.NewLine)
             .Build();
-
-        protected string DashClassname => new CssBuilder("mud-stepper-header-dash flex-grow-1 mx-auto")
-            .AddClass("mud-stepper-header-dash-completed")
-            .Build();
+        
+        protected string GetDashClassname(MudStep step)
+        {
+            return new CssBuilder("mud-stepper-header-dash flex-grow-1 mx-auto")
+                .AddClass("mud-stepper-header-dash-completed", step.Status != StepStatus.Continued)
+                .AddClass("mud-stepper-header-dash-vertical", Vertical)
+                .AddClass("mt-5", HeaderTextView == HeaderTextView.NewLine)
+                .Build();
+        }
 
         [Parameter]
         public int ActiveIndex { get; set; }
@@ -37,22 +43,25 @@ namespace MudExtensions
         public bool Linear { get; set; }
 
         /// <summary>
-        /// If total steps exceed this value, only the active step has title.
-        /// </summary>
-        [Parameter]
-        public bool DisableHeaderText { get; set; }
-
-        /// <summary>
-        /// If true, disabled ripple effect when click on step headers.
+        /// If true, disables ripple effect when click on step headers.
         /// </summary>
         [Parameter]
         public bool DisableRipple { get; set; }
+
+        /// <summary>
+        /// If true, disables the default animation on step changing.
+        /// </summary>
+        [Parameter]
+        public bool DisableAnimation { get; set; }
 
         [Parameter]
         public Color Color { get; set; } = Color.Default;
 
         [Parameter]
         public Variant Variant { get; set; }
+
+        [Parameter]
+        public HeaderTextView HeaderTextView { get; set; } = HeaderTextView.All;
 
         [Parameter]
         public bool Vertical { get; set; }
@@ -95,9 +104,6 @@ namespace MudExtensions
         {
             _steps.Add(step);
 
-            //Steps.Add(step);
-            //Steps = Steps;
-
             StateHasChanged();
         }
 
@@ -113,7 +119,10 @@ namespace MudExtensions
             ActiveIndex = Steps.IndexOf(step);
             _isResultStep = false;
             await ActiveStepChanged.InvokeAsync();
-            await _animate.Refresh();
+            if (_animate != null)
+            {
+                await _animate.Refresh();
+            }
         }
 
         protected async Task SetActiveIndex(int count)
@@ -149,7 +158,10 @@ namespace MudExtensions
                 }
             }
             await ActiveStepChanged.InvokeAsync();
-            await _animate.Refresh();
+            if (_animate != null)
+            {
+                await _animate.Refresh();
+            }
         }
 
         internal bool _isResultStep = false;

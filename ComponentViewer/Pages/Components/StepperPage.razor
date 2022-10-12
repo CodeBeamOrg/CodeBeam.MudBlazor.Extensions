@@ -1,12 +1,13 @@
 ﻿@page "/mudstepper"
 @using CodeBeam.MudExtensions.Utilities
 @using MudBlazor.Extensions
+@using MudExtensions.Enums
 
 <ExamplePage Title="MudStepper">
     <ExampleCard Title="Usage" Description="">
         <MudGrid Class="cursor-default">
             <MudItem xs="12" sm="8">
-                <MudStepper @ref="_stepper" Linear="_linear" Vertical="_vertical" Color="Color.Primary" Variant="_variant" DisableHeaderText="_disableHeaderText">
+                <MudStepper @ref="_stepper" Linear="_linear" Vertical="_vertical" Color="Color.Primary" Variant="_variant" DisableAnimation="_disableAnimation" HeaderTextView="_headerTextView">
                     <ChildContent>
                         <MudStep Title="First Step">The first item's content.</MudStep>
                         <MudStep Title="Second Step" Optional="true">The second item's content.</MudStep>
@@ -16,13 +17,19 @@
                 </MudStepper>
             </MudItem>
 
-            <MudItem xs="12" sm="4">
+            <MudItem xs="12" sm="4" Class="border-solid border-2 mud-border-secondary rounded-bl rounded-tl">
                 <MudStack Spacing="4">
-                    <MudCheckBox @bind-Checked="_linear" Color="Color.Primary" Label="Linear" />
-                    <MudCheckBox @bind-Checked="_disableHeaderText" Color="Color.Primary" Label="Disable Header Text" />
+                    <MudCheckBox @bind-Checked="_linear" Color="Color.Primary" Label="Linear" Dense="true" />
+                    <MudCheckBox @bind-Checked="_disableAnimation" Color="Color.Primary" Label="Disable Animation" Dense="true" />
                     <MudSwitch @bind-Checked="_vertical" Color="Color.Primary" Label="Vertical" />
                     <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant">
                         @foreach (Variant item in Enum.GetValues<Variant>())
+                        {
+                            <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudSelect @bind-Value="_headerTextView" Variant="Variant.Outlined" Label="Header Text View">
+                        @foreach (HeaderTextView item in Enum.GetValues<HeaderTextView>())
                         {
                             <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                         }
@@ -39,5 +46,6 @@
     bool _vertical;
     bool _linear;
     Variant _variant = Variant.Filled;
-    bool _disableHeaderText = false;
+    HeaderTextView _headerTextView = HeaderTextView.All;
+    bool _disableAnimation = false;
 }
