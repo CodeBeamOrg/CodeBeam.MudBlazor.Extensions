@@ -117,7 +117,6 @@ namespace MudExtensions
         protected async Task SetActiveIndex(MudStep step)
         {
             ActiveIndex = Steps.IndexOf(step);
-            _isResultStep = false;
             await ActiveStepChanged.InvokeAsync();
             if (_animate != null)
             {
@@ -125,37 +124,23 @@ namespace MudExtensions
             }
         }
 
-        protected async Task SetActiveIndex(int count)
+        protected async Task SetActiveIndex(int count, bool firstCompleted = false)
         {
-            if (_isResultStep)
+            if (firstCompleted == true)
             {
                 ActiveIndex = Steps.Count;
             }
-            if (Steps.Count - 1 < ActiveIndex + count)
-            {
-                ActiveIndex = Steps.Count - 1;
-                if (IsAllStepsCompleted() == false)
-                {
-                    _isResultStep = true;
-                }
-            }
-            else if (ActiveIndex + count < 0)
+            if (ActiveIndex + count < 0)
             {
                 ActiveIndex = 0;
-                _isResultStep = false;
+            }
+            else if (ActiveIndex == Steps.Count - 1 && IsAllStepsCompleted() == false)
+            {
+                ActiveIndex = Steps.IndexOf(Steps.FirstOrDefault(x => x.Status == StepStatus.Continued));
             }
             else
             {
-                if (IsAllStepsCompleted())
-                {
-                    ActiveIndex = Steps.Count - 1;
-                    _isResultStep = true;
-                }
-                else
-                {
-                    ActiveIndex += count;
-                    _isResultStep = false;
-                }
+                ActiveIndex += count;
             }
             await ActiveStepChanged.InvokeAsync();
             if (_animate != null)
@@ -164,11 +149,14 @@ namespace MudExtensions
             }
         }
 
-        internal bool _isResultStep = false;
         public async Task CompleteStep(int index, bool moveToNextStep = true)
         {
             Steps[index].SetStatus(StepStatus.Completed);
-            if (moveToNextStep)
+            if (IsAllStepsCompleted())
+            {
+                await SetActiveIndex(0, true);
+            }
+            else if (moveToNextStep)
             {
                 await SetActiveIndex(1);
             }
@@ -215,11 +203,20 @@ namespace MudExtensions
             }
         }
 
+        internal bool ShowResultStep()
+        {
+            if (IsAllStepsCompleted() && ActiveIndex == Steps.Count)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public void Reset()
         {
             Steps.ForEach(x => x.SetStatus(StepStatus.Continued));
             ActiveIndex = 0;
-            _isResultStep = false;
         }
 
     }
