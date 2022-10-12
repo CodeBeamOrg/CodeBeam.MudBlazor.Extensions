@@ -1,6 +1,6 @@
 ﻿@namespace MudExtensions
 @inherits MudComponentBase
 
-<div class="@((MudStepper.Steps[MudStepper.ActiveIndex] == this && MudStepper.IsAllStepsCompleted() == false) || (MudStepper.IsAllStepsCompleted() && ResultStep) ? "" : "d-none")">
+<div class="@((MudStepper.Steps[MudStepper.ActiveIndex] == this && MudStepper.IsAllStepsCompleted() == false) || (MudStepper.IsAllStepsCompleted() && IsResultStep) ? "" : "d-none")">
     @ChildContent
 </div>

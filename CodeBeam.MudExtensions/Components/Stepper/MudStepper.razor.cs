@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
+using MudExtensions.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,8 +63,11 @@ namespace MudExtensions
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        /// <summary>
+        /// Overrides the action buttons (previous, next etc.) with custom render fragment.
+        /// </summary>
         [Parameter]
-        public RenderFragment CompletedContent { get; set; }
+        public RenderFragment ActionContent { get; set; }
 
         [Parameter]
         public EventCallback<int> ActiveStepChanged { get; set; }
@@ -151,11 +155,25 @@ namespace MudExtensions
         internal bool _isResultStep = false;
         public async Task CompleteStep(int index, bool moveToNextStep = true)
         {
-            Steps[index].SetComplete(true);
+            Steps[index].SetStatus(StepStatus.Completed);
             if (moveToNextStep)
             {
                 await SetActiveIndex(1);
             }
+        }
+
+        public async Task SkipStep(int index, bool moveToNextStep = true)
+        {
+            Steps[index].SetStatus(StepStatus.Skipped);
+            if (moveToNextStep)
+            {
+                await SetActiveIndex(1);
+            }
+        }
+
+        public void MoveNextStep()
+        {
+
         }
 
         protected bool IsStepActive(MudStep step)
@@ -165,12 +183,12 @@ namespace MudExtensions
 
         public bool IsAllStepsCompleted()
         {
-            return !Steps.Any(x => x.Completed == false && x.Optional == false);
+            return !Steps.Any(x => x.Status == Enums.StepStatus.Continued);
         }
 
         protected int CompletedStepCount()
         {
-            return Steps.Where(x => x.Completed).Count();
+            return Steps.Where(x => x.Status != Enums.StepStatus.Continued).Count();
         }
 
         protected string GetNextButtonString()
@@ -187,7 +205,7 @@ namespace MudExtensions
 
         public void Reset()
         {
-            Steps.ForEach(x => x.SetComplete(false));
+            Steps.ForEach(x => x.SetStatus(StepStatus.Continued));
             ActiveIndex = 0;
             _isResultStep = false;
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudExtensions.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,8 @@ namespace MudExtensions
         [Parameter]
         public string Title { get; set; }
 
-        /// <summary>
-        /// If true the requirement of the step is completed and shows an tick into the header.
-        /// </summary>
         [Parameter]
-        public bool Completed { get; set; }
+        public StepStatus Status { get; set; } = StepStatus.Continued;
 
         /// <summary>
         /// If true the step is skippable.
@@ -29,8 +27,11 @@ namespace MudExtensions
         [Parameter]
         public bool Optional { get; set; }
 
+        /// <summary>
+        /// If true, the step show when the stepper is completed. There should be only one result step.
+        /// </summary>
         [Parameter]
-        public bool ResultStep { get; set; }
+        public bool IsResultStep { get; set; }
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -38,15 +39,15 @@ namespace MudExtensions
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            if (ResultStep == false)
+            if (IsResultStep == false)
             {
                 MudStepper.AddStep(this);
             }
         }
 
-        protected internal void SetComplete(bool value)
+        protected internal void SetStatus(StepStatus status)
         {
-            Completed = value;
+            Status = status;
         }
 
         public void Dispose()
