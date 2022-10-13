@@ -21,11 +21,30 @@ namespace MudExtensions
         [CascadingParameter]
         protected MudStepper MudStepper { get; set; }
 
+        /// <summary>
+        /// Step text to show on header.
+        /// </summary>
         [Parameter]
         public string Title { get; set; }
 
+        StepStatus _status = StepStatus.Continued;
+        /// <summary>
+        /// The step status flag to show step is continued, skipped or completed. Do not set it directly unless you know what you do exactly.
+        /// </summary>
         [Parameter]
-        public StepStatus Status { get; set; } = StepStatus.Continued;
+        public StepStatus Status
+        { 
+            get => _status; 
+            set
+            {
+                if (_status == value)
+                {
+                    return;
+                }
+                _status = value;
+                StatusChanged.InvokeAsync(_status).AndForget();
+            }
+        }
 
         /// <summary>
         /// If true the step is skippable.
@@ -41,6 +60,12 @@ namespace MudExtensions
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
+
+        /// <summary>
+        /// Fires when step status changed.
+        /// </summary>
+        [Parameter]
+        public EventCallback<StepStatus> StatusChanged { get; set; }
 
         protected override void OnInitialized()
         {

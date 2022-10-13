@@ -3,8 +3,8 @@
 @using MudExtensions.Enums
 
 <CascadingValue Value="this" IsFixed="true">
-    <MudStack Class="@Class" Style="@Style" Row="Vertical">
-        <MudStack Row="!Vertical" AlignItems="@(HeaderTextView == HeaderTextView.NewLine ? AlignItems.Start : AlignItems.Center)">
+    <MudStack Class="@Class" Style="@Style"> @*Row="Vertical"*@
+        <MudStack Row="true" AlignItems="@(HeaderTextView == HeaderTextView.NewLine ? AlignItems.Start : AlignItems.Center)"> @*Row="!Vertical"*@
             @foreach (MudStep step in _steps)
             {
                 if (step.IsResultStep)
@@ -94,9 +94,7 @@
                         {
                             <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => CompleteStep(ActiveIndex))">@GetNextButtonString()</MudButton>
                         }
-                    }
-
-                    
+                    }  
                 }
             </div>
         </MudStack>

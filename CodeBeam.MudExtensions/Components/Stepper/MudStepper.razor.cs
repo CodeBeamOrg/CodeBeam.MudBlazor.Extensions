@@ -33,19 +33,24 @@ namespace MudExtensions
         {
             return new CssBuilder("mud-stepper-header-dash flex-grow-1 mx-auto")
                 .AddClass("mud-stepper-header-dash-completed", step.Status != StepStatus.Continued)
-                .AddClass("mud-stepper-header-dash-vertical", Vertical)
+                //.AddClass("mud-stepper-header-dash-vertical", Vertical)
                 .AddClass("mt-5", HeaderTextView == HeaderTextView.NewLine)
-                .AddClass("dash-tiny", Vertical && ActiveIndex != Steps.IndexOf(step))
+                //.AddClass("dash-tiny", Vertical && ActiveIndex != Steps.IndexOf(step))
                 .AddClass($"mud-stepper-border-{Color.ToDescriptionString()}")
                 .Build();
         }
 
-        [Parameter]
-        public int ActiveIndex { get; set; }
+        internal int ActiveIndex { get; set; }
 
+        /// <summary>
+        /// Provides CSS classes for the step content.
+        /// </summary>
         [Parameter]
         public string ContentClass { get; set; }
 
+        /// <summary>
+        /// Provides CSS styles for the step content.
+        /// </summary>
         [Parameter]
         public string ContentStyle { get; set; }
 
@@ -67,21 +72,37 @@ namespace MudExtensions
         [Parameter]
         public bool DisableAnimation { get; set; }
 
+        /// <summary>
+        /// The predefined Mud color for header and action buttons.
+        /// </summary>
         [Parameter]
         public Color Color { get; set; } = Color.Default;
 
+        /// <summary>
+        /// The variant for header and action buttons.
+        /// </summary>
         [Parameter]
         public Variant Variant { get; set; }
 
+        /// <summary>
+        /// Choose header text view. Default is all.
+        /// </summary>
         [Parameter]
         public HeaderTextView HeaderTextView { get; set; } = HeaderTextView.All;
 
-        [Parameter]
-        public bool Vertical { get; set; }
+        // TODO
+        //[Parameter]
+        //public bool Vertical { get; set; }
 
+        /// <summary>
+        /// A class for provide all local strings at once.
+        /// </summary>
         [Parameter]
         public StepperLocalizedStrings LocalizedStrings { get; set; } = new();
 
+        /// <summary>
+        /// The child content where MudSteps should be inside.
+        /// </summary>
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
@@ -93,6 +114,9 @@ namespace MudExtensions
 
         [Parameter]
         public EventCallback<int> ActiveStepChanged { get; set; }
+
+        [Parameter]
+        public Func<bool> PreventStepChange { get; set; }
 
         List<MudStep> _steps = new();
         List<MudStep> _allSteps = new();
@@ -143,6 +167,11 @@ namespace MudExtensions
 
         protected async Task SetActiveIndex(int count, bool firstCompleted = false)
         {
+            if (PreventStepChange.Invoke() == true)
+            {
+                return;
+            }
+
             int backupActiveIndex = ActiveIndex;
             if (_animate != null)
             {
@@ -181,6 +210,11 @@ namespace MudExtensions
 
         public async Task CompleteStep(int index, bool moveToNextStep = true)
         {
+            if (PreventStepChange.Invoke() == true)
+            {
+                return;
+            }
+
             Steps[index].SetStatus(StepStatus.Completed);
             if (IsAllStepsCompleted())
             {
@@ -194,6 +228,11 @@ namespace MudExtensions
 
         public async Task SkipStep(int index, bool moveToNextStep = true)
         {
+            if (PreventStepChange.Invoke() == true)
+            {
+                return;
+            }
+
             Steps[index].SetStatus(StepStatus.Skipped);
             if (moveToNextStep)
             {
@@ -204,11 +243,6 @@ namespace MudExtensions
         protected bool IsStepActive(MudStep step)
         {
             return Steps.IndexOf(step) == ActiveIndex;
-        }
-
-        public bool IsAllStepsCompleted()
-        {
-            return !Steps.Any(x => x.Status == Enums.StepStatus.Continued);
         }
 
         protected int CompletedStepCount()
@@ -228,7 +262,7 @@ namespace MudExtensions
             }
         }
 
-        internal bool ShowResultStep()
+        protected internal bool ShowResultStep()
         {
             if (IsAllStepsCompleted() && ActiveIndex == Steps.Count)
             {
@@ -238,9 +272,19 @@ namespace MudExtensions
             return false;
         }
 
-        internal bool HasResultStep()
+        protected internal bool HasResultStep()
         {
             return _allSteps.Any(x => x.IsResultStep);
+        }
+
+        public bool IsAllStepsCompleted()
+        {
+            return !Steps.Any(x => x.Status == Enums.StepStatus.Continued);
+        }
+
+        public int GetActiveIndex()
+        {
+            return ActiveIndex;
         }
 
         public void Reset()

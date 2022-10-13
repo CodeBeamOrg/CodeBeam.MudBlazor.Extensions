@@ -2,7 +2,7 @@
 @using MudBlazor.Extensions
 
 <ExamplePage Title="API">
-    <ExampleCard Title="Api - MudAnimate">
+    <ExampleCard Title="Api - MudAnimate" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudAnimate).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
@@ -15,7 +15,7 @@
         </MudTable>
     </ExampleCard>
 
-    <ExampleCard Title="Api - MudLoading">
+    <ExampleCard Title="Api - MudLoading" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudLoading).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
@@ -28,7 +28,7 @@
         </MudTable>
     </ExampleCard>
 
-    <ExampleCard Title="Api - MudLoadingButton">
+    <ExampleCard Title="Api - MudLoadingButton" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudLoadingButton).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
@@ -41,7 +41,7 @@
         </MudTable>
     </ExampleCard>
 
-    <ExampleCard Title="Api - MudPage">
+    <ExampleCard Title="Api - MudPage" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudPage).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
@@ -54,7 +54,7 @@
         </MudTable>
     </ExampleCard>
 
-    <ExampleCard Title="Api - MudSection">
+    <ExampleCard Title="Api - MudSection" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudSection).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
@@ -67,7 +67,7 @@
         </MudTable>
     </ExampleCard>
 
-    <ExampleCard Title="Api - MudPasswordField">
+    <ExampleCard Title="Api - MudPasswordField" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudPasswordField<string>).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
@@ -80,7 +80,7 @@
         </MudTable>
     </ExampleCard>
 
-    <ExampleCard Title="Api - MudScrollbar">
+    <ExampleCard Title="Api - MudScrollbar" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudScrollbar).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
@@ -93,8 +93,32 @@
         </MudTable>
     </ExampleCard>
 
-    <ExampleCard Title="Api - MudSpeedDial">
+    <ExampleCard Title="Api - MudSpeedDial"HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudSpeedDial).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
+    <ExampleCard Title="Api - MudStepper & MudStep" HasExpansionPanel="true">
+        <MudTable Items="@(typeof(MudStepper).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+        <MudText Class="ma-4" Typo="Typo.h6" Color="Color.Secondary">MudStep</MudText>
+        <MudTable Items="@(typeof(MudStep).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>

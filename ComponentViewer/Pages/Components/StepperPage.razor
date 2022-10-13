@@ -2,18 +2,23 @@
 @using CodeBeam.MudExtensions.Utilities
 @using MudBlazor.Extensions
 @using MudExtensions.Enums
+@inject ISnackbar Snackbar
 
 <ExamplePage Title="MudStepper">
-    <ExampleCard Title="Usage" Description="">
+    <ExampleCard Title="Playground" Description="Place MudSteps in the MudStepper.">
         <MudGrid Class="cursor-default">
             <MudItem xs="12" sm="8">
-                <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant" DisableAnimation="_disableAnimation" HeaderTextView="_headerTextView">
-                    <MudStep Title="Customer Info">
-                        <MudStack>
-                            <MudTextField T="string" Label="Name" Variant="_variant" />
-                            <MudTextField T="string" Label="Last Name" Variant="_variant" />
-                            <MudTextField T="string" Label="Adress" Variant="_variant" />
-                        </MudStack>
+                <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant" DisableAnimation="_disableAnimation" HeaderTextView="_headerTextView"
+                        PreventStepChange="new Func<bool>(CheckChange)" LocalizedStrings="GetLocalizedStrings()">
+
+                    <MudStep Title="Customer Info" StatusChanged="StatusChanged">
+                        <MudForm @ref="_form">
+                            <MudStack>
+                                <MudTextField T="string" Label="Name" Variant="_variant" Required="true" />
+                                <MudTextField T="string" Label="Last Name" Variant="_variant" />
+                                <MudTextField T="string" Label="Adress" Variant="_variant" />
+                            </MudStack>
+                        </MudForm>
                     </MudStep>
                     <MudStep Title="Booking Spec." Optional="true">
                         <MudCheckBox T="bool" Label="Early Check-in" Color="_color" />
@@ -21,14 +26,17 @@
                         <MudCheckBox T="bool" Label="Twin Bed" Color="_color" />
                     </MudStep>
                     <MudStep Title="Payment">
-                        <MudStack>
-                            <MudTextField T="string" Label="Card Number" Variant="_variant" />
-                            <MudStack Row="true">
-                                <MudTextField T="string" Label="Expire Date" Variant="_variant" />
-                                <MudTextField T="string" Label="CVC" Variant="_variant" />
+                        <MudForm @ref="_form2">
+                            <MudStack>
+                                <MudTextField T="string" Label="Card Number" Variant="_variant" Required="true" />
+                                <MudStack Row="true">
+                                    <MudTextField T="string" Label="Expire Date" Variant="_variant" Required="true" />
+                                    <MudTextField T="string" Label="CVC" Variant="_variant" Required="true" />
+                                </MudStack>
                             </MudStack>
-                        </MudStack>
+                        </MudForm>
                     </MudStep>
+                    
                     @if (_addResultStep)
                     {
                         <MudStep Title="Result Step" IsResultStep="true">
@@ -46,7 +54,8 @@
                     <MudCheckBox @bind-Checked="_linear" Color="Color.Primary" Label="Linear" Dense="true" />
                     <MudCheckBox @bind-Checked="_disableAnimation" Color="Color.Primary" Label="Disable Animation" Dense="true" />
                     <MudSwitch @bind-Checked="_addResultStep" Color="Color.Primary" Label="Has Result Step" />
-                    <MudSwitch @bind-Checked="_vertical" Color="Color.Primary" Label="Vertical" />
+                    <MudSwitch @bind-Checked="_checkValidationBeforeComplete" Color="Color.Primary" Label="Check Validation Before Complete Step" />
+                    <MudSwitch @bind-Checked="_customLocalization" Color="Color.Primary" Label="Custom Localization (German)" />
                     <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant">
                         @foreach (Variant item in Enum.GetValues<Variant>())
                         {
@@ -74,11 +83,65 @@
 
 @code {
     MudStepper _stepper;
-    bool _vertical;
+    MudForm _form;
+    MudForm _form2;
+    bool _checkValidationBeforeComplete = false;
     bool _linear;
     Variant _variant = Variant.Filled;
     HeaderTextView _headerTextView = HeaderTextView.All;
     bool _disableAnimation = false;
     bool _addResultStep = true;
+    bool _customLocalization = false;
     Color _color = Color.Primary;
+
+    private bool CheckChange()
+    {
+        if (_checkValidationBeforeComplete == true)
+        {
+            if (_stepper.GetActiveIndex() == 0)
+            {
+                _form.Validate();
+                return !_form.IsValid;
+            }
+            else if (_stepper.GetActiveIndex() == 2)
+            {
+                _form2.Validate();
+                return !_form2.IsValid;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void StatusChanged(StepStatus status)
+    {
+        Snackbar.Add($"First step {status.ToDescriptionString()}.", Severity.Info);
+    }
+
+    private StepperLocalizedStrings GetLocalizedStrings()
+    {
+        if (_customLocalization == false)
+        {
+            return new StepperLocalizedStrings();
+        }
+        else
+        {
+            return new StepperLocalizedStrings()
+            {
+                    Completed = "Abgeschlossen",
+                    Finish = "Fertig",
+                    Next = "Nächste",
+                    Optional = "Optional",
+                    Previous = "Früher",
+                    Skip = "überspringen",
+                    Skipped = "übersprungen",
+            };
+        }
+    }
 }

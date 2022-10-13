@@ -1,18 +1,41 @@
-﻿
-<MudCard Class="component-card mx-2 my-8 pa-2 example-card" Elevation="4">
-    <MudCardHeader>
-        <div>
-            <MudText Class="example-card-text" Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
-            <MudText Class="example-card-text" Typo="Typo.body2" Color="Color.Inherit">@Description</MudText>
-        </div>
-    </MudCardHeader>
-    <MudCardContent>
-        <div class="pa-2" style="background: var(--mud-palette-background)">
-            @ChildContent
-        </div>
-            
-    </MudCardContent>
-</MudCard>
+﻿@if (HasExpansionPanel)
+{
+    <MudExpansionPanel Text="@Title">
+        <MudCard Class="component-card mx-2 my-8 pa-2 example-card" Elevation="4">
+            <MudCardHeader>
+                <div>
+                    <MudText Class="example-card-text" Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
+                    <MudText Class="example-card-text" Typo="Typo.body2" Color="Color.Inherit">@Description</MudText>
+                </div>
+            </MudCardHeader>
+            <MudCardContent>
+                <div class="pa-2" style="background: var(--mud-palette-background)">
+                    @ChildContent
+                </div>
+
+            </MudCardContent>
+        </MudCard>
+    </MudExpansionPanel>
+}
+else
+{
+    <MudCard Class="component-card mx-2 my-8 pa-2 example-card" Elevation="4">
+        <MudCardHeader>
+            <div>
+                <MudText Class="example-card-text" Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
+                <MudText Class="example-card-text" Typo="Typo.body2" Color="Color.Inherit">@Description</MudText>
+            </div>
+        </MudCardHeader>
+        <MudCardContent>
+            <div class="pa-2" style="background: var(--mud-palette-background)">
+                @ChildContent
+            </div>
+
+        </MudCardContent>
+    </MudCard>
+}
+
+
 
 @code{
     [Parameter]
@@ -23,6 +46,9 @@
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public bool HasExpansionPanel { get; set; }
 }
 
 <style>

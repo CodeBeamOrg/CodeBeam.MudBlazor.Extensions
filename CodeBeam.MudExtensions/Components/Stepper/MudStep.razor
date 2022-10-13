@@ -1,10 +1,6 @@
 ﻿@namespace MudExtensions
 @inherits MudComponentBase
 
-@*<div class="@((MudStepper.ActiveIndex < MudStepper.Steps.Count && MudStepper.Steps[MudStepper.ActiveIndex] == this && (MudStepper.ShowResultStep() == false || MudStepper.HasResultStep())) || (IsResultStep && MudStepper.ShowResultStep()) ? "" : "d-none")" style="@Style">
-    @ChildContent
-</div>*@
-
 <div class="@Classname" style="@Style">
     @ChildContent
 </div>
