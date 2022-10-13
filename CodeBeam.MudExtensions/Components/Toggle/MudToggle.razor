@@ -1,7 +1,7 @@
 ﻿@namespace MudExtensions
 @inherits MudComponentBase
 
-<div class="@Classname" style="@GetStyle()">
+<div class="@Classname" style="@GetStyle()" @onclick="HandleOnClick">
     @if (Toggled && ToggleContent != null)
     {
         @ToggleContent

@@ -1,0 +1,39 @@
+﻿$mud-palette-colors: primary, secondary, tertiary, info, success, warning, error, dark;
+
+.mud-stepper-header {
+    min-height: 62px;
+    border-radius: var(--mud-default-borderradius);
+
+    &.mud-stepper-header-non-linear:hover {
+        background-color: var(--mud-palette-action-default-hover);
+    }
+}
+
+.mud-stepper-header-dash {
+    min-width: 50px;
+    border-bottom: 1px solid;
+    border-left: none;
+    height: 50%;
+    border-color: var(--mud-palette-text-primary);
+
+    &.mud-stepper-header-dash-vertical {
+        min-width: unset;
+        border-bottom: none;
+        border-left: 2px solid;
+        border-color: var(--mud-palette-primary);
+
+        &.dash-tiny {
+            height: 20px;
+        }
+    }
+
+    &.mud-stepper-header-dash-completed {
+        border-bottom: 2px solid;
+
+        @each $color in $mud-palette-colors {
+            &.mud-stepper-border-#{$color} {
+                border-color: var(--mud-palette-#{$color});
+            }
+        }
+    }
+}
