@@ -1,0 +1,7 @@
+version: 2
+updates:
+  - package-ecosystem: "nuget"
+    directory: "/CodeBeam.MudExtensions/"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
