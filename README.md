@@ -18,9 +18,10 @@
 - MudScrollbar
 - MudSection
 - MudSpeedDial
+- MudStepper
 
 ## Installation
-This extension uses MudBlazor features, so only need to add this line described below:<br /><br />
+This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />
 Add the following to your HTML head section, it's either `index.html` or `_Layout.cshtml`/`_Host.cshtml` depending on whether you're running Server-Side or WASM.
 ```
 <link href="_content/CodeBeam.MudExtensions/MudExtensions.min.css" rel="stylesheet" />
@@ -47,6 +48,11 @@ https://user-images.githubusercontent.com/78308169/194701300-e4ad517a-8fbb-4a5e-
 ### MudSpeedDial
 
 https://user-images.githubusercontent.com/78308169/194750397-e0dfd08c-c297-426f-bcd6-55ce2e7c4a25.mp4
+
+### MudStepper
+
+https://user-images.githubusercontent.com/78308169/195593490-6fd8d5fe-0472-4b9b-8180-ef6b9d94bcbd.mp4
+
 
 ## Contribution
 Feel free to contribute.
