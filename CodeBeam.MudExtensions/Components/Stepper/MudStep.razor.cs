@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,11 @@ namespace MudExtensions
 {
     public partial class MudStep : MudComponentBase, IDisposable
     {
+
+        protected string Classname => new CssBuilder()
+            .AddClass("d-none", ((MudStepper.ActiveIndex < MudStepper.Steps.Count && MudStepper.Steps[MudStepper.ActiveIndex] != this) || (MudStepper.ShowResultStep() && IsResultStep == false)) || (IsResultStep && MudStepper.ShowResultStep() == false))
+            .AddClass(Class)
+            .Build();
 
         [CascadingParameter]
         protected MudStepper MudStepper { get; set; }
@@ -39,10 +45,8 @@ namespace MudExtensions
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            if (IsResultStep == false)
-            {
-                MudStepper.AddStep(this);
-            }
+
+            MudStepper.AddStep(this);
         }
 
         protected internal void SetStatus(StepStatus status)

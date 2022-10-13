@@ -7,13 +7,37 @@
     <ExampleCard Title="Usage" Description="">
         <MudGrid Class="cursor-default">
             <MudItem xs="12" sm="8">
-                <MudStepper @ref="_stepper" Linear="_linear" Vertical="_vertical" Color="Color.Primary" Variant="_variant" DisableAnimation="_disableAnimation" HeaderTextView="_headerTextView">
-                    <ChildContent>
-                        <MudStep Title="First Step">The first item's content.</MudStep>
-                        <MudStep Title="Second Step" Optional="true">The second item's content.</MudStep>
-                        <MudStep Title="Third Step">The third item's content.</MudStep>
-                        <MudStep Title="Result Step" IsResultStep="true">Your request succesfully sent.</MudStep>
-                    </ChildContent>
+                <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant" DisableAnimation="_disableAnimation" HeaderTextView="_headerTextView">
+                    <MudStep Title="Customer Info">
+                        <MudStack>
+                            <MudTextField T="string" Label="Name" Variant="_variant" />
+                            <MudTextField T="string" Label="Last Name" Variant="_variant" />
+                            <MudTextField T="string" Label="Adress" Variant="_variant" />
+                        </MudStack>
+                    </MudStep>
+                    <MudStep Title="Booking Spec." Optional="true">
+                        <MudCheckBox T="bool" Label="Early Check-in" Color="_color" />
+                        <MudCheckBox T="bool" Label="Late Check-out" Color="_color" />
+                        <MudCheckBox T="bool" Label="Twin Bed" Color="_color" />
+                    </MudStep>
+                    <MudStep Title="Payment">
+                        <MudStack>
+                            <MudTextField T="string" Label="Card Number" Variant="_variant" />
+                            <MudStack Row="true">
+                                <MudTextField T="string" Label="Expire Date" Variant="_variant" />
+                                <MudTextField T="string" Label="CVC" Variant="_variant" />
+                            </MudStack>
+                        </MudStack>
+                    </MudStep>
+                    @if (_addResultStep)
+                    {
+                        <MudStep Title="Result Step" IsResultStep="true">
+                            <div class="d-flex flex-column align-center justify-center" style="height: 200px">
+                                <MudIconButton Icon="@Icons.Filled.DoneAll" Size="Size.Large" Variant="Variant.Filled" Color="Color.Success" />
+                                <MudText>Your reservation succesfully completed.</MudText>
+                            </div>
+                        </MudStep>
+                    }
                 </MudStepper>
             </MudItem>
 
@@ -21,9 +45,16 @@
                 <MudStack Spacing="4">
                     <MudCheckBox @bind-Checked="_linear" Color="Color.Primary" Label="Linear" Dense="true" />
                     <MudCheckBox @bind-Checked="_disableAnimation" Color="Color.Primary" Label="Disable Animation" Dense="true" />
+                    <MudSwitch @bind-Checked="_addResultStep" Color="Color.Primary" Label="Has Result Step" />
                     <MudSwitch @bind-Checked="_vertical" Color="Color.Primary" Label="Vertical" />
                     <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant">
                         @foreach (Variant item in Enum.GetValues<Variant>())
+                        {
+                            <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color">
+                        @foreach (Color item in Enum.GetValues<Color>())
                         {
                             <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                         }
@@ -48,4 +79,6 @@
     Variant _variant = Variant.Filled;
     HeaderTextView _headerTextView = HeaderTextView.All;
     bool _disableAnimation = false;
+    bool _addResultStep = true;
+    Color _color = Color.Primary;
 }

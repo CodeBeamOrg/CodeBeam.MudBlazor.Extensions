@@ -17,24 +17,37 @@ namespace MudExtensions
     public partial class MudStepper : MudComponentBase
     {
         MudAnimate _animate;
+        Guid _animateGuid = Guid.NewGuid();
 
         protected string HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-2")
             .AddClass("mud-ripple", DisableRipple == false && Linear == false)
             .AddClass("cursor-pointer mud-stepper-header-non-linear", Linear == false)
             .AddClass("flex-column", HeaderTextView == HeaderTextView.NewLine)
             .Build();
-        
+
+        protected string ContentClassname => new CssBuilder($"mud-stepper-ani-{_animateGuid.ToString()}")
+            .AddClass(ContentClass)
+            .Build();
+
         protected string GetDashClassname(MudStep step)
         {
             return new CssBuilder("mud-stepper-header-dash flex-grow-1 mx-auto")
                 .AddClass("mud-stepper-header-dash-completed", step.Status != StepStatus.Continued)
                 .AddClass("mud-stepper-header-dash-vertical", Vertical)
                 .AddClass("mt-5", HeaderTextView == HeaderTextView.NewLine)
+                .AddClass("dash-tiny", Vertical && ActiveIndex != Steps.IndexOf(step))
+                .AddClass($"mud-stepper-border-{Color.ToDescriptionString()}")
                 .Build();
         }
 
         [Parameter]
         public int ActiveIndex { get; set; }
+
+        [Parameter]
+        public string ContentClass { get; set; }
+
+        [Parameter]
+        public string ContentStyle { get; set; }
 
         /// <summary>
         /// If true, the header can not be clickable and users can step one by one.
@@ -82,7 +95,7 @@ namespace MudExtensions
         public EventCallback<int> ActiveStepChanged { get; set; }
 
         List<MudStep> _steps = new();
-
+        List<MudStep> _allSteps = new();
         public List<MudStep> Steps
         {
             get => _steps;
@@ -102,7 +115,11 @@ namespace MudExtensions
 
         internal void AddStep(MudStep step)
         {
-            _steps.Add(step);
+            _allSteps.Add(step);
+            if (step.IsResultStep == false)
+            {
+                Steps.Add(step);
+            }
 
             StateHasChanged();
         }
@@ -110,31 +127,44 @@ namespace MudExtensions
         internal void RemoveStep(MudStep step)
         {
             Steps.Remove(step);
-
+            _allSteps.Remove(step);
             StateHasChanged();
         }
 
         protected async Task SetActiveIndex(MudStep step)
         {
-            ActiveIndex = Steps.IndexOf(step);
-            await ActiveStepChanged.InvokeAsync();
             if (_animate != null)
             {
                 await _animate.Refresh();
             }
+            ActiveIndex = Steps.IndexOf(step);
+            await ActiveStepChanged.InvokeAsync();
         }
 
         protected async Task SetActiveIndex(int count, bool firstCompleted = false)
         {
-            if (firstCompleted == true)
+            int backupActiveIndex = ActiveIndex;
+            if (_animate != null)
             {
-                ActiveIndex = Steps.Count;
+                await _animate.Refresh();
             }
-            if (ActiveIndex + count < 0)
+
+            if (ActiveIndex == Steps.Count - 1 && HasResultStep() == false && 0 < count)
+            {
+                return;
+            }
+            else if (firstCompleted == true)
+            {
+                if (HasResultStep())
+                {
+                    ActiveIndex = Steps.Count;
+                }
+            }
+            else if (ActiveIndex + count < 0)
             {
                 ActiveIndex = 0;
             }
-            else if (ActiveIndex == Steps.Count - 1 && IsAllStepsCompleted() == false)
+            else if (ActiveIndex == Steps.Count - 1 && IsAllStepsCompleted() == false && 0 < count)
             {
                 ActiveIndex = Steps.IndexOf(Steps.FirstOrDefault(x => x.Status == StepStatus.Continued));
             }
@@ -142,10 +172,10 @@ namespace MudExtensions
             {
                 ActiveIndex += count;
             }
-            await ActiveStepChanged.InvokeAsync();
-            if (_animate != null)
+
+            if (backupActiveIndex != ActiveIndex)
             {
-                await _animate.Refresh();
+                await ActiveStepChanged.InvokeAsync();
             }
         }
 
@@ -154,7 +184,7 @@ namespace MudExtensions
             Steps[index].SetStatus(StepStatus.Completed);
             if (IsAllStepsCompleted())
             {
-                await SetActiveIndex(0, true);
+                await SetActiveIndex(1, true);
             }
             else if (moveToNextStep)
             {
@@ -169,11 +199,6 @@ namespace MudExtensions
             {
                 await SetActiveIndex(1);
             }
-        }
-
-        public void MoveNextStep()
-        {
-
         }
 
         protected bool IsStepActive(MudStep step)
@@ -211,6 +236,11 @@ namespace MudExtensions
             }
 
             return false;
+        }
+
+        internal bool HasResultStep()
+        {
+            return _allSteps.Any(x => x.IsResultStep);
         }
 
         public void Reset()

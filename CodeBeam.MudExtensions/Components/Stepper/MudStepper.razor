@@ -3,7 +3,7 @@
 @using MudExtensions.Enums
 
 <CascadingValue Value="this" IsFixed="true">
-    <MudStack Row="Vertical">
+    <MudStack Class="@Class" Style="@Style" Row="Vertical">
         <MudStack Row="!Vertical" AlignItems="@(HeaderTextView == HeaderTextView.NewLine ? AlignItems.Start : AlignItems.Center)">
             @foreach (MudStep step in _steps)
             {
@@ -46,8 +46,8 @@
 
             }
         </MudStack>
-        <MudStack Justify="Justify.SpaceBetween" Style="min-height: 500px;">
-            <div class="mud-stepper-ani">
+        <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
+            <div class="@ContentClassname" style="@ContentStyle">
                 @ChildContent
             </div>
             
@@ -58,20 +58,24 @@
                 }
                 else
                 {
-                    if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued || ShowResultStep())
+                    bool showResultStep = ShowResultStep();
+                    if (ActiveIndex != 0)
                     {
-                        <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Filled.ChevronLeft" OnClick="@(() => SetActiveIndex(-1))" />
-                    }
-                    else
-                    {
-                        <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(-1))">@LocalizedStrings.Previous</MudButton>
+                        if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued || showResultStep)
+                        {
+                            <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Filled.ChevronLeft" OnClick="@(() => SetActiveIndex(-1))" />
+                        }
+                        else
+                        {
+                            <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(-1))">@LocalizedStrings.Previous</MudButton>
+                        }
                     }
 
                     <MudSpacer />
 
-                    if (ShowResultStep() == false)
+                    if (showResultStep == false)
                     {
-                        if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued)
+                        if ((ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued) || (ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
                         {
                             <MudButton Color="@Color" Variant="@Variant" Disabled="true">@(Steps[ActiveIndex].Status == StepStatus.Completed ? LocalizedStrings.Completed : LocalizedStrings.Skipped)</MudButton>
                         }
@@ -79,7 +83,9 @@
                         {
                             <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SkipStep(ActiveIndex))">@LocalizedStrings.Skip</MudButton>
                         }
-
+                    }
+                    if (showResultStep == false && !(ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
+                    {
                         if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued)
                         {
                             <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Filled.ChevronRight" OnClick="@(() => SetActiveIndex(1))" />
@@ -99,6 +105,6 @@
 
 @if (DisableAnimation == false)
 {
-    <MudAnimate @ref="_animate" Selector=".mud-stepper-ani" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.7" />
+    <MudAnimate @ref="_animate" Selector="@($".mud-stepper-ani-{_animateGuid.ToString()}")" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.5" />
 }
 
