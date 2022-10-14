@@ -1,0 +1,63 @@
+﻿@namespace MudExtensions
+@typeparam T
+@inherits MudBaseInput<T>
+@using MudExtensions.Enums
+@using MudExtensions.Utilities
+
+
+<MudSwipeArea Class="mud-wheel d-flex flex-column align-center justify-center relative" Style="@GetStylename()" OnSwipe="@(async(d) => await HandleOnSwipe(d))" @onwheel="HandleOnWheel" PreventDefault="true">
+
+    @if (true)
+    {
+        int index = Items.IndexOf(Value) == -1 ? 0 : Items.IndexOf(Value);
+        for (int i = WheelLevel + 1; 0 < i; i--)
+        {
+            int a = i;
+            if (0 <= index - a)
+            {
+                <div class="@OuterItemClassname(index - a)" @onclick="@(async() => await ChangeWheel(-a))">
+                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@Items[index - a].ToString()</MudText>
+                </div>
+            }
+            else
+            {
+                <div class="@EmptyItemClassname" />
+            }
+        }
+
+        <span class="@BorderClassname" />
+
+        <div class="middle-item d-flex align-center justify-center mud-width-full" @onmouseover="@(() => _mouseMiddle = true)" @onmouseout="@(() => _mouseMiddle = false)">
+@*            @if (_mouseMiddle)
+            {
+                <MudIconButton Style="display: fixed; left: 0; top: 0; bottom; 0" Icon="@Icons.Filled.ArrowCircleUp" />
+            }*@
+
+            <MudText Class="@($"mud-wheel-ani-{_animateGuid} my-2)")" Typo="@(Dense ? Typo.body1 : Typo.h6)" Color="Color.Primary" Style="font-weight: 900">@Items[index].ToString()</MudText>
+
+@*            @if (_mouseMiddle)
+            {
+                <MudIconButton Icon="@Icons.Filled.ArrowCircleUp" />
+            }*@
+        </div>
+
+        <div class="@BorderClassname" />
+
+        for (int i = 1; i < WheelLevel + 2; i++)
+        {
+            int a = i;
+            if (index + a < Items.Count)
+            {
+                <div class="@OuterItemClassname(index + a)" @onclick="@(async() => await ChangeWheel(a))">
+                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@Items[index + a].ToString()</MudText>
+                </div>
+            }
+            else
+            {
+                <div class="@EmptyItemClassname" />
+            }
+        }
+    }
+</MudSwipeArea>
+
+<MudAnimate @ref="_animate" Selector="@($".mud-wheel-ani-{_animateGuid}")" AnimationType="AnimationType.SlideY" Duration="0.3" Value="0" ValueSecondary="_animateValue" AnimationTiming="AnimationTiming.Ease" />
