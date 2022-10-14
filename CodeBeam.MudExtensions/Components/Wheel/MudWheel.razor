@@ -16,7 +16,7 @@
             if (0 <= index - a)
             {
                 <div class="@OuterItemClassname(index - a)" @onclick="@(async() => await ChangeWheel(-a))">
-                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@Items[index - a].ToString()</MudText>
+                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(Items[index - a]) : Converter.Set(Items[index - a]))</MudText>
                 </div>
             }
             else
@@ -27,18 +27,8 @@
 
         <span class="@BorderClassname" />
 
-        <div class="middle-item d-flex align-center justify-center mud-width-full" @onmouseover="@(() => _mouseMiddle = true)" @onmouseout="@(() => _mouseMiddle = false)">
-@*            @if (_mouseMiddle)
-            {
-                <MudIconButton Style="display: fixed; left: 0; top: 0; bottom; 0" Icon="@Icons.Filled.ArrowCircleUp" />
-            }*@
-
-            <MudText Class="@($"mud-wheel-ani-{_animateGuid} my-2)")" Typo="@(Dense ? Typo.body1 : Typo.h6)" Color="Color.Primary" Style="font-weight: 900">@Items[index].ToString()</MudText>
-
-@*            @if (_mouseMiddle)
-            {
-                <MudIconButton Icon="@Icons.Filled.ArrowCircleUp" />
-            }*@
+        <div class="middle-item d-flex align-center justify-center mud-width-full">
+            <MudText Class="@($"mud-wheel-ani-{_animateGuid} my-2)")" Typo="@(Dense ? Typo.body1 : Typo.h6)" Color="@Color" Style="font-weight: 900">@(ToStringFunc != null ? ToStringFunc(Items[index]) : Converter.Set(Items[index]))</MudText>
         </div>
 
         <div class="@BorderClassname" />
@@ -49,7 +39,7 @@
             if (index + a < Items.Count)
             {
                 <div class="@OuterItemClassname(index + a)" @onclick="@(async() => await ChangeWheel(a))">
-                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@Items[index + a].ToString()</MudText>
+                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(Items[index + a]) : Converter.Set(Items[index + a]))</MudText>
                 </div>
             }
             else

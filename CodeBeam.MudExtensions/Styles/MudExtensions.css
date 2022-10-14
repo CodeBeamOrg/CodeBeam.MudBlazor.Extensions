@@ -200,7 +200,8 @@
   display: flex;
   align-content: center;
   justify-content: center;
-  color: var(--mud-palette-text-secondary); }
+  color: var(--mud-palette-text-secondary);
+  border-radius: var(--mud-default-borderradius); }
   .mud-wheel-item.mud-wheel-item:hover {
     background-color: var(--mud-palette-action-default-hover); }
   .mud-wheel-item.wheel-item-closest {
@@ -215,15 +216,51 @@
 .middle-item {
   transform: scale(1.2); }
 
-.item-level-1 {
-  transform: scale(0.9); }
-
-.item-level-2 {
-  transform: scale(0.7); }
-
 .mud-wheel-border {
   min-height: 2px !important;
-  background-color: var(--mud-palette-primary); }
-  .mud-wheel-border.wheel-border-gradient {
+  /*background-color: var(--mud-palette-primary);*/ }
+  .mud-wheel-border.mud-wheel-border-default {
+    background-color: var(--mud-palette-text-primary); }
+  .mud-wheel-border.mud-wheel-border-primary {
+    background-color: var(--mud-palette-primary); }
+  .mud-wheel-border.wheel-border-gradient-primary {
     background-image: linear-gradient(to right, rgba(255, 0, 0, 0), var(--mud-palette-primary), rgba(255, 0, 0, 0));
+    background-color: unset; }
+  .mud-wheel-border.mud-wheel-border-secondary {
+    background-color: var(--mud-palette-secondary); }
+  .mud-wheel-border.wheel-border-gradient-secondary {
+    background-image: linear-gradient(to right, rgba(255, 0, 0, 0), var(--mud-palette-secondary), rgba(255, 0, 0, 0));
+    background-color: unset; }
+  .mud-wheel-border.mud-wheel-border-tertiary {
+    background-color: var(--mud-palette-tertiary); }
+  .mud-wheel-border.wheel-border-gradient-tertiary {
+    background-image: linear-gradient(to right, rgba(255, 0, 0, 0), var(--mud-palette-tertiary), rgba(255, 0, 0, 0));
+    background-color: unset; }
+  .mud-wheel-border.mud-wheel-border-info {
+    background-color: var(--mud-palette-info); }
+  .mud-wheel-border.wheel-border-gradient-info {
+    background-image: linear-gradient(to right, rgba(255, 0, 0, 0), var(--mud-palette-info), rgba(255, 0, 0, 0));
+    background-color: unset; }
+  .mud-wheel-border.mud-wheel-border-success {
+    background-color: var(--mud-palette-success); }
+  .mud-wheel-border.wheel-border-gradient-success {
+    background-image: linear-gradient(to right, rgba(255, 0, 0, 0), var(--mud-palette-success), rgba(255, 0, 0, 0));
+    background-color: unset; }
+  .mud-wheel-border.mud-wheel-border-warning {
+    background-color: var(--mud-palette-warning); }
+  .mud-wheel-border.wheel-border-gradient-warning {
+    background-image: linear-gradient(to right, rgba(255, 0, 0, 0), var(--mud-palette-warning), rgba(255, 0, 0, 0));
+    background-color: unset; }
+  .mud-wheel-border.mud-wheel-border-error {
+    background-color: var(--mud-palette-error); }
+  .mud-wheel-border.wheel-border-gradient-error {
+    background-image: linear-gradient(to right, rgba(255, 0, 0, 0), var(--mud-palette-error), rgba(255, 0, 0, 0));
+    background-color: unset; }
+  .mud-wheel-border.mud-wheel-border-dark {
+    background-color: var(--mud-palette-dark); }
+  .mud-wheel-border.wheel-border-gradient-dark {
+    background-image: linear-gradient(to right, rgba(255, 0, 0, 0), var(--mud-palette-dark), rgba(255, 0, 0, 0));
+    background-color: unset; }
+  .mud-wheel-border.wheel-border-gradient-default {
+    background-image: linear-gradient(to right, rgba(255, 0, 0, 0), var(--mud-palette-text-primary), rgba(255, 0, 0, 0));
     background-color: unset; }

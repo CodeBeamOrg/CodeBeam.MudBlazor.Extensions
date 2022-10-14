@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,12 @@ namespace MudExtensions
             .Build();
 
         protected string BorderClassname => new CssBuilder("mud-wheel-border mud-wheel-item mud-width-full")
-            .AddClass("wheel-border-gradient", SmoothBorders)
+            .AddClass($"mud-wheel-border-{Color.ToDescriptionString()}")
+            .AddClass($"wheel-border-gradient-{Color.ToDescriptionString()}", SmoothBorders)
             .AddClass("my-1", Dense == false)
             .Build();
 
         protected string EmptyItemClassname => new CssBuilder("mud-wheel-ani-{_animateGuid} mud-wheel-item wheel-item-empty")
-            .AddClass("wheel-border-gradient", SmoothBorders)
             .AddClass("my-1", Dense == false)
             .AddClass("wheel-item-empty-dense", Dense == true)
             .Build();
@@ -32,7 +33,6 @@ namespace MudExtensions
         MudAnimate _animate;
         Guid _animateGuid = Guid.NewGuid();
         int _animateValue = 52;
-        bool _mouseMiddle = true;
 
         [Parameter]
         public List<T> Items { get; set; }
@@ -45,6 +45,30 @@ namespace MudExtensions
 
         [Parameter]
         public bool SmoothBorders { get; set; }
+
+        [Parameter]
+        public Color Color { get; set; }
+
+        private Func<T, string> _toStringFunc = x => x?.ToString();
+        /// <summary>
+        /// Defines how values are displayed in the drop-down list
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public Func<T, string> ToStringFunc
+        {
+            get => _toStringFunc;
+            set
+            {
+                if (_toStringFunc == value)
+                    return;
+                _toStringFunc = value;
+                Converter = new Converter<T>
+                {
+                    SetFunc = _toStringFunc ?? (x => x?.ToString()),
+                };
+            }
+        }
 
         protected string GetStylename()
         {
@@ -130,6 +154,6 @@ namespace MudExtensions
         }
 
         protected int GetIndex() => Items.IndexOf(Value) == -1 ? 0 : Items.IndexOf(Value);
-        protected int GetAnimateValue() => Dense ? 24 : 46;
+        protected int GetAnimateValue() => Dense ? 24 : 42;
     }
 }

@@ -1,4 +1,5 @@
-﻿
+﻿$mud-palette-colors: primary, secondary, tertiary, info, success, warning, error, dark;
+
 .mud-wheel {
     /*height: 240px;*/
     overflow: hidden;
@@ -12,6 +13,7 @@
     align-content: center;
     justify-content: center;
     color: var(--mud-palette-text-secondary);
+    border-radius: var(--mud-default-borderradius);
 
     &.mud-wheel-item:hover {
         background-color: var(--mud-palette-action-default-hover);
@@ -38,20 +40,27 @@
     transform: scale(1.2);
 }
 
-.item-level-1 {
-    transform: scale(0.9);
-}
-
-.item-level-2 {
-    transform: scale(0.7);
-}
-
 .mud-wheel-border {
     min-height: 2px !important;
-    background-color: var(--mud-palette-primary);
+    /*background-color: var(--mud-palette-primary);*/
 
-    &.wheel-border-gradient {
-        background-image: linear-gradient(to right, rgba(255,0,0,0), var(--mud-palette-primary), rgba(255,0,0,0));
+    &.mud-wheel-border-default {
+        background-color: var(--mud-palette-text-primary);
+    }
+
+    @each $color in $mud-palette-colors {
+        &.mud-wheel-border-#{$color} {
+            background-color: var(--mud-palette-#{$color});
+        }
+
+        &.wheel-border-gradient-#{$color} {
+            background-image: linear-gradient(to right, rgba(255,0,0,0), var(--mud-palette-#{$color}), rgba(255,0,0,0));
+            background-color: unset;
+        }
+    }
+
+    &.wheel-border-gradient-default {
+        background-image: linear-gradient(to right, rgba(255,0,0,0), var(--mud-palette-text-primary), rgba(255,0,0,0));
         background-color: unset;
     }
 }
