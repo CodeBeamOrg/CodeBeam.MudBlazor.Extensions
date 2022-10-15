@@ -5,11 +5,11 @@
 @inject ISnackbar Snackbar
 
 <ExamplePage Title="MudWheel">
-    <ExampleCard Title="Playground" Description="">
+    <ExampleCard Title="Playground" Description="Each MudWheel has ItemCollection to switch between values.">
         <MudGrid Class="cursor-default">
             <MudItem xs="12" sm="8" Class="d-flex">
-                <MudWheel T="int" Items="_numbers" @bind-Value="_val" WheelLevel="_wheelLevel" Dense="_dense" SmoothBorders="_smoothBorders" Color="_color" />
-                <MudWheel T="WheelDocClass" Items="_customObject" WheelLevel="_wheelLevel" Dense="_dense" SmoothBorders="_smoothBorders" Color="_color" ToStringFunc="@(e => e?.Name)" />
+                <MudWheel T="int" ItemCollection="_numbers" @bind-Value="_val" WheelLevel="_wheelLevel" Dense="_dense" SmoothBorders="_smoothBorders" Color="_color" />
+                <MudWheel T="string" ItemCollection="_letterNumbers" WheelLevel="_wheelLevel" Dense="_dense" SmoothBorders="_smoothBorders" Color="_color" />
             </MudItem>
 
             <MudItem xs="12" sm="4" Class="border-solid border-2 mud-border-secondary rounded-bl rounded-tl">
@@ -27,6 +27,7 @@
                 </MudStack>
             </MudItem>
         </MudGrid>
+        
     </ExampleCard>
 </ExamplePage>
 

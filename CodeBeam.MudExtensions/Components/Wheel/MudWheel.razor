@@ -9,14 +9,14 @@
 
     @if (true)
     {
-        int index = Items.IndexOf(Value) == -1 ? 0 : Items.IndexOf(Value);
+        int index = GetIndex();
         for (int i = WheelLevel + 1; 0 < i; i--)
         {
             int a = i;
             if (0 <= index - a)
             {
                 <div class="@OuterItemClassname(index - a)" @onclick="@(async() => await ChangeWheel(-a))">
-                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(Items[index - a]) : Converter.Set(Items[index - a]))</MudText>
+                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index - a]) : Converter.Set(ItemCollection[index - a]))</MudText>
                 </div>
             }
             else
@@ -28,7 +28,7 @@
         <span class="@BorderClassname" />
 
         <div class="middle-item d-flex align-center justify-center mud-width-full">
-            <MudText Class="@($"mud-wheel-ani-{_animateGuid} my-2)")" Typo="@(Dense ? Typo.body1 : Typo.h6)" Color="@Color" Style="font-weight: 900">@(ToStringFunc != null ? ToStringFunc(Items[index]) : Converter.Set(Items[index]))</MudText>
+            <MudText Class="@($"mud-wheel-ani-{_animateGuid} my-2)")" Typo="@(Dense ? Typo.body1 : Typo.h6)" Color="@Color" Style="font-weight: 900">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index]) : Converter.Set(ItemCollection[index]))</MudText>
         </div>
 
         <div class="@BorderClassname" />
@@ -36,10 +36,10 @@
         for (int i = 1; i < WheelLevel + 2; i++)
         {
             int a = i;
-            if (index + a < Items.Count)
+            if (index + a < ItemCollection.Count)
             {
                 <div class="@OuterItemClassname(index + a)" @onclick="@(async() => await ChangeWheel(a))">
-                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(Items[index + a]) : Converter.Set(Items[index + a]))</MudText>
+                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index + a]) : Converter.Set(ItemCollection[index + a]))</MudText>
                 </div>
             }
             else

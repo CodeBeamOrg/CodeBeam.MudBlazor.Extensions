@@ -15,7 +15,7 @@ namespace MudExtensions
     {
 
         protected string OuterItemClassname(int index) => new CssBuilder($"mud-wheel-item mud-wheel-ani-{_animateGuid}")
-            .AddClass("wheel-item-closest", Math.Abs(Items.IndexOf(Value) - index) == 1)
+            .AddClass("wheel-item-closest", Math.Abs(ItemCollection.IndexOf(Value) - index) == 1)
             .AddClass("my-1", Dense == false)
             .Build();
 
@@ -35,7 +35,7 @@ namespace MudExtensions
         int _animateValue = 52;
 
         [Parameter]
-        public List<T> Items { get; set; }
+        public List<T> ItemCollection { get; set; }
 
         [Parameter]
         public int WheelLevel { get; set; } = 2;
@@ -81,7 +81,7 @@ namespace MudExtensions
         protected async Task HandleOnWheel(WheelEventArgs args)
         {
             int index = GetIndex();
-            if ((args.DeltaY < 0 && index == 0) || (0 < args.DeltaY && index == Items.Count - 1))
+            if ((args.DeltaY < 0 && index == 0) || (0 < args.DeltaY && index == ItemCollection.Count - 1))
             {
                 return;
             }
@@ -97,12 +97,12 @@ namespace MudExtensions
             await _animate.Refresh();
             if (args.DeltaY < 0 && index != 0)
             {
-                T val = Items[index - 1];
+                T val = ItemCollection[index - 1];
                 await SetValueAsync(val);
             }
-            else if (0 < args.DeltaY && index != Items.Count - 1)
+            else if (0 < args.DeltaY && index != ItemCollection.Count - 1)
             {
-                T val = Items[index + 1];
+                T val = ItemCollection[index + 1];
                 await SetValueAsync(val);
             }
             await Task.Delay(300);
@@ -111,7 +111,7 @@ namespace MudExtensions
         protected async Task HandleOnSwipe(SwipeDirection direction)
         {
             int index = GetIndex();
-            if ((direction == SwipeDirection.TopToBottom && index == 0) || (direction == SwipeDirection.BottomToTop && index == Items.Count - 1))
+            if ((direction == SwipeDirection.TopToBottom && index == 0) || (direction == SwipeDirection.BottomToTop && index == ItemCollection.Count - 1))
             {
                 return;
             }
@@ -126,12 +126,12 @@ namespace MudExtensions
             await _animate.Refresh();
             if (direction == SwipeDirection.TopToBottom)
             {
-                T val = Items[index - 1];
+                T val = ItemCollection[index - 1];
                 await SetValueAsync(val);
             }
             else if (direction == SwipeDirection.BottomToTop)
             {
-                T val = Items[index + 1];
+                T val = ItemCollection[index + 1];
                 await SetValueAsync(val);
             }
 
@@ -149,11 +149,11 @@ namespace MudExtensions
                 _animateValue = - GetAnimateValue();
             }
             await _animate.Refresh();
-            T val = Items[index + changeCount];
+            T val = ItemCollection[index + changeCount];
             await SetValueAsync(val);
         }
 
-        protected int GetIndex() => Items.IndexOf(Value) == -1 ? 0 : Items.IndexOf(Value);
+        protected int GetIndex() => ItemCollection.IndexOf(Value) == -1 ? 0 : ItemCollection.IndexOf(Value);
         protected int GetAnimateValue() => Dense ? 24 : 42;
     }
 }
