@@ -19,6 +19,7 @@
 - MudSection
 - MudSpeedDial
 - MudStepper
+- MudWheel
 
 ## Installation
 This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />
@@ -52,6 +53,10 @@ https://user-images.githubusercontent.com/78308169/194750397-e0dfd08c-c297-426f-
 ### MudStepper
 
 https://user-images.githubusercontent.com/78308169/195593490-6fd8d5fe-0472-4b9b-8180-ef6b9d94bcbd.mp4
+
+### MudWheel
+
+https://user-images.githubusercontent.com/78308169/195979884-7cf1698c-ce0a-400f-83a7-2accf6fff8c5.mp4
 
 
 ## Contribution
