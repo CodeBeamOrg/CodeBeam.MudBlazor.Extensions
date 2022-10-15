@@ -1,0 +1,66 @@
+﻿$mud-palette-colors: primary, secondary, tertiary, info, success, warning, error, dark;
+
+.mud-wheel {
+    /*height: 240px;*/
+    overflow: hidden;
+    min-width: 0;
+    flex-grow: 1;
+}
+
+.mud-wheel-item {
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    color: var(--mud-palette-text-secondary);
+    border-radius: var(--mud-default-borderradius);
+
+    &.mud-wheel-item:hover {
+        background-color: var(--mud-palette-action-default-hover);
+    }
+
+    &.wheel-item-closest {
+        color: var(--mud-palette-text);
+    }
+
+    &.wheel-item-empty {
+        min-height: 32px !important;
+
+        &.wheel-item-empty-dense {
+            min-height: 24px !important;
+        }
+
+        &.wheel-item-empty:hover {
+            background-color: unset;
+        }
+    }
+}
+
+.middle-item {
+    transform: scale(1.2);
+}
+
+.mud-wheel-border {
+    min-height: 2px !important;
+    /*background-color: var(--mud-palette-primary);*/
+
+    &.mud-wheel-border-default {
+        background-color: var(--mud-palette-text-primary);
+    }
+
+    @each $color in $mud-palette-colors {
+        &.mud-wheel-border-#{$color} {
+            background-color: var(--mud-palette-#{$color});
+        }
+
+        &.wheel-border-gradient-#{$color} {
+            background-image: linear-gradient(to right, rgba(255,0,0,0), var(--mud-palette-#{$color}), rgba(255,0,0,0));
+            background-color: unset;
+        }
+    }
+
+    &.wheel-border-gradient-default {
+        background-image: linear-gradient(to right, rgba(255,0,0,0), var(--mud-palette-text-primary), rgba(255,0,0,0));
+        background-color: unset;
+    }
+}

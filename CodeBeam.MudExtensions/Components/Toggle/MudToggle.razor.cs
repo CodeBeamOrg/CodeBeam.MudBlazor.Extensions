@@ -24,15 +24,14 @@ namespace MudExtensions
         {
             if (Toggled == false)
             {
-                return Style;
+                return $"{StyleCommon} {Style}";
             }
             else
             {
-                return StyleToggled;
+                return $"{StyleCommon} {StyleToggled}";
             }
 
         }
-        
 
         bool _toggled;
         [Parameter]
@@ -61,6 +60,9 @@ namespace MudExtensions
 
         [Parameter]
         public string StyleToggled { get; set; }
+
+        [Parameter]
+        public string StyleCommon { get; set; }
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
