@@ -1,0 +1,15 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+<MudAutocomplete T="String" Style="@($"font-family:\"{Font}\" !important")" Label="@Label" Value="@Font" Variant="@Variant" Margin="@Margin" Dense="@Dense"
+Required="@Required" ValueChanged="@OnFontValueChanged" Placeholder="@PlaceHolder"
+          MaxItems="null" SearchFunc="@SearchFonts" Clearable OnClearButtonClick="@ClearFontValue" CoerceValue="false">
+    <ItemTemplate>
+        <MudText Style="@($"font-family:\"{context}\" !important")">
+                <style>
+        @($"@import url('https://fonts.googleapis.com/css2?family={context.Replace(" ", "+")}')")
+    </style>
+            @context
+        </MudText>
+    </ItemTemplate>
+</MudAutocomplete>
