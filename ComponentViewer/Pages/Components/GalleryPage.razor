@@ -1,0 +1,30 @@
+﻿@page "/mudgallery"
+
+<ExamplePage Title="MudGallery">
+    <ExampleCard Title="Usage" Description="">
+        <MudGrid>
+            <MudItem xs="12" sm="8" Class="d-flex align-center flex-wrap">
+                <MudGallery ImageSource="_source" ItemPerLine="_itemPerLine" />
+            </MudItem>
+
+            <MudItem xs="12" sm="4">
+                <MudStack>
+                    <MudNumericField @bind-Value="_itemPerLine" Label="Item Per Line" />
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </ExampleCard>
+</ExamplePage>
+
+@code{
+    int _itemPerLine = 3;
+
+    List<string> _source = new() { "https://cdn.pixabay.com/photo/2022/09/17/08/47/piano-7460435_960_720.jpg", 
+    "https://cdn.pixabay.com/photo/2017/07/29/16/10/windows-2551954_960_720.jpg",
+    "https://mudblazor.com/images/castle.jpg",
+    "https://cdn.pixabay.com/photo/2022/08/01/13/20/lily-of-the-valley-7358144__340.jpg",
+    "https://cdn.pixabay.com/photo/2022/03/31/01/05/bird-7102006__340.jpg",
+    "https://cdn.pixabay.com/photo/2019/06/05/08/37/dog-4253238__340.jpg",
+    "https://cdn.pixabay.com/photo/2022/07/27/03/23/deer-7347041_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2022/03/31/11/28/snakes-head-fritillary-7102810_960_720.jpg" };
+}

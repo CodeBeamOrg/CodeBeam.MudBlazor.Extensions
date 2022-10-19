@@ -1,4 +1,9 @@
-﻿.mud-page {
+﻿.mud-gallery-dialog .mud-dialog {
+  background-color: transparent !important;
+  box-shadow: none;
+  height: 100%; }
+
+.mud-page {
   display: grid;
   box-sizing: border-box;
   width: 100%; }
