@@ -165,9 +165,9 @@ namespace MudExtensions
             await ActiveStepChanged.InvokeAsync();
         }
 
-        protected async Task SetActiveIndex(int count, bool firstCompleted = false)
+        protected async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)
         {
-            if (PreventStepChange.Invoke() == true)
+            if (skipPreventProcess == false && PreventStepChange != null && PreventStepChange.Invoke() == true)
             {
                 return;
             }
@@ -210,7 +210,7 @@ namespace MudExtensions
 
         public async Task CompleteStep(int index, bool moveToNextStep = true)
         {
-            if (PreventStepChange.Invoke() == true)
+            if (PreventStepChange != null && PreventStepChange.Invoke() == true)
             {
                 return;
             }
@@ -218,17 +218,17 @@ namespace MudExtensions
             Steps[index].SetStatus(StepStatus.Completed);
             if (IsAllStepsCompleted())
             {
-                await SetActiveIndex(1, true);
+                await SetActiveIndex(1, true, true);
             }
             else if (moveToNextStep)
             {
-                await SetActiveIndex(1);
+                await SetActiveIndex(1, skipPreventProcess: true);
             }
         }
 
         public async Task SkipStep(int index, bool moveToNextStep = true)
         {
-            if (PreventStepChange.Invoke() == true)
+            if (PreventStepChange != null && PreventStepChange.Invoke() == true)
             {
                 return;
             }
@@ -236,7 +236,7 @@ namespace MudExtensions
             Steps[index].SetStatus(StepStatus.Skipped);
             if (moveToNextStep)
             {
-                await SetActiveIndex(1);
+                await SetActiveIndex(1, skipPreventProcess: true);
             }
         }
 
