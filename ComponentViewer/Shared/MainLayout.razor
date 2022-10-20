@@ -1,19 +1,19 @@
 ﻿@inherits LayoutComponentBase
 
 <style>
-    @($"@import url('https://fonts.googleapis.com/css2?family={font?.Replace(" ", "+")}')")
+    @(_fontPicker?.ImportFontStyleText(font))
 </style>
 
 <MudLayout>
-    <MudAppBar Class="appbar-style">
+    <MudAppBar Class="background-gradient-animation mud-width-full" Style="background: linear-gradient(-45deg, var(--mud-palette-info), var(--mud-palette-tertiary), var(--mud-palette-secondary), var(--mud-palette-primary)); background-size: 400% 400%; position: relative; overflow-x: hidden">
         <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="4">
-            <MudIconButton Class="reverse-color" Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large" Href="https://mudblazor.com/" Target="_blank" />
+            <MudIconButton Class="white-text" Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large" Href="https://mudblazor.com/" Target="_blank" />
             <MudText>CodeBeam MudExtensions</MudText>
         </MudStack>
     </MudAppBar>
-    <MudMainContent>
+    <MudMainContent Class="pt-0">
         <div class="pa-4">
-            <MudFontPicker @ref="@_fontPicker" Label="Font Picker" FontChanged="FontChanged" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
+            <MudFontPicker @ref="@_fontPicker" Label="Font Picker" StaticInputText="true" FontChanged="FontChanged" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" Clearable="true" MaxItems="null" />
         </div>
         @Body
     </MudMainContent>
@@ -47,8 +47,18 @@
 
 @code {
     MudFontPicker _fontPicker;
-    string font = null;
+    string font = "Roboto";
     bool open = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            _fontPicker.Font = "Roboto";
+            FontChanged();
+        }
+    }
 
     MudTheme _theme = new MudTheme()
         {
