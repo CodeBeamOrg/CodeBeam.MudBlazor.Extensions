@@ -11,6 +11,7 @@
 ## Components
 
 - MudAnimate
+- MudFontPicker
 - MudLoading
 - MudLoadingButton
 - MudPage
@@ -45,6 +46,10 @@ Each example is recorded in the playground website.
 ### MudAnimate
 
 https://user-images.githubusercontent.com/78308169/194701300-e4ad517a-8fbb-4a5e-9407-a5a585157685.mp4
+
+### MudFontPicker
+
+https://user-images.githubusercontent.com/78308169/196959281-76d6e05b-8368-43a2-a562-658dbd4ea3a9.mp4
 
 ### MudSpeedDial
 
