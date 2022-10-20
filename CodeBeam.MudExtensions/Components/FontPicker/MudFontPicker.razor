@@ -1,0 +1,17 @@
+﻿@namespace MudExtensions
+@inherits MudAutocomplete<string>
+
+<MudAutocomplete T="string" Class="@Class" PopoverClass="@PopoverClass" Style="@(StaticInputText ? null : $"font-family:\"{Font}\" !important")" Label="@Label" Value="@Font" Variant="@Variant" Margin="@Margin" Dense="@Dense"
+        Required="@Required" RequiredError="@RequiredError" ValueChanged="@SetFontValue" Placeholder="@Placeholder" MaxItems="@MaxItems" Disabled="@Disabled" HelperText="@HelperText" HelperTextOnFocus="@HelperTextOnFocus" TextUpdateSuppression="@TextUpdateSuppression" Counter="@Counter" MaxLength="@MaxLength" IconSize="@IconSize" DebounceInterval="@DebounceInterval"
+        AutoFocus="@AutoFocus" Adornment="@Adornment" AdornmentAriaLabel="@AdornmentAriaLabel" AdornmentColor="@AdornmentColor" AdornmentIcon="@AdornmentIcon" AdornmentText="@AdornmentText" OnAdornmentClick="@OnAdornmentClick" SelectOnClick="@SelectOnClick" ResetValueOnEmptyText="@ResetValueOnEmptyText"
+        SearchFunc="@SearchFonts" Clearable="@Clearable" OnClearButtonClick="@ClearFont" Error="@Error" ErrorId="@ErrorId" ErrorText="@ErrorText" CoerceValue="false" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin"
+        DisableUnderLine="@DisableUnderLine" Immediate="@Immediate" For="@For" FullWidth="@FullWidth" MinCharacters="@MinCharacters" SelectValueOnTab="@SelectValueOnTab" Validation="@Validation" OnlyValidateIfDirty="@OnlyValidateIfDirty" ReadOnly="@ReadOnly">
+    <ItemTemplate>
+        <MudText Style="@($"font-family:\"{context}\" !important")">
+            <style>
+                @(ImportFontStyleText(context))
+            </style>
+            @context
+        </MudText>
+    </ItemTemplate>
+</MudAutocomplete>
