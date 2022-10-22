@@ -3,42 +3,39 @@
 @using MudExtensions.Enums
 
 <CascadingValue Value="this" IsFixed="true">
-    <div class="d-flex flex-wrap">
+    <div class="@Classname" style="@Style">
         @foreach (var item in ImageSource)
         {
             <MudImage Style="@ImageStylename" Src="@item" @onclick="@(() => ImageClick(item))" ObjectFit="ObjectFit.Cover" />
         }
     </div>
 
-@*    <MudDialog @bind-IsVisible="_visible" Options="_dialogOptions" DisableSidePadding="true">
-        <DialogContent>
-            <div class="@DialogClassname">
-                <MudImage Src="@_selectedSrc" Fluid="true" />
-            </div>
-        </DialogContent>
-    </MudDialog>*@
-
-@*    <MudPopover Open="_visible" Class="d-flex" Style="display: fixed; top: 0; height: 100vh; width: 100vh">
-        <MudImage Src="@_selectedSrc" Fluid="true" />
-    </MudPopover>*@
     @if (_visible)
     {
-        <div class="mud-overlay" style="background-color: rgba(0, 0, 0, 0.8); z-index: 2000">
-            <MudContainer Class="relative pa-0" MaxWidth="MaxWidth.Medium" Style="background-color: rgba(150, 150, 150, 0.8); top: 0; bottom: 0; height: 100%;">
-                @*<MudStack Justify="Justify.SpaceBetween" Class="mud-width-full" Style="height: 100%">*@
+        <div class="mud-overlay" style="background-color: rgba(0, 0, 0, 0.8); z-index: 2000" @onclick="@(EnableBackdropClick ? () =>  ChangeMenu(false) : null)" @onclick:stopPropagation>
+            <MudContainer Class="relative pa-0" MaxWidth="MaxWidth" Style="background-color: rgba(20, 20, 20, 0.9); top: 0; bottom: 0; height: 100%;">
+
                 <div class="d-flex absolute" style="top: 0px; left: 0; right: 0; height: 56px; width: 100%; background-color: rgba(0, 0, 0, 0.6);">
+                    @ToolboxTopContent
+                </div>
+                <div class="d-flex align-center justify-center" style="background-color: rgba(var(--mud-palette-background-grey), 0.9); height: 100%; max-height: 100%; overflow: auto">
+                    <MudImage Class="@ClassSelectedImage" Style="@StyleSelectedImage" Src="@_selectedSrc" Fluid="true" />
+                </div>
 
-                    </div>
-                <div class="d-flex align-center justify-center" style="background-color: rgba(var(--mud-palette-background-grey), 0.9); height: 100%;">
-                        <MudImage Src="@_selectedSrc" Fluid="true" />
-                    </div>
+                <div class="d-flex justify-center absolute" style="bottom: 0px; left: 0; right: 0; height: 56px; width: 100%; background-color: rgba(0, 0, 0, 0.6);">
+                    @ToolboxBottomContent
+                </div>
 
-                <div class="d-flex absolute" style="bottom: 0px; left: 0; right: 0; height: 56px; width: 100%; background-color: rgba(0, 0, 0, 0.6);">
+                @if (ShowToolboxNavigationButtons == true)
+                {
+                    <MudIconButton Class="absolute white-text" Size="Size.Large" DisableRipple="true" Icon="@Icons.Outlined.ChevronLeft" Style="bottom: 0px; top: 0px; left: 4px;" OnClick="@(() => SetAdjacentImage(-1))" />
+                    <MudIconButton Class="absolute white-text" Size="Size.Large" DisableRipple="true" Icon="@Icons.Outlined.ChevronRight" Style="bottom: 0px; top: 0px; right: 4px;" OnClick="@(() => SetAdjacentImage(1))" />
+                }
 
-                    </div>
-                @*</MudStack>*@
-                
-                <MudSpeedDial OpenOnClick="false" Color="Color.Secondary" OnMainButtonClick="@(() => _visible = false)" />
+                @if (ShowToolboxCloseButton == true)
+                {
+                    <MudIconButton Class="absolute white-text" DisableRipple="true" Icon="@Icons.Outlined.Close" Style="top: 4px; right: 0px;" OnClick="@(() => ChangeMenu(false))" />
+                }
             </MudContainer>
         </div>
     }

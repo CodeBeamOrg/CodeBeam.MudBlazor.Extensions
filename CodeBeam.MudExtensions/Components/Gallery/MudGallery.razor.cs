@@ -23,7 +23,8 @@ namespace MudExtensions
         DialogOptions _dialogOptions = new() { NoHeader = true, FullWidth = true, MaxWidth = MaxWidth.Large, CloseOnEscapeKey = true };
         string _selectedSrc;
 
-        protected string DialogClassname => new CssBuilder("mud-gallery-dialog d-flex align-center justify-center mud-width-full")
+        protected string Classname => new CssBuilder("d-flex flex-wrap")
+            .AddClass(Class)
             .Build();
 
         protected string ImageStylename => new StyleBuilder()
@@ -32,33 +33,22 @@ namespace MudExtensions
             .Build();
 
         [Parameter]
+        public string ClassSelectedImage { get; set; }
+
+        [Parameter]
+        public string StyleSelectedImage { get; set; }
+
+        /// <summary>
+        /// Sets how many images show per gallery line. Default is 3.
+        /// </summary>
+        [Parameter]
         public int ItemPerLine { get; set; } = 3;
 
         /// <summary>
-        /// The mini image square's width and height.
+        /// If true, closes selected image on backdrop click. Default is true.
         /// </summary>
         [Parameter]
-        public int ImageDimension { get; set; }
-
-        /// <summary>
-        /// Provides CSS classes for the step content.
-        /// </summary>
-        [Parameter]
-        public string ContentClass { get; set; }
-
-        /// <summary>
-        /// Provides CSS styles for the step content.
-        /// </summary>
-        [Parameter]
-        public string ContentStyle { get; set; }
-
-
-
-        /// <summary>
-        /// If true, disables ripple effect when click on step headers.
-        /// </summary>
-        [Parameter]
-        public bool DisableRipple { get; set; }
+        public bool EnableBackdropClick { get; set; } = true;
 
         /// <summary>
         /// If true, disables the default animation on step changing.
@@ -66,27 +56,33 @@ namespace MudExtensions
         [Parameter]
         public bool DisableAnimation { get; set; }
 
-        /// <summary>
-        /// The predefined Mud color for header and action buttons.
-        /// </summary>
         [Parameter]
-        public Color Color { get; set; } = Color.Default;
+        public bool ShowToolboxCloseButton { get; set; } = true;
+
+        [Parameter]
+        public bool ShowToolboxNavigationButtons { get; set; } = true;
 
         /// <summary>
-        /// The variant for header and action buttons.
+        /// The max width for selected image. The remaining space fills with an overlay. Default is Medium.
         /// </summary>
         [Parameter]
-        public Variant Variant { get; set; }
+        public MaxWidth MaxWidth { get; set; } = MaxWidth.Medium;
 
         /// <summary>
-        /// Overrides the action buttons (previous, next etc.) with custom render fragment.
+        /// Renderfragment for top section on selected view.
         /// </summary>
         [Parameter]
-        public RenderFragment ActionContent { get; set; }
+        public RenderFragment ToolboxTopContent { get; set; }
 
+        /// <summary>
+        /// Renderfragment for bottom section on selected view.
+        /// </summary>
         [Parameter]
-        public EventCallback<int> ActiveStepChanged { get; set; }
+        public RenderFragment ToolboxBottomContent { get; set; }
 
+        /// <summary>
+        /// Gallery's image source.
+        /// </summary>
         [Parameter]
         public List<string> ImageSource { get; set; }
 
@@ -97,6 +93,30 @@ namespace MudExtensions
             StateHasChanged();
         }
 
+        public void ChangeMenu(bool visible)
+        {
+            _visible = visible;
+        }
+
+        protected void SetAdjacentImage(int count)
+        {
+            if (_selectedSrc == null)
+            {
+                return;
+            }
+            int index = ImageSource.IndexOf(_selectedSrc);
+
+            if (ImageSource.Count <= index + count || index + count < 0)
+            {
+                return;
+            }
+            _selectedSrc = ImageSource[index + count];
+        }
+
+        public int GetSelectedImageIndex()
+        {
+            return ImageSource.IndexOf(_selectedSrc);
+        }
 
     }
 }
