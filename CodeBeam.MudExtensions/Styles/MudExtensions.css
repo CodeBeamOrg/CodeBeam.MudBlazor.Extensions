@@ -1,7 +1,13 @@
-﻿.mud-gallery-dialog .mud-dialog {
-  background-color: transparent !important;
-  box-shadow: none;
-  height: 100%; }
+﻿.mud-gallery-selected-toolbox {
+  left: 0;
+  right: 0;
+  height: 56px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.6); }
+  .mud-gallery-selected-toolbox.gallery-toolbox-top {
+    top: 0; }
+  .mud-gallery-selected-toolbox.gallery-toolbox-bottom {
+    bottom: 0; }
 
 .mud-page {
   display: grid;

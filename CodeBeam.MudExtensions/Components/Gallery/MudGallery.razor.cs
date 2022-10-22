@@ -51,10 +51,10 @@ namespace MudExtensions
         public bool EnableBackdropClick { get; set; } = true;
 
         /// <summary>
-        /// If true, disables the default animation on step changing.
+        /// If true, disables the default animation on image changing.
         /// </summary>
         [Parameter]
-        public bool DisableAnimation { get; set; }
+        public bool EnableAnimation { get; set; } = true;
 
         [Parameter]
         public bool ShowToolboxCloseButton { get; set; } = true;
@@ -98,7 +98,7 @@ namespace MudExtensions
             _visible = visible;
         }
 
-        protected void SetAdjacentImage(int count)
+        protected async Task SetAdjacentImage(int count)
         {
             if (_selectedSrc == null)
             {
@@ -110,7 +110,13 @@ namespace MudExtensions
             {
                 return;
             }
+
+            if (EnableAnimation == true)
+            {
+                await _animate.Refresh();
+            }
             _selectedSrc = ImageSource[index + count];
+            
         }
 
         public int GetSelectedImageIndex()

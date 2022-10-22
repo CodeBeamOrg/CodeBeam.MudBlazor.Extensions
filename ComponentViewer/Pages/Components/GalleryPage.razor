@@ -8,7 +8,7 @@
             <MudItem xs="12" sm="8" Class="d-flex align-center flex-wrap">
                 <MudGallery @ref="_gallery" ImageSource="_source" ItemPerLine="_itemPerLine" EnableBackdropClick="_enableBackdropClick"
                             ShowToolboxCloseButton="_showToolboxCloseButton" ShowToolboxNavigationButtons="_showToolboxNavigationButtons"
-                            MaxWidth="_maxWidth" StyleSelectedImage="@ImageStyle">
+                            MaxWidth="_maxWidth" StyleSelectedImage="@ImageStyle" EnableAnimation="_enableAnimation">
                     <ToolboxTopContent>
                         <MudText Class="white-text pa-4">Image @(_gallery.GetSelectedImageIndex() + 1) - Description</MudText>
                     </ToolboxTopContent>
@@ -29,6 +29,7 @@
                     <MudSwitch @bind-Checked="_enableBackdropClick" Color="Color.Primary" Label="Enable Backdrop Click" />
                     <MudSwitch @bind-Checked="_showToolboxCloseButton" Color="Color.Primary" Label="Toolbox Close Button" />
                     <MudSwitch @bind-Checked="_showToolboxNavigationButtons" Color="Color.Primary" Label="Toolbox Navigation Buttons" />
+                    <MudSwitch @bind-Checked="_enableAnimation" Color="Color.Primary" Label="Animation" />
                     <MudSelect @bind-Value="_maxWidth" Variant="Variant.Outlined" Label="MaxWidth" Margin="Margin.Dense" Dense="true">
                         @foreach (MaxWidth item in Enum.GetValues<MaxWidth>())
                         {
@@ -47,6 +48,7 @@
     bool _enableBackdropClick = true;
     bool _showToolboxCloseButton = true;
     bool _showToolboxNavigationButtons = true;
+    bool _enableAnimation = true;
     int _rotateValue = 0;
     MaxWidth _maxWidth = MaxWidth.Medium;
 

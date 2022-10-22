@@ -1,7 +1,16 @@
 ﻿
-.mud-gallery-dialog .mud-dialog {
-    background-color: transparent !important;
-    box-shadow: none;
+.mud-gallery-selected-toolbox {
+    left: 0;
+    right: 0;
+    height: 56px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
 
-    height: 100%;
+    &.gallery-toolbox-top {
+        top: 0;
+    }
+
+    &.gallery-toolbox-bottom {
+        bottom: 0;
+    }
 }

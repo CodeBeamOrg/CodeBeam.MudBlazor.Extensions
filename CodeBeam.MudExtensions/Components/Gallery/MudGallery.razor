@@ -15,14 +15,14 @@
         <div class="mud-overlay" style="background-color: rgba(0, 0, 0, 0.8); z-index: 2000" @onclick="@(EnableBackdropClick ? () =>  ChangeMenu(false) : null)" @onclick:stopPropagation>
             <MudContainer Class="relative pa-0" MaxWidth="MaxWidth" Style="background-color: rgba(20, 20, 20, 0.9); top: 0; bottom: 0; height: 100%;">
 
-                <div class="d-flex absolute" style="top: 0px; left: 0; right: 0; height: 56px; width: 100%; background-color: rgba(0, 0, 0, 0.6);">
+                <div class="d-flex absolute mud-gallery-selected-toolbox gallery-toolbox-top">
                     @ToolboxTopContent
                 </div>
-                <div class="d-flex align-center justify-center" style="background-color: rgba(var(--mud-palette-background-grey), 0.9); height: 100%; max-height: 100%; overflow: auto">
+                <div class="@($"d-flex align-center justify-center mud-gallery-ani-{_animateGuid.ToString()}")" style="background-color: rgba(var(--mud-palette-background-grey), 0.9); height: 100%; max-height: 100%; overflow: auto">
                     <MudImage Class="@ClassSelectedImage" Style="@StyleSelectedImage" Src="@_selectedSrc" Fluid="true" />
                 </div>
 
-                <div class="d-flex justify-center absolute" style="bottom: 0px; left: 0; right: 0; height: 56px; width: 100%; background-color: rgba(0, 0, 0, 0.6);">
+                <div class="d-flex justify-center absolute mud-gallery-selected-toolbox gallery-toolbox-bottom">
                     @ToolboxBottomContent
                 </div>
 
@@ -41,8 +41,8 @@
     }
 </CascadingValue>
 
-@if (DisableAnimation == false)
+@if (EnableAnimation == true)
 {
-    <MudAnimate @ref="_animate" Selector="@($".mud-stepper-ani-{_animateGuid.ToString()}")" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.5" />
+    <MudAnimate @ref="_animate" Selector="@($".mud-gallery-ani-{_animateGuid.ToString()}")" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.3" />
 }
 
