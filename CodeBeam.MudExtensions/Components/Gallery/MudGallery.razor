@@ -1,0 +1,48 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+@using MudExtensions.Enums
+
+<CascadingValue Value="this" IsFixed="true">
+    <div class="@Classname" style="@Style">
+        @foreach (var item in ImageSource)
+        {
+            <MudImage Style="@ImageStylename" Src="@item" @onclick="@(() => ImageClick(item))" ObjectFit="ObjectFit.Cover" />
+        }
+    </div>
+
+    @if (_visible)
+    {
+        <div class="mud-overlay" style="background-color: rgba(0, 0, 0, 0.8); z-index: 2000" @onclick="@(EnableBackdropClick ? () =>  ChangeMenu(false) : null)" @onclick:stopPropagation>
+            <MudContainer Class="relative pa-0" MaxWidth="MaxWidth" Style="background-color: rgba(20, 20, 20, 0.9); top: 0; bottom: 0; height: 100%;">
+
+                <div class="d-flex absolute mud-gallery-selected-toolbox gallery-toolbox-top">
+                    @ToolboxTopContent
+                </div>
+                <div class="@($"d-flex align-center justify-center mud-gallery-ani-{_animateGuid.ToString()}")" style="background-color: rgba(var(--mud-palette-background-grey), 0.9); height: 100%; max-height: 100%; overflow: auto">
+                    <MudImage Class="@ClassSelectedImage" Style="@StyleSelectedImage" Src="@_selectedSrc" Fluid="true" />
+                </div>
+
+                <div class="d-flex justify-center absolute mud-gallery-selected-toolbox gallery-toolbox-bottom">
+                    @ToolboxBottomContent
+                </div>
+
+                @if (ShowToolboxNavigationButtons == true)
+                {
+                    <MudIconButton Class="absolute white-text" Size="Size.Large" DisableRipple="true" Icon="@Icons.Outlined.ChevronLeft" Style="bottom: 0px; top: 0px; left: 4px;" OnClick="@(() => SetAdjacentImage(-1))" />
+                    <MudIconButton Class="absolute white-text" Size="Size.Large" DisableRipple="true" Icon="@Icons.Outlined.ChevronRight" Style="bottom: 0px; top: 0px; right: 4px;" OnClick="@(() => SetAdjacentImage(1))" />
+                }
+
+                @if (ShowToolboxCloseButton == true)
+                {
+                    <MudIconButton Class="absolute white-text" DisableRipple="true" Icon="@Icons.Outlined.Close" Style="top: 4px; right: 0px;" OnClick="@(() => ChangeMenu(false))" />
+                }
+            </MudContainer>
+        </div>
+    }
+</CascadingValue>
+
+@if (EnableAnimation == true)
+{
+    <MudAnimate @ref="_animate" Selector="@($".mud-gallery-ani-{_animateGuid.ToString()}")" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.3" />
+}
+

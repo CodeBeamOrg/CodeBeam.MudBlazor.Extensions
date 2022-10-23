@@ -1,0 +1,16 @@
+﻿
+.mud-gallery-selected-toolbox {
+    left: 0;
+    right: 0;
+    height: 56px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+
+    &.gallery-toolbox-top {
+        top: 0;
+    }
+
+    &.gallery-toolbox-bottom {
+        bottom: 0;
+    }
+}

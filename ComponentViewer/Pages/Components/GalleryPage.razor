@@ -1,0 +1,80 @@
+﻿@page "/mudgallery"
+@using MudBlazor.Extensions
+@using MudBlazor.Utilities
+
+<ExamplePage Title="MudGallery">
+    <ExampleCard Title="Usage" Description="">
+        <MudGrid>
+            <MudItem xs="12" sm="8" Class="d-flex align-center flex-wrap">
+                <MudGallery @ref="_gallery" ImageSource="_source" ItemPerLine="_itemPerLine" EnableBackdropClick="_enableBackdropClick"
+                            ShowToolboxCloseButton="_showToolboxCloseButton" ShowToolboxNavigationButtons="_showToolboxNavigationButtons"
+                            MaxWidth="_maxWidth" StyleSelectedImage="@ImageStyle" EnableAnimation="_enableAnimation">
+                    <ToolboxTopContent>
+                        <MudText Class="white-text pa-4">Image @(_gallery.GetSelectedImageIndex() + 1) - Description</MudText>
+                    </ToolboxTopContent>
+                    <ToolboxBottomContent>
+                        <MudIconButton Class="white-text" Icon="@Icons.Outlined.Edit" />
+                        <MudIconButton Class="white-text" Icon="@Icons.Outlined.RotateRight" OnClick="ArrangeRotateValue" />
+                        @if (_showToolboxCloseButton == false)
+                        {
+                            <MudIconButton Class="white-text" Icon="@Icons.Outlined.Close" OnClick="@(() => _gallery.ChangeMenu(false))" />
+                        }
+                    </ToolboxBottomContent>
+                </MudGallery>
+            </MudItem>
+
+            <MudItem xs="12" sm="4">
+                <MudStack Spacing="4">
+                    <MudNumericField @bind-Value="_itemPerLine" Label="Item Per Line" />
+                    <MudSwitch @bind-Checked="_enableBackdropClick" Color="Color.Primary" Label="Enable Backdrop Click" />
+                    <MudSwitch @bind-Checked="_showToolboxCloseButton" Color="Color.Primary" Label="Toolbox Close Button" />
+                    <MudSwitch @bind-Checked="_showToolboxNavigationButtons" Color="Color.Primary" Label="Toolbox Navigation Buttons" />
+                    <MudSwitch @bind-Checked="_enableAnimation" Color="Color.Primary" Label="Animation" />
+                    <MudSelect @bind-Value="_maxWidth" Variant="Variant.Outlined" Label="MaxWidth" Margin="Margin.Dense" Dense="true">
+                        @foreach (MaxWidth item in Enum.GetValues<MaxWidth>())
+                        {
+                            <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </ExampleCard>
+</ExamplePage>
+
+@code{
+    MudGallery _gallery;
+    int _itemPerLine = 3;
+    bool _enableBackdropClick = true;
+    bool _showToolboxCloseButton = true;
+    bool _showToolboxNavigationButtons = true;
+    bool _enableAnimation = true;
+    int _rotateValue = 0;
+    MaxWidth _maxWidth = MaxWidth.Medium;
+
+    private string ImageStyle => new StyleBuilder()
+        .AddStyle("transform", $"rotate({_rotateValue}deg)")
+        .Build();
+
+    List<string> _source = new() { "https://cdn.pixabay.com/photo/2022/09/17/08/47/piano-7460435_960_720.jpg", 
+    "https://cdn.pixabay.com/photo/2017/07/29/16/10/windows-2551954_960_720.jpg",
+    "https://mudblazor.com/images/castle.jpg",
+    "https://cdn.pixabay.com/photo/2022/08/01/13/20/lily-of-the-valley-7358144__340.jpg",
+    "https://cdn.pixabay.com/photo/2022/03/31/01/05/bird-7102006__340.jpg",
+    "https://cdn.pixabay.com/photo/2019/06/05/08/37/dog-4253238__340.jpg",
+    "https://cdn.pixabay.com/photo/2022/07/27/03/23/deer-7347041_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2022/03/31/11/28/snakes-head-fritillary-7102810_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2022/10/07/09/06/bridge-7504605_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2022/08/24/05/44/duck-7406987_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2022/10/05/20/43/hyacinth-macaw-7501470_960_720.jpg" };
+
+    private void ArrangeRotateValue()
+    {
+        if (_rotateValue == 270)
+        {
+            _rotateValue = 0;
+            return;
+        }
+        _rotateValue += 90;
+    }
+}
