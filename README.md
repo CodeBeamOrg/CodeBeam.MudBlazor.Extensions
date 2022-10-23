@@ -12,6 +12,7 @@
 
 - MudAnimate
 - MudFontPicker
+- MudGallery
 - MudLoading
 - MudLoadingButton
 - MudPage
@@ -50,6 +51,10 @@ https://user-images.githubusercontent.com/78308169/194701300-e4ad517a-8fbb-4a5e-
 ### MudFontPicker
 
 https://user-images.githubusercontent.com/78308169/196959281-76d6e05b-8368-43a2-a562-658dbd4ea3a9.mp4
+
+### MudGallery
+
+https://user-images.githubusercontent.com/78308169/197382396-6ff0a926-e52a-4554-b408-5736ebd539c9.mp4
 
 ### MudSpeedDial
 
