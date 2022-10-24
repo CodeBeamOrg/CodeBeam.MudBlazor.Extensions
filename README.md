@@ -13,6 +13,7 @@
 - MudAnimate
 - MudFontPicker
 - MudGallery
+- MudInputStyler
 - MudLoading
 - MudLoadingButton
 - MudPage
