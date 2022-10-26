@@ -17,12 +17,13 @@ namespace MudExtensions
            new CssBuilder("mud-input-input-control")
            .AddClass(Class)
            .Build();
-
+        DateTime dt;
         protected override void OnInitialized()
         {
             Converter = new MudBlazor.Converter<DateTime?, string>()
             {
                 SetFunc = x => x?.ToString(DateFormat),
+                GetFunc = x => DateTime.TryParseExact(x, DateFormat, null, System.Globalization.DateTimeStyles.None, out dt) == true ? dt : null,
             };
         }
 
@@ -213,13 +214,14 @@ namespace MudExtensions
 
         protected async Task UpdateValueAsync(bool updateText = true)
         {
+            var _backUpValue = Value;
             try
             {
                 await SetValueAsync(new DateTime(_year, _month, _day, _hour, _minute, _second), updateText);
             }
-            catch (Exception)
+            catch
             {
-                //ignore
+                await SetValueAsync(_backUpValue, updateText);
             }
         }
 
@@ -256,9 +258,9 @@ namespace MudExtensions
             }
         }
 
-        protected void HandleOnBlur()
+        protected async Task HandleOnBlur()
         {
-            SetTextAsync(InputReference.Text, true);
+            await SetTextAsync(InputReference.Text, true);
         }
 
         protected async Task HandleAdornmentClick()
