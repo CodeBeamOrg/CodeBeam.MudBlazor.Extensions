@@ -16,7 +16,7 @@
     color: var(--mud-palette-text-secondary);
     border-radius: var(--mud-default-borderradius);
 
-    &.mud-wheel-item:hover {
+    &.mud-wheel-item:hover:not(.mud-disabled) {
         background-color: var(--mud-palette-action-default-hover);
     }
 
@@ -35,10 +35,18 @@
             background-color: unset;
         }
     }
+
+    &.mud-disabled {
+        color: var(--mud-palette-text-disabled);
+    }
 }
 
 .middle-item {
     transform: scale(1.2);
+
+    &.mud-disabled {
+        color: var(--mud-palette-text-disabled);
+    }
 }
 
 .mud-wheel-border {

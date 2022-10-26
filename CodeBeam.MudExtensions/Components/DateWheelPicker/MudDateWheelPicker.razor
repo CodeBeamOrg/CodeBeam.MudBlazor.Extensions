@@ -1,0 +1,78 @@
+﻿@namespace MudExtensions
+@inherits MudBaseInput<DateTime?>
+
+<CascadingValue Name="SubscribeToParentForm" Value="false" IsFixed="true">
+    <div>
+        <MudInputControl Label="@Label" Variant="@Variant" HelperText="@HelperText" HelperTextOnFocus="@HelperTextOnFocus" FullWidth="@FullWidth" Margin="@Margin" Class="@Classname" Style="@Style"
+                         Error="@Error" ErrorText="@ErrorText" ErrorId="@ErrorId" Disabled="@Disabled" @onclick="@(Editable ? null : ToggleMenu)" Required="@Required" ForId="@FieldId">
+            <InputContent>
+                <MudInput 
+                          @ref="InputReference" Margin="@Margin" Placeholder="@Placeholder"
+                          Variant="@Variant" InputType="InputType.Text"
+                          TextUpdateSuppression="false"
+                          Value="@(Text)" DisableUnderLine="@DisableUnderLine"
+                          Disabled="@Disabled" ReadOnly="!Editable" Error="@Error" ErrorId="@ErrorId"
+                          OnAdornmentClick="HandleAdornmentClick" AdornmentIcon="@_currentIcon" Adornment="Adornment.End"
+                          AdornmentColor="@AdornmentColor" IconSize="@IconSize" OnBlur="HandleOnBlur"
+                          Clearable="@Clearable" OnClearButtonClick="HandleClearButtonClick"
+                          @attributes="UserAttributes" />
+                <MudPopover Class="" Open=@(_isOpen) MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" RelativeWidth="true">
+                    @if (ShowToolbar || SubmitOnClose == false)
+                    {
+                        <div class="d-flex">
+                            @if (SubmitOnClose == false)
+                            {
+                                <MudIconButton Icon="@Icons.Filled.Done" Color="@Color" OnClick="@(() => CloseMenu(true))" />
+                            }
+                            <MudSpacer />
+                            @if (ShowToolbar)
+                            {
+                                <MudIconButton Icon="@Icons.Filled.Sync" Color="@Color" Disabled="@(DateView == DateView.Both)" OnClick="@(() => ToggleDateView())" />
+                                <MudIconButton Icon="@(DateView == DateView.Both ? Icons.Filled.ChevronLeft : Icons.Filled.ChevronRight)" Color="@Color" OnClick="@(() => ExpandDateView())" />
+                            }
+                        </div>
+                    }
+                    
+                    <div class="d-flex">
+                        @if (DateView == DateView.Date || DateView == DateView.Both)
+                        {
+                            int yearIndex = DateFormat.IndexOf('y');
+                            int monthIndex = DateFormat.IndexOf('M');
+                            int dayIndex = DateFormat.IndexOf('d');
+                            @if (yearIndex < dayIndex)
+                            {
+                                <MudWheel Class="mud-width-full" @bind-Value="_year" ItemCollection="Years" Label="@(ShowHeader ? LocalizedStrings.Year : null)" Dense="@Dense" Color="@Color" Disabled="FixYear" />
+                                <MudWheel Class="mud-width-full" @bind-Value="_month" ItemCollection="Months" Label="@(ShowHeader ? LocalizedStrings.Month : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixMonth" />
+                                <MudWheel Class="mud-width-full" @bind-Value="_day" ItemCollection="Days" Label="@(ShowHeader ? LocalizedStrings.Day : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixDay" />
+                            }
+                            else if (monthIndex < dayIndex && dayIndex < yearIndex )
+                            {
+                                <MudWheel Class="mud-width-full" @bind-Value="_month" ItemCollection="Months" Label="@(ShowHeader ? LocalizedStrings.Month : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixMonth" />
+                                <MudWheel Class="mud-width-full" @bind-Value="_day" ItemCollection="Days" Label="@(ShowHeader ? LocalizedStrings.Day : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixDay" />
+                                <MudWheel Class="mud-width-full" @bind-Value="_year" ItemCollection="Years" Label="@(ShowHeader ? LocalizedStrings.Year : null)" Dense="@Dense" Color="@Color" Disabled="FixYear" />
+                            }
+                            else
+                            {
+                                <MudWheel Class="mud-width-full" @bind-Value="_day" ItemCollection="Days" Label="@(ShowHeader ? LocalizedStrings.Day : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixDay" />
+                                <MudWheel Class="mud-width-full" @bind-Value="_month" ItemCollection="Months" Label="@(ShowHeader ? LocalizedStrings.Month : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixMonth" />
+                                <MudWheel Class="mud-width-full" @bind-Value="_year" ItemCollection="Years" Label="@(ShowHeader ? LocalizedStrings.Year : null)" Dense="@Dense" Color="@Color" Disabled="FixYear" />
+                            }
+                        }
+                        @if (DateView == DateView.Time || DateView == DateView.Both)
+                        {
+                            <MudWheel Class="mud-width-full" @bind-Value="_hour" ItemCollection="Hours" Label="@(ShowHeader ? LocalizedStrings.Hour : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@(ColorTime == Color.Inherit ? Color : ColorTime)" Disabled="FixHour" />
+                            <MudWheel Class="mud-width-full" @bind-Value="_minute" ItemCollection="Minutes" Label="@(ShowHeader ? LocalizedStrings.Minute : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@(ColorTime == Color.Inherit ? Color : ColorTime)" Disabled="FixMinute" />
+                            @if (HasSeconds())
+                            {
+                                <MudWheel Class="mud-width-full" @bind-Value="_second" ItemCollection="Seconds" Label="@(ShowHeader ? LocalizedStrings.Second : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@(ColorTime == Color.Inherit ? Color : ColorTime)" Disabled="FixSecond" />
+                            }
+                        }
+                    </div>
+                </MudPopover>
+            </InputContent>
+        </MudInputControl>
+    </div>
+
+</CascadingValue>
+<!-- mousedown instead of click needed to close the menu before OnLostFocus runs -->
+<MudOverlay Visible="_isOpen" @onmousedown="@(() => CloseMenu(SubmitOnClose))" LockScroll="@LockScroll" />

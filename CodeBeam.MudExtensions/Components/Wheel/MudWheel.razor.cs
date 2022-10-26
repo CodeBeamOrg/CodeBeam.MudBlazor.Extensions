@@ -14,9 +14,25 @@ namespace MudExtensions
     public partial class MudWheel<T> : MudBaseInput<T>
     {
 
+        [Inject] public IScrollManager ScrollManager { get; set; }
+
+        protected string Classname => new CssBuilder("mud-width-full")
+            .AddClass(Class)
+            .Build();
+
+        protected string InnerClassname => new CssBuilder("mud-wheel d-flex flex-column align-center justify-center relative")
+            .AddClass("mud-disabled", Disabled)
+            .AddClass(InnerClass)
+            .Build();
+
+        protected string MiddleItemClassname => new CssBuilder("middle-item d-flex align-center justify-center mud-width-full")
+            .AddClass("mud-disabled", Disabled)
+            .Build();
+
         protected string OuterItemClassname(int index) => new CssBuilder($"mud-wheel-item mud-wheel-ani-{_animateGuid}")
             .AddClass("wheel-item-closest", Math.Abs(ItemCollection.IndexOf(Value) - index) == 1)
             .AddClass("my-1", Dense == false)
+            .AddClass("mud-disabled", Disabled)
             .Build();
 
         protected string BorderClassname => new CssBuilder("mud-wheel-border mud-wheel-item mud-width-full")
@@ -39,6 +55,9 @@ namespace MudExtensions
 
         [Parameter]
         public int WheelLevel { get; set; } = 2;
+
+        [Parameter]
+        public string InnerClass { get; set; }
 
         [Parameter]
         public bool Dense { get; set; }
@@ -80,6 +99,10 @@ namespace MudExtensions
 
         protected async Task HandleOnWheel(WheelEventArgs args)
         {
+            if (Disabled || ReadOnly)
+            {
+                return;
+            }
             int index = GetIndex();
             if ((args.DeltaY < 0 && index == 0) || (0 < args.DeltaY && index == ItemCollection.Count - 1))
             {
@@ -110,6 +133,10 @@ namespace MudExtensions
 
         protected async Task HandleOnSwipe(SwipeDirection direction)
         {
+            if (Disabled || ReadOnly)
+            {
+                return;
+            }
             int index = GetIndex();
             if ((direction == SwipeDirection.TopToBottom && index == 0) || (direction == SwipeDirection.BottomToTop && index == ItemCollection.Count - 1))
             {
@@ -139,6 +166,10 @@ namespace MudExtensions
 
         protected async Task ChangeWheel(int changeCount)
         {
+            if (Disabled || ReadOnly)
+            {
+                return;
+            }
             int index = GetIndex();
             if (0 < changeCount)
             {

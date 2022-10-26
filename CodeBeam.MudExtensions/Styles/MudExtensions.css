@@ -214,7 +214,7 @@
   justify-content: center;
   color: var(--mud-palette-text-secondary);
   border-radius: var(--mud-default-borderradius); }
-  .mud-wheel-item.mud-wheel-item:hover {
+  .mud-wheel-item.mud-wheel-item:hover:not(.mud-disabled) {
     background-color: var(--mud-palette-action-default-hover); }
   .mud-wheel-item.wheel-item-closest {
     color: var(--mud-palette-text); }
@@ -224,9 +224,13 @@
       min-height: 24px !important; }
     .mud-wheel-item.wheel-item-empty.wheel-item-empty:hover {
       background-color: unset; }
+  .mud-wheel-item.mud-disabled {
+    color: var(--mud-palette-text-disabled); }
 
 .middle-item {
   transform: scale(1.2); }
+  .middle-item.mud-disabled {
+    color: var(--mud-palette-text-disabled); }
 
 .mud-wheel-border {
   min-height: 2px !important;
