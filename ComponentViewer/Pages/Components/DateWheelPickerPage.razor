@@ -1,0 +1,38 @@
+﻿@page "/muddatewheelpicker"
+@using MudBlazor.Extensions
+
+<ExamplePage Title="MudDateWheelPicker">
+    <ExampleCard Title="Usage" Description="">
+        <MudGrid>
+            <MudItem xs="12" sm="8">
+                <MudDateWheelPicker T="DateTime?" @bind-Value="_date" DateView="_dateView" Editable="_editable" AnchorOrigin="Origin.BottomCenter"
+                    ShowToolbar="_showToolbar" ShowHeader="_showHeader" SubmitOnClose="_submitOnClose" />
+                <MudText>@_date?.ToString("dd:MM:yyyy HH:mm")</MudText>
+            </MudItem>
+
+            <MudItem xs="12" sm="4">
+                <MudStack Spacing="4">
+                    <MudSelect @bind-Value="_dateView" Variant="Variant.Outlined">
+                        @foreach (DateView item in Enum.GetValues<DateView>())
+                        {
+                            <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudSwitch @bind-Checked="_editable" Color="Color.Primary" Label="Editable" />
+                    <MudSwitch @bind-Checked="_showToolbar" Color="Color.Primary" Label="Show Toolbar" />
+                    <MudSwitch @bind-Checked="_showHeader" Color="Color.Primary" Label="Show Header" />
+                    <MudSwitch @bind-Checked="_submitOnClose" Color="Color.Primary" Label="Submit On Close" />
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </ExampleCard>
+</ExamplePage>
+
+@code{
+    DateTime? _date = new DateTime(2000, 1, 1);
+    DateView _dateView = DateView.Date;
+    bool _editable = false;
+    bool _showToolbar = false;
+    bool _showHeader = false;
+    bool _submitOnClose = true;
+}

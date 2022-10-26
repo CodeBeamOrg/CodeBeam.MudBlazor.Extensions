@@ -3,9 +3,16 @@
 @inherits MudBaseInput<T>
 @using MudExtensions.Enums
 @using MudExtensions.Utilities
+@using MudBlazor.Events
+
+<div class="@Classname" @onmouseenter="@(() => ScrollManager.LockScrollAsync() )" @onmouseleave="@(() => ScrollManager.UnlockScrollAsync())" @onclick:stopPropagation>
 
 
-<MudSwipeArea Class="mud-wheel d-flex flex-column align-center justify-center relative" Style="@GetStylename()" OnSwipe="@(async(d) => await HandleOnSwipe(d))" @onwheel="HandleOnWheel" PreventDefault="true">
+@if (!string.IsNullOrEmpty(Label))
+{
+    <MudText Align="Align.Center">@Label</MudText>
+}
+<MudSwipeArea Class="@InnerClassname" Style="@GetStylename()" OnSwipe="@(async(d) => await HandleOnSwipe(d))" @onwheel="HandleOnWheel" PreventDefault="true">
 
     @if (true)
     {
@@ -49,5 +56,5 @@
         }
     }
 </MudSwipeArea>
-
+</div>
 <MudAnimate @ref="_animate" Selector="@($".mud-wheel-ani-{_animateGuid}")" AnimationType="AnimationType.SlideY" Duration="0.3" Value="0" ValueSecondary="_animateValue" AnimationTiming="AnimationTiming.Ease" />

@@ -14,6 +14,16 @@ namespace MudExtensions
     public partial class MudWheel<T> : MudBaseInput<T>
     {
 
+        [Inject] public IScrollManager ScrollManager { get; set; }
+
+        protected string Classname => new CssBuilder("mud-width-full")
+            .AddClass(Class)
+            .Build();
+
+        protected string InnerClassname => new CssBuilder("mud-wheel d-flex flex-column align-center justify-center relative")
+            .AddClass(InnerClass)
+            .Build();
+
         protected string OuterItemClassname(int index) => new CssBuilder($"mud-wheel-item mud-wheel-ani-{_animateGuid}")
             .AddClass("wheel-item-closest", Math.Abs(ItemCollection.IndexOf(Value) - index) == 1)
             .AddClass("my-1", Dense == false)
@@ -39,6 +49,9 @@ namespace MudExtensions
 
         [Parameter]
         public int WheelLevel { get; set; } = 2;
+
+        [Parameter]
+        public string InnerClass { get; set; }
 
         [Parameter]
         public bool Dense { get; set; }
