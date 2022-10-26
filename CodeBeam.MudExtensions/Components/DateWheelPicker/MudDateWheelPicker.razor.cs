@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Threading.Tasks;
+using CodeBeam.MudExtensions.Utilities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,17 +18,22 @@ namespace MudExtensions
            .AddClass(Class)
            .Build();
 
+        protected override void OnInitialized()
+        {
+            Converter = new MudBlazor.Converter<DateTime?, string>()
+            {
+                SetFunc = x => x?.ToString(DateFormat),
+            };
+        }
+
         public MudInput<string> InputReference { get; private set; }
 
         [CascadingParameter(Name = "Standalone")]
         internal bool StandaloneEx { get; set; } = true;
 
-        /// <summary>
-        /// Type of the input element. It should be a valid HTML5 input type.
-        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public InputType InputType { get; set; } = InputType.Text;
+        public string DateFormat { get; set; } = "dd.MM.yyyy";
 
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
@@ -35,15 +41,57 @@ namespace MudExtensions
 
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool FixYear { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool FixMonth { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool FixHour { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool FixMinute { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool FixSecond { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool FixDay { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Editable { get; set; }
 
         [Parameter]
-        [Category(CategoryTypes.FormComponent.Behavior)]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public bool Dense { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public Color Color { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public Color ColorTime { get; set; } = Color.Inherit;
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
         public bool ShowHeader { get; set; }
 
         [Parameter]
-        [Category(CategoryTypes.FormComponent.Behavior)]
+        [Category(CategoryTypes.FormComponent.Appearance)]
         public bool ShowToolbar { get; set; }
+
+        /// <summary>
+        /// A class for provide all local strings at once.
+        /// </summary>
+        [Parameter]
+        public DateWheelPickerLocalizedStrings LocalizedStrings { get; set; } = new();
 
         private string GetCounterText() => Counter == null ? string.Empty : (Counter == 0 ? (string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") : ((string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") + $" / {Counter}"));
 
@@ -144,7 +192,7 @@ namespace MudExtensions
             {
                 await InputReference.FocusAsync();
             }
-            
+
             StateHasChanged();
 
         }
@@ -161,7 +209,6 @@ namespace MudExtensions
         protected void HandleOnBlur()
         {
             SetTextAsync(InputReference.Text, true);
-            SetWheelValues();
         }
 
         protected async Task HandleAdornmentClick()
@@ -205,12 +252,6 @@ namespace MudExtensions
             _year = Value.Value.Year;
         }
 
-        //public async Task Submit(bool close = true)
-        //{
-        //    await UpdateValueAsync();
-        //    await CloseMenu();
-        //}
-
         public override ValueTask FocusAsync()
         {
             return InputReference.FocusAsync();
@@ -235,6 +276,15 @@ namespace MudExtensions
         {
             InputReference.Reset();
             base.ResetValue();
+        }
+
+        protected bool HasSeconds()
+        {
+            if (DateFormat.Contains("s"))
+            {
+                return true;
+            }
+            return false;
         }
 
         protected string NumberToString(int val)

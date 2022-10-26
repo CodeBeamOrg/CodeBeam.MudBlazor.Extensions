@@ -6,55 +6,53 @@
 @using MudBlazor.Events
 
 <div class="@Classname" @onmouseenter="@(() => ScrollManager.LockScrollAsync() )" @onmouseleave="@(() => ScrollManager.UnlockScrollAsync())" @onclick:stopPropagation>
-
-
-@if (!string.IsNullOrEmpty(Label))
-{
-    <MudText Align="Align.Center">@Label</MudText>
-}
-<MudSwipeArea Class="@InnerClassname" Style="@GetStylename()" OnSwipe="@(async(d) => await HandleOnSwipe(d))" @onwheel="HandleOnWheel" PreventDefault="true">
-
-    @if (true)
+    @if (!string.IsNullOrEmpty(Label))
     {
-        int index = GetIndex();
-        for (int i = WheelLevel + 1; 0 < i; i--)
-        {
-            int a = i;
-            if (0 <= index - a)
-            {
-                <div class="@OuterItemClassname(index - a)" @onclick="@(async() => await ChangeWheel(-a))">
-                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index - a]) : Converter.Set(ItemCollection[index - a]))</MudText>
-                </div>
-            }
-            else
-            {
-                <div class="@EmptyItemClassname" />
-            }
-        }
-
-        <span class="@BorderClassname" />
-
-        <div class="middle-item d-flex align-center justify-center mud-width-full">
-            <MudText Class="@($"mud-wheel-ani-{_animateGuid} my-2)")" Typo="@(Dense ? Typo.body1 : Typo.h6)" Color="@Color" Style="font-weight: 900">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index]) : Converter.Set(ItemCollection[index]))</MudText>
-        </div>
-
-        <div class="@BorderClassname" />
-
-        for (int i = 1; i < WheelLevel + 2; i++)
-        {
-            int a = i;
-            if (index + a < ItemCollection.Count)
-            {
-                <div class="@OuterItemClassname(index + a)" @onclick="@(async() => await ChangeWheel(a))">
-                    <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index + a]) : Converter.Set(ItemCollection[index + a]))</MudText>
-                </div>
-            }
-            else
-            {
-                <div class="@EmptyItemClassname" />
-            }
-        }
+        <MudText Align="Align.Center" Color="@Color">@Label</MudText>
     }
-</MudSwipeArea>
+    <MudSwipeArea Class="@InnerClassname" Style="@GetStylename()" OnSwipe="@(async(d) => await HandleOnSwipe(d))" @onwheel="HandleOnWheel" PreventDefault="true">
+
+        @if (true)
+        {
+            int index = GetIndex();
+            for (int i = WheelLevel + 1; 0 < i; i--)
+            {
+                int a = i;
+                if (0 <= index - a)
+                {
+                    <div class="@OuterItemClassname(index - a)" @onclick="@(async() => await ChangeWheel(-a))">
+                        <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index - a]) : Converter.Set(ItemCollection[index - a]))</MudText>
+                        </div>
+                }
+                else
+                {
+                    <div class="@EmptyItemClassname" />
+                }
+            }
+
+            <span class="@BorderClassname" />
+
+            <div class="@MiddleItemClassname">
+                <MudText Class="@($"mud-wheel-ani-{_animateGuid} my-2)")" Typo="@(Dense ? Typo.body1 : Typo.h6)" Color="@Color" Style="font-weight: 900">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index]) : Converter.Set(ItemCollection[index]))</MudText>
+                </div>
+
+            <div class="@BorderClassname" />
+
+            for (int i = 1; i < WheelLevel + 2; i++)
+            {
+                int a = i;
+                if (index + a < ItemCollection.Count)
+                {
+                    <div class="@OuterItemClassname(index + a)" @onclick="@(async() => await ChangeWheel(a))">
+                        <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index + a]) : Converter.Set(ItemCollection[index + a]))</MudText>
+                        </div>
+                }
+                else
+                {
+                    <div class="@EmptyItemClassname" />
+                }
+            }
+        }
+    </MudSwipeArea>
 </div>
 <MudAnimate @ref="_animate" Selector="@($".mud-wheel-ani-{_animateGuid}")" AnimationType="AnimationType.SlideY" Duration="0.3" Value="0" ValueSecondary="_animateValue" AnimationTiming="AnimationTiming.Ease" />
