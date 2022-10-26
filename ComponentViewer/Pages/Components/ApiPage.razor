@@ -15,6 +15,19 @@
         </MudTable>
     </ExampleCard>
 
+    <ExampleCard Title="Api - MudDateWheelPicker" HasExpansionPanel="true">
+        <MudTable Items="@(typeof(MudDateWheelPicker).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
     <ExampleCard Title="Api - MudGallery" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudGallery).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>

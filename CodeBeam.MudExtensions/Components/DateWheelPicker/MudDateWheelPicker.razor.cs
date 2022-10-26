@@ -161,7 +161,7 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public List<int> Months { get; set; } = Enumerable.Range(1, 12).ToList();
 
-        int _year = 2000;
+        int _year = DateTime.Today.Year;
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public List<int> Years { get; set; } = Enumerable.Range(1, 9999).ToList();
@@ -245,7 +245,6 @@ namespace MudExtensions
             }
 
             StateHasChanged();
-
         }
 
         public async Task CloseMenu(bool submit)
@@ -354,9 +353,16 @@ namespace MudExtensions
         /// Clear the text field, set Value to default(T) and Text to null
         /// </summary>
         /// <returns></returns>
-        public Task Clear()
+        public async Task Clear()
         {
-            return InputReference.SetText(null);
+            await SetValueAsync(null);
+            await InputReference.SetText(null);
+        }
+
+        protected async Task HandleClearButtonClick()
+        {
+            await Clear();
+            await OnClearButtonClick.InvokeAsync();
         }
 
         /// <summary>
@@ -368,11 +374,6 @@ namespace MudExtensions
         {
             if (InputReference != null)
                 await InputReference.SetText(text);
-        }
-
-        private async Task OnMaskedValueChanged(string s)
-        {
-            await SetTextAsync(s);
         }
 
     }
