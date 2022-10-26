@@ -43,6 +43,7 @@
                         <MudCheckBox @bind-Checked="_fixSecond" Label="Fix Second" />
                     </div>
                     <MudTextField @bind-Value="_dateFormat" Variant="Variant.Outlined" Label="Date Format" />
+                    <MudButton OnClick="@(() => _date = DateTime.Now)">Set Today</MudButton>
                 </MudStack>
             </MudItem>
         </MudGrid>

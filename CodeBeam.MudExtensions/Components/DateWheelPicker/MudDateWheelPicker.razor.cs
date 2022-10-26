@@ -31,58 +31,100 @@ namespace MudExtensions
         [CascadingParameter(Name = "Standalone")]
         internal bool StandaloneEx { get; set; } = true;
 
+        /// <summary>
+        /// The date format that determines the text and wheel order. Default is "dd.MM.yyyy".
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public string DateFormat { get; set; } = "dd.MM.yyyy";
 
+        /// <summary>
+        /// If false, users have to click the "done" button to submit value before close popover. Default is true.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool SubmitOnClose { get; set; } = true;
 
+        /// <summary>
+        /// If true, the year wheel is disabled.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool FixYear { get; set; }
 
+        /// <summary>
+        /// If true, the month wheel is disabled.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool FixMonth { get; set; }
 
+        /// <summary>
+        /// If true, the hour wheel is disabled.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool FixHour { get; set; }
 
+        /// <summary>
+        /// If true, the minute wheel is disabled.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool FixMinute { get; set; }
 
+        /// <summary>
+        /// If true, the second wheel is disabled.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool FixSecond { get; set; }
 
+        /// <summary>
+        /// If true, the day wheel is disabled.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool FixDay { get; set; }
 
+        /// <summary>
+        /// If true, only adornment click opens popover and users can directly write to the input.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Editable { get; set; }
 
+        /// <summary>
+        /// Determines the wheels are dense or not.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public bool Dense { get; set; }
 
+        /// <summary>
+        /// The color of various parts of the component.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public Color Color { get; set; }
 
+        /// <summary>
+        /// The time wheels (hour, minute and second) color. If its inherit (by default) it takes the Color value.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public Color ColorTime { get; set; } = Color.Inherit;
 
+        /// <summary>
+        /// Show wheel labels.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public bool ShowHeader { get; set; }
 
+        /// <summary>
+        /// Show toolbar that allows change between DateViews dynamically.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public bool ShowToolbar { get; set; }
@@ -102,6 +144,9 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Clearable { get; set; } = false;
 
+        /// <summary>
+        /// Determines the view of wheels.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public DateView DateView { get; set; } = DateView.Date;
@@ -154,7 +199,6 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public Origin TransformOrigin { get; set; } = Origin.TopCenter;
 
-
         /// <summary>
         /// If true, prevent scrolling while dropdown is open.
         /// </summary>
@@ -169,7 +213,14 @@ namespace MudExtensions
 
         protected async Task UpdateValueAsync(bool updateText = true)
         {
-            await SetValueAsync(new DateTime(_year, _month, _day, _hour, _minute, _second), updateText);
+            try
+            {
+                await SetValueAsync(new DateTime(_year, _month, _day, _hour, _minute, _second), updateText);
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
         }
 
         public async Task ToggleMenu()
@@ -250,6 +301,9 @@ namespace MudExtensions
             _day = Value.Value.Day;
             _month = Value.Value.Month;
             _year = Value.Value.Year;
+            _hour = Value.Value.Hour;
+            _minute = Value.Value.Minute;
+            _second = Value.Value.Second;
         }
 
         public override ValueTask FocusAsync()
