@@ -11,6 +11,7 @@
 ## Components
 
 - MudAnimate
+- MudDateWheelPicker
 - MudFontPicker
 - MudGallery
 - MudInputStyler
@@ -49,6 +50,10 @@ Each example is recorded in the playground website.
 
 https://user-images.githubusercontent.com/78308169/194701300-e4ad517a-8fbb-4a5e-9407-a5a585157685.mp4
 
+### MudDateWheelPicker
+
+https://user-images.githubusercontent.com/78308169/198103805-56f9403b-dcdd-4e82-a02e-e53426d55ad5.mp4
+
 ### MudFontPicker
 
 https://user-images.githubusercontent.com/78308169/196959281-76d6e05b-8368-43a2-a562-658dbd4ea3a9.mp4
@@ -56,6 +61,10 @@ https://user-images.githubusercontent.com/78308169/196959281-76d6e05b-8368-43a2-
 ### MudGallery
 
 https://user-images.githubusercontent.com/78308169/197382396-6ff0a926-e52a-4554-b408-5736ebd539c9.mp4
+
+### MudInputStyler
+
+https://user-images.githubusercontent.com/78308169/198103898-41a8eb8a-ba0a-4f06-adfe-ced24c76b4e5.mp4
 
 ### MudSpeedDial
 
