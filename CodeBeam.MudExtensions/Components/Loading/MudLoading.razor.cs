@@ -10,6 +10,11 @@ namespace MudExtensions
     public partial class MudLoading : MudComponentBase
     {
 
+        protected string TextClassname => new CssBuilder()
+            .AddClass("mt-4")
+            .AddClass(ClassText)
+            .Build();
+
         bool _loading = true;
         /// <summary>
         /// Two way binded loading state.
@@ -42,6 +47,20 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public bool Overlap { get; set; } = false;
+
+        /// <summary>
+        /// The text shows after the loading indicator.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public string Text { get; set; }
+
+        /// <summary>
+        /// CSS classes for the text, seperated by space.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public string ClassText { get; set; }
 
         /// <summary>
         /// If true, show a darken background.
