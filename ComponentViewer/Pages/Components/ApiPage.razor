@@ -119,6 +119,19 @@
         </MudTable>
     </ExampleCard>
 
+    <ExampleCard Title="Api - MudPopup" HasExpansionPanel="true">
+        <MudTable Items="@(typeof(MudPopup).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
     <ExampleCard Title="Api - MudScrollbar" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudScrollbar).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
