@@ -19,6 +19,7 @@
 - MudLoadingButton
 - MudPage
 - MudPasswordField
+- MudPopup
 - MudScrollbar
 - MudSection
 - MudSpeedDial
@@ -65,6 +66,10 @@ https://user-images.githubusercontent.com/78308169/197382396-6ff0a926-e52a-4554-
 ### MudInputStyler
 
 https://user-images.githubusercontent.com/78308169/198103898-41a8eb8a-ba0a-4f06-adfe-ced24c76b4e5.mp4
+
+### MudPopup
+
+https://user-images.githubusercontent.com/78308169/198975726-d2633c10-8059-4fc6-8e8a-ce9dd79ed018.mp4
 
 ### MudSpeedDial
 
