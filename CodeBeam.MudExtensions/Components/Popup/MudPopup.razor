@@ -1,0 +1,39 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+@using MudBlazor.Events
+
+@if (Open)
+{
+    <MudBreakpointProvider OnBreakpointChanged="GetBreakpoint" />
+    <div class="@Classname" style="@Stylename">
+        @if (ChildContent != null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            <MudStack Class="mud-width-full" Row="@((_breakpoint != Breakpoint.Xs && PopupPosition != PopupPosition.Center))"
+              AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    @if (!string.IsNullOrEmpty(Icon))
+                    {
+                        <MudIcon Icon="@Icon" Color="@Color" />
+                    }
+
+                    <MudText Color="@Color" Typo="Typo.body2">@Text @(LinkContent ?? null)</MudText>
+                    @if (ActionContent != null)
+                    {
+                        @ActionContent
+                    }
+                    else
+                    {
+                        <MudIconButton Icon="@Icons.Filled.Close" Color="@Color" OnClick="@(() => Open = false)" />
+                    }
+            </MudStack>
+        }
+    </div>
+}
+
+@if (EnableAnimation == true)
+{
+    <MudAnimate Selector="@($".popup-{_animationGuid}")" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.5" />
+}

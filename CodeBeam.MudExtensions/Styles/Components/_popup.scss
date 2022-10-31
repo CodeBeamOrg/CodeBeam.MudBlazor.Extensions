@@ -1,0 +1,16 @@
+﻿
+.mud-popup {
+    z-index: 2000;
+    overflow: auto;
+    background-color: var(--mud-palette-background);
+    min-height: var(--mud-appbar-height);
+
+    &.mud-popup-center {
+        height: 300px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 320px;
+        aspect-ratio: 1 / 1;
+    }
+}

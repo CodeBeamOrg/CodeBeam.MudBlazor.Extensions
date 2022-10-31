@@ -162,6 +162,19 @@
   .mud-section.mud-section-row-end-12 {
     grid-row-end: 12; }
 
+.mud-popup {
+  z-index: 2000;
+  overflow: auto;
+  background-color: var(--mud-palette-background);
+  min-height: var(--mud-appbar-height); }
+  .mud-popup.mud-popup-center {
+    height: 300px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    aspect-ratio: 1 / 1; }
+
 .mud-stepper-header {
   min-height: 62px;
   border-radius: var(--mud-default-borderradius); }
