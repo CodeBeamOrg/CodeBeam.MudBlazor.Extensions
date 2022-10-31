@@ -1,0 +1,18 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+<div class="@Classname" style="@Style">
+    <div class="@ContentClassname" style="@StyleContent">
+        @FirstContent
+    </div>
+    <div class="@ContentClassname" style="@StyleContent">
+        @SecondContent
+    </div>
+    <MudSlider @ref="_slider" Class="mud-splitter-thumb mud-splitter-track" T="double" Min="0" Max="100" Step="0.1" ValueChanged="GetDimensions" />
+</div>
+
+<style>
+    .mud-splitter-generate {
+        @($"grid-template-columns: {_firstContentDimension.ToInvariantString()}% {_secondContentDimension.ToInvariantString()}%")
+    }
+</style>

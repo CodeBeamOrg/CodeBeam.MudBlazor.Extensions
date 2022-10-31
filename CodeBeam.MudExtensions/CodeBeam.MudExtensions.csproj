@@ -45,4 +45,10 @@
 	  </None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="Components\Splitter\MudSplitter.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  </Content>
+	</ItemGroup>
+
 </Project>
