@@ -15,4 +15,17 @@
     .mud-splitter-generate {
         @($"grid-template-columns: {_firstContentDimension.ToInvariantString()}% {_secondContentDimension.ToInvariantString()}%")
     }
+
+    .mud-splitter-thumb ::-webkit-slider-thumb {
+        @(Color == Color.Default ? "background-color: var(--mud-palette-action-default) !important;" : $"background-color: var(--mud-palette-{Color.ToDescriptionString()}) !important;") @(StyleBar)
+        @(Height != null ? $"height: {Height}px !important;" : null)
+    }
+
+    .mud-splitter-thumb ::-moz-range-thumb {
+        @(StyleBar)
+    }
+
+    .mud-splitter-content {
+        @(Height != null ? $"height: {Height}px;" : null)
+    }
 </style>

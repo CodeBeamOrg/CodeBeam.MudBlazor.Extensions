@@ -18,11 +18,12 @@ namespace MudExtensions
         MudSlider<double> _slider;
 
         protected string Classname => new CssBuilder("mud-splitter relative")
+            .AddClass("border-solid border-8 mud-border-primary", Bordered == true)
             .AddClass("mud-splitter-generate")
             .AddClass(Class)
             .Build();
 
-        protected string ContentClassname => new CssBuilder("d-flex ma-2")
+        protected string ContentClassname => new CssBuilder("mud-splitter-content d-flex ma-2")
             .AddClass(ClassContent)
             .Build();
 
@@ -33,10 +34,34 @@ namespace MudExtensions
         public string ClassContent { get; set; }
 
         /// <summary>
+        /// The height of splitter.
+        /// </summary>
+        [Parameter]
+        public int? Height { get; set; }
+
+        /// <summary>
+        /// The height of splitter.
+        /// </summary>
+        [Parameter]
+        public Color Color { get; set; }
+
+        /// <summary>
+        /// If true, splitter bar goes vertical.
+        /// </summary>
+        [Parameter]
+        public bool Bordered { get; set; }
+
+        /// <summary>
         /// The two contents' (sections) styles, seperated by space.
         /// </summary>
         [Parameter]
         public string StyleContent { get; set; }
+
+        /// <summary>
+        /// The splitter bar's styles, seperated by space.
+        /// </summary>
+        [Parameter]
+        public string StyleBar { get; set; }
 
         /// <summary>
         /// If true, splitter bar goes vertical.
