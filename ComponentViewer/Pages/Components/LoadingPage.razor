@@ -7,7 +7,7 @@
         <MudGrid>
             <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center flex-wrap">
                 <MudPaper Class="mud-width-full" Style="height: 300px; position: relative">
-                    <MudLoading @bind-Loading="_loading" Overlap="@_overlap" LoaderType="_loaderType" Darken="_darken">
+                    <MudLoading @bind-Loading="_loading" Overlap="@_overlap" LoaderType="_loaderType" Darken="_darken" Text="@_text" ClassText="@(_darken ? "white-text" : null)">
                         <MudStack>
                             <MudText>This is a text inside a paper. Its the content.</MudText>
                             <MudButton OnClick="ShowSnackbar" Variant="Variant.Filled" Color="Color.Primary">A Button Can Not Be Clickable While Loading</MudButton>
@@ -25,6 +25,7 @@
                         <MudSelectItem Value="LoaderType.Circular">Circular</MudSelectItem>
                         <MudSelectItem Value="LoaderType.Linear">Linear</MudSelectItem>
                     </MudSelect>
+                    <MudTextField @bind-Value="_text" Variant="Variant.Outlined" Label="Text" />
                 </MudStack>
             </MudItem>
         </MudGrid>
@@ -69,6 +70,7 @@
     bool _loading = true;
     bool _overlap;
     bool _darken;
+    string _text;
     LoaderType _loaderType = LoaderType.Circular;
 
     bool _loading2 = true;
