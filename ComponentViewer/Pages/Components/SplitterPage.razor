@@ -1,0 +1,74 @@
+﻿@page "/mudsplitter"
+@using MudBlazor.Extensions
+
+<ExamplePage Title="MudSplitter">
+    <ExampleCard Title="Usage" Description="MudSplitter consists StartContent and EndContent">
+        <MudGrid>
+            <MudItem xs="12" sm="8">
+                <MudSplitter @ref="_splitter"  Height="@_height" Color="_color" Horizontal="_horizontal" Bordered="_bordered" MinPercantage="_minPercentage" DimensionChanged="DimensionChanged">
+                    <StartContent>
+                        <MudText>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</MudText>
+                    </StartContent>
+
+                    <EndContent>
+                        <MudText>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</MudText>
+                    </EndContent>
+                </MudSplitter>
+            </MudItem>
+
+            <MudItem xs="12" sm="4">
+                <MudStack>
+                    <MudTextField @bind-Value="_height" Variant="Variant.Outlined" Label="Height" Clearable="true" />
+                    <MudSelect @bind-Value="_color" Variant="Variant.Outlined">
+                        @foreach (Color col in Enum.GetValues<Color>())
+                        {
+                            <MudSelectItem Value="col">@col.ToDescriptionString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudSwitch @bind-Checked="_bordered" Color="Color.Primary" Label="Border" />
+                    <MudDivider />
+                    <MudNumericField @bind-Value="_percentage" Variant="Variant.Outlined" Label="Start Content Percentage" />
+                    <MudButton OnClick="@(() => _splitter.SetDimensions(_percentage))">Set Dimension (@_percentage)</MudButton>
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </ExampleCard>
+
+    <ExampleCard Title="Image" Description="MudSplitter's contents are flex by default. If you want to work MudImage with Fluid parameter, take them into block container.">
+        <MudGrid>
+            <MudItem xs="12" sm="8">
+                <MudSplitter Height="@_height" Color="Color.Secondary">
+                    <StartContent>
+                        <div>
+                            <MudImage Src="https://cdn.pixabay.com/photo/2022/08/15/03/07/path-7387018_960_720.jpg" Fluid="true" />
+                        </div>
+                        
+
+                        
+                    </StartContent>
+
+                    <EndContent>
+                        <MudText>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</MudText>
+                    </EndContent>
+                </MudSplitter>
+            </MudItem>
+
+            <MudItem xs="12" sm="4">
+                <MudTextField @bind-Value="_height" Variant="Variant.Outlined" Label="Height" Clearable="true" />
+            </MudItem>
+        </MudGrid>
+    </ExampleCard>
+</ExamplePage>
+
+@code{
+    MudSplitter _splitter;
+    string _height;
+    Color _color;
+    double _percentage = 50;
+    bool _bordered = false;
+
+    private void DimensionChanged()
+    {
+        _percentage = _splitter.GetStartContentPercentage();
+    }
+}

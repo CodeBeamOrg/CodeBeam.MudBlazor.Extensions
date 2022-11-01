@@ -1,0 +1,33 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+<div class="@Classname" style="@Style">
+    <MudSlider @ref="_slider" Class="@SliderClassname" T="double" Min="0" Max="100" Step="0.1" ValueChanged="UpdateDimensions" />
+
+    <div class="@ContentClassname" style="@StyleContent">
+        @StartContent
+    </div>
+    <div class="@ContentClassname" style="@StyleContent">
+        @EndContent
+    </div>
+</div>
+
+<style>
+    @($".mud-splitter-generate-{_styleGuid} {{ grid-template-columns: {_firstContentDimension.ToInvariantString()}% {_secondContentDimension.ToInvariantString()}%; }}")
+
+    .mud-splitter-thumb-@(_styleGuid) ::-webkit-slider-thumb {
+        @(Color == Color.Default ? "background-color: var(--mud-palette-action-default) !important;" : $"background-color: var(--mud-palette-{Color.ToDescriptionString()}) !important;") @(StyleBar)
+        @(Height != null ? $"height: {Height} !important;" : null)
+        @(StyleBar)
+    }
+
+    .mud-splitter-thumb-@(_styleGuid) ::-moz-range-thumb {
+        @(Color == Color.Default ? "background-color: var(--mud-palette-action-default) !important;" : $"background-color: var(--mud-palette-{Color.ToDescriptionString()}) !important;") @(StyleBar)
+        @(Height != null ? $"height: {Height} !important;" : null)
+        @(StyleBar)
+    }
+
+    .mud-splitter-content-@(_styleGuid) {
+        @(Height != null ? $"height: {Height};" : null)
+    }
+</style>

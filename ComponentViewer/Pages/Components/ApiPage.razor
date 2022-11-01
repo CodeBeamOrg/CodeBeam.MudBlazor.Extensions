@@ -158,6 +158,19 @@
         </MudTable>
     </ExampleCard>
 
+    <ExampleCard Title="Api - MudSplitter" HasExpansionPanel="true">
+        <MudTable Items="@(typeof(MudSplitter).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
     <ExampleCard Title="Api - MudStepper & MudStep" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudStepper).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
