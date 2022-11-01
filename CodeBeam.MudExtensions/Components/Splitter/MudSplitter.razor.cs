@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.Components.Highlighter;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 using System;
@@ -15,16 +16,20 @@ namespace MudExtensions
     public partial class MudSplitter : MudComponentBase
     {
 
+        Guid _styleGuid = Guid.NewGuid();
         MudSlider<double> _slider;
 
-        protected string Classname => new CssBuilder("mud-splitter relative")
-            .AddClass("border-solid border-8 mud-border-primary", Bordered == true)
-            .AddClass("mud-splitter-generate")
+        protected string Classname => new CssBuilder("mud-splitter")
+            .AddClass($"border-solid border-8 mud-border-{Color.ToDescriptionString()}", Bordered == true)
+            .AddClass($"mud-splitter-generate mud-splitter-generate-{_styleGuid}")
             .AddClass(Class)
             .Build();
 
-        protected string ContentClassname => new CssBuilder("mud-splitter-content d-flex ma-2")
+        protected string ContentClassname => new CssBuilder($"mud-splitter-content mud-splitter-content-{_styleGuid} d-flex ma-2")
             .AddClass(ClassContent)
+            .Build();
+
+        protected string SliderClassname => new CssBuilder($"mud-splitter-thumb mud-splitter-thumb-{_styleGuid} mud-splitter-track")
             .Build();
 
         /// <summary>
@@ -33,11 +38,24 @@ namespace MudExtensions
         [Parameter]
         public string ClassContent { get; set; }
 
+        string _height;
         /// <summary>
         /// The height of splitter.
         /// </summary>
         [Parameter]
-        public int? Height { get; set; }
+        public string Height 
+        { 
+            get => _height; 
+            set
+            {
+                if (value == _height)
+                {
+                    return;
+                }
+                _height = value;
+                UpdateDimensions().AndForget();
+            }
+        }
 
         /// <summary>
         /// The height of splitter.
@@ -46,7 +64,7 @@ namespace MudExtensions
         public Color Color { get; set; }
 
         /// <summary>
-        /// If true, splitter bar goes vertical.
+        /// If true, splitter has borders.
         /// </summary>
         [Parameter]
         public bool Bordered { get; set; }
@@ -58,31 +76,35 @@ namespace MudExtensions
         public string StyleContent { get; set; }
 
         /// <summary>
-        /// The splitter bar's styles, seperated by space.
+        /// The splitter bar's styles, seperated by space. All styles have to include !important and end with ';'
         /// </summary>
         [Parameter]
         public string StyleBar { get; set; }
 
-        /// <summary>
-        /// If true, splitter bar goes vertical.
-        /// </summary>
-        [Parameter]
-        public bool Horizontal { get; set; }
+        ///// <summary>
+        ///// If true, splitter bar goes vertical.
+        ///// </summary>
+        //[Parameter]
+        //public bool Horizontal { get; set; }
 
         [Parameter]
-        public RenderFragment FirstContent { get; set; }
+        public RenderFragment StartContent { get; set; }
 
         [Parameter]
-        public RenderFragment SecondContent { get; set; }
+        public RenderFragment EndContent { get; set; }
 
-        protected override void OnParametersSet()
+        [Parameter]
+        public EventCallback DimensionChanged { get; set; }
+
+        protected override async Task OnInitializedAsync()
         {
-            GetDimensions();
+            await base.OnInitializedAsync();
+            await UpdateDimensions();
         }
 
         double _firstContentDimension = 50;
         double _secondContentDimension = 50;
-        protected void GetDimensions()
+        protected async Task UpdateDimensions()
         {
             if (_slider == null)
             {
@@ -90,6 +112,19 @@ namespace MudExtensions
             }
             _firstContentDimension = _slider.Value;
             _secondContentDimension = 100d - _firstContentDimension;
+            await DimensionChanged.InvokeAsync();
+        }
+
+        public double GetStartContentPercentage() => _firstContentDimension;
+
+        /// <summary>
+        /// Updates the dimension with given the start content's percentage
+        /// </summary>
+        /// <param name="percentage"></param>
+        public async Task SetDimensions(double percentage)
+        {
+            _slider.Value = percentage;
+            await UpdateDimensions();
         }
 
     }

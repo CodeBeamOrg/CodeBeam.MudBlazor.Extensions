@@ -1,8 +1,8 @@
 ﻿
 .mud-splitter {
     display: grid;
-    width: 100%;
     position: relative;
+    width: 100%;
 }
 
 .mud-splitter-content {
@@ -11,17 +11,12 @@
 
 .mud-splitter-thumb ::-webkit-slider-runnable-track {
     visibility: hidden !important;
-/*    top: 50%;
-    transform: translateY(-50%);*/
-    top: 0px !important;
     height: 100% !important;
 }
 
 .mud-splitter-thumb ::-moz-range-track {
     visibility: hidden !important;
     height: 100% !important;
-    top: 50%;
-    transform: translateY(-50%);
 }
 
 .mud-splitter-track {
@@ -39,7 +34,6 @@
     }
 
     &.mud-slider .mud-slider-input {
-        /*height: 0px;*/
         top: 50%;
         /*transform: translateY(-50%);*/
     }
