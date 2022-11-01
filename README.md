@@ -23,6 +23,7 @@
 - MudScrollbar
 - MudSection
 - MudSpeedDial
+- MudSplitter
 - MudStepper
 - MudWheel
 
