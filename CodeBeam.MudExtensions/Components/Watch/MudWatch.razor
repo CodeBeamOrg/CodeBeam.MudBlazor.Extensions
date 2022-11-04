@@ -7,7 +7,7 @@
     {
         @if (ShowHour)
         {
-            <MudWheel Class="mud-width-full" @bind-Value="_hour" ItemCollection="Hours" WheelLevel="0" Dense="@Dense" Color="@Color" />
+            <MudWheel @ref="_wheelHour" Class="mud-width-full" @bind-Value="_hour" ItemCollection="Hours" WheelLevel="0" Dense="@Dense" Color="@Color" />
         }
         @if (ShowMinute)
         {

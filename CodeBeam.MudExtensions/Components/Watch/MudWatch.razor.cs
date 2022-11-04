@@ -17,49 +17,18 @@ namespace MudExtensions
 {
     public partial class MudWatch : MudBaseInput<TimeSpan?>
     {
+        MudWheel<int> _wheelHour;
         MudWheel<int> _wheelMinute;
         MudWheel<int> _wheelSecond;
 
-        PeriodicTimer timer = new PeriodicTimer(TimeSpan.FromMilliseconds(100));
         System.Timers.Timer _timer = new();
         Stopwatch _stopwatch = new();
 
-        public void ExecuteAsync()
-        {
-            _timer.Interval = Interval.TotalMilliseconds;
-            _timer.Start();
-            _stopwatch.Start();
-            
-
-
-            //timer = new PeriodicTimer(Interval);
-            
-            //sw.Start();
-            //try
-            //{
-            //    while (await timer.WaitForNextTickAsync())
-            //    {
-            //        Value = Value.Value.Add(Increment);
-            //        SetWheelValues();
-            //        //await _wheelSecond.RefreshAnimate();
-            //        await InvokeAsync(StateHasChanged);
-            //    }
-            //    sw.Stop();
-            //    Value = TimeSpan.FromMilliseconds(sw.ElapsedMilliseconds);
-            //    SetWheelValues();
-            //    await InvokeAsync(StateHasChanged);
-            //    timer.Dispose();
-
-            //}
-            //catch
-            //{
-
-            //}
-
-        }
-
         public async void Elapse(object sender, System.Timers.ElapsedEventArgs args)
         {
+            int oldHour = ((int)Value.Value.TotalHours);
+            int oldMinute = ((int)Value.Value.TotalMinutes);
+            int oldSecond = ((int)Value.Value.TotalSeconds);
             if (Mode == WatchMode.Watch)
             {
                 Value = DateTime.Now.TimeOfDay;
@@ -67,37 +36,53 @@ namespace MudExtensions
             }
             else if (Mode == WatchMode.CountDown)
             {
+                if (Value.Value <= TimeSpan.Zero)
+                {
+                    await Stop();
+                    Value = TimeSpan.Zero;
+                    SetInternalValues();
+                    await InvokeAsync(StateHasChanged);
+                    await InvokeAsync(CountdownCompleted.InvokeAsync);
+                    return;
+                }
+
                 int oldSecondValue = ((int)Value.Value.TotalSeconds);
                 Value = CountdownTime - TimeSpan.FromMilliseconds(_stopwatch.ElapsedMilliseconds);
                 SetInternalValues();
-                if (Wheel == true)
-                {
-                    if (oldSecondValue != ((int)Value.Value.TotalSeconds))
-                    {
-                        // When you await this line, some animates will miss.
-                        _wheelSecond.RefreshAnimate();
-                    }
-                }
+                
             }
             else
             {
                 int oldSecondValue = ((int)Value.Value.TotalSeconds);
                 Value = TimeSpan.FromMilliseconds(_stopwatch.ElapsedMilliseconds);
                 SetInternalValues();
-                if (Wheel == true)
+            }
+#pragma warning disable CS4014
+            if (Wheel == true)
+            {
+                if (oldHour != ((int)Value.Value.TotalHours))
                 {
-                    if (oldSecondValue != ((int)Value.Value.TotalSeconds))
-                    {
-                        // When you await this line, some animates will miss.
-                        _wheelSecond.RefreshAnimate();
-                    }
+                    // When you await this line, some animates will miss.
+                    _wheelHour.RefreshAnimate();
+                }
+
+                if (oldMinute != ((int)Value.Value.TotalMinutes))
+                {
+                    // When you await this line, some animates will miss.
+                    _wheelSecond.RefreshAnimate();
+                }
+
+                if (oldSecond != ((int)Value.Value.TotalSeconds))
+                {
+                    // When you await this line, some animates will miss.
+                    _wheelSecond.RefreshAnimate();
                 }
             }
-
+#pragma warning restore CS4014
             await InvokeAsync(StateHasChanged);
         }
 
-        public void Stop()
+        public async Task Stop()
         {
             _timer.Stop();
             _stopwatch.Stop();
@@ -111,7 +96,7 @@ namespace MudExtensions
             }
 
             SetInternalValues();
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
 
         public void ResetWatch()
@@ -125,16 +110,34 @@ namespace MudExtensions
                 _stopwatch.Reset();
                 Value = CountdownTime;
                 SetInternalValues();
+                LapRecords.Clear();
                 return;
             }
             _stopwatch.Reset();
             Value = TimeSpan.Zero;
             SetInternalValues();
+            LapRecords.Clear();
         }
 
         public void Start()
         {
-            ExecuteAsync();
+            _timer.Interval = Interval.TotalMilliseconds;
+            _timer.Start();
+            _stopwatch.Start();
+        }
+
+        public async void Lap()
+        {
+            if (LapRecords == null)
+            {
+                LapRecords = new();
+            }
+            LapRecords.Add(new LapRecord()
+            {
+                TotalTime = TimeSpan.FromMilliseconds(_stopwatch.ElapsedMilliseconds),
+                Gap = LapRecords.Count == 0 ? TimeSpan.FromMilliseconds(_stopwatch.ElapsedMilliseconds) : TimeSpan.FromMilliseconds(_stopwatch.ElapsedMilliseconds) - LapRecords.LastOrDefault().TotalTime,
+            });
+            await LapRecordsChanged.InvokeAsync();
         }
 
         protected string Classname =>
@@ -142,7 +145,7 @@ namespace MudExtensions
            .AddClass(Class)
            .Build();
         TimeSpan dt;
-        protected override async void OnInitialized()
+        protected override void OnInitialized()
         {
             _timer.Elapsed += Elapse;
             if (Mode == WatchMode.Watch)
@@ -261,11 +264,11 @@ namespace MudExtensions
         public Typo TypoMillisecond { get; set; } = Typo.h6;
 
         /// <summary>
-        /// If true, only adornment click opens popover and users can directly write to the input.
+        /// Fires when countdown reach to 0.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public bool Editable { get; set; }
+        public EventCallback CountdownCompleted { get; set; }
 
         /// <summary>
         /// Determines the wheels are dense or not.
@@ -283,49 +286,28 @@ namespace MudExtensions
 
 
         int _hour = 0;
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.Behavior)]
-        public List<int> Hours { get; set; } = Enumerable.Range(0, 24).ToList();
+        internal List<int> Hours { get; set; } = Enumerable.Range(0, 24).ToList();
 
         int _minute = 0;
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.Behavior)]
-        public List<int> Minutes { get; set; } = Enumerable.Range(0, 60).ToList();
+        internal List<int> Minutes { get; set; } = Enumerable.Range(0, 60).ToList();
 
         int _second = 0;
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.Behavior)]
-        public List<int> Seconds { get; set; } = Enumerable.Range(0, 60).ToList();
+        internal List<int> Seconds { get; set; } = Enumerable.Range(0, 60).ToList();
 
         int _milliSecond = 0;
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.Behavior)]
-        public List<int> MilliSeconds { get; set; } = Enumerable.Range(0, 999).ToList();
+        internal List<int> MilliSeconds { get; set; } = Enumerable.Range(0, 999).ToList();
 
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public int MaxHeight { get; set; } = 300;
-
-        internal bool _isOpen;
-        internal string _currentIcon { get; set; } = Icons.Filled.CalendarMonth;
-
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public Origin AnchorOrigin { get; set; } = Origin.TopCenter;
 
         /// <summary>
-        /// Sets the transform origin point for the popover.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public Origin TransformOrigin { get; set; } = Origin.TopCenter;
-
-        /// <summary>
-        /// If true, prevent scrolling while dropdown is open.
+        /// The records that builds with Lap method or created manually.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public bool LockScroll { get; set; } = false;
+        public List<LapRecord> LapRecords { get; set; } = new();
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public EventCallback<LapRecord> LapRecordsChanged { get; set; }
 
         /// <summary>
         /// Button click event for clear button. Called after text and value has been cleared.

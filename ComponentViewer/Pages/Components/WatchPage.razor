@@ -1,19 +1,32 @@
 ﻿@page "/mudwatch"
+@inject ISnackbar Snackbar
+@using CodeBeam.MudExtensions.Utilities
 @using MudBlazor.Extensions
 @using MudExtensions.Enums
 
 <ExamplePage Title="MudWatch">
-    <ExampleCard Title="Usage" Description="">
+    <ExampleCard Title="Usage" Description="MudWatch has classic and wheel views with other design options.">
         <MudGrid>
             <MudItem xs="12" sm="8">
                 <MudStack Class="mud-width-full" AlignItems="AlignItems.Center">
-                    <MudWatch @ref="_watch" Interval="TimeSpan.FromMilliseconds(1)" Increment="TimeSpan.FromMilliseconds(100)" Mode="_watchMode"
+                    <MudWatch @ref="_watch" Interval="TimeSpan.FromMilliseconds(1)" Increment="TimeSpan.FromMilliseconds(100)" Mode="_watchMode" LapRecords="_lapRecords" LapRecordsChanged="@(() => Snackbar.Add("Lap updated."))"
                               Wheel="_wheel" ShowHour="_showHour" ShowMinute="_showMinute" ShowSecond="_showSecond" ShowMillisecond="_showMillisecond"
-                              Delimiter="@_delimiter" Typo="_typo" TypoMillisecond="_typoMillisecond" Color="_color" />
-                    @*<MudWatch @ref="_watch" Style="width: 300px" Interval="TimeSpan.FromSeconds(1)" Increment="TimeSpan.FromSeconds(1)" />*@
-                    <MudButton OnClick="@(() => _watch.Start())">Start</MudButton>
-                    <MudButton OnClick="@(() => _watch.Stop())">Stop</MudButton>
-                    <MudButton OnClick="@(() => _watch.ResetWatch())">Reset</MudButton>
+                              Delimiter="@_delimiter" Typo="_typo" TypoMillisecond="_typoMillisecond" Color="_color" CountdownCompleted="@(() => Snackbar.Add("Completed"))" />
+
+                    @*<MudWatch @ref="_watch2" Interval="TimeSpan.FromMilliseconds(1)" Increment="TimeSpan.FromMilliseconds(100)" Mode="_watchMode"
+                              Wheel="_wheel" ShowHour="_showHour" ShowMinute="_showMinute" ShowSecond="_showSecond" ShowMillisecond="_showMillisecond"
+                              Delimiter="@_delimiter" Typo="_typo" TypoMillisecond="_typoMillisecond" Color="_color" CountdownCompleted="@(() => Snackbar.Add("Completed"))" />*@
+                    <MudStack Row="true">
+                        <MudButton OnClick="@(() => _watch.Start())">Start</MudButton>
+                        <MudButton OnClick="@(() => _watch.Stop())">Stop</MudButton>
+                        <MudButton OnClick="@(() => _watch.Lap())">Lap</MudButton>
+                        <MudButton OnClick="@(() => _watch.ResetWatch())">Reset</MudButton>
+                    </MudStack>
+                    @for (int i = 0; i < _lapRecords.Count(); i++)
+                    {
+                        int a = i;
+                        <MudText>@($"Lap {a + 1}: Total Time: {_lapRecords[a].TotalTime.ToString(@"mm\:ss\:fff")} - Gap: {_lapRecords[a].Gap.ToString(@"ss\:fff")}")</MudText>
+                    }
                 </MudStack>
             </MudItem>
 
@@ -59,6 +72,7 @@
 
 @code{
     MudWatch _watch;
+    MudWatch _watch2;
     WatchMode _watchMode = WatchMode.Watch;
     bool _wheel;
     bool _showHour = true;
@@ -69,4 +83,5 @@
     Typo _typo = Typo.h6;
     Typo _typoMillisecond = Typo.h6;
     Color _color;
+    List<LapRecord> _lapRecords = new();
 }
