@@ -25,6 +25,8 @@
     <PackageReference Include="MudBlazor" Version="6.0.17" />
   </ItemGroup>
 
+	<!--Uncomment it on development and debug to generate min.css on rebuild-->
+	<!--This sections causes to fail auto deployment to CloudFlare-->
 	<Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
 		<Exec Command="dotnet tool restore" StandardOutputImportance="high" />
 	</Target>

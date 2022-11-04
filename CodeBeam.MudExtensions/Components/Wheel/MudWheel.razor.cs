@@ -164,7 +164,7 @@ namespace MudExtensions
 
         }
 
-        protected async Task ChangeWheel(int changeCount)
+        public async Task ChangeWheel(int changeCount)
         {
             if (Disabled || ReadOnly)
             {
@@ -182,6 +182,11 @@ namespace MudExtensions
             await _animate.Refresh();
             T val = ItemCollection[index + changeCount];
             await SetValueAsync(val);
+        }
+
+        public async Task RefreshAnimate()
+        {
+            await _animate.Refresh();
         }
 
         protected int GetIndex() => ItemCollection.IndexOf(Value) == -1 ? 0 : ItemCollection.IndexOf(Value);
