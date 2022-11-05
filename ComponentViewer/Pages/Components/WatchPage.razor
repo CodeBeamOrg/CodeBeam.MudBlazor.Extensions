@@ -9,7 +9,7 @@
         <MudGrid>
             <MudItem xs="12" sm="8">
                 <MudStack Class="mud-width-full" AlignItems="AlignItems.Center">
-                    <MudWatch @ref="_watch" Interval="TimeSpan.FromMilliseconds(1)" Increment="TimeSpan.FromMilliseconds(100)" Mode="_watchMode" LapRecords="_lapRecords" LapRecordsChanged="@(() => Snackbar.Add("Lap updated."))"
+                    <MudWatch @ref="_watch" Interval="TimeSpan.FromMilliseconds(1)" Mode="_watchMode" LapRecords="_lapRecords" LapRecordsChanged="@(() => Snackbar.Add("Lap updated."))"
                               Wheel="_wheel" ShowHour="_showHour" ShowMinute="_showMinute" ShowSecond="_showSecond" ShowMillisecond="_showMillisecond"
                               Delimiter="@_delimiter" Typo="_typo" TypoMillisecond="_typoMillisecond" Color="_color" CountdownCompleted="@(() => Snackbar.Add("Completed"))" />
 
@@ -20,7 +20,7 @@
                         <MudButton OnClick="@(() => _watch.Start())">Start</MudButton>
                         <MudButton OnClick="@(() => _watch.Stop())">Stop</MudButton>
                         <MudButton OnClick="@(() => _watch.Lap())">Lap</MudButton>
-                        <MudButton OnClick="@(() => _watch.ResetWatch())">Reset</MudButton>
+                        <MudButton OnClick="@(() => _watch.Reset())">Reset</MudButton>
                     </MudStack>
                     @for (int i = 0; i < _lapRecords.Count(); i++)
                     {
