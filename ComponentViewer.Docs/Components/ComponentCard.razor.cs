@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace ComponentViewer.Components
+namespace ComponentViewer.Docs.Components
 {
     public partial class ComponentCard
     {
