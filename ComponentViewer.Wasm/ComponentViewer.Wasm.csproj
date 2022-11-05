@@ -14,6 +14,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CodeBeam.MudExtensions\CodeBeam.MudExtensions.csproj" />
+    <ProjectReference Include="..\ComponentViewer.Docs\ComponentViewer.Docs.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\favicon.ico">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
