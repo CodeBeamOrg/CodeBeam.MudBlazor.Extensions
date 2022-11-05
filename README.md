@@ -25,6 +25,8 @@
 - MudSpeedDial
 - MudSplitter
 - MudStepper
+- MudToggle
+- MudWatch
 - MudWheel
 
 ## Installation
@@ -40,7 +42,7 @@ Adding namespace to `_Imports.razor` is not obligatory, but may be useful.
 ```
 
 ## Playground
-https://mudextensions.azurewebsites.net/
+https://codebeam-mudextensions.pages.dev/
 
 ## API
 https://mudextensions.azurewebsites.net/api
