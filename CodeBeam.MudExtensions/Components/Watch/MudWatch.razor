@@ -1,0 +1,30 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+
+<div class="@Classname" style="@Style">
+    @if (Wheel)
+    {
+        @if (ShowHour)
+        {
+            <MudWheel @ref="_wheelHour" Class="mud-width-full" @bind-Value="_hour" ItemCollection="Hours" WheelLevel="0" Dense="@Dense" Color="@Color" ToStringFunc="new Func<int, string>(NumberToString)" />
+        }
+        @if (ShowMinute)
+        {
+            <MudWheel @ref="_wheelMinute" Class="mud-width-full" @bind-Value="_minute" ItemCollection="Minutes" WheelLevel="0" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" />
+        }
+        @if (ShowSecond)
+        {
+            <MudWheel @ref="_wheelSecond" Class="mud-width-full" @bind-Value="_second" ItemCollection="Seconds" WheelLevel="0" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" />
+        }
+        @if (ShowMillisecond)
+        {
+            <MudWheel Class="mud-width-full" @bind-Value="_milliSecond" ItemCollection="MilliSeconds" WheelLevel="0" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" />
+        }
+    }
+    else
+    {
+        <MudText Typo="@Typo" Color="@Color" Align="Align.Center">@GetWatchText() <MudText Inline="true" Typo="@TypoMillisecond">@($"{(ShowMillisecond ? _milliSecond.ToString("D3") : null)}")</MudText></MudText>
+    }
+</div>
+               
