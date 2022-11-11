@@ -1,0 +1,169 @@
+﻿$mud-palette-colors: primary, secondary, tertiary, info, success, warning, error, dark;
+
+.mud-switch-m3 {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    /*    margin-left: -11px;
+    margin-right: 16px;
+    margin-inline-start: -11px;
+    margin-inline-end: 16px;*/
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
+
+    &.mud-disabled {
+        color: var(--mud-palette-text-disabled) !important;
+        cursor: default;
+    }
+
+    &.mud-readonly, .mud-readonly:hover {
+        cursor: default;
+        background-color: transparent !important;
+    }
+}
+
+.mud-switch-span-m3 {
+    width: 52px;
+    height: 32px;
+    display: inline-flex;
+    /*padding: 12px;*/
+    z-index: 0;
+    /*overflow: hidden;*/
+    position: relative;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    vertical-align: middle;
+
+    &.mud-switch-child-content-m3 {
+        margin-inline-end: 12px;
+    }
+
+    & .mud-switch-track-m3 {
+        /*width: 100%;
+        height: 100%;*/
+        width: 52px;
+        height: 32px;
+        /*opacity: 0.48;*/
+        z-index: -1;
+        transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        border-radius: 30px;
+        background-color: var(--mud-palette-background);
+        border: 2px solid;
+
+        &.mud-switch-track-default-m3{
+            border-color: var(--mud-palette-text-primary);
+        }
+
+        @each $color in $mud-palette-colors {
+            &.mud-switch-track-#{$color}-m3 {
+                border-color: var(--mud-palette-#{$color});
+            }
+        }
+    }
+}
+
+.mud-switch-base-m3 {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-inline-start: 8px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    color: #fafafa;
+    z-index: 1;
+    position: absolute;
+    transition: left 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
+    &.mud-switch-base-dense-m3 {
+        padding-inline-start: 4px;
+    }
+
+    &.mud-checked {
+        transform: translateX(20px);
+        padding: 4px;
+
+        & + .mud-switch-track-m3 {
+            opacity: 1;
+
+            &.mud-default {
+                background-color: var(--mud-palette-text-primary);
+            }
+
+            @each $color in $mud-palette-colors {
+                &.mud-#{$color} {
+                    background-color: var(--mud-palette-#{$color});
+                }
+            }
+
+            /*background-color: var(--mud-palette-primary);*/
+        }
+
+        & .mud-switch-thumb-m3 {
+            width: 24px;
+            height: 24px;
+            box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+            border-radius: 50%;
+            background-color: var(--mud-palette-background);
+        }
+    }
+
+    &:hover {
+        background-color: var(--mud-palette-action-default-hover);
+    }
+
+    &.mud-switch-disabled {
+        color: var(--mud-palette-grey-default) !important;
+
+        & + .mud-switch-track-m3 {
+            opacity: 0.12 !important;
+        }
+
+        &:hover, &:focus-visible {
+            cursor: default;
+            background-color: transparent !important;
+        }
+    }
+}
+
+.mud-switch-button-m3 {
+    display: flex;
+    align-items: inherit;
+    justify-content: inherit;
+
+    & .mud-switch-input-m3 {
+        top: 0;
+        left: 0;
+        width: 100%;
+        cursor: inherit;
+        height: 100%;
+        margin: 0;
+        opacity: 0;
+        padding: 0;
+        z-index: 1;
+        position: absolute;
+    }
+
+    & .mud-switch-thumb-m3 {
+        width: 16px;
+        height: 16px;
+        box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+        border-radius: 50%;
+
+        &.mud-switch-thumb-default-m3 {
+            background-color: var(--mud-palette-text-primary);
+        }
+
+        @each $color in $mud-palette-colors {
+            &.mud-switch-thumb-#{$color}-m3 {
+                background-color: var(--mud-palette-#{$color});
+            }
+        }
+
+        /*background-color: var(--mud-palette-primary);*/
+
+        &.mud-switch-thumb-off-icon-m3 {
+            width: 24px;
+            height: 24px;
+        }
+    }
+}

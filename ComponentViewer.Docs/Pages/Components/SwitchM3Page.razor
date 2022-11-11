@@ -1,0 +1,43 @@
+﻿@page "/mudswitchm3"
+@using MudBlazor.Extensions
+
+<ExamplePage Title="MudSwitchM3">
+    <ExampleCard Title="Usage" Description="MudSwitch M3 has Material 3 design and MudSwitch features.">
+        <MudGrid>
+            <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center" Style="height: 500px">
+                
+                <MudSwitch @bind-Checked="_checked" Color="_color" ThumbIcon="@(_checked ? _icon : _offIcon)">M2 Switch</MudSwitch>
+
+                <MudSwitchM3 @bind-Checked="_checked" Color="_color" ThumbIcon="@_icon" ThumbOffIcon="@_offIcon">M3 Switch</MudSwitchM3>
+            </MudItem>
+            
+            <MudItem xs="12" sm="4">
+                <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color">
+                    @foreach (Color item in Enum.GetValues<Color>())
+                    {
+                        <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudRadioGroup @bind-SelectedOption="_icon">
+                    <MudRadio T="string" Option="null">None</MudRadio>
+                    <MudRadio Option="@Icons.Custom.Brands.MudBlazor"><MudIcon Icon="@Icons.Custom.Brands.MudBlazor" /></MudRadio>
+                    <MudRadio Option="@Icons.Filled.Done"><MudIcon Icon="@Icons.Filled.Done" /></MudRadio>
+                </MudRadioGroup>
+                
+                <MudRadioGroup @bind-SelectedOption="_offIcon">
+                    <MudRadio T="string" Option="null">None</MudRadio>
+                    <MudRadio Option="@Icons.Custom.Brands.MudBlazor"><MudIcon Icon="@Icons.Custom.Brands.MudBlazor" /></MudRadio>
+                    <MudRadio Option="@Icons.Filled.Remove"><MudIcon Icon="@Icons.Filled.Remove" /></MudRadio>
+                    <MudRadio Option="@Icons.Filled.Close"><MudIcon Icon="@Icons.Filled.Close" /></MudRadio>
+                </MudRadioGroup>
+            </MudItem>
+        </MudGrid>
+    </ExampleCard>
+</ExamplePage>
+
+@code{
+    bool _checked = false;
+    Color _color;
+    string _icon;
+    string _offIcon;
+}
