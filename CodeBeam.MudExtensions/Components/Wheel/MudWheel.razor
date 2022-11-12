@@ -3,7 +3,6 @@
 @inherits MudBaseInput<T>
 @using MudExtensions.Enums
 @using MudExtensions.Utilities
-@using MudBlazor.Events
 
 <div class="@Classname" @onmouseenter="@(() => ScrollManager.LockScrollAsync() )" @onmouseleave="@(() => ScrollManager.UnlockScrollAsync())" @onclick:stopPropagation>
     @if (!string.IsNullOrEmpty(Label))
