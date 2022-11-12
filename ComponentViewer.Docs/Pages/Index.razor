@@ -1,20 +1,31 @@
 ﻿@page "/"
 @namespace ComponentViewer.Docs.Pages
 @using MudExtensions.Enums
+@using MudBlazor.Events
+@inject IScrollManager ScrollManager
 
 <MudScrollbar Width="2" HoverWidth="8" Color="primary" />
+<MudScrollToTop>
+    <MudFab Color="Color.Secondary" Icon="@Icons.Filled.ArrowUpward" />
+</MudScrollToTop>
 
-<MudContainer Class="pa-4" Style="min-height: 100vh; background: var(--mud-palette-background-grey);" MaxWidth="MaxWidth.False">
-    <div class="d-flex align-baseline justify-center mt-6">
+<MudContainer Class="d-flex flex-column align-center justify-center pa-4" Style="min-height: 100vh; background: var(--mud-palette-background-grey); overflow: hidden;" MaxWidth="MaxWidth.False">
+    <div class="d-flex align-baseline justify-center mt-6" @onmouseenter="@(() => _hover = true)" @onmouseleave="@(() => _hover = false)">
         <MudText Class="slogan" Align="Align.Center">The</MudText>
         <MudText Class="slogan" Align="Align.Center" Color="Color.Primary">Mud</MudText>
-        <MudText Class="slogan" Align="Align.Center" Color="Color.Secondary">Secondary</MudText>
+        <MudText Class="slogan" Align="Align.Center" Color="Color.Secondary">@GetSloganText()</MudText>
     </div>
     <div class="d-flex align-baseline gap-2 justify-center mb-10">
         <MudText Class="slogan3" Align="Align.Center">by</MudText>
-        <MudText Class="slogan3" Align="Align.Center" Color="Color.Info">CodeBeam</MudText>
+        <MudLink Class="slogan3" Href="https://github.com/CodeBeamOrg/CodeBeam.MudExtensions" Target="_blank" Color="Color.Info" Underline="Underline.Hover">CodeBeam</MudLink>
     </div>
+    
+    <div class="d-flex justify-center mt-16">
+        <MudIconButton Icon="@Icons.Filled.ArrowDownward" Style="height: 52px; width 52px;" Color="Color.Secondary" Variant="Variant.Outlined" OnClick="@(async() => await ScrollManager.ScrollToAsync("cont", 0, 1600, ScrollBehavior.Smooth))" />
+    </div>
+</MudContainer>
 
+<MudContainer id="cont" Class="pa-4" Style="background: var(--mud-palette-background-grey);" MaxWidth="MaxWidth.False">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
             <ComponentCard Title="API"
@@ -107,13 +118,37 @@
 <style>
     .slogan {
         color: var(--mud-palette-text-primary);
-        font-size: 58px;
+        font-size: calc(16px + 6vw);
         font-weight: 900;
+        font-family: "Roboto Black";
+        letter-spacing: 0;
+        transition: all 1s;
+        cursor: pointer;
+    }
+
+    .slogan:hover {
+        letter-spacing: calc(4px + 2vw);
     }
 
     .slogan3 {
         color: var(--mud-palette-text-primary);
         font-size:24px;
-        font-weight: 900;
+        font-weight: 300;
     }
 </style>
+
+@code{
+    bool _hover = false;
+
+    private string GetSloganText()
+    {
+        if (_hover)
+        {
+            return "Extension";
+        }
+        else
+        {
+            return "Secondary";
+        }
+    }
+}

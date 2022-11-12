@@ -145,7 +145,7 @@
         </MudTable>
     </ExampleCard>
 
-    <ExampleCard Title="Api - MudSpeedDial"HasExpansionPanel="true">
+    <ExampleCard Title="Api - MudSpeedDial" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudSpeedDial).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
@@ -184,6 +184,19 @@
         </MudTable>
         <MudText Class="ma-4" Typo="Typo.h6" Color="Color.Secondary">MudStep</MudText>
         <MudTable Items="@(typeof(MudStep).GetProperties().OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.ToString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
+    <ExampleCard Title="Api - MudSwitchM3" HasExpansionPanel="true">
+        <MudTable Items="@(typeof(MudSwitchM3<bool>).GetProperties().OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
