@@ -1,0 +1,67 @@
+﻿@using MudBlazor.Utilities
+<MudGrid Style="background-color: var(--mud-palette-background-grey)">
+    <MudItem xs="12" sm="8">
+        <MudStack>
+            <MudText>Default TextFields</MudText>
+            <MudStack Row="true">
+                <MudTextField T="string" Label="Test" />
+                <MudTextField T="string" Label="Test" Variant="Variant.Outlined" />
+                <MudTextField T="string" Label="Test" Variant="Variant.Filled" />
+            </MudStack>
+            <MudDivider />
+            <MudText Class="mt-4">Modified TextFields</MudText>
+            <MudStack Row="true">
+                <MudTextField Class="text-field" T="string" Label="Test" />
+                <MudTextField Class="text-field label-background-grey" T="string" Label="Test" Variant="Variant.Outlined" />
+                <MudTextField Class="text-field label-background-transparent" T="string" Label="Test" Variant="Variant.Filled" />
+            </MudStack>
+            <MudDivider />
+            <MudText Class="mt-4">Modified Selects</MudText>
+            <MudStack Row="true">
+                <MudSelect T="string" Class="text-field" T="string" Label="Test" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="@("a")">Colored With InputStyler</MudSelectItem>
+                </MudSelect>
+                <MudSelect T="string" Class="text-field label-background-grey" T="string" Label="Test" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="@("a")">Colored With InputStyler</MudSelectItem>
+                </MudSelect>
+                <MudSelect T="string" Class="text-field label-background-transparent" T="string" Label="Test" Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="@("a")">Colored With InputStyler</MudSelectItem>
+                </MudSelect>
+            </MudStack>
+        </MudStack>
+
+        <MudInputStyler Selector=".text-field" BaseColor="@(_baseColor?.ToString())" TextColor="@(_textColor?.ToString())" LabelColor="@(_labelColor?.ToString())"
+                        BorderColor="@(_borderColor?.ToString())" Always="_always" />
+        <MudInputStyler Selector=".label-background-grey" LabelBackgroundColor="@("var(--mud-palette-background-grey)")" />
+        <MudInputStyler Selector=".label-background-transparent" LabelBackgroundColor="transparent" />
+        <MudInputStyler />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudSwitch @bind-Checked="_always" Color="Color.Primary" Label="Always" />
+            <MudColorPicker @bind-Value="_baseColor" Label="Base Color" ColorPickerView="ColorPickerView.Grid" Clearable="true" />
+            <MudColorPicker @bind-Value="_textColor" Label="Text Color" ColorPickerView="ColorPickerView.Grid" Clearable="true" />
+            <MudColorPicker @bind-Value="_labelColor" Label="Label Color" ColorPickerView="ColorPickerView.Grid" Clearable="true" />
+            <MudColorPicker @bind-Value="_borderColor" Label="Border Color" ColorPickerView="ColorPickerView.Grid" Clearable="true" />
+            <MudButton OnClick="Reset">Reset</MudButton>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    MudColor _baseColor;
+    MudColor _textColor;
+    MudColor _labelColor;
+    MudColor _borderColor;
+    bool _always;
+
+    private void Reset()
+    {
+        _baseColor = null;
+        _textColor = null;
+        _labelColor = null;
+        _borderColor = null;
+        StateHasChanged();
+    }
+}

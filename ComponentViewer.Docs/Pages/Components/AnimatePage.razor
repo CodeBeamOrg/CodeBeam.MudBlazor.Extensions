@@ -1,122 +1,13 @@
 ﻿@page "/mudanimate"
-@using MudBlazor.Extensions
-@using MudBlazor.Utilities
-@using MudExtensions.Enums
-@using MudExtensions.Utilities
+@using ComponentViewer.Docs.Pages.Examples
 
 <ExamplePage Title="MudAnimate">
-    <ExampleCard Title="Playground" Description="See the MudAnimate's capabilities.">
-        <MudAnimate @ref="_animate" Selector=".id1" Duration="_duration" AnimationType="_animationType" Value="_value" ValueSecondary="_valueSecondary" Hover="_hover" Delay="_delay" Infinite="_infinite" IterationCount="_iterationCount"
-            AnimationTiming="_animationTiming" AnimationDirection="_animationDirection" AnimationFillMode="_animationFillMode" Paused="_paused" />
-
-        <MudGrid>
-            <MudItem xs="12" sm="8">
-                <div class="d-flex align-center justify-center ma-0" style="height:500px;">
-                    @if (_animationType == AnimationType.TextSpacing || _animationType == AnimationType.TextShadow)
-                    {
-                         <MudText Class="id1 black-text" Typo="Typo.h1" Style="outline: none;">MudBlazor</MudText>
-                    }
-                    else
-                    {
-                        <div>
-                            <MudPaper Class="id1 d-flex align-center justify-center" Elevation="0" Height="200px" Width="200px" Style="background-color: blue">
-                                <MudText Class="white-text" Typo="Typo.h1" Style="outline: none;">A</MudText>
-                            </MudPaper>
-                            @if (_animationType == AnimationType.Blur)
-                            {
-                                <MudText Class="id1 black-text mt-8" Typo="Typo.h1" Style="outline: none;">MudBlazor</MudText>
-                            }
-                        </div>
-                    }                    
-                </div>
-            </MudItem>
-
-            <MudItem xs="12" sm="4">
-                <MudStack Spacing="4">
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(async() => await _animate.Refresh())">Refresh</MudButton>
-                    <MudSelect @bind-Value="_animationType" Variant="Variant.Outlined" Label="Type" Margin="Margin.Dense" Dense="true">
-                        @foreach (AnimationType item in Enum.GetValues(typeof(AnimationType)))
-                        {
-                            <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
-                        }
-                    </MudSelect>
-                    <MudNumericField @bind-Value="_value" Variant="Variant.Outlined" Label="Value" Margin="Margin.Dense" />
-                    <MudNumericField @bind-Value="_valueSecondary" Variant="Variant.Outlined" Label="Value Secondary" Margin="Margin.Dense" Step="(double)0.1" />
-                    <MudNumericField @bind-Value="_duration" Variant="Variant.Outlined" Label="Duration" Step="(double)0.1" Min="(double)0.1" Max="(double)10" Margin="Margin.Dense" />
-                    <MudNumericField T="double" @bind-Value="_delay" Variant="Variant.Outlined" Label="Delay" Step="(double)0.1" Min="(double)0" Max="(double)10" Margin="Margin.Dense" />
-                    <MudNumericField @bind-Value="_iterationCount" Variant="Variant.Outlined" Label="Iteration Count" Step="1" Min="0" Max="10" Margin="Margin.Dense" />
-                    <MudCheckBox @bind-Checked="_hover" Label="Hover" Color="Color.Primary" Dense="true" />
-                    <MudCheckBox @bind-Checked="_infinite" Label="Infinite" Color="Color.Primary" Dense="true" />
-                    <MudCheckBox @bind-Checked="_paused" Label="Pause" Color="Color.Primary" Dense="true" />
-                    <MudSelect @bind-Value="_animationTiming" Variant="Variant.Outlined" Label="Timing" Margin="Margin.Dense" Dense="true">
-                        @foreach (AnimationTiming item in Enum.GetValues(typeof(AnimationTiming)))
-                        {
-                            <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
-                        }
-                    </MudSelect>
-                    <MudSelect @bind-Value="_animationDirection" Variant="Variant.Outlined" Label="Direction" Margin="Margin.Dense" Dense="true">
-                        @foreach (AnimationDirection item in Enum.GetValues(typeof(AnimationDirection)))
-                        {
-                            <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
-                        }
-                    </MudSelect>
-                    <MudSelect @bind-Value="_animationFillMode" Variant="Variant.Outlined" Label="FillMode" Margin="Margin.Dense" Dense="true">
-                        @foreach (AnimationFillMode item in Enum.GetValues(typeof(AnimationFillMode)))
-                        {
-                            <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudStack>
-            </MudItem>
-        </MudGrid>
+    <ExampleCard ExampleName="AnimateExample1" Title="Playground" Description="See the MudAnimate's capabilities.">
+        <AnimateExample1 />
     </ExampleCard>
 
-    <ExampleCard Title="Multiple Animations" Description=" Multiple animations can be added with KeyframeAdvanced parameter.">
-        <MudRender @ref="_animateRender">
-            <MudAnimate @ref="_animate2" Selector=".id2" Duration="1" AnimationType="AnimationType.Rotate" Value="_value2" ValueSecondary="0" Infinite="true"
-                        KeyframeAdvanced="@KeyframeBuilder.Build(2, new List<string>() {"0", $"{_value2}"}, string.Join(" ", _animationTypes))" />
-        </MudRender>
-
-        <MudGrid>
-            <MudItem xs="12" sm="8">
-                <div class="d-flex align-center justify-center ma-0" style="height:400px;">
-                    <MudPaper Class="id2 d-flex align-center justify-center" Elevation="0" Height="200px" Width="200px" Style="background-color: blue">
-                        <MudText Class="white-text" Typo="Typo.h1" Style="outline: none;">A</MudText>
-                    </MudPaper>
-                </div>
-            </MudItem>
-
-            <MudItem xs="12" sm="4">
-                <MudStack Spacing="4">
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => _animateRender.ForceRender())">Refresh</MudButton>
-                    <MudSelect @bind-SelectedValues="_animationTypes" Variant="Variant.Outlined" Label="Type" MultiSelection="true" Margin="Margin.Dense" Dense="true">
-                        <MudSelectItem Value="KeyframePreset.Rotate">Rotate</MudSelectItem>
-                        <MudSelectItem Value="KeyframePreset.Fade">Fade</MudSelectItem>
-                        <MudSelectItem Value="KeyframePreset.Blur">Blur</MudSelectItem>
-                    </MudSelect>
-                    <MudNumericField @bind-Value="_value2" Variant="Variant.Outlined" Label="Value" Margin="Margin.Dense" />
-                </MudStack>
-            </MudItem>
-        </MudGrid>
+    <ExampleCard ExampleName="AnimateExample2" Title="Multiple Animations" Description=" Multiple animations can be added with KeyframeAdvanced parameter.">
+        <AnimateExample2 />
     </ExampleCard>
 </ExamplePage>
 
-@code {
-    MudAnimate _animate;
-    MudAnimate _animate2;
-    MudRender _animateRender;
-    double _duration = 1;
-    double _delay = 0;
-    int _iterationCount = 1;
-    bool _hover;
-    bool _infinite;
-    AnimationType _animationType = AnimationType.Rotate;
-    IEnumerable<string> _animationTypes = new List<string>();
-    AnimationTiming _animationTiming = AnimationTiming.EaseInOut;
-    AnimationDirection _animationDirection = AnimationDirection.Normal;
-    AnimationFillMode _animationFillMode = AnimationFillMode.None;
-    bool _paused;
-    double _value = 360;
-    double _value2 = 360;
-    double? _valueSecondary;
-}

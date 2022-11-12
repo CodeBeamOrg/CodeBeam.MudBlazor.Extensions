@@ -34,7 +34,11 @@ else
                 <MudText Class="mb-4" Typo="Typo.subtitle2" Color="Color.Secondary">Code</MudText>
                 @foreach (string line in _lines)
                 {
-                    <pre style="color: var(--mud-palette-primary); font-weight: 500">@line</pre>
+                    if (string.IsNullOrEmpty(line) || line == "/r")
+                    {
+                        <br />
+                    }
+                    <pre style="color: var(--mud-palette-primary); font-weight: 500; font-size: 14px; white-space: pre-wrap">@line</pre>
                 }
             </div>
         </MudCardContent>
