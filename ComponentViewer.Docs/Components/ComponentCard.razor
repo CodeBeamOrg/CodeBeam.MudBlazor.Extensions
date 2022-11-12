@@ -1,9 +1,11 @@
 ﻿@inherits MudComponentBase
 @namespace ComponentViewer.Docs.Components
 
-<MudCard Class="component-card pa-2" Elevation="4" @onclick="NavigateComponentPage">
-    <MudCardHeader>
+<MudCard Class="component-card pa-0" Elevation="4" @onclick="NavigateComponentPage">
+    <MudCardHeader Class="component-card-header">
         <MudText Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
+        <MudSpacer />
+        <MudIcon Class="icon-class" Icon="@Icons.Custom.Brands.MudBlazor" />
     </MudCardHeader>
     <MudCardContent>
         <div class="d-flex align-center" style="min-height: 100px">
@@ -18,16 +20,39 @@
 </MudCard>
 
 <style>
-    .component-card{
+    .component-card {
         background-color: transparent;
         color: var(--mud-palette-secondary);
-        transition: background-color .6s;
-        transition: color 1s;
+        transition: background-color .6s, color 1s;
         cursor: pointer;
     }
 
     .component-card:hover {
         color: white;
         background: linear-gradient(to right, var(--mud-palette-primary) , var(--mud-palette-secondary));
+        box-shadow: var(--mud-palette-secondary) 0px 30px 90px;
     }
+
+    .component-card:hover .component-card-header {
+        color: var(--mud-palette-primary);
+        background-color: var(--mud-palette-background-grey);
+        /*transform: rotate3d(1, 1, 1, 25deg);*/
+        transition: left 1s;
+    }
+
+    .component-card:hover .icon-class {
+        color: var(--mud-palette-secondary);
+    }
+
+    .component-card-header{
+        background-color: var(--mud-palette-background);
+        transition: background-color .6s, color 1s;
+        cursor: pointer;
+    }
+
+    .icon-class {
+        color: var(--mud-palette-background);
+        transition: color 1s;
+    }
+
 </style>

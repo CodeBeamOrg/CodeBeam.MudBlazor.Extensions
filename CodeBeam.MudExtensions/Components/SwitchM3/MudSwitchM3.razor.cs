@@ -22,7 +22,7 @@ namespace MudExtensions
 
         protected string SwitchSpanClassname =>
             new CssBuilder("mud-switch-span-m3 mud-flip-x-rtl")
-                .AddClass("mud-switch-child-content-m3", ChildContent != null)
+                .AddClass("mud-switch-child-content-m3", ChildContent != null || !string.IsNullOrEmpty(Label))
                 .Build();
 
         protected string SwitchClassname =>

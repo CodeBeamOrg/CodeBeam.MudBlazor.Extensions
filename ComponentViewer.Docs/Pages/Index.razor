@@ -5,10 +5,16 @@
 <MudScrollbar Width="2" HoverWidth="8" Color="primary" />
 
 <MudContainer Class="pa-4" Style="min-height: 100vh; background: var(--mud-palette-background-grey);" MaxWidth="MaxWidth.False">
-    <div class="d-flex">
-        <MudText Class="my-6 d-flex" Style="font-weight: 900" Typo="Typo.h5">The <MudText Style="font-weight: 900" Color="Color.Secondary" Typo="Typo.h5">Secondary</MudText>NeedsFor<MudText Style="font-weight: 900" Color="Color.Primary" Typo="Typo.h5">Mud</MudText></MudText>
+    <div class="d-flex align-baseline justify-center mt-6">
+        <MudText Class="slogan" Align="Align.Center">The</MudText>
+        <MudText Class="slogan" Align="Align.Center" Color="Color.Primary">Mud</MudText>
+        <MudText Class="slogan" Align="Align.Center" Color="Color.Secondary">Secondary</MudText>
     </div>
-    
+    <div class="d-flex align-baseline gap-2 justify-center mb-10">
+        <MudText Class="slogan3" Align="Align.Center">by</MudText>
+        <MudText Class="slogan3" Align="Align.Center" Color="Color.Info">CodeBeam</MudText>
+    </div>
+
     <MudGrid>
         <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
             <ComponentCard Title="API"
@@ -52,12 +58,12 @@
 
         <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
             <ComponentCard Title="MudPasswordField"
-                Description="A specialized textfield that designed for working easily with passwords." />
+                           Description="A specialized textfield that designed for working easily with passwords." />
         </MudItem>
 
         <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
             <ComponentCard Title="MudPopup"
-                Description="A mobile friendly popup content for several situations." />
+                           Description="A mobile friendly popup content for several situations." />
         </MudItem>
 
         <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
@@ -97,3 +103,17 @@
         
     </MudGrid>
 </MudContainer>
+
+<style>
+    .slogan {
+        color: var(--mud-palette-text-primary);
+        font-size: 58px;
+        font-weight: 900;
+    }
+
+    .slogan3 {
+        color: var(--mud-palette-text-primary);
+        font-size:24px;
+        font-weight: 900;
+    }
+</style>
