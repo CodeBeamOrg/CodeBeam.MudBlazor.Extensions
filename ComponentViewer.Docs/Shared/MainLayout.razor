@@ -6,16 +6,34 @@
 </style>
 
 <MudLayout>
-    <MudAppBar Class="background-gradient-animation mud-width-full" Style="background: linear-gradient(-45deg, var(--mud-palette-info), var(--mud-palette-primary), var(--mud-palette-secondary), var(--mud-palette-primary)); background-size: 400% 400%; position: relative; overflow-x: hidden">
-        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="4">
+    <MudAppBar Class="background-gradient-animation mud-width-full" Style="background: linear-gradient(-45deg, var(--mud-palette-dark), var(--mud-palette-primary), var(--mud-palette-dark), var(--mud-palette-secondary), var(--mud-palette-dark)); background-size: 400% 400%; position: relative; overflow-x: hidden">
+        <MudStack Class="mud-width-full" Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Spacing="4">
             <MudIconButton Class="white-text" Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large" Href="https://mudblazor.com/" Target="_blank" />
-            <MudText>CodeBeam MudExtensions</MudText>
+            <MudText Style="font-weight: 900; color: white">CodeBeam MudExtensions</MudText>
+            <div class="d-flex">
+                <MudToggleIconButton @bind-Toggled="_isDarkMode" Class="white-text" Icon="@Icons.Filled.DarkMode" ToggledIcon="@Icons.Filled.LightMode"/>
+                <MudIconButton Class="white-text" Icon="@Icons.Filled.Settings" OnClick="@ToggleOpen"/>
+                @if (_open == true)
+                {
+                    <MudPopover Class="pa-4" Open="_open" AnchorOrigin="Origin.TopLeft" TransformOrigin="Origin.BottomRight" Style="width: 320px; height: 400px">
+                        <MudStack Justify="Justify.SpaceBetween">
+                            <MudSwitchM3 @bind-Checked="_showFontPicker" Color="Color.Secondary" Label="Font Picker"/>
+                            <MudSlider T="int" Value="_borderRadius" ValueChanged="BorderRadiusChanged" Min="0" Max="50" Color="Color.Secondary" ValueLabel="true" />
+                            <MudText Class="mt-n2" Typo="Typo.subtitle2">Border Radius</MudText>
+                            <MudButton Class="mud-width-full" OnClick="@ToggleOpen">Close</MudButton>
+                        </MudStack>
+                    </MudPopover>
+                }
+            </div>
         </MudStack>
     </MudAppBar>
     <MudMainContent Class="pt-0">
-        <div class="pa-4">
-            <MudFontPicker @ref="@_fontPicker" Label="Font Picker" StaticInputText="true" FontChanged="FontChanged" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" Clearable="true" MaxItems="null" />
-        </div>
+        @if (_showFontPicker)
+        {
+            <div class="pa-4">
+                <MudFontPicker @ref="@_fontPicker" Label="Font Picker" StaticInputText="true" FontChanged="FontChanged" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" Clearable="true" MaxItems="null"/>
+            </div>
+        }
         @Body
     </MudMainContent>
 </MudLayout>
@@ -41,7 +59,7 @@
 </style>
 
 
-<MudThemeProvider Theme="_theme" />
+<MudThemeProvider Theme="_theme" @bind-IsDarkMode="_isDarkMode" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -49,15 +67,21 @@
 @code {
     MudFontPicker _fontPicker;
     string font = "Roboto";
-    bool open = false;
+    bool _isDarkMode = false;
+    bool _open = false;
+    bool _showFontPicker = false;
+    int _borderRadius = 20;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
         if (firstRender)
         {
-            _fontPicker.Font = "Roboto";
-            FontChanged();
+            if (_fontPicker != null)
+            {
+                _fontPicker.Font = "Roboto";
+                FontChanged();
+            }
         }
     }
 
@@ -65,34 +89,41 @@
         {
             LayoutProperties = new LayoutProperties()
             {
-                DefaultBorderRadius = "20px"
+                DefaultBorderRadius = $"20px"
             },
         };
 
     private void FontChanged()
     {
-        font = _fontPicker?.Font;
+        font = _fontPicker?.Font ?? "Roboto";
 
-        if (font != null)
+
+        _theme = new MudTheme()
         {
-            _theme = new MudTheme()
+            LayoutProperties = new LayoutProperties()
+            {
+                DefaultBorderRadius = $"{_borderRadius}px"
+            },
+
+            Typography = new Typography()
+            {
+                Default = new Default()
                 {
-                    LayoutProperties = new LayoutProperties()
-                    {
-                        DefaultBorderRadius = "20px"
-                    },
-
-                    Typography = new Typography()
-                    {
-                        Default = new Default()
-                        {
-                            FontFamily = new[] { font, "Roboto", "Poppins", "Helvetica", "sans-serif" }
-                        },
-                    }
-                };
-        }
-
-
+                    FontFamily = new[] { font, "Roboto", "Poppins", "Helvetica", "sans-serif" }
+                },
+            }
+        };
         StateHasChanged();
+    }
+
+    private void ToggleOpen()
+    {
+        _open = !_open;
+    }
+
+    private void BorderRadiusChanged(int val)
+    {
+        _borderRadius = val;
+        FontChanged();
     }
 }

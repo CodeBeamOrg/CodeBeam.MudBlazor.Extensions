@@ -45,6 +45,7 @@
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
+	  <None Include="Components\SwitchM3\MudSwitchM3.razor" />
 	</ItemGroup>
 
 	<ItemGroup>

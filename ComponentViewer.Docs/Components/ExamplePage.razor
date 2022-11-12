@@ -1,13 +1,15 @@
 ﻿@inject NavigationManager NavigationManager
 @namespace ComponentViewer.Docs.Components
 
-<MudContainer Class="pa-6">
-    <div class="py-6 d-flex gap-4">
-        <MudIconButton Icon="@Icons.Filled.ArrowBack" Variant="Variant.Outlined" Color="Color.Secondary" OnClick="@(() => NavigationManager.NavigateTo("/"))" />
-        <MudText Typo="Typo.h4" Color="Color.Secondary">@Title</MudText>
-    </div>
-    @ChildContent
-</MudContainer>
+<CascadingValue Value="this" IsFixed="true">
+    <MudContainer Class="pa-6">
+        <div class="py-6 d-flex gap-4">
+            <MudIconButton Icon="@Icons.Filled.ArrowBack" Variant="Variant.Outlined" Color="Color.Secondary" OnClick="@(() => NavigationManager.NavigateTo("/"))" />
+            <MudText Typo="Typo.h4" Color="Color.Secondary">@Title</MudText>
+        </div>
+        @ChildContent
+    </MudContainer>
+</CascadingValue>
 
 @code{
     [Parameter]

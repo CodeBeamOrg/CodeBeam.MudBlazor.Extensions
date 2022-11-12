@@ -3,7 +3,7 @@
 @if (HasExpansionPanel)
 {
     <MudExpansionPanel Text="@Title">
-        <MudCard Class="component-card mx-2 my-8 pa-2 example-card" Elevation="4">
+        <MudCard Class="component-card mx-2 my-8 pa-2 example-card" Style="cursor: default" Elevation="4">
             <MudCardHeader>
                 <div>
                     <MudText Class="example-card-text" Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
@@ -14,14 +14,13 @@
                 <div class="pa-2" style="background: var(--mud-palette-background)">
                     @ChildContent
                 </div>
-
             </MudCardContent>
         </MudCard>
     </MudExpansionPanel>
 }
 else
 {
-    <MudCard Class="component-card mx-2 my-8 pa-2 example-card" Elevation="4">
+    <MudCard Class="component-card mx-2 my-8 pa-2 example-card" Style="cursor: default" Elevation="4">
         <MudCardHeader>
             <div>
                 <MudText Class="example-card-text" Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
@@ -31,15 +30,21 @@ else
         <MudCardContent>
             <div class="pa-2" style="background: var(--mud-palette-background)">
                 @ChildContent
+                <MudDivider Class="mud-width-full mt-8" />
+                <MudText Class="mb-4" Typo="Typo.subtitle2" Color="Color.Secondary">Code</MudText>
+                @foreach (string line in _lines)
+                {
+                    <pre style="color: var(--mud-palette-primary); font-weight: 500">@line</pre>
+                }
             </div>
-
         </MudCardContent>
     </MudCard>
 }
 
-
-
 @code{
+    [Parameter]
+    public string ExampleName { get; set; }
+
     [Parameter]
     public string Title { get; set; }
 
@@ -51,6 +56,18 @@ else
 
     [Parameter]
     public bool HasExpansionPanel { get; set; }
+
+    string[] _lines = new string[] { };
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        string path = $@"..\ComponentViewer.Docs\Pages\Examples\{ExampleName}.razor";
+        if (System.IO.File.Exists(path))
+        {
+            _lines = System.IO.File.ReadAllLines(path);
+        }
+    }
 }
 
 <style>
@@ -72,7 +89,7 @@ else
         transition: color 1s;
     }
 
-        .example-card:hover .example-card-text {
-            color: white;
-        }
+    .example-card:hover .example-card-text {
+        color: white;
+    }
 </style>
