@@ -33,11 +33,11 @@ namespace MudExtensions
         internal bool StandaloneEx { get; set; } = true;
 
         /// <summary>
-        /// The date format that determines the text and wheel order. Default is "dd.MM.yyyy".
+        /// The date format that determines the text and wheel order. Default is Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string DateFormat { get; set; } = "dd.MM.yyyy";
+        public string DateFormat { get; set; } = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
 
         /// <summary>
         /// If false, users have to click the "done" button to submit value before close popover. Default is true.
