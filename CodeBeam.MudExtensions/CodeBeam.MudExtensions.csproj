@@ -1,36 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-  <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
-    <Nullable>disable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Version>6.1.0</Version>
-    <Title>CodeBeam.MudBlazor.Extensions</Title>
-    <Authors>CodeBeam</Authors>
-    <Company>CodeBeam</Company>
-    <Description>MudBlazor extension components from contributors. Includes 20+ components and utilities.</Description>
-    <Copyright>CodeBeam OpenSource MIT</Copyright>
-    <PackageIcon>Mud_Secondary.png</PackageIcon>
-    <PackageProjectUrl>https://codebeam-mudextensions.pages.dev/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/CodeBeamOrg/CodeBeam.MudExtensions</RepositoryUrl>
-    <PackageTags>Blazor; MudBlazor; Component; Extension; Animate; Stepper; Loading; Gallery</PackageTags>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Version>6.1.0</Version>
+		<Title>CodeBeam.MudBlazor.Extensions</Title>
+		<Authors>CodeBeam</Authors>
+		<Company>CodeBeam</Company>
+		<Description>MudBlazor extension components from contributors. Includes 20+ components and utilities.</Description>
+		<Copyright>CodeBeam OpenSource MIT</Copyright>
+		<PackageIcon>Mud_Secondary.png</PackageIcon>
+		<PackageProjectUrl>https://codebeam-mudextensions.pages.dev/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/CodeBeamOrg/CodeBeam.MudExtensions</RepositoryUrl>
+		<PackageTags>Blazor; MudBlazor; Component; Extension; Animate; Stepper; Loading; Gallery</PackageTags>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <SupportedPlatform Include="browser" />
-  </ItemGroup>
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-	  <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.10" />
-	  <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
-    <PackageReference Include="MudBlazor" Version="6.1.2" />
-  </ItemGroup>
-	
+	<ItemGroup>
+		<PackageReference Include="MudBlazor" Version="6.1.2" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
+	</ItemGroup>
+
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
 		<PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.0.*" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.0.*" />
-		<PackageReference Include="MudBlazor" Version="6.1.2" />
-	</ItemGroup>				
+	</ItemGroup>
 
 	<!--Uncomment it on development and debug to generate min.css on rebuild-->
 	<!--This sections causes to fail auto deployment to CloudFlare-->
@@ -48,17 +50,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\..\..\Desktop\Mud_Secondary.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	  <None Include="Components\SwitchM3\MudSwitchM3.razor" />
+		<None Include="..\..\..\..\Desktop\Mud_Secondary.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="Components\SwitchM3\MudSwitchM3.razor" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Update="Components\Splitter\MudSplitter.razor">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	  </Content>
+		<Content Update="Components\Splitter\MudSplitter.razor">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Content>
 	</ItemGroup>
 
 </Project>
