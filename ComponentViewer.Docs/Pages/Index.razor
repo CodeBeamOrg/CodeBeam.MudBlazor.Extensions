@@ -4,12 +4,12 @@
 
 @inject IScrollManager ScrollManager
 
-<MudScrollbar Width="2" HoverWidth="8" Color="primary" />
+<MudScrollbar Width="8" Color="primary" HoverColor="secondary" />
 <MudScrollToTop>
     <MudFab Color="Color.Secondary" Icon="@Icons.Filled.ArrowUpward" />
 </MudScrollToTop>
 
-<MudContainer Class="d-flex flex-column align-center justify-center pa-4" Style="min-height: 100vh; background: var(--mud-palette-background-grey); overflow: hidden;" MaxWidth="MaxWidth.False">
+<MudContainer Class="d-flex flex-column align-center justify-center pa-4 top-container" MaxWidth="MaxWidth.False">
     <div class="d-flex align-baseline justify-center mt-6" @onmouseenter="@(() => _hover = true)" @onmouseleave="@(() => _hover = false)">
         <MudText Class="slogan" Align="Align.Center">The</MudText>
         <MudText Class="slogan" Align="Align.Center" Color="Color.Primary">Mud</MudText>
@@ -21,7 +21,7 @@
     </div>
     
     <div class="d-flex justify-center mt-16">
-        <MudIconButton Icon="@Icons.Filled.ArrowDownward" Style="height: 52px; width 52px;" Color="Color.Secondary" Variant="Variant.Outlined" OnClick="@(async() => await ScrollManager.ScrollToAsync("cont", 0, 1600, ScrollBehavior.Smooth))" />
+        <MudIconButton Icon="@Icons.Filled.ArrowDownward" Style="height: 52px;" Color="Color.Secondary" Variant="Variant.Outlined" OnClick="@(async() => await ScrollManager.ScrollToAsync("cont", 0, 1600, ScrollBehavior.Smooth))" />
     </div>
 </MudContainer>
 
@@ -124,10 +124,17 @@
         letter-spacing: 0;
         transition: all 1s;
         cursor: pointer;
+        user-select: none;
     }
 
     .slogan:hover {
         letter-spacing: calc(4px + 2vw);
+    }
+
+    .top-container {
+        min-height: 100vh;
+        background-color: var(--mud-palette-background-grey);
+        overflow: hidden;
     }
 
     .slogan3 {

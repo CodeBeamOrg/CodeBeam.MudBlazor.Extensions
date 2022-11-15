@@ -4,11 +4,11 @@
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>6.0.12</Version>
+    <Version>6.1.0</Version>
     <Title>CodeBeam.MudBlazor.Extensions</Title>
     <Authors>CodeBeam</Authors>
     <Company>CodeBeam</Company>
-    <Description>MudBlazor extension components from contributors.</Description>
+    <Description>MudBlazor extension components from contributors. Includes 20+ components and utilities.</Description>
     <Copyright>CodeBeam OpenSource MIT</Copyright>
     <PackageIcon>Mud_Secondary.png</PackageIcon>
     <PackageProjectUrl>https://codebeam-mudextensions.pages.dev/</PackageProjectUrl>
@@ -23,13 +23,13 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
 	  <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.10" />
 	  <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
-    <PackageReference Include="MudBlazor" Version="6.0.19-dev3" />
+    <PackageReference Include="MudBlazor" Version="6.1.2" />
   </ItemGroup>
 	
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
 		<PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.0.*" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.0.*" />
-		<PackageReference Include="MudBlazor" Version="6.0.19-dev3" />
+		<PackageReference Include="MudBlazor" Version="6.1.2" />
 	</ItemGroup>				
 
 	<!--Uncomment it on development and debug to generate min.css on rebuild-->
