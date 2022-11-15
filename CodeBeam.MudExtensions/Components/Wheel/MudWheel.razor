@@ -9,7 +9,7 @@
     {
         <MudText Align="Align.Center" Color="@Color">@Label</MudText>
     }
-    <MudSwipeArea Class="@InnerClassname" Style="@GetStylename()" OnSwipe="@(async(d) => await HandleOnSwipe(d))" @onwheel="HandleOnWheel" PreventDefault="true">
+    <MudSwipeArea Class="@InnerClassname" Style="@GetStylename()" Sensitivity="@Sensitivity" OnSwipe="@(async(d) => await HandleOnSwipe(d))" @onwheel="HandleOnWheel" PreventDefault="true">
 
         @if (true)
         {
@@ -21,7 +21,7 @@
                 {
                     <div class="@OuterItemClassname(index - a)" @onclick="@(async() => await ChangeWheel(-a))">
                         <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index - a]) : Converter.Set(ItemCollection[index - a]))</MudText>
-                        </div>
+                    </div>
                 }
                 else
                 {
@@ -33,7 +33,7 @@
 
             <div class="@MiddleItemClassname">
                 <MudText Class="@($"mud-wheel-ani-{_animateGuid} my-2)")" Typo="@(Dense ? Typo.body1 : Typo.h6)" Color="@Color" Style="font-weight: 900">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index]) : Converter.Set(ItemCollection[index]))</MudText>
-                </div>
+            </div>
 
             <div class="@BorderClassname" />
 
@@ -44,7 +44,7 @@
                 {
                     <div class="@OuterItemClassname(index + a)" @onclick="@(async() => await ChangeWheel(a))">
                         <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index + a]) : Converter.Set(ItemCollection[index + a]))</MudText>
-                        </div>
+                    </div>
                 }
                 else
                 {
@@ -54,4 +54,5 @@
         }
     </MudSwipeArea>
 </div>
+
 <MudAnimate @ref="_animate" Selector="@($".mud-wheel-ani-{_animateGuid}")" AnimationType="AnimationType.SlideY" Duration="0.3" Value="0" ValueSecondary="_animateValue" AnimationTiming="AnimationTiming.Ease" />

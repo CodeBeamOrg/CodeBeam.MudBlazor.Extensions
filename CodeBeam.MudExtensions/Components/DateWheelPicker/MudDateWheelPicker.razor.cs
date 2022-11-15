@@ -48,6 +48,12 @@ namespace MudExtensions
         public bool SubmitOnClose { get; set; } = true;
 
         /// <summary>
+        /// The minimum swipe delta to change wheel value on touch devices. Default is 30.
+        /// </summary>
+        [Parameter]
+        public int Sensitivity { get; set; } = 30;
+
+        /// <summary>
         /// If true, the year wheel is disabled.
         /// </summary>
         [Parameter]
