@@ -1,0 +1,24 @@
+﻿<MudGrid>
+    <MudItem xs="12" sm="8">
+        <MudSplitter Height="@_height" Color="Color.Secondary">
+            <StartContent>
+                <div>
+                    <MudImage Src="https://cdn.pixabay.com/photo/2022/08/15/03/07/path-7387018_960_720.jpg" Fluid="true" />
+                </div>
+            </StartContent>
+
+            <EndContent>
+                <MudText>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</MudText>
+            </EndContent>
+        </MudSplitter>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudTextField @bind-Value="_height" Variant="Variant.Outlined" Label="Height" Clearable="true" />
+    </MudItem>
+</MudGrid>
+
+@code {
+    string _height;
+    double _percentage = 50;
+}

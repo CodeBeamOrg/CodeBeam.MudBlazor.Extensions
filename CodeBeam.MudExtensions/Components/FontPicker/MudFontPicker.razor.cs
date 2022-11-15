@@ -1,4 +1,4 @@
-﻿using CodeBeam.MudExtensions.Utilities;
+﻿using MudExtensions.Utilities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;

@@ -1,0 +1,35 @@
+﻿<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center flex-wrap">
+        <MudPaper Class="mud-width-full" Style="height: 300px; position: relative">
+            <MudLoading @bind-Loading="_loading2">
+                <LoaderContent>
+                    <div class="mud-width-full mud-height-full d-flex flex-column align-center justify-center">
+                        <MudProgressLinear Color="Color.Primary" Indeterminate="true" />
+                        <MudStack Row="true" Spacing="2">
+                            <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Tertiary" Size="Size.Small" />
+                            <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Secondary" Size="Size.Medium" />
+                            <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Primary" Size="Size.Large" />
+                            <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Secondary" Size="Size.Medium" />
+                            <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Tertiary" Size="Size.Small" />
+                        </MudStack>
+                                
+                    </div>
+                </LoaderContent>
+                <ChildContent>
+                    <MudText>This is a text inside a paper.</MudText>
+                </ChildContent>
+                        
+            </MudLoading>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack>
+            <MudSwitch @bind-Checked="_loading2" Color="Color.Primary">Loading</MudSwitch>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    bool _loading2 = true;
+}

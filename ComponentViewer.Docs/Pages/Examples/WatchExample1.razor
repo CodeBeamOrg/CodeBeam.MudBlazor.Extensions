@@ -1,0 +1,80 @@
+﻿@inject ISnackbar Snackbar
+@using MudBlazor.Extensions
+@using MudExtensions.Utilities
+
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <MudStack Class="mud-width-full" AlignItems="AlignItems.Center">
+            <MudWatch @ref="_watch" Interval="TimeSpan.FromMilliseconds(1)" Mode="_watchMode" LapRecords="_lapRecords" LapRecordsChanged="@(() => Snackbar.Add("Lap updated."))"
+                      Wheel="_wheel" ShowHour="_showHour" ShowMinute="_showMinute" ShowSecond="_showSecond" ShowMillisecond="_showMillisecond"
+                      Delimiter="@_delimiter" Typo="_typo" TypoMillisecond="_typoMillisecond" Color="_color" CountdownCompleted="@(() => Snackbar.Add("Completed"))" />
+
+            <MudStack Row="true">
+                <MudButton OnClick="@(() => _watch.Start())">Start</MudButton>
+                <MudButton OnClick="@(() => _watch.Stop())">Stop</MudButton>
+                <MudButton OnClick="@(() => _watch.Lap())">Lap</MudButton>
+                <MudButton OnClick="@(() => _watch.Reset())">Reset</MudButton>
+            </MudStack>
+            @for (int i = 0; i < _lapRecords.Count(); i++)
+            {
+                int a = i;
+                <MudText>@($"Lap {a + 1}: Total Time: {_lapRecords[a].TotalTime.ToString(@"mm\:ss\:fff")} - Gap: {_lapRecords[a].Gap.ToString(@"ss\:fff")}")</MudText>
+            }
+        </MudStack>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudSelect @bind-Value="_watchMode" Variant="Variant.Outlined" Label="watch Mode">
+                @foreach (WatchMode item in Enum.GetValues<WatchMode>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSwitch @bind-Checked="_wheel" Color="Color.Primary" Label="Wheel" />
+            <div class="d-flex flex-wrap">
+                <MudSwitch @bind-Checked="_showHour" Color="Color.Primary" Label="Show Hour" />
+                <MudSwitch @bind-Checked="_showMinute" Color="Color.Primary" Label="Show Minute" />
+                <MudSwitch @bind-Checked="_showSecond" Color="Color.Primary" Label="Show Second" />
+                <MudSwitch @bind-Checked="_showMillisecond" Color="Color.Primary" Label="Show Millisecond" />
+            </div>
+            <MudTextField @bind-Value="_delimiter" Variant="Variant.Outlined" Label="Delimiter" />
+            <MudSelect @bind-Value="_typo" Variant="Variant.Outlined" Label="Typo">
+                @foreach (Typo item in Enum.GetValues<Typo>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudSelect @bind-Value="_typoMillisecond" Variant="Variant.Outlined" Label="Typo Millisecond">
+                @foreach (Typo item in Enum.GetValues<Typo>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color">
+                @foreach (Color item in Enum.GetValues<Color>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    MudWatch _watch;
+    MudWatch _watch2;
+    WatchMode _watchMode = WatchMode.Watch;
+    bool _wheel;
+    bool _showHour = true;
+    bool _showMinute = true;
+    bool _showSecond = true;
+    bool _showMillisecond = true;
+    string _delimiter = ":";
+    Typo _typo = Typo.h6;
+    Typo _typoMillisecond = Typo.h6;
+    Color _color;
+    List<LapRecord> _lapRecords = new();
+}

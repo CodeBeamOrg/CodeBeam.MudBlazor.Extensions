@@ -28,18 +28,22 @@ else
             </div>
         </MudCardHeader>
         <MudCardContent>
-            <div class="pa-2" style="background: var(--mud-palette-background)">
+            <div class="pa-2" style="background: var(--mud-palette-background);">
                 @ChildContent
                 <MudDivider Class="mud-width-full mt-8" />
-                <MudText Class="mb-4" Typo="Typo.subtitle2" Color="Color.Secondary">Code</MudText>
-                @foreach (string line in _lines)
-                {
-                    if (string.IsNullOrEmpty(line) || line == "/r")
-                    {
-                        <br />
-                    }
-                    <pre style="color: var(--mud-palette-primary); font-weight: 500; font-size: 14px; white-space: pre-wrap">@line</pre>
-                }
+                <MudExpansionPanel Text="Code">
+                    <div style="overflow-x: scroll">
+                        @foreach (string line in _lines)
+                        {
+                            if (string.IsNullOrEmpty(line) || line == "/r")
+                            {
+                                <br/>
+                            }
+                            <pre style="color: var(--mud-palette-primary); font-weight: 500; font-size: 14px;">@line</pre>
+                        }
+                    </div>
+                </MudExpansionPanel>
+                
             </div>
         </MudCardContent>
     </MudCard>
