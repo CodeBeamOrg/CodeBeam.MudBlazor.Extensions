@@ -1,6 +1,6 @@
 # CodeBeam.MudExtensions
 #### Useful third party extension components for MudBlazor, from the community contributors.
-##### `TheSecondaryNeedsForMud`
+##### `TheMudSecondary`
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/codebeamorg/codebeam.mudextensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudextensions/stargazers)
 [![GitHub last commit](https://img.shields.io/github/last-commit/codebeamorg/codebeam.mudextensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudextensions)
@@ -25,6 +25,7 @@
 - MudSpeedDial
 - MudSplitter
 - MudStepper
+- MudSwitchM3
 - MudToggle
 - MudWatch
 - MudWheel
@@ -39,13 +40,14 @@ Add the following to your HTML head section, it's either `index.html` or `_Layou
 Adding namespace to `_Imports.razor` is not obligatory, but may be useful.
 ```
 @using MudExtensions
+@using MudExtensions.Enums
 ```
 
 ## Playground
 https://codebeam-mudextensions.pages.dev/
 
 ## API
-https://mudextensions.azurewebsites.net/api
+https://codebeam-mudextensions.pages.dev/api
 
 ## Examples
 Each example is recorded in the playground website.
