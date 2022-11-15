@@ -53,8 +53,17 @@ namespace MudExtensions
         [Parameter]
         public List<T> ItemCollection { get; set; }
 
+        /// <summary>
+        /// Determines how many items will show before and after the middle one.
+        /// </summary>
         [Parameter]
         public int WheelLevel { get; set; } = 2;
+
+        /// <summary>
+        /// The minimum swipe delta to change wheel value on touch devices. Default is 30.
+        /// </summary>
+        [Parameter]
+        public int Sensitivity { get; set; } = 30;
 
         [Parameter]
         public string InnerClass { get; set; }
@@ -65,6 +74,9 @@ namespace MudExtensions
         [Parameter]
         public bool SmoothBorders { get; set; }
 
+        /// <summary>
+        /// Color for middle item and borders
+        /// </summary>
         [Parameter]
         public Color Color { get; set; }
 
@@ -150,6 +162,8 @@ namespace MudExtensions
             {
                 _animateValue = - GetAnimateValue();
             }
+
+
             await _animate.Refresh();
             if (direction == SwipeDirection.TopToBottom)
             {
