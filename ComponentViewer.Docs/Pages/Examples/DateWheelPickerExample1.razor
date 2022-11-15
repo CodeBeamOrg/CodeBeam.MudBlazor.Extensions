@@ -1,0 +1,63 @@
+﻿@using MudBlazor.Extensions
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <MudDateWheelPicker T="DateTime?" @bind-Value="_date" DateView="_dateView" Editable="_editable" Label="Date" Clearable
+                            ShowToolbar="_showToolbar" ShowHeader="_showHeader" SubmitOnClose="_submitOnClose" Variant="Variant.Outlined" Color="_color" ColorTime="_colorTime"
+                            DateFormat="@_dateFormat" FixDay="_fixDay" FixMonth="_fixMonth" FixYear="_fixYear" FixHour="_fixHour" FixMinute="_fixMinute" FixSecond="_fixSecond" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudSelect @bind-Value="_dateView" Variant="Variant.Outlined" Label="Date View">
+                @foreach (DateView item in Enum.GetValues<DateView>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSwitch @bind-Checked="_editable" Color="Color.Primary" Label="Editable" />
+            <MudSwitch @bind-Checked="_showToolbar" Color="Color.Primary" Label="Show Toolbar" />
+            <MudSwitch @bind-Checked="_showHeader" Color="Color.Primary" Label="Show Header" />
+            <MudSwitch @bind-Checked="_submitOnClose" Color="Color.Primary" Label="Submit On Close" />
+            <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color">
+                @foreach (Color item in Enum.GetValues<Color>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="_colorTime" Variant="Variant.Outlined" Label="Color Time">
+                @foreach (Color item in Enum.GetValues<Color>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <div class="d-flex flex-wrap">
+                <MudCheckBox @bind-Checked="_fixDay" Label="Fix Day" />
+                <MudCheckBox @bind-Checked="_fixMonth" Label="Fix Month" />
+                <MudCheckBox @bind-Checked="_fixYear" Label="Fix Year" />
+                <MudCheckBox @bind-Checked="_fixHour" Label="Fix Hour" />
+                <MudCheckBox @bind-Checked="_fixMinute" Label="Fix Minute" />
+                <MudCheckBox @bind-Checked="_fixSecond" Label="Fix Second" />
+            </div>
+            <MudTextField @bind-Value="_dateFormat" Variant="Variant.Outlined" Label="Date Format" />
+            <MudButton OnClick="@(() => _date = DateTime.Now)">Set Today</MudButton>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    DateTime? _date = new DateTime(2000, 1, 1);
+    DateView _dateView = DateView.Date;
+    bool _editable = false;
+    bool _showToolbar = false;
+    bool _showHeader = false;
+    bool _submitOnClose = true;
+    Color _color;
+    Color _colorTime = Color.Inherit;
+    string _dateFormat = "dd.MM.yyyy";
+    bool _fixYear;
+    bool _fixMonth;
+    bool _fixDay;
+    bool _fixHour;
+    bool _fixMinute;
+    bool _fixSecond;
+}

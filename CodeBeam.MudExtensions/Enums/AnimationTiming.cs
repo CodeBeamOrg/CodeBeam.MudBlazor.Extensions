@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace MudExtensions
+namespace MudExtensions.Enums
 {
     public enum AnimationTiming
     {

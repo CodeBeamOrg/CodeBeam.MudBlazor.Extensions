@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Data;
 using System.Threading.Tasks;
-using CodeBeam.MudExtensions.Utilities;
+using MudExtensions.Utilities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Utilities;
+using MudExtensions.Enums;
 using static MudBlazor.CategoryTypes;
 
 namespace MudExtensions

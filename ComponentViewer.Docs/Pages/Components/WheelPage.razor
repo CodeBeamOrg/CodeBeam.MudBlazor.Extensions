@@ -1,59 +1,8 @@
 ﻿@page "/mudwheel"
-@using CodeBeam.MudExtensions.Utilities
-@using MudBlazor.Extensions
-@using MudExtensions.Enums
-@inject ISnackbar Snackbar
+@using ComponentViewer.Docs.Pages.Examples
 
 <ExamplePage Title="MudWheel">
-    <ExampleCard Title="Playground" Description="Each MudWheel has ItemCollection to switch between values.">
-        <MudGrid Class="cursor-default">
-            <MudItem xs="12" sm="8" Class="d-flex">
-                <MudWheel T="int" ItemCollection="_numbers" @bind-Value="_val" WheelLevel="_wheelLevel" Dense="_dense" SmoothBorders="_smoothBorders" Color="_color" />
-                <MudWheel T="string" ItemCollection="_letterNumbers" WheelLevel="_wheelLevel" Dense="_dense" SmoothBorders="_smoothBorders" Color="_color" />
-            </MudItem>
-
-            <MudItem xs="12" sm="4" Class="border-solid border-2 mud-border-secondary rounded-bl rounded-tl">
-                <MudStack Spacing="4">
-                    <MudNumericField @bind-Value="_val" Label="Value (First MudWheel)" Min="0" Max="5000000" HelperText="Between 0 and 5.000.000" />
-                    <MudNumericField @bind-Value="_wheelLevel" Label="Wheel Level" />
-                    <MudSwitch @bind-Checked="_dense" Color="Color.Primary" Label="Dense" />
-                    <MudSwitch @bind-Checked="_smoothBorders" Color="Color.Primary" Label="Smooth Borders" />
-                    <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color">
-                        @foreach (Color item in Enum.GetValues<Color>())
-                        {
-                            <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudStack>
-            </MudItem>
-        </MudGrid>
-        
+    <ExampleCard ExampleName="WheelExample1" Title="Playground" Description="Each MudWheel has ItemCollection to switch between values.">
+        <WheelExample1 />
     </ExampleCard>
 </ExamplePage>
-
-@code {
-    int _wheelLevel = 2;
-    List<int> _numbers = new();
-    List<string> _letterNumbers = new() { "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten" };
-    int _val = 9;
-    bool _dense;
-    bool _smoothBorders = false;
-    Color _color = Color.Default;
-
-    List<WheelDocClass> _customObject = new() { new WheelDocClass() { Number = 1, Name = "Mary" }, new WheelDocClass() { Number = 2, Name = "John" } };
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        for (int i = 0; i <= 5000000; i++)
-        {
-            _numbers.Add(i);
-        }
-    }
-
-    public class WheelDocClass
-    {
-        public int Number { get; set; }
-        public string Name { get; set; }
-    }
-}

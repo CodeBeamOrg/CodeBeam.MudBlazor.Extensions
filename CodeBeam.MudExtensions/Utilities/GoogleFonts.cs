@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeBeam.MudExtensions.Utilities
+namespace MudExtensions.Utilities
 {
     public static class GoogleFonts
     {

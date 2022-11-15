@@ -1,0 +1,34 @@
+﻿@using MudExtensions.Utilities
+<MudRender @ref="_animateRender">
+    <MudAnimate @ref="_animate2" Selector=".id2" Duration="1" AnimationType="AnimationType.Rotate" Value="_value2" ValueSecondary="0" Infinite="true"
+                KeyframeAdvanced="@KeyframeBuilder.Build(2, new List<string>() {"0", $"{_value2}"}, string.Join(" ", _animationTypes))" />
+</MudRender>
+
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <div class="d-flex align-center justify-center ma-0" style="height:400px;">
+            <MudPaper Class="id2 d-flex align-center justify-center" Elevation="0" Height="200px" Width="200px" Style="background-color: blue">
+                <MudText Class="white-text" Typo="Typo.h1" Style="outline: none;">A</MudText>
+            </MudPaper>
+        </div>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => _animateRender.ForceRender())">Refresh</MudButton>
+            <MudSelect @bind-SelectedValues="_animationTypes" Variant="Variant.Outlined" Label="Type" MultiSelection="true" Margin="Margin.Dense" Dense="true">
+                <MudSelectItem Value="KeyframePreset.Rotate">Rotate</MudSelectItem>
+                <MudSelectItem Value="KeyframePreset.Fade">Fade</MudSelectItem>
+                <MudSelectItem Value="KeyframePreset.Blur">Blur</MudSelectItem>
+            </MudSelect>
+            <MudNumericField @bind-Value="_value2" Variant="Variant.Outlined" Label="Value" Margin="Margin.Dense" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    MudAnimate _animate2;
+    MudRender _animateRender;
+    IEnumerable<string> _animationTypes = new List<string>();
+    double _value2 = 360;
+}

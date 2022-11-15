@@ -1,0 +1,55 @@
+﻿<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center flex-wrap">
+        <MudLoadingButton @bind-Loading="_loading2" LoadingAdornment="_adornment2" LoadingCircularColor="Color.Primary" OnClick="ButtonClick2" Variant="Variant.Filled" Color="Color.Primary">
+            <LoadingContent>
+                LOADING
+            </LoadingContent>
+
+            <ChildContent>
+                CLICK ME
+            </ChildContent>
+        </MudLoadingButton>
+
+        <MudLoadingButton ButtonVariant="ButtonVariant.IconButton" @bind-Loading="_loading2" Icon="@Icons.Custom.Brands.MudBlazor" LoadingAdornment="_adornment2" LoadingCircularColor="Color.Primary" OnClick="ButtonClick2" Variant="Variant.Filled" Color="Color.Primary">
+            <LoadingContent>
+                LOADING
+            </LoadingContent>
+
+            <ChildContent>
+                CLICK ME
+            </ChildContent>
+        </MudLoadingButton>
+
+        <MudLoadingButton ButtonVariant="ButtonVariant.Fab" @bind-Loading="_loading2" StartIcon="@Icons.Custom.Brands.MudBlazor" LoadingAdornment="_adornment2" LoadingCircularColor="Color.Primary" OnClick="ButtonClick2" Variant="Variant.Filled" Color="Color.Primary">
+            <LoadingContent>
+                LOADING
+            </LoadingContent>
+
+            <ChildContent>
+                CLICK ME
+            </ChildContent>
+        </MudLoadingButton>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack>
+            <MudSwitch @bind-Checked="_loading2" Color="Color.Primary">Loading</MudSwitch>
+            <MudSelect @bind-Value="_adornment2" Variant="Variant.Outlined" Label="Loading Adornment">
+                <MudSelectItem Value="Adornment.Start">Start</MudSelectItem>
+                <MudSelectItem Value="Adornment.End">End</MudSelectItem>
+            </MudSelect>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code{
+    bool _loading2 = false;
+    Adornment _adornment2 = Adornment.Start;
+
+    private async Task ButtonClick2()
+    {
+        _loading2 = true;
+        await Task.Delay(2000);
+        _loading2 = false;
+    }
+}    

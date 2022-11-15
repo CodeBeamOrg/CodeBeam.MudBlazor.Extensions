@@ -3,7 +3,7 @@
 @if (HasExpansionPanel)
 {
     <MudExpansionPanel Text="@Title">
-        <MudCard Class="component-card mx-2 my-8 pa-2 example-card" Style="cursor: default" Elevation="4">
+        <MudCard Class="component-card mx-sm-2 my-8 pa-sm-2 example-card" Style="cursor: default" Elevation="4">
             <MudCardHeader>
                 <div>
                     <MudText Class="example-card-text" Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
@@ -20,7 +20,7 @@
 }
 else
 {
-    <MudCard Class="component-card mx-2 my-8 pa-2 example-card" Style="cursor: default" Elevation="4">
+    <MudCard Class="component-card mx-sm-2 my-8 pa-sm-2 example-card" Style="cursor: default" Elevation="4">
         <MudCardHeader>
             <div>
                 <MudText Class="example-card-text" Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
@@ -28,14 +28,22 @@ else
             </div>
         </MudCardHeader>
         <MudCardContent>
-            <div class="pa-2" style="background: var(--mud-palette-background)">
+            <div class="pa-2" style="background: var(--mud-palette-background);">
                 @ChildContent
                 <MudDivider Class="mud-width-full mt-8" />
-                <MudText Class="mb-4" Typo="Typo.subtitle2" Color="Color.Secondary">Code</MudText>
-                @foreach (string line in _lines)
-                {
-                    <pre style="color: var(--mud-palette-primary); font-weight: 500">@line</pre>
-                }
+                <MudExpansionPanel Text="Code">
+                    <div style="overflow-x: scroll">
+                        @foreach (string line in _lines)
+                        {
+                            if (string.IsNullOrEmpty(line) || line == "/r")
+                            {
+                                <br/>
+                            }
+                            <pre style="color: var(--mud-palette-primary); font-weight: 500; font-size: 14px;">@line</pre>
+                        }
+                    </div>
+                </MudExpansionPanel>
+                
             </div>
         </MudCardContent>
     </MudCard>
