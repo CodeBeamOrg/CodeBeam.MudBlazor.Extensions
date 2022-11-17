@@ -9,37 +9,6 @@ namespace MudExtensions
 {
     public partial class MudColorProvider : MudComponentBase
     {
-        public string _primaryRGB;
-        public string _onprimaryRGB;
-        public string _primaryContainerRGB;
-        public string _onprimaryContainerRGB;
-
-        public string _primary10;
-        public string _primary20;
-        public string _primary30;
-        public string _primary40;
-        public string _primary50;
-        public string _primary60;
-        public string _primary70;
-        public string _primary80;
-        public string _primary90;
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-            _primaryRGB = GetRGBString(Primary, 40);
-            _onprimaryRGB = GetRGBString(Primary, 100);
-            _primaryContainerRGB = GetRGBString(Primary, 90);
-            _onprimaryContainerRGB = GetRGBString(Primary, 10);
-        }
-
-        public void Refresh()
-        {
-            _primaryRGB = GetRGBString(Primary, 40);
-            _onprimaryRGB = GetRGBString(Primary, 100);
-            _primaryContainerRGB = GetRGBString(Primary, 90);
-            _onprimaryContainerRGB = GetRGBString(Primary, 10);
-        }
 
         public string GetRGBString(string hex, int percentage = 40)
         {
@@ -73,31 +42,36 @@ namespace MudExtensions
             }
             else if (percentage < 40)
             {
-                double standardDecrement = 25.5d * ((40d - percentage) / 10d);
-                double deviationDecrement = (val / 6d) - 25.5d;
-                int semiVal = (int)Math.Round(val - standardDecrement - (deviationDecrement * ((percentage - 40d) / 10)));
-                if (semiVal < 0)
-                {
-                    semiVal = 0;
-                }
-                return semiVal;
+                //double standardDecrement = 25.5d * ((40d - percentage) / 10d);
+                //double deviationDecrement = (val / 6d) - 25.5d;
+                //int semiVal = (int)Math.Round(val - standardDecrement - (deviationDecrement * ((percentage - 40d) / 10)));
+                //if (semiVal < 0)
+                //{
+                //    semiVal = 0;
+                //}
+                //return semiVal;
+                double processTime = (40 - percentage) / 10;
+                return (int)(val - val * 0.15 * processTime);
             }
             else
             {
-                double standardIncrement = 25.5d * ((percentage - 40d) / 10d);
-                if (255 < val + standardIncrement)
-                {
-                    return 255;
-                }
+                //double standardIncrement = 25.5d * ((percentage - 40d) / 10d);
+                //if (255 < val + standardIncrement)
+                //{
+                //    return 255;
+                //}
 
-                double deviationIncrement = ((255d - val) / 6d) - 25.5d;
-                int semiVal = (int)Math.Round(val + standardIncrement + (deviationIncrement * ((percentage - 40d) / 10)));
+                //double deviationIncrement = ((255d - val) / 6d) - 25.5d;
+                //int semiVal = (int)Math.Round(val + standardIncrement + (deviationIncrement * ((percentage - 40d) / 10)));
 
-                if (255 < semiVal)
-                {
-                    semiVal = 255;
-                }
-                return semiVal;
+                //if (255 < semiVal)
+                //{
+                //    semiVal = 255;
+                //}
+                //return semiVal;
+
+                double processTime = (percentage - 40) / 10;
+                return (int)(val + (255 -  val) * 0.15 * processTime);
             }
         }
 

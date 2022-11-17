@@ -5,87 +5,38 @@
 @inherits MudComponentBase
 
 @code {
-    string _primary;
+
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
-    public string Primary
-    {
-        get => _primary;
-        set
-        {
-            if (_primary == value)
-            {
-                return;
-            }
-            _primary = value;
-            Refresh();
-        }
-    }
+    public string Primary { get; set; }
 
     string _secondary;
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
-    public string Secondary
-    {
-        get => _secondary;
-        set
-        {
-            if (_secondary == value)
-            {
-                return;
-            }
-            _secondary = value;
-            Refresh();
-        }
-    }
+    public string Secondary { get; set; }
 
     string _tertiary;
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
-    public string Tertiary
-    {
-        get => _tertiary;
-        set
-        {
-            if (_tertiary == value)
-            {
-                return;
-            }
-            _tertiary = value;
-            Refresh();
-        }
-    }
+    public string Tertiary { get; set; }
 
     /// <summary>
     /// If true, selected colors applies even the input does not have focus. Default is false.
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
-    public ColorTone MainTone { get; set; } = ColorTone.Tone40;
+    public int MainTone { get; set; } = 40;
 
     /// <summary>
     /// If true, selected colors applies even the input does not have focus. Default is false.
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
-    public ColorTone ContainerTone { get; set; } = ColorTone.Tone90;
+    public int ContainerTone { get; set; } = 90;
 
-    bool _darkMode;
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
-    public bool DarkMode
-    {
-        get => _darkMode;
-        set
-        {
-            if (_darkMode == value)
-            {
-                return;
-            }
-            _darkMode = value;
-            Refresh();
-        }
-    }
+    public bool DarkMode { get; set; }
 
     /// <summary>
     /// Supports id and class selection. Use "#idName" for id selectors (ex. <Component id="idName" />) or ".idName" for class selectors (ex. <Component Class="idName" />). Leave it null or empty to effect all scrollbars.
@@ -146,7 +97,19 @@
             @($"--mud-primary-{a}: {GetRGBString(Primary, a)};")
             @($"--mud-secondary-{a}: {GetRGBString(Secondary, a)};")
             @($"--mud-tertiary-{a}: {GetRGBString(Tertiary, a)};")
-        }
+        } 
+        @($"--mud-primary-{MainTone}: {GetRGBString(Primary, MainTone)};") 
+        @($"--mud-secondary-{MainTone}: {GetRGBString(Secondary, MainTone)};") 
+        @($"--mud-tertiary-{MainTone}: {GetRGBString(Tertiary, MainTone)};") 
+        @($"--mud-primary-{ContainerTone}: {GetRGBString(Primary, ContainerTone)};") 
+        @($"--mud-secondary-{ContainerTone}: {GetRGBString(Secondary, ContainerTone)};") 
+        @($"--mud-tertiary-{ContainerTone}: {GetRGBString(Tertiary, ContainerTone)};") 
+        @($"--mud-primary-{100 - ContainerTone}: {GetRGBString(Primary, 100 - ContainerTone)};") 
+        @($"--mud-secondary-{100 - ContainerTone}: {GetRGBString(Secondary, 100 - ContainerTone)};") 
+        @($"--mud-tertiary-{100 - ContainerTone}: {GetRGBString(Tertiary, 100 - ContainerTone)};") 
+        @($"--mud-primary-99: {GetRGBString(Primary, 99)};")
+        @($"--mud-secondary-99: {GetRGBString(Secondary, 99)};")
+        @($"--mud-tertiary-99: {GetRGBString(Tertiary, 99)};")
         --mud-primary-0: rgb(0, 0, 0);
         --mud-primary-100: rgb(255, 255, 255);
         --mud-secondary-0: rgb(0, 0, 0);
@@ -154,21 +117,20 @@
         --mud-tertiary-0: rgb(0, 0, 0);
         --mud-tertiary-100: rgb(255, 255, 255);
 
-        --mud-m3-primary: var(--mud-primary-@($"{MainTone.ToDescriptionString()}"));
-        --mud-m3-primary-container: var(--mud-primary-@($"{ContainerTone.ToDescriptionString()}"));
+        --mud-m3-primary: var(--mud-primary-@($"{MainTone.ToString()}"));
+        --mud-m3-primary-container: var(--mud-primary-@($"{ContainerTone.ToString()}"));
+        --mud-m3-onprimary: var(--mud-primary-@(DarkMode ? "0" : "100"));
+        --mud-m3-onprimary-container: var(--mud-primary-@($"{100 - ContainerTone}"));
 
-        --mud-m3-onprimary: @(_onprimaryRGB);
-        --mud-m3-onprimary-container: @(_onprimaryContainerRGB);
-
-        --mud-m3-secondary: var(--mud-secondary-@($"{MainTone.ToDescriptionString()}"));
-        --mud-m3-secondary-container: var(--mud-secondary-@($"{ContainerTone.ToDescriptionString()}"));
+        --mud-m3-secondary: var(--mud-secondary-@($"{MainTone.ToString()}"));
+        --mud-m3-secondary-container: var(--mud-secondary-@($"{ContainerTone.ToString()}"));
         --mud-m3-onsecondary: var(--mud-secondary-@(DarkMode ? "0" : "100"));
-        --mud-m3-onsecondary-container: var(--mud-secondary-@($"{100 - int.Parse(ContainerTone.ToDescriptionString())}"));
+        --mud-m3-onsecondary-container: var(--mud-secondary-@($"{100 - ContainerTone}"));
 
-        --mud-m3-tertiary: var(--mud-tertiary-@($"{MainTone.ToDescriptionString()}"));
-        --mud-m3-tertiary-container: var(--mud-tertiary-@($"{ContainerTone.ToDescriptionString()}"));
+        --mud-m3-tertiary: var(--mud-tertiary-@($"{MainTone.ToString()}"));
+        --mud-m3-tertiary-container: var(--mud-tertiary-@($"{ContainerTone.ToString()}"));
         --mud-m3-ontertiary: var(--mud-tertiary-@(DarkMode ? "0" : "100"));
-        --mud-m3-ontertiary-container: var(--mud-tertiary-@($"{100 - int.Parse(ContainerTone.ToDescriptionString())}"));
+        --mud-m3-ontertiary-container: var(--mud-tertiary-@($"{100 - ContainerTone}"));
     }
 </style>
 
