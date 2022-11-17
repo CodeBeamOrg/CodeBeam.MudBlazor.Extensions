@@ -1,0 +1,232 @@
+﻿@namespace MudExtensions
+@using System.Text
+@using MudExtensions.Enums
+@using MudExtensions.Utilities
+@inherits MudComponentBase
+
+@code {
+    string _primary;
+    [Parameter]
+    [Category(CategoryTypes.Item.Behavior)]
+    public string Primary
+    {
+        get => _primary;
+        set
+        {
+            if (_primary == value)
+            {
+                return;
+            }
+            _primary = value;
+            Refresh();
+        }
+    }
+
+    string _secondary;
+    [Parameter]
+    [Category(CategoryTypes.Item.Behavior)]
+    public string Secondary
+    {
+        get => _secondary;
+        set
+        {
+            if (_secondary == value)
+            {
+                return;
+            }
+            _secondary = value;
+            Refresh();
+        }
+    }
+
+    string _tertiary;
+    [Parameter]
+    [Category(CategoryTypes.Item.Behavior)]
+    public string Tertiary
+    {
+        get => _tertiary;
+        set
+        {
+            if (_tertiary == value)
+            {
+                return;
+            }
+            _tertiary = value;
+            Refresh();
+        }
+    }
+
+    /// <summary>
+    /// If true, selected colors applies even the input does not have focus. Default is false.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Behavior)]
+    public ColorTone MainTone { get; set; } = ColorTone.Tone40;
+
+    /// <summary>
+    /// If true, selected colors applies even the input does not have focus. Default is false.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Behavior)]
+    public ColorTone ContainerTone { get; set; } = ColorTone.Tone90;
+
+    bool _darkMode;
+    [Parameter]
+    [Category(CategoryTypes.Item.Behavior)]
+    public bool DarkMode
+    {
+        get => _darkMode;
+        set
+        {
+            if (_darkMode == value)
+            {
+                return;
+            }
+            _darkMode = value;
+            Refresh();
+        }
+    }
+
+    /// <summary>
+    /// Supports id and class selection. Use "#idName" for id selectors (ex. <Component id="idName" />) or ".idName" for class selectors (ex. <Component Class="idName" />). Leave it null or empty to effect all scrollbars.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Behavior)]
+    public string Selector { get; set; }
+
+    /// <summary>
+    /// If true, selected colors applies even the input does not have focus. Default is false.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Behavior)]
+    public bool Always { get; set; }
+
+    /// <summary>
+    /// The base color that affects text, label and borders. Can be overrided with other color parameters. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public string BaseColor { get; set; }
+
+    /// <summary>
+    /// The text color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public string TextColor { get; set; }
+
+    /// <summary>
+    /// The label text color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public string LabelColor { get; set; }
+
+    /// <summary>
+    /// The label background color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public string LabelBackgroundColor { get; set; }
+
+    /// <summary>
+    /// The border color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public string BorderColor { get; set; }
+
+}
+
+<style>
+    :root {
+        @for (int i = 10; i < 100; i = i + 10)
+        {
+            int a = i;
+            @($"--mud-primary-{a}: {GetRGBString(Primary, a)};")
+            @($"--mud-secondary-{a}: {GetRGBString(Secondary, a)};")
+            @($"--mud-tertiary-{a}: {GetRGBString(Tertiary, a)};")
+        }
+        --mud-primary-0: rgb(0, 0, 0);
+        --mud-primary-100: rgb(255, 255, 255);
+        --mud-secondary-0: rgb(0, 0, 0);
+        --mud-secondary-100: rgb(255, 255, 255);
+        --mud-tertiary-0: rgb(0, 0, 0);
+        --mud-tertiary-100: rgb(255, 255, 255);
+
+        --mud-m3-primary: var(--mud-primary-@($"{MainTone.ToDescriptionString()}"));
+        --mud-m3-primary-container: var(--mud-primary-@($"{ContainerTone.ToDescriptionString()}"));
+
+        --mud-m3-onprimary: @(_onprimaryRGB);
+        --mud-m3-onprimary-container: @(_onprimaryContainerRGB);
+
+        --mud-m3-secondary: var(--mud-secondary-@($"{MainTone.ToDescriptionString()}"));
+        --mud-m3-secondary-container: var(--mud-secondary-@($"{ContainerTone.ToDescriptionString()}"));
+        --mud-m3-onsecondary: var(--mud-secondary-@(DarkMode ? "0" : "100"));
+        --mud-m3-onsecondary-container: var(--mud-secondary-@($"{100 - int.Parse(ContainerTone.ToDescriptionString())}"));
+
+        --mud-m3-tertiary: var(--mud-tertiary-@($"{MainTone.ToDescriptionString()}"));
+        --mud-m3-tertiary-container: var(--mud-tertiary-@($"{ContainerTone.ToDescriptionString()}"));
+        --mud-m3-ontertiary: var(--mud-tertiary-@(DarkMode ? "0" : "100"));
+        --mud-m3-ontertiary-container: var(--mud-tertiary-@($"{100 - int.Parse(ContainerTone.ToDescriptionString())}"));
+    }
+</style>
+
+@*<style>
+    @if (!string.IsNullOrEmpty(BaseColor))
+    {
+        @($"{Selector} .mud-input-root {{ color: {BaseColor} !important; }}")
+        @if (Always)
+        {
+            @($"{Selector} .mud-input-underline:after, {Selector} .mud-input-underline:before {{ border-color: {BaseColor} !important; }}")
+            @($"{Selector} .mud-input-outlined-border {{ border-color: {BaseColor} !important; }}")
+            @($"{Selector} .mud-input-underline:hover:before {{ opacity: 0.6; }}")
+            @($"{Selector} .mud-input-label {{ color: {BaseColor} !important; }}")
+            @($"{Selector}:focus-within .mud-input-label {{ color: {BaseColor} !important; font-weight: 900 }}")
+        }
+        else
+        {
+            @($"{Selector} .mud-input-underline:after {{ border-color: {BaseColor} !important; }}")
+            @($"{Selector} .mud-input-outlined:focus-within .mud-input-outlined-border {{ border-color: {BaseColor} !important; }}")
+            @($"{Selector}:focus-within .mud-input-label {{ color: {BaseColor} !important; }}")
+        }
+    }
+    @if (!string.IsNullOrEmpty(TextColor))
+    {
+        @($"{Selector} .mud-input-root {{ color: {TextColor} !important; }}")
+    }
+    @if (!string.IsNullOrEmpty(LabelColor))
+    {
+        if (Always)
+        {
+            @($"{Selector} .mud-input-label {{ color: {LabelColor} !important; }}")
+            @($"{Selector}:focus-within .mud-input-label {{ color: {LabelColor} !important; font-weight: 900 }}")
+        }
+        else
+        {
+            @($"{Selector}:focus-within .mud-input-label {{ color: {LabelColor} !important; }}")
+        }
+    }
+    @if (!string.IsNullOrEmpty(LabelBackgroundColor))
+    {
+        @($"{Selector} .mud-input-label {{ background-color: {LabelBackgroundColor} !important; }}")
+    }
+    @if (!string.IsNullOrEmpty(BorderColor))
+    {
+        if (Always)
+        {
+            @($"{Selector} .mud-input-underline:after, {Selector} .mud-input-underline:before {{ border-color: {BorderColor} !important; }}")
+            @($"{Selector} .mud-input-outlined-border {{ border-color: {BorderColor} !important; }}")
+            @($"{Selector} .mud-input-underline:hover:before {{ opacity: 0.6; }}")
+        }
+        else
+        {
+            <MudRender>@(Selector) .mud-input-underline:after {
+                @($"border-color: {BorderColor} !important;");
+            }</MudRender>
+            <MudRender>@(Selector) .mud-input-outlined:focus-within .mud-input-outlined-border {
+                @($"border-color: {BorderColor} !important;");
+            }</MudRender>
+        }
+    }
+</style>*@

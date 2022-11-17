@@ -1,0 +1,151 @@
+﻿@using MudBlazor.Utilities
+@using ComponentViewer.Docs.Shared
+@using MudBlazor.Extensions
+
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <MudColorProvider @ref="_colorProvider" Primary="@_primaryColor?.Value.ToString()" Secondary="@_secondaryColor?.Value.ToString()" Tertiary="@_tertiaryColor?.Value.ToString()"
+                          MainTone="_mainTone" ContainerTone="_containerTone" DarkMode="@MainLayout.IsDarkMode" />
+        @*<MudText>Primary: @_colorProvider?._primaryRGB</MudText>
+        <MudText>Primary Container: @_colorProvider?._primaryContainerRGB</MudText>
+        <MudText>On Primary: @_colorProvider?._onprimaryRGB</MudText>
+        <MudText>On Primary Container: @_colorProvider?._onprimaryContainerRGB</MudText>*@
+
+        <div class="d-flex gap-4 flex-wrap justify-center">
+            <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-primary)" Class="d-flex flex-column align-center justify-center">
+                <MudText Style="color: var(--mud-m3-onprimary)">Primary</MudText>
+                <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-onprimary)">Tone @(_mainTone.ToDescriptionString())</MudText>
+                </MudPaper>
+                <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-onprimary)" Class="d-flex flex-column align-center justify-center">
+                    <MudText Style="color: var(--mud-m3-primary)">On Primary</MudText>
+                    <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-primary)">Tone 100</MudText>
+                </MudPaper>
+                <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-primary-container)" Class="d-flex flex-column align-center justify-center">
+                    <MudText Style="color: var(--mud-m3-onprimary-container)">Primary Container</MudText>
+                    <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-onprimary-container)">Tone @(_containerTone.ToDescriptionString())</MudText>
+                </MudPaper>
+                <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-onprimary-container)" Class="d-flex flex-column align-center justify-center">
+                <MudText Style="color: var(--mud-m3-primary-container)">On Primary Container</MudText>
+                <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-primary-container)">Tone @(100 - int.Parse(_containerTone.ToDescriptionString()))</MudText>
+            </MudPaper>
+            </div>
+            
+        @if (_showAllTones)
+        {
+            <div class="d-flex mt-2 flex-wrap justify-center">
+                @for (int i = 0; i <= 100; i = i + 10)
+                {
+                    int a = i;
+                    <MudPaper Width="64px" Height="64px" Style="@($"background-color: var(--mud-primary-{a})")" Class="d-flex align-center justify-center">
+                        <MudText Class="@(a <= 50 ? "white-text" : "black-text")">@a</MudText>
+                    </MudPaper>
+                }
+            </div>
+        }
+
+        <MudDivider Class="mud-width-full mt-4" />
+
+        <div class="d-flex gap-4 flex-wrap justify-center mt-4">
+            <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-secondary)" Class="d-flex flex-column align-center justify-center">
+                <MudText Style="color: var(--mud-m3-onsecondary)">Secondary</MudText>
+                <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-onsecondary)">Tone @(_mainTone.ToDescriptionString())</MudText>
+                </MudPaper>
+                <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-onsecondary)" Class="d-flex flex-column align-center justify-center">
+                    <MudText Style="color: var(--mud-m3-secondary)">On Secondary</MudText>
+                    <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-secondary)">Tone 100</MudText>
+                </MudPaper>
+                <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-secondary-container)" Class="d-flex flex-column align-center justify-center">
+                    <MudText Style="color: var(--mud-m3-onsecondary-container)">Secondary Container</MudText>
+                    <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-onsecondary-container)">Tone @(_containerTone.ToDescriptionString())</MudText>
+
+                </MudPaper>
+                <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-onsecondary-container)" Class="d-flex flex-column align-center justify-center">
+                    <MudText Style="color: var(--mud-m3-secondary-container)">On Secondary Container</MudText>
+                    <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-secondary-container)">Tone @(100 - int.Parse(_containerTone.ToDescriptionString()))</MudText>
+                </MudPaper>
+            </div>
+        
+            @if (_showAllTones)
+            {
+                <div class="d-flex mt-2 flex-wrap justify-center">
+                    @for (int i = 0; i <= 100; i = i + 10)
+                    {
+                        int a = i;
+                        <MudPaper Width="64px" Height="64px" Style="@($"background-color: var(--mud-secondary-{a})")" Class="d-flex flex-column align-center justify-center">
+                            <MudText Class="@(a <= 50 ? "white-text" : "black-text")">@a</MudText>
+                        </MudPaper>
+                    }
+                </div>
+            }
+
+        
+        
+        <MudDivider Class="mud-width-full mt-4" />
+
+        <div class="d-flex gap-4 flex-wrap justify-center mt-4">
+            <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-tertiary)" Class="d-flex flex-column align-center justify-center">
+                <MudText Style="color: var(--mud-m3-ontertiary)">Tertiary</MudText>
+                <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-ontertiary)">Tone @(_mainTone.ToDescriptionString())</MudText>
+                </MudPaper>
+                <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-ontertiary)" Class="d-flex flex-column align-center justify-center">
+                    <MudText Style="color: var(--mud-m3-tertiary)">On Tertiary</MudText>
+                    <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-tertiary)">Tone 100</MudText>
+                </MudPaper>
+                <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-tertiary-container)" Class="d-flex flex-column align-center justify-center">
+                    <MudText Style="color: var(--mud-m3-ontertiary-container)">Tertiary Container</MudText>
+                    <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-ontertiary-container)">Tone @(_containerTone.ToDescriptionString())</MudText>
+                </MudPaper>
+                <MudPaper Width="180px" Height="180px" Style="background-color: var(--mud-m3-ontertiary-container)" Class="d-flex flex-column align-center justify-center">
+                    <MudText Style="color: var(--mud-m3-tertiary-container)">On Tertiary Container</MudText>
+                    <MudText Typo="Typo.subtitle2" Style="color: var(--mud-m3-tertiary-container)">Tone @(100 - int.Parse(_containerTone.ToDescriptionString()))</MudText>
+                </MudPaper>
+            </div>
+            
+            @if (_showAllTones)
+            {
+                <div class="d-flex mt-2 flex-wrap justify-center">
+                    @for (int i = 0; i <= 100; i = i + 10)
+                    {
+                        int a = i;
+                        <MudPaper Width="64px" Height="64px" Style="@($"background-color: var(--mud-tertiary-{a})")" Class="d-flex align-center justify-center">
+                            <MudText Class="@(a <= 50 ? "white-text" : "black-text")">@a</MudText>
+                        </MudPaper>
+                    }
+                </div>
+            }
+        
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudSwitchM3 @bind-Checked="_showAllTones" Label="Show All Tones" Color="Color.Primary" />
+            <MudSelect @bind-Value="_mainTone" Label="Main Tone" Variant="Variant.Outlined">
+                @foreach (ColorTone tone in Enum.GetValues<ColorTone>())
+                {
+                    <MudSelectItem Value="tone">@tone.ToString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="_containerTone" Label="Container Tone" Variant="Variant.Outlined">
+                @foreach (ColorTone tone in Enum.GetValues<ColorTone>())
+                {
+                    <MudSelectItem Value="tone">@tone.ToString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudColorPicker @bind-Value="_primaryColor" Variant="Variant.Outlined" Label="Primary Color"/>
+            <MudColorPicker @bind-Value="_secondaryColor" Variant="Variant.Outlined" Label="Secondary Color"/>
+            <MudColorPicker @bind-Value="_tertiaryColor" Variant="Variant.Outlined" Label="Tertiary Color"/>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [CascadingParameter]
+    MainLayout MainLayout { get; set; }
+
+    MudColor _primaryColor = new MudColor("#594ae2");
+    MudColor _secondaryColor = new MudColor("#ff4081");
+    MudColor _tertiaryColor = new MudColor("#1ec8a5");
+    MudColorProvider _colorProvider;
+    ColorTone _mainTone = ColorTone.Tone40;
+    ColorTone _containerTone = ColorTone.Tone90;
+    bool _showAllTones = true;
+}

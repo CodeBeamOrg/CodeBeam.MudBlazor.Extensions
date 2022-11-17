@@ -1,6 +1,7 @@
 ﻿@page "/"
 @namespace ComponentViewer.Docs.Pages
 @using MudExtensions.Enums
+@using ComponentViewer.Docs.Shared
 
 @inject IScrollManager ScrollManager
 
@@ -35,6 +36,11 @@
         <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
             <ComponentCard Title="MudAnimate"
                            Description="A revolutionary next generation animate component." />
+        </MudItem>
+        
+        <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
+            <ComponentCard Title="MudColorProvider"
+                           Description="" />
         </MudItem>
 
         <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
@@ -145,6 +151,9 @@
 </style>
 
 @code{
+    [CascadingParameter]
+    MainLayout MainLayout { get; set; }
+
     bool _hover = false;
 
     private string GetSloganText()
