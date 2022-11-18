@@ -1,0 +1,39 @@
+﻿@page "/mudcolorprovider"
+@using ComponentViewer.Docs.Pages.Examples
+
+<ExamplePage Title="MudColorProvider">
+    <ExampleCard ExampleName="ColorProviderExample1" Title="Basics" Description="MudColorProvider extends your primary, secondary and tertiary color.">
+        <ColorProviderExample1 />
+    </ExampleCard>
+    
+    <ExampleCard ExampleName="ColorProviderExample2" Title="How To Use" Description="">
+        <MudText>(1) Place <CodeBlock>@("<MudColorProvider />")</CodeBlock> after <CodeBlock>@("<MudThemeProvider />")</CodeBlock>.</MudText>
+        <MudText>(2) After you define primary, secondary and tertiary colors, MudColorProvider creates CSS classes and variables.</MudText>
+        <MudText>(3) Use this classes or variables in your components, like: <CodeBlock>Class="mud-m3-theme-primary"</CodeBlock> or <CodeBlock>Style="background-color: var(--mud-primary-40)"</CodeBlock> </MudText>
+
+        <MudText Class="mt-2" Typo="Typo.h6">Theme Classes</MudText>
+        <MudText Color="Color.Primary">.mud-m3-theme-primary<br/>.mud-m3-theme-primary-reverse<br/>.mud-m3-theme-primary-container<br/>.mud-m3-primary-container-reverse</MudText>
+        <MudText Color="Color.Secondary">.mud-m3-theme-secondary<br/>.mud-m3-theme-secondary-reverse<br/>.mud-m3-theme-secondary-container<br/>.mud-m3-secondary-container-reverse</MudText>
+        <MudText Color="Color.Tertiary">.mud-m3-theme-tertiary<br/>.mud-m3-theme-tertiary-reverse<br/>.mud-m3-theme-tertiary-container<br/>.mud-m3-tertiary-container-reverse</MudText>
+        <MudText Class="mt-2" Typo="Typo.h6">Dynamic CSS Variables</MudText>
+        <MudText>These variables depends on MainTone and ContainerTone parameters.</MudText>
+        <MudText>Example if you have MainTone = 24, you will have --mud-primary-24, --mud-secondary-24, --mud-tertiary-24 (Although not included in the variables)</MudText>
+        <MudText>And this variables represent your dynamic values:</MudText>
+        <MudText Class="mt-2" Color="Color.Primary">--mud-m3-primary --mud-m3-secondary --mud-m3-tertiary</MudText>
+        <MudText Color="Color.Primary">--mud-m3-onprimary --mud-m3-onsecondary --mud-m3-ontertiary</MudText>
+        <MudText Color="Color.Primary">--mud-m3-primary-container --mud-m3-secondary-container --mud-m3-tertiary-container</MudText>
+        <MudText Color="Color.Primary">--mud-m3-onprimary-container --mud-m3-onsecondary-container --mud-m3-ontertiary-container</MudText>
+        <MudText Class="mt-2" Typo="Typo.h6">Static CSS Variables</MudText>
+        <MudText>These variables shows your color shades and created automatically by component.</MudText>
+        @for (int i = 0; i <= 100; i = i + 10)
+        {
+            int a = i;
+            <MudText>--mud-primary-@(a) --mud-secondary-@(a) --mud-tertiary-@(a)</MudText>
+            @if (a == 90)
+            {
+                <MudText>--mud-primary-99 --mud-secondary-99 --mud-tertiary-99</MudText>
+            }
+        }
+        <ColorProviderExample2/>
+    </ExampleCard>
+</ExamplePage>

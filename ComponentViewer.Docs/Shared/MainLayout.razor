@@ -5,13 +5,14 @@
     @(_fontPicker?.ImportFontStyleText(font))
 </style>
 
-<MudLayout>
+<CascadingValue Value="this" IsFixed="true">
+    <MudLayout>
     <MudAppBar Class="background-gradient-animation mud-width-full" Style="background: linear-gradient(-45deg, var(--mud-palette-dark), var(--mud-palette-primary), var(--mud-palette-dark), var(--mud-palette-secondary), var(--mud-palette-dark)); background-size: 400% 400%; position: relative; overflow-x: hidden">
         <MudStack Class="mud-width-full" Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Spacing="4">
             <MudIconButton Class="white-text" Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large" Href="https://mudblazor.com/" Target="_blank" />
             <MudText Style="font-weight: 900; color: white">CodeBeam MudExtensions</MudText>
             <div class="d-flex">
-                <MudToggleIconButton @bind-Toggled="_isDarkMode" Class="white-text" Icon="@Icons.Filled.DarkMode" ToggledIcon="@Icons.Filled.LightMode"/>
+                <MudToggleIconButton @bind-Toggled="IsDarkMode" Class="white-text" Icon="@Icons.Filled.DarkMode" ToggledIcon="@Icons.Filled.LightMode"/>
                 <MudIconButton Class="white-text" Icon="@Icons.Filled.Settings" OnClick="@ToggleOpen"/>
                 @if (_open == true)
                 {
@@ -37,6 +38,7 @@
         @Body
     </MudMainContent>
 </MudLayout>
+</CascadingValue>
 
 <style>
     .appbar-style {
@@ -58,14 +60,14 @@
         }
 </style>
 
-<MudThemeProvider Theme="_theme" @bind-IsDarkMode="_isDarkMode" />
+<MudThemeProvider Theme="_theme" @bind-IsDarkMode="IsDarkMode" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 @code {
     MudFontPicker _fontPicker;
     string font = "Roboto";
-    bool _isDarkMode = false;
+    internal bool IsDarkMode = false;
     bool _open = false;
     bool _showFontPicker = false;
     int _borderRadius = 20;

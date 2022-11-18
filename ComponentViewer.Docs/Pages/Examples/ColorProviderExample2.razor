@@ -1,0 +1,55 @@
+﻿@using MudBlazor.Utilities
+@using ComponentViewer.Docs.Shared
+@using MudBlazor.Extensions
+
+<MudInputStyler Selector=".input-styler" LabelBackgroundColor="var(--mud-m3-primary-container)" BorderColor="var(--mud-secondary-10)" />
+
+<MudItem Class="mud-m3-theme-primary-container mud-width-full mt-4">
+    <MudStack>
+        <MudCheckBox T="bool" Label="Wanna Check" Color="Color.Primary" />
+        <MudCheckBox T="bool" Label="Or Not" Color="Color.Secondary" />
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" />
+        <MudChipSet MultiSelection="true" Filter="true">
+            <MudChip Text="Milk" Color="Color.Primary"></MudChip>
+            <MudChip Text="Eggs" Color="Color.Primary"></MudChip>
+            <MudChip Text="Soap" Color="Color.Primary"></MudChip>
+            <MudChip Text="Cornflakes" Color="Color.Primary"></MudChip>
+            <MudChip Text="Salad" Color="Color.Primary"></MudChip>
+            <MudChip Text="Apples" Color="Color.Primary"></MudChip>
+            <MudChip Text="Red wine" Color="Color.Primary"></MudChip>
+        </MudChipSet>
+
+        <MudStack Row="true">
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary">Cancel</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary">Done</MudButton>
+        </MudStack>
+
+        <MudStack Row="true">
+            <MudSelect T="double" Label="Primary" Class="input-styler" PopoverClass="mud-m3-theme-primary" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                <MudSelectItem T="double" Value="4.50" />
+                <MudSelectItem T="double" Value="4.99" />
+                <MudSelectItem T="double" Value="3.60" />
+            </MudSelect>
+            <MudSelect T="double" Label="Primary Container" Class="input-styler" PopoverClass="mud-m3-theme-primary-container" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                <MudSelectItem T="double" Value="4.50" />
+                <MudSelectItem T="double" Value="4.99" />
+                <MudSelectItem T="double" Value="3.60" />
+            </MudSelect>
+        </MudStack>
+
+        <MudExpansionPanels MultiExpansion="true">
+            <MudExpansionPanel Class="mud-m3-theme-primary" Text="mud-m3-theme-primary">
+                Panel One Content
+            </MudExpansionPanel>
+            <MudExpansionPanel Class="mud-m3-theme-primary-reverse" Text="mud-m3-theme-primary-reverse">
+                Panel Two Content
+            </MudExpansionPanel>
+            <MudExpansionPanel Class="mud-m3-theme-primary-container" Text="mud-m3-theme-primary-container">
+                Panel Three Content
+            </MudExpansionPanel>
+            <MudExpansionPanel Class="mud-m3-theme-primary-container-reverse" Text="mud-m3-theme-primary-container-reverse">
+                Panel Four Content
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudStack>
+</MudItem>
