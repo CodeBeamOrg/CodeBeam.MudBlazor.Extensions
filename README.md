@@ -11,6 +11,7 @@
 ## Components
 
 - MudAnimate
+- MudColorProvider
 - MudDateWheelPicker
 - MudFontPicker
 - MudGallery
