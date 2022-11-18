@@ -42,34 +42,11 @@ namespace MudExtensions
             }
             else if (percentage < 40)
             {
-                //double standardDecrement = 25.5d * ((40d - percentage) / 10d);
-                //double deviationDecrement = (val / 6d) - 25.5d;
-                //int semiVal = (int)Math.Round(val - standardDecrement - (deviationDecrement * ((percentage - 40d) / 10)));
-                //if (semiVal < 0)
-                //{
-                //    semiVal = 0;
-                //}
-                //return semiVal;
                 double processTime = (40 - percentage) / 10;
                 return (int)(val - val * 0.15 * processTime);
             }
             else
             {
-                //double standardIncrement = 25.5d * ((percentage - 40d) / 10d);
-                //if (255 < val + standardIncrement)
-                //{
-                //    return 255;
-                //}
-
-                //double deviationIncrement = ((255d - val) / 6d) - 25.5d;
-                //int semiVal = (int)Math.Round(val + standardIncrement + (deviationIncrement * ((percentage - 40d) / 10)));
-
-                //if (255 < semiVal)
-                //{
-                //    semiVal = 255;
-                //}
-                //return semiVal;
-
                 double processTime = (percentage - 40) / 10;
                 return (int)(val + (255 -  val) * 0.15 * processTime);
             }

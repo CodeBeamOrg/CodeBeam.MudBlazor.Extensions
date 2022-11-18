@@ -5,30 +5,36 @@
 @inherits MudComponentBase
 
 @code {
-
+    /// <summary>
+    /// The hex value of primary color.
+    /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
     public string Primary { get; set; }
 
-    string _secondary;
+    /// <summary>
+    /// The hex value of secondary color.
+    /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
     public string Secondary { get; set; }
 
-    string _tertiary;
+    /// <summary>
+    /// The hex value of tertiary color.
+    /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
     public string Tertiary { get; set; }
 
     /// <summary>
-    /// If true, selected colors applies even the input does not have focus. Default is false.
+    /// The color shade between 0 (black) and 100 (white). Default is 40 (20 for dark mode). If its on default, the value will change automatically for dark mode.
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
     public int MainTone { get; set; } = 40;
 
     /// <summary>
-    /// If true, selected colors applies even the input does not have focus. Default is false.
+    /// The color shade between 0 (black) and 100 (white) for container colors. Default is 90 (30 for dark mode). If its on default, the value will change automatically for dark mode.
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
@@ -39,54 +45,11 @@
     public bool DarkMode { get; set; }
 
     /// <summary>
-    /// Supports id and class selection. Use "#idName" for id selectors (ex. <Component id="idName" />) or ".idName" for class selectors (ex. <Component Class="idName" />). Leave it null or empty to effect all scrollbars.
+    /// If true, the current CSS variables also be overriden (--mud-palette-primary etc.). Default is false.
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
-    public string Selector { get; set; }
-
-    /// <summary>
-    /// If true, selected colors applies even the input does not have focus. Default is false.
-    /// </summary>
-    [Parameter]
-    [Category(CategoryTypes.Item.Behavior)]
-    public bool Always { get; set; }
-
-    /// <summary>
-    /// The base color that affects text, label and borders. Can be overrided with other color parameters. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
-    /// </summary>
-    [Parameter]
-    [Category(CategoryTypes.Item.Appearance)]
-    public string BaseColor { get; set; }
-
-    /// <summary>
-    /// The text color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
-    /// </summary>
-    [Parameter]
-    [Category(CategoryTypes.Item.Appearance)]
-    public string TextColor { get; set; }
-
-    /// <summary>
-    /// The label text color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
-    /// </summary>
-    [Parameter]
-    [Category(CategoryTypes.Item.Appearance)]
-    public string LabelColor { get; set; }
-
-    /// <summary>
-    /// The label background color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
-    /// </summary>
-    [Parameter]
-    [Category(CategoryTypes.Item.Appearance)]
-    public string LabelBackgroundColor { get; set; }
-
-    /// <summary>
-    /// The border color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
-    /// </summary>
-    [Parameter]
-    [Category(CategoryTypes.Item.Appearance)]
-    public string BorderColor { get; set; }
-
+    public bool Override { get; set; }
 }
 
 <style>
@@ -117,78 +80,91 @@
         --mud-tertiary-0: rgb(0, 0, 0);
         --mud-tertiary-100: rgb(255, 255, 255);
 
-        --mud-m3-primary: var(--mud-primary-@($"{MainTone.ToString()}"));
-        --mud-m3-primary-container: var(--mud-primary-@($"{ContainerTone.ToString()}"));
-        --mud-m3-onprimary: var(--mud-primary-@(DarkMode ? "0" : "100"));
-        --mud-m3-onprimary-container: var(--mud-primary-@($"{100 - ContainerTone}"));
+        --mud-m3-primary: var(--mud-primary-@($"{(MainTone == 40 && DarkMode == true ? "80" : MainTone.ToString())}"));
+        --mud-m3-onprimary: var(--mud-primary-@(DarkMode ? "20" : "100"));
+        --mud-m3-primary-container: var(--mud-primary-@($"{(ContainerTone == 90 && DarkMode == true ? "30" : ContainerTone.ToString())}"));
+        --mud-m3-onprimary-container: var(--mud-primary-@($"{(ContainerTone == 90 && DarkMode == true ? "90" : 100 - ContainerTone)}"));
 
-        --mud-m3-secondary: var(--mud-secondary-@($"{MainTone.ToString()}"));
-        --mud-m3-secondary-container: var(--mud-secondary-@($"{ContainerTone.ToString()}"));
-        --mud-m3-onsecondary: var(--mud-secondary-@(DarkMode ? "0" : "100"));
-        --mud-m3-onsecondary-container: var(--mud-secondary-@($"{100 - ContainerTone}"));
+        --mud-m3-secondary: var(--mud-secondary-@($"{(MainTone == 40 && DarkMode == true ? "80" : MainTone.ToString())}"));
+        --mud-m3-onsecondary: var(--mud-secondary-@(DarkMode ? "20" : "100"));
+        --mud-m3-secondary-container: var(--mud-secondary-@($"{(ContainerTone == 90 && DarkMode == true ? "30" : ContainerTone.ToString())}"));
+        --mud-m3-onsecondary-container: var(--mud-secondary-@($"{(ContainerTone == 90 && DarkMode == true ? "90" : 100 - ContainerTone)}"));
 
-        --mud-m3-tertiary: var(--mud-tertiary-@($"{MainTone.ToString()}"));
-        --mud-m3-tertiary-container: var(--mud-tertiary-@($"{ContainerTone.ToString()}"));
-        --mud-m3-ontertiary: var(--mud-tertiary-@(DarkMode ? "0" : "100"));
-        --mud-m3-ontertiary-container: var(--mud-tertiary-@($"{100 - ContainerTone}"));
+        --mud-m3-tertiary: var(--mud-tertiary-@($"{(MainTone == 40 && DarkMode == true ? "80" : MainTone.ToString())}"));
+        --mud-m3-ontertiary: var(--mud-tertiary-@(DarkMode ? "20" : "100"));
+        --mud-m3-tertiary-container: var(--mud-tertiary-@($"{(ContainerTone == 90 && DarkMode == true ? "30" : ContainerTone.ToString())}"));
+        --mud-m3-ontertiary-container: var(--mud-tertiary-@($"{(ContainerTone == 90 && DarkMode == true ? "90" : 100 - ContainerTone)}"));
+
+        @if (Override)
+        {
+            <MudRender>
+                --mud-palette-primary: var(--mud-m3-primary) !important;
+                --mud-palette-primary-text: var(--mud-m3-primary-container) !important;
+                --mud-palette-secondary: var(--mud-m3-secondary) !important;
+                --mud-palette-secondary-text: var(--mud-m3-secondary-container) !important;
+                --mud-palette-tertiary: var(--mud-m3-tertiary) !important;
+                --mud-palette-tertiary-text: var(--mud-m3-tertiary-container) !important;
+            </MudRender>
+        }
+    }
+
+    .mud-m3-theme-primary {
+        color: var(--mud-m3-onprimary);
+        background-color: var(--mud-m3-primary);
+    }
+
+    .mud-m3-theme-primary-reverse {
+        color: var(--mud-m3-primary);
+        background-color: var(--mud-m3-onprimary);
+    }
+
+    .mud-m3-theme-primary-container {
+        color: var(--mud-m3-onprimary-container);
+        background-color: var(--mud-m3-primary-container);
+    }
+
+    .mud-m3-theme-primary-container-reverse {
+        color: var(--mud-m3-primary-container);
+        background-color: var(--mud-m3-onprimary-container);
+    }
+
+    .mud-m3-theme-secondary {
+        color: var(--mud-m3-onsecondary);
+        background-color: var(--mud-m3-secondary);
+    }
+
+    .mud-m3-theme-secondary-reverse {
+        color: var(--mud-m3-secondary);
+        background-color: var(--mud-m3-onsecondary);
+    }
+
+    .mud-m3-theme-secondary-container {
+        color: var(--mud-m3-onsecondary-container);
+        background-color: var(--mud-m3-secondary-container);
+    }
+
+    .mud-m3-theme-secondary-container-reverse {
+        color: var(--mud-m3-secondary-container);
+        background-color: var(--mud-m3-onsecondary-container);
+    }
+
+    .mud-m3-theme-tertiary {
+        color: var(--mud-m3-ontertiary);
+        background-color: var(--mud-m3-tertiary);
+    }
+
+    .mud-m3-theme-tertiary-reverse {
+        color: var(--mud-m3-tertiary);
+        background-color: var(--mud-m3-ontertiary);
+    }
+
+    .mud-m3-theme-tertiary-container {
+        color: var(--mud-m3-ontertiary-container);
+        background-color: var(--mud-m3-tertiary-container);
+    }
+
+    .mud-m3-theme-tertiary-container-reverse {
+        color: var(--mud-m3-tertiary-container);
+        background-color: var(--mud-m3-ontertiary-container);
     }
 </style>
-
-@*<style>
-    @if (!string.IsNullOrEmpty(BaseColor))
-    {
-        @($"{Selector} .mud-input-root {{ color: {BaseColor} !important; }}")
-        @if (Always)
-        {
-            @($"{Selector} .mud-input-underline:after, {Selector} .mud-input-underline:before {{ border-color: {BaseColor} !important; }}")
-            @($"{Selector} .mud-input-outlined-border {{ border-color: {BaseColor} !important; }}")
-            @($"{Selector} .mud-input-underline:hover:before {{ opacity: 0.6; }}")
-            @($"{Selector} .mud-input-label {{ color: {BaseColor} !important; }}")
-            @($"{Selector}:focus-within .mud-input-label {{ color: {BaseColor} !important; font-weight: 900 }}")
-        }
-        else
-        {
-            @($"{Selector} .mud-input-underline:after {{ border-color: {BaseColor} !important; }}")
-            @($"{Selector} .mud-input-outlined:focus-within .mud-input-outlined-border {{ border-color: {BaseColor} !important; }}")
-            @($"{Selector}:focus-within .mud-input-label {{ color: {BaseColor} !important; }}")
-        }
-    }
-    @if (!string.IsNullOrEmpty(TextColor))
-    {
-        @($"{Selector} .mud-input-root {{ color: {TextColor} !important; }}")
-    }
-    @if (!string.IsNullOrEmpty(LabelColor))
-    {
-        if (Always)
-        {
-            @($"{Selector} .mud-input-label {{ color: {LabelColor} !important; }}")
-            @($"{Selector}:focus-within .mud-input-label {{ color: {LabelColor} !important; font-weight: 900 }}")
-        }
-        else
-        {
-            @($"{Selector}:focus-within .mud-input-label {{ color: {LabelColor} !important; }}")
-        }
-    }
-    @if (!string.IsNullOrEmpty(LabelBackgroundColor))
-    {
-        @($"{Selector} .mud-input-label {{ background-color: {LabelBackgroundColor} !important; }}")
-    }
-    @if (!string.IsNullOrEmpty(BorderColor))
-    {
-        if (Always)
-        {
-            @($"{Selector} .mud-input-underline:after, {Selector} .mud-input-underline:before {{ border-color: {BorderColor} !important; }}")
-            @($"{Selector} .mud-input-outlined-border {{ border-color: {BorderColor} !important; }}")
-            @($"{Selector} .mud-input-underline:hover:before {{ opacity: 0.6; }}")
-        }
-        else
-        {
-            <MudRender>@(Selector) .mud-input-underline:after {
-                @($"border-color: {BorderColor} !important;");
-            }</MudRender>
-            <MudRender>@(Selector) .mud-input-outlined:focus-within .mud-input-outlined-border {
-                @($"border-color: {BorderColor} !important;");
-            }</MudRender>
-        }
-    }
-</style>*@
