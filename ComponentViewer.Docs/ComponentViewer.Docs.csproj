@@ -25,5 +25,8 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
   </ItemGroup>
-
+	
+	<ItemGroup>
+		<EmbeddedResource Include="Pages/Examples/**" />
+	</ItemGroup>
 </Project>

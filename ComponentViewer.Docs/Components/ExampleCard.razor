@@ -37,19 +37,19 @@ else
                         {
                             if (string.IsNullOrEmpty(line) || line == "/r")
                             {
-                                <br/>
+                                <br />
                             }
                             <pre style="color: var(--mud-palette-primary); font-weight: 500; font-size: 14px;">@line</pre>
                         }
                     </div>
                 </MudExpansionPanel>
-                
+
             </div>
         </MudCardContent>
     </MudCard>
 }
 
-@code{
+@code {
     [Parameter]
     public string ExampleName { get; set; }
 
@@ -65,15 +65,26 @@ else
     [Parameter]
     public bool HasExpansionPanel { get; set; }
 
-    string[] _lines = new string[] { };
+    List<string> _lines = new();
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        string path = $@"..\ComponentViewer.Docs\Pages\Examples\{ExampleName}.razor";
-        if (System.IO.File.Exists(path))
+
+        var ass = System.Reflection.Assembly.GetExecutingAssembly();
+        var names = ass.GetManifestResourceNames();
+
+        string path = $@"ComponentViewer.Docs.Pages.Examples.{ExampleName}.razor";
+        var resourceStream = ass.GetManifestResourceStream(path);
+        using var reader = new StreamReader(resourceStream);
+
+        while (true)
         {
-            _lines = System.IO.File.ReadAllLines(path);
+            var line = reader.ReadLine();
+            if (line != null)
+                _lines.Add(line);
+            else
+                break;
         }
     }
 }
@@ -92,12 +103,12 @@ else
             background: linear-gradient(to right, var(--mud-palette-primary), var(--mud-palette-secondary));
         }
 
-    .example-card .example-card-text {
-        color: var(--mud-palette-secondary);
-        transition: color 1s;
-    }
+        .example-card .example-card-text {
+            color: var(--mud-palette-secondary);
+            transition: color 1s;
+        }
 
-    .example-card:hover .example-card-text {
-        color: white;
-    }
+        .example-card:hover .example-card-text {
+            color: white;
+        }
 </style>
