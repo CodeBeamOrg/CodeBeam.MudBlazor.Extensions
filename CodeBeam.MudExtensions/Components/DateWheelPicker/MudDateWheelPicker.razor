@@ -43,19 +43,19 @@
                             @if (yearIndex < dayIndex)
                             {
                                 <MudWheel Class="mud-width-full" @bind-Value="_year" ItemCollection="Years" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Year : null)" Dense="@Dense" Color="@Color" Disabled="FixYear" />
-                                <MudWheel Class="mud-width-full" @bind-Value="_month" ItemCollection="Months" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Month : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixMonth" />
+                                <MudWheel Class="mud-width-full" Value="_month" ValueChanged=@((int m) => OnMonthChanged(m)) ItemCollection="Months" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Month : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixMonth" />
                                 <MudWheel Class="mud-width-full" @bind-Value="_day" ItemCollection="Days" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Day : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixDay" />
                             }
                             else if (monthIndex < dayIndex && dayIndex < yearIndex )
                             {
-                                <MudWheel Class="mud-width-full" @bind-Value="_month" ItemCollection="Months" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Month : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixMonth" />
+                                <MudWheel Class="mud-width-full" Value="_month" ValueChanged=@((int m) => OnMonthChanged(m)) ItemCollection="Months" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Month : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixMonth" />
                                 <MudWheel Class="mud-width-full" @bind-Value="_day" ItemCollection="Days" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Day : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixDay" />
                                 <MudWheel Class="mud-width-full" @bind-Value="_year" ItemCollection="Years" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Year : null)" Dense="@Dense" Color="@Color" Disabled="FixYear" />
                             }
                             else
                             {
                                 <MudWheel Class="mud-width-full" @bind-Value="_day" ItemCollection="Days" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Day : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixDay" />
-                                <MudWheel Class="mud-width-full" @bind-Value="_month" ItemCollection="Months" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Month : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixMonth" />
+                                <MudWheel Class="mud-width-full" Value="_month" ValueChanged=@((int m) => OnMonthChanged(m)) ItemCollection="Months" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Month : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixMonth" />
                                 <MudWheel Class="mud-width-full" @bind-Value="_year" ItemCollection="Years" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Year : null)" Dense="@Dense" Color="@Color" Disabled="FixYear" />
                             }
                         }
