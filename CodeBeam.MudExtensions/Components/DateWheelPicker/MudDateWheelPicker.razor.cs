@@ -1,14 +1,9 @@
-﻿using System;
-using System.Data;
-using System.Threading.Tasks;
-using MudExtensions.Utilities;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
-using static MudBlazor.CategoryTypes;
+using MudExtensions.Utilities;
 
 namespace MudExtensions
 {
@@ -300,6 +295,34 @@ namespace MudExtensions
             }
         }
 
+        private void RefreshDays()
+        {
+            var month = _month;
+            var year = _year;
+            var day = _day;
+
+            ++month;
+
+            if (month == 13)
+            {
+                month = 1;
+                ++year;
+            }
+
+            Days = Enumerable.Range(1, new DateTime(year, month, 1).AddDays(-1).Day).ToList();
+            if (Days.Last() < _day)
+            {
+                _day = Days.Last();
+            }
+        }
+
+        private void OnMonthChanged(int month)
+        {
+            _month = month;
+
+            RefreshDays();
+        }
+
         protected void SetWheelValues()
         {
             if (Value == null)
@@ -312,6 +335,8 @@ namespace MudExtensions
             _hour = Value.Value.Hour;
             _minute = Value.Value.Minute;
             _second = Value.Value.Second;
+
+            RefreshDays();
         }
 
         public override ValueTask FocusAsync()
