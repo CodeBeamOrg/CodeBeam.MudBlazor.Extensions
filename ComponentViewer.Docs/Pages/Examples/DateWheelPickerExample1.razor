@@ -45,7 +45,7 @@
 </MudGrid>
 
 @code {
-    DateTime? _date = new DateTime(2000, 1, 1);
+    DateTime? _date = DateTime.Now;
     DateView _dateView = DateView.Date;
     bool _editable = false;
     bool _showToolbar = false;
@@ -53,7 +53,7 @@
     bool _submitOnClose = true;
     Color _color;
     Color _colorTime = Color.Inherit;
-    string _dateFormat = "dd.MM.yyyy";
+    string _dateFormat = System.Globalization.CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern;
     bool _fixYear;
     bool _fixMonth;
     bool _fixDay;
