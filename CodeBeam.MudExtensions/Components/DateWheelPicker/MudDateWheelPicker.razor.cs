@@ -299,6 +299,7 @@ namespace MudExtensions
         {
             var month = _month;
             var year = _year;
+            var day = _day;
 
             ++month;
 
@@ -309,6 +310,10 @@ namespace MudExtensions
             }
 
             Days = Enumerable.Range(1, new DateTime(year, month, 1).AddDays(-1).Day).ToList();
+            if (Days.Last() < _day)
+            {
+                _day = Days.Last();
+            }
         }
 
         private void OnMonthChanged(int month)
