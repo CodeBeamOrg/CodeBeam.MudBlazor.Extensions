@@ -1,0 +1,28 @@
+﻿@inject ISnackbar Snackbar
+@using MudBlazor.Extensions
+@using MudExtensions.Utilities
+
+<MudGrid Class="cursor-default">
+    <MudCSVFieldMapper @ref="csvFieldMapper" MudFieldHeaders="PartnerFields" OnUpload="Upload"></MudCSVFieldMapper>
+</MudGrid>
+
+@code {
+    MudCSVFieldMapper csvFieldMapper;
+
+    List<MudFieldHeader> PartnerFields = new() {
+        new MudFieldHeader("Email", true),
+        new MudFieldHeader("First Name"),
+        new MudFieldHeader("Last Name"),
+        new MudFieldHeader("Phone"),
+    };
+
+    private async Task<bool> Upload()
+    {
+        var file = csvFieldMapper.CSVFile; //IBrowserFile / .csv that was uploaded
+        byte[] FileContent = csvFieldMapper.FileContentByte; // file with headers updated to correct names
+
+        Snackbar.Add($"Headers Mapped!", Severity.Info);
+        return true;
+        //Send renamed headers with CSV file to MudTable or Database to be parsed
+    }
+}
