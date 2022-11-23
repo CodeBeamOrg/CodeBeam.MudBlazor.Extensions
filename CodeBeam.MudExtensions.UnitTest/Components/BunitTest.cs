@@ -4,6 +4,11 @@
 
 using System;
 using System.Threading.Tasks;
+using Bunit;
+using CodeBeam.MudExtensions.UnitTests.Mocks;
+using Microsoft.Extensions.DependencyInjection;
+using MudBlazor;
+using MudBlazor.Services;
 using NUnit.Framework;
 
 namespace CodeBeam.MudExtensions.UnitTests.Components
@@ -16,6 +21,11 @@ namespace CodeBeam.MudExtensions.UnitTests.Components
         public virtual void Setup()
         {
             Context = new();
+            Context.JSInterop.Mode = JSRuntimeMode.Loose;
+            Context.Services.AddTransient<IScrollManager, MockScrollManager>();
+            Context.Services.AddTransient<IKeyInterceptorFactory, MockKeyInterceptorServiceFactory>();
+            Context.Services.AddSingleton<IMudPopoverService, MockPopoverService>();
+            Context.Services.AddSingleton<ISnackbar, SnackbarService>();
             //Context.AddTestServices();
         }
 

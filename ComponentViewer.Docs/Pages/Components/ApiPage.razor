@@ -1,248 +1,400 @@
 ﻿@page "/api"
 @using MudBlazor.Extensions
+@using System.Security.Cryptography.X509Certificates
 
 <ExamplePage Title="API">
     <ExampleCard Title="Api - MudAnimate" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudAnimate).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudAnimate).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudAnimate instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudColorProvider" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudColorProvider).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudColorProvider).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudColorProvider instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudDateWheelPicker" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudDateWheelPicker).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudDateWheelPicker).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudDateWheelPicker instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudGallery" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudGallery).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudGallery).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudGallery animate = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(animate)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudInputStyler" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudInputStyler).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudInputStyler).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudInputStyler animate = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(animate)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudLoading" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudLoading).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudLoading).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudLoading instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudLoadingButton" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudLoadingButton).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudLoadingButton).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudLoadingButton instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudPage" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudPage).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudPage).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudPage instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudSection" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudSection).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudSection).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudSection instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudPasswordField" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudPasswordField<string>).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudPasswordField<string>).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudPasswordField<string> instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudPopup" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudPopup).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudPopup).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudPopup instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudScrollbar" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudScrollbar).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudScrollbar).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudScrollbar instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudSpeedDial" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudSpeedDial).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudSpeedDial).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudSpeedDial instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudSplitter" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudSplitter).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudSplitter).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudSplitter instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudStepper & MudStep" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudStepper).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudStepper).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudStepper instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
         <MudText Class="ma-4" Typo="Typo.h6" Color="Color.Secondary">MudStep</MudText>
-        <MudTable Items="@(typeof(MudStep).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudStep).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudStep instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudSwitchM3" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudSwitchM3<bool>).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudSwitchM3<bool>).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudSwitchM3<bool> instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudWheel" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudWheel<string>).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudWheel<string>).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudWheel<string> instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>
 
     <ExampleCard Title="Api - MudWatch" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudWatch).GetProperties().OrderBy(x => x.Name).ToList())">
+        <MudTable Items="@(typeof(MudWatch).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
                 <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.ToString()</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudWatch instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
             </RowTemplate>
         </MudTable>
     </ExampleCard>

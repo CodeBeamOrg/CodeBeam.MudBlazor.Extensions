@@ -76,15 +76,18 @@ else
 
         string path = $@"ComponentViewer.Docs.Pages.Examples.{ExampleName}.razor";
         var resourceStream = ass.GetManifestResourceStream(path);
-        using var reader = new StreamReader(resourceStream);
-
-        while (true)
+        if (resourceStream != null)
         {
-            var line = reader.ReadLine();
-            if (line != null)
-                _lines.Add(line);
-            else
-                break;
+            using var reader = new StreamReader(resourceStream);
+
+            while (true)
+            {
+                var line = reader.ReadLine();
+                if (line != null)
+                    _lines.Add(line);
+                else
+                    break;
+            }
         }
     }
 }
