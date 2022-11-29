@@ -130,7 +130,7 @@ namespace MudExtensions
             {
                 if (MudCSVHeaders[i].MappedField != "File")
                 {
-                    NewHeader = NewHeader.Replace(MudCSVHeaders[i].Name, MudCSVHeaders[i].MappedField);
+                    NewHeader = Regex.Replace(NewHeader, String.Format(@"\b{0}\b", MudCSVHeaders[i].Name), MudCSVHeaders[i].MappedField);
                     CSVMapping.Add(MudCSVHeaders[i].MappedField, MudCSVHeaders[i].Name);
                 }
             }
