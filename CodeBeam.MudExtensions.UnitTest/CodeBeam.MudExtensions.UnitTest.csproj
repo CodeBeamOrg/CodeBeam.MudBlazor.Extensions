@@ -13,6 +13,7 @@
     <PackageReference Include="CodecovUploader" Version="0.3.2" />
     <PackageReference Include="FluentAssertions" Version="6.8.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="Moq" Version="4.18.2" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
@@ -21,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CodeBeam.MudExtensions\CodeBeam.MudExtensions.csproj" />
+    <ProjectReference Include="..\ComponentViewer.Docs\ComponentViewer.Docs.csproj" />
   </ItemGroup>
 
 </Project>
