@@ -17,6 +17,7 @@ namespace MudExtensions
             .AddClass(Class)
             .Build();
 
+        MudWheel<int> _wheelDay;
         MudWheel<int> _wheelHour;
         MudWheel<int> _wheelMinute;
         MudWheel<int> _wheelSecond;
@@ -42,7 +43,7 @@ namespace MudExtensions
 
             if (Mode == WatchMode.Watch)
             {
-                SetWatchMode(Mode);
+                SetWatchMode(Mode).AndForget();
                 Start();
             }
         }
@@ -93,7 +94,7 @@ namespace MudExtensions
                     return;
                 }
                 _watchMode = value;
-                SetWatchMode(_watchMode);
+                SetWatchMode(_watchMode).AndForget();
             }
         }
 
@@ -107,6 +108,13 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public string Delimiter { get; set; } = ":";
+
+        /// <summary>
+        /// If true, components shows days. Default is false.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public bool ShowDay { get; set; } = false;
 
         /// <summary>
         /// If true, components shows hours. Default is true.
@@ -185,6 +193,8 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Appearance)]
         public Color Color { get; set; }
 
+        int _day = 0;
+        internal List<int> Days { get; set; } = Enumerable.Range(0, 3600).ToList();
 
         int _hour = 0;
         internal List<int> Hours { get; set; } = Enumerable.Range(0, 24).ToList();
@@ -282,7 +292,7 @@ namespace MudExtensions
             await InvokeAsync(StateHasChanged);
         }
 
-        public async void Reset()
+        public async Task Reset()
         {
             if (Mode == WatchMode.Watch)
             {
@@ -296,10 +306,13 @@ namespace MudExtensions
                 await LapRecordsChanged.InvokeAsync();
                 return;
             }
-            _stopwatch.Reset();
-            Value = TimeSpan.Zero;
-            LapRecords.Clear();
-            await LapRecordsChanged.InvokeAsync();
+            else
+            {
+                _stopwatch.Reset();
+                Value = TimeSpan.Zero;
+                LapRecords.Clear();
+                await LapRecordsChanged.InvokeAsync();
+            }
         }
 
         public void Start()
@@ -323,7 +336,7 @@ namespace MudExtensions
             await LapRecordsChanged.InvokeAsync();
         }
 
-        protected void SetWatchMode(WatchMode mode)
+        protected async Task SetWatchMode(WatchMode mode)
         {
             if (mode == WatchMode.Watch)
             {
@@ -338,7 +351,7 @@ namespace MudExtensions
             {
                 Interval = TimeSpan.FromMilliseconds(1);
                 Value = TimeSpan.Zero;
-                Reset();
+                await Reset();
                 ShowHour = true;
                 ShowMinute = true;
                 ShowSecond = true;
@@ -347,16 +360,18 @@ namespace MudExtensions
             else if (mode == WatchMode.CountDown)
             {
                 Interval = TimeSpan.FromMilliseconds(1);
-                Reset();
+                await Reset();
                 ShowHour = true;
                 ShowMinute = true;
                 ShowSecond = true;
                 ShowMillisecond = true;
             }
+            StateHasChanged();
         }
 
         protected void SetInternalValues()
         {
+            _day = Value.Days;
             _hour = Value.Hours;
             _minute = Value.Minutes;
             _second = Value.Seconds;
@@ -366,6 +381,10 @@ namespace MudExtensions
         protected string GetWatchText()
         {
             List<string> ls = new();
+            if (ShowDay)
+            {
+                ls.Add(_day.ToString("D2"));
+            }
             if (ShowHour)
             {
                 ls.Add(_hour.ToString("D2"));
