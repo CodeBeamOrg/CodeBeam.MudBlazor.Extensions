@@ -154,11 +154,14 @@ namespace MudExtensions
                     //Todo Create an optional Parent Method for Comparison so someone could use a fuzzy name matcher: https://github.com/JakeBayer/FuzzySharp
                     //if (FuzzySharp.Fuzz.Ratio(MudFieldHeaders[i].Name.ToLower(), csvField.ToLower()) > 90)
                     if (String.Compare(MudFieldHeaders[i].Name, csvField, StringComparison.CurrentCultureIgnoreCase) == 0)
-                    {
-                        MudCSVHeaders.Add(new MudCSVHeader(csvField, MudFieldHeaders[i].Name));
-                        MudFieldHeaders[i].FieldCount++;
-                        matchedField = true;
-                        break;
+                    {                    
+                        if (MudFieldHeaders[i].FieldCount == 0) //only match if it hasn't already been matched
+                        { 
+                            MudCSVHeaders.Add(new MudCSVHeader(csvField, MudFieldHeaders[i].Name));
+                            MudFieldHeaders[i].FieldCount++;
+                            matchedField = true;
+                            break;
+                        }
                     }
                 }
 
