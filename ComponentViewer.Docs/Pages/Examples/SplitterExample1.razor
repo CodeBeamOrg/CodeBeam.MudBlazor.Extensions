@@ -3,7 +3,7 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudSplitter @ref="_splitter" Height="@_height" Color="_color" Bordered="_bordered" DimensionChanged="DimensionChanged">
+        <MudSplitter @ref="_splitter" Height="@_height" Color="_color" Bordered="_bordered" DimensionChanged="DimensionChanged" DisableSlide="_disableSlide" DisableMargin="_disableMargin" Sensitivity="_sensitivity" Overlap="true">
             <StartContent>
                 <MudText>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</MudText>
             </StartContent>
@@ -23,8 +23,11 @@
                     <MudSelectItem Value="col">@col.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSwitch @bind-Checked="_bordered" Color="Color.Primary" Label="Border" />
+            <MudSwitchM3 @bind-Checked="_bordered" Color="Color.Primary" Label="Border" />
+            <MudSwitchM3 @bind-Checked="_disableSlide" Color="Color.Primary" Label="Disable" />
+            <MudSwitchM3 @bind-Checked="_disableMargin" Color="Color.Primary" Label="Disable Margin" />
             <MudDivider />
+            <MudNumericField @bind-Value="_sensitivity" Variant="Variant.Outlined" Min="0.01" Max="10" Step="0.1" Label="Sensitivity" />
             <MudNumericField @bind-Value="_percentage" Variant="Variant.Outlined" Label="Start Content Percentage" />
             <MudButton OnClick="@(() => _splitter.SetDimensions(_percentage))">Set Dimension (@_percentage)</MudButton>
         </MudStack>
@@ -37,6 +40,9 @@
     Color _color;
     double _percentage = 50;
     bool _bordered = false;
+    bool _disableSlide = false;
+    bool _disableMargin = false;
+    double _sensitivity = 0.1d;
 
     private void DimensionChanged()
     {

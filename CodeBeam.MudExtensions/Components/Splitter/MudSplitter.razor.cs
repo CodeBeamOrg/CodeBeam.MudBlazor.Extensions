@@ -25,7 +25,8 @@ namespace MudExtensions
             .AddClass(Class)
             .Build();
 
-        protected string ContentClassname => new CssBuilder($"mud-splitter-content mud-splitter-content-{_styleGuid} d-flex ma-2")
+        protected string ContentClassname => new CssBuilder($"mud-splitter-content mud-splitter-content-{_styleGuid} d-flex")
+            .AddClass("ma-2", !DisableMargin)
             .AddClass(ClassContent)
             .Build();
 
@@ -80,6 +81,24 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public string StyleBar { get; set; }
+
+        /// <summary>
+        /// The slide sensitivity that should between 0.01 and 10. Smaller values increase the smooth but reduce performance. Default is 0.1
+        /// </summary>
+        [Parameter]
+        public double Sensitivity { get; set; } = 0.1d;
+
+        /// <summary>
+        /// If true, user cannot interact with splitter bar.
+        /// </summary>
+        [Parameter]
+        public bool DisableSlide { get; set; }
+
+        /// <summary>
+        /// Disables the default margin.
+        /// </summary>
+        [Parameter]
+        public bool DisableMargin { get; set; }
 
         ///// <summary>
         ///// If true, splitter bar goes vertical.
