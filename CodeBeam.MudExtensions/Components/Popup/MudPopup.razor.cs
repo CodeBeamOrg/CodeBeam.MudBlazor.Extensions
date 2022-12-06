@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using MudExtensions.Enums;
+using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -50,7 +51,7 @@ namespace MudExtensions
                     return;
                 }
                 _open = value;
-                OpenChanged.InvokeAsync(_open).AndForget();
+                OpenChanged.InvokeAsync(_open).AndForgetExt();
             }
         }
 

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MudExtensions.Extensions;
 using static MudBlazor.CategoryTypes;
 
 namespace MudExtensions
@@ -54,7 +55,7 @@ namespace MudExtensions
                     return;
                 }
                 _height = value;
-                UpdateDimensions().AndForget();
+                UpdateDimensions().AndForgetExt();
             }
         }
 
