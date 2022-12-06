@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
+using MudExtensions.Extensions;
 using static MudBlazor.CategoryTypes;
 
 namespace MudExtensions
@@ -43,7 +44,7 @@ namespace MudExtensions
 
             if (Mode == WatchMode.Watch)
             {
-                SetWatchMode(Mode).AndForget();
+                SetWatchMode(Mode).AndForgetExt();
                 Start();
             }
         }
@@ -94,7 +95,7 @@ namespace MudExtensions
                     return;
                 }
                 _watchMode = value;
-                SetWatchMode(_watchMode).AndForget();
+                SetWatchMode(_watchMode).AndForgetExt();
             }
         }
 

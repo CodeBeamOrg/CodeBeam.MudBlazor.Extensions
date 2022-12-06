@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -42,7 +43,7 @@ namespace MudExtensions
                     return;
                 }
                 _status = value;
-                StatusChanged.InvokeAsync(_status).AndForget();
+                StatusChanged.InvokeAsync(_status).AndForgetExt();
             }
         }
 

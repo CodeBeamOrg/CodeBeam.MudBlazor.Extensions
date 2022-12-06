@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -45,7 +46,7 @@ namespace MudExtensions
                     return;
                 }
                 _toggled = value;
-                ToggledChanged.InvokeAsync().AndForget();
+                ToggledChanged.InvokeAsync().AndForgetExt();
             }
         }
 

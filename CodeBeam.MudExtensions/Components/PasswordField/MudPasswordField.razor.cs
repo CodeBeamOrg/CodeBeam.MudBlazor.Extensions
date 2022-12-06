@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Utilities;
+using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -116,7 +117,7 @@ namespace MudExtensions
                     _passwordIcon = Icons.Filled.Visibility;
                 }
 
-                PasswordModeChanged.InvokeAsync(value).AndForget();
+                PasswordModeChanged.InvokeAsync(value).AndForgetExt();
             }
         }
 

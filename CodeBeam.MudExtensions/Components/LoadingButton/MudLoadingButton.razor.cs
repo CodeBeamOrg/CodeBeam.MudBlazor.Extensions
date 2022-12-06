@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
+using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -27,7 +28,7 @@ namespace MudExtensions
                     return;
                 }
                 _loading = value;
-                LoadingChanged.InvokeAsync(_loading).AndForget();
+                LoadingChanged.InvokeAsync(_loading).AndForgetExt();
             }
         }
 
