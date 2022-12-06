@@ -31,6 +31,14 @@
 - MudWatch
 - MudWheel
 
+## Supported MudBlazor Versions
+| Codebeam.MudExtensions | MudBlazor | .Net |
+| :---  |    :----:   | :---: |
+| 6.0.0 - 6.0.3 | 6.0.16 | .Net 6 |
+| 6.0.4 - 6.0.12 | 6.0.17 | .Net 6 |
+| 6.1.0 - 6.1.4 | 6.1.2 | .Net 6 & .Net 7 |
+| 6.1.5 | 6.1.4 | .Net 6 & .Net 7 |
+
 ## Installation
 This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />
 Add the following to your HTML head section, it's either `index.html` or `_Layout.cshtml`/`_Host.cshtml` depending on whether you're running Server-Side or WASM.
