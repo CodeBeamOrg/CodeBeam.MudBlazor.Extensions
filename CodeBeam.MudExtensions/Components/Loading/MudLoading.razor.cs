@@ -17,6 +17,21 @@ namespace MudExtensions
             .AddClass(ClassText)
             .Build();
 
+        protected string LoaderClassname => new CssBuilder()
+            .AddClass(LoaderType == LoaderType.Linear ? "mb-2" : "")
+            .AddClass(ClassLoader)
+            .Build();
+
+        protected string TextStylename =>
+            new StyleBuilder()
+                .AddStyle(TextStyle)
+                .Build();
+        
+        protected string LoaderStylename =>
+            new StyleBuilder()
+                .AddStyle(LoaderStyle)
+                .Build();
+        
         bool _loading = true;
         /// <summary>
         /// Two way binded loading state.
@@ -63,6 +78,27 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public string ClassText { get; set; }
+
+        /// <summary>
+        /// CSS classes for the progress component, seperated by space.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public string ClassLoader { get; set; }
+
+        /// <summary>
+        /// CSS style for the text.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public string TextStyle { get; set; }
+        
+        /// <summary>
+        /// CSS style for the progress component.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public string LoaderStyle { get; set; }
 
         /// <summary>
         /// If true, show a darken background.
