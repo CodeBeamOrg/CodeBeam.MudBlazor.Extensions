@@ -16,21 +16,6 @@ namespace MudExtensions
             .AddClass("mt-4")
             .AddClass(ClassText)
             .Build();
-
-        protected string LoaderClassname => new CssBuilder()
-            .AddClass(LoaderType == LoaderType.Linear ? "mb-2" : "")
-            .AddClass(ClassLoader)
-            .Build();
-
-        protected string TextStylename =>
-            new StyleBuilder()
-                .AddStyle(TextStyle)
-                .Build();
-        
-        protected string LoaderStylename =>
-            new StyleBuilder()
-                .AddStyle(LoaderStyle)
-                .Build();
         
         bool _loading = true;
         /// <summary>
