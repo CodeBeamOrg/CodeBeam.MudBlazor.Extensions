@@ -15,8 +15,8 @@
         {
             <MudOverlay Visible="_loading" Absolute="true" DarkBackground="@Darken">
                 <div class="d-flex flex-column align-center justify-center">
-                    <MudProgressCircular Class="@ClassLoader" Style="@LoaderStyle" Color="Color.Primary" Indeterminate="true" />
-                    <MudText Class="@TextClassname" Style="@TextStyle">@Text</MudText>
+                    <MudProgressCircular Class="@ClassLoader" Style="@StyleLoader" Color="Color.Primary" Indeterminate="true" />
+                    <MudText Class="@TextClassname" Style="@StyleText">@Text</MudText>
                 </div>
             </MudOverlay>
         }
@@ -30,8 +30,8 @@
         else
         {
 
-            <MudProgressLinear Class="@ClassLoader" Style="@LoaderStyle" Color="Color.Primary" Indeterminate="true" />
-            <MudText Class="@TextClassname" Style="@TextStyle" Align="Align.Center">@Text</MudText>
+            <MudProgressLinear Class="@ClassLoader" Style="@StyleLoader" Color="Color.Primary" Indeterminate="true" />
+            <MudText Class="@TextClassname" Style="@StyleText" Align="Align.Center">@Text</MudText>
             
             <MudOverlay Visible="_loading" Absolute="true" DarkBackground="@Darken">
                 <div class="d-flex align-center justify-center">

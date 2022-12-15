@@ -76,14 +76,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string TextStyle { get; set; }
+        public string StyleText { get; set; }
         
         /// <summary>
         /// CSS style for the progress component.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string LoaderStyle { get; set; }
+        public string StyleLoader { get; set; }
 
         /// <summary>
         /// If true, show a darken background.

@@ -3,7 +3,7 @@
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center flex-wrap">
         <MudPaper Class="mud-width-full" Style="height: 300px; position: relative">
-            <MudLoading @bind-Loading="_loading" LoaderType="_loaderType" Text="@_text" ClassText="@_classText" ClassLoader="@_loaderText" TextStyle="@_styleText" LoaderStyle="@_loaderStyle">
+            <MudLoading @bind-Loading="_loading" LoaderType="_loaderType" Text="@_text" ClassText="@_classText" ClassLoader="@_classLoader" StyleText="@_styleText" StyleLoader="@_styleLoader">
                 <MudStack>
                     <MudText>This is a text inside a paper. Its the content.</MudText>
                     <MudButton OnClick="ShowSnackbar" Variant="Variant.Filled" Color="Color.Primary">A Button Can Not Be Clickable While Loading</MudButton>
@@ -22,8 +22,8 @@
             <MudTextField @bind-Value="_text" Variant="Variant.Outlined" Label="Text" />
             <MudTextField @bind-Value="_classText" Variant="Variant.Outlined" Label="Text Class" />
             <MudTextField @bind-Value="_styleText" Variant="Variant.Outlined" Label="Text Style" />
-            <MudTextField @bind-Value="_loaderText" Variant="Variant.Outlined" Label="Loader Class" />
-            <MudTextField @bind-Value="_loaderStyle" Variant="Variant.Outlined" Label="Loader Style" />
+            <MudTextField @bind-Value="_classLoader" Variant="Variant.Outlined" Label="Loader Class" />
+            <MudTextField @bind-Value="_styleLoader" Variant="Variant.Outlined" Label="Loader Style" />
         </MudStack>
     </MudItem>
 </MudGrid>
@@ -33,8 +33,8 @@
     string _text = "Some text.";
     string _classText;
     string _styleText;
-    string _loaderText;
-    string _loaderStyle;
+    string _classLoader;
+    string _styleLoader;
     LoaderType _loaderType = LoaderType.Circular;
 
     private void ShowSnackbar()
