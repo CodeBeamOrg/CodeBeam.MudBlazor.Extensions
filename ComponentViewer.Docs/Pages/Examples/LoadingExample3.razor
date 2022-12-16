@@ -1,0 +1,44 @@
+﻿@inject ISnackbar Snackbar
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center flex-wrap">
+        <MudPaper Class="mud-width-full" Style="height: 300px; position: relative">
+            <MudLoading @bind-Loading="_loading" LoaderType="_loaderType" Text="@_text" ClassText="@_classText" ClassLoader="@_classLoader" StyleText="@_styleText" StyleLoader="@_styleLoader">
+                <MudStack>
+                    <MudText>This is a text inside a paper. Its the content.</MudText>
+                    <MudButton OnClick="ShowSnackbar" Variant="Variant.Filled" Color="Color.Primary">A Button Can Not Be Clickable While Loading</MudButton>
+                </MudStack>
+            </MudLoading>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack>
+            <MudSwitch @bind-Checked="_loading" Color="Color.Primary">Loading</MudSwitch>
+            <MudSelect @bind-Value="_loaderType" Variant="Variant.Outlined" Label="Loader Type">
+                <MudSelectItem Value="LoaderType.Circular">Circular</MudSelectItem>
+                <MudSelectItem Value="LoaderType.Linear">Linear</MudSelectItem>
+            </MudSelect>
+            <MudTextField @bind-Value="_text" Variant="Variant.Outlined" Label="Text" />
+            <MudTextField @bind-Value="_classText" Variant="Variant.Outlined" Label="Text Class" />
+            <MudTextField @bind-Value="_styleText" Variant="Variant.Outlined" Label="Text Style" />
+            <MudTextField @bind-Value="_classLoader" Variant="Variant.Outlined" Label="Loader Class" />
+            <MudTextField @bind-Value="_styleLoader" Variant="Variant.Outlined" Label="Loader Style" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    bool _loading = true;
+    string _text = "Some text.";
+    string _classText;
+    string _styleText;
+    string _classLoader;
+    string _styleLoader;
+    LoaderType _loaderType = LoaderType.Circular;
+
+    private void ShowSnackbar()
+    {
+        Snackbar.Add("Button clicked.", Severity.Info);
+    }
+}

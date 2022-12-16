@@ -16,7 +16,7 @@ namespace MudExtensions
             .AddClass("mt-4")
             .AddClass(ClassText)
             .Build();
-
+        
         bool _loading = true;
         /// <summary>
         /// Two way binded loading state.
@@ -63,6 +63,27 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public string ClassText { get; set; }
+
+        /// <summary>
+        /// CSS classes for the progress component, seperated by space.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public string ClassLoader { get; set; }
+
+        /// <summary>
+        /// CSS style for the text.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public string StyleText { get; set; }
+        
+        /// <summary>
+        /// CSS style for the progress component.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public string StyleLoader { get; set; }
 
         /// <summary>
         /// If true, show a darken background.
