@@ -28,19 +28,19 @@ namespace MudExtensions
     }
 
     //Header fields in your CSV File
-    public class MudCSVHeader
+    public class MudCsvHeader
     {
         public string Name { get; set; } = "";
         public string MappedField { get; set; } = "File";
 
-        public MudCSVHeader(string name, string mappedField = "File")
+        public MudCsvHeader(string name, string mappedField = "File")
         {
             Name = name;
             MappedField = mappedField;
         }
     }
 
-    public partial class MudCSVFieldMapper : MudComponentBase
+    public partial class MudCsvMapper : MudComponentBase
     {
         protected string Classname =>
            new CssBuilder("mud-input-input-control")
@@ -56,24 +56,24 @@ namespace MudExtensions
         private bool _valid = false;
 
         [Parameter]
-        public IBrowserFile CSVFile { get; set; } = null;
+        public IBrowserFile CsvFile { get; set; } = null;
 
         [Parameter]
         public byte[] FileContentByte { get; set; }
 
         //if you want to see what was mapped use this dictionary
         [Parameter]
-        public Dictionary<string, string> CSVMapping { get; set; } = new();
+        public Dictionary<string, string> CsvMapping { get; set; } = new();
 
         [Parameter]
         public EventCallback<bool> OnUpload { get; set; }
 
         private static string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
         private string DragClass = DefaultDragClass;
-        private MudDropContainer<MudCSVHeader> DropContainer;
+        private MudDropContainer<MudCsvHeader> DropContainer;
         private List<string> FileNames = new List<string>();
         private string HeaderLine = "";
-        List<MudCSVHeader> MudCSVHeaders = new();
+        List<MudCsvHeader> MudCsvHeaders = new();
         string FileContentStr;
 
         protected override void OnInitialized()
@@ -118,7 +118,7 @@ namespace MudExtensions
                 var reader = new StreamReader(new MemoryStream(FileContentByte), Encoding.Default);
                 HeaderLine = reader.ReadLine();
                 ReadCSVHeaders(HeaderLine);
-                CSVFile = files[0];
+                CsvFile = files[0];
                 FileContentStr = reader.ReadToEnd();
             }
         }
@@ -126,12 +126,12 @@ namespace MudExtensions
         public async Task Upload()
         {
             string NewHeader = HeaderLine;
-            for (int i = 0; i < MudCSVHeaders.Count; i++)
+            for (int i = 0; i < MudCsvHeaders.Count; i++)
             {
-                if (MudCSVHeaders[i].MappedField != "File")
+                if (MudCsvHeaders[i].MappedField != "File")
                 {
-                    NewHeader = Regex.Replace(NewHeader, String.Format(@"\b{0}\b", MudCSVHeaders[i].Name), MudCSVHeaders[i].MappedField);
-                    CSVMapping.Add(MudCSVHeaders[i].MappedField, MudCSVHeaders[i].Name);
+                    NewHeader = Regex.Replace(NewHeader, String.Format(@"\b{0}\b", MudCsvHeaders[i].Name), MudCsvHeaders[i].MappedField);
+                    CsvMapping.Add(MudCsvHeaders[i].MappedField, MudCsvHeaders[i].Name);
                 }
             }
 
@@ -151,22 +151,25 @@ namespace MudExtensions
                 bool matchedField = false;
                 for (int i = 0; i < MudFieldHeaders.Count; i++)
                 {
-                    //Todo Create an optional Parent Method for Comparison so someone could use a fuzzy name matcher: https://github.com/JakeBayer/FuzzySharp
-                    //if (FuzzySharp.Fuzz.Ratio(MudFieldHeaders[i].Name.ToLower(), csvField.ToLower()) > 90)
+                    //Do an exact match on the fields first
                     if (String.Compare(MudFieldHeaders[i].Name, csvField, StringComparison.CurrentCultureIgnoreCase) == 0)
-                    {                    
+                    {
                         if (MudFieldHeaders[i].FieldCount == 0) //only match if it hasn't already been matched
-                        { 
-                            MudCSVHeaders.Add(new MudCSVHeader(csvField, MudFieldHeaders[i].Name));
+                        {
+                            MudCsvHeaders.Add(new MudCsvHeader(csvField, MudFieldHeaders[i].Name));
                             MudFieldHeaders[i].FieldCount++;
                             matchedField = true;
                             break;
                         }
                     }
+                    
+                    //Then do a Fuzzy match if possible. This works best because sometimes you have fields that are substrings of another field
+                    //Todo Create an optional Parent Method for Comparison so someone could use a fuzzy name matcher: https://github.com/JakeBayer/FuzzySharp
+                    //if (FuzzySharp.Fuzz.Ratio(MudFieldHeaders[i].Name.ToLower(), csvField.ToLower()) > 90)
                 }
 
                 if (matchedField) continue;
-                MudCSVHeaders.Add(new MudCSVHeader(csvField));
+                MudCsvHeaders.Add(new MudCsvHeader(csvField));
             }
 
             IsValid();
@@ -183,7 +186,7 @@ namespace MudExtensions
         }
 
         /* handling board events */
-        private void TaskUpdated(MudItemDropInfo<MudCSVHeader> mudCSVField)
+        private void TaskUpdated(MudItemDropInfo<MudCsvHeader> mudCSVField)
         {
             string oldMappedField = mudCSVField.Item.MappedField;
             mudCSVField.Item.MappedField = mudCSVField.DropzoneIdentifier;
@@ -210,7 +213,7 @@ namespace MudExtensions
         {
             foreach (MudFieldHeader mudFieldHeader in MudFieldHeaders.Where(i => i.Required))
             {
-                if (!MudCSVHeaders.Where(i => i.MappedField == mudFieldHeader.Name).Any())
+                if (!MudCsvHeaders.Where(i => i.MappedField == mudFieldHeader.Name).Any())
                 {
                     _valid = false;
                     return;

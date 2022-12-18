@@ -3,11 +3,11 @@
 @using MudExtensions.Utilities
 
 <MudGrid Class="cursor-default">
-    <MudCSVFieldMapper @ref="csvFieldMapper" MudFieldHeaders="PartnerFields" OnUpload="Upload"></MudCSVFieldMapper>
+    <MudCsvMapper @ref="csvMapper" MudFieldHeaders="PartnerFields" OnUpload="Upload"></MudCsvMapper>
 </MudGrid>
 
 @code {
-    MudCSVFieldMapper csvFieldMapper;
+    MudCsvMapper csvMapper;
 
     List<MudFieldHeader> PartnerFields = new() {
         new MudFieldHeader("Email", true),
@@ -18,10 +18,10 @@
 
     private async Task<bool> Upload()
     {
-        var file = csvFieldMapper.CSVFile; //IBrowserFile / .csv that was uploaded
-        byte[] FileContent = csvFieldMapper.FileContentByte; // file with headers updated to correct names
+        var file = csvMapper.CsvFile; //IBrowserFile / .csv that was uploaded
+        byte[] FileContent = csvMapper.FileContentByte; // file with headers updated to correct names
 
-        Snackbar.Add($"Headers Mapped!", Severity.Info);
+        Snackbar.Add($"CSV Mapped!", Severity.Info);
         return true;
         //Send renamed headers with CSV file to MudTable or Database to be parsed
     }

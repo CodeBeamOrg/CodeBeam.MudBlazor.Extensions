@@ -1,5 +1,6 @@
 ﻿@namespace MudExtensions
 @inherits MudComponentBase
+
 @using Microsoft.AspNetCore.Components
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.Forms
@@ -54,13 +55,13 @@
 		</MudFileUpload>
 	</MudStack>
 
-	<MudDropContainer T="MudCSVHeader" @ref="DropContainer" Items="@MudCSVHeaders" ItemsSelector="@((item,column) => item.MappedField == column)" ItemDropped="TaskUpdated">
+	<MudDropContainer T="MudCsvHeader" @ref="DropContainer" Items="@MudCsvHeaders" ItemsSelector="@((item,column) => item.MappedField == column)" ItemDropped="TaskUpdated">
 		<ChildContent>
-			@if (MudCSVHeaders.Count > 0)
+			@if (MudCsvHeaders.Count > 0)
 			{
 				<h2 class="d-flex" style="width:100%">CSV File Headers</h2>
 				<div class="d-flex flex-column flex-grow-1 my-2">
-					<MudDropZone T="MudCSVHeader" Identifier="File" DraggingClass="mud-alert-text-info"
+					<MudDropZone T="MudCsvHeader" Identifier="File" DraggingClass="mud-alert-text-info"
 							 ItemDraggingClass="mud-alert-text-info" style="min-height:40px"
 								Class="rounded-lg border-2 border-dashed mud-border-lines-default pa-2 flex-row">				
 					</MudDropZone>
@@ -75,7 +76,7 @@
 
 				@foreach (var item in MudFieldHeaders)
 				{
-					<MudDropZone T="MudCSVHeader" Identifier="@item.Name" DraggingClass="mud-alert-text-info"
+					<MudDropZone T="MudCsvHeader" Identifier="@item.Name" DraggingClass="mud-alert-text-info"
 							CanDrop="@((x) => (item.FieldCount == 0))"
 							ItemDraggingClass="mud-alert-text-error" Class="rounded-lg border-2 border-dashed mud-border-lines-default pa-2 my-1">
 						<MudText Typo="Typo.subtitle1">
