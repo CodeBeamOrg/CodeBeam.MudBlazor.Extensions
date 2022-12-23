@@ -5,23 +5,16 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.Forms
 
-<div class="@Class" style="@Style">
+<div class="@Classname" style="@Style">
 
-<style>
-	.mud-drop-item{
+	<style>
+	.mud-csv-mapper .mud-drop-item{
 	    flex-shrink: 0 !important;
 		display:inline-block !important;
 		margin: 0 4px;
 	}
 	</style>
 
-	<style>
-		.mud-drop-item {
-			flex-shrink: 0 !important;
-			display: inline-block !important;
-			margin: 0 4px;
-		}
-	</style>
 
 	<MudStack Style="width: 100%">
 		<MudFileUpload T="IBrowserFile" Accept=".csv" OnFilesChanged="OnInputFileChanged" Hidden="false" Class="flex-1 d-flex justify-center align-content-center my-2"
@@ -39,9 +32,9 @@
 						<h3>
 							<MudFab HtmlTag="Button"
 									Color="Color.Secondary"
-									Label="Choose a .csv file"
+									Label="@LocalizedStrings.ChooseFile"
 									Icon="@Icons.Outlined.CloudDownload" Size="Size.Large"
-									for="@context" /> or Drag and Drop a CSV file here.
+									for="@context" />@LocalizedStrings.OrDragAndDrop
 						</h3>
 					</MudPaper>
 					<MudPaper Elevation="0" class="d-flex justify-center align-content-center mud-transparent m2">
@@ -70,9 +63,9 @@
 			<div class="d-flex flex-wrap justify-space-between">				
 				@if (MudFieldHeaders.Count == 0)
 				{
-					<MudText Typo="Typo.overline" class="--mud-palette-error">Define your MudFieldHeaders / Expected column in your code</MudText>
+					<MudText Typo="Typo.overline" class="--mud-palette-error">@LocalizedStrings.DefineHeaders</MudText>
 				}
-				<h2 class="d-flex" style="width:100%">Expected Headers</h2>
+				<h2 class="d-flex" style="width:100%">@LocalizedStrings.ExpectedHeaders</h2>
 
 				@foreach (var item in MudFieldHeaders)
 				{
@@ -89,7 +82,7 @@
 						@if (item.FieldCount == 0)
 						{
 							<MudPaper Elevation="0" Class="pa-2 ma-2 d-flex flex-column mud-background-gray rounded-lg">
-								<MudText Typo="Typo.overline">Drag Here</MudText>
+								<MudText Typo="Typo.overline">@LocalizedStrings.DragHere</MudText>
 							</MudPaper>
 						}
 					</MudDropZone>
@@ -103,5 +96,5 @@
 
 	</MudDropContainer>
 
-	<MudButton Class="my-2" Color="Color.Primary" StartIcon="@Icons.Filled.CloudDownload" Variant="Variant.Filled" OnClick="@(() => Upload())" Disabled="!_valid">Import</MudButton>
+	<MudButton Class="my-2" Color="Color.Primary" StartIcon="@Icons.Filled.CloudDownload" Variant="Variant.Filled" OnClick="@(() => Upload())" Disabled="!_valid">@LocalizedStrings.Import</MudButton>
 </div>

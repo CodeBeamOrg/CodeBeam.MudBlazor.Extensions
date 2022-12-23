@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
-using System.Text.RegularExpressions;
-using System.Text;
 using MudBlazor.Utilities;
+using MudExtensions.Utilities;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MudExtensions
 {
@@ -43,9 +44,15 @@ namespace MudExtensions
     public partial class MudCsvMapper : MudComponentBase
     {
         protected string Classname =>
-           new CssBuilder("mud-input-input-control")
+           new CssBuilder("mud-csv-mapper")
            .AddClass(Class)
            .Build();
+
+        /// <summary>
+        /// A class for provide all local strings at once.
+        /// </summary>
+        [Parameter]
+        public CsvMapperLocalizedStrings LocalizedStrings { get; set; } = new();
 
         /// <summary>
         /// Choose Table Column Headers
@@ -162,7 +169,7 @@ namespace MudExtensions
                             break;
                         }
                     }
-                    
+
                     //Then do a Fuzzy match if possible. This works best because sometimes you have fields that are substrings of another field
                     //Todo Create an optional Parent Method for Comparison so someone could use a fuzzy name matcher: https://github.com/JakeBayer/FuzzySharp
                     //if (FuzzySharp.Fuzz.Ratio(MudFieldHeaders[i].Name.ToLower(), csvField.ToLower()) > 90)
