@@ -58,8 +58,8 @@
                 <MudTd>
                     @if (true)
                     {
-                        MudGallery animate = new();
-                        <MudText Typo="Typo.body2">@(context.GetValue(animate)?.ToString() ?? "null")</MudText>
+                        MudCsvMapper instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
                     }
                 </MudTd>
             </RowTemplate>

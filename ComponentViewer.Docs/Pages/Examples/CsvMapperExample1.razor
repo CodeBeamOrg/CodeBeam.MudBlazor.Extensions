@@ -3,13 +3,13 @@
 @using MudExtensions.Utilities
 
 <MudGrid Class="cursor-default">
-    <MudCsvMapper @ref="csvMapper" MudFieldHeaders="PartnerFields" OnUpload="Upload"></MudCsvMapper>
+    <MudCsvMapper @ref="_csvMapper" Class="pa-4" MudFieldHeaders="_partnerFields" OnUpload="Upload"></MudCsvMapper>
 </MudGrid>
 
 @code {
-    MudCsvMapper csvMapper;
+    MudCsvMapper _csvMapper;
 
-    List<MudFieldHeader> PartnerFields = new() {
+    List<MudFieldHeader> _partnerFields = new() {
         new MudFieldHeader("Email", true),
         new MudFieldHeader("First Name"),
         new MudFieldHeader("Last Name"),
@@ -18,8 +18,8 @@
 
     private async Task<bool> Upload()
     {
-        var file = csvMapper.CsvFile; //IBrowserFile / .csv that was uploaded
-        byte[] FileContent = csvMapper.FileContentByte; // file with headers updated to correct names
+        var file = _csvMapper.CsvFile; //IBrowserFile / .csv that was uploaded
+        byte[] fileContent = _csvMapper.FileContentByte; // file with headers updated to correct names
 
         Snackbar.Add($"CSV Mapped!", Severity.Info);
         return true;
