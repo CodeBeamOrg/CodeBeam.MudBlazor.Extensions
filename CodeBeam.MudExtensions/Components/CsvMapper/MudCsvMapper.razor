@@ -1,0 +1,100 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+@using Microsoft.AspNetCore.Components
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="@Classname" style="@Style">
+
+    <style>
+        .mud-csv-mapper .mud-drop-item {
+            flex-shrink: 0 !important;
+            display: inline-block !important;
+            margin: 0 4px;
+        }
+    </style>
+
+
+    <MudStack Style="width: 100%">
+        <MudFileUpload T="IBrowserFile" Accept=".csv" OnFilesChanged="OnInputFileChanged" Hidden="false" Class="flex-1 d-flex justify-center align-content-center my-2"
+                       InputClass="absolute mud-width-full mud-height-full d-flex justify-center align-content-center overflow-hidden z-20" InputStyle="opacity:0"
+                       @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass">
+            <ButtonTemplate>
+                <MudPaper Outlined="true" Class="@("d-flex flex-column justify-center align-content-center mud-background-gray p-2 " + DragClass)">
+                    <MudPaper Elevation="0" class="mud-transparent d-flex justify-center align-content-center">
+                        <svg class="mud-icon-root" viewBox="0 0 24 24" height="75" width="75" style=" height:75px; width:175px;" aria-hidden="true">
+                            <path d="M0 0h24v24H0V0z" fill="none"></path>
+                            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3zm-5.55-8h-2.9v3H8l4 4 4-4h-2.55z"></path>
+                        </svg>
+                    </MudPaper>
+                    <MudPaper Elevation="0" class="d-flex justify-center align-content-center mud-transparent">
+                        <h3>
+                            <MudFab HtmlTag="Button"
+                                    Color="Color.Secondary"
+                                    Label="@LocalizedStrings.ChooseFile"
+                                    Icon="@Icons.Outlined.CloudDownload" Size="Size.Large"
+                                    for="@context" />@LocalizedStrings.OrDragAndDrop
+                        </h3>
+                    </MudPaper>
+                    <MudPaper Elevation="0" class="d-flex justify-center align-content-center mud-transparent m2">
+                        @foreach (var file in FileNames)
+                        {
+                            <MudChip Color="Color.Dark" Text="@file" />
+                        }
+                    </MudPaper>
+                </MudPaper>
+            </ButtonTemplate>
+        </MudFileUpload>
+    </MudStack>
+
+    <MudDropContainer T="MudCsvHeader" @ref="DropContainer" Items="@MudCsvHeaders" ItemsSelector="@((item,column) => item.MappedField == column)" ItemDropped="TaskUpdated">
+        <ChildContent>
+            @if (MudCsvHeaders.Count > 0)
+            {
+                <h2 class="d-flex" style="width:100%">CSV File Headers</h2>
+                <div class="d-flex flex-column flex-grow-1 my-2">
+                    <MudDropZone T="MudCsvHeader" Identifier="File" DraggingClass="mud-alert-text-info"
+                             ItemDraggingClass="mud-alert-text-info" style="min-height:40px"
+                             Class="rounded-lg border-2 border-dashed mud-border-lines-default pa-2 flex-row">
+                    </MudDropZone>
+                </div>
+            }
+            <div class="d-flex flex-wrap justify-space-between">
+                @if (MudFieldHeaders.Count == 0)
+                {
+                    <MudText Typo="Typo.overline" class="--mud-palette-error">@LocalizedStrings.DefineHeaders</MudText>
+                }
+                <h2 class="d-flex" style="width:100%">@LocalizedStrings.ExpectedHeaders</h2>
+
+                @foreach (var item in MudFieldHeaders)
+                {
+                    <MudDropZone T="MudCsvHeader" Identifier="@item.Name" DraggingClass="mud-alert-text-info"
+                             CanDrop="@((x) => (item.FieldCount == 0))"
+                             ItemDraggingClass="mud-alert-text-error" Class="rounded-lg border-2 border-dashed mud-border-lines-default pa-2 my-1">
+                        <MudText Typo="Typo.subtitle1">
+                            <b>@item.Name</b>
+                            @if (item.Required)
+                            {
+                                <b>*</b>
+                            }
+                        </MudText>
+                        @if (item.FieldCount == 0)
+                        {
+                            <MudPaper Elevation="0" Class="pa-2 ma-2 d-flex flex-column mud-background-gray rounded-lg">
+                                <MudText Typo="Typo.overline">@LocalizedStrings.DragHere</MudText>
+                            </MudPaper>
+                        }
+                    </MudDropZone>
+                }
+            </div>
+
+        </ChildContent>
+        <ItemRenderer>
+            <MudPaper Elevation="5" Class="pa-4 rounded-lg my-3 flex-shrink-0">@context.Name</MudPaper>
+        </ItemRenderer>
+
+    </MudDropContainer>
+
+    <MudButton Class="my-2" Color="Color.Primary" StartIcon="@Icons.Filled.CloudDownload" Variant="Variant.Filled" OnClick="@(() => Upload())" Disabled="!_valid">@LocalizedStrings.Import</MudButton>
+</div>
