@@ -116,7 +116,10 @@ namespace MudExtensions
         [Parameter]
         public EventCallback DimensionChanged { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        [Parameter]
+        public EventCallback OnDoubleClicked { get; set; }
+
+      protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
             await UpdateDimensions();
@@ -147,5 +150,10 @@ namespace MudExtensions
             await UpdateDimensions();
         }
 
+        async Task OnDoubleClick()
+        {
+           if (OnDoubleClicked.HasDelegate)
+              await OnDoubleClicked.InvokeAsync();
+        }
     }
 }

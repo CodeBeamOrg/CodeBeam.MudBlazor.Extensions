@@ -2,7 +2,7 @@
 @inherits MudComponentBase
 
 <div class="@Classname" style="@Style">
-    <MudSlider @ref="_slider" Class="@SliderClassname" Style="overflow: hidden; z-index: 6" T="double" Min="0" Max="100" Step="@Sensitivity" ValueChanged="UpdateDimensions" Disabled="DisableSlide"/>
+    <MudSlider @ref="_slider" ondblclick="@OnDoubleClick" Class="@SliderClassname" Style="overflow: hidden; z-index: 6" T="double" Min="0" Max="100" Step="@Sensitivity" ValueChanged="UpdateDimensions" Disabled="DisableSlide"/>
 
     <div class="@ContentClassname" style="@StyleContent">
         @StartContent
