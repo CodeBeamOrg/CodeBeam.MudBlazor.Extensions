@@ -42,7 +42,6 @@
     bool _bordered = false;
     bool _disableSlide = false;
     bool _disableMargin = false;
-    bool _enabledDoubleClick = false;
     double _sensitivity = 0.1d;
 
     private void DimensionChanged()
@@ -50,9 +49,9 @@
         _percentage = _splitter.GetStartContentPercentage();
     }
 
-    private void OnDoubleClicked()
+    private async Task OnDoubleClicked()
     {
         _percentage = 50;
-        _splitter.SetDimensions(_percentage);
+        await _splitter.SetDimensions(_percentage);
     }
 }
