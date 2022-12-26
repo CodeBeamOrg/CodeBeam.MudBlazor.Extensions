@@ -19,7 +19,7 @@ namespace MudExtensions
             .Build();
 
         protected string ContentClassname => new CssBuilder($"mud-splitter-content mud-splitter-content-{_styleGuid} d-flex")
-            .AddClass("ma-2", !DisableMargin)
+            .AddClass("ma-2", !DisableMargin && string.IsNullOrWhiteSpace(Margin))
             .AddClass(Margin, !DisableMargin && !string.IsNullOrWhiteSpace(Margin))
             .AddClass(ClassContent)
             .Build();
