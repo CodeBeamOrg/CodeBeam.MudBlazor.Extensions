@@ -3,7 +3,18 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudSplitter @ref="_splitter" Height="@_height" Color="_color" Bordered="_bordered" OnDoubleClicked="@OnDoubleClicked" DimensionChanged="DimensionChanged" DisableSlide="_disableSlide" DisableMargin="_disableMargin" Sensitivity="_sensitivity" Overlap="true">
+        <MudSplitter @ref="@_splitter"
+            Height="@_height"
+            Color="@_color"
+            Bordered="@_bordered"
+            Margin="@_margin"
+            OnDoubleClicked="@OnDoubleClicked"
+            DimensionChanged="DimensionChanged"
+            DisableSlide="@_disableSlide"
+            DisableMargin="@_disableMargin"
+            Sensitivity="@_sensitivity"
+            Overlap="true">
+
             <StartContent>
                 <MudText>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</MudText>
             </StartContent>
@@ -16,19 +27,20 @@
 
     <MudItem xs="12" sm="4">
         <MudStack>
-            <MudTextField @bind-Value="_height" Variant="Variant.Outlined" Label="Height" Clearable="true" />
-            <MudSelect @bind-Value="_color" Variant="Variant.Outlined">
+            <MudTextField @bind-Value="@_height" Variant="Variant.Outlined" Label="Height" Clearable="true" />
+            <MudTextField @bind-Value="@_margin" Variant="Variant.Outlined" Label="Margin" Clearable="true" />
+            <MudSelect @bind-Value="@_color" Variant="Variant.Outlined">
                 @foreach (Color col in Enum.GetValues<Color>())
                 {
                     <MudSelectItem Value="col">@col.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSwitchM3 @bind-Checked="_bordered" Color="Color.Primary" Label="Border" />
-            <MudSwitchM3 @bind-Checked="_disableSlide" Color="Color.Primary" Label="Disable" />
-            <MudSwitchM3 @bind-Checked="_disableMargin" Color="Color.Primary" Label="Disable Margin" />
+            <MudSwitchM3 @bind-Checked="@_bordered" Color="Color.Primary" Label="Border" />
+            <MudSwitchM3 @bind-Checked="@_disableSlide" Color="Color.Primary" Label="Disable" />
+            <MudSwitchM3 @bind-Checked="@_disableMargin" Color="Color.Primary" Label="Disable Margin (Default: ma-2)" />
             <MudDivider />
-            <MudNumericField @bind-Value="_sensitivity" Variant="Variant.Outlined" Min="0.01" Max="10" Step="0.1" Label="Sensitivity" />
-            <MudNumericField @bind-Value="_percentage" Variant="Variant.Outlined" Label="Start Content Percentage" />
+            <MudNumericField @bind-Value="@_sensitivity" Variant="Variant.Outlined" Min="0.01" Max="10" Step="0.1" Label="Sensitivity" />
+            <MudNumericField @bind-Value="@_percentage" Variant="Variant.Outlined" Label="Start Content Percentage" />
             <MudButton OnClick="@(() => _splitter.SetDimensions(_percentage))">Set Dimension (@_percentage)</MudButton>
         </MudStack>
     </MudItem>
@@ -36,7 +48,8 @@
 
 @code{
     MudSplitter _splitter;
-    string _height;
+    string _height = "250px";
+    string _margin;
     Color _color;
     double _percentage = 50;
     bool _bordered = false;

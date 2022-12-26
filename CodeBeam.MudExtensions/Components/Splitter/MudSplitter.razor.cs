@@ -1,16 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using MudBlazor.Components.Highlighter;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MudExtensions.Extensions;
-using static MudBlazor.CategoryTypes;
 
 namespace MudExtensions
 {
@@ -28,6 +20,7 @@ namespace MudExtensions
 
         protected string ContentClassname => new CssBuilder($"mud-splitter-content mud-splitter-content-{_styleGuid} d-flex")
             .AddClass("ma-2", !DisableMargin)
+            .AddClass(Margin, !DisableMargin && !string.IsNullOrWhiteSpace(Margin))
             .AddClass(ClassContent)
             .Build();
 
@@ -100,6 +93,13 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public bool DisableMargin { get; set; }
+
+        /// <summary>
+        /// The default margin.
+        /// </summary>
+        [Parameter]
+        public string Margin { get; set; }
+
 
         ///// <summary>
         ///// If true, splitter bar goes vertical.
