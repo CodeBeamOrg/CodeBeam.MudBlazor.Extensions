@@ -3,7 +3,11 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudSplitter @ref="_splitter" Height="@_height" Color="_color" Bordered="_bordered" OnDoubleClicked="@OnDoubleClicked" DimensionChanged="DimensionChanged" DisableSlide="_disableSlide" DisableMargin="_disableMargin" Sensitivity="_sensitivity" Overlap="true">
+        <MudSplitter @ref="_splitter"
+                     @bind-Dimension="@_percentage"
+                     OnDoubleClicked="@OnDoubleClicked"
+                     EnableSlide="@_sliderEnabled" EnableMargin="@_marginEnabled" Sensitivity="_sensitivity"
+                     StyleBar="width:3px !important;" Height="@_height" Color="_color" Bordered="_borderedEnabled">
             <StartContent>
                 <MudText>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</MudText>
             </StartContent>
@@ -16,42 +20,38 @@
 
     <MudItem xs="12" sm="4">
         <MudStack>
-            <MudTextField @bind-Value="_height" Variant="Variant.Outlined" Label="Height" Clearable="true" />
-            <MudSelect @bind-Value="_color" Variant="Variant.Outlined">
-                @foreach (Color col in Enum.GetValues<Color>())
-                {
-                    <MudSelectItem Value="col">@col.ToDescriptionString()</MudSelectItem>
-                }
+            <MudTextField @bind-Value="_height" Variant="Variant.Outlined" Label="Height px" Clearable />
+            <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Clearable>
+            @foreach (Color col in Enum.GetValues<Color>())
+            {
+                   <MudSelectItem Value="col">@col.ToDescriptionString()</MudSelectItem>
+            }
             </MudSelect>
-            <MudSwitchM3 @bind-Checked="_bordered" Color="Color.Primary" Label="Border" />
-            <MudSwitchM3 @bind-Checked="_disableSlide" Color="Color.Primary" Label="Disable" />
-            <MudSwitchM3 @bind-Checked="_disableMargin" Color="Color.Primary" Label="Disable Margin" />
+            <MudSwitchM3 @bind-Checked="_borderedEnabled" Color="Color.Primary" Label="Enable splitter-border" />
+            <MudSwitchM3 @bind-Checked="_sliderEnabled" Color="Color.Primary" Label="Enable splitter-bar" />
+            <MudSwitchM3 @bind-Checked="_marginEnabled" Color="Color.Primary" Label="Enable margin" />
+            <MudSwitchM3 @bind-Checked="@_doubleClickEnabled" Color="Color.Primary" Label="Enable double-click" />
             <MudDivider />
             <MudNumericField @bind-Value="_sensitivity" Variant="Variant.Outlined" Min="0.01" Max="10" Step="0.1" Label="Sensitivity" />
-            <MudNumericField @bind-Value="_percentage" Variant="Variant.Outlined" Label="Start Content Percentage" />
-            <MudButton OnClick="@(() => _splitter.SetDimensions(_percentage))">Set Dimension (@_percentage)</MudButton>
+            <MudNumericField @bind-Value="@_percentage" Variant="Variant.Outlined" Label="Dimension percentage" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
-@code{
-    MudSplitter _splitter;
-    string _height;
-    Color _color;
-    double _percentage = 50;
-    bool _bordered = false;
-    bool _disableSlide = false;
-    bool _disableMargin = false;
-    double _sensitivity = 0.1d;
+@code {
+   MudSplitter _splitter;
+   Color _color;
+   string _height = "400px";
+   double _sensitivity = 0.1d;
+   double _percentage = 50;
+   bool? _sliderEnabled;
+   bool? _marginEnabled;
+   bool _borderedEnabled = true;
+   bool _doubleClickEnabled = true;
 
-    private void DimensionChanged()
-    {
-        _percentage = _splitter.GetStartContentPercentage();
-    }
-
-    private async Task OnDoubleClicked()
-    {
-        _percentage = 50;
-        await _splitter.SetDimensions(_percentage);
-    }
+   void OnDoubleClicked()
+   {
+      if (_doubleClickEnabled)
+         _percentage = 50;
+   }
 }

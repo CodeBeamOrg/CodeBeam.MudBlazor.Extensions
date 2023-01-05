@@ -1,16 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using MudBlazor.Components.Highlighter;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MudExtensions.Extensions;
-using static MudBlazor.CategoryTypes;
 
 namespace MudExtensions
 {
@@ -21,13 +12,13 @@ namespace MudExtensions
         MudSlider<double> _slider;
 
         protected string Classname => new CssBuilder("mud-splitter")
-            .AddClass($"border-solid border-8 mud-border-{Color.ToDescriptionString()}", Bordered == true)
+            .AddClass($"border-solid border-2 mud-border-{Color.ToDescriptionString()}", Bordered == true)
             .AddClass($"mud-splitter-generate mud-splitter-generate-{_styleGuid}")
             .AddClass(Class)
             .Build();
 
         protected string ContentClassname => new CssBuilder($"mud-splitter-content mud-splitter-content-{_styleGuid} d-flex")
-            .AddClass("ma-2", !DisableMargin)
+            .AddClass("ma-2", !EnableMargin.HasValue || EnableMargin.Value)
             .AddClass(ClassContent)
             .Build();
 
@@ -40,24 +31,12 @@ namespace MudExtensions
         [Parameter]
         public string ClassContent { get; set; }
 
-        string _height;
+        //string _height;
         /// <summary>
         /// The height of splitter.
         /// </summary>
         [Parameter]
-        public string Height 
-        { 
-            get => _height; 
-            set
-            {
-                if (value == _height)
-                {
-                    return;
-                }
-                _height = value;
-                UpdateDimensions().AndForgetExt();
-            }
-        }
+        public string Height { get; set; }
 
         /// <summary>
         /// The height of splitter.
@@ -89,17 +68,34 @@ namespace MudExtensions
         [Parameter]
         public double Sensitivity { get; set; } = 0.1d;
 
+        [Obsolete("DisableSlide is deprecated, please use property EnableSlide to set Slide.")]
+        [Parameter]
+        public bool DisableSlide
+        {
+            get { return EnableSlide.HasValue ? !EnableSlide.Value : false; }
+            set { EnableSlide = !value; }
+        }
         /// <summary>
-        /// If true, user cannot interact with splitter bar.
+        /// If true, user can interact with splitter bar.
+        /// Default is true.
         /// </summary>
         [Parameter]
-        public bool DisableSlide { get; set; }
+        public bool? EnableSlide { get; set; } = true;
 
+        [Obsolete("DisableMargin is deprecated, please use property EnableMargin to set Margin.")]
+        [Parameter]
+        public bool DisableMargin
+        {
+            get { return EnableMargin.HasValue ? !EnableMargin.Value : false; }
+            set { EnableMargin = !value; }
+        }
         /// <summary>
-        /// Disables the default margin.
+        /// Enables the default margin.
+        /// Default is true.
         /// </summary>
         [Parameter]
-        public bool DisableMargin { get; set; }
+        public bool? EnableMargin { get; set; } = true;
+
 
         ///// <summary>
         ///// If true, splitter bar goes vertical.
@@ -113,47 +109,44 @@ namespace MudExtensions
         [Parameter]
         public RenderFragment EndContent { get; set; }
 
+
+        /// <summary>
+        /// The start content's percentage.
+        /// Default is 50.
+        /// </summary>
         [Parameter]
-        public EventCallback DimensionChanged { get; set; }
+        public double Dimension { get; set; } = 50;
+
+        [Parameter]
+        public EventCallback<double> DimensionChanged { get; set; }
 
         [Parameter]
         public EventCallback OnDoubleClicked { get; set; }
 
-      protected override async Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            await UpdateDimensions();
+            await UpdateDimension(Dimension);
         }
 
-        double _firstContentDimension = 50;
-        double _secondContentDimension = 50;
-        protected async Task UpdateDimensions()
+        protected async Task UpdateDimension(double percentage)
         {
-            if (_slider == null)
-            {
-                return;
-            }
-            _firstContentDimension = _slider.Value;
-            _secondContentDimension = 100d - _firstContentDimension;
-            await DimensionChanged.InvokeAsync();
+            Dimension = percentage;
+            if (DimensionChanged.HasDelegate)
+                await DimensionChanged.InvokeAsync(percentage);
         }
-
-        public double GetStartContentPercentage() => _firstContentDimension;
 
         /// <summary>
         /// Updates the dimension with given the start content's percentage
         /// </summary>
         /// <param name="percentage"></param>
-        public async Task SetDimensions(double percentage)
-        {
-            _slider.Value = percentage;
-            await UpdateDimensions();
-        }
+        [Obsolete("SetDimensions is deprecated, please use property Dimension to set start content's percentage.")]
+        public Task SetDimensions(double percentage) => UpdateDimension(percentage);
 
         async Task OnDoubleClick()
         {
-           if (OnDoubleClicked.HasDelegate)
-              await OnDoubleClicked.InvokeAsync();
+            if (OnDoubleClicked.HasDelegate)
+                await OnDoubleClicked.InvokeAsync();
         }
     }
 }

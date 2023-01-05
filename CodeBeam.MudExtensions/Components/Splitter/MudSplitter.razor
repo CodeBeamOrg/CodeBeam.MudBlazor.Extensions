@@ -2,7 +2,9 @@
 @inherits MudComponentBase
 
 <div class="@Classname" style="@Style">
-    <MudSlider @ref="_slider" ondblclick="@OnDoubleClick" Class="@SliderClassname" Style="overflow: hidden; z-index: 6" T="double" Min="0" Max="100" Step="@Sensitivity" ValueChanged="UpdateDimensions" Disabled="DisableSlide"/>
+    <MudSlider @ref="_slider" Value="@Dimension" ValueChanged="@UpdateDimension" ondblclick="@OnDoubleClick"
+               T="double" Min="0" Max="100" Step="@Sensitivity" Disabled="@(EnableSlide.HasValue && !EnableSlide.Value)"
+               Class="@SliderClassname" Style="overflow: hidden; z-index: 6" />
 
     <div class="@ContentClassname" style="@StyleContent">
         @StartContent
@@ -13,7 +15,7 @@
 </div>
 
 <style>
-    @($".mud-splitter-generate-{_styleGuid} {{ grid-template-columns: {_firstContentDimension.ToInvariantString()}% {_secondContentDimension.ToInvariantString()}%; }}")
+    @($".mud-splitter-generate-{_styleGuid} {{ grid-template-columns: {Dimension.ToInvariantString()}% {(100 - Dimension).ToInvariantString()}%; }}")
 
     .mud-splitter-thumb-@(_styleGuid) ::-webkit-slider-thumb {
         @(Color == Color.Default ? "background-color: var(--mud-palette-action-default) !important;" : $"background-color: var(--mud-palette-{Color.ToDescriptionString()}) !important;") @(StyleBar)
