@@ -3,7 +3,7 @@
 
 <div class="@Classname" style="@Style">
     <MudSlider @ref="_slider" Value="@Dimension" ValueChanged="@UpdateDimension" ondblclick="@OnDoubleClick"
-               T="double" Min="0" Max="100" Step="@Sensitivity" Disabled="@(EnableSlide.HasValue && !EnableSlide.Value)"
+               T="double" Min="0" Max="100" Step="@Sensitivity" Disabled="@(!EnableSlide)"
                Class="@SliderClassname" Style="overflow: hidden; z-index: 6" />
 
     <div class="@ContentClassname" style="@StyleContent">

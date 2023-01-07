@@ -18,7 +18,7 @@ namespace MudExtensions
             .Build();
 
         protected string ContentClassname => new CssBuilder($"mud-splitter-content mud-splitter-content-{_styleGuid} d-flex")
-            .AddClass("ma-2", !EnableMargin.HasValue || EnableMargin.Value)
+            .AddClass("ma-2", EnableMargin)
             .AddClass(ClassContent)
             .Build();
 
@@ -60,7 +60,7 @@ namespace MudExtensions
         /// The splitter bar's styles, seperated by space. All styles have to include !important and end with ';'
         /// </summary>
         [Parameter]
-        public string StyleBar { get; set; }
+        public string StyleBar { get; set; } = "width:2px !important;";
 
         /// <summary>
         /// The slide sensitivity that should between 0.01 and 10. Smaller values increase the smooth but reduce performance. Default is 0.1
@@ -72,7 +72,7 @@ namespace MudExtensions
         [Parameter]
         public bool DisableSlide
         {
-            get { return EnableSlide.HasValue ? !EnableSlide.Value : false; }
+            get { return !EnableSlide; }
             set { EnableSlide = !value; }
         }
         /// <summary>
@@ -80,13 +80,13 @@ namespace MudExtensions
         /// Default is true.
         /// </summary>
         [Parameter]
-        public bool? EnableSlide { get; set; } = true;
+        public bool EnableSlide { get; set; } = true;
 
         [Obsolete("DisableMargin is deprecated, please use property EnableMargin to set Margin.")]
         [Parameter]
         public bool DisableMargin
         {
-            get { return EnableMargin.HasValue ? !EnableMargin.Value : false; }
+            get { return !EnableMargin; }
             set { EnableMargin = !value; }
         }
         /// <summary>
@@ -94,7 +94,7 @@ namespace MudExtensions
         /// Default is true.
         /// </summary>
         [Parameter]
-        public bool? EnableMargin { get; set; } = true;
+        public bool EnableMargin { get; set; } = true;
 
 
         ///// <summary>

@@ -7,7 +7,7 @@
                      @bind-Dimension="@_percentage"
                      OnDoubleClicked="@OnDoubleClicked"
                      EnableSlide="@_sliderEnabled" EnableMargin="@_marginEnabled" Sensitivity="_sensitivity"
-                     StyleBar="width:3px !important;" Height="@_height" Color="_color" Bordered="_borderedEnabled">
+                     Height="@_height" Color="_color" Bordered="_borderedEnabled">
             <StartContent>
                 <MudText>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</MudText>
             </StartContent>
@@ -44,8 +44,8 @@
    string _height = "400px";
    double _sensitivity = 0.1d;
    double _percentage = 50;
-   bool? _sliderEnabled;
-   bool? _marginEnabled;
+   bool _sliderEnabled = true;
+   bool _marginEnabled = true;
    bool _borderedEnabled = true;
    bool _doubleClickEnabled = true;
 
