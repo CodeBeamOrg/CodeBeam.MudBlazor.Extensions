@@ -77,13 +77,19 @@
 
                 @if (showResultStep == false)
                 {
-                    if (!DisableStepResultIndicator && (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued) || (ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
+                    if ((ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued) || (ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
                     {
-                        <MudButton Color="@Color" Variant="@Variant" Disabled="true">@(Steps[ActiveIndex].Status == StepStatus.Completed ? LocalizedStrings.Completed : LocalizedStrings.Skipped)</MudButton>
+                        if (!DisableStepResultIndicator)
+                        {
+                            <MudButton Color="@Color" Variant="@Variant" Disabled="true">@(Steps[ActiveIndex].Status == StepStatus.Completed ? LocalizedStrings.Completed : LocalizedStrings.Skipped)</MudButton>
+                        }
                     }
-                    else if (!DisableSkipButton && ActiveIndex < Steps.Count && Steps[ActiveIndex].Optional == true)
+                    else if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Optional == true)
                     {
+                        if (!DisableSkipButton)
+                        {
                         <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SkipStep(ActiveIndex))">@LocalizedStrings.Skip</MudButton>
+                        }
                     }
                 }
 
