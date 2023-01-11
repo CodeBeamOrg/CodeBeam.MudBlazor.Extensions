@@ -5,7 +5,7 @@
 <MudGrid Class="cursor-default">
     <MudItem xs="12" sm="8">
         <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant" DisableAnimation="_disableAnimation" HeaderTextView="_headerTextView"
-                    PreventStepChange="new Func<bool>(CheckChange)" LocalizedStrings="GetLocalizedStrings()">
+                    PreventStepChange="new Func<StepChangeDirection, bool>(CheckChange)" LocalizedStrings="GetLocalizedStrings()">
 
             <MudStep Title="Customer Info" StatusChanged="StatusChanged">
                 <MudForm @ref="_form">
@@ -88,10 +88,15 @@
     bool _customLocalization = false;
     Color _color = Color.Primary;
 
-    private bool CheckChange()
+    private bool CheckChange(StepChangeDirection direction)
     {
         if (_checkValidationBeforeComplete == true)
         {
+            // Always allow stepping backwards, even if forms are invalid
+            if (direction == StepChangeDirection.Backward)
+            {
+                return false;
+            }
             if (_stepper.GetActiveIndex() == 0)
             {
                 _form.Validate();

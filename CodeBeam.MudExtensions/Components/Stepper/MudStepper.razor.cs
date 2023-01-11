@@ -116,7 +116,7 @@ namespace MudExtensions
         public EventCallback<int> ActiveStepChanged { get; set; }
 
         [Parameter]
-        public Func<bool> PreventStepChange { get; set; }
+        public Func<StepChangeDirection, bool> PreventStepChange { get; set; }
 
         List<MudStep> _steps = new();
         List<MudStep> _allSteps = new();
@@ -167,7 +167,13 @@ namespace MudExtensions
 
         protected async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)
         {
-            if (skipPreventProcess == false && PreventStepChange != null && PreventStepChange.Invoke() == true)
+            var stepChangeDirection = (
+                count == 0 ? StepChangeDirection.None :
+                    count > 1 ? StepChangeDirection.Forward :
+                        StepChangeDirection.Backward
+            );
+
+            if (skipPreventProcess == false && PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection) == true)
             {
                 return;
             }
@@ -210,7 +216,13 @@ namespace MudExtensions
 
         public async Task CompleteStep(int index, bool moveToNextStep = true)
         {
-            if (PreventStepChange != null && PreventStepChange.Invoke() == true)
+            var stepChangeDirection = (
+                index == ActiveIndex ? StepChangeDirection.None : 
+                    index > ActiveIndex ? StepChangeDirection.Forward : 
+                        StepChangeDirection.Backward
+            );
+
+            if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection) == true)
             {
                 return;
             }
@@ -228,7 +240,13 @@ namespace MudExtensions
 
         public async Task SkipStep(int index, bool moveToNextStep = true)
         {
-            if (PreventStepChange != null && PreventStepChange.Invoke() == true)
+            var stepChangeDirection = (
+                index == ActiveIndex ? StepChangeDirection.None :
+                    index > ActiveIndex ? StepChangeDirection.Forward :
+                        StepChangeDirection.Backward
+            );
+
+            if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection) == true)
             {
                 return;
             }
