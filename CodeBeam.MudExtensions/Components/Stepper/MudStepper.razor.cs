@@ -73,6 +73,30 @@ namespace MudExtensions
         public bool DisableAnimation { get; set; }
 
         /// <summary>
+        /// If true, disables built-in "previous" step action button.
+        /// </summary>
+        [Parameter]
+        public bool DisablePreviousButton { get; set; }
+
+        /// <summary>
+        /// If true, disables built-in "next" step action button.
+        /// </summary>
+        [Parameter]
+        public bool DisableNextButton { get; set; }
+
+        /// <summary>
+        /// If true, disables built-in "skip" step action button.
+        /// </summary>
+        [Parameter]
+        public bool DisableSkipButton { get; set; }
+
+        /// <summary>
+        /// If true, disables built-in "completed"/"skipped" step result indictors shown in the actions panel.
+        /// </summary>
+        [Parameter]
+        public bool DisableStepResultIndicator { get; set; }
+
+        /// <summary>
         /// The predefined Mud color for header and action buttons.
         /// </summary>
         [Parameter]
