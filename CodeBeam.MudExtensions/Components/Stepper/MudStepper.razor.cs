@@ -169,7 +169,7 @@ namespace MudExtensions
         {
             var stepChangeDirection = (
                 count == 0 ? StepChangeDirection.None :
-                    count > 1 ? StepChangeDirection.Forward :
+                    count >= 1 ? StepChangeDirection.Forward :
                         StepChangeDirection.Backward
             );
 
@@ -218,7 +218,7 @@ namespace MudExtensions
         {
             var stepChangeDirection = (
                 index == ActiveIndex ? StepChangeDirection.None : 
-                    index > ActiveIndex ? StepChangeDirection.Forward : 
+                    index >= ActiveIndex ? StepChangeDirection.Forward : 
                         StepChangeDirection.Backward
             );
 
@@ -242,7 +242,7 @@ namespace MudExtensions
         {
             var stepChangeDirection = (
                 index == ActiveIndex ? StepChangeDirection.None :
-                    index > ActiveIndex ? StepChangeDirection.Forward :
+                    index >= ActiveIndex ? StepChangeDirection.Forward :
                         StepChangeDirection.Backward
             );
 
