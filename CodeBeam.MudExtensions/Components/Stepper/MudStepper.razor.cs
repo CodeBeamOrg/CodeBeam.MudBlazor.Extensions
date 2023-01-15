@@ -131,8 +131,12 @@ namespace MudExtensions
         public RenderFragment ChildContent { get; set; }
 
         /// <summary>
-        /// Overrides the action buttons (previous, next etc.) with custom render fragment.
+        /// Custom content to be shown between the "previous" and "next" action buttons.
         /// </summary>
+        /// <remarks>
+        /// If set, you must also supply a <code><MudSpacer /></code> somewhere in your render fragment
+        /// to ensure that the built-in action buttons are aligned correctly.
+        /// </remarks>
         [Parameter]
         public RenderFragment ActionContent { get; set; }
 

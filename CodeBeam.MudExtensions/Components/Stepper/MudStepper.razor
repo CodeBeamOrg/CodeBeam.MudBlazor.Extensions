@@ -70,10 +70,13 @@
 
                 @if (ActionContent != null)
                 {
+                    @* User will will provide their own MudSpacer in this render fragment *@
                     @ActionContent
                 }
-
-                <MudSpacer />
+                else
+                {
+                    <MudSpacer />
+                }
 
                 @if (showResultStep == false)
                 {
