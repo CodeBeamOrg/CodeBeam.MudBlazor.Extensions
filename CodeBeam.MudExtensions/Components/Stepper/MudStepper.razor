@@ -51,50 +51,63 @@
             </div>
             
             <div class="d-flex gap-4">
+                
+                @{
+                    bool showResultStep = ShowResultStep();
+                }
+
+                @if (!DisablePreviousButton && ActiveIndex != 0)
+                {
+                    if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued || showResultStep)
+                    {
+                        <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Filled.ChevronLeft" OnClick="@(() => SetActiveIndex(-1))" />
+                    }
+                    else
+                    {
+                        <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(-1))">@LocalizedStrings.Previous</MudButton>
+                    }
+                }
+
                 @if (ActionContent != null)
                 {
+                    @* The user will provide their own MudSpacer in this render fragment *@
                     @ActionContent
                 }
                 else
                 {
-                    bool showResultStep = ShowResultStep();
-                    if (ActiveIndex != 0)
-                    {
-                        if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued || showResultStep)
-                        {
-                            <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Filled.ChevronLeft" OnClick="@(() => SetActiveIndex(-1))" />
-                        }
-                        else
-                        {
-                            <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(-1))">@LocalizedStrings.Previous</MudButton>
-                        }
-                    }
-
                     <MudSpacer />
+                }
 
-                    if (showResultStep == false)
+                @if (showResultStep == false)
+                {
+                    if ((ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued) || (ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
                     {
-                        if ((ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued) || (ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
+                        if (!DisableStepResultIndicator)
                         {
                             <MudButton Color="@Color" Variant="@Variant" Disabled="true">@(Steps[ActiveIndex].Status == StepStatus.Completed ? LocalizedStrings.Completed : LocalizedStrings.Skipped)</MudButton>
                         }
-                        else if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Optional == true)
+                    }
+                    else if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Optional == true)
+                    {
+                        if (!DisableSkipButton)
                         {
-                            <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SkipStep(ActiveIndex))">@LocalizedStrings.Skip</MudButton>
+                        <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SkipStep(ActiveIndex))">@LocalizedStrings.Skip</MudButton>
                         }
                     }
-                    if (showResultStep == false && !(ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
-                    {
-                        if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued)
-                        {
-                            <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Filled.ChevronRight" OnClick="@(() => SetActiveIndex(1))" />
-                        }
-                        else
-                        {
-                            <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => CompleteStep(ActiveIndex))">@GetNextButtonString()</MudButton>
-                        }
-                    }  
                 }
+
+                @if (showResultStep == false && !DisableNextButton && !(ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
+                {
+                    if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued)
+                    {
+                        <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Filled.ChevronRight" OnClick="@(() => SetActiveIndex(1))" />
+                    }
+                    else
+                    {
+                        <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => CompleteStep(ActiveIndex))">@GetNextButtonString()</MudButton>
+                    }
+                }
+
             </div>
         </MudStack>
     </MudStack>

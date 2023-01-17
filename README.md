@@ -38,7 +38,7 @@
 | 6.0.0 - 6.0.3 | 6.0.16 | .Net 6 |
 | 6.0.4 - 6.0.12 | 6.0.17 - 6.0.18 | .Net 6 |
 | 6.1.0 - 6.1.4 | 6.1.0 - 6.1.2 | .Net 6 & .Net 7 |
-| 6.1.5 -6.1.7 | 6.1.4 - 6.1.6 | .Net 6 & .Net 7 |
+| 6.1.5 -6.1.8 | 6.1.4 - 6.1.7 | .Net 6 & .Net 7 |
 
 ## Installation
 This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />

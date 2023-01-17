@@ -4,7 +4,7 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>6.1.7</Version>
+		<Version>6.1.8</Version>
 		<Title>CodeBeam.MudBlazor.Extensions</Title>
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
@@ -50,9 +50,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\..\..\Desktop\Mud_Secondary.png">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
+		<None Include="..\..\..\..\Desktop\MudBuilder\Mud_Secondary.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
 		</None>
 		<None Include="Components\SwitchM3\MudSwitchM3.razor" />
 	</ItemGroup>
