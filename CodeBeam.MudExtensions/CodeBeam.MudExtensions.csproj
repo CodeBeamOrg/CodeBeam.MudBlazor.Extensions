@@ -50,9 +50,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\..\..\Desktop\Mud_Secondary.png">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
+		<None Include="..\..\..\..\Desktop\MudBuilder\Mud_Secondary.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
 		</None>
 		<None Include="Components\SwitchM3\MudSwitchM3.razor" />
 	</ItemGroup>
