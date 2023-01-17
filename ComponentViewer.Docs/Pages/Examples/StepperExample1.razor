@@ -1,47 +1,58 @@
 ﻿@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 @using MudBlazor.Extensions
 @using MudExtensions.Utilities
 
 <MudGrid Class="cursor-default">
     <MudItem xs="12" sm="8">
-        <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant" DisableAnimation="_disableAnimation" HeaderTextView="_headerTextView"
+        <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant" 
+                    DisableAnimation="_disableAnimation" DisablePreviousButton="_disablePreviousButton" DisableNextButton="_disableNextButton" 
+                    DisableSkipButton="_disableSkipButton" DisableStepResultIndicator="_disableStepResultIndicator" HeaderTextView="_headerTextView"
                     PreventStepChange="new Func<bool>(CheckChange)" LocalizedStrings="GetLocalizedStrings()">
-
-            <MudStep Title="Customer Info" StatusChanged="StatusChanged">
-                <MudForm @ref="_form">
-                    <MudStack>
-                        <MudTextField T="string" Label="Name" Variant="_variant" Required="true" />
-                        <MudTextField T="string" Label="Last Name" Variant="_variant" />
-                        <MudTextField T="string" Label="Adress" Variant="_variant" />
-                    </MudStack>
-                </MudForm>
-            </MudStep>
-            <MudStep Title="Booking Spec." Optional="true">
-                <MudCheckBox T="bool" Label="Early Check-in" Color="_color" />
-                <MudCheckBox T="bool" Label="Late Check-out" Color="_color" />
-                <MudCheckBox T="bool" Label="Twin Bed" Color="_color" />
-            </MudStep>
-            <MudStep Title="Payment">
-                <MudForm @ref="_form2">
-                    <MudStack>
-                        <MudTextField T="string" Label="Card Number" Variant="_variant" Required="true" />
-                        <MudStack Row="true">
-                            <MudTextField T="string" Label="Expire Date" Variant="_variant" Required="true" />
-                            <MudTextField T="string" Label="CVC" Variant="_variant" Required="true" />
+            <ChildContent>
+                <MudStep Title="Customer Info" StatusChanged="StatusChanged">
+                    <MudForm @ref="_form">
+                        <MudStack>
+                            <MudTextField T="string" Label="Name" Variant="_variant" Required="true" />
+                            <MudTextField T="string" Label="Last Name" Variant="_variant" />
+                            <MudTextField T="string" Label="Adress" Variant="_variant" />
                         </MudStack>
-                    </MudStack>
-                </MudForm>
-            </MudStep>
-
-            @if (_addResultStep)
-            {
-                <MudStep Title="Result Step" IsResultStep="true">
-                    <div class="d-flex flex-column align-center justify-center" style="height: 200px">
-                        <MudIconButton Icon="@Icons.Filled.DoneAll" Size="Size.Large" Variant="Variant.Filled" Color="Color.Success" />
-                        <MudText>Your reservation succesfully completed.</MudText>
-                    </div>
+                    </MudForm>
                 </MudStep>
-            }
+                <MudStep Title="Booking Spec." Optional="true">
+                    <MudCheckBox T="bool" Label="Early Check-in" Color="_color" />
+                    <MudCheckBox T="bool" Label="Late Check-out" Color="_color" />
+                    <MudCheckBox T="bool" Label="Twin Bed" Color="_color" />
+                </MudStep>
+                <MudStep Title="Payment">
+                    <MudForm @ref="_form2">
+                        <MudStack>
+                            <MudTextField T="string" Label="Card Number" Variant="_variant" Required="true" />
+                            <MudStack Row="true">
+                                <MudTextField T="string" Label="Expire Date" Variant="_variant" Required="true" />
+                                <MudTextField T="string" Label="CVC" Variant="_variant" Required="true" />
+                            </MudStack>
+                        </MudStack>
+                    </MudForm>
+                </MudStep>
+
+                @if (_addResultStep)
+                {
+                    <MudStep Title="Result Step" IsResultStep="true">
+                        <div class="d-flex flex-column align-center justify-center" style="height: 200px">
+                            <MudIconButton Icon="@Icons.Filled.DoneAll" Size="Size.Large" Variant="Variant.Filled" Color="Color.Success" />
+                            <MudText>Your reservation succesfully completed.</MudText>
+                        </div>
+                    </MudStep>
+                }
+            </ChildContent>
+            <ActionContent>
+                @if (!_stepper.IsAllStepsCompleted())
+                {
+                    <MudButton Color="Color.Secondary" Variant="_variant" OnClick="@(() => NavigationManager.NavigateTo("/"))">Cancel</MudButton>
+                }
+                <MudSpacer />
+            </ActionContent>
         </MudStepper>
     </MudItem>
 
@@ -49,6 +60,10 @@
         <MudStack Spacing="4">
             <MudCheckBox @bind-Checked="_linear" Color="Color.Primary" Label="Linear" Dense="true" />
             <MudCheckBox @bind-Checked="_disableAnimation" Color="Color.Primary" Label="Disable Animation" Dense="true" />
+            <MudCheckBox @bind-Checked="_disablePreviousButton" Color="Color.Primary" Label="Disable Previous Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Checked="_disableNextButton" Color="Color.Primary" Label="Disable Next Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Checked="_disableSkipButton" Color="Color.Primary" Label="Disable Skip Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Checked="_disableStepResultIndicator" Color="Color.Primary" Label="Disable Step Result Indicator" Dense="true" />
             <MudSwitch @bind-Checked="_addResultStep" Color="Color.Primary" Label="Has Result Step" />
             <MudSwitch @bind-Checked="_checkValidationBeforeComplete" Color="Color.Primary" Label="Check Validation Before Complete Step" />
             <MudSwitch @bind-Checked="_customLocalization" Color="Color.Primary" Label="Custom Localization (German)" />
@@ -84,6 +99,10 @@
     Variant _variant = Variant.Filled;
     HeaderTextView _headerTextView = HeaderTextView.All;
     bool _disableAnimation = false;
+    bool _disablePreviousButton = false;
+    bool _disableNextButton = false;
+    bool _disableSkipButton = false;
+    bool _disableStepResultIndicator = false;
     bool _addResultStep = true;
     bool _customLocalization = false;
     Color _color = Color.Primary;
