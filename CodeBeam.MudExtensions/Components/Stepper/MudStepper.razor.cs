@@ -144,7 +144,7 @@ namespace MudExtensions
         public EventCallback<int> ActiveStepChanged { get; set; }
 
         [Parameter]
-        public Func<bool> PreventStepChange { get; set; }
+        public Func<StepChangeDirection, bool> PreventStepChange { get; set; }
 
         List<MudStep> _steps = new();
         List<MudStep> _allSteps = new();
@@ -183,7 +183,7 @@ namespace MudExtensions
             StateHasChanged();
         }
 
-        protected async Task SetActiveIndex(MudStep step)
+        protected internal async Task SetActiveIndex(MudStep step)
         {
             if (_animate != null)
             {
@@ -193,9 +193,15 @@ namespace MudExtensions
             await ActiveStepChanged.InvokeAsync();
         }
 
-        protected async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)
+        protected internal async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)
         {
-            if (skipPreventProcess == false && PreventStepChange != null && PreventStepChange.Invoke() == true)
+            var stepChangeDirection = (
+                count == 0 ? StepChangeDirection.None :
+                    count >= 1 ? StepChangeDirection.Forward :
+                        StepChangeDirection.Backward
+            );
+
+            if (skipPreventProcess == false && PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection) == true)
             {
                 return;
             }
@@ -238,9 +244,14 @@ namespace MudExtensions
 
         public async Task CompleteStep(int index, bool moveToNextStep = true)
         {
-            if (PreventStepChange != null && PreventStepChange.Invoke() == true)
+            var isActiveStep = (index == ActiveIndex);
+            if (isActiveStep)
             {
-                return;
+                var stepChangeDirection = (moveToNextStep ? StepChangeDirection.Forward : StepChangeDirection.None);
+                if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection) == true)
+                {
+                    return;
+                }
             }
 
             Steps[index].SetStatus(StepStatus.Completed);
@@ -248,7 +259,7 @@ namespace MudExtensions
             {
                 await SetActiveIndex(1, true, true);
             }
-            else if (moveToNextStep)
+            else if (isActiveStep && moveToNextStep)
             {
                 await SetActiveIndex(1, skipPreventProcess: true);
             }
@@ -256,13 +267,18 @@ namespace MudExtensions
 
         public async Task SkipStep(int index, bool moveToNextStep = true)
         {
-            if (PreventStepChange != null && PreventStepChange.Invoke() == true)
+            var isActiveStep = (index == ActiveIndex);
+            if (isActiveStep)
             {
-                return;
+                var stepChangeDirection = (moveToNextStep ? StepChangeDirection.Forward : StepChangeDirection.None);
+                if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection) == true)
+                {
+                    return;
+                }
             }
 
             Steps[index].SetStatus(StepStatus.Skipped);
-            if (moveToNextStep)
+            if (isActiveStep && moveToNextStep)
             {
                 await SetActiveIndex(1, skipPreventProcess: true);
             }

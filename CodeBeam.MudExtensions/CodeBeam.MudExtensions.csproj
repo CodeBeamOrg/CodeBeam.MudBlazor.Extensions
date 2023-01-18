@@ -48,7 +48,13 @@
 		<Content Remove="compilerconfig.json" />
 		<Content Remove="excubowebcompiler.json" />
 	</ItemGroup>
-
+	
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>CodeBeam.MudExtensions.UnitTest</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+	
 	<ItemGroup>
 		<None Include="..\..\..\..\Desktop\MudBuilder\Mud_Secondary.png">
 		  <Pack>True</Pack>
