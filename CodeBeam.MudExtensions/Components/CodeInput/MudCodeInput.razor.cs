@@ -9,13 +9,29 @@ using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
-    public partial class MudCodeInput<T> : MudDebouncedInput<T>
+    public partial class MudCodeInput<T> : MudFormComponent<T, string>
     {
+        public MudCodeInput() : base(new DefaultConverter<T>()) { }
+
         protected string Classname =>
            new CssBuilder($"d-flex gap-{Spacing}")
            .AddClass(Class)
            .Build();
 
+        protected string InputClassname =>
+            new CssBuilder("justify-text-center")
+                .AddClass("mud-code", Variant != Variant.Text)
+                .AddClass(ClassInput)
+                .Build();
+
+        private List<MudTextField<T>> _elementReferences = new();
+
+        /// <summary>
+        /// The CSS classes for each input, seperated by space.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public string ClassInput { get; set; }
 
         /// <summary>
         /// Type of the input element. It should be a valid HTML5 input type.
@@ -24,11 +40,13 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public InputType InputType { get; set; } = InputType.Text;
 
+        /// <summary>
+        /// The value of the input.
+        /// </summary>
         private T _theValue;
-
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public T TheValue
+        public T Value
         {
             get => _theValue;
             set
@@ -42,6 +60,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// The event fires when value changed.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public EventCallback<T> TheValueChanged { get; set; }
@@ -73,9 +94,28 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// Determines the spacing between each input.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public int Spacing { get; set; } = 2;
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool Disabled { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool ReadOnly { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public Variant Variant { get; set; } = Variant.Text;
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public Margin Margin { get; set; }
 
         protected async Task HandleKeyDown(KeyboardEventArgs arg)
         {
@@ -83,11 +123,6 @@ namespace MudExtensions
             {
                 return;
             }
-
-            //if (arg.Key == "Shift")
-            //{
-            //    return;
-            //}
 
             if (RuntimeLocation.IsClientSide)
             {
@@ -106,17 +141,6 @@ namespace MudExtensions
             }
             
         }
-
-        protected async Task HandleKeyUp(KeyboardEventArgs arg)
-        {
-            if (Disabled || ReadOnly)
-            {
-                return;
-            }
-
-            await SetValue();
-        }
-
 
         private int _lastFocusedIndex = 0;
         protected void CheckFocus(int count)
@@ -161,8 +185,6 @@ namespace MudExtensions
             }
         }
 
-        private List<MudTextField<T>> _elementReferences = new();
-
         public async Task SetValue()
         {
             string result =  "";
@@ -177,8 +199,8 @@ namespace MudExtensions
                 result += val;
             }
 
-            TheValue = Converter.Get(result);
-            await TheValueChanged.InvokeAsync(TheValue);
+            Value = Converter.Get(result);
+            await TheValueChanged.InvokeAsync(Value);
         }
 
         public async Task SetValueFromOutside(T value)
@@ -188,7 +210,7 @@ namespace MudExtensions
             {
                 val = val.Substring(0, Count);
             }
-            TheValue = Converter.Get(val);
+            Value = Converter.Get(val);
             for (int i = 0; i < Count; i++)
             {
                 if (i < val.Length)
@@ -201,7 +223,7 @@ namespace MudExtensions
                 }
             }
 
-            await TheValueChanged.InvokeAsync(TheValue);
+            await TheValueChanged.InvokeAsync(Value);
             StateHasChanged();
         }
 

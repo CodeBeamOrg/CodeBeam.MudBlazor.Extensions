@@ -3,7 +3,7 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center" Style="height: 500px">
-        <MudCodeInput @ref="_textFieldGroup" T="string" @bind-TheValue="@_value" Count="@_count" Spacing="_spacing" Variant="@_variant" />
+        <MudCodeInput @ref="_textFieldGroup" T="string" @bind-TheValue="@_value" Count="@_count" Spacing="_spacing" Variant="@_variant" Margin="_margin" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -14,6 +14,12 @@
             <MudNumericField @bind-Value="_spacing" Label="Spacing" Variant="Variant.Outlined" />
             <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant">
                 @foreach (var item in Enum.GetValues<Variant>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="_margin" Variant="Variant.Outlined" Label="Margin">
+                @foreach (var item in Enum.GetValues<Margin>())
                 {
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
@@ -31,6 +37,7 @@
     int _count = 4;
     int _spacing = 2;
     Variant _variant = Variant.Outlined;
+    Margin _margin;
 
     private async Task SetValue()
     {
