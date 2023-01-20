@@ -1,0 +1,23 @@
+﻿@namespace MudExtensions
+@typeparam T
+@inherits MudDebouncedInput<T>
+
+<div class="@Classname" style="@Style">
+    @for (int i = 0; i < Count; i++)
+    {
+        int a = i;
+        <MudTextField @ref="_elementReferences[a]" T="T" Class="justify-text-center mud-code" Style="width: 42px" MaxLength="1"
+            @onkeydown="HandleKeyDown" @onfocus="@(() => CheckFocus(a))" @onblur="SetValue"
+            Variant="@Variant" Margin="@Margin" />
+    }
+</div>
+
+<style>
+    .justify-text-center input {
+        text-align: center;
+    }
+
+    .mud-code input {
+        padding: 12px 0px !important;
+    }
+</style>
