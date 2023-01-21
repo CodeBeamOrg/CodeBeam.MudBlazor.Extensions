@@ -11,6 +11,7 @@
 ## Components
 
 - MudAnimate
+- MudCodeInput
 - MudColorProvider
 - MudCsvMapper
 - MudDateWheelPicker
@@ -38,7 +39,7 @@
 | 6.0.0 - 6.0.3 | 6.0.16 | .Net 6 |
 | 6.0.4 - 6.0.12 | 6.0.17 - 6.0.18 | .Net 6 |
 | 6.1.0 - 6.1.4 | 6.1.0 - 6.1.2 | .Net 6 & .Net 7 |
-| 6.1.5 -6.1.8 | 6.1.4 - 6.1.7 | .Net 6 & .Net 7 |
+| 6.1.5 -6.1.9 | 6.1.4 - 6.1.7 | .Net 6 & .Net 7 |
 
 ## Installation
 This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />
@@ -50,7 +51,6 @@ Add the following to your HTML head section, it's either `index.html` or `_Layou
 Adding namespace to `_Imports.razor` is not obligatory, but useful.
 ```razor
 @using MudExtensions
-@using MudExtensions.Enums
 ```
 
 ## Playground
@@ -65,6 +65,10 @@ Each example is recorded in the playground website.
 ### MudAnimate
 
 https://user-images.githubusercontent.com/78308169/194701300-e4ad517a-8fbb-4a5e-9407-a5a585157685.mp4
+
+### MudCodeInput
+
+https://user-images.githubusercontent.com/78308169/213863531-fa817188-3194-4858-8642-ace98a324b32.mp4
 
 ### MudDateWheelPicker
 
