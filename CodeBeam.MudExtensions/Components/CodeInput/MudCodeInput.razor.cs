@@ -65,7 +65,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public EventCallback<T> TheValueChanged { get; set; }
+        public EventCallback<T> ValueChanged { get; set; }
 
         private int _count;
         /// <summary>
@@ -200,7 +200,7 @@ namespace MudExtensions
             }
 
             Value = Converter.Get(result);
-            await TheValueChanged.InvokeAsync(Value);
+            await ValueChanged.InvokeAsync(Value);
         }
 
         public async Task SetValueFromOutside(T value)
@@ -223,7 +223,7 @@ namespace MudExtensions
                 }
             }
 
-            await TheValueChanged.InvokeAsync(Value);
+            await ValueChanged.InvokeAsync(Value);
             StateHasChanged();
         }
 
