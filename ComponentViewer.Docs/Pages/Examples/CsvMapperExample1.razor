@@ -7,7 +7,7 @@
          <MudSwitch @bind-Checked="_customLocalization" Color="Color.Primary" Label="Custom Localization (German)" />
     </MudItem>
     <MudItem xs="12">
-        <MudCsvMapper @ref="_csvMapper" Class="pa-4" MudFieldHeaders="_partnerFields" OnUpload="Upload" LocalizedStrings="GetLocalizedStrings()"></MudCsvMapper>
+        <MudCsvMapper @ref="_csvMapper" Class="pa-4" AllowCreateExpectedHeaders="true" AutoMatch="AutoMatching.Partial" NormalizeHeaders="true" ShowIncludeUnmappedData="true"  ExpectedHeaders="_expectedFields" OnImported="Upload" LocalizedStrings="GetLocalizedStrings()"></MudCsvMapper>
     </MudItem>
 </MudGrid>
 
@@ -15,11 +15,13 @@
     MudCsvMapper _csvMapper;
     bool _customLocalization = false;
 
-    List<MudFieldHeader> _partnerFields = new() {
-        new MudFieldHeader("Email", true),
-        new MudFieldHeader("First Name"),
-        new MudFieldHeader("Last Name"),
-        new MudFieldHeader("Phone"),
+    List<MudExpectedHeader> _expectedFields = new() {
+        new MudExpectedHeader("Email", true),
+        new MudExpectedHeader("First Name"),
+        new MudExpectedHeader("Last Name"),
+        new MudExpectedHeader("Phone"),
+        new MudExpectedHeader("Date", false, true),
+        new MudExpectedHeader("Source", true, true),
     };
 
     private async Task<bool> Upload()
