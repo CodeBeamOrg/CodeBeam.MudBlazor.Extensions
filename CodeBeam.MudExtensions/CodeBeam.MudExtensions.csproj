@@ -47,7 +47,6 @@
 	<ItemGroup>
 		<Content Remove="compilerconfig.json" />
 		<Content Remove="excubowebcompiler.json" />
-		<Content Remove="wwwroot\MudExtensions.js" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -61,7 +60,7 @@
 		  <Pack>True</Pack>
 		  <PackagePath>\</PackagePath>
 		</None>
-		<None Include="wwwroot\MudExtensions.js" />
+		<!--<None Include="wwwroot\MudExtensions.js" />-->
 		<!--<None Include="Components\ListExtended\MudListExtended.razor" />
 		<None Include="Components\ListExtended\MudListItemExtended.razor" />
 		<None Include="Components\ListExtended\MudListSubheaderExtended.razor" />
@@ -73,6 +72,10 @@
 		<Content Update="Components\Splitter\MudSplitter.razor">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="NewFolder\" />
 	</ItemGroup>
 
 </Project>
