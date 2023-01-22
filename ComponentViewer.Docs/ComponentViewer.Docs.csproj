@@ -29,4 +29,5 @@
 	<ItemGroup>
 		<EmbeddedResource Include="Pages/Examples/**" />
 	</ItemGroup>
+
 </Project>

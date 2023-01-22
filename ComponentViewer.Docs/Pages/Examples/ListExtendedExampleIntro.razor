@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Components
+@using MudBlazor.Extensions
+
+<MudStack>
+    <MudText Class="mb-4"><b>Extended Features That MudListExtended Has:</b></MudText>
+    <MudText>- Secondary text</MudText>
+    <MudText>- Populate with <CodeBlock>ItemCollection</CodeBlock> parameter</MudText>
+    <MudText>- MultiSelection with rich customizable options</MudText>
+    <MudText>- Sticky header</MudText>
+    <MudText>- Virtualization</MudText>
+    <MudText>- New <CodeBlock>ScrollToMiddle</CodeBlock> scroll.</MudText>
+    <MudText>- <CodeBlock>MaxItems</CodeBlock> for determining how many items will show.</MudText>
+</MudStack>
+
+@code {
+    public bool Dense { get; set; }
+    public bool Padding { get; set; }
+    public bool Gutters { get; set; }
+
+    MudListItemExtended<string> selectedItem = new();
+}

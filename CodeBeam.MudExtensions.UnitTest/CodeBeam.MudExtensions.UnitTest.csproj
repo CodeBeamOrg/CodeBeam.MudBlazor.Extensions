@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CodeBeam.MudExtensions.UnitTest.Viewer\CodeBeam.MudExtensions.UnitTest.Viewer.csproj" />
     <ProjectReference Include="..\CodeBeam.MudExtensions\CodeBeam.MudExtensions.csproj" />
     <ProjectReference Include="..\ComponentViewer.Docs\ComponentViewer.Docs.csproj" />
   </ItemGroup>

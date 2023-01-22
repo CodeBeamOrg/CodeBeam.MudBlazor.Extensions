@@ -9,6 +9,7 @@ using CodeBeam.MudExtensions.UnitTests.Mocks;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Services;
+using MudExtensions.Services;
 using NUnit.Framework;
 
 namespace CodeBeam.MudExtensions.UnitTests.Components
@@ -23,9 +24,11 @@ namespace CodeBeam.MudExtensions.UnitTests.Components
             Context = new();
             Context.JSInterop.Mode = JSRuntimeMode.Loose;
             Context.Services.AddTransient<IScrollManager, MockScrollManager>();
+            Context.Services.AddSingleton<IScrollManagerExtended, ScrollManagerExtended>();
             Context.Services.AddTransient<IKeyInterceptorFactory, MockKeyInterceptorServiceFactory>();
             Context.Services.AddSingleton<IMudPopoverService, MockPopoverService>();
             Context.Services.AddSingleton<ISnackbar, SnackbarService>();
+            Context.Services.AddSingleton<IJsApiService, JsApiService>();
             //Context.AddTestServices();
         }
 
