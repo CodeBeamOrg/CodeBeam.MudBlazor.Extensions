@@ -60,7 +60,12 @@
 		  <Pack>True</Pack>
 		  <PackagePath>\</PackagePath>
 		</None>
+		<!--<None Include="wwwroot\MudExtensions.js" />-->
+		<!--<None Include="Components\ListExtended\MudListExtended.razor" />
+		<None Include="Components\ListExtended\MudListItemExtended.razor" />
+		<None Include="Components\ListExtended\MudListSubheaderExtended.razor" />
 		<None Include="Components\SwitchM3\MudSwitchM3.razor" />
+		<None Include="wwwroot\MudExtensions.js" />-->
 	</ItemGroup>
 
 	<ItemGroup>
@@ -68,5 +73,9 @@
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		</Content>
 	</ItemGroup>
+
+	<!--<ItemGroup>
+	  <Folder Include="NewFolder\" />
+	</ItemGroup>-->
 
 </Project>

@@ -20,14 +20,40 @@
         <MudText Class="slogan3" Align="Align.Center">by</MudText>
         <MudLink Class="slogan3" Href="https://github.com/CodeBeamOrg/CodeBeam.MudExtensions" Target="_blank" Color="Color.Info" Underline="Underline.Hover">CodeBeam</MudLink>
     </div>
+
+    <div class="d-flex align-baseline gap-2 justify-center my-10">
+        <MudGrid Class="justify-center">
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <ComponentCard Title="Extended Components" Description="Known Mud components with new features added while keeping all existing features." ShowActionButton="false" NavigateToComponentPage="false" />
+            </MudItem>
+
+             <MudItem xs="12" sm="6" md="4" lg="3">
+                <ComponentCard Title="Unique Components" Description="New Mud components that Mud Core doesn't have." ShowActionButton="false" NavigateToComponentPage="false" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <ComponentCard Title="Be a Sponsor" Description="You can help the basic expenses of the project." ShowActionButton="false" ComponentName="BeASponsor" />
+            </MudItem>
+        </MudGrid>
+    </div>
     
-    <div class="d-flex justify-center mt-16">
+    <div class="d-flex justify-center mt-12">
         <MudIconButton Icon="@Icons.Filled.ArrowDownward" Style="height: 52px;" Color="Color.Secondary" Variant="Variant.Outlined" OnClick="@(async() => await ScrollManager.ScrollToAsync("cont", 0, 1600, ScrollBehavior.Smooth))" />
     </div>
 </MudContainer>
 
-<MudContainer id="cont" Class="pa-4" Style="background: var(--mud-palette-background-grey);" MaxWidth="MaxWidth.False">
-    <MudGrid>
+<MudExpansionPanels Style="background-color: var(--mud-palette-background-grey)" MultiExpansion="true">
+    <MudExpansionPanel IsInitiallyExpanded="true" Text="Extended Components" Style="background-color: var(--mud-palette-background-grey)">
+        <MudGrid Class="justify-center">
+            <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
+                <ComponentCard Title="MudListExtended"
+                               Description="The extended MudList component." />
+            </MudItem>
+        </MudGrid>
+    </MudExpansionPanel>
+
+    <MudExpansionPanel IsInitiallyExpanded="true" Text="Unique Components" Style="background-color: var(--mud-palette-background-grey)">
+        <MudGrid>
         <MudItem xs="12" sm="6" md="4" lg="3" xl="2">
             <ComponentCard Title="API"
                            Description="A basic API list for all components." />
@@ -129,7 +155,8 @@
         </MudItem>
         
     </MudGrid>
-</MudContainer>
+    </MudExpansionPanel>
+</MudExpansionPanels>
 
 <style>
     .slogan {

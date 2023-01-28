@@ -7,10 +7,13 @@
 
 <CascadingValue Value="this" IsFixed="true">
     <MudLayout>
-    <MudAppBar Class="background-gradient-animation mud-width-full" Style="background: linear-gradient(-45deg, var(--mud-palette-dark), var(--mud-palette-primary), var(--mud-palette-dark), var(--mud-palette-secondary), var(--mud-palette-dark)); background-size: 400% 400%; position: relative; overflow-x: hidden">
-        <MudStack Class="mud-width-full" Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Spacing="4">
-            <MudIconButton Class="white-text" Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large" Href="https://mudblazor.com/" Target="_blank" />
+    <MudAppBar Class="background-gradient-animation mud-width-full" Style="background: linear-gradient(-45deg, var(--mud-palette-dark), var(--mud-palette-primary), var(--mud-palette-dark), var(--mud-palette-secondary), var(--mud-palette-dark)); background-size: 400% 400%; position: fixed; overflow-x: hidden" Dense="true">
+
+            <MudIconButton Class="white-text" Icon="@Icons.Filled.Menu" OnClick="@(() => _drawerOpen = !_drawerOpen)"></MudIconButton>
+            <MudIconButton Class="white-text" Icon="@Icons.Custom.Brands.MudBlazor" Href="https://mudblazor.com/" Target="_blank" />
+            <MudSpacer />
             <MudText Style="font-weight: 900; color: white">CodeBeam MudExtensions</MudText>
+            <MudSpacer />
             <div class="d-flex">
                 <MudToggleIconButton @bind-Toggled="IsDarkMode" Class="white-text" Icon="@Icons.Filled.DarkMode" ToggledIcon="@Icons.Filled.LightMode"/>
                 <MudIconButton Class="white-text" Icon="@Icons.Filled.Settings" OnClick="@ToggleOpen"/>
@@ -26,9 +29,42 @@
                     </MudPopover>
                 }
             </div>
-        </MudStack>
     </MudAppBar>
-    <MudMainContent Class="pt-0">
+    <MudDrawer @bind-Open="@_drawerOpen" Elevation="1" Variant="@DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
+    <MudDrawerHeader>
+        <MudText Typo="Typo.h6">MudExtensions</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu Color="Color.Secondary" Bordered="true">
+        <MudNavLink Href="/api">Api</MudNavLink>
+        <MudNavGroup Title="Components">
+            <MudNavLink Href="/mudanimate">Animate</MudNavLink>
+            <MudNavLink Href="/mudcodeinput">CodeInput</MudNavLink>
+            <MudNavLink Href="/mudcolorprovider">ColorProvider</MudNavLink>
+            <MudNavLink Href="/mudcsvmapper">CsvMapper</MudNavLink>
+            <MudNavLink Href="/muddatewheelpicker">DateWheelPicker</MudNavLink>
+            <MudNavLink Href="/mudgallery">Gallery</MudNavLink>
+            <MudNavLink Href="/mudinputstyler">InputStyler</MudNavLink>
+            <MudNavLink Href="/mudlistextended">ListExtended</MudNavLink>
+            <MudNavLink Href="/mudloading">Loading</MudNavLink>
+            <MudNavLink Href="/mudloadingbutton">LoadingButton</MudNavLink>
+            <MudNavLink Href="/mudpage">Page & Section</MudNavLink>
+            <MudNavLink Href="/mudpasswordfield">PasswordField</MudNavLink>
+            <MudNavLink Href="/mudpopup">Popup</MudNavLink>
+            <MudNavLink Href="/mudscrollbar">Scrollbar</MudNavLink>
+            <MudNavLink Href="/mudspeeddial">SpeedDial</MudNavLink>
+            <MudNavLink Href="/mudsplitter">Splitter</MudNavLink>
+            <MudNavLink Href="/mudstepper">Stepper</MudNavLink>
+            <MudNavLink Href="/mudswitchm3">SwitchM3</MudNavLink>
+            <MudNavLink Href="/mudwatch">Watch</MudNavLink>
+            <MudNavLink Href="/mudwheel">Wheel</MudNavLink>
+        </MudNavGroup>
+        <MudNavGroup Title="Not Documented">
+            <MudNavLink>FontPicker</MudNavLink>
+            <MudNavLink>Toggle</MudNavLink>
+        </MudNavGroup>
+    </MudNavMenu>
+</MudDrawer>
+    <MudMainContent Class="pt-13">
         @if (_showFontPicker)
         {
             <div class="pa-4">
@@ -69,6 +105,7 @@
     string font = "Roboto";
     internal bool IsDarkMode = false;
     bool _open = false;
+    bool _drawerOpen = false;
     bool _showFontPicker = false;
     int _borderRadius = 20;
 

@@ -8,14 +8,18 @@
         <MudIcon Class="icon-class" Icon="@Icons.Custom.Brands.MudBlazor" />
     </MudCardHeader>
     <MudCardContent>
-        <div class="d-flex align-center" style="min-height: 100px">
+        <div class="d-flex flex-column align-center" style="min-height: 100px">
             <MudText>@Description</MudText>
+            @ChildContent
         </div>
         
     </MudCardContent>
     <MudCardActions>
-        <MudSpacer />
-        <MudButton Variant="Variant.Outlined" Color="Color.Inherit" OnClick="NavigateComponentPage">Go To Component</MudButton>
+        @if (ShowActionButton)
+        {
+            <MudSpacer />
+            <MudButton Variant="Variant.Outlined" Color="Color.Inherit" OnClick="NavigateComponentPage">Go To Component</MudButton>
+        }
     </MudCardActions>
 </MudCard>
 
