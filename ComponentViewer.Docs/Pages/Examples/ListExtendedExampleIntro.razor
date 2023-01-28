@@ -1,16 +1,79 @@
 ﻿@using Microsoft.AspNetCore.Components
 @using MudBlazor.Extensions
 
-<MudStack>
-    <MudText Class="mb-4"><b>Extended Features That MudListExtended Has:</b></MudText>
-    <MudText>- Secondary text</MudText>
-    <MudText>- Populate with <CodeBlock>ItemCollection</CodeBlock> parameter</MudText>
-    <MudText>- MultiSelection with rich customizable options</MudText>
-    <MudText>- Sticky header</MudText>
-    <MudText>- Virtualization</MudText>
-    <MudText>- New <CodeBlock>ScrollToMiddle</CodeBlock> scroll.</MudText>
-    <MudText>- <CodeBlock>MaxItems</CodeBlock> for determining how many items will show.</MudText>
-</MudStack>
+<div class="d-flex flex-column gap-4">
+    <MudPaper Class="d-flex align-center" MinWidth="300px" Height="100px" Elevation="0">
+        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
+            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">1</MudAvatar>
+        </MudPaper>
+        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
+            <MudText Align="Align.Center">Secondary text</MudText>
+        </MudPaper>
+    </MudPaper>
+
+    <MudPaper Class="d-flex align-center" MinWidth="300px" Height="100px" Elevation="0">
+        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
+            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">2</MudAvatar>
+        </MudPaper>
+        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
+            <MudText Align="Align.Center">Populate with <CodeBlock>ItemCollection</CodeBlock> parameter</MudText>
+        </MudPaper>
+    </MudPaper>
+
+    <MudPaper Class="d-flex align-center" MinWidth="300px" Height="100px" Elevation="0">
+        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
+            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">3</MudAvatar>
+        </MudPaper>
+        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
+            <MudText Align="Align.Center">MultiSelection with rich customizable options</MudText>
+        </MudPaper>
+    </MudPaper>
+
+    <MudPaper Class="d-flex align-center" MinWidth="300px" Height="100px" Elevation="0">
+        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
+            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">4</MudAvatar>
+        </MudPaper>
+        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
+            <MudText Align="Align.Center">Sticky Header</MudText>
+        </MudPaper>
+    </MudPaper>
+
+    <MudPaper Class="d-flex align-center" MinWidth="300px" Height="100px" Elevation="0">
+        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
+            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">5</MudAvatar>
+        </MudPaper>
+        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
+            <MudText Align="Align.Center">Generic Values</MudText>
+        </MudPaper>
+    </MudPaper>
+
+    <MudPaper Class="d-flex align-center" MinWidth="300px" Height="100px" Elevation="0">
+        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
+            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">6</MudAvatar>
+        </MudPaper>
+        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
+            <MudText Align="Align.Center">Virtualization (Experimental)</MudText>
+        </MudPaper>
+    </MudPaper>
+
+    <MudPaper Class="d-flex align-center" MinWidth="300px" Height="100px" Elevation="0">
+        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
+            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">7</MudAvatar>
+        </MudPaper>
+        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
+            <MudText Align="Align.Center">New <CodeBlock>ScrollToMiddle</CodeBlock> scroll algorithm</MudText>
+        </MudPaper>
+    </MudPaper>
+
+    <MudPaper Class="d-flex align-center" MinWidth="300px" Height="100px" Elevation="0">
+        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
+            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">8</MudAvatar>
+        </MudPaper>
+        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
+            <MudText Align="Align.Center"><CodeBlock>MaxItems</CodeBlock> for determining how many items will show</MudText>
+        </MudPaper>
+    </MudPaper>
+</div>
 
 @code {
     public bool Dense { get; set; }
