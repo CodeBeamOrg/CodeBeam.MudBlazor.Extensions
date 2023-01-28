@@ -48,9 +48,19 @@
 
 ## Installation
 This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />
-Add the following to your HTML head section, it's either `index.html` or `_Layout.cshtml`/`_Host.cshtml` depending on whether you're running Server-Side or WASM.
+Add the following to your HTML **head** section, it's either `index.html` or `_Layout.cshtml`/`_Host.cshtml` depending on whether you're running Server-Side or WASM.
 ```html
 <link href="_content/CodeBeam.MudExtensions/MudExtensions.min.css" rel="stylesheet" />
+```
+
+Add the following to your HTML **body** section
+```html
+<script src="_content/CodeBeam.MudExtensions/MudExtensions.js"></script>
+```
+
+Add the extension services into program.cs
+```razor
+builder.Services.UseMudExtensions();
 ```
 
 Adding namespace to `_Imports.razor` is not obligatory, but useful.
