@@ -7,10 +7,13 @@
 
 <CascadingValue Value="this" IsFixed="true">
     <MudLayout>
-    <MudAppBar Class="background-gradient-animation mud-width-full" Style="background: linear-gradient(-45deg, var(--mud-palette-dark), var(--mud-palette-primary), var(--mud-palette-dark), var(--mud-palette-secondary), var(--mud-palette-dark)); background-size: 400% 400%; position: relative; overflow-x: hidden">
-        <MudStack Class="mud-width-full" Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Spacing="4">
+    <MudAppBar Class="background-gradient-animation mud-width-full" Style="background: linear-gradient(-45deg, var(--mud-palette-dark), var(--mud-palette-primary), var(--mud-palette-dark), var(--mud-palette-secondary), var(--mud-palette-dark)); background-size: 400% 400%; position: relative; overflow-x: hidden" Fixed="true">
+
+            <MudIconButton Class="white-text" Icon="@Icons.Filled.Menu" OnClick="@(() => _drawerOpen = !_drawerOpen)"></MudIconButton>
             <MudIconButton Class="white-text" Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large" Href="https://mudblazor.com/" Target="_blank" />
+            <MudSpacer />
             <MudText Style="font-weight: 900; color: white">CodeBeam MudExtensions</MudText>
+            <MudSpacer />
             <div class="d-flex">
                 <MudToggleIconButton @bind-Toggled="IsDarkMode" Class="white-text" Icon="@Icons.Filled.DarkMode" ToggledIcon="@Icons.Filled.LightMode"/>
                 <MudIconButton Class="white-text" Icon="@Icons.Filled.Settings" OnClick="@ToggleOpen"/>
@@ -26,8 +29,20 @@
                     </MudPopover>
                 }
             </div>
-        </MudStack>
     </MudAppBar>
+    <MudDrawer @bind-Open="@_drawerOpen" Elevation="1" Variant="@DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
+    <MudDrawerHeader>
+        <MudText Typo="Typo.h6">MudExtensions</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu Color="Color.Secondary" Bordered="true">
+        <MudNavLink Href="/api">Api</MudNavLink>
+        <MudNavGroup Title="Components">
+            <MudNavLink Href="/mudanimate">MudAnimate</MudNavLink>
+        <MudNavLink Href="/mudcodeinput">MudCodeInput</MudNavLink>
+        </MudNavGroup>
+        
+    </MudNavMenu>
+</MudDrawer>
     <MudMainContent Class="pt-0">
         @if (_showFontPicker)
         {
@@ -69,6 +84,7 @@
     string font = "Roboto";
     internal bool IsDarkMode = false;
     bool _open = false;
+    bool _drawerOpen = false;
     bool _showFontPicker = false;
     int _borderRadius = 20;
 

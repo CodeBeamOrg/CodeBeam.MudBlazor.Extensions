@@ -15,9 +15,23 @@ namespace ComponentViewer.Docs.Components
         [Parameter]
         public string Description { get; set; }
 
+        [Parameter]
+        public RenderFragment ChildContent { get; set; }
+
+        [Parameter]
+        public bool ShowActionButton { get; set; } = true;
+
+        [Parameter]
+        public bool NavigateToComponentPage { get; set; } = true;
+
         private void NavigateComponentPage()
         {
-            NavigationManager.NavigateTo($"/{(string.IsNullOrEmpty(ComponentName) ? Title.ToLowerInvariant() : ComponentName.ToLowerInvariant())}");
+            if (NavigateToComponentPage == false)
+            {
+                return;
+            }
+            string properName = ComponentName?.Replace(" ", null);
+            NavigationManager.NavigateTo($"/{(string.IsNullOrEmpty(properName) ? Title.ToLowerInvariant() : properName.ToLowerInvariant())}");
         }
     }
 }

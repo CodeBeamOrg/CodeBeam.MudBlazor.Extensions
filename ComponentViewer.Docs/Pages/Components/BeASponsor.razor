@@ -1,0 +1,16 @@
+﻿@page "/beasponsor"
+@inject NavigationManager NavigationManager
+
+<div class="d-flex flex-column gap-8 align-center justify-center"  style="height: 90vh">
+    <MudIcon Icon="@Icons.Filled.VolunteerActivism" Color="Color.Secondary" Size="Size.Large" />
+    <MudText Class="my-4" Align="Align.Center">
+        Small donations make MudExtensions better.
+    </MudText>
+
+    <div class="d-flex gap-8">
+        <MudButton Href="https://github.com/sponsors/MudBlazor" Target="_blank" Variant="Variant.Outlined" Color="Color.Secondary">MudBlazor</MudButton>
+        <MudButton Href="https://github.com/sponsors/CodeBeamOrg" Target="_blank" Variant="Variant.Outlined" Color="Color.Secondary">MudExtensions</MudButton>
+    </div>
+
+    <MudButton Class="mt-8" Style="width: 300px" OnClick="@(() => NavigationManager.NavigateTo("/"))" StartIcon="@Icons.Filled.ArrowBack" Variant="Variant.Outlined" Color="Color.Secondary">Turn Back</MudButton>
+</div>
