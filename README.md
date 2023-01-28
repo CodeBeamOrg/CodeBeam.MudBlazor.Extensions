@@ -11,6 +11,7 @@
 ## Components
 
 - MudAnimate
+- MudCodeInput
 - MudColorProvider
 - MudCsvMapper
 - MudDateWheelPicker
@@ -32,25 +33,39 @@
 - MudWatch
 - MudWheel
 
+## Extended Components
+
+- MudListExtended
+
 ## Supported MudBlazor Versions
 | MudExtensions | MudBlazor | .Net |
 | :---  |    :----:   | :---: |
 | 6.0.0 - 6.0.3 | 6.0.16 | .Net 6 |
 | 6.0.4 - 6.0.12 | 6.0.17 - 6.0.18 | .Net 6 |
 | 6.1.0 - 6.1.4 | 6.1.0 - 6.1.2 | .Net 6 & .Net 7 |
-| 6.1.5 -6.1.8 | 6.1.4 - 6.1.7 | .Net 6 & .Net 7 |
+| 6.1.5 - 6.1.9 | 6.1.4 - 6.1.7 | .Net 6 & .Net 7 |
+| 6.2.0 | 6.1.8 | .Net 6 & .Net 7 |
 
 ## Installation
 This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />
-Add the following to your HTML head section, it's either `index.html` or `_Layout.cshtml`/`_Host.cshtml` depending on whether you're running Server-Side or WASM.
+Add the following to your HTML **head** section, it's either `index.html` or `_Layout.cshtml`/`_Host.cshtml` depending on whether you're running Server-Side or WASM.
 ```html
 <link href="_content/CodeBeam.MudExtensions/MudExtensions.min.css" rel="stylesheet" />
+```
+
+Add the following to your HTML **body** section
+```html
+<script src="_content/CodeBeam.MudExtensions/MudExtensions.js"></script>
+```
+
+Add the extension services into program.cs
+```razor
+builder.Services.UseMudExtensions();
 ```
 
 Adding namespace to `_Imports.razor` is not obligatory, but useful.
 ```razor
 @using MudExtensions
-@using MudExtensions.Enums
 ```
 
 ## Playground
@@ -65,6 +80,10 @@ Each example is recorded in the playground website.
 ### MudAnimate
 
 https://user-images.githubusercontent.com/78308169/194701300-e4ad517a-8fbb-4a5e-9407-a5a585157685.mp4
+
+### MudCodeInput
+
+https://user-images.githubusercontent.com/78308169/213863531-fa817188-3194-4858-8642-ace98a324b32.mp4
 
 ### MudDateWheelPicker
 

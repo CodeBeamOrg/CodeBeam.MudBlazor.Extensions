@@ -4,7 +4,7 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>6.1.8</Version>
+		<Version>6.2.0</Version>
 		<Title>CodeBeam.MudBlazor.Extensions</Title>
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
@@ -22,7 +22,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CsvHelper" Version="30.0.1" />
-		<PackageReference Include="MudBlazor" Version="6.1.4" />
+		<PackageReference Include="MudBlazor" Version="6.1.8" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
@@ -31,8 +31,8 @@
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
-		<PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.0.*" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.0.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.1.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.1.*" />
 	</ItemGroup>
 
 	<!--Uncomment it on development and debug to generate min.css on rebuild-->
@@ -61,7 +61,12 @@
 		  <Pack>True</Pack>
 		  <PackagePath>\</PackagePath>
 		</None>
+		<!--<None Include="wwwroot\MudExtensions.js" />-->
+		<!--<None Include="Components\ListExtended\MudListExtended.razor" />
+		<None Include="Components\ListExtended\MudListItemExtended.razor" />
+		<None Include="Components\ListExtended\MudListSubheaderExtended.razor" />
 		<None Include="Components\SwitchM3\MudSwitchM3.razor" />
+		<None Include="wwwroot\MudExtensions.js" />-->
 	</ItemGroup>
 
 	<ItemGroup>
@@ -69,5 +74,9 @@
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		</Content>
 	</ItemGroup>
+
+	<!--<ItemGroup>
+	  <Folder Include="NewFolder\" />
+	</ItemGroup>-->
 
 </Project>
