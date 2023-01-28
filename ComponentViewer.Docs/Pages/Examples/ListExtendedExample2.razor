@@ -3,14 +3,14 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex gap-8 align-top justify-center" Style="height: 500px">
-        <MudPaper Width="300px">
+        <MudPaper Width="300px" Elevation="0">
             <MudText Class="ma-4">Array List</MudText>
             <MudListExtended ItemCollection="_states" Clickable="true" MaxItems="_maxItems" />
         </MudPaper>
 
-        <MudPaper Width="300px">
+        <MudPaper Width="300px" Elevation="0">
             <MudText Class="ma-4">Enum List</MudText>
-            <MudListExtended T="Continent" ItemCollection="(ICollection<Continent>)Enum.GetValues(typeof(Continent))" Clickable="true" MaxItems="_maxItems" />
+            <MudListExtended T="Continent" ItemCollection="(ICollection<Continent>)Enum.GetValues<Continent>()" Clickable="true" MaxItems="_maxItems" />
         </MudPaper>
     </MudItem>
 

@@ -13,7 +13,7 @@
         }
         @if (ItemCollection != null)
         {
-            <MudVirtualize IsEnabled="@Virtualize" Items="ItemCollection" Context="item">
+            <MudVirtualize IsEnabled="@Virtualize" Items="ItemCollection" Context="item" OverscanCount="@OverscanCount">
 @*                @if (MudSelect != null)
                 {
                     <MudSelectItem Value="@item" Text="@(MudSelect.ToStringFunc == null ? item.ToString() : MudSelect.ToStringFunc(item))" />

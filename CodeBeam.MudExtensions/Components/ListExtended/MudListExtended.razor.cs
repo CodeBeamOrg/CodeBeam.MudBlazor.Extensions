@@ -125,6 +125,13 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Behavior)]
         public int? MaxItems { get; set; } = null;
 
+        /// <summary>
+        /// Overscan value for Virtualized list. Default is 2.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public int OverscanCount { get; set; } = 2;
+
         private bool _multiSelection = false;
         /// <summary>
         /// Allows multi selection and adds MultiSelectionComponent for each list item.
