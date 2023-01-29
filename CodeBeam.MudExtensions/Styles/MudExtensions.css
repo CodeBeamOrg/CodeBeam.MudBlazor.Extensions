@@ -615,3 +615,60 @@
   padding-left: 32px;
   padding-inline-start: 32px;
   padding-inline-end: unset; }
+
+.mud-select-extended {
+  display: flex;
+  flex-grow: 1;
+  flex-basis: 0;
+  min-width: 0;
+  position: relative;
+  overflow-x: auto; }
+  .mud-select-extended.mud-autocomplete {
+    display: block; }
+    .mud-select-extended.mud-autocomplete .mud-select-input-extended {
+      cursor: text; }
+    .mud-select-extended.mud-autocomplete .mud-input-adornment-extended {
+      cursor: pointer; }
+  .mud-select-extended.mud-autocomplete--with-progress .mud-select-input-extended input {
+    padding-right: 3.5rem !important; }
+  .mud-select-extended.mud-autocomplete--with-progress .mud-input-adorned-end input {
+    padding-right: 4.5rem !important; }
+  .mud-select-extended.mud-autocomplete--with-progress .mud-select-input-extended .mud-icon-button {
+    display: none !important; }
+  .mud-select-extended.mud-autocomplete--with-progress .progress-indicator-circular {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-right: 1rem; }
+  .mud-select-extended.mud-autocomplete--with-progress .progress-indicator-circular--with-adornment {
+    padding-right: 3rem; }
+  .mud-select-extended.mud-autocomplete--with-progress .mud-progress-linear {
+    position: absolute;
+    bottom: -1px;
+    height: 2px; }
+  .mud-select-extended .mud-select-input-extended {
+    cursor: pointer; }
+    .mud-select-extended .mud-select-input-extended .mud-input-slot {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis; }
+    .mud-select-extended .mud-select-input-extended .mud-input-adornment-end {
+      margin-left: 0; }
+    .mud-select-extended .mud-select-input-extended:disabled {
+      cursor: default; }
+  .mud-select-extended .mud-disabled .mud-select-input {
+    cursor: default; }
+
+.mud-select-extended > .mud-form-helpertext {
+  margin-top: -21px; }
+
+.mud-select-all-extended {
+  margin-top: 10px;
+  border-bottom: 1px solid lightgrey;
+  padding-bottom: 18px; }

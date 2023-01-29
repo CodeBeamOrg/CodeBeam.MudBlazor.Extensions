@@ -1,0 +1,17 @@
+﻿@namespace MudExtensions
+@typeparam T
+@inherits MudBaseSelectItem
+
+@if (HideContent == false)
+{
+    <MudListItemExtended @attributes="UserAttributes" T="T" Value="@Value" Text="@Text" id="@ItemId" OnClick="@HandleOnClick" IsFunctional="@IsFunctional" Href="@Href" Disabled="@GetDisabledStatus()" Class="@GetCssClasses()" Style="@Style">
+        @if (ChildContent != null && MudSelectExtended.ItemCollection == null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @DisplayString
+        }
+    </MudListItemExtended>
+}

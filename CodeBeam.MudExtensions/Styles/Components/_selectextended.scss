@@ -1,0 +1,93 @@
+﻿.mud-select-extended {
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 0;
+    position: relative;
+    //Required but broke outlined variant's label
+    overflow-x: auto;
+
+    &.mud-autocomplete {
+        display: block;
+
+        & .mud-select-input-extended {
+            cursor: text;
+        }
+
+        & .mud-input-adornment-extended {
+            cursor: pointer;
+        }
+    }
+
+    &.mud-autocomplete--with-progress {
+        & .mud-select-input-extended input {
+            padding-right: 3.5rem !important;
+        }
+
+        & .mud-input-adorned-end input {
+            padding-right: 4.5rem !important;
+        }
+
+        & .mud-select-input-extended .mud-icon-button {
+            display: none !important;
+        }
+
+        & .progress-indicator-circular {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+            padding-right: 1rem;
+        }
+
+        & .progress-indicator-circular--with-adornment {
+            padding-right: 3rem;
+        }
+
+        & .mud-progress-linear {
+            position: absolute;
+            bottom: -1px;
+            height: 2px;
+        }
+    }
+
+    .mud-select-input-extended {
+        cursor: pointer;
+
+        & .mud-input-slot {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        & .mud-input-adornment-end {
+            margin-left: 0;
+        }
+
+        &:disabled {
+            cursor: default;
+        }
+    }
+
+    .mud-disabled {
+        .mud-select-input {
+            cursor: default;
+        }
+    }
+}
+
+
+.mud-select-extended > .mud-form-helpertext {
+    margin-top: -21px;
+}
+
+.mud-select-all-extended {
+    margin-top: 10px;
+    border-bottom: 1px solid lightgrey;
+    padding-bottom: 18px;
+}

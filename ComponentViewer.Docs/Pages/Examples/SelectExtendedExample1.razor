@@ -1,0 +1,15 @@
+﻿
+<div class="d-flex gap-8">
+    <MudSelectExtended T="string" Label="RenderFragment Based">
+        <MudSelectItemExtended Value="@("Foo")" Text="Foo" />
+        <MudSelectItemExtended Value="@("Bar")" Text="Bar" />
+        <MudSelectItemExtended Value="@("Fizz")" Text="Fizz" />
+        <MudSelectItemExtended Value="@("Buzz")" Text="Buzz" />
+    </MudSelectExtended>
+
+    <MudSelectExtended T="string" Label="Data Based" ItemCollection="_collection" />
+</div>
+
+@code {
+    string[] _collection = new string[] { "Foo", "Bar", "Fizz", "Buzz" };
+}

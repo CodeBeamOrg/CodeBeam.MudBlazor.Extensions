@@ -40,7 +40,7 @@ namespace MudExtensions
             .AddStyle(Style)
             .Build();
 
-        [CascadingParameter] protected MudSelect<T> MudSelect { get; set; }
+        [CascadingParameter] protected MudSelectExtended<T> MudSelectExtended { get; set; }
         [CascadingParameter] protected MudAutocomplete<T> MudAutocomplete { get; set; }
         [CascadingParameter] protected MudListExtended<T> ParentList { get; set; }
 
@@ -563,7 +563,7 @@ namespace MudExtensions
                 return Task.CompletedTask;
             }
 
-            if (MudSelect != null || MudAutocomplete != null)
+            if (MudSelectExtended != null || MudAutocomplete != null)
             {
                 return Task.CompletedTask;
             }
@@ -618,7 +618,7 @@ namespace MudExtensions
                     },
                 });
 
-                if (MudSelect == null && MudAutocomplete == null)
+                if (MudSelectExtended == null && MudAutocomplete == null)
                 {
                     if (MultiSelection == false && SelectedValue != null)
                     {
@@ -630,14 +630,14 @@ namespace MudExtensions
                     }
                 }
 
-                if (MudSelect != null || MudAutocomplete != null)
+                if (MudSelectExtended != null || MudAutocomplete != null)
                 {
                     if (MultiSelection)
                     {
                         UpdateSelectAllState();
-                        if (MudSelect != null)
+                        if (MudSelectExtended != null)
                         {
-                            SelectedValues = MudSelect.SelectedValues;
+                            SelectedValues = MudSelectExtended.SelectedValues;
                         }
                         else if (MudAutocomplete != null)
                         {
@@ -995,9 +995,9 @@ namespace MudExtensions
             }
 
             SelectedValues = items.Where(x => x.IsSelected == true).Select(y => y.Value).ToHashSet(_comparer);
-            if (MudSelect != null)
+            if (MudSelectExtended != null)
             {
-                //MudSelect.BeginValidate();
+                //MudSelectExtended.BeginValidate();
             }
         }
 
