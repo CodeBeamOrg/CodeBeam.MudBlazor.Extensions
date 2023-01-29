@@ -60,7 +60,7 @@ Add the following to your HTML **body** section
 
 Add the extension services into program.cs
 ```razor
-builder.Services.UseMudExtensions();
+builder.Services.AddMudExtensions();
 ```
 
 Adding namespace to `_Imports.razor` is not obligatory, but useful.
