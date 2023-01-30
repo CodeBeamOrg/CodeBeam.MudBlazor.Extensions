@@ -1,0 +1,35 @@
+﻿@namespace CodeBeam.MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudGrid>
+    <MudItem xs="12" md="6">
+        <MudText Typo="Typo.body2">MudSelect.Value: "@value"</MudText>
+        <MudText Typo="Typo.body2">Selected Values: "@string.Join(", ", options ?? new List<string>())"</MudText>
+    </MudItem>
+    <MudItem xs="12" md="12">
+        <MudSelectExtended T="string" @bind-Value="value" @bind-SelectedValues="options" Label="Felines" HelperText="Pick your favorite feline"
+                   MultiSelection="true" SelectAll="true" SelectAllText="Select all felines"
+                    AdornmentIcon="@Icons.Material.Filled.Search"
+                   MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))">
+            @foreach (var feline in felines)
+            {
+                <MudSelectItemExtended T="string" Value="@feline">@feline</MudSelectItemExtended>
+            }
+        </MudSelectExtended>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private string value { get; set; } = "Nothing selected";
+    private IEnumerable<string> options { get; set; } = new HashSet<string>() { "Lion" };
+
+    private string[] felines =
+    {
+        "Jaguar", "Leopard", "Lion", "Lynx", "Panther", "Puma", "Tiger"
+    };
+
+    private string GetMultiSelectionText(List<string> selectedValues)
+    {
+        return $"{selectedValues.Count} feline{(selectedValues.Count > 1 ? "s have" : " has")} been selected";
+    }
+}

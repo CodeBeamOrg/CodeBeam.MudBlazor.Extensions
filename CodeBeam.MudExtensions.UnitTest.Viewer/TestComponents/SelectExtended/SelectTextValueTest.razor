@@ -1,0 +1,10 @@
+﻿@namespace CodeBeam.MudExtensions.UnitTests.TestComponents
+
+<MudSelectExtended @bind-Value="_boolValue">
+        <MudSelectItemExtended T="bool?" Value="null" Text="Open and Closed" />
+        <MudSelectItemExtended T="bool?" Value="true" Text="Open" />
+        <MudSelectItemExtended T="bool?" Value="false" />
+</MudSelectExtended>
+@code {
+    public bool? _boolValue { get; set; } = true;
+}

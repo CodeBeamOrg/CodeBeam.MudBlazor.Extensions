@@ -1,0 +1,27 @@
+﻿@namespace CodeBeam.MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudSelectExtended Label="Select Item" 
+    MultiSelection="true" 
+    T="string" 
+    Delimiter="^"
+    SelectAll="true"
+    @bind-SelectedValues="@SelectedItems">
+
+    @foreach (var item in AllItems)
+    {
+        <MudSelectItemExtended T="string" Value="@item">@item</MudSelectItemExtended>
+    }
+</MudSelectExtended>
+
+@code {
+    public static string __description__ = "Test for the Select All option";
+    private List<string> AllItems = new();    
+    private IEnumerable<string> SelectedItems = new HashSet<string>();
+    protected override void OnInitialized()
+    {
+        AllItems.Add("FirstA");
+        AllItems.Add("SecondA");
+        AllItems.Add("ThirdA");
+    }
+}

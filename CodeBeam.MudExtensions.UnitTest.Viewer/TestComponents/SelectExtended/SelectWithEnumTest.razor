@@ -1,0 +1,23 @@
+﻿@namespace CodeBeam.MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+Value: @Selected
+<br />
+<MudSelectExtended IsPreRendered @bind-Value="@Selected">
+    @foreach (MyEnum item in Enum.GetValues(typeof(MyEnum)))
+    {
+        <MudSelectItemExtended Value="@item">@item</MudSelectItemExtended>
+    }
+</MudSelectExtended>
+
+@code {
+    public static string __description__ = "Initial Text should be the enum's default value.";
+
+    public MyEnum Selected { get; set; }
+
+    public enum MyEnum
+    {
+        First,
+        Second,
+    }
+}

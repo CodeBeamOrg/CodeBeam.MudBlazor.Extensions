@@ -1,0 +1,30 @@
+@namespace CodeBeam.MudExtensions.UnitTests.TestComponents
+
+@if (_posts != null)
+{
+    <MudSelectExtended Label="Roles" T="string" SelectedValues="SelectedValues" MultiSelection="true">
+        @foreach (var role in _posts)
+        {
+            <MudSelectItemExtended T="string" Value="@role">@role</MudSelectItemExtended>
+        }
+    </MudSelectExtended>
+}
+
+
+@code
+{
+    private IEnumerable<string> SelectedValues { get; set; } = new HashSet<string>()
+    { 
+        "Programista", "test"
+    };
+
+    private HashSet<string> _posts;
+
+    protected override void OnInitialized()
+    {
+        _posts = new HashSet<string>
+        {
+            "Programista", "Programista 2", "test", "Technik", "Tester", "Tester tester"
+        };
+    }
+}

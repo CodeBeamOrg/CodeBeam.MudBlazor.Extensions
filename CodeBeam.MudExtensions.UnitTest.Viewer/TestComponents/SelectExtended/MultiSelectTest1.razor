@@ -1,0 +1,15 @@
+﻿@namespace CodeBeam.MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudSelectExtended @bind-SelectedValues="values" MultiSelection="true">
+    <MudSelectItemExtended Value="@("1")">1</MudSelectItemExtended>
+    <MudSelectItemExtended Value="@("2")">2</MudSelectItemExtended>
+    <MudSelectItemExtended Value="@("3")">3</MudSelectItemExtended>
+</MudSelectExtended>
+
+
+@code {
+    public static string __description__ = "Click should not close the menu and selecting multiple values should update the bindable value with a comma separated list.";
+
+    IEnumerable<string> values = new HashSet<string>();
+}

@@ -1,0 +1,62 @@
+﻿@namespace CodeBeam.MudExtensions.UnitTests.TestComponents
+@using global::MudExtensions;
+
+@*<MudPopoverProvider></MudPopoverProvider>
+<MudSelectExtended @ref="_select" T="string" ValueChanged="ValueChanged" SelectedValuesChanged="ValuesChanged" MultiSelection="MultiSelection">
+    <MudSelectItemExtended @ref="FirstItem" T="string" Value="@("1")" />
+    <MudSelectItemExtended @ref="SecondItem" T="string" Value="@("2")" />
+    <MudSelectItemExtended @ref="ThirdItem" T="string" Value="@("3")" />
+    <MudSelectItemExtended T="string" Value="@("4")" Disabled="true" />
+</MudSelectExtended>*@
+
+@code {
+    [Parameter]
+    public bool MultiSelection { get; set; }
+
+    public int ValueChangeCount { get; set; }
+    public int ValuesChangeCount { get; set; }
+    public int ItemChangeCount { get; set; }
+    public int ItemsChangeCount { get; set; }
+    MudSelectExtended<string> _select;
+    MudSelectItemExtended<string> FirstItem { get; set; }
+    MudSelectItemExtended<string> SecondItem { get; set; }
+    MudSelectItemExtended<string> ThirdItem { get; set; }
+
+    //public void SetSelectedItem()
+    //{
+    //    #pragma warning disable BL0005
+    //    _select.SelectedItem = SecondItem;
+    //}
+
+    //public void SetSelectedItems()
+    //{
+    //    _select.SelectedItems = new HashSet<MudSelectItem<string>>() { SecondItem, ThirdItem };
+    //    //StateHasChanged();
+    //}
+
+    //public void SetReverseSelectedItems()
+    //{
+    //    _select.SelectedItems = new HashSet<MudSelectItem<string>>() { ThirdItem, FirstItem };
+    //    //StateHasChanged();
+    //}
+
+    private void ValueChanged()
+    {
+        ValueChangeCount++;
+    }
+
+    private void ValuesChanged()
+    {
+        ValuesChangeCount++;
+    }
+
+    private void ItemChanged()
+    {
+        ItemChangeCount++;
+    }
+
+    private void ItemsChanged()
+    {
+        ItemsChangeCount++;
+    }
+}

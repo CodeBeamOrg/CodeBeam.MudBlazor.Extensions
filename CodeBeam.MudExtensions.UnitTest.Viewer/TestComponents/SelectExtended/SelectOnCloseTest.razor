@@ -1,0 +1,21 @@
+﻿@namespace CodeBeam.MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudSelectExtended T="string" @bind-Value="Selected" Label="Coffee" AnchorOrigin="Origin.BottomCenter" OnClose="onClose">
+    <MudSelectItemExtended Value="@("Cappuccino")" />
+    <MudSelectItemExtended Value="@("Cafe Latte")" />
+    <MudSelectItemExtended Value="@("Espresso")" />
+</MudSelectExtended>
+
+selected: @Selected
+
+selected When OnClose: @SelectedWhenOnClose
+@code {
+    public string Selected { get; set; } = "";
+    public string SelectedWhenOnClose { get; set; } = "";
+
+    public void onClose()
+    {
+        SelectedWhenOnClose = Selected;
+    }
+}
