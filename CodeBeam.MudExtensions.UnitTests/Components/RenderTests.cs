@@ -10,7 +10,7 @@ using FluentAssertions;
 using MudBlazor;
 using MudExtensions;
 
-namespace CodeBeam.MudExtensions.UnitTest.Components
+namespace CodeBeam.MudExtensions.UnitTests.Components
 {
     [TestFixture]
     public class RenderTests : BunitTest

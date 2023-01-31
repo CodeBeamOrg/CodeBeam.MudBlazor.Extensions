@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentViewer.Wasm", "Com
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentViewer.Docs", "ComponentViewer.Docs\ComponentViewer.Docs.csproj", "{D4DCAB94-89CB-414A-A153-B32830C42682}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudExtensions.UnitTest", "CodeBeam.MudExtensions.UnitTest\CodeBeam.MudExtensions.UnitTest.csproj", "{75F2BF6B-9046-4E68-BA97-ED1CA2C1D572}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudExtensions.UnitTests", "CodeBeam.MudExtensions.UnitTests\CodeBeam.MudExtensions.UnitTests.csproj", "{75F2BF6B-9046-4E68-BA97-ED1CA2C1D572}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudExtensions.UnitTest.Viewer", "CodeBeam.MudExtensions.UnitTest.Viewer\CodeBeam.MudExtensions.UnitTest.Viewer.csproj", "{590CCBEC-3D84-42C8-A925-C0CD2135268C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudExtensions.UnitTests.Viewer", "CodeBeam.MudExtensions.UnitTests.Viewer\CodeBeam.MudExtensions.UnitTests.Viewer.csproj", "{590CCBEC-3D84-42C8-A925-C0CD2135268C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

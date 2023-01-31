@@ -1,4 +1,4 @@
-using CodeBeam.MudExtensions.UnitTest.Viewer;
+using CodeBeam.MudExtensions.UnitTests.Viewer;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;

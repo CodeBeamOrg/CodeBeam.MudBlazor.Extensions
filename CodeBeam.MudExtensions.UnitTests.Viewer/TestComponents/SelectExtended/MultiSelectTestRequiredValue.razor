@@ -7,15 +7,15 @@
     <MudSelectItemExtended Value="@("3")">3</MudSelectItemExtended>
 </MudSelectExtended>
 
-<MudSelect T=TestClass Label="Object Binding" MultiSelection="true" Required="true" @bind-SelectedValues="SelectedRoles" Clearable="true">
+<MudSelectExtended T=TestClass Label="Object Binding" MultiSelection="true" Required="true" @bind-SelectedValues="SelectedRoles" Clearable="true">
     @foreach(var role in Roles)
     {
         <MudSelectItemExtended T="TestClass" Value=@role/>
     }
-</MudSelect>
+</MudSelectExtended>
 
 @code {
-
+    
 	public static string __description__ = "Multi-Select Required Should Recognize Values";
 
     string value=null;

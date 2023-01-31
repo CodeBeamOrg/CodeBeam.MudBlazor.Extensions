@@ -1,4 +1,4 @@
-namespace CodeBeam.MudExtensions.UnitTest
+namespace CodeBeam.MudExtensions.UnitTests
 {
     public class Tests
     {

@@ -18,7 +18,7 @@ namespace MudExtensions
 
         private IMudSelectExtended _parent;
         internal MudSelectExtended<T> MudSelectExtended => (MudSelectExtended<T>)IMudSelectExtended;
-        internal string ItemId { get; } = "_"+Guid.NewGuid().ToString().Substring(0,8);
+        internal string ItemId { get; } = "selectItem_"+Guid.NewGuid().ToString().Substring(0,8);
 
         /// <summary>
         /// The parent select component

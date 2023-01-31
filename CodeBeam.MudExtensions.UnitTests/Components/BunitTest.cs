@@ -23,12 +23,18 @@ namespace CodeBeam.MudExtensions.UnitTests.Components
         {
             Context = new();
             Context.JSInterop.Mode = JSRuntimeMode.Loose;
-            Context.Services.AddTransient<IScrollManager, MockScrollManager>();
-            Context.Services.AddSingleton<IScrollManagerExtended, ScrollManagerExtended>();
-            Context.Services.AddTransient<IKeyInterceptorFactory, MockKeyInterceptorServiceFactory>();
-            Context.Services.AddSingleton<IMudPopoverService, MockPopoverService>();
-            Context.Services.AddSingleton<ISnackbar, SnackbarService>();
-            Context.Services.AddSingleton<IJsApiService, JsApiService>();
+            //Context.Services.AddTransient<IScrollManager, MockScrollManager>();
+            //Context.Services.AddSingleton<IScrollManagerExtended, ScrollManagerExtended>();
+            //Context.Services.AddTransient<IKeyInterceptorFactory, MockKeyInterceptorServiceFactory>();
+            //Context.Services.AddSingleton<IMudPopoverService, MockPopoverService>();
+            //Context.Services.AddSingleton<ISnackbar, SnackbarService>();
+            //Context.Services.AddSingleton<IJsApiService, JsApiService>();
+            Context.Services.AddMudServices(options =>
+            {
+                options.SnackbarConfiguration.ShowTransitionDuration = 0;
+                options.SnackbarConfiguration.HideTransitionDuration = 0;
+            });
+            Context.Services.AddMudExtensions();
             //Context.AddTestServices();
         }
 
