@@ -219,7 +219,7 @@ namespace MudBlazor.UnitTests.Components
             //{
             var comp = Context.RenderComponent<MultiSelectTest1>();
             // print the generated html
-            //Console.WriteLine(comp.Markup);
+            Console.WriteLine(comp.Markup);
             // select elements needed for the test
             var select = comp.FindComponent<MudSelectExtended<string>>();
             var menu = comp.Find("div.mud-popover");
@@ -232,8 +232,8 @@ namespace MudBlazor.UnitTests.Components
             await comp.InvokeAsync(() => input.Click());
             comp.WaitForAssertion(() => menu.ClassList.Should().Contain("mud-popover-open"));
             // now click an item and see the value change
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item").Count.Should().BeGreaterThan(0));
-            var items = comp.FindAll("div.mud-list-item").ToArray();
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
+            var items = comp.FindAll("div.mud-list-item-extended").ToArray();
             items[1].Click();
             // menu should still be open now!!
             menu.ClassList.Should().Contain("mud-popover-open");
@@ -254,9 +254,9 @@ namespace MudBlazor.UnitTests.Components
                 "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z";
             // check that the correct items are checked
             comp.WaitForAssertion(() =>
-                comp.FindAll("div.mud-list-item path")[1].Attributes["d"].Value.Should().Be(@unchecked));
-            comp.FindAll("div.mud-list-item path")[3].Attributes["d"].Value.Should().Be(@checked);
-            comp.FindAll("div.mud-list-item path")[5].Attributes["d"].Value.Should().Be(@checked);
+                comp.FindAll("div.mud-list-item-extended path")[1].Attributes["d"].Value.Should().Be(@unchecked));
+            comp.FindAll("div.mud-list-item-extended path")[3].Attributes["d"].Value.Should().Be(@checked);
+            comp.FindAll("div.mud-list-item-extended path")[5].Attributes["d"].Value.Should().Be(@checked);
             // now check how setting the SelectedValues makes items checked or unchecked
             // Note: If popover is open, selecting values programmatically doesn't work for now.
             await comp.InvokeAsync(() => select.Instance.CloseMenu());
@@ -265,10 +265,10 @@ namespace MudBlazor.UnitTests.Components
                 select.Instance.SelectedValues = new HashSet<string>() { "1", "2" };
             });
             await comp.InvokeAsync(() => input.Click());
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item path")[1].Attributes["d"].Value.Should().Be(@checked));
-            comp.FindAll("div.mud-list-item path")[3].Attributes["d"].Value.Should().Be(@checked);
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended path")[1].Attributes["d"].Value.Should().Be(@checked));
+            comp.FindAll("div.mud-list-item-extended path")[3].Attributes["d"].Value.Should().Be(@checked);
             select.Instance.SelectedValues.Should().NotContain("3");
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item path")[5].Attributes["d"].Value.Should().Be(@unchecked));
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended path")[5].Attributes["d"].Value.Should().Be(@unchecked));
             //Console.WriteLine(comp.Markup);
             //});
         }

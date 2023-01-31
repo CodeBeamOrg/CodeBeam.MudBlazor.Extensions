@@ -5,7 +5,7 @@
     min-width: 0;
     position: relative;
     //Required but broke outlined variant's label
-    overflow-x: auto;
+    /*overflow-x: auto;*/
 
     &.mud-autocomplete {
         display: block;
