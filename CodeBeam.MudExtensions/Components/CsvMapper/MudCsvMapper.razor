@@ -33,14 +33,13 @@
                             <MudFab HtmlTag="Button"
                                     Color="Color.Secondary"
                                     Label="@LocalizedStrings.ChooseFile"
-                                    Icon="@Icons.Outlined.CloudDownload" Size="Size.Large"
-                                    for="@context" />@LocalizedStrings.OrDragAndDrop
+                                    Icon="@Icons.Outlined.CloudDownload" Size="Size.Large"/>@LocalizedStrings.OrDragAndDrop
                         </h3>
                     </MudPaper>
                     <MudPaper Elevation="0" class="d-flex justify-center align-content-center mud-transparent m2">
-                        @foreach (var file in FileNames)
+                        @if (FileNames.Count > 0)
                         {
-                            <MudChip Color="Color.Dark" Text="@file" />
+                            <MudChip Color="Color.Dark" Text="@FileNames.LastOrDefault()"/>
                         }
                     </MudPaper>
                 </MudPaper>
@@ -48,45 +47,94 @@
         </MudFileUpload>
     </MudStack>
 
-    <MudDropContainer T="MudCsvHeader" @ref="DropContainer" Items="@MudCsvHeaders" ItemsSelector="@((item,column) => item.MappedField == column)" ItemDropped="TaskUpdated">
+    <MudDropContainer T="MudCsvHeader" Items="@MudCsvHeaders" ItemsSelector="@ItemSelector" ItemDropped="OnDrop">
         <ChildContent>
             @if (MudCsvHeaders.Count > 0)
             {
                 <h2 class="d-flex" style="width:100%">CSV File Headers</h2>
                 <div class="d-flex flex-column flex-grow-1 my-2">
                     <MudDropZone T="MudCsvHeader" Identifier="File" DraggingClass="mud-alert-text-info"
-                             ItemDraggingClass="mud-alert-text-info" style="min-height:40px"
-                             Class="rounded-lg border-2 border-dashed mud-border-lines-default pa-2 flex-row">
+                                 ItemDraggingClass="mud-alert-text-info" style="min-height:40px"
+                                 Class="rounded-lg border-2 border-dashed mud-border-lines-default pa-2 flex-row">
                     </MudDropZone>
                 </div>
             }
-            <div class="d-flex flex-wrap justify-space-between">
-                @if (MudFieldHeaders.Count == 0)
+            <h2 class="d-flex" style="width:100%">@LocalizedStrings.ExpectedHeaders</h2>
+            <div class="d-flex flex-wrap justify-space-between" style="margin-top: 15px; row-gap: 15px;">
+                @if (ExpectedHeaders.Count == 0)
                 {
                     <MudText Typo="Typo.overline" class="--mud-palette-error">@LocalizedStrings.DefineHeaders</MudText>
                 }
-                <h2 class="d-flex" style="width:100%">@LocalizedStrings.ExpectedHeaders</h2>
 
-                @foreach (var item in MudFieldHeaders)
+                @foreach (var item in ExpectedHeaders)
                 {
-                    <MudDropZone T="MudCsvHeader" Identifier="@item.Name" DraggingClass="mud-alert-text-info"
-                             CanDrop="@((x) => (item.FieldCount == 0))"
-                             ItemDraggingClass="mud-alert-text-error" Class="rounded-lg border-2 border-dashed mud-border-lines-default pa-2 my-1">
-                        <MudText Typo="Typo.subtitle1">
-                            <b>@item.Name</b>
-                            @if (item.Required)
+                    var required = item.Required;
+                    var matched = item.MatchedFieldCount > 0;
+                    bool confirmed = _defaultValueHeaders.ContainsKey(item.Name) && _defaultValueHeaders[item.Name].Confirmed;
+                    string warning;
+                    if (item.AllowDefaultValue)
+                    {
+                        warning = "This field is required. You must either provide a default value or map a field from the imported csv.";
+                    }
+                    else
+                    {
+                        warning = "This field is required. You must map a field from the imported csv.";
+                    }
+
+                    <MudBadge Icon="@Icons.Material.Filled.Warning" Color="Color.Error" Overlap="true" Visible="@(required && !confirmed && !matched)">
+                        <MudDropZone T="MudCsvHeader" Identifier="@item.Name" DraggingClass="mud-alert-text-info"
+                                     CanDrop="@((x) => (item.MatchedFieldCount == 0))"
+                                     ItemDraggingClass="mud-alert-text-error" Class="rounded-lg border-2 border-dashed mud-border-lines-default pa-2 my-1"
+                                     Style="@((required && !matched && !confirmed ? item.RequiredCss : "") + _expectedHeaderDropZoneWidth)">
+                            <MudText Typo="Typo.subtitle1">
+                                <b>@item.Name</b>
+                                @if (required)
+                                {
+                                    <b>*</b>
+                                }
+                                @if (!matched && item.CreatingDefaultValue)
+                                {
+                                    <MudIconButton Style="padding-left: 8px;" Icon="@Icons.Outlined.ArrowBackIosNew" Color="Color.Secondary" OnClick="@(() => item.CreatingDefaultValue = !item.CreatingDefaultValue)"></MudIconButton>
+                                }
+                                else if(!matched && item.AllowDefaultValue)
+                                {
+                                    <MudIconButton Style="padding-left: 8px;" Icon="@Icons.Outlined.Add" Color="Color.Secondary" OnClick="@(() => item.CreatingDefaultValue = !item.CreatingDefaultValue)"></MudIconButton>
+                                }
+                            </MudText>
+                            @if (!matched && !confirmed)
                             {
-                                <b>*</b>
+                                <MudPaper Elevation="0" Class="pa-2 ma-2 d-flex flex-column mud-background-gray rounded-lg">
+                                    <MudText Typo="Typo.overline">@LocalizedStrings.DragHere</MudText>
+                                </MudPaper>
                             }
-                        </MudText>
-                        @if (item.FieldCount == 0)
-                        {
-                            <MudPaper Elevation="0" Class="pa-2 ma-2 d-flex flex-column mud-background-gray rounded-lg">
-                                <MudText Typo="Typo.overline">@LocalizedStrings.DragHere</MudText>
-                            </MudPaper>
-                        }
-                    </MudDropZone>
+                            @if (!matched && item.CreatingDefaultValue)
+                            {
+                                <MudTextField Disabled="_defaultValueHeaders[item.Name].Confirmed" @bind-Value="_defaultValueHeaders[item.Name].DefaultValue" Required="@item.Required" RequiredError="@_requiredDefaultValueMessage" Style="margin-top: 10px" Label="@("Default Value" )" Variant="Variant.Text"></MudTextField>
+                                <MudButton OnClick="@(() => SubmitDefaultValue(item.Name))" ButtonType="ButtonType.Submit">@(_defaultValueHeaders[item.Name].Confirmed ? "Edit" : "Confirm")</MudButton>
+                            }
+
+                        </MudDropZone>
+                    </MudBadge>
                 }
+
+                <MudPaper Elevation="0" Width="180px">
+                @if (AllowCreateExpectedHeaders && _addSectionOpen)
+                {
+                    <MudPaper Elevation="0" Width="180px" Class="rounded-lg mud-background-gray pa-2 my-1">
+                        <EditForm Model="@_model" OnSubmit="OnSubmit">
+                            <MudIconButton Style="padding-left: 8px;" Icon="@Icons.Outlined.ArrowBackIosNew" Color="Color.Secondary" OnClick="@(() => _addSectionOpen = false)"></MudIconButton>
+                            <MudTextField @bind-Value="_model.Name" Label="Expected Header" Required="true" For="@(() => _model.Name)"></MudTextField>
+                            <MudSwitch Color="Color.Primary" T="bool" @bind-Checked="_model.Required">Required</MudSwitch>
+                            <MudSwitch Color="Color.Primary" T="bool" @bind-Checked="_model.AllowDefaultValue">Allow Default Value</MudSwitch>
+                            <MudButton ButtonType="ButtonType.Submit" Size="Size.Small" Color="Color.Primary" FullWidth="true">Add Header</MudButton>
+                        </EditForm>
+                    </MudPaper>
+                }
+                else if(AllowCreateExpectedHeaders)
+                {
+                    <MudButton OnClick="OpenAddSection" Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="rounded-lg py-2" FullWidth="true">Create Header</MudButton>
+                }   
+                </MudPaper>
             </div>
 
         </ChildContent>
@@ -95,6 +143,16 @@
         </ItemRenderer>
 
     </MudDropContainer>
-
-    <MudButton Class="my-2" Color="Color.Primary" StartIcon="@Icons.Filled.CloudDownload" Variant="Variant.Filled" OnClick="@(() => Upload())" Disabled="!_valid">@LocalizedStrings.Import</MudButton>
+    @if (ShowIncludeUnmappedData)
+    {
+        <MudSwitch @bind-Checked="_includeUnmappedData" Color="Color.Info">Include unmapped data</MudSwitch>
+    }
+    @if (!_importedComplete)
+    {
+        <MudButton Class="my-2" Color="Color.Primary" StartIcon="@Icons.Filled.CloudDownload" Variant="Variant.Filled" OnClick="@OnImport" Disabled="!_valid">@LocalizedStrings.Import</MudButton>
+    }
+    else
+    {
+        <MudButton Class="my-2" Color="Color.Secondary" StartIcon="@Icons.Filled.RestartAlt" Variant="Variant.Filled" OnClick="@ReloadPage" Disabled="!_valid">Reset</MudButton>
+    }
 </div>

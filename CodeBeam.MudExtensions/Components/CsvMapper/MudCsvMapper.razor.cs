@@ -1,30 +1,49 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.ComponentModel;
+using CsvHelper;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using MudBlazor.Utilities;
 using MudExtensions.Utilities;
+using System.Globalization;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace MudExtensions
 {
-    //Default fields in your database
-    public class MudFieldHeader
+    internal class ConfirmedDefaultValue
     {
-        public string Name { get; set; } = "";
-        public bool Required { get; set; } = false;
-        public int FieldCount { get; set; } = 0;
+        public string DefaultValue { get; set; }
+        public bool Confirmed { get; set; }
+    }
 
-        public MudFieldHeader(string name)
+    //Default fields in your database
+    public class MudExpectedHeader
+    {
+        public readonly string RequiredCss = "border-color: var(--mud-palette-error); color: var(--mud-palette-error);";
+        public string Name { get; set; } = "";
+        public bool Required { get; set; }
+        public bool AllowDefaultValue { get; set; }
+        public bool CreatingDefaultValue { get; set; }
+        public int MatchedFieldCount { get; set; } = 0;
+
+        public MudExpectedHeader()
+        {
+        }
+        public MudExpectedHeader(string name)
         {
             Name = name;
             Required = false;
         }
-
-        public MudFieldHeader(string name, bool required = false)
+        public MudExpectedHeader(string name, bool required = false)
         {
             Name = name;
             Required = required;
+        }
+        public MudExpectedHeader(string name, bool required = false, bool allowDefaultValue = false)
+        {
+            Name = name;
+            Required = required;
+            AllowDefaultValue = allowDefaultValue;
         }
     }
 
@@ -58,7 +77,7 @@ namespace MudExtensions
         /// Choose Table Column Headers
         /// </summary>
         [Parameter]
-        public List<MudFieldHeader> MudFieldHeaders { get; set; } = new();
+        public List<MudExpectedHeader> ExpectedHeaders { get; set; } = new();
 
         private bool _valid = false;
 
@@ -73,30 +92,44 @@ namespace MudExtensions
         public Dictionary<string, string> CsvMapping { get; set; } = new();
 
         [Parameter]
-        public EventCallback<bool> OnUpload { get; set; }
+        public EventCallback<bool> OnImported { get; set; }
 
-        private static string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
+        [Parameter] 
+        public bool ShowIncludeUnmappedData { get; set; }
+
+        [Parameter]
+        public bool AllowCreateExpectedHeaders { get; set; }
+
+        [Parameter]
+        public bool NormalizeHeaders { get; set; }
+
+        [Inject] private IDialogService _dialogService { get; set; }
+        [Inject] private NavigationManager _navigationManager { get; set; }
+
         private string DragClass = DefaultDragClass;
-        private MudDropContainer<MudCsvHeader> DropContainer;
-        private List<string> FileNames = new List<string>();
-        private string HeaderLine = "";
-        List<MudCsvHeader> MudCsvHeaders = new();
-        string FileContentStr;
+        private static readonly string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
+        private readonly string _requiredDefaultValueMessage = "Default value is required if no header is mapped";
+        private readonly string _expectedHeaderDropZoneWidth = "width: 180px;";
+        private List<string> FileNames = new ();
+        private List<MudCsvHeader> MudCsvHeaders = new();
+        private List<IDictionary<string,object>> CsvContent;
+        private bool _includeUnmappedData;
+        private bool _importedComplete;
 
+        private MudExpectedHeader _model { get; set; } = new();
+        private bool _addSectionOpen;
+        private Dictionary<string, ConfirmedDefaultValue> _defaultValueHeaders { get; set; }
         protected override void OnInitialized()
         {
-            base.OnInitialized();
+            _defaultValueHeaders = ExpectedHeaders.Where(x =>x.AllowDefaultValue).ToDictionary(key => key.Name, val => new ConfirmedDefaultValue()
+            {
+                Confirmed = false,
+                DefaultValue = ""
+            });
         }
-
-        //TODO SearchFunc 
-        /// <summary>
-        /// The SearchFunc returns a list of items matching the typed text
-        /// </summary>
-        //[Parameter]
-        //public Func<string, string> SearchFunc { get; set; }
-
         private async Task OnInputFileChanged(InputFileChangeEventArgs args)
         {
+            Reset();
             ClearDragClass();
             var files = args.GetMultipleFiles();
             foreach (var file in files)
@@ -105,128 +138,217 @@ namespace MudExtensions
             }
             if (files.Count > 0)
             {
-
-                long maxFileSize = 1024 * 1024 * 15;
-                using var stream = new MemoryStream();
-                var buffer = new byte[files[0].Size];
-
-                using var newFileStream = files[0].OpenReadStream(maxFileSize);
-
-                int bytesRead;
-                double totalRead = 0;
-
-                while ((bytesRead = await newFileStream.ReadAsync(buffer)) != 0)
-                {
-                    totalRead += bytesRead;
-                    await stream.WriteAsync(buffer, 0, bytesRead);
-                }
-
-                FileContentByte = stream.GetBuffer();
-                var reader = new StreamReader(new MemoryStream(FileContentByte), Encoding.Default);
-                HeaderLine = reader.ReadLine();
-                ReadCSVHeaders(HeaderLine);
                 CsvFile = files[0];
-                FileContentStr = reader.ReadToEnd();
+                await ReadFile(files[0]);
+                CreateCsvContent();
+                MatchCsvHeadersWithExpectedHeaders();
             }
         }
-
-        public async Task Upload()
+        private void Reset()
         {
-            string NewHeader = HeaderLine;
-            for (int i = 0; i < MudCsvHeaders.Count; i++)
-            {
-                if (MudCsvHeaders[i].MappedField != "File")
-                {
-                    NewHeader = Regex.Replace(NewHeader, String.Format(@"\b{0}\b", MudCsvHeaders[i].Name), MudCsvHeaders[i].MappedField);
-                    CsvMapping.Add(MudCsvHeaders[i].MappedField, MudCsvHeaders[i].Name);
-                }
-            }
-
-            FileContentStr = NewHeader + "\r\n" + FileContentStr;
-            FileContentByte = System.Text.Encoding.UTF8.GetBytes(FileContentStr);
-
-            await OnUpload.InvokeAsync();
+            MudCsvHeaders = new();
+            ExpectedHeaders.ForEach(x => x.MatchedFieldCount = 0);
         }
-
-        public void ReadCSVHeaders(string input)
+        private async Task ReadFile(IBrowserFile file)
         {
-            Regex csvSplit = new Regex("(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)", RegexOptions.Compiled);
+            long maxFileSize = 1024 * 1024 * 15;
+            await using var stream = new MemoryStream();
+            var buffer = new byte[file.Size];
 
-            foreach (Match match in csvSplit.Matches(input))
+            await using var newFileStream = file.OpenReadStream(maxFileSize);
+
+            int bytesRead;
+            double totalRead = 0;
+            while ((bytesRead = await newFileStream.ReadAsync(buffer)) != 0)
             {
-                string csvField = match.Value.TrimStart(',');
-                bool matchedField = false;
-                for (int i = 0; i < MudFieldHeaders.Count; i++)
-                {
-                    //Do an exact match on the fields first
-                    if (String.Compare(MudFieldHeaders[i].Name, csvField, StringComparison.CurrentCultureIgnoreCase) == 0)
-                    {
-                        if (MudFieldHeaders[i].FieldCount == 0) //only match if it hasn't already been matched
-                        {
-                            MudCsvHeaders.Add(new MudCsvHeader(csvField, MudFieldHeaders[i].Name));
-                            MudFieldHeaders[i].FieldCount++;
-                            matchedField = true;
-                            break;
-                        }
-                    }
+                totalRead += bytesRead;
+                await stream.WriteAsync(buffer, 0, bytesRead);
+            }
+            FileContentByte = stream.GetBuffer();
+        }
+        private void CreateCsvContent()
+        {
+            using var reader = new StreamReader(new MemoryStream(FileContentByte), Encoding.Default);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            CsvContent = csv.GetRecords<dynamic>().Select(x => (IDictionary<string, object>)x).ToList();
+        }
+        private void MatchCsvHeadersWithExpectedHeaders()
+        {
+            var csvFields = CsvContent.FirstOrDefault().Keys;
+            foreach (var csvField in csvFields)
+            {
+                // You can add other matching try as FuzzySharp here
+                bool isMatched = TryExactMatch(csvField);
 
-                    //Then do a Fuzzy match if possible. This works best because sometimes you have fields that are substrings of another field
-                    //Todo Create an optional Parent Method for Comparison so someone could use a fuzzy name matcher: https://github.com/JakeBayer/FuzzySharp
-                    //if (FuzzySharp.Fuzz.Ratio(MudFieldHeaders[i].Name.ToLower(), csvField.ToLower()) > 90)
-                }
-
-                if (matchedField) continue;
+                if (isMatched) continue;
                 MudCsvHeaders.Add(new MudCsvHeader(csvField));
             }
 
             IsValid();
+            
+        }
+        private bool TryExactMatch(string csvField)
+        {
+            foreach (var expectedField in ExpectedHeaders)
+            {
+                if (string.Compare(expectedField.Name, csvField, StringComparison.CurrentCultureIgnoreCase) != 0) continue;
+                if (expectedField.MatchedFieldCount != 0) continue;
+
+                MudCsvHeaders.Add(new MudCsvHeader(csvField, expectedField.Name));
+                expectedField.MatchedFieldCount++;
+                return true;
+            }
+            return false;
+        }
+        private async Task OnImport()
+        {
+            var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                PrepareHeaderForMatch = (header) => header.Header
+            };
+            UpdateHeaderLineWithMatchedFields();
+            if(!_includeUnmappedData) RemoveUnmappedData();
+            AddDefaultValues();
+            await using (var writer = new StringWriter())
+            await using (var csv = new CsvWriter(writer, config))
+            {
+                var dynamicContent = CsvContent.Cast<dynamic>();
+                await csv.WriteRecordsAsync(dynamicContent);
+
+                var str = writer.ToString();
+                FileContentByte = Encoding.UTF8.GetBytes(str);
+            }
+            await OnImported.InvokeAsync();
+            await Task.Delay(100);
+            _importedComplete = true;
+        }
+        private void UpdateHeaderLineWithMatchedFields()
+        {
+            foreach (var map in MudCsvHeaders)
+            {
+                if (map.MappedField == "File") continue;
+                var normalizedMappedField = Normalize(map.MappedField);
+                foreach (var row in CsvContent)
+                {
+                    var temp = row[map.Name];
+                    row.Remove(map.Name);
+                    row[normalizedMappedField] = temp;
+                }
+                CsvMapping.Add(map.MappedField, map.Name);
+            }
+        }
+        private void AddDefaultValues()
+        {
+            foreach (var record in CsvContent)
+            {
+                foreach (var header in _defaultValueHeaders.Where(header => header.Value.Confirmed))
+                {
+                    var normalizedDefaultHeader = Normalize(header.Key);
+                    if (record.Keys.Contains(header.Key))
+                        throw new Exception("Shouldn't happen");
+                    record[normalizedDefaultHeader] = header.Value.DefaultValue;
+                }
+            }
+        }
+        private void RemoveUnmappedData()
+        {
+            var unMappedHeaders = MudCsvHeaders.Where(x => x.MappedField == "File").Select(x => x.Name);
+            foreach (var record in CsvContent)
+            {
+                foreach (var unMappedHeader in unMappedHeaders)
+                {
+                    record.Remove(unMappedHeader);
+                }
+            }
         }
 
+        private string Normalize(string str)
+        {
+            return NormalizeHeaders ? str.Replace(" ", "").Replace("\"", "").ToLower() : str;
+        }
+        /* handling board events */
+        private void OnDrop(MudItemDropInfo<MudCsvHeader> mudCSVField)
+        {
+            string oldMappedField = mudCSVField.Item.MappedField;
+            mudCSVField.Item.MappedField = mudCSVField.DropzoneIdentifier;
+            DecrementOldMatchedFieldCount(oldMappedField);
+            IncrementNewMatchedFieldCount(mudCSVField.DropzoneIdentifier);
+            IsValid();
+        }
+        private void DecrementOldMatchedFieldCount(string fieldName)
+        {
+            foreach (var expectedHeader in ExpectedHeaders.Where(expectedHeader => expectedHeader.Name == fieldName))
+            {
+                expectedHeader.MatchedFieldCount--;
+            }
+        }
+        private void IncrementNewMatchedFieldCount(string fieldName)
+        {
+            foreach (var expectedHeader in ExpectedHeaders)
+            {
+                if (expectedHeader.Name == fieldName)
+                {
+                    expectedHeader.MatchedFieldCount++;
+                }
+            }
+        }
+        private void IsValid()
+        {
+            foreach (MudExpectedHeader requiredHeader in ExpectedHeaders.Where(i => i.Required))
+            {
+                if (MudCsvHeaders.Any(i => i.MappedField == requiredHeader.Name)) continue;
+                if (_defaultValueHeaders.Any(x =>
+                        x.Key == requiredHeader.Name && x.Value.Confirmed))
+                {
+                    continue;
+                }
+                _valid = false;
+                return;
+            }
+            _valid = true;
+        }
         private void SetDragClass()
         {
             DragClass = $"{DefaultDragClass} mud-border-primary";
         }
-
         private void ClearDragClass()
         {
             DragClass = DefaultDragClass;
         }
-
-        /* handling board events */
-        private void TaskUpdated(MudItemDropInfo<MudCsvHeader> mudCSVField)
+        private static bool ItemSelector(MudCsvHeader item, string identifier)
         {
-            string oldMappedField = mudCSVField.Item.MappedField;
-            mudCSVField.Item.MappedField = mudCSVField.DropzoneIdentifier;
-
-            for (int i = 0; i < MudFieldHeaders.Count; i++)
-            {
-                if (MudFieldHeaders[i].Name == oldMappedField)
-                {
-                    MudFieldHeaders[i].FieldCount--;
-                }
-            }
-
-            for (int i = 0; i < MudFieldHeaders.Count; i++)
-            {
-                if (MudFieldHeaders[i].Name == mudCSVField.DropzoneIdentifier)
-                {
-                    MudFieldHeaders[i].FieldCount++;
-                }
-            }
-            IsValid();
+            return item.MappedField == identifier;
         }
-
-        private void IsValid()
+        private void OpenAddSection()
         {
-            foreach (MudFieldHeader mudFieldHeader in MudFieldHeaders.Where(i => i.Required))
+            _addSectionOpen = true;
+        }
+        private void SubmitDefaultValue(string name)
+        {
+            if (!string.IsNullOrWhiteSpace(_defaultValueHeaders[name].DefaultValue))
             {
-                if (!MudCsvHeaders.Where(i => i.MappedField == mudFieldHeader.Name).Any())
-                {
-                    _valid = false;
-                    return;
-                }
+                _defaultValueHeaders[name].Confirmed = !_defaultValueHeaders[name].Confirmed;
+                IsValid();
             }
-            _valid = true;
+        }
+        private void OnSubmit(EditContext context)
+        {
+            if (string.IsNullOrWhiteSpace(_model.Name)) return;
+            ExpectedHeaders.Add(_model);
+            if (_model.AllowDefaultValue)
+            {
+                _defaultValueHeaders.Add(_model.Name, new ConfirmedDefaultValue()
+                {
+                    Confirmed = false,
+                    DefaultValue = ""
+                });
+            }
+            _model = new();
+            _addSectionOpen = false;
+        }
+        private void ReloadPage()
+        {
+            _navigationManager.NavigateTo(_navigationManager.Uri, forceLoad:true);
         }
     }
 }
