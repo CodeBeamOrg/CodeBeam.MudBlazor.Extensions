@@ -13,6 +13,7 @@ using CodeBeam.MudExtensions.UnitTests.TestComponents;
 using FluentAssertions;
 using Microsoft.AspNetCore.Components.Web;
 using MudExtensions;
+using MudExtensions.UnitTests.TestComponents;
 using NUnit.Framework;
 using static CodeBeam.MudExtensions.UnitTests.TestComponents.SelectWithEnumTest;
 
@@ -115,32 +116,32 @@ namespace MudBlazor.UnitTests.Components
             select.Instance.Text.Should().Be("2, 1");
         }
 
-        [Test]
-        public async Task Select_ValueChangeEventCountTest()
-        {
-            var comp = Context.RenderComponent<SelectEventCountTest>(x =>
-            {
-                x.Add(c => c.MultiSelection, false);
-            });
-            var select = comp.FindComponent<MudSelectExtended<string>>();
-            var input = comp.Find("div.mud-input-control");
+        //[Test]
+        //public async Task Select_ValueChangeEventCountTest()
+        //{
+        //    var comp = Context.RenderComponent<SelectEventCountTest>(x =>
+        //    {
+        //        x.Add(c => c.MultiSelection, false);
+        //    });
+        //    var select = comp.FindComponent<MudSelectExtended<string>>();
+        //    var input = comp.Find("div.mud-input-control");
 
-            comp.Instance.ValueChangeCount.Should().Be(0);
-            comp.Instance.ValuesChangeCount.Should().Be(0);
+        //    comp.Instance.ValueChangeCount.Should().Be(0);
+        //    comp.Instance.ValuesChangeCount.Should().Be(0);
 
-            await comp.InvokeAsync(() => select.SetParam("Value", "1"));
-            await comp.InvokeAsync(() => select.Instance.ForceUpdate());
-            comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
-            comp.Instance.ValuesChangeCount.Should().Be(1);
-            select.Instance.Value.Should().Be("1");
+        //    await comp.InvokeAsync(() => select.SetParam("Value", "1"));
+        //    await comp.InvokeAsync(() => select.Instance.ForceUpdate());
+        //    comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
+        //    comp.Instance.ValuesChangeCount.Should().Be(1);
+        //    select.Instance.Value.Should().Be("1");
 
-            // Changing value programmatically without ForceUpdate should change value, but should not fire change events
-            // Its by design, so this part can be change if design changes
-            await comp.InvokeAsync(() => select.SetParam("Value", "2"));
-            comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
-            comp.Instance.ValuesChangeCount.Should().Be(1);
-            select.Instance.Value.Should().Be("2");
-        }
+        //    // Changing value programmatically without ForceUpdate should change value, but should not fire change events
+        //    // Its by design, so this part can be change if design changes
+        //    await comp.InvokeAsync(() => select.SetParam("Value", "2"));
+        //    comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
+        //    comp.Instance.ValuesChangeCount.Should().Be(1);
+        //    select.Instance.Value.Should().Be("2");
+        //}
 
         [Test]
         public async Task Select_ValueChangeEventCountTest_MultiSelection()

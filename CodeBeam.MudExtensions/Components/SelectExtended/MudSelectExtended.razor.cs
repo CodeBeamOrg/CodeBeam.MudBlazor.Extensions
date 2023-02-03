@@ -887,6 +887,7 @@ namespace MudExtensions
             await InvokeAsync(StateHasChanged);
         }
 
+        //TODO: will override this method when core library will have the base one.
         public async Task ForceUpdate()
         {
             //await base.ForceUpdate();
@@ -898,6 +899,11 @@ namespace MudExtensions
             {
                 await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
             }
+        }
+
+        public void BeginValidatePublic()
+        {
+            BeginValidate();
         }
 
         protected internal bool Add(MudSelectItemExtended<T> item)

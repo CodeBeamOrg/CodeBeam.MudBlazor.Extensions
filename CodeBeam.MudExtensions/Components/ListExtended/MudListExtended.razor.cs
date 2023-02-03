@@ -997,7 +997,7 @@ namespace MudExtensions
             SelectedValues = items.Where(x => x.IsSelected == true).Select(y => y.Value).ToHashSet(_comparer);
             if (MudSelectExtended != null)
             {
-                //MudSelectExtended.BeginValidate();
+                MudSelectExtended.BeginValidatePublic();
             }
         }
 
