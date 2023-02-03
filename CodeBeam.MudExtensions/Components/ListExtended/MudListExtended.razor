@@ -14,16 +14,16 @@
         @if (ItemCollection != null)
         {
             <MudVirtualize IsEnabled="@Virtualize" Items="ItemCollection" Context="item" OverscanCount="@OverscanCount">
-@*                @if (MudSelect != null)
+                @if (MudSelectExtended != null)
                 {
-                    <MudSelectItem Value="@item" Text="@(MudSelect.ToStringFunc == null ? item.ToString() : MudSelect.ToStringFunc(item))" />
+                    <MudSelectItemExtended Value="@item" Text="@(MudSelectExtended.ToStringFunc == null ? item.ToString() : MudSelectExtended.ToStringFunc(item))" />
                 }
                 else
                 {
-                    <MudListItem Value="@item" Text="@item.ToString()" />
-                }*@
+                    <MudListItemExtended Value="@item" Text="@item.ToString()" />
+                }
                 @*Upper commented block will replace after Experimental Select*@
-                <MudListItemExtended Value="@item" Text="@item.ToString()" />
+                @*<MudListItemExtended Value="@item" Text="@item.ToString()" />*@
             </MudVirtualize>
         }
         else

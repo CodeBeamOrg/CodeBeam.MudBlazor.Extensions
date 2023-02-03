@@ -1,0 +1,21 @@
+﻿@namespace MudExtensions
+@typeparam T
+@inherits MudBaseSelectItem
+
+@if (HideContent == false)
+{
+
+    if (Nested == true)
+    {
+        <MudListItemExtended T="T" Text="@Text" InitiallyExpanded="@InitiallyExpanded" ExpandedChanged="HandleExpandedChanged">
+            <NestedList>
+                @ChildContent
+            </NestedList>
+        </MudListItemExtended>
+    }
+    else
+    {
+        <MudListSubheaderExtended T="T" Sticky="@Sticky">@Text</MudListSubheaderExtended>
+        @ChildContent
+    }
+}

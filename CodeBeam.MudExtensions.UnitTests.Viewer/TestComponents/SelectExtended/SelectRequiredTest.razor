@@ -1,0 +1,16 @@
+﻿@namespace CodeBeam.MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudSelectExtended id="selectLabelTest" @bind-Value="value" Label="RequiredTest" Required="true">
+    <MudSelectItemExtended Value="@(string.Empty)" />
+    <MudSelectItemExtended Value="@("1")" />
+    <MudSelectItemExtended Value="@("2")" />
+    <MudSelectItemExtended Value="@("3")" />
+</MudSelectExtended>
+
+@code
+{
+    public static string __description__ = "The Select should not show required-error initially. The first (empty) item should.";
+
+    string value = null;
+}
