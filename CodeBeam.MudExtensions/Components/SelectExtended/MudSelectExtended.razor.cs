@@ -297,6 +297,13 @@ namespace MudExtensions
         public bool Clearable { get; set; } = false;
 
         /// <summary>
+        /// If true, shows a searchbox for filtering items. Only works with ItemCollection approach.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public bool SearchBox { get; set; }
+
+        /// <summary>
         /// If true, prevent scrolling while dropdown is open.
         /// </summary>
         [Parameter]

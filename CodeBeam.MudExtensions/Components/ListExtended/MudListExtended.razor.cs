@@ -26,6 +26,7 @@ namespace MudExtensions
         private List<MudListExtended<T>> _childLists = new();
         internal MudListItemExtended<T> _lastActivatedItem;
         internal bool? _allSelected = false;
+        private string _searchString;
 
         protected string Classname =>
         new CssBuilder("mud-list-extended")
@@ -110,6 +111,13 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public ICollection<T> ItemCollection { get; set; } = null;
+
+        /// <summary>
+        /// If true, shows a searchbox for filtering items. Only works with ItemCollection approach.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public bool SearchBox { get; set; } = true;
 
         /// <summary>
         /// Allows virtualization. Only work if ItemCollection parameter is not null.
@@ -1214,7 +1222,7 @@ namespace MudExtensions
         #endregion
 
 
-        #region Others (Clear, Scroll)
+        #region Others (Clear, Scroll, Search)
 
         /// <summary>
         /// Clears value(s) and item(s) and deactive all items.
@@ -1238,6 +1246,16 @@ namespace MudExtensions
 
         protected internal ValueTask ScrollToMiddleAsync(MudListItemExtended<T> item)
             => ScrollManagerExtended.ScrollToMiddleAsync(_elementId, item.ItemId);
+
+        protected ICollection<T> GetSearchedItems()
+        {
+            if (SearchBox == false || ItemCollection == null || _searchString == null)
+            {
+                return ItemCollection;
+            }
+
+            return ItemCollection.Where(x => Converter.Set(x).Contains(_searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
+        }
 
         #endregion
     }

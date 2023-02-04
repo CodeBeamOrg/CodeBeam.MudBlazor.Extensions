@@ -11,9 +11,20 @@
             <MudListItemExtended T="T" IsFunctional="true" Icon="@SelectAllCheckBoxIcon" IconColor="@Color" Text="@SelectAllText" OverrideMultiSelectionComponent="MultiSelectionComponent.None" OnClick="@(() => SelectAllItems(_allSelected))" OnClickHandlerPreventDefault="true" Dense="@Dense" Class="mb-2" />
             <MudDivider />
         }
+        
         @if (ItemCollection != null)
         {
-            <MudVirtualize IsEnabled="@Virtualize" Items="ItemCollection" Context="item" OverscanCount="@OverscanCount">
+            @if (SearchBox == true)
+            {
+                <MudListSubheaderExtended T="T" Style="position: sticky; top: -24px; background-color: var(--mud-palette-background); z-index: 10">
+                    <div @onkeydown:stopPropagation>
+                        <MudTextField @bind-Value="@_searchString" Immediate="true" Variant="Variant.Outlined" Margin="Margin.Dense"
+                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" IconColor="Color" />
+                    </div>
+
+                </MudListSubheaderExtended>
+            }
+            <MudVirtualize IsEnabled="@Virtualize" Items="GetSearchedItems()" Context="item" OverscanCount="@OverscanCount">
                 @if (MudSelectExtended != null)
                 {
                     <MudSelectItemExtended Value="@item" Text="@(MudSelectExtended.ToStringFunc == null ? item.ToString() : MudSelectExtended.ToStringFunc(item))" />
@@ -22,8 +33,6 @@
                 {
                     <MudListItemExtended Value="@item" Text="@item.ToString()" />
                 }
-                @*Upper commented block will replace after Experimental Select*@
-                @*<MudListItemExtended Value="@item" Text="@item.ToString()" />*@
             </MudVirtualize>
         }
         else

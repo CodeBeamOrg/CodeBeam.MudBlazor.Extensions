@@ -37,9 +37,9 @@
 
 	<!--Uncomment it on development and debug to generate min.css on rebuild-->
 	<!--This sections causes to fail auto deployment to CloudFlare-->
-	<!--<Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
+	<Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
 		<Exec Command="dotnet tool restore" StandardOutputImportance="high" />
-	</Target>-->
+	</Target>
 
 	<Target Name="PreBuild" AfterTargets="ToolRestore">
 		<Exec Command="dotnet tool run webcompiler -r Styles/MudExtensions.scss -c excubowebcompiler.json" StandardOutputImportance="high" />
