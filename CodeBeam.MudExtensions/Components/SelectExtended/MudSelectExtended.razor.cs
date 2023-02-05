@@ -301,7 +301,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public bool SearchBox { get; set; } = true;
+        public bool SearchBox { get; set; }
 
         /// <summary>
         /// If true, prevent scrolling while dropdown is open.
