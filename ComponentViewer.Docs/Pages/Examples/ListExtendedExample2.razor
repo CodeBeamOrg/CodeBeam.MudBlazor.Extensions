@@ -5,23 +5,29 @@
     <MudItem xs="12" sm="8" Class="d-flex gap-8 align-top justify-center" Style="height: 500px">
         <MudPaper Width="300px" Elevation="0">
             <MudText Class="ma-4">Array List</MudText>
-            <MudListExtended ItemCollection="_states" Clickable="true" MaxItems="_maxItems" />
+            <MudListExtended ItemCollection="_states" Clickable="true" MaxItems="_maxItems" SearchBox="_searchBox" @bind-SelectedValue="_selectedState" />
         </MudPaper>
 
         <MudPaper Width="300px" Elevation="0">
             <MudText Class="ma-4">Enum List</MudText>
-            <MudListExtended T="Continent" ItemCollection="(ICollection<Continent>)Enum.GetValues<Continent>()" Clickable="true" MaxItems="_maxItems" />
+            <MudListExtended T="Continent" ItemCollection="(ICollection<Continent>)Enum.GetValues<Continent>()" Clickable="true" MaxItems="_maxItems" SearchBox="_searchBox" />
         </MudPaper>
     </MudItem>
 
     <MudItem xs="12" sm="4">
-        <MudNumericField @bind-Value="_maxItems" Label="Max Items" Min="0" Max="16" HelperText="Between 0 - 16" HelperTextOnFocus="true" />
+        <MudStack>
+            <MudText>Selected State: @_selectedState</MudText>
+            <MudNumericField @bind-Value="_maxItems" Label="Max Items" Min="0" Max="16" HelperText="Between 0 - 16" HelperTextOnFocus="true" />
+            <MudSwitchM3 @bind-Checked="_searchBox" Color="Color.Primary" Label="SearchBox" />
+        </MudStack>
     </MudItem>
 </MudGrid>
 
 @code
 {
     int _maxItems = 8;
+    bool _searchBox = false;
+    string _selectedState;
 
     private string[] _states =
     {

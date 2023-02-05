@@ -24,11 +24,12 @@ namespace MudExtensions
           .AddClass("mud-list-item-dense-extended", Dense == true || MudListExtended?.Dense == true)
           .AddClass("mud-list-item-gutters-extended", !DisableGutters && !(MudListExtended?.DisableGutters == true))
           .AddClass("mud-list-item-clickable-extended", MudListExtended?.Clickable)
-          .AddClass("mud-ripple", MudListExtended?.Clickable == true && !DisableRipple && !Disabled)
+          .AddClass("mud-ripple", MudListExtended?.Clickable == true && !DisableRipple && !Disabled && !IsFunctional)
           .AddClass($"mud-selected-item mud-{MudListExtended?.Color.ToDescriptionString()}-text mud-{MudListExtended?.Color.ToDescriptionString()}-hover", _selected && !Disabled && NestedList == null && !MudListExtended.DisableSelectedItemStyle)
           .AddClass("mud-list-item-hilight-extended", _active && !Disabled && NestedList == null && IsFunctional == false)
           .AddClass("mud-list-item-disabled-extended", Disabled)
           .AddClass("mud-list-item-nested-background-extended", MudListExtended != null && MudListExtended.SecondaryBackgroundForNestedItemHeader && NestedList != null)
+          .AddClass("mud-list-item-functional", IsFunctional)
           .AddClass(Class)
         .Build();
 

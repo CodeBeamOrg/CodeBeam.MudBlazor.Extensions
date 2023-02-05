@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -9,6 +10,7 @@ using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using MudExtensions.Services;
+using static MudBlazor.CategoryTypes;
 
 namespace MudExtensions
 {
@@ -26,6 +28,7 @@ namespace MudExtensions
         private List<MudListExtended<T>> _childLists = new();
         internal MudListItemExtended<T> _lastActivatedItem;
         internal bool? _allSelected = false;
+        private string _searchString;
 
         protected string Classname =>
         new CssBuilder("mud-list-extended")
@@ -110,6 +113,20 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public ICollection<T> ItemCollection { get; set; } = null;
+
+        /// <summary>
+        /// If true, shows a searchbox for filtering items. Only works with ItemCollection approach.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public bool SearchBox { get; set; }
+
+        /// <summary>
+        /// SearchBox's CSS classes, seperated by space.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public string ClassSearchBox { get; set; }
 
         /// <summary>
         /// Allows virtualization. Only work if ItemCollection parameter is not null.
@@ -663,6 +680,7 @@ namespace MudExtensions
                 }
                 _firstRendered = true;
             }
+
             _centralCommanderResultRendered = true;
         }
 
@@ -846,7 +864,7 @@ namespace MudExtensions
             _lastActivatedItem = item;
         }
 
-        protected internal void UpdateSelectedStyles(bool deselectFirst = true)
+        protected internal void UpdateSelectedStyles(bool deselectFirst = true, bool update = true)
         {
             var items = CollectAllMudListItems(true);
             if (deselectFirst)
@@ -868,7 +886,10 @@ namespace MudExtensions
                 items.Where(x => SelectedValues.Contains(x.Value, Comparer == null ? null : Comparer)).ToList().ForEach(x => x.SetSelected(true));
             }
 
-            StateHasChanged();
+            if (update == true)
+            {
+                StateHasChanged();
+            }
         }
 
         protected bool IsSelectable()
@@ -1214,7 +1235,7 @@ namespace MudExtensions
         #endregion
 
 
-        #region Others (Clear, Scroll)
+        #region Others (Clear, Scroll, Search)
 
         /// <summary>
         /// Clears value(s) and item(s) and deactive all items.
@@ -1238,6 +1259,16 @@ namespace MudExtensions
 
         protected internal ValueTask ScrollToMiddleAsync(MudListItemExtended<T> item)
             => ScrollManagerExtended.ScrollToMiddleAsync(_elementId, item.ItemId);
+
+        protected ICollection<T> GetSearchedItems()
+        {
+            if (SearchBox == false || ItemCollection == null || _searchString == null)
+            {
+                return ItemCollection;
+            }
+
+            return ItemCollection.Where(x => Converter.Set(x).Contains(_searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
+        }
 
         #endregion
     }
