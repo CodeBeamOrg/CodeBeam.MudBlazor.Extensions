@@ -16,9 +16,9 @@
         {
             @if (SearchBox == true)
             {
-                <MudListSubheaderExtended T="T" Style="position: sticky; top: -24px; background-color: var(--mud-palette-background); z-index: 10">
+                <MudListSubheaderExtended T="T" Style="position: sticky; top: -12px; background-color: var(--mud-palette-background); z-index: 10">
                     <div @onkeydown:stopPropagation>
-                        <MudTextField @bind-Value="@_searchString" Immediate="true" Variant="Variant.Outlined" Margin="Margin.Dense"
+                        <MudTextField @bind-Value="@_searchString" OnKeyUp="@(() => UpdateSelectedStyles())" Immediate="true" Variant="Variant.Outlined" Margin="Margin.Dense"
                               Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" IconColor="Color" />
                     </div>
 
