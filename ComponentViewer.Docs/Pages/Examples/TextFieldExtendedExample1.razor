@@ -56,7 +56,6 @@
     
     <MudItem xs="12" sm="4">
         <MudStack>
-            <MudSelectExtended @bind-Value="_variant" ItemCollection="@((ICollection<Variant>)Enum.GetValues<Variant>())" />
             <MudSwitchM3 @bind-Checked="_showLabel" Label="Show Label" Color="Color.Primary" />
             <MudSwitchM3 @bind-Checked="_adornmentStart" Label="AdornmentStart" Color="Color.Primary" />
             <MudSwitchM3 @bind-Checked="_dense" Label="Dense" Color="Color.Primary" />
@@ -66,7 +65,6 @@
 </MudGrid>
 
 @code {
-    Variant _variant = Variant.Text;
     bool _showLabel = true;
     bool _adornmentStart = true;
     bool _dense = false;

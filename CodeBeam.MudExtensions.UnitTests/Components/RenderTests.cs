@@ -49,5 +49,26 @@ namespace CodeBeam.MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<StepperPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
+
+        [Test]
+        public void ListExtendedPageRenderTest()
+        {
+            var comp = Context.RenderComponent<ListExtendedPage>();
+            comp.Markup.Should().NotBeNullOrEmpty();
+        }
+
+        [Test]
+        public void SelectExtendedPageRenderTest()
+        {
+            var comp = Context.RenderComponent<SelectExtendedPage>();
+            comp.Markup.Should().NotBeNullOrEmpty();
+        }
+
+        [Test]
+        public void TextFieldExtendedPageRenderTest()
+        {
+            var comp = Context.RenderComponent<TextFieldExtendedPage>();
+            comp.Markup.Should().NotBeNullOrEmpty();
+        }
     }
 }
