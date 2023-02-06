@@ -12,6 +12,12 @@
             <MudText Class="ma-4">Enum List</MudText>
             <MudListExtended T="Continent" ItemCollection="(ICollection<Continent>)Enum.GetValues<Continent>()" Clickable="true" MaxItems="_maxItems" SearchBox="_searchBox" />
         </MudPaper>
+
+        <MudPaper Width="300px" Elevation="0">
+            <MudText Class="ma-4">Complex Type List</MudText>
+            <MudListExtended T="ComplexTypes" ItemCollection="_complexTypeCollection" Clickable="true" MaxItems="_maxItems" SearchBox="_searchBox"
+                ToStringFunc="@(e => e?.Name + " " + e?.SurName)" />
+        </MudPaper>
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -28,6 +34,13 @@
     int _maxItems = 8;
     bool _searchBox = false;
     string _selectedState;
+    ICollection<ComplexTypes> _complexTypeCollection = new List<ComplexTypes>()
+    {
+        new ComplexTypes() { Name = "John", SurName = "Star" },
+        new ComplexTypes() { Name = "David", SurName = "Codewriter" },
+        new ComplexTypes() { Name = "Mary", SurName = "Hardcoded" },
+        new ComplexTypes() { Name = "Jessica", SurName = "Fastfinger" },
+    };
 
     private string[] _states =
     {
@@ -55,5 +68,11 @@
         Africa,
         Australia,
         Antarctica
+    }
+
+    public class ComplexTypes
+    {
+        public string Name { get; set; }
+        public string SurName { get; set; }
     }
 }

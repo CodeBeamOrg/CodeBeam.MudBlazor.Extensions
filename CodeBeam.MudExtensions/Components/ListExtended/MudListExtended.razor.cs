@@ -107,6 +107,27 @@ namespace MudExtensions
             }
         }
 
+        private Func<T, string> _toStringFunc = x => x?.ToString();
+        /// <summary>
+        /// Defines how values are displayed in the drop-down list
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public Func<T, string> ToStringFunc
+        {
+            get => _toStringFunc;
+            set
+            {
+                if (_toStringFunc == value)
+                    return;
+                _toStringFunc = value;
+                Converter = new DefaultConverter<T>
+                {
+                    SetFunc = _toStringFunc ?? (x => x?.ToString()),
+                };
+            }
+        }
+
         /// <summary>
         /// Predefined enumerable items. If its not null, creates list items automatically.
         /// </summary>

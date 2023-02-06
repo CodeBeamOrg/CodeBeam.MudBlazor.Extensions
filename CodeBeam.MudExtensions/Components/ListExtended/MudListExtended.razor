@@ -27,11 +27,11 @@
             <MudVirtualize IsEnabled="@Virtualize" Items="GetSearchedItems()" Context="item" OverscanCount="@OverscanCount">
                 @if (MudSelectExtended != null)
                 {
-                    <MudSelectItemExtended Value="@item" Text="@(MudSelectExtended.ToStringFunc == null ? item.ToString() : MudSelectExtended.ToStringFunc(item))" />
+                    <MudSelectItemExtended Value="@item" Text="@(ToStringFunc == null ? item.ToString() : ToStringFunc(item))" />
                 }
                 else
                 {
-                    <MudListItemExtended Value="@item" Text="@item.ToString()" />
+                    <MudListItemExtended Value="@item" Text="@(ToStringFunc == null ? item.ToString() : ToStringFunc(item))" />
                 }
             </MudVirtualize>
         }
