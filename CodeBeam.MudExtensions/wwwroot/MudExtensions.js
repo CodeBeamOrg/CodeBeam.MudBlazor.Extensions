@@ -10,3 +10,8 @@ class MudScrollManagerExtended {
     }
 };
 window.mudScrollManagerExtended = new MudScrollManagerExtended();
+
+function auto_size(element) {
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight + 4) + "px";
+}
