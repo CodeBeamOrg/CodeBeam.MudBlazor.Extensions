@@ -16,7 +16,7 @@
         <MudPaper Width="300px" Elevation="0">
             <MudText Class="ma-4">Complex Type List</MudText>
             <MudListExtended T="ComplexTypes" ItemCollection="_complexTypeCollection" Clickable="true" MaxItems="_maxItems" SearchBox="_searchBox"
-                ToStringFunc="@(e => e.Name + " " + e.SurName)" />
+                ToStringFunc="@(e => e?.Name + " " + e?.SurName)" />
         </MudPaper>
     </MudItem>
 
