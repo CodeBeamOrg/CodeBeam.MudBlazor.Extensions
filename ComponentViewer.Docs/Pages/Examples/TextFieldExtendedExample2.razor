@@ -1,0 +1,18 @@
+﻿
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex justify-center">
+        <MudPaper Width="200px" Elevation="0">
+            <MudTextFieldExtended T="string" Lines="2" Immediate="true" AutoSize="_autosize" Label="AutoSized TextField" Variant="Variant.Filled" />
+        </MudPaper>
+    </MudItem>
+    
+    <MudItem xs="12" sm="4">
+        <MudStack>
+            <MudSwitchM3 @bind-Checked="_autosize" Label="AutoSize" Color="Color.Primary" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    bool _autosize = true;
+}

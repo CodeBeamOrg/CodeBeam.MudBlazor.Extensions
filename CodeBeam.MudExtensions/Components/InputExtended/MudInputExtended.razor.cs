@@ -2,20 +2,37 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
-    public partial class MudInputExtended<T> : MudBaseInput<T>
+    public partial class MudInputExtended<T> : MudBaseInputExtended<T>
     {
+        [Inject] IJSRuntime JSRuntime { get; set; }
+
         protected string Classname => MudInputCssHelperExtended.GetClassname(this,
-            () => HasNativeHtmlPlaceholder() || !string.IsNullOrEmpty(Text) || Adornment == Adornment.Start || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(Converter.Set(Value)));
+            () => HasNativeHtmlPlaceholder() || !string.IsNullOrEmpty(Text) || AdornmentStart != null || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(Converter.Set(Value)));
 
         protected string InputClassname => MudInputCssHelperExtended.GetInputClassname(this);
 
         protected string AdornmentClassname => MudInputCssHelperExtended.GetAdornmentClassname(this);
+
+        protected string AdornmentStartClassname =>
+            new CssBuilder("mud-input-adornment mud-input-adornment-start-extended")
+                .AddClass($"mud-input-{Variant.ToDescriptionString()}-extended")
+                .AddClass($"mud-text", !string.IsNullOrEmpty(AdornmentText))
+                .AddClass($"mud-input-root-filled-shrink", Variant == Variant.Filled)
+                .Build();
+
+        protected string AdornmentEndClassname =>
+            new CssBuilder("mud-input-adornment mud-input-adornment-end-extended")
+                .AddClass($"mud-input-{Variant.ToDescriptionString()}-extended")
+                .AddClass($"mud-text", !string.IsNullOrEmpty(AdornmentText))
+                .AddClass($"mud-input-root-filled-shrink", Variant == Variant.Filled)
+                .Build();
 
         protected string ClearButtonClassname =>
                     new CssBuilder()
@@ -25,32 +42,72 @@ namespace MudExtensions
                     .AddClass("mud-icon-button-edge-margin-end", Adornment != Adornment.End && HideSpinButtons == true)
                     .Build();
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+            if (firstRender)
+            {
+                if (AutoSize == true)
+                {
+                    await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+                    StateHasChanged();
+                }
+            }
+        }
+
+
         /// <summary>
         /// Type of the input element. It should be a valid HTML5 input type.
         /// </summary>
         [Parameter] public InputType InputType { get; set; } = InputType.Text;
 
-        internal InputType GetInputType() => InputType;
+        internal override InputType GetInputType() => InputType;
 
         protected string InputTypeString => InputType.ToDescriptionString();
 
-        protected Task OnInput(ChangeEventArgs args)
+        protected Task OnInputHandler(ChangeEventArgs args)
         {
             if (!Immediate)
                 return Task.CompletedTask;
             _isFocused = true;
+            OnInput.InvokeAsync();
+            if (AutoSize)
+            {
+                JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+            }
             return SetTextAsync(args?.Value as string);
         }
 
-        protected async Task OnChange(ChangeEventArgs args)
+        protected async Task OnChangeHandler(ChangeEventArgs args)
         {
             _internalText = args?.Value as string;
             await OnInternalInputChanged.InvokeAsync(args);
             if (!Immediate)
             {
                 await SetTextAsync(args?.Value as string);
+                if (AutoSize)
+                {
+                    await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+                }
+                
+                await OnChange.InvokeAsync();
             }
         }
+
+        /// <summary>
+        /// If true, automatically resize the height regard to the text. Needs Lines parameter to set more than 1.
+        /// </summary>
+        [Parameter] public bool AutoSize { get; set; }
+
+        /// <summary>
+        /// Fires on input.
+        /// </summary>
+        [Parameter] public EventCallback OnInput { get; set; }
+
+        /// <summary>
+        /// Fires on change.
+        /// </summary>
+        [Parameter] public EventCallback OnChange { get; set; }
 
         /// <summary>
         /// Paste hook for descendants.

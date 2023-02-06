@@ -672,3 +672,13 @@
   margin-top: 10px;
   border-bottom: 1px solid lightgrey;
   padding-bottom: 18px; }
+
+/*@import '../abstracts/variables';*/
+.mud-input-adornment-start-extended:not(.mud-input-text-extended) {
+  margin-inline-start: 12px; }
+
+.mud-input-adornment-start-extended.mud-input-filled-extended {
+  margin-top: 16px; }
+
+.mud-input-adornment-end-extended:not(.mud-input-text-extended) {
+  margin-inline-end: 12px; }

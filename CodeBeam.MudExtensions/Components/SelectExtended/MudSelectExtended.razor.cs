@@ -14,7 +14,7 @@ using static MudBlazor.CategoryTypes;
 
 namespace MudExtensions
 {
-    public partial class MudSelectExtended<T> : MudBaseInput<T>, IMudSelectExtended, IMudShadowSelectExtended
+    public partial class MudSelectExtended<T> : MudBaseInputExtended<T>, IMudSelectExtended, IMudShadowSelectExtended
     {
 
         #region Constructor, Injected Services, Parameters, Fields

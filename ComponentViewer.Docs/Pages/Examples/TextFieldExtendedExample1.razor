@@ -1,0 +1,74 @@
+﻿
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <div class="d-flex gap-4">
+            @if (_adornmentStart)
+            {
+                <MudTextFieldExtended T="string" Immediate="true" Label="@(_showLabel ? "Extended TextField" : null)" Variant="Variant.Text" Margin="@(_dense ? Margin.Dense : Margin.Normal)" Clearable="_clearable">
+                    <AdornmentStart>
+                        kg
+                    </AdornmentStart>
+                    <AdornmentEnd>
+                        <MudIcon Icon="@Icons.Filled.Menu" />
+                    </AdornmentEnd>
+                </MudTextFieldExtended>
+
+                <MudTextFieldExtended T="string" Label="@(_showLabel ? "Extended TextField" : null)" Variant="Variant.Outlined" Margin="@(_dense ? Margin.Dense : Margin.Normal)" Clearable="_clearable">
+                    <AdornmentStart>
+                        <MudText>kg</MudText>
+                    </AdornmentStart>
+                    <AdornmentEnd>
+                        <MudIcon Icon="@Icons.Filled.Menu" />
+                    </AdornmentEnd>
+                </MudTextFieldExtended>
+
+                <MudTextFieldExtended T="string" Label="@(_showLabel ? "Extended TextField" : null)" Variant="Variant.Filled" Margin="@(_dense ? Margin.Dense : Margin.Normal)" Clearable="_clearable">
+                    <AdornmentStart>
+                        <MudText>kg</MudText>
+                    </AdornmentStart>
+                    <AdornmentEnd>
+                        <MudIcon Icon="@Icons.Filled.Menu" />
+                    </AdornmentEnd>
+                </MudTextFieldExtended>
+            }
+            else
+            {
+                <MudTextFieldExtended T="string" Label="@(_showLabel ? "Extended TextField" : null)" Variant="Variant.Text" Margin="@(_dense ? Margin.Dense : Margin.Normal)" Clearable="_clearable">
+                    <AdornmentEnd>
+                        <MudIcon Icon="@Icons.Filled.Menu" />
+                    </AdornmentEnd>
+                </MudTextFieldExtended>
+
+                <MudTextFieldExtended T="string" Label="@(_showLabel ? "Extended TextField" : null)" Variant="Variant.Outlined" Margin="@(_dense ? Margin.Dense : Margin.Normal)" Clearable="_clearable">
+                    <AdornmentEnd>
+                        <MudIcon Icon="@Icons.Filled.Menu" />
+                    </AdornmentEnd>
+                </MudTextFieldExtended>
+
+                <MudTextFieldExtended T="string" Label="@(_showLabel ? "Extended TextField" : null)" Variant="Variant.Filled" Margin="@(_dense ? Margin.Dense : Margin.Normal)" Clearable="_clearable">
+                    <AdornmentEnd>
+                        <MudIcon Icon="@Icons.Filled.Menu" />
+                    </AdornmentEnd>
+                </MudTextFieldExtended>
+            }
+        </div>
+    </MudItem>
+    
+    <MudItem xs="12" sm="4">
+        <MudStack>
+            <MudSelectExtended @bind-Value="_variant" ItemCollection="@((ICollection<Variant>)Enum.GetValues<Variant>())" />
+            <MudSwitchM3 @bind-Checked="_showLabel" Label="Show Label" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Checked="_adornmentStart" Label="AdornmentStart" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Checked="_dense" Label="Dense" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Checked="_clearable" Label="Clearable" Color="Color.Primary" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    Variant _variant = Variant.Text;
+    bool _showLabel = true;
+    bool _adornmentStart = true;
+    bool _dense = false;
+    bool _clearable = false;
+}
