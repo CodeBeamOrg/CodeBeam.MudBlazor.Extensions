@@ -31,7 +31,7 @@
                 }
                 else
                 {
-                    <MudListItemExtended Value="@item" Text="@item.ToString()" />
+                    <MudListItemExtended Value="@item" Text="@(ToStringFunc == null ? item.ToString() : ToStringFunc(item))" />
                 }
             </MudVirtualize>
         }
