@@ -39,6 +39,16 @@
 - MudSelectExtended
 - MudTextFieldExtended
 
+
+## Playground
+- **Docs**
+https://codebeam-mudextensions.pages.dev/
+- **Try MudExtensions**
+https://trymudextensions.pages.dev/
+
+## API
+https://codebeam-mudextensions.pages.dev/api
+
 ## Supported MudBlazor Versions
 | MudExtensions | MudBlazor | .Net |
 | :---  |    :----:   | :---: |
@@ -70,12 +80,6 @@ Adding namespace to `_Imports.razor` is not obligatory, but useful.
 ```razor
 @using MudExtensions
 ```
-
-## Playground
-https://codebeam-mudextensions.pages.dev/
-
-## API
-https://codebeam-mudextensions.pages.dev/api
 
 ## Examples
 Each example is recorded in the playground website.
