@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
+using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -137,13 +138,17 @@ namespace MudExtensions
         protected void HandleOnClick()
         {
             // Selection works on list. We arrange only popover state and some minor arrangements on click.
-            MudSelectExtended?.SelectOption(Value).AndForget();
+            MudSelectExtended?.SelectOption(Value).AndForgetExt();
             InvokeAsync(StateHasChanged);
             if (MultiSelection == false)
             {
-                MudSelectExtended.CloseMenu().AndForget();
+                MudSelectExtended.CloseMenu().AndForgetExt();
             }
-            OnClick.InvokeAsync().AndForget();
+            else
+            {
+                MudSelectExtended.FocusAsync().AndForgetExt();
+            }
+            OnClick.InvokeAsync().AndForgetExt();
         }
 
         protected bool GetDisabledStatus()

@@ -796,6 +796,14 @@ namespace MudExtensions
                         }
                     }
                     break;
+                case "f":
+                case "F":
+                    if (obj.CtrlKey == true && obj.ShiftKey == true)
+                    {
+                        SearchBox = !SearchBox;
+                        StateHasChanged();
+                    }
+                    break;
             }
             await OnKeyDown.InvokeAsync(obj);
         }

@@ -10,8 +10,6 @@ namespace MudExtensions
         public static string GetClassname<T>(MudBaseInputExtended<T> baseInput, Func<bool> shrinkWhen) =>
             new CssBuilder("mud-input")
                 .AddClass($"mud-input-{baseInput.Variant.ToDescriptionString()}")
-                //.AddClass($"mud-input-adorned-start", baseInput.AdornmentStart != null)
-                //.AddClass($"mud-input-adorned-end", baseInput.AdornmentEnd != null)
                 .AddClass($"mud-input-margin-{baseInput.Margin.ToDescriptionString()}", when: () => baseInput.Margin != Margin.None)
                 .AddClass("mud-input-underline", when: () => baseInput.DisableUnderLine == false && baseInput.Variant != Variant.Outlined)
                 .AddClass("mud-shrink", when: shrinkWhen)
@@ -26,10 +24,8 @@ namespace MudExtensions
             new CssBuilder("mud-input-slot")
                 .AddClass("mud-input-root")
                 .AddClass($"mud-input-root-{baseInput.Variant.ToDescriptionString()}")
-                //.AddClass($"mud-input-root-adorned-start", baseInput.AdornmentStart != null)
-                //.AddClass($"mud-input-root-adorned-end", baseInput.AdornmentEnd != null)
                 .AddClass($"mud-input-root-margin-{baseInput.Margin.ToDescriptionString()}", when: () => baseInput.Margin != Margin.None)
-                .AddClass("ms-4", baseInput.Variant == Variant.Text)
+                .AddClass("ms-4", baseInput.AdornmentStart != null && baseInput.Variant == Variant.Text)
                 .AddClass(baseInput.Class)
                 .Build();
 

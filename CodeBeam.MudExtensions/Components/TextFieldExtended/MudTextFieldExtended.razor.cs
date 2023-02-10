@@ -7,7 +7,7 @@ using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
-    public partial class MudTextFieldExtended<T> : MudDebouncedInput<T>
+    public partial class MudTextFieldExtended<T> : MudDebouncedInputExtended<T>
     {
         protected string Classname =>
            new CssBuilder("mud-input-input-control")
@@ -32,7 +32,7 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public InputType InputType { get; set; } = InputType.Text;
 
-        internal InputType GetInputType() => InputType;
+        internal override InputType GetInputType() => InputType;
 
         private string GetCounterText() => Counter == null ? string.Empty : (Counter == 0 ? (string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") : ((string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") + $" / {Counter}"));
 
@@ -47,17 +47,6 @@ namespace MudExtensions
         /// Button click event for clear button. Called after text and value has been cleared.
         /// </summary>
         [Parameter] public EventCallback<MouseEventArgs> OnClearButtonClick { get; set; }
-
-        /// <summary>
-        /// The adornment that placed start of the input.
-        /// </summary>
-        [Parameter] public RenderFragment AdornmentStart { get; set; }
-
-        /// <summary>
-        /// The adornment that placed end of the input.
-        /// </summary>
-        [Parameter] public RenderFragment AdornmentEnd { get; set; }
-
 
         public override ValueTask FocusAsync()
         {
