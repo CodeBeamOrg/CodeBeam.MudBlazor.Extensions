@@ -36,10 +36,10 @@ namespace MudExtensions
 
         protected string ClearButtonClassname =>
                     new CssBuilder()
-                    .AddClass("me-n1", Adornment == Adornment.End && HideSpinButtons == false)
-                    .AddClass("mud-icon-button-edge-end", Adornment == Adornment.End && HideSpinButtons == true)
-                    .AddClass("me-6", Adornment != Adornment.End && HideSpinButtons == false)
-                    .AddClass("mud-icon-button-edge-margin-end", Adornment != Adornment.End && HideSpinButtons == true)
+                    .AddClass("me-n1", Adornment == Adornment.End && !HideSpinButtons)
+                    .AddClass("mud-icon-button-edge-end", Adornment == Adornment.End && HideSpinButtons)
+                    .AddClass("me-6", Adornment != Adornment.End && !HideSpinButtons)
+                    .AddClass("mud-icon-button-edge-margin-end", Adornment != Adornment.End && HideSpinButtons)
                     .Build();
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -47,7 +47,7 @@ namespace MudExtensions
             await base.OnAfterRenderAsync(firstRender);
             if (firstRender)
             {
-                if (AutoSize == true)
+                if (AutoSize)
                 {
                     await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
                     StateHasChanged();

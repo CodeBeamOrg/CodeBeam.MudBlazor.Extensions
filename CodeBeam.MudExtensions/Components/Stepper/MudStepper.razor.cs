@@ -20,8 +20,8 @@ namespace MudExtensions
         Guid _animateGuid = Guid.NewGuid();
 
         protected string HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-2")
-            .AddClass("mud-ripple", DisableRipple == false && Linear == false)
-            .AddClass("cursor-pointer mud-stepper-header-non-linear", Linear == false)
+            .AddClass("mud-ripple", !DisableRipple && !Linear)
+            .AddClass("cursor-pointer mud-stepper-header-non-linear", !Linear)
             .AddClass("flex-column", HeaderTextView == HeaderTextView.NewLine)
             .Build();
 
@@ -168,7 +168,7 @@ namespace MudExtensions
         internal void AddStep(MudStep step)
         {
             _allSteps.Add(step);
-            if (step.IsResultStep == false)
+            if (!step.IsResultStep)
             {
                 Steps.Add(step);
             }
@@ -201,7 +201,7 @@ namespace MudExtensions
                         StepChangeDirection.Backward
             );
 
-            if (skipPreventProcess == false && PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection) == true)
+            if (!skipPreventProcess && PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
             {
                 return;
             }
@@ -212,11 +212,11 @@ namespace MudExtensions
                 await _animate.Refresh();
             }
 
-            if (ActiveIndex == Steps.Count - 1 && HasResultStep() == false && 0 < count)
+            if (ActiveIndex == Steps.Count - 1 && !HasResultStep() && 0 < count)
             {
                 return;
             }
-            else if (firstCompleted == true)
+            else if (firstCompleted)
             {
                 if (HasResultStep())
                 {
@@ -227,7 +227,7 @@ namespace MudExtensions
             {
                 ActiveIndex = 0;
             }
-            else if (ActiveIndex == Steps.Count - 1 && IsAllStepsCompleted() == false && 0 < count)
+            else if (ActiveIndex == Steps.Count - 1 && !IsAllStepsCompleted() && 0 < count)
             {
                 ActiveIndex = Steps.IndexOf(Steps.FirstOrDefault(x => x.Status == StepStatus.Continued));
             }
@@ -248,7 +248,7 @@ namespace MudExtensions
             if (isActiveStep)
             {
                 var stepChangeDirection = (moveToNextStep ? StepChangeDirection.Forward : StepChangeDirection.None);
-                if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection) == true)
+                if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
                 {
                     return;
                 }
@@ -271,7 +271,7 @@ namespace MudExtensions
             if (isActiveStep)
             {
                 var stepChangeDirection = (moveToNextStep ? StepChangeDirection.Forward : StepChangeDirection.None);
-                if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection) == true)
+                if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
                 {
                     return;
                 }

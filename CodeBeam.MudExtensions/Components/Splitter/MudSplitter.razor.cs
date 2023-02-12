@@ -12,7 +12,7 @@ namespace MudExtensions
         MudSlider<double> _slider;
 
         protected string Classname => new CssBuilder("mud-splitter")
-            .AddClass($"border-solid border-2 mud-border-{Color.ToDescriptionString()}", Bordered == true)
+            .AddClass($"border-solid border-2 mud-border-{Color.ToDescriptionString()}", Bordered)
             .AddClass($"mud-splitter-generate mud-splitter-generate-{_styleGuid}")
             .AddClass(Class)
             .Build();

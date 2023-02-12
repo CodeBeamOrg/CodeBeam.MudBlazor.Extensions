@@ -253,7 +253,7 @@ namespace MudExtensions
                 Value = TimeSpan.FromMilliseconds(_stopwatch.ElapsedMilliseconds);
             }
 #pragma warning disable CS4014
-            if (Wheel == true)
+            if (Wheel)
             {
                 if (oldHour != ((int)Value.TotalHours))
                 {

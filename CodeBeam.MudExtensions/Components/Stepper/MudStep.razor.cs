@@ -15,7 +15,7 @@ namespace MudExtensions
     {
 
         protected string Classname => new CssBuilder()
-            .AddClass("d-none", ((MudStepper.ActiveIndex < MudStepper.Steps.Count && MudStepper.Steps[MudStepper.ActiveIndex] != this) || (MudStepper.ShowResultStep() && IsResultStep == false)) || (IsResultStep && MudStepper.ShowResultStep() == false))
+            .AddClass("d-none", ((MudStepper.ActiveIndex < MudStepper.Steps.Count && MudStepper.Steps[MudStepper.ActiveIndex] != this) || (MudStepper.ShowResultStep() && !IsResultStep)) || (IsResultStep && !MudStepper.ShowResultStep()))
             .AddClass(Class)
             .Build();
 

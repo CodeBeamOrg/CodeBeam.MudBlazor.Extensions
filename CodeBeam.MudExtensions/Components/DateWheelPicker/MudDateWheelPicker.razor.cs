@@ -19,7 +19,7 @@ namespace MudExtensions
             Converter = new MudBlazor.Converter<DateTime?, string>()
             {
                 SetFunc = x => x?.ToString(DateFormat),
-                GetFunc = x => DateTime.TryParseExact(x, DateFormat, null, System.Globalization.DateTimeStyles.None, out dt) == true ? dt : null,
+                GetFunc = x => DateTime.TryParseExact(x, DateFormat, null, System.Globalization.DateTimeStyles.None, out dt) ? dt : null,
             };
         }
 
@@ -189,7 +189,7 @@ namespace MudExtensions
         public int MaxHeight { get; set; } = 300;
 
         internal bool _isOpen;
-        internal string _currentIcon { get; set; } = Icons.Filled.CalendarMonth;
+        internal string _currentIcon { get; set; } = Icons.Material.Filled.CalendarMonth;
 
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
@@ -243,7 +243,7 @@ namespace MudExtensions
                 return;
             SetWheelValues();
             _isOpen = true;
-            if (Editable == true)
+            if (Editable)
             {
                 await InputReference.FocusAsync();
             }

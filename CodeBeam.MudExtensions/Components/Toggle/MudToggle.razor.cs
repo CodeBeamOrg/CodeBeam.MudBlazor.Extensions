@@ -16,14 +16,14 @@ namespace MudExtensions
     {
 
         protected string Classname => new CssBuilder()
-            .AddClass(Class, Toggled == false)
-            .AddClass(ClassToggled, Toggled == true)
+            .AddClass(Class, !Toggled)
+            .AddClass(ClassToggled, Toggled)
             .AddClass(ClassCommon)
             .Build();
 
         protected string GetStyle()
         {
-            if (Toggled == false)
+            if (!Toggled)
             {
                 return $"{StyleCommon} {Style}";
             }

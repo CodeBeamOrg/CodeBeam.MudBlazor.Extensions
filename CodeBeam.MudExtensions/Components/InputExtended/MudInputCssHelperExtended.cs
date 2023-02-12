@@ -13,7 +13,7 @@ namespace MudExtensions
                 //.AddClass($"mud-input-adorned-start", baseInput.AdornmentStart != null)
                 //.AddClass($"mud-input-adorned-end", baseInput.AdornmentEnd != null)
                 .AddClass($"mud-input-margin-{baseInput.Margin.ToDescriptionString()}", when: () => baseInput.Margin != Margin.None)
-                .AddClass("mud-input-underline", when: () => baseInput.DisableUnderLine == false && baseInput.Variant != Variant.Outlined)
+                .AddClass("mud-input-underline", when: () => !baseInput.DisableUnderLine && baseInput.Variant != Variant.Outlined)
                 .AddClass("mud-shrink", when: shrinkWhen)
                 .AddClass("mud-disabled", baseInput.Disabled)
                 .AddClass("mud-input-error", baseInput.HasErrors)

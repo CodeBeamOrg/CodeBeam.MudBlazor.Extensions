@@ -1,7 +1,7 @@
 ﻿
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.SelectedOption == 1 ? new Func<List<string>, string>(GetMultiSelectionText) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="value" @bind-SelectedValues="options" T="string" Label="US States" AdornmentIcon="@Icons.Filled.Search" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.SelectedOption == 1 ? new Func<List<string>, string>(GetMultiSelectionText) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="value" @bind-SelectedValues="options" T="string" Label="US States" AdornmentIcon="@Icons.Material.Filled.Search" AnchorOrigin="Origin.BottomCenter">
             @foreach (var state in states)
             {
                 <MudSelectItemExtended T="string" Value="@state" Text="@state" />

@@ -166,7 +166,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string OpenIcon { get; set; } = Icons.Filled.ArrowDropDown;
+        public string OpenIcon { get; set; } = Icons.Material.Filled.ArrowDropDown;
 
         /// <summary>
         /// Dropdown color of select. Supports theme colors.
@@ -180,7 +180,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string CloseIcon { get; set; } = Icons.Filled.ArrowDropUp;
+        public string CloseIcon { get; set; } = Icons.Material.Filled.ArrowDropUp;
 
         /// <summary>
         /// The value presenter.
@@ -320,21 +320,21 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string CheckedIcon { get; set; } = Icons.Filled.CheckBox;
+        public string CheckedIcon { get; set; } = Icons.Material.Filled.CheckBox;
 
         /// <summary>
         /// Custom unchecked icon.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string UncheckedIcon { get; set; } = Icons.Filled.CheckBoxOutlineBlank;
+        public string UncheckedIcon { get; set; } = Icons.Material.Filled.CheckBoxOutlineBlank;
 
         /// <summary>
         /// Custom indeterminate icon.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string IndeterminateIcon { get; set; } = Icons.Filled.IndeterminateCheckBox;
+        public string IndeterminateIcon { get; set; } = Icons.Material.Filled.IndeterminateCheckBox;
 
         private bool _multiSelection = false;
         /// <summary>
@@ -445,14 +445,14 @@ namespace MudExtensions
                 if (SelectedValues.Count() == set.Count() && _selectedValues.All(x => set.Contains(x, _comparer)))
                     return;
 
-                if (_selectedValuesSetterStarted == true)
+                if (_selectedValuesSetterStarted)
                 {
                     return;
                 }
                 _selectedValuesSetterStarted = true;
                 _selectedValues = new HashSet<T>(set, _comparer);
                 SelectionChangedFromOutside?.Invoke(new HashSet<T>(_selectedValues, _comparer));
-                if (MultiSelection == false)
+                if (!MultiSelection)
                 {
                     SetValueAsync(_selectedValues.FirstOrDefault()).AndForget();
                 }
@@ -561,7 +561,7 @@ namespace MudExtensions
                 {
                     foreach (var val in SelectedValues)
                     {
-                        if (Strict == false && !Items.Select(x => x.Value).Contains(val))
+                        if (!Strict && !Items.Select(x => x.Value).Contains(val))
                         {
                             textList.Add(ToStringFunc != null ? ToStringFunc(val) : Converter.Set(val));
                             continue;
@@ -577,7 +577,7 @@ namespace MudExtensions
 
             // when multiselection is true, we return
             // a comma separated list of selected values
-            if (MultiSelection == true)
+            if (MultiSelection)
             {
                 if (MultiSelectionTextFunc != null)
                 {
@@ -615,11 +615,11 @@ namespace MudExtensions
         {
             base.OnInitialized();
             UpdateIcon();
-            if (MultiSelection == false && Value != null)
+            if (!MultiSelection && Value != null)
             {
                 _selectedValues = new HashSet<T>(_comparer) { Value };
             }
-            else if (MultiSelection == true && SelectedValues != null)
+            else if (MultiSelection && SelectedValues != null)
             {
                 // TODO: Check this line again
                 SetValueAsync(SelectedValues.FirstOrDefault()).AndForget();
@@ -669,7 +669,7 @@ namespace MudExtensions
         {
             base.Dispose(disposing);
 
-            if (disposing == true)
+            if (disposing)
             {
                 if (_keyInterceptor != null)
                 {
@@ -690,7 +690,7 @@ namespace MudExtensions
             if (Disabled || ReadOnly)
                 return;
 
-            if (_list != null && _isOpen == true)
+            if (_list != null && _isOpen)
             {
                 await _list.HandleKeyDown(obj);
             }
@@ -701,21 +701,21 @@ namespace MudExtensions
                     await CloseMenu();
                     break;
                 case "ArrowUp":
-                    if (obj.AltKey == true)
+                    if (obj.AltKey)
                     {
                         await CloseMenu();
                     }
-                    else if (_isOpen == false)
+                    else if (!_isOpen)
                     {
                         await OpenMenu();
                     }
                     break;
                 case "ArrowDown":
-                    if (obj.AltKey == true)
+                    if (obj.AltKey)
                     {
                         await OpenMenu();
                     }
-                    else if (_isOpen == false)
+                    else if (!_isOpen)
                     {
                         await OpenMenu();
                     }
@@ -728,7 +728,7 @@ namespace MudExtensions
                     break;
                 case "Enter":
                 case "NumpadEnter":
-                    if (MultiSelection == false)
+                    if (!MultiSelection)
                     {
                         if (!_isOpen)
                         {
@@ -742,7 +742,7 @@ namespace MudExtensions
                     }
                     else
                     {
-                        if (_isOpen == false)
+                        if (!_isOpen)
                         {
                             await OpenMenu();
                             break;
@@ -898,7 +898,7 @@ namespace MudExtensions
         public async Task ForceUpdate()
         {
             //await base.ForceUpdate();
-            if (MultiSelection == false)
+            if (!MultiSelection)
             {
                 SelectedValues = new HashSet<T>(_comparer) { Value };
             }
@@ -930,7 +930,7 @@ namespace MudExtensions
                 }
             }
             //UpdateSelectAllChecked();
-            if (result.HasValue == false)
+            if (!result.HasValue)
             {
                 result = item.Value?.Equals(Value);
             }
@@ -1011,9 +1011,9 @@ namespace MudExtensions
                 if (Value == null)
                     return false;
                 //return _shadowLookup.TryGetValue(Value, out var _);
-                foreach (var item in Items)
+                foreach (var value in Items.Select(x => x.Value))
                 {
-                    if (Comparer != null ? Comparer.Equals(item.Value, Value) : item.Value.Equals(Value)) //(Converter.Set(item.Value) == Converter.Set(Value))
+                    if (Comparer != null ? Comparer.Equals(value, Value) : value.Equals(Value)) //(Converter.Set(item.Value) == Converter.Set(Value))
                     {
                         return true;
                     }

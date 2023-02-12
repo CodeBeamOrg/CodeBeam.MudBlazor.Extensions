@@ -38,7 +38,7 @@ namespace MudExtensions
 
         protected string Stylename =>
         new StyleBuilder()
-            .AddStyle("max-height", $"{MaxItems * (Dense == false ? 48 : 36) + (DisablePadding == true ? 0 : 16)}px", MaxItems != null)
+            .AddStyle("max-height", $"{MaxItems * (!Dense ? 48 : 36) + (DisablePadding ? 0 : 16)}px", MaxItems != null)
             .AddStyle("overflow-y", "auto", MaxItems != null)
             .AddStyle(Style)
             .Build();
@@ -192,11 +192,11 @@ namespace MudExtensions
                     return;
                 }
                 _multiSelection = value;
-                if (_setParametersDone == false)
+                if (!_setParametersDone)
                 {
                     return;
                 }
-                if (_multiSelection == false)
+                if (!_multiSelection)
                 {
                     if (!_centralCommanderIsProcessing)
                     {
@@ -314,11 +314,11 @@ namespace MudExtensions
         // (2) When this method runs once, prevents all value setters until OnAfterRender runs. That guarantees to have proper values.
         protected void HandleCentralValueCommander(string changedValueType, bool updateStyles = true)
         {
-            if (_setParametersDone == false)
+            if (!_setParametersDone)
             {
                 return;
             }
-            if (_centralCommanderIsProcessing == true)
+            if (_centralCommanderIsProcessing)
             {
                 return;
             }
@@ -326,7 +326,7 @@ namespace MudExtensions
 
             if (changedValueType == nameof(SelectedValue))
             {
-                if (MultiSelection == false)
+                if (!MultiSelection)
                 {
                     SelectedValues = new HashSet<T>(_comparer) { SelectedValue };
                     UpdateSelectedItem();
@@ -334,7 +334,7 @@ namespace MudExtensions
             }
             else if (changedValueType == nameof(SelectedValues))
             {
-                if (MultiSelection == true)
+                if (MultiSelection)
                 {
                     SelectedValue = SelectedValues == null ? default(T) : SelectedValues.LastOrDefault();
                     UpdateSelectedItem();
@@ -342,7 +342,7 @@ namespace MudExtensions
             }
             else if (changedValueType == nameof(SelectedItem))
             {
-                if (MultiSelection == false)
+                if (!MultiSelection)
                 {
                     SelectedItems = new HashSet<MudListItemExtended<T>>() { SelectedItem };
                     UpdateSelectedValue();
@@ -350,7 +350,7 @@ namespace MudExtensions
             }
             else if (changedValueType == nameof(SelectedItems))
             {
-                if (MultiSelection == true)
+                if (MultiSelection)
                 {
                     SelectedItem = SelectedItems == null ? null : SelectedItems.LastOrDefault();
                     UpdateSelectedValue();
@@ -389,7 +389,7 @@ namespace MudExtensions
 
         protected internal void UpdateSelectedValue()
         {
-            if (MultiSelection == false && SelectedItem == null)
+            if (!MultiSelection && SelectedItem == null)
             {
                 SelectedValue = default(T);
                 SelectedValues = null;
@@ -412,11 +412,11 @@ namespace MudExtensions
             get => _selectedValue;
             set
             {
-                if (Converter.Set(_selectedValue) != Converter.Set(default(T)) && _firstRendered == false)
+                if (Converter.Set(_selectedValue) != Converter.Set(default(T)) && !_firstRendered)
                 {
                     return;
                 }
-                if (_centralCommanderResultRendered == false && _firstRendered == true)
+                if (!_centralCommanderResultRendered && _firstRendered)
                 {
                     return;
                 }
@@ -450,11 +450,11 @@ namespace MudExtensions
 
             set
             {
-                if (value == null && _firstRendered == false)
+                if (value == null && !_firstRendered)
                 {
                     return;
                 }
-                if (_centralCommanderResultRendered == false && _firstRendered == true)
+                if (!_centralCommanderResultRendered && _firstRendered)
                 {
                     return;
                 }
@@ -479,7 +479,7 @@ namespace MudExtensions
                 //}
 
                 _selectedValues = value == null ? null : new HashSet<T>(value, _comparer);
-                if (_setParametersDone == false)
+                if (!_setParametersDone)
                 {
                     return;
                 }
@@ -500,7 +500,7 @@ namespace MudExtensions
             get => _selectedItem;
             set
             {
-                if (_centralCommanderResultRendered == false && _firstRendered == true)
+                if (!_centralCommanderResultRendered && _firstRendered)
                 {
                     return;
                 }
@@ -508,7 +508,7 @@ namespace MudExtensions
                     return;
 
                 _selectedItem = value;
-                if (_setParametersDone == false)
+                if (!_setParametersDone)
                 {
                     return;
                 }
@@ -529,7 +529,7 @@ namespace MudExtensions
             get => _selectedItems;
             set
             {
-                if (_centralCommanderResultRendered == false && _firstRendered == true)
+                if (!_centralCommanderResultRendered && _firstRendered)
                 {
                     return;
                 }
@@ -543,7 +543,7 @@ namespace MudExtensions
                     return;
 
                 _selectedItems = value == null ? null : value.ToHashSet();
-                if (_setParametersDone == false)
+                if (!_setParametersDone)
                 {
                     return;
                 }
@@ -596,7 +596,7 @@ namespace MudExtensions
         bool _setParametersDone = false;
         public override Task SetParametersAsync(ParameterView parameters)
         {
-            if (_centralCommanderIsProcessing == true)
+            if (_centralCommanderIsProcessing)
             {
                 return Task.CompletedTask;
             }
@@ -658,11 +658,11 @@ namespace MudExtensions
 
                 if (MudSelectExtended == null && MudAutocomplete == null)
                 {
-                    if (MultiSelection == false && SelectedValue != null)
+                    if (!MultiSelection && SelectedValue != null)
                     {
                         HandleCentralValueCommander(nameof(SelectedValue));
                     }
-                    else if (MultiSelection == true && SelectedValues != null)
+                    else if (MultiSelection && SelectedValues != null)
                     {
                         HandleCentralValueCommander(nameof(SelectedValues));
                     }
@@ -745,7 +745,7 @@ namespace MudExtensions
 
         protected internal async Task HandleKeyDown(KeyboardEventArgs obj)
         {
-            if (Disabled || (Clickable == false && MultiSelection == false))
+            if (Disabled || (!Clickable && !MultiSelection))
                 return;
             if (ParentList != null)
             {
@@ -788,7 +788,7 @@ namespace MudExtensions
                     break;
                 case "a":
                 case "A":
-                    if (obj.CtrlKey == true)
+                    if (obj.CtrlKey)
                     {
                         if (MultiSelection)
                         {
@@ -858,7 +858,7 @@ namespace MudExtensions
                 return;
             }
 
-            if (MultiSelection == false)
+            if (!MultiSelection)
             {
                 SelectedValue = item.Value;
             }
@@ -893,12 +893,12 @@ namespace MudExtensions
                 DeselectAllItems(items);
             }
 
-            if (IsSelectable() == false)
+            if (!IsSelectable())
             {
                 return;
             }
 
-            if (MultiSelection == false)
+            if (!MultiSelection)
             {
                 items.FirstOrDefault(x => SelectedValue == null ? x.Value == null : SelectedValue.Equals(x == null ? null : x.Value))?.SetSelected(true);
             }
@@ -907,7 +907,7 @@ namespace MudExtensions
                 items.Where(x => SelectedValues.Contains(x.Value, Comparer == null ? null : Comparer)).ToList().ForEach(x => x.SetSelected(true));
             }
 
-            if (update == true)
+            if (update)
             {
                 StateHasChanged();
             }
@@ -946,13 +946,13 @@ namespace MudExtensions
                     items.AddRange(list._items);
             }
 
-            if (exceptNestedAndExceptional == false)
+            if (!exceptNestedAndExceptional)
             {
                 return items;
             }
             else
             {
-                return items.Where(x => x.NestedList == null && x.IsFunctional == false).ToList();
+                return items.Where(x => x.NestedList == null && !x.IsFunctional).ToList();
             }
         }
 
@@ -994,21 +994,21 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string CheckedIcon { get; set; } = Icons.Filled.CheckBox;
+        public string CheckedIcon { get; set; } = Icons.Material.Filled.CheckBox;
 
         /// <summary>
         /// Custom unchecked icon.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string UncheckedIcon { get; set; } = Icons.Filled.CheckBoxOutlineBlank;
+        public string UncheckedIcon { get; set; } = Icons.Material.Filled.CheckBoxOutlineBlank;
 
         /// <summary>
         /// Custom indeterminate icon.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string IndeterminateIcon { get; set; } = Icons.Filled.IndeterminateCheckBox;
+        public string IndeterminateIcon { get; set; } = Icons.Material.Filled.IndeterminateCheckBox;
 
         protected void SelectAllItems(bool? deselect = false)
         {
@@ -1017,7 +1017,7 @@ namespace MudExtensions
             {
                 foreach (var item in items)
                 {
-                    if (item.IsSelected == true)
+                    if (item.IsSelected)
                     {
                         item.SetSelected(false);
                     }
@@ -1028,7 +1028,7 @@ namespace MudExtensions
             {
                 foreach (var item in items)
                 {
-                    if (item.IsSelected == false)
+                    if (!item.IsSelected)
                     {
                         item.SetSelected(true);
                     }
@@ -1036,7 +1036,7 @@ namespace MudExtensions
                 _allSelected = true;
             }
 
-            SelectedValues = items.Where(x => x.IsSelected == true).Select(y => y.Value).ToHashSet(_comparer);
+            SelectedValues = items.Where(x => x.IsSelected).Select(y => y.Value).ToHashSet(_comparer);
             if (MudSelectExtended != null)
             {
                 MudSelectExtended.BeginValidatePublic();
@@ -1053,7 +1053,7 @@ namespace MudExtensions
             var items = CollectAllMudListItems(true);
             if (_lastActivatedItem == null)
             {
-                var a = items.FindIndex(x => x.IsActive == true);
+                var a = items.FindIndex(x => x.IsActive);
                 return a;
             }
             else
@@ -1068,7 +1068,7 @@ namespace MudExtensions
             var items = CollectAllMudListItems(true);
             if (_lastActivatedItem == null)
             {
-                return items.FirstOrDefault(x => x.IsActive == true).Value;
+                return items.FirstOrDefault(x => x.IsActive).Value;
             }
             else
             {
@@ -1099,7 +1099,7 @@ namespace MudExtensions
         public async Task ActiveFirstItem(string startChar = null)
         {
             var items = CollectAllMudListItems(true);
-            if (items == null || items.Count == 0 || items[0].Disabled == true)
+            if (items == null || items.Count == 0 || items[0].Disabled)
             {
                 return;
             }
@@ -1109,7 +1109,7 @@ namespace MudExtensions
             {
                 items[0].SetActive(true);
                 _lastActivatedItem = items[0];
-                if (items[0].ParentListItem != null && items[0].ParentListItem.Expanded == false)
+                if (items[0].ParentListItem != null && !items[0].ParentListItem.Expanded)
                 {
                     items[0].ParentListItem.Expanded = true;
                 }
@@ -1126,7 +1126,7 @@ namespace MudExtensions
                     return;
                 }
                 _lastActivatedItem.SetActive(true);
-                if (_lastActivatedItem.ParentListItem != null && _lastActivatedItem.ParentListItem.Expanded == false)
+                if (_lastActivatedItem.ParentListItem != null && !_lastActivatedItem.ParentListItem.Expanded)
                 {
                     _lastActivatedItem.ParentListItem.Expanded = true;
                 }
@@ -1139,7 +1139,7 @@ namespace MudExtensions
             {
                 possibleItems[0].SetActive(true);
                 _lastActivatedItem = possibleItems[0];
-                if (_lastActivatedItem.ParentListItem != null && _lastActivatedItem.ParentListItem.Expanded == false)
+                if (_lastActivatedItem.ParentListItem != null && !_lastActivatedItem.ParentListItem.Expanded)
                 {
                     _lastActivatedItem.ParentListItem.Expanded = true;
                 }
@@ -1151,7 +1151,7 @@ namespace MudExtensions
             {
                 possibleItems[0].SetActive(true);
                 _lastActivatedItem = possibleItems[0];
-                if (_lastActivatedItem.ParentListItem != null && _lastActivatedItem.ParentListItem.Expanded == false)
+                if (_lastActivatedItem.ParentListItem != null && !_lastActivatedItem.ParentListItem.Expanded)
                 {
                     _lastActivatedItem.ParentListItem.Expanded = true;
                 }
@@ -1162,7 +1162,7 @@ namespace MudExtensions
                 var item = possibleItems[possibleItems.IndexOf(theItem) + 1];
                 item.SetActive(true);
                 _lastActivatedItem = item;
-                if (_lastActivatedItem.ParentListItem != null && _lastActivatedItem.ParentListItem.Expanded == false)
+                if (_lastActivatedItem.ParentListItem != null && !_lastActivatedItem.ParentListItem.Expanded)
                 {
                     _lastActivatedItem.ParentListItem.Expanded = true;
                 }
@@ -1182,7 +1182,7 @@ namespace MudExtensions
             {
                 return;
             }
-            if (items[index + changeCount].Disabled == true)
+            if (items[index + changeCount].Disabled)
             {
                 // Recursive
                 await ActiveAdjacentItem(changeCount > 0 ? changeCount + 1 : changeCount - 1);
@@ -1192,7 +1192,7 @@ namespace MudExtensions
             items[index + changeCount].SetActive(true);
             _lastActivatedItem = items[index + changeCount];
 
-            if (items[index + changeCount].ParentListItem != null && items[index + changeCount].ParentListItem.Expanded == false)
+            if (items[index + changeCount].ParentListItem != null && !items[index + changeCount].ParentListItem.Expanded)
             {
                 items[index + changeCount].ParentListItem.Expanded = true;
             }
@@ -1216,7 +1216,7 @@ namespace MudExtensions
             items[index - 1].SetActive(true);
             _lastActivatedItem = items[index - 1];
 
-            if (items[index - 1].ParentListItem != null && items[index - 1].ParentListItem.Expanded == false)
+            if (items[index - 1].ParentListItem != null && !items[index - 1].ParentListItem.Expanded)
             {
                 items[index - 1].ParentListItem.Expanded = true;
             }
@@ -1235,7 +1235,7 @@ namespace MudExtensions
             DeactiveAllItems(items);
             for (int i = 0; i < items.Count; i++)
             {
-                if (items[properLastIndex - i].Disabled != true)
+                if (!items[properLastIndex - i].Disabled)
                 {
                     properLastIndex -= i;
                     break;
@@ -1244,7 +1244,7 @@ namespace MudExtensions
             items[properLastIndex].SetActive(true);
             _lastActivatedItem = items[properLastIndex];
 
-            if (items[properLastIndex].ParentListItem != null && items[properLastIndex].ParentListItem.Expanded == false)
+            if (items[properLastIndex].ParentListItem != null && !items[properLastIndex].ParentListItem.Expanded)
             {
                 items[properLastIndex].ParentListItem.Expanded = true;
             }
@@ -1283,7 +1283,7 @@ namespace MudExtensions
 
         protected ICollection<T> GetSearchedItems()
         {
-            if (SearchBox == false || ItemCollection == null || _searchString == null)
+            if (!SearchBox || ItemCollection == null || _searchString == null)
             {
                 return ItemCollection;
             }

@@ -39,7 +39,7 @@ namespace CodeBeam.MudExtensions.UnitTests.Mocks
         {
             var entry = _cachedValues.Last();
 
-            if (IsVertical == false)
+            if (!IsVertical)
             {
                 entry.Value.Width = newSize;
             }
@@ -57,7 +57,7 @@ namespace CodeBeam.MudExtensions.UnitTests.Mocks
         {
             var entry = _cachedValues.ElementAt(index);
 
-            if (IsVertical == false)
+            if (!IsVertical)
             {
                 entry.Value.Width = newSize;
             }
@@ -85,12 +85,12 @@ namespace CodeBeam.MudExtensions.UnitTests.Mocks
             {
                 var size = PanelSize;
                 // last element is always TabsContentSize
-                if (item.Id == elements.Last().Id && _firstBatchProcessed == false)
+                if (item.Id == elements.Last().Id && !_firstBatchProcessed)
                 {
                     size = PanelTotalSize;
                 }
                 var rect = new BoundingClientRect { Width = size };
-                if (IsVertical == true)
+                if (IsVertical)
                 {
                     rect = new BoundingClientRect { Height = size };
                 }
@@ -115,7 +115,7 @@ namespace CodeBeam.MudExtensions.UnitTests.Mocks
 
         public BoundingClientRect GetSizeInfo(ElementReference reference)
         {
-            if (_cachedValues.ContainsKey(reference) == false)
+            if (!_cachedValues.ContainsKey(reference))
             {
                 return null;
             }
