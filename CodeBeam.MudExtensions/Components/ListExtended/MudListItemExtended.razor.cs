@@ -26,7 +26,7 @@ namespace MudExtensions
           .AddClass("mud-list-item-clickable-extended", MudListExtended?.Clickable)
           .AddClass("mud-ripple", MudListExtended?.Clickable == true && !DisableRipple && !Disabled && !IsFunctional)
           .AddClass($"mud-selected-item mud-{MudListExtended?.Color.ToDescriptionString()}-text mud-{MudListExtended?.Color.ToDescriptionString()}-hover", _selected && !Disabled && NestedList == null && !MudListExtended.DisableSelectedItemStyle)
-          .AddClass("mud-list-item-hilight-extended", _active && !Disabled && NestedList == null && IsFunctional == false)
+          .AddClass("mud-list-item-hilight-extended", _active && !Disabled && NestedList == null && !IsFunctional)
           .AddClass("mud-list-item-disabled-extended", Disabled)
           .AddClass("mud-list-item-nested-background-extended", MudListExtended != null && MudListExtended.SecondaryBackgroundForNestedItemHeader && NestedList != null)
           .AddClass("mud-list-item-functional", IsFunctional)
@@ -161,14 +161,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Expanding)]
-        public string ExpandLessIcon { get; set; } = Icons.Filled.ExpandLess;
+        public string ExpandLessIcon { get; set; } = Icons.Material.Filled.ExpandLess;
 
         /// <summary>
         /// Custom expand more icon.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Expanding)]
-        public string ExpandMoreIcon { get; set; } = Icons.Filled.ExpandMore;
+        public string ExpandMoreIcon { get; set; } = Icons.Material.Filled.ExpandMore;
 
         /// <summary>
         /// If true, the List Subheader will be indented.
@@ -360,7 +360,7 @@ namespace MudExtensions
             if (Disabled)
                 return;
 
-            if (OnClickHandlerPreventDefault == true)
+            if (OnClickHandlerPreventDefault)
             {
                 OnClick.InvokeAsync(ev).AndForget();
                 return;

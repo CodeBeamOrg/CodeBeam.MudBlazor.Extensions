@@ -131,7 +131,7 @@ namespace MudExtensions
                 var converter = MudSelectExtended?.Converter;
                 if (converter == null)
                     return $"{(string.IsNullOrEmpty(Text) ? Value : Text)}";
-                return string.IsNullOrEmpty(Text) == false ? Text : converter.Set(Value);
+                return !string.IsNullOrEmpty(Text) ? Text : converter.Set(Value);
             }
         }
 
@@ -140,7 +140,7 @@ namespace MudExtensions
             // Selection works on list. We arrange only popover state and some minor arrangements on click.
             MudSelectExtended?.SelectOption(Value).AndForgetExt();
             InvokeAsync(StateHasChanged);
-            if (MultiSelection == false)
+            if (!MultiSelection)
             {
                 MudSelectExtended.CloseMenu().AndForgetExt();
             }

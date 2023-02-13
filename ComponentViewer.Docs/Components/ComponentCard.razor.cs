@@ -26,7 +26,7 @@ namespace ComponentViewer.Docs.Components
 
         private void NavigateComponentPage()
         {
-            if (NavigateToComponentPage == false)
+            if (!NavigateToComponentPage)
             {
                 return;
             }

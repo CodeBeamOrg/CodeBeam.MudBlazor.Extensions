@@ -111,7 +111,7 @@ namespace MudExtensions
                 return;
             }
 
-            if (EnableAnimation == true)
+            if (EnableAnimation)
             {
                 await _animate.Refresh();
             }

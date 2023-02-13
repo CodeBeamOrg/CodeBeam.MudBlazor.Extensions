@@ -106,15 +106,15 @@ namespace MudExtensions
                     return;
                 }
                 _passwordMode = value;
-                if (_passwordMode == true)
+                if (_passwordMode)
                 {
                     _passwordInput = InputType.Password;
-                    _passwordIcon = Icons.Filled.VisibilityOff;
+                    _passwordIcon = Icons.Material.Filled.VisibilityOff;
                 }
                 else
                 {
                     _passwordInput = InputType.Text;
-                    _passwordIcon = Icons.Filled.Visibility;
+                    _passwordIcon = Icons.Material.Filled.Visibility;
                 }
 
                 PasswordModeChanged.InvokeAsync(value).AndForgetExt();

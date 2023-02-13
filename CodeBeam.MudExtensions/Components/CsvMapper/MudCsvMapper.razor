@@ -149,10 +149,10 @@
     }
     @if (!_importedComplete)
     {
-        <MudButton Class="my-2" Color="Color.Primary" StartIcon="@Icons.Filled.CloudDownload" Variant="Variant.Filled" OnClick="@OnImport" Disabled="!_valid">@LocalizedStrings.Import</MudButton>
+        <MudButton Class="my-2" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudDownload" Variant="Variant.Filled" OnClick="@OnImport" Disabled="!_valid">@LocalizedStrings.Import</MudButton>
     }
     else
     {
-        <MudButton Class="my-2" Color="Color.Secondary" StartIcon="@Icons.Filled.RestartAlt" Variant="Variant.Filled" OnClick="@ReloadPage" Disabled="!_valid">Reset</MudButton>
+        <MudButton Class="my-2" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.RestartAlt" Variant="Variant.Filled" OnClick="@ReloadPage" Disabled="!_valid">Reset</MudButton>
     }
 </div>

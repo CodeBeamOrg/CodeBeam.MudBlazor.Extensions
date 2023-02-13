@@ -22,13 +22,13 @@
                         <div class="d-flex">
                             @if (SubmitOnClose == false)
                             {
-                                <MudIconButton Icon="@Icons.Filled.Done" Color="@Color" OnClick="@(() => CloseMenu(true))" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Done" Color="@Color" OnClick="@(() => CloseMenu(true))" />
                             }
                             <MudSpacer />
                             @if (ShowToolbar)
                             {
-                                <MudIconButton Icon="@Icons.Filled.Sync" Color="@Color" Disabled="@(DateView == DateView.Both)" OnClick="@(() => ToggleDateView())" />
-                                <MudIconButton Icon="@(DateView == DateView.Both ? Icons.Filled.ChevronLeft : Icons.Filled.ChevronRight)" Color="@Color" OnClick="@(() => ExpandDateView())" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Sync" Color="@Color" Disabled="@(DateView == DateView.Both)" OnClick="@(() => ToggleDateView())" />
+                                <MudIconButton Icon="@(DateView == DateView.Both ? Icons.Material.Filled.ChevronLeft : Icons.Material.Filled.ChevronRight)" Color="@Color" OnClick="@(() => ExpandDateView())" />
                             }
                         </div>
                     }

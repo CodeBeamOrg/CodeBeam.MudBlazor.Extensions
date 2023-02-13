@@ -16,11 +16,11 @@
                     <MudAvatar Class="@((active || step.Status != StepStatus.Continued) ? $"mud-theme-{Color.ToDescriptionString()}" : null)" Variant="@Variant" Size="Size.Small">
                         @if (step.Status == Enums.StepStatus.Completed)
                         {
-                            <MudIcon Icon="@Icons.Filled.Done" Size="Size.Small" />
+                            <MudIcon Icon="@Icons.Material.Filled.Done" Size="Size.Small" />
                         }
                         else if (step.Status == StepStatus.Skipped)
                         {
-                            <MudIcon Icon="@Icons.Filled.Remove" Size="Size.Small" />
+                            <MudIcon Icon="@Icons.Material.Filled.Remove" Size="Size.Small" />
                         }
                         else
                         {
@@ -60,7 +60,7 @@
                 {
                     if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued || showResultStep)
                     {
-                        <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Filled.ChevronLeft" OnClick="@(() => SetActiveIndex(-1))" />
+                        <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Material.Filled.ChevronLeft" OnClick="@(() => SetActiveIndex(-1))" />
                     }
                     else
                     {
@@ -100,7 +100,7 @@
                 {
                     if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued)
                     {
-                        <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Filled.ChevronRight" OnClick="@(() => SetActiveIndex(1))" />
+                        <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Material.Filled.ChevronRight" OnClick="@(() => SetActiveIndex(1))" />
                     }
                     else
                     {

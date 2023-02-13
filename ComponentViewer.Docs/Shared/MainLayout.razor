@@ -9,14 +9,14 @@
     <MudLayout>
     <MudAppBar Class="background-gradient-animation mud-width-full" Style="background: linear-gradient(-45deg, var(--mud-palette-dark), var(--mud-palette-primary), var(--mud-palette-dark), var(--mud-palette-secondary), var(--mud-palette-dark)); background-size: 400% 400%; position: fixed; overflow-x: hidden" Dense="true">
 
-            <MudIconButton Class="white-text" Icon="@Icons.Filled.Menu" OnClick="@(() => _drawerOpen = !_drawerOpen)"></MudIconButton>
+            <MudIconButton Class="white-text" Icon="@Icons.Material.Filled.Menu" OnClick="@(() => _drawerOpen = !_drawerOpen)"></MudIconButton>
             <MudIconButton Class="white-text" Icon="@Icons.Custom.Brands.MudBlazor" Href="https://mudblazor.com/" Target="_blank" />
             <MudSpacer />
             <MudText Style="font-weight: 900; color: white">CodeBeam MudExtensions</MudText>
             <MudSpacer />
             <div class="d-flex">
-                <MudToggleIconButton @bind-Toggled="IsDarkMode" Class="white-text" Icon="@Icons.Filled.DarkMode" ToggledIcon="@Icons.Filled.LightMode"/>
-                <MudIconButton Class="white-text" Icon="@Icons.Filled.Settings" OnClick="@ToggleOpen"/>
+                <MudToggleIconButton @bind-Toggled="IsDarkMode" Class="white-text" Icon="@Icons.Material.Filled.DarkMode" ToggledIcon="@Icons.Material.Filled.LightMode"/>
+                <MudIconButton Class="white-text" Icon="@Icons.Material.Filled.Settings" OnClick="@ToggleOpen"/>
                 @if (_open == true)
                 {
                     <MudPopover Class="pa-4" Open="_open" AnchorOrigin="Origin.TopLeft" TransformOrigin="Origin.BottomRight" Style="width: 320px; height: 400px">

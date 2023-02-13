@@ -31,19 +31,19 @@ namespace MudExtensions
 
         protected string OuterItemClassname(int index) => new CssBuilder($"mud-wheel-item mud-wheel-ani-{_animateGuid}")
             .AddClass("wheel-item-closest", Math.Abs(ItemCollection.IndexOf(Value) - index) == 1)
-            .AddClass("my-1", Dense == false)
+            .AddClass("my-1", !Dense)
             .AddClass("mud-disabled", Disabled)
             .Build();
 
         protected string BorderClassname => new CssBuilder("mud-wheel-border mud-wheel-item mud-width-full")
             .AddClass($"mud-wheel-border-{Color.ToDescriptionString()}")
             .AddClass($"wheel-border-gradient-{Color.ToDescriptionString()}", SmoothBorders)
-            .AddClass("my-1", Dense == false)
+            .AddClass("my-1", !Dense)
             .Build();
 
         protected string EmptyItemClassname => new CssBuilder("mud-wheel-ani-{_animateGuid} mud-wheel-item wheel-item-empty")
-            .AddClass("my-1", Dense == false)
-            .AddClass("wheel-item-empty-dense", Dense == true)
+            .AddClass("my-1", !Dense)
+            .AddClass("wheel-item-empty-dense", Dense)
             .Build();
 
         MudAnimate _animate;

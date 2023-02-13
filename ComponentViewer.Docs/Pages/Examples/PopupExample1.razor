@@ -8,7 +8,7 @@
                 <div class="d-flex align-center">
                     <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Primary" />
                     <MudSpacer />
-                    <MudIconButton Icon="@Icons.Filled.Close" Color="Color.Primary" OnClick="@(() => _open = false)" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Primary" OnClick="@(() => _open = false)" />
                 </div>
                 <MudText Typo="Typo.h6" Color="Color.Primary">Follow Us</MudText>
                 <MudText>And get the latest news.</MudText>
@@ -41,7 +41,7 @@ else
             </MudStack>
             <MudRadioGroup @bind-SelectedOption="_icon">
                 <MudRadio Option="@Icons.Custom.Brands.MudBlazor"><MudIcon Icon="@Icons.Custom.Brands.MudBlazor" /></MudRadio>
-                <MudRadio Option="@Icons.Filled.Info"><MudIcon Icon="@Icons.Filled.Info" /></MudRadio>
+                <MudRadio Option="@Icons.Material.Filled.Info"><MudIcon Icon="@Icons.Material.Filled.Info" /></MudRadio>
             </MudRadioGroup>
             <MudTextField @bind-Value="_popupText" Label="Text" />
             <MudTextField @bind-Value="_linkText" Label="Link Text" />

@@ -45,7 +45,7 @@
     bool _openOnHover = true;
     bool _openOnClick = true;
     bool _differentIconOnOpen = true;
-    string _openIcon = Icons.Filled.Close;
+    string _openIcon = Icons.Material.Filled.Close;
 
     private async Task ButtonClick(string text)
     {
@@ -69,7 +69,7 @@
         _differentIconOnOpen = _switch.Checked;
         if (_differentIconOnOpen == true)
         {
-            _openIcon = Icons.Filled.Close;
+            _openIcon = Icons.Material.Filled.Close;
         }
         else
         {

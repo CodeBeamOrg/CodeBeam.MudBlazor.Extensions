@@ -157,7 +157,7 @@ namespace MudExtensions
         {
             base.Dispose(disposing);
 
-            if (disposing == true)
+            if (disposing)
             {
                 if(_keyInterceptor != null)
                 {

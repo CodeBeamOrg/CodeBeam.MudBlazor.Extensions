@@ -45,7 +45,7 @@ namespace MudExtensions
         public EventCallback OnMainButtonClick { get; set; }
 
         [Parameter]
-        public string Icon { get; set; } = Icons.Filled.Add;
+        public string Icon { get; set; } = Icons.Material.Filled.Add;
 
         [Parameter]
         public string IconOnOpen { get; set; }
@@ -74,7 +74,7 @@ namespace MudExtensions
 
         protected string GetIcon()
         {
-            if (Open == true && !string.IsNullOrEmpty(IconOnOpen))
+            if (Open && !string.IsNullOrEmpty(IconOnOpen))
             {
                 return IconOnOpen;
             }
@@ -115,7 +115,7 @@ namespace MudExtensions
         bool _popoverMouseEnter;
         protected void RootMouseEnter()
         {
-            if (OpenOnHover == false)
+            if (!OpenOnHover)
             {
                 return;
             }
@@ -126,7 +126,7 @@ namespace MudExtensions
 
         protected void PopoverMouseEnter()
         {
-            if (OpenOnHover == false)
+            if (!OpenOnHover)
             {
                 return;
             }
@@ -135,7 +135,7 @@ namespace MudExtensions
 
         protected async Task PopoverMouseLeave()
         {
-            if (OpenOnHover == false)
+            if (!OpenOnHover)
             {
                 return;
             }
@@ -145,13 +145,13 @@ namespace MudExtensions
 
         protected async Task WaitToClose()
         {
-            if (OpenOnHover == false)
+            if (!OpenOnHover)
             {
                 return;
             }
             _rootMouseEnter = false;
             await Task.Delay(100);
-            if (_popoverMouseEnter == false && _rootMouseEnter == false)
+            if (!_popoverMouseEnter && !_rootMouseEnter)
             {
                 CloseMenu();
             }

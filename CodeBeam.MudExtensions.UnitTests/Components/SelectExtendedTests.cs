@@ -656,7 +656,7 @@ namespace MudBlazor.UnitTests.Components
 
             // get the first (select all item) and check if it is indeterminate
             var selectAllItem = comp.FindComponent<MudListItemExtended<string>>();
-            selectAllItem.Instance.Icon.Should().Be(Icons.Filled.IndeterminateCheckBox);
+            selectAllItem.Instance.Icon.Should().Be(Icons.Material.Filled.IndeterminateCheckBox);
 
             // Check that all normal select items are actually selected
             //var items = comp.FindComponents<MudSelectItem<string>>().Where(x=>x.Instance.HideContent==false).ToArray();

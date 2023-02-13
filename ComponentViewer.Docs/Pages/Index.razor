@@ -7,7 +7,7 @@
 
 <MudScrollbar Width="8" Color="primary" HoverColor="secondary" />
 <MudScrollToTop>
-    <MudFab Color="Color.Secondary" Icon="@Icons.Filled.ArrowUpward" />
+    <MudFab Color="Color.Secondary" Icon="@Icons.Material.Filled.ArrowUpward" />
 </MudScrollToTop>
 
 <MudContainer Class="d-flex flex-column align-center justify-center pa-4 top-container" MaxWidth="MaxWidth.False">
@@ -38,7 +38,7 @@
     </div>
     
     <div class="d-flex justify-center mt-12">
-        <MudIconButton Icon="@Icons.Filled.ArrowDownward" Style="height: 52px;" Color="Color.Secondary" Variant="Variant.Outlined" OnClick="@(async() => await ScrollManager.ScrollToAsync("cont", 0, 1600, ScrollBehavior.Smooth))" />
+        <MudIconButton Icon="@Icons.Material.Filled.ArrowDownward" Style="height: 52px;" Color="Color.Secondary" Variant="Variant.Outlined" OnClick="@(async() => await ScrollManager.ScrollToAsync("cont", 0, 1600, ScrollBehavior.Smooth))" />
     </div>
 </MudContainer>
 
