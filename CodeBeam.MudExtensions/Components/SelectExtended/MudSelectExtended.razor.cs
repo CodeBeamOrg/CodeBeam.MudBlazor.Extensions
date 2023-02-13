@@ -197,6 +197,13 @@ namespace MudExtensions
         public bool SelectAll { get; set; }
 
         /// <summary>
+        /// Sets position of the Select All checkbox
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Appearance)]
+        public SelectAllPosition SelectAllPosition { get; set; } = SelectAllPosition.Top;
+
+        /// <summary>
         /// Define the text of the Select All option.
         /// </summary>
         [Parameter]
