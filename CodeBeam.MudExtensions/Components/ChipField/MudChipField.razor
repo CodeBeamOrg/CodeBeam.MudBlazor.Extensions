@@ -7,6 +7,8 @@
     T="T"
     Immediate="true"
     OnKeyDown="HandleKeyDown"
+    ForceShrink="@(Values?.Any() ?? false)"
+
     Clearable="@Clearable"
     AutoFocus="@AutoFocus"
     Class="@Class"
@@ -35,17 +37,18 @@
     @bind-Value="@_internalValue">
 
     <DataVisualiser>
-        <MudChipSet Class="d-flex" AllClosable="true" OnClose="Closed">
-            @foreach (var value in Values ?? new List<string>())
+        <MudChipSet Class="@ChipClassname" Style="@($"max-width: {ChipsMaxWidth}%")" AllClosable="true" OnClose="Closed">
+            @for (int i = 0; i < (MaxChips == 0 ? Values?.Count ?? 0 : (MaxChips < (Values?.Count ?? 0) ? MaxChips : Values?.Count ?? 0)); i++)
             {
-                <MudChip Text="@value" Color="@ChipColor" Variant="@ChipVariant" Disabled="@Disabled" />
+                int a = i;
+                <MudChip DisableRipple="true" Style="" Text="@Values[a]" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
             }
         </MudChipSet>
+        @if (Values != null && MaxChips != 0 && MaxChips < Values.Count)
+        {
+            <MudChip DisableRipple="true" Text="@($"+{Values.Count - MaxChips}")" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
+        }
     </DataVisualiser>
-
-    <AdornmentStart>
-        @AdornmentStart
-    </AdornmentStart>
 
     <AdornmentEnd>
         @AdornmentEnd

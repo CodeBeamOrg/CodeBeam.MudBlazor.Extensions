@@ -106,6 +106,10 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool OnlyValidateIfDirty { get; set; } = false;
 
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool ForceShrink { get; set; }
+
         /// <summary>
         /// The color of the adornment if used. It supports the theme colors.
         /// </summary>

@@ -14,6 +14,13 @@ namespace MudExtensions
 {
     public partial class MudChipField<T> : MudTextFieldExtended<T>
     {
+        protected string ChipClassname =>
+           new CssBuilder("d-flex")
+            .AddClass("flex-wrap", WrapChips)
+            .AddClass("mt-5", Variant == Variant.Filled)
+            .AddClass(ClassChip)
+            .Build();
+
         MudTextFieldExtended<T> _textFieldExtendedReference;
         T _internalValue;
 
@@ -24,13 +31,31 @@ namespace MudExtensions
         public EventCallback<List<string>> ValuesChanged { get; set; }
 
         [Parameter]
+        public Size ChipSize { get; set; }
+
+        [Parameter]
         public char Delimiter { get; set; }
+
+        [Parameter]
+        public string ClassChip { get; set; }
+
+        [Parameter]
+        public string StyleChip { get; set; }
 
         [Parameter]
         public Color ChipColor { get; set; }
 
         [Parameter]
         public Variant ChipVariant { get; set; }
+
+        [Parameter]
+        public bool WrapChips { get; set; }
+
+        [Parameter]
+        public int MaxChips { get; set; }
+
+        [Parameter]
+        public int ChipsMaxWidth { get; set; } = 80;
 
         protected async Task HandleKeyDown(KeyboardEventArgs args)
         {
@@ -40,7 +65,7 @@ namespace MudExtensions
                 StateHasChanged();
             }
 
-            if (args.Key == "Backspace" && _internalValue == null && Values.Any())
+            if (args.Key == "Backspace" && string.IsNullOrEmpty(Converter.Set(_internalValue)) && Values.Any())
             {
                 Values.RemoveAt(Values.Count - 1);
                 await ValuesChanged.InvokeAsync(Values);
