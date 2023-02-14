@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Components
+@using MudBlazor.Extensions
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center" Style="height: 500px">
+        <MudChipField T="string" @bind-Values="_values" Delimiter="@_delimiter" FullWidth="true" Disabled="_disabled" ReadOnly="_readonly"
+            ChipColor="_color" ChipVariant="_variant" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudText>Values:
+                @foreach (var item in _values ?? new List<string>())
+                {
+                    <MudText Inline="true"> @(" " + item + " ") </MudText>
+                }
+            </MudText>
+            <MudTextField @bind-Value="@_delimiter" Immediate="true" Label="Delimiter" />
+            <MudNumericField @bind-Value="_count" Label="Count" Variant="Variant.Outlined" />
+            <MudNumericField @bind-Value="_spacing" Label="Spacing" Variant="Variant.Outlined" />
+            <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Variant">
+                @foreach (var item in Enum.GetValues<Color>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Margin">
+                @foreach (var item in Enum.GetValues<Variant>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSwitchM3 @bind-Checked="@_disabled" Label="Disabled" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Checked="@_readonly" Label="ReadOnly" Color="Color.Primary" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code{
+    char _delimiter = ' ';
+    List<string> _values;
+    MudCodeInput<string> _textFieldGroup;
+    string _value;
+    int _count = 4;
+    int _spacing = 2;
+    Color _color = Color.Default;
+    Variant _variant = Variant.Filled;
+    bool _disabled;
+    bool _readonly;
+}

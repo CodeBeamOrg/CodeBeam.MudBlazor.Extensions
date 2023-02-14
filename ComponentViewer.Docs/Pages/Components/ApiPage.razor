@@ -24,6 +24,27 @@
         </MudTable>
     </ExampleCard>
 
+    <ExampleCard Title="Api - MudChipField" HasExpansionPanel="true">
+        <MudTable Items="@(typeof(MudChipField<string>).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudChipField<string> instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
     <ExampleCard Title="Api - MudCodeInput" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudCodeInput<string>).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>

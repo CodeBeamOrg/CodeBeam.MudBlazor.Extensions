@@ -26,6 +26,11 @@ namespace MudExtensions
         [Parameter] public bool AutoSize { get; set; }
 
         /// <summary>
+        /// The render fragment for child content.
+        /// </summary>
+        [Parameter] public RenderFragment DataVisualiser { get; set; }
+
+        /// <summary>
         /// Type of the input element. It should be a valid HTML5 input type.
         /// </summary>
         [Parameter]

@@ -1,0 +1,54 @@
+﻿@namespace MudExtensions
+@inherits MudTextFieldExtended<T>
+@typeparam T
+
+<MudTextFieldExtended
+    @ref="_textFieldExtendedReference"
+    T="T"
+    Immediate="true"
+    OnKeyDown="HandleKeyDown"
+    Clearable="@Clearable"
+    AutoFocus="@AutoFocus"
+    Class="@Class"
+    Style="@Style"
+    Converter="@Converter"
+    Counter="@Counter"
+    Culture="@Culture"
+    DebounceInterval="@DebounceInterval"
+    Disabled="@Disabled"
+    DisableUnderLine="@DisableUnderLine"
+    Error="@Error"
+    ErrorId="@ErrorId"
+    ErrorText="@ErrorText"
+    For="@For"
+    Format="@Format"
+    FullWidth="@FullWidth"
+    HelperText="@HelperText"
+    HelperTextOnFocus="@HelperTextOnFocus"
+    Label="@Label"
+    ReadOnly="@ReadOnly"
+    Placeholder="@Placeholder"
+    Required="@Required"
+    RequiredError="@RequiredError"
+    Validation="@Validation"
+    Variant="@Variant"
+    @bind-Value="@_internalValue">
+
+    <DataVisualiser>
+        <MudChipSet Class="d-flex" AllClosable="true" OnClose="Closed">
+            @foreach (var value in Values ?? new List<string>())
+            {
+                <MudChip Text="@value" Color="@ChipColor" Variant="@ChipVariant" Disabled="@Disabled" />
+            }
+        </MudChipSet>
+    </DataVisualiser>
+
+    <AdornmentStart>
+        @AdornmentStart
+    </AdornmentStart>
+
+    <AdornmentEnd>
+        @AdornmentEnd
+    </AdornmentEnd>
+
+</MudTextFieldExtended>
