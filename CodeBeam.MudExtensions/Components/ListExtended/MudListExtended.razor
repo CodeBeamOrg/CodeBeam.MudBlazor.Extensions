@@ -19,7 +19,7 @@
                 <MudListSubheaderExtended T="T" Style="position: sticky; top: -12px; background-color: var(--mud-palette-background); z-index: 10">
                     <div @onkeydown:stopPropagation>
                         <MudTextField @bind-Value="@_searchString" Class="@ClassSearchBox" OnKeyUp="@(() => UpdateSelectedStyles())" Immediate="true" Variant="Variant.Outlined" Margin="Margin.Dense"
-                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" IconColor="Color" AutoFocus="@SearchBoxAutoFocus" />
+                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color" AutoFocus="@SearchBoxAutoFocus" />
                     </div>
 
                 </MudListSubheaderExtended>
