@@ -304,6 +304,14 @@ namespace MudExtensions
         public bool SearchBox { get; set; }
 
         /// <summary>
+        /// If true, the search-box will be focused when the dropdown is opened.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public bool SearchBoxAutoFocus { get; set; }
+
+
+        /// <summary>
         /// If true, prevent scrolling while dropdown is open.
         /// </summary>
         [Parameter]
@@ -461,7 +469,7 @@ namespace MudExtensions
                     SetValueAsync(_selectedValues.LastOrDefault(), false).AndForget();
                     UpdateTextPropertyAsync(false).AndForget();
                 }
-                
+
                 SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer)).AndForget();
                 _selectedValuesSetterStarted = false;
                 //Console.WriteLine("SelectedValues setter ended");
