@@ -25,7 +25,7 @@
                           Disabled="@Disabled" ReadOnly="true" Error="@Error" ErrorId="@ErrorId"
                           Clearable="@Clearable" OnClearButtonClick="(async (e) => await SelectClearButtonClickHandlerAsync(e))"
                           @attributes="UserAttributes" OnBlur="@OnLostFocus">
-                    
+
                     <AdornmentEnd>
                         <MudIcon Icon="@_currentIcon" Color="@AdornmentColor" Size="@IconSize" @onclick="OnAdornmentClick" />
                     </AdornmentEnd>
@@ -43,7 +43,7 @@
                                 {
                                     <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
                                 }
-                                
+
                                 <MudRender>@GetSelectTextPresenter()</MudRender>
                             }
                             else if (ValuePresenter == ValuePresenter.Chip)
@@ -65,7 +65,7 @@
                                 if (SelectedListItem == null)
                                 {
                                     <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
-                                    
+
                                 }
                                 else if (ItemTemplate != null)
                                 {
@@ -102,12 +102,12 @@
                                  Clickable="true" Color="@Color" Dense="@Dense" ItemCollection="@ItemCollection" Virtualize="@Virtualize" DisablePadding="@DisablePopoverPadding" DisableSelectedItemStyle="@DisableSelectedItemStyle"
                                          MultiSelection="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MultiSelectionAlign="@MultiSelectionAlign" SelectAll="@SelectAll" SelectAllPosition="@SelectAllPosition" SelectAllText="@SelectAllText"
                                  CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" IndeterminateIcon="@IndeterminateIcon" SelectValueOnTab="@SelectValueOnTab" Comparer="@Comparer"
-                                 ItemTemplate="@ItemTemplate" ItemSelectedTemplate="@ItemSelectedTemplate" ItemDisabledTemplate="@ItemDisabledTemplate" SearchBox="@SearchBox" ToStringFunc="@ToStringFunc">
+                                 ItemTemplate="@ItemTemplate" ItemSelectedTemplate="@ItemSelectedTemplate" ItemDisabledTemplate="@ItemDisabledTemplate" SearchBox="@SearchBox" SearchBoxAutoFocus="@SearchBoxAutoFocus" ToStringFunc="@ToStringFunc">
                             @ChildContent
 						</MudListExtended>
 					</CascadingValue>
 				</MudPopover>
-			</InputContent>        
+			</InputContent>
 		</MudInputControl>
 	</div>
 

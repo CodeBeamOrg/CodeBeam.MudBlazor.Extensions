@@ -143,6 +143,13 @@ namespace MudExtensions
         public bool SearchBox { get; set; }
 
         /// <summary>
+        /// If true, the search-box will be focused when the dropdown is opened.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public bool SearchBoxAutoFocus { get; set; }
+
+        /// <summary>
         /// SearchBox's CSS classes, seperated by space.
         /// </summary>
         [Parameter]

@@ -14,7 +14,7 @@ namespace MudExtensions
         [Inject] IJSRuntime JSRuntime { get; set; }
 
         protected string Classname => MudInputCssHelperExtended.GetClassname(this,
-            () => HasNativeHtmlPlaceholder() || !string.IsNullOrEmpty(Text) || AdornmentStart != null || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(Converter.Set(Value)));
+            () => HasNativeHtmlPlaceholder() || ForceShrink == true || !string.IsNullOrEmpty(Text) || AdornmentStart != null || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(Converter.Set(Value)));
 
         protected string InputClassname => MudInputCssHelperExtended.GetInputClassname(this);
 

@@ -11,7 +11,7 @@
             <MudListItemExtended T="T" IsFunctional="true" Icon="@SelectAllCheckBoxIcon" IconColor="@Color" Text="@SelectAllText" OverrideMultiSelectionComponent="MultiSelectionComponent.None" OnClick="@(() => SelectAllItems(_allSelected))" OnClickHandlerPreventDefault="true" Dense="@Dense" Class="mb-2" />
             <MudDivider />
         }
-        
+
         @if (ItemCollection != null)
         {
             @if (SearchBox == true)
@@ -24,7 +24,8 @@
                             <MudCheckBox CheckedIcon="@SelectAllCheckBoxIcon" Color="@Color" @bind-Checked="_allSelected" @onclick="() => SelectAllItems(_allSelected)" Dense="true" />
                         }
                         <MudTextField @bind-Value="@_searchString" Class="@ClassSearchBox" OnKeyUp="@(() => UpdateSelectedStyles())" Immediate="true" Variant="Variant.Outlined" Margin="Margin.Dense"
-                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" IconColor="Color" />
+
+                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color" AutoFocus="@SearchBoxAutoFocus" />
                         @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.AfterSearch && ParentList == null)
                         {
                             <MudCheckBox CheckedIcon="@SelectAllCheckBoxIcon" Color="@Color" @bind-Checked="_allSelected" @onclick="() => SelectAllItems(_allSelected)" Dense="true" />
