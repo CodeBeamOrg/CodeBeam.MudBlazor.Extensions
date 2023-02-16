@@ -19,12 +19,16 @@
                 <MudListSubheaderExtended T="T" Style="position: sticky; top: -12px; background-color: var(--mud-palette-background); z-index: 10">
                     
                     <div @onkeydown:stopPropagation class="mud-list-item-extended">
-                        @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.NextToSearch && ParentList == null)
+                        @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.BeforeSearch && ParentList == null)
                         {
                             <MudCheckBox CheckedIcon="@SelectAllCheckBoxIcon" Color="@Color" @bind-Checked="_allSelected" @onclick="() => SelectAllItems(_allSelected)" Dense="true" />
                         }
                         <MudTextField @bind-Value="@_searchString" Class="@ClassSearchBox" OnKeyUp="@(() => UpdateSelectedStyles())" Immediate="true" Variant="Variant.Outlined" Margin="Margin.Dense"
                               Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" IconColor="Color" />
+                        @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.AfterSearch && ParentList == null)
+                        {
+                            <MudCheckBox CheckedIcon="@SelectAllCheckBoxIcon" Color="@Color" @bind-Checked="_allSelected" @onclick="() => SelectAllItems(_allSelected)" Dense="true" />
+                        }
                     </div>
 
                 </MudListSubheaderExtended>
@@ -43,6 +47,12 @@
         else
         {
             @ChildContent
+        }
+        
+        @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.Bottom && ParentList == null)
+        {
+            <MudDivider />
+            <MudListItemExtended T="T" IsFunctional="true" Icon="@SelectAllCheckBoxIcon" IconColor="@Color" Text="@SelectAllText" OverrideMultiSelectionComponent="MultiSelectionComponent.None" OnClick="@(() => SelectAllItems(_allSelected))" OnClickHandlerPreventDefault="true" Dense="@Dense" Class="mb-2" />
         }
     </CascadingValue>
 </div>

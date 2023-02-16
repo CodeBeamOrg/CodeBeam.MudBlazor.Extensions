@@ -11,7 +11,9 @@
     <MudItem xs="12" sm="4">
         <MudRadioGroup T="SelectAllPosition" @bind-SelectedOption="_selectAllPosition">
             <MudRadio Option="SelectAllPosition.Top" Color="Color.Primary">Top</MudRadio>
-            <MudRadio Option="SelectAllPosition.NextToSearch" Color="Color.Primary">Next to Search</MudRadio>
+            <MudRadio Option="SelectAllPosition.BeforeSearch" Color="Color.Primary">Before Search</MudRadio>
+            <MudRadio Option="SelectAllPosition.AfterSearch" Color="Color.Primary">After Search</MudRadio>
+            <MudRadio Option="SelectAllPosition.Bottom" Color="Color.Primary">Bottom</MudRadio>
         </MudRadioGroup>
         <MudGrid Class="mt-3 px-4">
             <MudItem xs="6">

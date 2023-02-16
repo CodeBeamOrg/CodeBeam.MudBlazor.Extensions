@@ -6,7 +6,11 @@ namespace MudExtensions.Enums
     {
         [Description("top")]
         Top,
-        [Description("nexttosearch")]
-        NextToSearch
+        [Description("beforesearch")]
+        BeforeSearch,
+        [Description("aftersearch")]
+        AfterSearch,
+        [Description("bottom")]
+        Bottom
     }
 }
