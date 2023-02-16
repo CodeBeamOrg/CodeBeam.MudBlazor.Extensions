@@ -1,18 +1,20 @@
 ﻿
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudSelectExtended MultiSelection="@_multiselection" ItemCollection="_states" SearchBox="true" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" />
+        <MudSelectExtended MultiSelection="@_multiselection" ItemCollection="_states" SearchBox="true" SearchBoxAutoFocus="@_searchBoxAutoFocus" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
         <MudStack>
             <MudSwitchM3 @bind-Checked="_multiselection" Color="Color.Primary" Label="MultiSelection" />
+            <MudSwitchM3 @bind-Checked="_searchBoxAutoFocus" Color="Color.Primary" Label="AutoFocus (SearchBox)" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code {
     bool _multiselection;
+    bool _searchBoxAutoFocus;
 
     private string[] _states =
     {
