@@ -193,7 +193,7 @@ namespace MudExtensions
             await ActiveStepChanged.InvokeAsync();
         }
 
-        protected internal async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)
+        public async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)
         {
             var stepChangeDirection = (
                 count == 0 ? StepChangeDirection.None :
