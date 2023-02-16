@@ -2,13 +2,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Utilities;
-using MudExtensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Markup;
 
 namespace MudExtensions
 {
@@ -18,21 +11,34 @@ namespace MudExtensions
            new CssBuilder("d-flex")
             .AddClass("flex-wrap", WrapChips)
             .AddClass("mt-5", Variant == Variant.Filled)
-            .AddClass(ClassChip)
+            .Build();
+
+        protected string ChipStylename =>
+           new StyleBuilder()
+            .AddStyle("max-width", $"{ChipsMaxWidth}%")
             .Build();
 
         MudTextFieldExtended<T> _textFieldExtendedReference;
         T _internalValue;
 
+        /// <summary>
+        /// /The list of values.
+        /// </summary>
         [Parameter]
         public List<string> Values { get; set; }
 
+        /// <summary>
+        /// Fires when values changed
+        /// </summary>
         [Parameter]
         public EventCallback<List<string>> ValuesChanged { get; set; }
 
         [Parameter]
         public Size ChipSize { get; set; }
 
+        /// <summary>
+        /// The char that created a new chip with current value.
+        /// </summary>
         [Parameter]
         public char Delimiter { get; set; }
 
@@ -51,6 +57,12 @@ namespace MudExtensions
         [Parameter]
         public bool WrapChips { get; set; }
 
+        /// <summary>
+        /// Determines that chips have close button. Default is true.
+        /// </summary>
+        [Parameter]
+        public bool Closeable { get; set; } = true;
+
         [Parameter]
         public int MaxChips { get; set; }
 
@@ -59,6 +71,7 @@ namespace MudExtensions
 
         protected async Task HandleKeyDown(KeyboardEventArgs args)
         {
+            
             if (args.Key == Delimiter.ToString() && _internalValue != null)
             {
                 await SetChips();
@@ -70,6 +83,14 @@ namespace MudExtensions
                 Values.RemoveAt(Values.Count - 1);
                 await ValuesChanged.InvokeAsync(Values);
             }
+            await Task.Delay(10);
+            await SetValueAsync(_internalValue);
+            await OnKeyDown.InvokeAsync(args);
+        }
+
+        protected async Task HandleKeyUp(KeyboardEventArgs args)
+        {
+            await OnKeyUp.InvokeAsync(args);
         }
 
         protected async Task SetChips()
@@ -86,7 +107,7 @@ namespace MudExtensions
             }
             else
             {
-                await Task.Delay(10);
+                await Task.Delay((int)DebounceInterval + 10);
             }
             await _textFieldExtendedReference.Clear();
             if (RuntimeLocation.IsServerSide)

@@ -7,8 +7,14 @@
     T="T"
     Immediate="true"
     OnKeyDown="HandleKeyDown"
+    OnKeyUp="HandleKeyUp"
+    OnKeyPress="@(async() => await OnKeyPress.InvokeAsync())"
+    OnBlur="@(async() => await OnBlur.InvokeAsync())"
+    OnClearButtonClick="@(async() => await OnClearButtonClick.InvokeAsync())"
+    OnDebounceIntervalElapsed="@(async() => await OnDebounceIntervalElapsed.InvokeAsync())"
+    OnInternalInputChanged="@(async() => await OnInternalInputChanged.InvokeAsync())"
     ForceShrink="@(Values?.Any() ?? false)"
-
+    
     Clearable="@Clearable"
     AutoFocus="@AutoFocus"
     Class="@Class"
@@ -28,20 +34,24 @@
     HelperText="@HelperText"
     HelperTextOnFocus="@HelperTextOnFocus"
     Label="@Label"
+    Margin="@Margin"
+    MaxLength="@MaxLength"
+    OnlyValidateIfDirty="@OnlyValidateIfDirty"
     ReadOnly="@ReadOnly"
     Placeholder="@Placeholder"
     Required="@Required"
     RequiredError="@RequiredError"
     Validation="@Validation"
     Variant="@Variant"
-    @bind-Value="@_internalValue">
+    @bind-Value="@_internalValue"
+    TextChanged="@(async() => await TextChanged.InvokeAsync())">
 
     <DataVisualiser>
-        <MudChipSet Class="@ChipClassname" Style="@($"max-width: {ChipsMaxWidth}%")" AllClosable="true" OnClose="Closed">
+        <MudChipSet Class="@ChipClassname" Style="@ChipStylename" AllClosable="@Closeable" OnClose="Closed">
             @for (int i = 0; i < (MaxChips == 0 ? Values?.Count ?? 0 : (MaxChips < (Values?.Count ?? 0) ? MaxChips : Values?.Count ?? 0)); i++)
             {
                 int a = i;
-                <MudChip DisableRipple="true" Style="" Text="@Values[a]" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
+                <MudChip Class="@ClassChip" Style="@StyleChip" DisableRipple="true" Text="@Values[a]" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
             }
         </MudChipSet>
         @if (Values != null && MaxChips != 0 && MaxChips < Values.Count)

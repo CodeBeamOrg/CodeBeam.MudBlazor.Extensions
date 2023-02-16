@@ -2,41 +2,42 @@
 @using MudBlazor.Extensions
 
 <MudGrid>
-    <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center" Style="height: 500px">
-        <MudChipField T="string" @bind-Values="_values" Delimiter="@_delimiter" FullWidth="true" Disabled="_disabled" ReadOnly="_readonly"
-            ChipColor="_color" ChipVariant="_chipVariant" ChipSize="_chipSize" WrapChips="_wrapChips" MaxChips="_maxChips" ChipsMaxWidth="_chipsMaxWidth" Variant="_variant" Label="ChipField" />
+    <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center">
+        <MudChipField T="string" @bind-Value="_value" @bind-Values="_values" StyleChip="@(_disableRadius ? "border-radius: 0 !important" : null)" Delimiter="@_delimiter" FullWidth="true" Disabled="_disabled" ReadOnly="_readonly"
+            ChipColor="_color" ChipVariant="_chipVariant" ChipSize="_chipSize" WrapChips="_wrapChips" MaxChips="_maxChips" ChipsMaxWidth="_chipsMaxWidth" Closeable="_closeable" Variant="_variant" Label="ChipField" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
-        <MudStack Spacing="4">
+        <MudStack Spacing="2">
+            <MudText>Value: @_value</MudText>
             <MudText>Values:
                 @foreach (var item in _values ?? new List<string>())
                 {
                     <MudText Inline="true"> @(" " + item + " ") </MudText>
                 }
             </MudText>
-            <MudTextField @bind-Value="@_delimiter" Immediate="true" Label="Delimiter" Variant="Variant.Outlined" />
-            <MudNumericField @bind-Value="_maxChips" Label="MaxChips" Variant="Variant.Outlined" />
-            <MudNumericField @bind-Value="_chipsMaxWidth" Label="ChipsMaxWidth" Variant="Variant.Outlined" />
-            <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Variant">
+            <MudTextField @bind-Value="@_delimiter" Immediate="true" Label="Delimiter" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudNumericField @bind-Value="_maxChips" Label="MaxChips" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudNumericField @bind-Value="_chipsMaxWidth" Label="ChipsMaxWidth" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color" Margin="Margin.Dense" Dense="true">
                 @foreach (var item in Enum.GetValues<Color>())
                 {
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSelect @bind-Value="_chipVariant" Variant="Variant.Outlined" Label="Chip Variant">
+            <MudSelect @bind-Value="_chipVariant" Variant="Variant.Outlined" Label="Chip Variant" Margin="Margin.Dense" Dense="true">
                 @foreach (var item in Enum.GetValues<Variant>())
                 {
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant">
+            <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant" Margin="Margin.Dense" Dense="true">
                 @foreach (var item in Enum.GetValues<Variant>())
                 {
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSelect @bind-Value="_chipSize" Variant="Variant.Outlined" Label="ChipSize">
+            <MudSelect @bind-Value="_chipSize" Variant="Variant.Outlined" Label="ChipSize" Margin="Margin.Dense" Dense="true">
                 @foreach (var item in Enum.GetValues<Size>())
                 {
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
@@ -45,15 +46,17 @@
             <MudSwitchM3 @bind-Checked="@_wrapChips" Label="WrapChips" Color="Color.Primary" />
             <MudSwitchM3 @bind-Checked="@_disabled" Label="Disabled" Color="Color.Primary" />
             <MudSwitchM3 @bind-Checked="@_readonly" Label="ReadOnly" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Checked="@_disableRadius" Label="Disable Border Radius" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Checked="@_closeable" Label="Closeable" Color="Color.Primary" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code{
     char _delimiter = ' ';
+    string _value;
     List<string> _values;
     MudCodeInput<string> _textFieldGroup;
-    string _value;
     int _maxChips = 0;
     int _chipsMaxWidth = 80;
     Color _color = Color.Default;
@@ -63,4 +66,6 @@
     bool _wrapChips;
     bool _disabled;
     bool _readonly;
+    bool _disableRadius;
+    bool _closeable = true;
 }
