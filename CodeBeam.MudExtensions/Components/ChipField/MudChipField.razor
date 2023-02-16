@@ -1,0 +1,67 @@
+﻿@namespace MudExtensions
+@inherits MudTextFieldExtended<T>
+@typeparam T
+
+<MudTextFieldExtended
+    @ref="_textFieldExtendedReference"
+    T="T"
+    Immediate="true"
+    OnKeyDown="HandleKeyDown"
+    OnKeyUp="HandleKeyUp"
+    OnKeyPress="@(async() => await OnKeyPress.InvokeAsync())"
+    OnBlur="@(async() => await OnBlur.InvokeAsync())"
+    OnClearButtonClick="@(async() => await OnClearButtonClick.InvokeAsync())"
+    OnDebounceIntervalElapsed="@(async() => await OnDebounceIntervalElapsed.InvokeAsync())"
+    OnInternalInputChanged="@(async() => await OnInternalInputChanged.InvokeAsync())"
+    ForceShrink="@(Values?.Any() ?? false)"
+    
+    Clearable="@Clearable"
+    AutoFocus="@AutoFocus"
+    Class="@Class"
+    Style="@Style"
+    Converter="@Converter"
+    Counter="@Counter"
+    Culture="@Culture"
+    DebounceInterval="@DebounceInterval"
+    Disabled="@Disabled"
+    DisableUnderLine="@DisableUnderLine"
+    Error="@Error"
+    ErrorId="@ErrorId"
+    ErrorText="@ErrorText"
+    For="@For"
+    Format="@Format"
+    FullWidth="@FullWidth"
+    HelperText="@HelperText"
+    HelperTextOnFocus="@HelperTextOnFocus"
+    Label="@Label"
+    Margin="@Margin"
+    MaxLength="@MaxLength"
+    OnlyValidateIfDirty="@OnlyValidateIfDirty"
+    ReadOnly="@ReadOnly"
+    Placeholder="@Placeholder"
+    Required="@Required"
+    RequiredError="@RequiredError"
+    Validation="@Validation"
+    Variant="@Variant"
+    @bind-Value="@_internalValue"
+    TextChanged="@(async() => await TextChanged.InvokeAsync())">
+
+    <DataVisualiser>
+        <MudChipSet Class="@ChipClassname" Style="@ChipStylename" AllClosable="@Closeable" OnClose="Closed">
+            @for (int i = 0; i < (MaxChips == 0 ? Values?.Count ?? 0 : (MaxChips < (Values?.Count ?? 0) ? MaxChips : Values?.Count ?? 0)); i++)
+            {
+                int a = i;
+                <MudChip Class="@ClassChip" Style="@StyleChip" DisableRipple="true" Text="@Values[a]" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
+            }
+        </MudChipSet>
+        @if (Values != null && MaxChips != 0 && MaxChips < Values.Count)
+        {
+            <MudChip DisableRipple="true" Text="@($"+{Values.Count - MaxChips}")" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
+        }
+    </DataVisualiser>
+
+    <AdornmentEnd>
+        @AdornmentEnd
+    </AdornmentEnd>
+
+</MudTextFieldExtended>

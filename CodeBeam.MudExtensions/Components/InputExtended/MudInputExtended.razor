@@ -4,14 +4,14 @@
 @using MudBlazor.Internal
 
 <div class="@Classname" style="@Style">
-
+    
     @if (AdornmentStart != null)
     {
         <div class="@AdornmentStartClassname">
             @AdornmentStart
         </div>
     }
-
+    
     @if (Lines > 1)
     {
         <textarea class="@InputClassname"
@@ -46,7 +46,6 @@
     }
     else
     {
-
         @if (DataVisualiser != null)
         {
             @DataVisualiser
