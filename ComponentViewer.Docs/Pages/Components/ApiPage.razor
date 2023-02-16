@@ -1,5 +1,6 @@
 ﻿@page "/api"
 @using MudBlazor.Extensions
+@using System.Text.RegularExpressions
 @using System.Security.Cryptography.X509Certificates
 
 <ExamplePage Title="API">
@@ -403,6 +404,7 @@
     </ExampleCard>
 
     <ExampleCard Title="Api - MudStepper & MudStep" HasExpansionPanel="true">
+        <MudText Class="ma-2" Typo="Typo.h6" Color="Color.Secondary">Properties</MudText>
         <MudTable Items="@(typeof(MudStepper).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>
@@ -417,6 +419,25 @@
                     {
                         MudStepper instance = new();
                         <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+        <MudText Class="ma-2" Typo="Typo.h6" Color="Color.Secondary">Methods</MudText>
+        <MudTable Items="@(typeof(MudStepper).GetMethods().Where(x => x.Name != "SetParametersAsync" && Regex.IsMatch(x.Name[0].ToString(), "[A-Z]")).OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.ReturnType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudStepper instance = new();
+                        @*<MudText Typo="Typo.body2">@(context(instance)?.ToString() ?? "null")</MudText>*@
                     }
                 </MudTd>
             </RowTemplate>
