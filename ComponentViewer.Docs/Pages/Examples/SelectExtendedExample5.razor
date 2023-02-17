@@ -1,7 +1,8 @@
 ﻿
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.SelectedOption == 1 ? new Func<List<string>, string>(GetMultiSelectionText) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="value" @bind-SelectedValues="options" T="string" Label="US States" AdornmentIcon="@Icons.Material.Filled.Search" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.SelectedOption == 1 ? new Func<List<string>, string>(GetMultiSelectionText) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="value" @bind-SelectedValues="options" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter"
+                           ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant">
             @foreach (var state in states)
             {
                 <MudSelectItemExtended T="string" Value="@state" Text="@state" />
@@ -29,14 +30,20 @@
                     <MudText Typo="Typo.subtitle2">}</MudText>
                 </MudItem>
             </MudGrid>
-    </MudItem>
-</MudGrid>
+            <MudSwitchM3 @bind-Checked="_chipCloseable" Label="Chip Closeable" Color="Color.Primary" />
+            <MudSelectExtended Class="mt-4" ItemCollection="@(Enum.GetValues<Variant>())" @bind-Value="_chipVariant" Label="Chip Variant" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudSelectExtended Class="mt-4" ItemCollection="@(Enum.GetValues<Size>())" @bind-Value="_chipSize" Label="Chip Size" Variant="Variant.Outlined" Margin="Margin.Dense" />
+        </MudItem>
+    </MudGrid>
 
-@code {
+    @code {
     MudRadioGroup<int> _radioGroup;
-    ValuePresenter _valuePresenter = ValuePresenter.Text; 
+    ValuePresenter _valuePresenter = ValuePresenter.Text;
     string value { get; set; } = "Nothing selected";
     IEnumerable<string> options { get; set; } = new HashSet<string>() { "Alaska", "California" };
+    bool _chipCloseable = false;
+    Variant _chipVariant = Variant.Filled;
+    Size _chipSize = Size.Small;
 
     private string[] states =
     {

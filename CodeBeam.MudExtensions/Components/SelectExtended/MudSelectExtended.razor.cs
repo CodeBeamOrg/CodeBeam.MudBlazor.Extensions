@@ -225,6 +225,25 @@ namespace MudExtensions
         public bool Virtualize { get; set; }
 
         /// <summary>
+        /// If true, chips has close button and remove from SelectedValues when pressed the close button.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public bool ChipCloseable { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public string ChipClass { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Variant ChipVariant { get; set; } = Variant.Filled;
+
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Size ChipSize { get; set; } = Size.Small;
+
+        /// <summary>
         /// Parameter to define the delimited string separator.
         /// </summary>
         [Parameter]
@@ -1054,6 +1073,12 @@ namespace MudExtensions
                 return SelectedValues?.Count() > 0;
             else
                 return base.HasValue(value);
+        }
+
+        protected async Task ChipClosed(MudChip chip)
+        {
+            SelectedValues = SelectedValues.Where(x => x.Equals(Converter.Get(chip.Text)) == false);
+            await SelectedValuesChanged.InvokeAsync(SelectedValues);
         }
     }
 }
