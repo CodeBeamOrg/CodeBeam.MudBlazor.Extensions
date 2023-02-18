@@ -141,7 +141,7 @@ namespace MudExtensions
             }
         }
 
-        protected override Task SetValueAsync(T value, bool updateText = true)
+        protected override Task SetValueAsync(T value, bool updateText = true, bool force = false)
         {
             if (_mask != null)
             {
@@ -150,7 +150,7 @@ namespace MudExtensions
                 textValue=Mask.GetCleanText();
                 value = Converter.Get(textValue);
             }
-            return base.SetValueAsync(value, updateText);
+            return base.SetValueAsync(value, updateText, force);
         }
 
         protected override Task SetTextAsync(string text, bool updateValue = true)

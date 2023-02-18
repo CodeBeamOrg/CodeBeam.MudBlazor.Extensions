@@ -225,6 +225,15 @@ namespace MudExtensions
         public virtual string Pattern { get; set; }
 
         /// <summary>
+        /// Sync the value, values and text, calls validation manually. Useful to call after user changes value or text programmatically.
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task ForceUpdate()
+        {
+            await SetValueAsync(Value, force: true);
+        }
+
+        /// <summary>
         /// Derived classes need to override this if they can be something other than text
         /// </summary>
         internal virtual InputType GetInputType() { return InputType.Text; }
@@ -296,10 +305,10 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
-        protected virtual void InvokeKeyDown(KeyboardEventArgs obj)
+        protected virtual async Task InvokeKeyDown(KeyboardEventArgs obj)
         {
             _isFocused = true;
-            OnKeyDown.InvokeAsync(obj).AndForget();
+            await OnKeyDown.InvokeAsync(obj);
         }
 
         /// <summary>
@@ -315,9 +324,9 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<KeyboardEventArgs> OnKeyPress { get; set; }
 
-        protected virtual void InvokeKeyPress(KeyboardEventArgs obj)
+        protected virtual async Task InvokeKeyPress(KeyboardEventArgs obj)
         {
-            OnKeyPress.InvokeAsync(obj).AndForget();
+            await OnKeyPress.InvokeAsync(obj);
         }
 
         /// <summary>
@@ -332,10 +341,10 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<KeyboardEventArgs> OnKeyUp { get; set; }
 
-        protected virtual void InvokeKeyUp(KeyboardEventArgs obj)
+        protected virtual async Task InvokeKeyUp(KeyboardEventArgs obj)
         {
             _isFocused = true;
-            OnKeyUp.InvokeAsync(obj).AndForget();
+            await OnKeyUp.InvokeAsync(obj);
         }
 
         /// <summary>
@@ -362,9 +371,9 @@ namespace MudExtensions
             set => _value = value;
         }
 
-        protected virtual async Task SetValueAsync(T value, bool updateText = true)
+        protected virtual async Task SetValueAsync(T value, bool updateText = true, bool force = false)
         {
-            if (!EqualityComparer<T>.Default.Equals(Value, value))
+            if (!EqualityComparer<T>.Default.Equals(Value, value) || force == true)
             {
                 _isDirty = true;
                 Value = value;
