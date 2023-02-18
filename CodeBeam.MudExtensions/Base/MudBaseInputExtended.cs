@@ -224,6 +224,9 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Validation)]
         public virtual string Pattern { get; set; }
 
+        [Parameter]
+        public string MockInputStyle { get; set; }
+
         /// <summary>
         /// Derived classes need to override this if they can be something other than text
         /// </summary>
