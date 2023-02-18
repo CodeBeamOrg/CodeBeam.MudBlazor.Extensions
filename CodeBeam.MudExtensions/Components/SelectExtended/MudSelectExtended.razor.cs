@@ -922,9 +922,9 @@ namespace MudExtensions
         }
 
         //TODO: will override this method when core library will have the base one.
-        public async Task ForceUpdate()
+        public override async Task ForceUpdate()
         {
-            //await base.ForceUpdate();
+            await base.ForceUpdate();
             if (!MultiSelection)
             {
                 SelectedValues = new HashSet<T>(_comparer) { Value };
