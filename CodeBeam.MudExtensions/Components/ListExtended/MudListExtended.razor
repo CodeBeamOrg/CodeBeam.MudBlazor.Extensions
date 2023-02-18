@@ -6,7 +6,7 @@
 
 <div @attributes="UserAttributes" id="@_elementId" class="@Classname" style="@Stylename" tabindex="-1" @onkeydown="HandleKeyDown" @onfocusout="HandleOnFocusOut">
     <CascadingValue Value="@this" IsFixed="true">
-        @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.Top && ParentList == null)
+        @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.BeforeSearchBox && ParentList == null)
         {
             <MudListItemExtended T="T" IsFunctional="true" Icon="@SelectAllCheckBoxIcon" IconColor="@Color" Text="@SelectAllText" OverrideMultiSelectionComponent="MultiSelectionComponent.None" OnClick="@(() => SelectAllItems(_allSelected))" OnClickHandlerPreventDefault="true" Dense="@Dense" Class="mb-2" />
             <MudDivider />
@@ -19,19 +19,18 @@
                 <MudListSubheaderExtended T="T" Style="position: sticky; top: -12px; background-color: var(--mud-palette-background); z-index: 10">
                     
                     <div @onkeydown:stopPropagation class="mud-list-item-extended">
-                        @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.BeforeSearch && ParentList == null)
+                        @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.NextToSearchBox && ParentList == null)
                         {
                             <MudCheckBox CheckedIcon="@SelectAllCheckBoxIcon" Color="@Color" @bind-Checked="_allSelected" @onclick="() => SelectAllItems(_allSelected)" Dense="true" />
                         }
                         <MudTextField @bind-Value="@_searchString" Class="@ClassSearchBox" OnKeyUp="@(() => UpdateSelectedStyles())" Immediate="true" Variant="Variant.Outlined" Margin="Margin.Dense"
-
-                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color" AutoFocus="@SearchBoxAutoFocus" />
-                        @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.AfterSearch && ParentList == null)
-                        {
-                            <MudCheckBox CheckedIcon="@SelectAllCheckBoxIcon" Color="@Color" @bind-Checked="_allSelected" @onclick="() => SelectAllItems(_allSelected)" Dense="true" />
-                        }
+                            Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color" AutoFocus="@SearchBoxAutoFocus" />
                     </div>
-
+                    @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.AfterSearchBox && ParentList == null)
+                    {
+                        <MudDivider />
+                        <MudListItemExtended T="T" IsFunctional="true" Icon="@SelectAllCheckBoxIcon" IconColor="@Color" Text="@SelectAllText" OverrideMultiSelectionComponent="MultiSelectionComponent.None" OnClick="@(() => SelectAllItems(_allSelected))" OnClickHandlerPreventDefault="true" Dense="@Dense" Class="mb-2" />
+                    }
                 </MudListSubheaderExtended>
             }
             <MudVirtualize IsEnabled="@Virtualize" Items="GetSearchedItems()" Context="item" OverscanCount="@OverscanCount">
@@ -48,12 +47,6 @@
         else
         {
             @ChildContent
-        }
-        
-        @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.Bottom && ParentList == null)
-        {
-            <MudDivider />
-            <MudListItemExtended T="T" IsFunctional="true" Icon="@SelectAllCheckBoxIcon" IconColor="@Color" Text="@SelectAllText" OverrideMultiSelectionComponent="MultiSelectionComponent.None" OnClick="@(() => SelectAllItems(_allSelected))" OnClickHandlerPreventDefault="true" Dense="@Dense" Class="mb-2" />
         }
     </CascadingValue>
 </div>

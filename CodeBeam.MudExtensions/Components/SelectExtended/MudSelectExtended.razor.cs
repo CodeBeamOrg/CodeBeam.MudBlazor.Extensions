@@ -201,7 +201,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
-        public SelectAllPosition SelectAllPosition { get; set; } = SelectAllPosition.Top;
+        public SelectAllPosition SelectAllPosition { get; set; } = SelectAllPosition.BeforeSearchBox;
 
         /// <summary>
         /// Define the text of the Select All option.

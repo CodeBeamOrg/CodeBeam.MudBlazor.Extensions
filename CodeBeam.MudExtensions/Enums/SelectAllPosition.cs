@@ -4,13 +4,11 @@ namespace MudExtensions.Enums
 {
     public enum SelectAllPosition
     {
-        [Description("top")]
-        Top,
-        [Description("beforesearch")]
-        BeforeSearch,
-        [Description("aftersearch")]
-        AfterSearch,
-        [Description("bottom")]
-        Bottom
+        [Description("Upper line")]
+        BeforeSearchBox,
+        [Description("Start of the searchbox in the same line")]
+        NextToSearchBox,
+        [Description("Below line")]
+        AfterSearchBox
     }
 }
