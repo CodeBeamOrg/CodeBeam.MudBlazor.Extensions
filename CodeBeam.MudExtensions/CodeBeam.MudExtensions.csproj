@@ -4,7 +4,7 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>6.2.5</Version>
+		<Version>6.2.6</Version>
 		<Title>CodeBeam.MudBlazor.Extensions</Title>
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
@@ -22,7 +22,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CsvHelper" Version="30.0.1" />
-		<PackageReference Include="MudBlazor" Version="6.1.8" />
+		<PackageReference Include="MudBlazor" Version="6.1.9" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
@@ -74,9 +74,5 @@
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		</Content>
 	</ItemGroup>
-
-	<!--<ItemGroup>
-	  <Folder Include="NewFolder\" />
-	</ItemGroup>-->
 
 </Project>
