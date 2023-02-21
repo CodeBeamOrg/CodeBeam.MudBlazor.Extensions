@@ -11,6 +11,7 @@ using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using MudExtensions.Services;
 using static MudBlazor.CategoryTypes;
+using static MudBlazor.Colors;
 
 namespace MudExtensions
 {
@@ -1311,6 +1312,20 @@ namespace MudExtensions
             }
 
             return ItemCollection.Where(x => Converter.Set(x).Contains(_searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
+        }
+
+        public async Task ForceUpdate()
+        {
+            if (!MultiSelection)
+            {
+                SelectedValues = new HashSet<T>(_comparer) { SelectedValue };
+            }
+            else
+            {
+                await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
+            }
+            await Task.Delay(1);
+            UpdateSelectedStyles();
         }
 
         #endregion

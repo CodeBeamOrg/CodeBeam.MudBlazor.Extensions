@@ -1,0 +1,15 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+@typeparam T
+@using MudExtensions.Enums
+
+<MudStack Class="@Class" Style="@Style" Row="!Vertical" Spacing="Spacing">
+    <MudListExtended @ref="_startList" Style="@StyleList" T="T" ItemCollection="@StartCollection" Clickable="true" MultiSelection="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" />
+    <div class="@($"{(Vertical ? "d-flex" : "d-flex flex-column")} gap-{ButtonSpacing}")">
+        <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardDoubleArrowDown : Icons.Material.Filled.KeyboardDoubleArrowRight)" OnClick="@(() => TransferAll(true))" />
+        <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardArrowDown : Icons.Material.Filled.KeyboardArrowRight)" OnClick="@(() => Transfer(true))" />
+        <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardArrowUp : Icons.Material.Filled.KeyboardArrowLeft)" OnClick="@(() => Transfer(false))" />
+        <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardDoubleArrowUp : Icons.Material.Filled.KeyboardDoubleArrowLeft)" OnClick="@(() => TransferAll(false))" />
+    </div>
+    <MudListExtended @ref="_endList" Style="@StyleList" T="T" ItemCollection="@EndCollection" Clickable="true" MultiSelection="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" />
+</MudStack>
