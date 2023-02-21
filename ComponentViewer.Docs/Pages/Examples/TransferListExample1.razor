@@ -1,7 +1,9 @@
 ﻿@using MudBlazor.Extensions
 
 <MudGrid>
-    <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center">
+    <MudItem xs="12" sm="8" Class="d-flex flex-column align-center justify-center">
+        <MudAlert Class="mud-width-full" Severity="Severity.Warning">Limitation: Null items should not use to transfer in MultiSelection.</MudAlert>
+        <MudAlert Class="mud-width-full mb-8" Severity="Severity.Warning">Limitation: Constant collections like arrays can not be use in MudTransferList.</MudAlert>
         <MudTransferList T="string" @bind-StartCollection="_startCollection" @bind-EndCollection="_endCollection" Vertical="_vertical" StyleList="background-color: var(--mud-palette-background-grey)" MultiSelection="_multiSelection" MaxItems="null" />
     </MudItem>
 

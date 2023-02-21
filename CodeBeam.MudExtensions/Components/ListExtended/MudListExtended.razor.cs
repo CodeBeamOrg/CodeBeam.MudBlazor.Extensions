@@ -1316,14 +1316,14 @@ namespace MudExtensions
 
         public async Task ForceUpdate()
         {
-            if (!MultiSelection)
-            {
-                SelectedValues = new HashSet<T>(_comparer) { SelectedValue };
-            }
-            else
-            {
-                await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
-            }
+            //if (!MultiSelection)
+            //{
+            //    SelectedValues = new HashSet<T>(_comparer) { SelectedValue };
+            //}
+            //else
+            //{
+            //    await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
+            //}
             await Task.Delay(1);
             UpdateSelectedStyles();
         }

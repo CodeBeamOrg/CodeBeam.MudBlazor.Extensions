@@ -60,6 +60,11 @@ namespace MudExtensions
                     ICollection<T> transferredValues = new List<T>();
                     foreach (var item in _startList.SelectedValues)
                     {
+                        // This is not a great fix, but changing multiselection true after transfering a single selection item causes a null item transfer.
+                        if (item == null)
+                        {
+                            continue;
+                        }
                         EndCollection.Add(item);
                         StartCollection.Remove(item);
                         transferredValues.Add(item);
@@ -88,6 +93,10 @@ namespace MudExtensions
                     ICollection<T> transferredValues = new List<T>();
                     foreach (var item in _endList.SelectedValues)
                     {
+                        if (item == null)
+                        {
+                            continue;
+                        }
                         StartCollection.Add(item);
                         EndCollection.Remove(item);
                         transferredValues.Add(item);
