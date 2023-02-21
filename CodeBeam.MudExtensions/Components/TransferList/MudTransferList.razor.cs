@@ -13,7 +13,13 @@ namespace MudExtensions
         public ICollection<T> StartCollection { get; set; }
 
         [Parameter]
+        public EventCallback<ICollection<T>> StartCollectionChanged { get; set; }
+
+        [Parameter]
         public ICollection<T> EndCollection { get; set; }
+
+        [Parameter]
+        public EventCallback<ICollection<T>> EndCollectionChanged { get; set; }
 
         [Parameter]
         public bool Vertical { get; set; }
@@ -44,6 +50,8 @@ namespace MudExtensions
                 {
                     EndCollection.Add(_startList.SelectedValue);
                     StartCollection.Remove(_startList.SelectedValue);
+                    await EndCollectionChanged.InvokeAsync(EndCollection);
+                    await StartCollectionChanged.InvokeAsync(StartCollection);
                     _endList.SelectedValue = _startList.SelectedValue;
                     _startList.Clear();
                 }
@@ -59,6 +67,8 @@ namespace MudExtensions
                     _endList.SelectedValues = transferredValues;
                     await _endList.ForceUpdate();
                     _startList.Clear();
+                    await EndCollectionChanged.InvokeAsync(EndCollection);
+                    await StartCollectionChanged.InvokeAsync(StartCollection);
                 }
                 
             }
@@ -70,6 +80,8 @@ namespace MudExtensions
                     EndCollection.Remove(_endList.SelectedValue);
                     _startList.SelectedValue = _endList.SelectedValue;
                     _endList.Clear();
+                    await StartCollectionChanged.InvokeAsync(StartCollection);
+                    await EndCollectionChanged.InvokeAsync(EndCollection);
                 }
                 else if (MultiSelection == true && _endList.SelectedValues != null)
                 {
@@ -83,12 +95,14 @@ namespace MudExtensions
                     _startList.SelectedValues = transferredValues;
                     await _startList.ForceUpdate();
                     _endList.Clear();
+                    await StartCollectionChanged.InvokeAsync(StartCollection);
+                    await EndCollectionChanged.InvokeAsync(EndCollection);
                 }
 
             }
         }
 
-        protected internal void TransferAll(bool startToEnd = true)
+        protected internal async Task TransferAll(bool startToEnd = true)
         {
             if (startToEnd == true)
             {
@@ -98,6 +112,8 @@ namespace MudExtensions
                 }
                 StartCollection.Clear();
                 _startList.Clear();
+                await EndCollectionChanged.InvokeAsync(EndCollection);
+                await StartCollectionChanged.InvokeAsync(StartCollection);
             }
             else if (startToEnd == false)
             {
@@ -107,6 +123,8 @@ namespace MudExtensions
                 }
                 EndCollection.Clear();
                 _endList.Clear();
+                await StartCollectionChanged.InvokeAsync(StartCollection);
+                await EndCollectionChanged.InvokeAsync(EndCollection);
             }
         }
 

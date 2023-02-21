@@ -2,11 +2,13 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center">
-        <MudTransferList StartCollection="_startCollection" EndCollection="_endCollection" Vertical="_vertical" StyleList="background-color: var(--mud-palette-background-grey)" MultiSelection="_multiSelection" MaxItems="null" />
+        <MudTransferList T="string" @bind-StartCollection="_startCollection" @bind-EndCollection="_endCollection" Vertical="_vertical" StyleList="background-color: var(--mud-palette-background-grey)" MultiSelection="_multiSelection" MaxItems="null" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
+            <MudText><b>Start Collection:</b> @string.Join(", ", _startCollection ?? new List<string>())</MudText>
+            <MudText><b>End Collection:</b> @string.Join(", ", _endCollection ?? new List<string>())</MudText>
             <MudSwitchM3 @bind-Checked="_vertical" Label="Vertical" Color="Color.Primary" />
             <MudSwitchM3 @bind-Checked="_multiSelection" Label="MultiSelection" Color="Color.Primary" />
         </MudStack>
@@ -14,8 +16,8 @@
 </MudGrid>
 
 @code{
-    List<string> _startCollection = new() { "Sweden", "Hungary", "Turkey", "England" };
-    List<string> _endCollection = new() { "Brazil", "China", "Germany", "USA" };
+    ICollection<string> _startCollection = new List<string>() { "Sweden", "Hungary", "Turkey", "England" };
+    ICollection<string> _endCollection = new List<string>() { "Brazil", "China", "Germany", "USA" };
 
     bool _vertical;
     bool _multiSelection;

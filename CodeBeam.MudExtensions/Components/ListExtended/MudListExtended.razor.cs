@@ -373,7 +373,7 @@ namespace MudExtensions
             }
             else if (changedValueType == "MultiSelectionOff")
             {
-                SelectedValue = SelectedValues.FirstOrDefault();
+                SelectedValue = SelectedValues == null ? default(T) : SelectedValues.FirstOrDefault();
                 var items = CollectAllMudListItems(true);
                 SelectedValues = SelectedValue == null ? null : new HashSet<T>(_comparer) { SelectedValue };
                 UpdateSelectedItem();
