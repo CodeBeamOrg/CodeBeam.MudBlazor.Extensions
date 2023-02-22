@@ -4,7 +4,7 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>6.2.6</Version>
+		<Version>6.2.7</Version>
 		<Title>CodeBeam.MudBlazor.Extensions</Title>
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
@@ -13,7 +13,7 @@
 		<PackageIcon>Mud_Secondary.png</PackageIcon>
 		<PackageProjectUrl>https://codebeam-mudextensions.pages.dev/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/CodeBeamOrg/CodeBeam.MudExtensions</RepositoryUrl>
-		<PackageTags>Blazor; MudBlazor; Component; Extension; Animate; Stepper; Select; List; Loading; Gallery; ChipField</PackageTags>
+		<PackageTags>Blazor; MudBlazor; Component; Extension; Animate; Stepper; Select; List; Loading; Gallery; ChipField; Transfer</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
