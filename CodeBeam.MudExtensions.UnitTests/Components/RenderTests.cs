@@ -70,5 +70,12 @@ namespace CodeBeam.MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<TextFieldExtendedPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
+
+        [Test]
+        public void TransferListPageRenderTest()
+        {
+            var comp = Context.RenderComponent<TransferListPage>();
+            comp.Markup.Should().NotBeNullOrEmpty();
+        }
     }
 }

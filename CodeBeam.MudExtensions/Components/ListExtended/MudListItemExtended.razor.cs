@@ -177,6 +177,13 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Appearance)]
         public bool Inset { get; set; }
 
+        /// <summary>
+        /// If true, stop propagation on click. Default is true.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Appearance)]
+        public bool OnClickStopPropagation { get; set; } = true;
+
         private bool? _dense;
         /// <summary>
         /// If true, compact vertical padding will be used.

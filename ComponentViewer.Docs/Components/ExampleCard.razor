@@ -30,20 +30,22 @@ else
         <MudCardContent>
             <div class="pa-2" style="background: var(--mud-palette-background);">
                 @ChildContent
-                <MudDivider Class="mud-width-full mt-8" />
-                <MudExpansionPanel Text="Code">
-                    <div style="overflow-x: scroll">
-                        @foreach (string line in _lines)
-                        {
-                            if (string.IsNullOrEmpty(line) || line == "/r")
+                @if (ShowCodeSection)
+                {
+                    <MudDivider Class="mud-width-full mt-8" />
+                    <MudExpansionPanel Text="Code">
+                        <div style="overflow-x: scroll">
+                            @foreach (string line in _lines)
                             {
-                                <br />
+                                if (string.IsNullOrEmpty(line) || line == "/r")
+                                {
+                                    <br />
+                                }
+                                <pre style="color: var(--mud-palette-text); font-weight: 500; font-size: 14px;">@line</pre>
                             }
-                            <pre style="color: var(--mud-palette-text); font-weight: 500; font-size: 14px;">@line</pre>
-                        }
-                    </div>
-                </MudExpansionPanel>
-
+                        </div>
+                    </MudExpansionPanel>
+                }
             </div>
         </MudCardContent>
     </MudCard>
@@ -64,6 +66,9 @@ else
 
     [Parameter]
     public bool HasExpansionPanel { get; set; }
+
+    [Parameter]
+    public bool ShowCodeSection { get; set; } = true;
 
     List<string> _lines = new();
 

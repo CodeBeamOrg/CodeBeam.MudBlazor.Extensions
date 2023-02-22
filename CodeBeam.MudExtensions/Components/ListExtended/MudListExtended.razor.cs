@@ -11,6 +11,7 @@ using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using MudExtensions.Services;
 using static MudBlazor.CategoryTypes;
+using static MudBlazor.Colors;
 
 namespace MudExtensions
 {
@@ -81,6 +82,13 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public RenderFragment<MudListItemExtended<T>> ItemDisabledTemplate { get; set; }
+
+        /// <summary>
+        /// Optional presentation template for select all item
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public RenderFragment SelectAllTemplate { get; set; }
 
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
@@ -372,7 +380,7 @@ namespace MudExtensions
             }
             else if (changedValueType == "MultiSelectionOff")
             {
-                SelectedValue = SelectedValues.FirstOrDefault();
+                SelectedValue = SelectedValues == null ? default(T) : SelectedValues.FirstOrDefault();
                 var items = CollectAllMudListItems(true);
                 SelectedValues = SelectedValue == null ? null : new HashSet<T>(_comparer) { SelectedValue };
                 UpdateSelectedItem();
@@ -1311,6 +1319,20 @@ namespace MudExtensions
             }
 
             return ItemCollection.Where(x => Converter.Set(x).Contains(_searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
+        }
+
+        public async Task ForceUpdate()
+        {
+            //if (!MultiSelection)
+            //{
+            //    SelectedValues = new HashSet<T>(_comparer) { SelectedValue };
+            //}
+            //else
+            //{
+            //    await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
+            //}
+            await Task.Delay(1);
+            UpdateSelectedStyles();
         }
 
         #endregion
