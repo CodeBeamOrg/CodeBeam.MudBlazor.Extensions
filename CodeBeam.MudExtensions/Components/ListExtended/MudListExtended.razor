@@ -8,8 +8,17 @@
     <CascadingValue Value="@this" IsFixed="true">
         @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.BeforeSearchBox && ParentList == null)
         {
-            <MudListItemExtended T="T" IsFunctional="true" Icon="@SelectAllCheckBoxIcon" IconColor="@Color" Text="@SelectAllText" OverrideMultiSelectionComponent="MultiSelectionComponent.None" OnClick="@(() => SelectAllItems(_allSelected))" OnClickHandlerPreventDefault="true" Dense="@Dense" Class="mb-2" />
-            <MudDivider />
+            @if (SelectAllTemplate != null)
+            {
+                <div class="mud-ripple" @onclick="@(() => SelectAllItems(_allSelected))" tabindex="-1">
+                    @SelectAllTemplate
+                </div>
+            }
+            else
+            {
+                <MudListItemExtended T="T" IsFunctional="true" Icon="@SelectAllCheckBoxIcon" IconColor="@Color" Text="@SelectAllText" OverrideMultiSelectionComponent="MultiSelectionComponent.None" OnClick="@(() => SelectAllItems(_allSelected))" OnClickHandlerPreventDefault="true" Dense="@Dense" Class="mb-2" />
+                <MudDivider />
+            }
         }
 
         @if (ItemCollection != null)

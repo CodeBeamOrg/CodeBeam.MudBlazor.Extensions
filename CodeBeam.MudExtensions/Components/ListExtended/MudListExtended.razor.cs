@@ -83,6 +83,13 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public RenderFragment<MudListItemExtended<T>> ItemDisabledTemplate { get; set; }
 
+        /// <summary>
+        /// Optional presentation template for select all item
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public RenderFragment SelectAllTemplate { get; set; }
+
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public DefaultConverter<T> Converter { get; set; } = new DefaultConverter<T>();

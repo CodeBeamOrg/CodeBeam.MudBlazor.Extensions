@@ -4,7 +4,9 @@
     <MudItem xs="12" sm="8" Class="d-flex flex-column align-center justify-center">
         <MudAlert Class="mud-width-full" Severity="Severity.Warning">Limitation: Null items should not use to transfer in MultiSelection.</MudAlert>
         <MudAlert Class="mud-width-full mb-8" Severity="Severity.Warning">Limitation: Constant collections like arrays can not be use in MudTransferList.</MudAlert>
-        <MudTransferList T="string" @bind-StartCollection="_startCollection" @bind-EndCollection="_endCollection" Vertical="_vertical" StyleList="background-color: var(--mud-palette-background-grey)" MultiSelection="_multiSelection" MaxItems="null" />
+        <MudTransferList @ref="_transferList" T="string" @bind-StartCollection="_startCollection" @bind-EndCollection="_endCollection" Vertical="_vertical" Color="_color"
+            StyleListCommon="background-color: var(--mud-palette-background-grey)" MultiSelection="_multiSelection" MaxItems="_maxItems" SelectAllType="_selectAllType"
+            PreventTransfer="@(new Func<bool, bool>(CheckTransfer))" ButtonVariant="_buttonVariant" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -13,14 +15,36 @@
             <MudText><b>End Collection:</b> @string.Join(", ", _endCollection ?? new List<string>())</MudText>
             <MudSwitchM3 @bind-Checked="_vertical" Label="Vertical" Color="Color.Primary" />
             <MudSwitchM3 @bind-Checked="_multiSelection" Label="MultiSelection" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Checked="_preventTurkeyTransfer" Label="Prevent Transfer If Turkey Selected" Color="Color.Primary" />
+            <MudNumericField @bind-Value="_maxItems" Clearable="true" Label="MaxItems" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudSelectExtended @bind-Value="_selectAllType" ItemCollection="@(Enum.GetValues<SelectAllType>())" Label="SelectAll Type" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
+            <MudSelectExtended @bind-Value="_color" ItemCollection="@(Enum.GetValues<Color>())" Label="Color" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
+            <MudSelectExtended @bind-Value="_buttonVariant" ItemCollection="@(Enum.GetValues<Variant>())" Label="Button Variant" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code{
-    ICollection<string> _startCollection = new List<string>() { "Sweden", "Hungary", "Turkey", "England" };
-    ICollection<string> _endCollection = new List<string>() { "Brazil", "China", "Germany", "USA" };
+    MudTransferList<string> _transferList;
+    ICollection<string> _startCollection = new List<string>() { "Sweden", "Hungary", "Turkey", "England", "Egypt" };
+    ICollection<string> _endCollection = new List<string>() { "Brazil", "China", "Germany", "USA", "South Africa" };
 
     bool _vertical;
     bool _multiSelection;
+    bool _preventTurkeyTransfer;
+    int? _maxItems;
+    SelectAllType _selectAllType = SelectAllType.Buttons;
+    Color _color = Color.Primary;
+    Variant _buttonVariant = Variant.Text;
+
+    private bool CheckTransfer(bool startToEnd)
+    {
+        var valuesStart = _transferList.GetStartListSelectedValues();
+        var valuesEnd = _transferList.GetEndListSelectedValues();
+        if (_preventTurkeyTransfer == true && (valuesStart?.Contains("Turkey") == true || valuesEnd?.Contains("Turkey") == true))
+        {
+            return true;
+        }
+        return false;
+    }
 }
