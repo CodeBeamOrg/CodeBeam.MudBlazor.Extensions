@@ -58,7 +58,7 @@ namespace MudExtensions
         /// Fires before transfer process start. Useful to backup items or prevent transfer.
         /// </summary>
         [Parameter]
-        public EventCallback OnTransfer { get; set; }
+        public EventCallback OnTransferStart { get; set; }
 
         /// <summary>
         /// Fires when start collection changed. Takes a "StartToEnd" direction bool parameter.
@@ -66,8 +66,17 @@ namespace MudExtensions
         [Parameter]
         public Func<bool, bool> PreventTransfer { get; set; }
 
+        /// <summary>
+        /// Fires when start collection changed. Takes a "StartToEnd" direction bool parameter.
+        /// </summary>
+        [Parameter]
+        public Func<ICollection<T>, ICollection<T>> OrderFunc { get; set; }
+
         [Parameter]
         public bool Vertical { get; set; }
+
+        [Parameter]
+        public bool Disabled { get; set; }
 
         /// <summary>
         /// Allows the transfer multiple items at once.
@@ -128,7 +137,7 @@ namespace MudExtensions
 
         protected internal async Task Transfer(bool startToEnd = true)
         {
-            await OnTransfer.InvokeAsync();
+            await OnTransferStart.InvokeAsync();
             if (PreventTransfer != null && PreventTransfer.Invoke(startToEnd) == true)
             {
                 return;
@@ -139,10 +148,12 @@ namespace MudExtensions
                 {
                     EndCollection.Add(_startList.SelectedValue);
                     StartCollection.Remove(_startList.SelectedValue);
+                    OrderItems();
                     await EndCollectionChanged.InvokeAsync(EndCollection);
                     await StartCollectionChanged.InvokeAsync(StartCollection);
                     _endList.SelectedValue = _startList.SelectedValue;
                     _startList.Clear();
+                    await _endList.ForceUpdate();
                 }
                 else if (MultiSelection == true && _startList.SelectedValues != null)
                 {
@@ -158,8 +169,12 @@ namespace MudExtensions
                         StartCollection.Remove(item);
                         transferredValues.Add(item);
                     }
+                    OrderItems();
                     _endList.SelectedValues = transferredValues;
-                    await _endList.ForceUpdate();
+                    if (OrderFunc != null)
+                    {
+                        await _endList.ForceUpdate();
+                    }
                     _startList.Clear();
                     await EndCollectionChanged.InvokeAsync(EndCollection);
                     await StartCollectionChanged.InvokeAsync(StartCollection);
@@ -174,8 +189,13 @@ namespace MudExtensions
                     EndCollection.Remove(_endList.SelectedValue);
                     _startList.SelectedValue = _endList.SelectedValue;
                     _endList.Clear();
+                    OrderItems();
                     await StartCollectionChanged.InvokeAsync(StartCollection);
                     await EndCollectionChanged.InvokeAsync(EndCollection);
+                    if (OrderFunc != null)
+                    {
+                        await _startList.ForceUpdate();
+                    }
                 }
                 else if (MultiSelection == true && _endList.SelectedValues != null)
                 {
@@ -191,6 +211,7 @@ namespace MudExtensions
                         transferredValues.Add(item);
                     }
                     _startList.SelectedValues = transferredValues;
+                    OrderItems();
                     await _startList.ForceUpdate();
                     _endList.Clear();
                     await StartCollectionChanged.InvokeAsync(StartCollection);
@@ -202,7 +223,7 @@ namespace MudExtensions
 
         protected internal async Task TransferAll(bool startToEnd = true)
         {
-            await OnTransfer.InvokeAsync();
+            await OnTransferStart.InvokeAsync();
             if (PreventTransfer != null && PreventTransfer.Invoke(startToEnd) == true)
             {
                 return;
@@ -215,6 +236,7 @@ namespace MudExtensions
                 }
                 StartCollection.Clear();
                 _startList.Clear();
+                OrderItems();
                 await EndCollectionChanged.InvokeAsync(EndCollection);
                 await StartCollectionChanged.InvokeAsync(StartCollection);
             }
@@ -226,6 +248,7 @@ namespace MudExtensions
                 }
                 EndCollection.Clear();
                 _endList.Clear();
+                OrderItems();
                 await StartCollectionChanged.InvokeAsync(StartCollection);
                 await EndCollectionChanged.InvokeAsync(EndCollection);
             }
@@ -263,6 +286,16 @@ namespace MudExtensions
             {
                 return new List<T>() { _endList.SelectedValue };
             }
+        }
+
+        protected void OrderItems()
+        {
+            if (OrderFunc == null)
+            {
+                return;
+            }
+            StartCollection = OrderFunc.Invoke(StartCollection);
+            EndCollection = OrderFunc.Invoke(EndCollection);
         }
 
     }

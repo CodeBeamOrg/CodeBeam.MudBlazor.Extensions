@@ -2,11 +2,9 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex flex-column align-center justify-center">
-        <MudAlert Class="mud-width-full" Severity="Severity.Warning">Limitation: Null items should not use to transfer in MultiSelection.</MudAlert>
-        <MudAlert Class="mud-width-full mb-8" Severity="Severity.Warning">Limitation: Constant collections like arrays can not be use in MudTransferList.</MudAlert>
         <MudTransferList @ref="_transferList" T="string" @bind-StartCollection="_startCollection" @bind-EndCollection="_endCollection" Vertical="_vertical" Color="_color"
-            StyleListCommon="background-color: var(--mud-palette-background-grey)" MultiSelection="_multiSelection" MaxItems="_maxItems" SelectAllType="_selectAllType"
-            PreventTransfer="@(new Func<bool, bool>(CheckTransfer))" ButtonVariant="_buttonVariant" />
+            StyleListCommon="background-color: var(--mud-palette-background-grey); width: 200px" MultiSelection="_multiSelection" MaxItems="_maxItems" SelectAllType="_selectAllType"
+                         PreventTransfer="@(new Func<bool, bool>(CheckTransfer))" OrderFunc="@(_orderOnTransfer == false ? null : new Func<ICollection<string>, ICollection<string>>(OrderMethod))" ButtonVariant="_buttonVariant" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -16,6 +14,7 @@
             <MudSwitchM3 @bind-Checked="_vertical" Label="Vertical" Color="Color.Primary" />
             <MudSwitchM3 @bind-Checked="_multiSelection" Label="MultiSelection" Color="Color.Primary" />
             <MudSwitchM3 @bind-Checked="_preventTurkeyTransfer" Label="Prevent Transfer If Turkey Selected" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Checked="_orderOnTransfer" Label="Order on Transfer" Color="Color.Primary" />
             <MudNumericField @bind-Value="_maxItems" Clearable="true" Label="MaxItems" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudSelectExtended @bind-Value="_selectAllType" ItemCollection="@(Enum.GetValues<SelectAllType>())" Label="SelectAll Type" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
             <MudSelectExtended @bind-Value="_color" ItemCollection="@(Enum.GetValues<Color>())" Label="Color" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
@@ -32,6 +31,7 @@
     bool _vertical;
     bool _multiSelection;
     bool _preventTurkeyTransfer;
+    bool _orderOnTransfer;
     int? _maxItems;
     SelectAllType _selectAllType = SelectAllType.Buttons;
     Color _color = Color.Primary;
@@ -46,5 +46,10 @@
             return true;
         }
         return false;
+    }
+
+    private ICollection<string> OrderMethod(ICollection<string> e)
+    {
+        return e.Order().ToList();
     }
 }

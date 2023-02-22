@@ -4,7 +4,7 @@
 @using MudExtensions.Enums
 
 <MudStack Class="@Class" Style="@Style" Row="!Vertical" Spacing="Spacing">
-    <MudListExtended @ref="_startList" Class="@StartClassname" Style="@StartStylename" T="T" ItemCollection="@StartCollection" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color">
+    <MudListExtended @ref="_startList" Class="@StartClassname" Style="@StartStylename" T="T" ItemCollection="@StartCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color">
         <SelectAllTemplate>
             @if (SelectAllType == SelectAllType.SelectAllItem)
             {
@@ -15,16 +15,16 @@
     <div class="@($"{(Vertical ? "d-flex" : "d-flex flex-column")} gap-{ButtonSpacing} align-center justify-center")">
         @if (SelectAllType == SelectAllType.Buttons)
         {
-            <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardDoubleArrowDown : Icons.Material.Filled.KeyboardDoubleArrowRight)" Color="@Color" Variant="@ButtonVariant" OnClick="@(() => TransferAll(true))" />
+            <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardDoubleArrowDown : Icons.Material.Filled.KeyboardDoubleArrowRight)" Disabled="Disabled" Color="@Color" Variant="@ButtonVariant" OnClick="@(() => TransferAll(true))" />
         }
-        <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardArrowDown : Icons.Material.Filled.KeyboardArrowRight)" Color="@Color" Variant="@ButtonVariant" OnClick="@(() => Transfer(true))" />
-        <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardArrowUp : Icons.Material.Filled.KeyboardArrowLeft)" Color="@Color" Variant="@ButtonVariant" OnClick="@(() => Transfer(false))" />
+        <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardArrowDown : Icons.Material.Filled.KeyboardArrowRight)" Disabled="Disabled" Color="@Color" Variant="@ButtonVariant" OnClick="@(() => Transfer(true))" />
+        <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardArrowUp : Icons.Material.Filled.KeyboardArrowLeft)" Disabled="Disabled" Color="@Color" Variant="@ButtonVariant" OnClick="@(() => Transfer(false))" />
         @if (SelectAllType == SelectAllType.Buttons)
         {
-            <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardDoubleArrowUp : Icons.Material.Filled.KeyboardDoubleArrowLeft)" Color="@Color" Variant="@ButtonVariant" OnClick="@(() => TransferAll(false))" />
+            <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardDoubleArrowUp : Icons.Material.Filled.KeyboardDoubleArrowLeft)" Disabled="Disabled" Color="@Color" Variant="@ButtonVariant" OnClick="@(() => TransferAll(false))" />
         }
     </div>
-    <MudListExtended @ref="_endList" Class="@EndClassname" Style="@EndStylename" T="T" ItemCollection="@EndCollection" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color">
+    <MudListExtended @ref="_endList" Class="@EndClassname" Style="@EndStylename" T="T" ItemCollection="@EndCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color">
         <SelectAllTemplate>
             @if (SelectAllType == SelectAllType.SelectAllItem)
             {

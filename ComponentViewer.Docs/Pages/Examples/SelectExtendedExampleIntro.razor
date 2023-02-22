@@ -2,93 +2,14 @@
 @using MudBlazor.Extensions
 
 <MudGrid>
-    <MudItem xs="12" md="6" Class="d-flex align-center">
-        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
-            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">1</MudAvatar>
-        </MudPaper>
-        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
-            <MudText Align="Align.Center">MudSelectItemExtended has the <CodeBlock>Text</CodeBlock>parameter. Users should use Text instead of RenderFragment if not certainly needed.</MudText>
-        </MudPaper>
-    </MudItem>
-
-    <MudItem xs="12" md="6" Class="d-flex align-center">
-        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
-            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">2</MudAvatar>
-        </MudPaper>
-        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
-            <MudText Align="Align.Center">MudSelectItemExtended can be groupable and can be nested.</MudText>
-        </MudPaper>
-    </MudItem>
-
-    <MudItem xs="12" md="6" Class="d-flex align-center">
-        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
-            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">3</MudAvatar>
-        </MudPaper>
-        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
-            <MudText Align="Align.Center">Support Mud Colors</MudText>
-        </MudPaper>
-    </MudItem>
-
-    <MudItem xs="12" md="6" Class="d-flex align-center">
-        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
-            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">4</MudAvatar>
-        </MudPaper>
-        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
-            <MudText Align="Align.Center">Can Populate With <CodeBlock>ItemCollection</CodeBlock> parameter</MudText>
-        </MudPaper>
-    </MudItem>
-
-    <MudItem xs="12" md="6" Class="d-flex align-center">
-        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
-            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">5</MudAvatar>
-        </MudPaper>
-        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
-            <MudText Align="Align.Center">Can show values in Chips</MudText>
-        </MudPaper>
-    </MudItem>
-
-    <MudItem xs="12" md="6" Class="d-flex align-center">
-        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
-            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">6</MudAvatar>
-        </MudPaper>
-        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
-            <MudText Align="Align.Center">Virtualization (Experimental)</MudText>
-        </MudPaper>
-    </MudItem>
-
-    <MudItem xs="12" md="6" Class="d-flex align-center">
-        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
-            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">7</MudAvatar>
-        </MudPaper>
-        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
-            <MudText Align="Align.Center">New <CodeBlock>ScrollToMiddle</CodeBlock> scroll algorithm (not completely implemented yet)</MudText>
-        </MudPaper>
-    </MudItem>
-
-    <MudItem xs="12" md="6" Class="d-flex align-center">
-        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
-            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">8</MudAvatar>
-        </MudPaper>
-        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
-            <MudText Align="Align.Center">Enhanced Keyboard Navigation</MudText>
-        </MudPaper>
-    </MudItem>
-
-    <MudItem xs="12" md="6" Class="d-flex align-center">
-        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
-            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">9</MudAvatar>
-        </MudPaper>
-        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
-            <MudText Align="Align.Center">Several Bug Fixes</MudText>
-        </MudPaper>
-    </MudItem>
-
-    <MudItem xs="12" md="6" Class="d-flex align-center">
-        <MudPaper Class="d-flex align-center justify-center mud-theme-secondary" MinWidth="100px" Height="100px">
-            <MudAvatar Variant="Variant.Filled" Color="Color.Secondary">10</MudAvatar>
-        </MudPaper>
-        <MudPaper Class="d-flex align-center justify-center pa-2" MinWidth="200px" Height="100px">
-            <MudText Align="Align.Center">SearchBox</MudText>
-        </MudPaper>
-    </MudItem>
+    <MudAlert Class="mud-width-full" Severity="Severity.Success"><b>Alternative Design Pattern:</b> Can Populate With <CodeBlock>ItemCollection</CodeBlock> parameter.</MudAlert>
+    <MudAlert Class="mud-width-full" Severity="Severity.Success"><b>Design Pattern Change:</b> MudSelectItemExtended has the <CodeBlock>Text</CodeBlock> parameter. Users should use Text instead of RenderFragment if not certainly needed.</MudAlert>
+    <MudAlert Class="mud-width-full" Severity="Severity.Success"><b>Feature:</b> Groups and Collapse</MudAlert>
+    <MudAlert Class="mud-width-full" Severity="Severity.Success"><b>Feature:</b> Support Mud Colors</MudAlert>
+    <MudAlert Class="mud-width-full" Severity="Severity.Success"><b>Feature:</b> Show Values With -Closeable- Chips</MudAlert>
+    <MudAlert Class="mud-width-full" Severity="Severity.Success"><b>Feature:</b> Virtualization (Experimental)</MudAlert>
+    <MudAlert Class="mud-width-full" Severity="Severity.Success"><b>Feature:</b> New <CodeBlock>ScrollToMiddle</CodeBlock> scroll algorithm (not completely implemented yet)</MudAlert>
+    <MudAlert Class="mud-width-full" Severity="Severity.Success"><b>Feature:</b> Enhanced Keyboard Navigation</MudAlert>
+    <MudAlert Class="mud-width-full" Severity="Severity.Success"><b>Feature:</b> SearchBox</MudAlert>
+    <MudAlert Class="mud-width-full" Severity="Severity.Success"><b>Feature:</b> Several Bug Fixes</MudAlert>
 </MudGrid>
