@@ -169,12 +169,9 @@ namespace MudExtensions
                         StartCollection.Remove(item);
                         transferredValues.Add(item);
                     }
-                    OrderItems();
                     _endList.SelectedValues = transferredValues;
-                    if (OrderFunc != null)
-                    {
-                        await _endList.ForceUpdate();
-                    }
+                    OrderItems();
+                    await _endList.ForceUpdate();
                     _startList.Clear();
                     await EndCollectionChanged.InvokeAsync(EndCollection);
                     await StartCollectionChanged.InvokeAsync(StartCollection);
