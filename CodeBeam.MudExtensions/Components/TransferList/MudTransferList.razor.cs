@@ -79,6 +79,12 @@ namespace MudExtensions
         public bool Disabled { get; set; }
 
         /// <summary>
+        /// If true, double click transfers the item. Doesn't have any effect on multitransfer is true.
+        /// </summary>
+        [Parameter]
+        public bool AllowDoubleClick { get; set; }
+
+        /// <summary>
         /// Allows the transfer multiple items at once.
         /// </summary>
         [Parameter]
@@ -293,6 +299,24 @@ namespace MudExtensions
             }
             StartCollection = OrderFunc.Invoke(StartCollection);
             EndCollection = OrderFunc.Invoke(EndCollection);
+        }
+
+        protected async Task DoubleClick(ListItemClickEventArgs<T> args)
+        {
+            if (AllowDoubleClick == false)
+            {
+                return;
+            }
+
+            if (StartCollection != null && StartCollection.Contains(args.ItemValue))
+            {
+                await Transfer(true);
+            }
+            else if (EndCollection != null && EndCollection.Contains(args.ItemValue))
+            {
+                await Transfer(false);
+            }
+
         }
 
     }
