@@ -1,0 +1,8 @@
+[
+  {
+    "outputFileName": "wwwroot/MudExtensions.min.js",
+    "inputFiles": [
+      "TScripts/MudExtensions.js"
+    ]
+  }
+]
