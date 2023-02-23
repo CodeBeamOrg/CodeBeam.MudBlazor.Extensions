@@ -21,6 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
 		<PackageReference Include="CsvHelper" Version="30.0.1" />
 		<PackageReference Include="MudBlazor" Version="6.1.9" />
 	</ItemGroup>
@@ -46,8 +47,13 @@
 	</Target>
 
 	<ItemGroup>
+		<Content Remove="bundleconfig.json" />
 		<Content Remove="compilerconfig.json" />
 		<Content Remove="excubowebcompiler.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="bundleconfig.json" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -61,6 +67,7 @@
 		  <Pack>True</Pack>
 		  <PackagePath>\</PackagePath>
 		</None>
+		<None Include="bundleconfig.json" />
 		<!--<None Include="wwwroot\MudExtensions.js" />-->
 		<!--<None Include="Components\ListExtended\MudListExtended.razor" />
 		<None Include="Components\ListExtended\MudListItemExtended.razor" />
