@@ -49,7 +49,7 @@
                 }
                 else
                 {
-                    <MudListItemExtended Value="@item" Text="@(ToStringFunc == null ? item.ToString() : ToStringFunc(item))" />
+                    <MudListItemExtended Value="@item" @ondblclick="@(() => OnDoubleClickHandler(new MouseEventArgs(), item))" Text="@(ToStringFunc == null ? item.ToString() : ToStringFunc(item))" />
                 }
             </MudVirtualize>
         }

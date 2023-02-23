@@ -324,6 +324,11 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<FocusEventArgs> OnFocusOut { get; set; }
 
+        /// <summary>
+        /// Fired on the OnDoubleClick event.
+        /// </summary>
+        [Parameter] public EventCallback<ListItemClickEventArgs<T>> OnDoubleClick { get; set; }
+
         #endregion
 
 
@@ -1335,6 +1340,17 @@ namespace MudExtensions
             UpdateSelectedStyles();
         }
 
+        protected async Task OnDoubleClickHandler(MouseEventArgs args, T itemValue)
+        {   
+            await OnDoubleClick.InvokeAsync(new ListItemClickEventArgs<T>() { MouseEventArgs = args, ItemValue = itemValue});
+        }
+
         #endregion
+    }
+
+    public class ListItemClickEventArgs<T>
+    {
+        public MouseEventArgs MouseEventArgs { get; set; }
+        public T ItemValue { get; set; }
     }
 }
