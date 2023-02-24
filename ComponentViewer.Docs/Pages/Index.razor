@@ -31,7 +31,7 @@
     </div>
 
     <div class="d-flex justify-center my-4">
-        <MudTextFieldExtended T="string" @bind-Value="_searchString" @bind-Value:after="@(() => _animate.Refresh())" Class="search-style" Style="width: 50vw" Placeholder="What are you looking for?" Variant="Variant.Outlined" Clearable="true" />
+        <MudTextFieldExtended T="string" @bind-Value="_searchString" @bind-Value:after="@(() => _animate.Refresh())" Class="search-style" Style="width: calc(50px + 50vw)" Placeholder="What are you looking for?" Variant="Variant.Outlined" Clearable="true" />
     </div>
 
     @if (string.IsNullOrEmpty(_searchString) == true)
@@ -134,7 +134,7 @@
         color: var(--mud-palette-text-primary);
         font-size: calc(16px + 6vw);
         font-weight: 900;
-        font-family: "Roboto Black";
+        font-family: "Roboto";
         letter-spacing: 0;
         transition: all 1s;
         cursor: pointer;
@@ -149,7 +149,7 @@
         color: var(--mud-palette-text-primary);
         font-size: calc(16px + 6vw);
         font-weight: 900;
-        font-family: "Roboto Black";
+        font-family: "Roboto";
         letter-spacing: 0;
         transition: all 1s;
         cursor: pointer;
