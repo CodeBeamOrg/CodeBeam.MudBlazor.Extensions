@@ -14,20 +14,20 @@
                 }
                 bool active = IsStepActive(step);
                 <div @onclick="@(Linear ? null : () => SetActiveIndex(step))" Class="@HeaderClassname">
-                    <MudAvatar Class="@((active || step.Status != StepStatus.Continued) ? $"mud-theme-{Color.ToDescriptionString()}" : null)" Variant="@Variant" Size="Size.Small">
-                        @if (step.Status == Enums.StepStatus.Completed)
-                        {
-                            <MudIcon Icon="@Icons.Material.Filled.Done" Size="Size.Small" />
-                        }
-                        else if (step.Status == StepStatus.Skipped)
-                        {
-                            <MudIcon Icon="@Icons.Material.Filled.Remove" Size="Size.Small" />
-                        }
-                        else
-                        {
-                            @(Steps.IndexOf(step) + 1)
-                        }
-                    </MudAvatar>
+                        <MudAvatar Class="@((active || step.Status != StepStatus.Continued) ? $"mud-theme-{Color.ToDescriptionString()}" : null)" Variant="@Variant" Size="Size.Small">
+                            @if (step.Status == Enums.StepStatus.Completed)
+                            {
+                                <MudIcon Icon="@Icons.Material.Filled.Done" Size="Size.Small" />
+                            }
+                            else if (step.Status == StepStatus.Skipped)
+                            {
+                                <MudIcon Icon="@Icons.Material.Filled.Remove" Size="Size.Small" />
+                            }
+                            else
+                            {
+                                @(Steps.IndexOf(step) + 1)
+                            }
+                        </MudAvatar>
                     @if (HeaderTextView == HeaderTextView.All || HeaderTextView == HeaderTextView.NewLine || (HeaderTextView == HeaderTextView.OnlyActiveText && active))
                     {
                         <div>
