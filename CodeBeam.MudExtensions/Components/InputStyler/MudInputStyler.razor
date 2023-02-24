@@ -35,6 +35,13 @@
     public string TextColor { get; set; }
 
     /// <summary>
+    /// The label style. Add !important if style doesn't applied.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public string LabelStyle { get; set; }
+
+    /// <summary>
     /// The label text color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
     /// </summary>
     [Parameter]
@@ -122,4 +129,6 @@
             }</MudRender>
         }
     }
+
+    @($"{Selector} .mud-input-label {{ {LabelStyle} }}")
 </style>

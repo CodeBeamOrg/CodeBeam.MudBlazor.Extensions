@@ -1,6 +1,6 @@
 ﻿@using MudBlazor.Utilities
-<MudGrid Style="background-color: var(--mud-palette-background-grey)">
-    <MudItem xs="12" sm="8">
+<MudGrid >
+    <MudItem xs="12" sm="8" Style="background-color: var(--mud-palette-background-grey)">
         <MudStack>
             <MudText>Default TextFields</MudText>
             <MudStack Row="true">
@@ -31,7 +31,7 @@
         </MudStack>
 
         <MudInputStyler Selector=".text-field" BaseColor="@(_baseColor?.ToString())" TextColor="@(_textColor?.ToString())" LabelColor="@(_labelColor?.ToString())"
-                        BorderColor="@(_borderColor?.ToString())" Always="_always" />
+                        BorderColor="@(_borderColor?.ToString())" LabelStyle="@_labelStyle" Always="_always" />
         <MudInputStyler Selector=".label-background-grey" LabelBackgroundColor="@("var(--mud-palette-background-grey)")" />
         <MudInputStyler Selector=".label-background-transparent" LabelBackgroundColor="transparent" />
         <MudInputStyler />
@@ -44,6 +44,7 @@
             <MudColorPicker @bind-Value="_textColor" Label="Text Color" ColorPickerView="ColorPickerView.Grid" Clearable="true" />
             <MudColorPicker @bind-Value="_labelColor" Label="Label Color" ColorPickerView="ColorPickerView.Grid" Clearable="true" />
             <MudColorPicker @bind-Value="_borderColor" Label="Border Color" ColorPickerView="ColorPickerView.Grid" Clearable="true" />
+            <MudTextField @bind-Value="_labelStyle" Label="Label Style" Variant="Variant.Outlined" />
             <MudButton OnClick="Reset">Reset</MudButton>
         </MudStack>
     </MudItem>
@@ -55,6 +56,7 @@
     MudColor _labelColor;
     MudColor _borderColor;
     bool _always;
+    string _labelStyle;
 
     private void Reset()
     {
