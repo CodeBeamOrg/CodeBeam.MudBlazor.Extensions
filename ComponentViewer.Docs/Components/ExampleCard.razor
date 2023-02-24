@@ -3,7 +3,7 @@
 @if (HasExpansionPanel)
 {
     <MudExpansionPanel Text="@Title">
-        <MudCard Class="component-card mx-sm-2 my-8 pa-sm-2 example-card" Style="cursor: default" Elevation="4">
+        <MudCard Class="component-card mx-sm-2 my-8 pa-sm-2" Style="cursor: default" Elevation="4">
             <MudCardHeader>
                 <div>
                     <MudText Class="example-card-text" Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
@@ -20,11 +20,12 @@
 }
 else
 {
-    <MudCard Class="component-card mx-sm-2 my-8 pa-sm-2 example-card" Style="cursor: default" Elevation="4">
+    <MudCard Class="component-card mx-sm-2 my-8 pa-sm-2" Style="cursor: default" Elevation="4">
         <MudCardHeader>
             <div>
                 <MudText Class="example-card-text" Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
                 <MudText Class="example-card-text" Typo="Typo.body2" Color="Color.Inherit">@Description</MudText>
+                <MudDivider />
             </div>
         </MudCardHeader>
         <MudCardContent>
@@ -98,25 +99,8 @@ else
 }
 
 <style>
-    .example-card {
-        background-color: transparent;
-        /*color: var(--mud-palette-secondary);*/
-        transition: background-color .6s;
+    .example-card-text {
+        color: var(--mud-palette-secondary);
         transition: color 1s;
-        cursor: pointer;
     }
-
-        .example-card:hover {
-            /*color: white;*/
-            background: linear-gradient(to right, var(--mud-palette-primary), var(--mud-palette-secondary));
-        }
-
-        .example-card .example-card-text {
-            color: var(--mud-palette-secondary);
-            transition: color 1s;
-        }
-
-        .example-card:hover .example-card-text {
-            color: white;
-        }
 </style>
