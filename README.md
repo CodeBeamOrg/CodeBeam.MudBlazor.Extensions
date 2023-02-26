@@ -68,9 +68,14 @@ Add the following to your HTML **head** section, it's either `index.html` or `_L
 <link href="_content/CodeBeam.MudExtensions/MudExtensions.min.css" rel="stylesheet" />
 ```
 
-Add the following to your HTML **body** section
+Add the following to your HTML **body** section\
+For version < 6.3.0
 ```html
 <script src="_content/CodeBeam.MudExtensions/MudExtensions.js"></script>
+```
+For version 6.3.0 and after
+```html
+<script src="_content/CodeBeam.MudExtensions/MudExtensions.min.js"></script>
 ```
 
 Add the extension services into program.cs
