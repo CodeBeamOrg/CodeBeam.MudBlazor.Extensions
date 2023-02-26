@@ -32,7 +32,7 @@
                         {
                             <MudCheckBox CheckedIcon="@SelectAllCheckBoxIcon" Color="@Color" @bind-Checked="_allSelected" @onclick="() => SelectAllItems(_allSelected)" Dense="true" />
                         }
-                        <MudTextField @bind-Value="@_searchString" Class="@ClassSearchBox" OnKeyUp="@(() => UpdateSelectedStyles())" Immediate="true" Variant="Variant.Outlined" Margin="Margin.Dense"
+                        <MudTextField @bind-Value="@_searchString" Class="@ClassSearchBox" Placeholder="@SearchBoxPlaceholder" OnKeyUp="@(() => UpdateSelectedStyles())" Immediate="true" Variant="Variant.Outlined" Margin="Margin.Dense"
                             Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color" AutoFocus="@SearchBoxAutoFocus" />
                     </div>
                 </MudListSubheaderExtended>
