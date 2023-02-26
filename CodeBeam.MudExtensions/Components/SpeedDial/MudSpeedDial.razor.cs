@@ -59,6 +59,9 @@ namespace MudExtensions
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        [Parameter]
+        public RenderFragment ActivatorContent { get; set; }
+
         Origin _origin = Origin.BottomRight;
         [Parameter]
         public Origin Origin

@@ -97,6 +97,18 @@ namespace MudExtensions
         public bool DisableStepResultIndicator { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        [Parameter]
+        public bool MobileView { get; set; }
+
+        /// <summary>
+        /// If true, action buttons have icons instead of text to gain more space.
+        /// </summary>
+        [Parameter]
+        public bool IconActionButtons { get; set; }
+
+        /// <summary>
         /// The predefined Mud color for header and action buttons.
         /// </summary>
         [Parameter]
