@@ -23,6 +23,7 @@ namespace MudExtensions
             .Build();
 
         protected string SliderClassname => new CssBuilder($"mud-splitter-thumb mud-splitter-thumb-{_styleGuid} mud-splitter-track")
+            .AddClass("mud-splitter-thumb-disabled", EnableSlide == false)
             .Build();
 
         /// <summary>
