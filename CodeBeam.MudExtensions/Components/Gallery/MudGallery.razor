@@ -28,13 +28,13 @@
 
                 @if (ShowToolboxNavigationButtons == true)
                 {
-                    <MudIconButton Class="absolute white-text" Size="Size.Large" DisableRipple="true" Icon="@Icons.Outlined.ChevronLeft" Style="bottom: 0px; top: 0px; left: 4px;" OnClick="@(() => SetAdjacentImage(-1))" />
-                    <MudIconButton Class="absolute white-text" Size="Size.Large" DisableRipple="true" Icon="@Icons.Outlined.ChevronRight" Style="bottom: 0px; top: 0px; right: 4px;" OnClick="@(() => SetAdjacentImage(1))" />
+                    <MudIconButton Class="absolute white-text" Size="Size.Large" DisableRipple="true" Icon="@Icons.Material.Outlined.ChevronLeft" Style="bottom: 0px; top: 0px; left: 4px;" OnClick="@(() => SetAdjacentImage(-1))" />
+                    <MudIconButton Class="absolute white-text" Size="Size.Large" DisableRipple="true" Icon="@Icons.Material.Outlined.ChevronRight" Style="bottom: 0px; top: 0px; right: 4px;" OnClick="@(() => SetAdjacentImage(1))" />
                 }
 
                 @if (ShowToolboxCloseButton == true)
                 {
-                    <MudIconButton Class="absolute white-text" DisableRipple="true" Icon="@Icons.Outlined.Close" Style="top: 4px; right: 0px;" OnClick="@(() => ChangeMenu(false))" />
+                    <MudIconButton Class="absolute white-text" DisableRipple="true" Icon="@Icons.Material.Outlined.Close" Style="top: 4px; right: 0px;" OnClick="@(() => ChangeMenu(false))" />
                 }
             </MudContainer>
         </div>

@@ -33,7 +33,7 @@
                             <MudFab HtmlTag="Button"
                                     Color="Color.Secondary"
                                     Label="@LocalizedStrings.ChooseFile"
-                                    Icon="@Icons.Outlined.CloudDownload" Size="Size.Large"/>@LocalizedStrings.OrDragAndDrop
+                                    Icon="@Icons.Material.Outlined.CloudDownload" Size="Size.Large"/>@LocalizedStrings.OrDragAndDrop
                         </h3>
                     </MudPaper>
                     <MudPaper Elevation="0" class="d-flex justify-center align-content-center mud-transparent m2">
@@ -94,11 +94,11 @@
                                 }
                                 @if (!matched && item.CreatingDefaultValue)
                                 {
-                                    <MudIconButton Style="padding-left: 8px;" Icon="@Icons.Outlined.ArrowBackIosNew" Color="Color.Secondary" OnClick="@(() => item.CreatingDefaultValue = !item.CreatingDefaultValue)"></MudIconButton>
+                                    <MudIconButton Style="padding-left: 8px;" Icon="@Icons.Material.Outlined.ArrowBackIosNew" Color="Color.Secondary" OnClick="@(() => item.CreatingDefaultValue = !item.CreatingDefaultValue)"></MudIconButton>
                                 }
                                 else if(!matched && item.AllowDefaultValue)
                                 {
-                                    <MudIconButton Style="padding-left: 8px;" Icon="@Icons.Outlined.Add" Color="Color.Secondary" OnClick="@(() => item.CreatingDefaultValue = !item.CreatingDefaultValue)"></MudIconButton>
+                                    <MudIconButton Style="padding-left: 8px;" Icon="@Icons.Material.Outlined.Add" Color="Color.Secondary" OnClick="@(() => item.CreatingDefaultValue = !item.CreatingDefaultValue)"></MudIconButton>
                                 }
                             </MudText>
                             @if (!matched && !confirmed)
@@ -122,7 +122,7 @@
                 {
                     <MudPaper Elevation="0" Width="180px" Class="rounded-lg mud-background-gray pa-2 my-1">
                         <EditForm Model="@_model" OnSubmit="OnSubmit">
-                            <MudIconButton Style="padding-left: 8px;" Icon="@Icons.Outlined.ArrowBackIosNew" Color="Color.Secondary" OnClick="@(() => _addSectionOpen = false)"></MudIconButton>
+                            <MudIconButton Style="padding-left: 8px;" Icon="@Icons.Material.Outlined.ArrowBackIosNew" Color="Color.Secondary" OnClick="@(() => _addSectionOpen = false)"></MudIconButton>
                             <MudTextField @bind-Value="_model.Name" Label="Expected Header" Required="true" For="@(() => _model.Name)"></MudTextField>
                             <MudSwitch Color="Color.Primary" T="bool" @bind-Checked="_model.Required">Required</MudSwitch>
                             <MudSwitch Color="Color.Primary" T="bool" @bind-Checked="_model.AllowDefaultValue">Allow Default Value</MudSwitch>

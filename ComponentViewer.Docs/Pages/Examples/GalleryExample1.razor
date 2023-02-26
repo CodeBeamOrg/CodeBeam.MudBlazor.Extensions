@@ -9,11 +9,11 @@
                 <MudText Class="white-text pa-4">Image @(_gallery.GetSelectedImageIndex() + 1) - Description</MudText>
             </ToolboxTopContent>
             <ToolboxBottomContent>
-                <MudIconButton Class="white-text" Icon="@Icons.Outlined.Edit" />
-                <MudIconButton Class="white-text" Icon="@Icons.Outlined.RotateRight" OnClick="ArrangeRotateValue" />
+                <MudIconButton Class="white-text" Icon="@Icons.Material.Outlined.Edit" />
+                <MudIconButton Class="white-text" Icon="@Icons.Material.Outlined.RotateRight" OnClick="ArrangeRotateValue" />
                 @if (_showToolboxCloseButton == false)
                 {
-                    <MudIconButton Class="white-text" Icon="@Icons.Outlined.Close" OnClick="@(() => _gallery.ChangeMenu(false))" />
+                    <MudIconButton Class="white-text" Icon="@Icons.Material.Outlined.Close" OnClick="@(() => _gallery.ChangeMenu(false))" />
                 }
             </ToolboxBottomContent>
         </MudGallery>

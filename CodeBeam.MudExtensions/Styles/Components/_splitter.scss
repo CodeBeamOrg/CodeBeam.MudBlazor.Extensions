@@ -49,7 +49,11 @@
     width: 8px !important;
     border: none !important;
     border-radius: 0 !important;
-    cursor: ew-resize !important;
+    cursor: ew-resize !important;   
+}
+
+.mud-splitter-thumb-disabled ::-webkit-slider-thumb {
+    cursor: not-allowed !important;
 }
 
 .mud-splitter-thumb ::-moz-range-thumb {
@@ -63,4 +67,8 @@
     border: none !important;
     border-radius: 0 !important;
     cursor: ew-resize !important;
+}
+
+.mud-splitter-thumb-disabled ::-moz-range-thumb {
+    cursor: not-allowed !important;
 }

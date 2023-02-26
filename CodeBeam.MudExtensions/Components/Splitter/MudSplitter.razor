@@ -18,13 +18,13 @@
     @($".mud-splitter-generate-{_styleGuid} {{ grid-template-columns: {Dimension.ToInvariantString()}% {(100 - Dimension).ToInvariantString()}%; }}")
 
     .mud-splitter-thumb-@(_styleGuid) ::-webkit-slider-thumb {
-        @(Color == Color.Default ? "background-color: var(--mud-palette-action-default) !important;" : $"background-color: var(--mud-palette-{Color.ToDescriptionString()}) !important;") @(StyleBar)
+        @(Color == Color.Default ? "background-color: var(--mud-palette-action-default) !important;" : $"background-color: var(--mud-palette-{Color.ToDescriptionString()}) !important;")
         @(Height != null ? $"height: {Height} !important;" : null)
         @(StyleBar)
     }
 
     .mud-splitter-thumb-@(_styleGuid) ::-moz-range-thumb {
-        @(Color == Color.Default ? "background-color: var(--mud-palette-action-default) !important;" : $"background-color: var(--mud-palette-{Color.ToDescriptionString()}) !important;") @(StyleBar)
+        @(Color == Color.Default ? "background-color: var(--mud-palette-action-default) !important;" : $"background-color: var(--mud-palette-{Color.ToDescriptionString()}) !important;")
         @(Height != null ? $"height: {Height} !important;" : null)
         @(StyleBar)
     }
