@@ -150,6 +150,10 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Appearance)]
         public bool DisableSelectedItemStyle { get; set; }
 
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public string SearchBoxPlaceholder { get; set; }
+
         /// <summary>
         /// If true, compact vertical padding will be applied to all Select items.
         /// </summary>
@@ -216,6 +220,13 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public Func<List<T>, string> MultiSelectionTextFunc { get; set; }
+
+        /// <summary>
+        /// Custom search func for searchbox. If doesn't set, it search with "Contains" logic by default. Passed value and searchString values.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public Func<T, string, bool> SearchFunc { get; set; }
 
         /// <summary>
         /// If not null, select items will automatically created regard to the collection.

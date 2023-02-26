@@ -1,7 +1,8 @@
 ﻿
 <MudGrid>
-    <MudItem xs="12" sm="8">
-        <MudSelectExtended MultiSelection="@_multiselection" ItemCollection="_states" SearchBox="true" SearchBoxAutoFocus="@_searchBoxAutoFocus" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" />
+    <MudItem xs="12" sm="8" Class="d-flex gap-4">
+        <MudSelectExtended MultiSelection="@_multiselection" ItemCollection="_states" SearchBox="true" SearchBoxAutoFocus="@_searchBoxAutoFocus" T="string" Label="Standard Search" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" HelperText="Search with 'Contains' logic" />
+        <MudSelectExtended MultiSelection="@_multiselection" ItemCollection="_states" SearchBox="true" SearchBoxAutoFocus="@_searchBoxAutoFocus" SearchFunc="@(new Func<string, string, bool>(SearchItems))" T="string" Label="Custom Search Func" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" SearchBoxPlaceholder="Some Placeholder" HelperText="Search with 'StartsWith' logic" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -33,5 +34,20 @@
         "Texas", "Utah", "Vermont", "Virgin Island", "Virginia",
         "Washington", "West Virginia", "Wisconsin", "Wyoming",
     };
+
+    private bool SearchItems(string value, string searchString)
+    {
+        if (searchString == "")
+        {
+            return true;
+        }
+
+        if (value.StartsWith(searchString, StringComparison.CurrentCultureIgnoreCase))
+        {
+            return true;
+        }
+
+        return false;
+    }
 
 }

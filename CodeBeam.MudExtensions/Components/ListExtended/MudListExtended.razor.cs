@@ -144,6 +144,13 @@ namespace MudExtensions
         public ICollection<T> ItemCollection { get; set; } = null;
 
         /// <summary>
+        /// Custom search func for searchbox. If doesn't set, it search with "Contains" logic by default. Passed value and searchString values.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public Func<T, string, bool> SearchFunc { get; set; }
+
+        /// <summary>
         /// If true, shows a searchbox for filtering items. Only works with ItemCollection approach.
         /// </summary>
         [Parameter]
@@ -163,6 +170,10 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public string ClassSearchBox { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public string SearchBoxPlaceholder { get; set; }
 
         /// <summary>
         /// Allows virtualization. Only work if ItemCollection parameter is not null.
@@ -1321,6 +1332,11 @@ namespace MudExtensions
             if (!SearchBox || ItemCollection == null || _searchString == null)
             {
                 return ItemCollection;
+            }
+
+            if (SearchFunc != null)
+            {
+                return ItemCollection.Where(x => SearchFunc.Invoke(x, _searchString)).ToList();
             }
 
             return ItemCollection.Where(x => Converter.Set(x).Contains(_searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
