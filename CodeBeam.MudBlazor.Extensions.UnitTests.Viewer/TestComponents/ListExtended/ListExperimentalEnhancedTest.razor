@@ -1,0 +1,35 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+
+<MudPaper Width="300px">
+    <MudListExtended T="int" Clickable="true" MultiSelection="true" @bind-SelectedValue="selectedValue" @bind-SelectedItem="selectedItem">
+        <MudListSubheaderExtended T="string">
+            Your drink:
+            <MudChip Color="Color.Secondary">
+                @(selectedItem?.Text ?? "You are dry") (@(selectedValue.ToString()))
+            </MudChip>
+        </MudListSubheaderExtended>
+        <MudListItemExtended Text="Water 1" Value="1" />
+        <MudListItemExtended IsFunctional="true" Text="Exceptional Water" Value="2" />
+        <MudListItemExtended Text="Water 2" Value="3" />
+        <MudListItemExtended T="int" Text="Teas">
+            <NestedList>
+                <MudListItemExtended Text="Earl Grey" Value="4" />
+                <MudListItemExtended Text="Matcha" Value="5" />
+                <MudListItemExtended Text="Pu'er" Value="6" />
+            </NestedList>
+        </MudListItemExtended>
+        <MudListItemExtended T="int" Text="Coffees">
+            <NestedList>
+                <MudListItemExtended Text="Irish Coffee" Value="7" />
+                <MudListItemExtended Text="Double Espresso" Value="8" />
+                <MudListItemExtended Disabled="true" Text="Cafe Latte" Value="9" />
+            </NestedList>
+        </MudListItemExtended>
+    </MudListExtended>
+</MudPaper>
+
+@code
+{
+    MudListItemExtended<int> selectedItem;
+    int selectedValue;
+}

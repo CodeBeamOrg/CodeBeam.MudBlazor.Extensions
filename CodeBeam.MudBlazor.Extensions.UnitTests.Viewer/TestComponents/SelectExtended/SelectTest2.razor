@@ -1,0 +1,15 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudSelectExtended @bind-Value="value" PopoverClass="select-popover-class" IsPreRendered>
+    <MudSelectItemExtended Value="@("1")"/>
+    <MudSelectItemExtended Value="@("2")"/>
+    <MudSelectItemExtended Value="@("3")"/>
+    <MudSelectItemExtended Value="@("4")" Disabled="true"/>
+</MudSelectExtended>
+
+@code {
+    public static string __description__ = "Value 2 should be selected initially and hilighted.";
+
+    string value="2";
+}

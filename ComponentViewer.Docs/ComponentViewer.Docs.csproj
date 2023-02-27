@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CodeBeam.MudExtensions\CodeBeam.MudExtensions.csproj" />
+    <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

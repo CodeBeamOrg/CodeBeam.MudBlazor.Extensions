@@ -1,0 +1,31 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+
+<MudListExtended T="int" Clickable="true" @bind-SelectedItem="selectedItem">
+    <MudListSubheaderExtended T="int">
+        Your drink:
+        <MudChip Color="Color.Secondary">
+            @(selectedItem?.Text ?? "You are dry")
+        </MudChip>
+    </MudListSubheaderExtended>
+    <MudListItemExtended T="int" Text="Sparkling Water" Value="1" />
+    <MudListItemExtended T="int" Text="Teas">
+        <NestedList>
+            <MudListItemExtended Text="Earl Grey"  Value="2"/>
+            <MudListItemExtended Text="Matcha"  Value="3"/>
+            <MudListItemExtended Text="Pu'er"  Value="4"/>
+        </NestedList>
+    </MudListItemExtended>
+    <MudListItemExtended T="int" Text="Coffees">
+        <NestedList>
+            <MudListItemExtended Text="Irish Coffee"  Value="5"/>
+            <MudListItemExtended Text="Double Espresso"  Value="6"/>
+            <MudListItemExtended Text="Cafe Latte"  Value="7"/>
+        </NestedList>
+    </MudListItemExtended>
+</MudListExtended>
+
+@code
+{
+    public static string __description__ = "Clicking the drinks selects them. The child lists are updated accordingly.";
+    MudListItemExtended<int> selectedItem;
+}
