@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.1" PrivateAssets="all" />
+		<PackageReference Include="System.Net.Http.Json" Version="7.0.0" />
+	</ItemGroup>
+
+</Project>

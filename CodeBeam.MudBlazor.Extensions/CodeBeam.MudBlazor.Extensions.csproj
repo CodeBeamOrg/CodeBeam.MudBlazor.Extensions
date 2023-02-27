@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Version>6.3.0</Version>
+		<Title>CodeBeam.MudBlazor.Extensions</Title>
+		<Authors>CodeBeam</Authors>
+		<Company>CodeBeam</Company>
+		<Description>MudBlazor extension components from contributors. Includes 25+ components and utilities.</Description>
+		<Copyright>CodeBeam OpenSource MIT</Copyright>
+		<PackageIcon>Mud_Secondary.png</PackageIcon>
+		<PackageProjectUrl>https://codebeam-mudextensions.pages.dev/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/CodeBeamOrg/CodeBeam.MudBlazor.Extensions</RepositoryUrl>
+		<PackageTags>Blazor; MudBlazor; Component; Extension; Animate; Stepper; Select; List; Loading; Gallery; ChipField; Transfer</PackageTags>
+		<RootNamespace>MudExtensions</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+		<PackageReference Include="CsvHelper" Version="30.0.1" />
+		<PackageReference Include="MudBlazor" Version="6.1.9" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.11" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.1.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.1.*" />
+	</ItemGroup>
+
+	<!--Uncomment it on development and debug to generate min.css on rebuild-->
+	<!--This sections causes to fail auto deployment to CloudFlare-->
+	<!--<Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
+		<Exec Command="dotnet tool restore" StandardOutputImportance="high" />
+	</Target>-->
+
+	<Target Name="PreBuild" AfterTargets="ToolRestore">
+		<Exec Command="dotnet tool run webcompiler -r Styles/MudExtensions.scss -c excubowebcompiler.json" StandardOutputImportance="high" />
+	</Target>
+
+	<ItemGroup>
+		<Content Remove="bundleconfig.json" />
+		<Content Remove="compilerconfig.json" />
+		<Content Remove="excubowebcompiler.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="bundleconfig.json" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>CodeBeam.MudBlazor.Extensions.UnitTests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<None Include="..\..\..\..\Desktop\MudBuilder\Mud_Secondary.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
+		<None Include="bundleconfig.json" />
+		<!--<None Include="wwwroot\MudExtensions.js" />-->
+		<!--<None Include="Components\ListExtended\MudListExtended.razor" />
+		<None Include="Components\ListExtended\MudListItemExtended.razor" />
+		<None Include="Components\ListExtended\MudListSubheaderExtended.razor" />
+		<None Include="Components\SwitchM3\MudSwitchM3.razor" />
+		<None Include="wwwroot\MudExtensions.js" />-->
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Update="Components\Splitter\MudSplitter.razor">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Content>
+	</ItemGroup>
+
+</Project>

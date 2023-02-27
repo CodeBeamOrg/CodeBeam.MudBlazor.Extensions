@@ -1,0 +1,42 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudSelectExtended @bind-Value="value" Label="String Binding" MultiSelection="true" IsPreRendered="true" Required="true" Clearable="true">
+    <MudSelectItemExtended Value="@("1")">1</MudSelectItemExtended>
+    <MudSelectItemExtended Value="@("2")">2</MudSelectItemExtended>
+    <MudSelectItemExtended Value="@("3")">3</MudSelectItemExtended>
+</MudSelectExtended>
+
+<MudSelectExtended T=TestClass Label="Object Binding" MultiSelection="true" Required="true" @bind-SelectedValues="SelectedRoles" Clearable="true">
+    @foreach(var role in Roles)
+    {
+        <MudSelectItemExtended T="TestClass" Value=@role/>
+    }
+</MudSelectExtended>
+
+@code {
+    
+	public static string __description__ = "Multi-Select Required Should Recognize Values";
+
+    string value=null;
+
+    public class TestClass
+    {
+        public string Name { get; set; }
+        public string NameTranslated { get; set; }
+        public override string ToString() => Name;
+    }
+
+
+    public List<TestClass> Roles {get; set; } = new();
+    public IEnumerable<TestClass> SelectedRoles = new List<TestClass>();
+
+    Func<TestClass, string> converter = p => p?.NameTranslated;
+    
+	protected override void OnInitialized()
+    {
+        Roles.Add(new TestClass() { Name ="Admin", NameTranslated="Administrator"});
+        Roles.Add(new TestClass() { Name ="Customer", NameTranslated="Kunde"});
+    }
+
+}

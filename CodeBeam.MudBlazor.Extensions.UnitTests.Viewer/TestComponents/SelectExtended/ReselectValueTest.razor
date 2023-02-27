@@ -1,0 +1,26 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<div>
+    <MudSelectExtended T="string" Variant="Variant.Text"
+               @bind-Value="fruit"
+               Direction="Direction.Bottom" Dense="true"
+               SelectedValuesChanged="@(() => FruitChanged(null))">
+
+        <MudSelectItemExtended Value="@("Apple")">Apple</MudSelectItemExtended>
+        <MudSelectItemExtended Value="@("Orange")">Orange</MudSelectItemExtended>
+    </MudSelectExtended>
+
+    <MudText>@fruit</MudText>
+    <MudText>@ChangeCount</MudText>
+</div>
+
+@code{
+    string fruit = "Apple";
+    public int ChangeCount { get; private set; }
+
+    void FruitChanged(IEnumerable<string> fruits)
+    {
+        ChangeCount++;
+    }
+}
