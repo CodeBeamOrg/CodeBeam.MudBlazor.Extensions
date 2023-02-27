@@ -2,11 +2,11 @@
 #### Useful third party extension components for MudBlazor, from the community contributors.
 ##### `TheMudSecondary`
 
-[![GitHub Repo stars](https://img.shields.io/github/stars/codebeamorg/codebeam.mudextensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudextensions/stargazers)
-[![GitHub last commit](https://img.shields.io/github/last-commit/codebeamorg/codebeam.mudextensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudextensions)
-[![Contributors](https://img.shields.io/github/contributors/codebeamorg/codebeam.mudextensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudextensions/graphs/contributors)
-[![Nuget version](https://img.shields.io/nuget/v/CodeBeam.mudextensions?color=ff4081&label=nuget%20version&logo=nuget&style=flat-square)](https://www.nuget.org/packages/codebeam.mudextensions/)
-[![Nuget downloads](https://img.shields.io/nuget/dt/CodeBeam.mudextensions?color=ff4081&label=nuget%20downloads&logo=nuget&style=flat-square)](https://www.nuget.org/packages/codebeam.mudextensions/)
+[![GitHub Repo stars](https://img.shields.io/github/stars/codebeamorg/codebeam.mudblazor.extensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudblazor.extensions/stargazers)
+[![GitHub last commit](https://img.shields.io/github/last-commit/codebeamorg/codebeam.mudblazor.extensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudblazor.extensions)
+[![Contributors](https://img.shields.io/github/contributors/codebeamorg/codebeam.mudblazor.extensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudblazor.extensions/graphs/contributors)
+[![Nuget version](https://img.shields.io/nuget/v/CodeBeam.mudblazor.extensions?color=ff4081&label=nuget%20version&logo=nuget&style=flat-square)](https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions)
+[![Nuget downloads](https://img.shields.io/nuget/dt/CodeBeam.mudblazor.extensions?color=ff4081&label=nuget%20downloads&logo=nuget&style=flat-square)](https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions)
 
 ## Components
 
@@ -62,7 +62,7 @@ https://codebeam-mudextensions.pages.dev/api
 | 6.1.0 - 6.1.4 | 6.1.0 - 6.1.2 | .Net 6 & .Net 7 |
 | 6.1.5 - 6.1.9 | 6.1.4 - 6.1.7 | .Net 6 & .Net 7 |
 | 6.2.0 - 6.2.5 | 6.1.8 | .Net 6 & .Net 7 |
-| 6.2.6 - 6.3.0 | 6.1.9 | .Net 6 & .Net 7 |
+| 6.2.6 - 6.4.0 | 6.1.9 | .Net 6 & .Net 7 |
 
 ## Installation
 This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />
@@ -133,6 +133,3 @@ https://user-images.githubusercontent.com/78308169/195979884-7cf1698c-ce0a-400f-
 
 ## Contribution
 Feel free to contribute.
-
-## Preparing
-Usage files and trick definitons for each extension component are preparing.
