@@ -48,6 +48,9 @@ https://codebeam-mudextensions.pages.dev/
 - **Try MudExtensions**
 https://trymudextensions.pages.dev/
 
+## Breaking Changes
+Look at the [Breaking Changes](https://github.com/CodeBeamOrg/CodeBeam.MudBlazor.Extensions/blob/dev/BreakingChanges.md)
+
 ## API
 https://codebeam-mudextensions.pages.dev/api
 
@@ -65,12 +68,12 @@ https://codebeam-mudextensions.pages.dev/api
 This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />
 Add the following to your HTML **head** section, it's either `index.html` or `_Layout.cshtml`/`_Host.cshtml` depending on whether you're running Server-Side or WASM.
 ```html
-<link href="_content/CodeBeam.MudExtensions/MudBlazor.Extensions.min.css" rel="stylesheet" />
+<link href="_content/CodeBeam.MudBlazor.Extensions/MudExtensions.min.css" rel="stylesheet" />
 ```
 
 Add the following to your HTML **body** section
 ```html
-<script src="_content/CodeBeam.MudBlazor.Extensions/MudExtensions.js"></script>
+<script src="_content/CodeBeam.MudBlazor.Extensions/MudExtensions.min.js"></script>
 ```
 
 Add the extension services into program.cs
