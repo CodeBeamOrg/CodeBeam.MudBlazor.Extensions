@@ -4,7 +4,7 @@
 @using MudBlazor
 @using MudExtensions.Enums
 
-<div @attributes="UserAttributes" id="@_elementId" class="@Classname" style="@Stylename" tabindex="-1" @onkeydown="HandleKeyDown" @onfocusout="HandleOnFocusOut">
+<div @attributes="UserAttributes" id="@_elementId" class="@Classname" style="@Stylename" tabindex="-1" @onkeydown="HandleKeyDown" @onfocusout="HandleOnFocusOut" @onscroll="HandleOnScroll">
     <CascadingValue Value="@this" IsFixed="true">
         @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.BeforeSearchBox && ParentList == null)
         {

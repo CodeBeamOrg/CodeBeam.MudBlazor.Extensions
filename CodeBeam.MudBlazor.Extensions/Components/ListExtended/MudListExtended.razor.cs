@@ -852,6 +852,14 @@ namespace MudExtensions
             await OnFocusOut.InvokeAsync();
         }
 
+        protected void HandleOnScroll()
+        {
+            if (Virtualize == true)
+            {
+                UpdateSelectedStyles();
+            }
+        }
+
         #endregion
 
 
