@@ -54,6 +54,10 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<ICollection<T>> EndCollectionChanged { get; set; }
 
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public Func<T, string> ToStringFunc { get; set; }
+
         /// <summary>
         /// Fires before transfer process start. Useful to backup items or prevent transfer.
         /// </summary>

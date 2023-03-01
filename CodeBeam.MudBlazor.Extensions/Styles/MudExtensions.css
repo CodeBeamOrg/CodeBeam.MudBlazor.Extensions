@@ -217,7 +217,7 @@
   cursor: ew-resize !important; }
 
 .mud-splitter-thumb-disabled ::-webkit-slider-thumb {
-  cursor: not-allowed !important; }
+  cursor: default !important; }
 
 .mud-splitter-thumb ::-moz-range-thumb {
   visibility: visible !important;
@@ -232,7 +232,7 @@
   cursor: ew-resize !important; }
 
 .mud-splitter-thumb-disabled ::-moz-range-thumb {
-  cursor: not-allowed !important; }
+  cursor: default !important; }
 
 .mud-stepper-header {
   min-height: 62px;
