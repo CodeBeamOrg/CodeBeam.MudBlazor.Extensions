@@ -1,0 +1,40 @@
+﻿@using MudBlazor.Extensions
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex flex-column align-center justify-center">
+        <MudTransferList @ref="_transferList" T="ComplexTypes" @bind-StartCollection="_startCollection" @bind-EndCollection="_endCollection" Color="Color.Primary"
+            StyleListCommon="background-color: var(--mud-palette-background-grey); width: 200px" AllowDoubleClick="true" ToStringFunc="@(e => e?.Name + " " + e?.SurName)" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code{
+    MudTransferList<ComplexTypes> _transferList;
+
+    ICollection<ComplexTypes> _startCollection = new List<ComplexTypes>()
+    {
+        new ComplexTypes() { Name = "Harry", SurName = "Potter" },
+        new ComplexTypes() { Name = "Hermione", SurName = "Granger" },
+        new ComplexTypes() { Name = "Ron", SurName = "Weasley" },
+        new ComplexTypes() { Name = "Neville", SurName = "Longbottom" },
+    };
+
+    ICollection<ComplexTypes> _endCollection = new List<ComplexTypes>()
+    {
+        new ComplexTypes() { Name = "Draco", SurName = "Malfoy" },
+        new ComplexTypes() { Name = "Seamus", SurName = "Finnigan" },
+        new ComplexTypes() { Name = "Sirius", SurName = "Black" },
+        new ComplexTypes() { Name = "Cho", SurName = "Chang" },
+    };
+
+    public class ComplexTypes
+    {
+        public string Name { get; set; }
+        public string SurName { get; set; }
+    }
+}

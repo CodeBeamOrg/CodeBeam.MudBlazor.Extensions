@@ -4,7 +4,7 @@
 @using MudExtensions.Enums
 
 <MudStack Class="@Class" Style="@Style" Row="!Vertical" Spacing="Spacing">
-    <MudListExtended @ref="_startList" Class="@StartClassname" Style="@StartStylename" OnDoubleClick="DoubleClick" T="T" ItemCollection="@StartCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color">
+    <MudListExtended @ref="_startList" Class="@StartClassname" Style="@StartStylename" OnDoubleClick="DoubleClick" T="T" ItemCollection="@StartCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color" ToStringFunc="ToStringFunc">
         <SelectAllTemplate>
             @if (SelectAllType == SelectAllType.SelectAllItem)
             {
@@ -24,7 +24,7 @@
             <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardDoubleArrowUp : Icons.Material.Filled.KeyboardDoubleArrowLeft)" Disabled="Disabled" Color="@Color" Variant="@ButtonVariant" OnClick="@(() => TransferAll(false))" />
         }
     </div>
-    <MudListExtended @ref="_endList" Class="@EndClassname" Style="@EndStylename" OnDoubleClick="DoubleClick" T="T" ItemCollection="@EndCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color">
+    <MudListExtended @ref="_endList" Class="@EndClassname" Style="@EndStylename" OnDoubleClick="DoubleClick" T="T" ItemCollection="@EndCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color" ToStringFunc="ToStringFunc">
         <SelectAllTemplate>
             @if (SelectAllType == SelectAllType.SelectAllItem)
             {

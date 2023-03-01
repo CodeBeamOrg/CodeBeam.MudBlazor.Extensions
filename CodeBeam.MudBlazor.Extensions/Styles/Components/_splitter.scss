@@ -53,7 +53,7 @@
 }
 
 .mud-splitter-thumb-disabled ::-webkit-slider-thumb {
-    cursor: not-allowed !important;
+    cursor: default !important;
 }
 
 .mud-splitter-thumb ::-moz-range-thumb {
@@ -70,5 +70,5 @@
 }
 
 .mud-splitter-thumb-disabled ::-moz-range-thumb {
-    cursor: not-allowed !important;
+    cursor: default !important;
 }
