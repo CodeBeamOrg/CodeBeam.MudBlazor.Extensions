@@ -16,7 +16,7 @@
                           AdornmentColor="@AdornmentColor" IconSize="@IconSize" OnBlur="HandleOnBlur"
                           Clearable="@Clearable" OnClearButtonClick="HandleClearButtonClick"
                           @attributes="UserAttributes" />
-                <MudPopover Class="" Open=@(_isOpen) MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" RelativeWidth="true">
+                <MudPopover Class="@PopoverClass" Style="@PopoverStyle" Open=@(_isOpen) MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" RelativeWidth="true">
                     @if (ShowToolbar || SubmitOnClose == false)
                     {
                         <div class="d-flex">

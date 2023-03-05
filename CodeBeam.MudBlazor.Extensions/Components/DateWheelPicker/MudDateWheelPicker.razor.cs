@@ -28,6 +28,14 @@ namespace MudExtensions
         [CascadingParameter(Name = "Standalone")]
         internal bool StandaloneEx { get; set; } = true;
 
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public string PopoverClass { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public string PopoverStyle { get; set; }
+
         /// <summary>
         /// The date format that determines the text and wheel order. Default is Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.
         /// </summary>
