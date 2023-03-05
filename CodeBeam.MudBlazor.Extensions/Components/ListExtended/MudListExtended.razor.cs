@@ -781,6 +781,22 @@ namespace MudExtensions
 
         #region Events (Key, Focus)
 
+        protected internal async Task SearchBoxHandleKeyDown(KeyboardEventArgs obj)
+        {
+            if (Disabled || (!Clickable && !MultiSelection))
+                return;
+            switch (obj.Key)
+            {
+                case " ":
+                    _searchString = _searchString + " ";
+                    await _searchField.BlurAsync();
+                    await _searchField.FocusAsync();
+                    StateHasChanged();
+                    break;
+            }
+        }
+
+        MudTextField<string> _searchField;
         protected internal async Task HandleKeyDown(KeyboardEventArgs obj)
         {
             if (Disabled || (!Clickable && !MultiSelection))
@@ -1365,8 +1381,8 @@ namespace MudExtensions
         }
 
         protected async Task OnDoubleClickHandler(MouseEventArgs args, T itemValue)
-        {   
-            await OnDoubleClick.InvokeAsync(new ListItemClickEventArgs<T>() { MouseEventArgs = args, ItemValue = itemValue});
+        {
+            await OnDoubleClick.InvokeAsync(new ListItemClickEventArgs<T>() { MouseEventArgs = args, ItemValue = itemValue });
         }
 
         #endregion
