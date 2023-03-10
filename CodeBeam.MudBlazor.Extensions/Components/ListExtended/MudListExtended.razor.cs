@@ -165,6 +165,13 @@ namespace MudExtensions
         public bool SearchBoxAutoFocus { get; set; }
 
         /// <summary>
+        /// If true, the search-box has a clear icon.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public bool SearchBoxClearable { get; set; }
+
+        /// <summary>
         /// SearchBox's CSS classes, seperated by space.
         /// </summary>
         [Parameter]
@@ -792,6 +799,13 @@ namespace MudExtensions
                     await _searchField.BlurAsync();
                     await _searchField.FocusAsync();
                     StateHasChanged();
+                    break;
+                case "a":
+                case "A":
+                    if (obj.CtrlKey == true)
+                    {
+                        await _searchField.SelectAsync();
+                    }
                     break;
             }
         }

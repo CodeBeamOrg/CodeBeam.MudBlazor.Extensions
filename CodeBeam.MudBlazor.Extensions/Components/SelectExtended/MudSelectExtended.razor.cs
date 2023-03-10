@@ -347,6 +347,12 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Behavior)]
         public bool SearchBoxAutoFocus { get; set; }
 
+        /// <summary>
+        /// If true, the search-box has a clear icon.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public bool SearchBoxClearable { get; set; }
 
         /// <summary>
         /// If true, prevent scrolling while dropdown is open.
