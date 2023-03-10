@@ -202,7 +202,7 @@ namespace MudExtensions
                 await _animate.Refresh();
             }
             ActiveIndex = Steps.IndexOf(step);
-            await ActiveStepChanged.InvokeAsync();
+            await ActiveStepChanged.InvokeAsync(ActiveIndex);
         }
 
         public async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)
@@ -250,7 +250,7 @@ namespace MudExtensions
 
             if (backupActiveIndex != ActiveIndex)
             {
-                await ActiveStepChanged.InvokeAsync();
+                await ActiveStepChanged.InvokeAsync(ActiveIndex);
             }
         }
 
