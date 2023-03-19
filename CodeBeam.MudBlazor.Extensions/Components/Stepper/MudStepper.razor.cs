@@ -11,6 +11,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using static MudBlazor.Colors;
+using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -252,6 +253,38 @@ namespace MudExtensions
             {
                 await ActiveStepChanged.InvokeAsync(ActiveIndex);
             }
+        }
+
+        public async Task SetActiveStepByIndex(int index, bool firstCompleted = false, bool skipPreventProcess = false)
+        {
+            var stepChangeDirection = (
+                index == ActiveIndex ? StepChangeDirection.None :
+                    index > ActiveIndex ? StepChangeDirection.Forward :
+                        StepChangeDirection.Backward
+            );
+
+            if (!skipPreventProcess && PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
+            {
+                return;
+            }
+
+            if (ActiveIndex == index || index < 0 || Steps.Count < index)
+            {
+                return;
+            }
+
+            if (Steps.Count == index && IsAllStepsCompleted() == false)
+            {
+                return;
+            }
+
+            if (_animate != null)
+            {
+                await _animate.Refresh();
+            }
+
+            ActiveIndex = index;
+            await ActiveStepChanged.InvokeAsync(ActiveIndex);
         }
 
         public async Task CompleteStep(int index, bool moveToNextStep = true)
