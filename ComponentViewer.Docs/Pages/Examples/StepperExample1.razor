@@ -59,6 +59,7 @@
 
     <MudItem xs="12" sm="4" Style="box-shadow: rgba(240, 46, 170, 0.4) -3px 3px;">
         <MudStack Spacing="4">
+            <MudNumericField @bind-Value="_activeIndex" Label="Change ActiveIndex" @bind-Value:after="(() => _stepper.SetActiveStepByIndex(_activeIndex))" Margin="Margin.Dense" />
             <MudCheckBox @bind-Checked="_linear" Color="Color.Primary" Label="Linear" Dense="true" />
             <MudCheckBox @bind-Checked="_disableAnimation" Color="Color.Primary" Label="Disable Animation" Dense="true" />
             <MudCheckBox @bind-Checked="_disablePreviousButton" Color="Color.Primary" Label="Disable Previous Step Action Button" Dense="true" />
@@ -111,6 +112,7 @@
     bool _addResultStep = true;
     bool _customLocalization = false;
     Color _color = Color.Primary;
+    int _activeIndex = 0;
 
     private bool CheckChange(StepChangeDirection direction)
     {
