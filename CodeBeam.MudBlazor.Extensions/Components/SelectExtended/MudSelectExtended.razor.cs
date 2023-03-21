@@ -10,6 +10,7 @@ using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudBlazor.Utilities.Exceptions;
 using MudExtensions.Enums;
+using MudExtensions.Extensions;
 using static MudBlazor.CategoryTypes;
 
 namespace MudExtensions
@@ -1101,7 +1102,7 @@ namespace MudExtensions
 
         protected async Task ChipClosed(MudChip chip)
         {
-            SelectedValues = SelectedValues.Where(x => x.Equals(Converter.Get(chip.Text)) == false);
+            SelectedValues = SelectedValues.Where(x => x.Equals(Converter.Get(chip.Value?.ToString())) == false);
             await SelectedValuesChanged.InvokeAsync(SelectedValues);
         }
     }
