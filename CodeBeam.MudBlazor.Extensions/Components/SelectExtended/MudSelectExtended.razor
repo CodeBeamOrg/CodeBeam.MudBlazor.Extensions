@@ -34,9 +34,9 @@
                         @if (ValuePresenter == ValuePresenter.Chip)
                         {
                             <MudChipSet Class="d-flex flex-wrap mud-width-full" Style="row-gap: 4px" AllClosable="ChipCloseable" OnClose="ChipClosed">
-                                @foreach (var val in SelectedValues)
+                                @foreach (var item in Items?.Where(x => SelectedValues.Contains(x.Value)) ?? new List<MudSelectItemExtended<T>>())
                                 {
-                                    <MudChip Class="@ChipClass" Text="@Converter.Set(val)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                    <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
                                 }
                             </MudChipSet>
                         }

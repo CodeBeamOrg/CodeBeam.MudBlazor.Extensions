@@ -1,7 +1,15 @@
 ﻿
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.SelectedOption == 1 ? new Func<List<string>, string>(GetMultiSelectionText) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="value" @bind-SelectedValues="options" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter"
+        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.SelectedOption == 1 ? new Func<List<int?>, string>(GetMultiSelectionText) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" T="int?" @bind-Value="intValue" @bind-SelectedValues="intValues" Label="Complex Type" AnchorOrigin="Origin.BottomCenter"
+                           ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant">
+            @foreach (var item in complexes)
+            {
+                <MudSelectItemExtended T="int?" Value="@item.Value" Text="@item.Text" />
+            }
+        </MudSelectExtended>
+
+        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.SelectedOption == 1 ? new Func<List<string>, string>(GetMultiSelectionText2) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="stringValue" @bind-SelectedValues="stringValues" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter"
                            ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant">
             @foreach (var state in states)
             {
@@ -20,13 +28,13 @@
             <MudItem xs="6">
                 <MudText Typo="Typo.subtitle2">Value:</MudText>
                 <MudText Typo="Typo.subtitle2">"</MudText>
-                <MudText Typo="Typo.body2" Class="pl-4">@value</MudText>
+                <MudText Typo="Typo.body2" Class="pl-4">@stringValue</MudText>
                 <MudText Typo="Typo.subtitle2">"</MudText>
             </MudItem>
             <MudItem xs="6">
                 <MudText Typo="Typo.subtitle2">SelectedValues: HashSet&lt;string&gt;</MudText>
                 <MudText Typo="Typo.subtitle2">{</MudText>
-                <MudText Typo="Typo.body2" Class="pl-4">@(string.Join(", ", options.Select(x => $"\"{x}\"")))</MudText>
+                <MudText Typo="Typo.body2" Class="pl-4">@(string.Join(", ", stringValues.Select(x => $"\"{x}\"")))</MudText>
                     <MudText Typo="Typo.subtitle2">}</MudText>
                 </MudItem>
             </MudGrid>
@@ -39,11 +47,29 @@
     @code {
     MudRadioGroup<int> _radioGroup;
     ValuePresenter _valuePresenter = ValuePresenter.Text;
-    string value { get; set; } = "Nothing selected";
-    IEnumerable<string> options { get; set; } = new HashSet<string>() { "Alaska", "California" };
+    string stringValue { get; set; } = "Nothing selected";
+    IEnumerable<string> stringValues { get; set; } = new HashSet<string>() { "Alaska", "California" };
+    int? intValue;
+    IEnumerable<int?> intValues { get; set; } = new HashSet<int?>() { 2, 3 };
     bool _chipCloseable = false;
     Variant _chipVariant = Variant.Filled;
     Size _chipSize = Size.Small;
+
+    public class Complex
+    {
+        public int? Value { get; set; }
+        public string Text { get; set; }
+    }
+
+    private Complex[] complexes =
+    {
+        new Complex() { Value = null, Text = "Null" },
+        new Complex() { Value = 1, Text = "A"},
+        new Complex() { Value = 2, Text = "B"},
+        new Complex() { Value = 3, Text = "C"},
+        new Complex() { Value = 4, Text = "D"},
+        new Complex() { Value = 5, Text = "E"},
+    };
 
     private string[] states =
     {
@@ -63,7 +89,12 @@
         "Washington", "West Virginia", "Wisconsin", "Wyoming",
     };
 
-    private string GetMultiSelectionText(List<string> selectedValues)
+    private string GetMultiSelectionText(List<int?> selectedValues)
+    {
+        return $"{selectedValues?.Count} value{(selectedValues?.Count > 1 ? "s have" : " has")} been selected";
+    }
+
+    private string GetMultiSelectionText2(List<string> selectedValues)
     {
         return $"{selectedValues.Count} state{(selectedValues.Count > 1 ? "s have" : " has")} been selected";
     }

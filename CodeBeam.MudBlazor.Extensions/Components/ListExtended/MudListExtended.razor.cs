@@ -442,7 +442,7 @@ namespace MudExtensions
             }
 
             SelectedValue = SelectedItem == null ? default(T) : SelectedItem.Value;
-            SelectedValues = SelectedItems.Select(x => x.Value).ToHashSet(_comparer);
+            SelectedValues = SelectedItems?.Select(x => x.Value).ToHashSet(_comparer);
         }
 
         private T _selectedValue;
