@@ -1394,6 +1394,13 @@ namespace MudExtensions
             UpdateSelectedStyles();
         }
 
+        public void ForceUpdateItems()
+        {
+            List<MudListItemExtended<T>> items = GetAllItems();
+            SelectedItem = items.FirstOrDefault(x => x.Value != null && x.Value.Equals(SelectedValue));
+            SelectedItems = items.Where((x => x.Value != null && SelectedValues.Contains(x.Value)));
+        }
+
         protected async Task OnDoubleClickHandler(MouseEventArgs args, T itemValue)
         {
             await OnDoubleClick.InvokeAsync(new ListItemClickEventArgs<T>() { MouseEventArgs = args, ItemValue = itemValue });

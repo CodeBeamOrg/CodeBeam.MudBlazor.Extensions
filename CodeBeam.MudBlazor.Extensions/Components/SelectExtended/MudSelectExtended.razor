@@ -3,16 +3,8 @@
 @inherits MudBaseInputExtended<T>
 @using MudExtensions.Enums
 
-@*To Be Discussed as Second ShadowItems: Needed to render directly into select to has initial values*@
-<div style="display: none">
-    <CascadingValue Value="@this" IsFixed="true">
-        <MudListExtended @ref="_list" T="T">
-            @ChildContent
-        </MudListExtended>
-    </CascadingValue>
-</div>
-
 <CascadingValue Name="Standalone" Value="false" IsFixed="true">
+    <CascadingValue Value="@this" IsFixed="true">
     <div class="mud-select-extended" id="@_elementId">
 		<MudInputControl Label="@Label" Variant="@Variant" HelperText="@HelperText" HelperTextOnFocus="@HelperTextOnFocus" FullWidth="@FullWidth" Margin="@Margin" Class="@Classname" Style="@Style"
 						 Error="@Error" ErrorText="@ErrorText" ErrorId="@ErrorId" Disabled="@Disabled" @onclick="@ToggleMenu" Required="@Required" ForId="@FieldId">
@@ -120,6 +112,21 @@
 		</MudInputControl>
 	</div>
 
+    @*To Be Discussed as Second ShadowItems: Needed to render directly into select to has initial values*@
+
+    <div style="display: none">
+        <CascadingValue Value="@this" IsFixed="true">
+                <MudListExtended T="T" @bind-SelectedValue="@Value" @bind-SelectedValues="@SelectedValues" @bind-SelectedItem="@SelectedListItem" @bind-SelectedItems="@SelectedListItems"
+                                 Clickable="true" Color="@Color" Dense="@Dense" ItemCollection="@ItemCollection" Virtualize="@Virtualize" DisablePadding="@DisablePopoverPadding" DisableSelectedItemStyle="@DisableSelectedItemStyle"
+                                 MultiSelection="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MultiSelectionAlign="@MultiSelectionAlign" SelectAll="@SelectAll" SelectAllPosition="@SelectAllPosition" SelectAllText="@SelectAllText"
+                                 CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" IndeterminateIcon="@IndeterminateIcon" SelectValueOnTab="@SelectValueOnTab" Comparer="@Comparer"
+                                 ItemTemplate="@ItemTemplate" ItemSelectedTemplate="@ItemSelectedTemplate" ItemDisabledTemplate="@ItemDisabledTemplate" SearchBox="@SearchBox" SearchBoxAutoFocus="@SearchBoxAutoFocus" SearchFunc="@SearchFunc" SearchBoxPlaceholder="@SearchBoxPlaceholder" SearchBoxClearable="@SearchBoxClearable" ToStringFunc="@ToStringFunc">
+                @ChildContent
+            </MudListExtended>
+            </CascadingValue>
+    </div>
+    </CascadingValue>
+
     @*Shadow select items for IsValueInList and CanRenderValue*@
     <CascadingValue Value="@((IMudShadowSelectExtended)this)" IsFixed="true">
         <CascadingValue Name="HideContent" Value="true">
@@ -127,6 +134,8 @@
 		</CascadingValue>
 	</CascadingValue>
 
+
+   
 </CascadingValue>
 <!-- mousedown instead of click needed to close the menu before OnLostFocus runs -->
 <MudOverlay Visible="_isOpen" @onmousedown="@(() => CloseMenu())" LockScroll="@LockScroll" />
