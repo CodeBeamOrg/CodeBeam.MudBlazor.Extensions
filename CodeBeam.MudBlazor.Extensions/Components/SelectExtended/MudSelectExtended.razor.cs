@@ -711,10 +711,16 @@ namespace MudExtensions
                 _keyInterceptor.KeyDown += HandleKeyDown;
                 _keyInterceptor.KeyUp += HandleKeyUp;
                 await UpdateTextPropertyAsync(false);
+                _list?.ForceUpdateItems();
                 StateHasChanged();
             }
             //Console.WriteLine("Select rendered");
             await base.OnAfterRenderAsync(firstRender);
+        }
+
+        public void ForceUpdateItems()
+        {
+            _list?.ForceUpdateItems();
         }
 
         protected override void Dispose(bool disposing)
@@ -1102,7 +1108,7 @@ namespace MudExtensions
 
         protected async Task ChipClosed(MudChip chip)
         {
-            SelectedValues = SelectedValues.Where(x => x.Equals(Converter.Get(chip.Value?.ToString())) == false);
+            SelectedValues = SelectedValues.Where(x => Converter.Set(x)?.ToString() != chip.Value?.ToString());
             await SelectedValuesChanged.InvokeAsync(SelectedValues);
         }
     }
