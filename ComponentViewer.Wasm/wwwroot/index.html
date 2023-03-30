@@ -15,8 +15,15 @@
 </head>
 
 <body>
-    <div id="app">Loading...</div>
-
+    <div id="app">
+        <div class="backgroundLoadColor" style="height: 100vh;position: absolute;width: 100vw;">
+            <svg class="loading-progress">
+                <circle r="40%" cx="50%" cy="50%" />
+                <circle r="40%" cx="50%" cy="50%" />
+            </svg>
+            <div class="loading-progress-text"></div>
+        </div>
+    </div>
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>

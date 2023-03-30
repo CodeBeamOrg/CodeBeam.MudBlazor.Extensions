@@ -442,7 +442,7 @@ namespace MudExtensions
             }
 
             SelectedValue = SelectedItem == null ? default(T) : SelectedItem.Value;
-            SelectedValues = SelectedItems.Select(x => x.Value).ToHashSet(_comparer);
+            SelectedValues = SelectedItems?.Select(x => x.Value).ToHashSet(_comparer);
         }
 
         private T _selectedValue;
@@ -1392,6 +1392,13 @@ namespace MudExtensions
             //}
             await Task.Delay(1);
             UpdateSelectedStyles();
+        }
+
+        public void ForceUpdateItems()
+        {
+            List<MudListItemExtended<T>> items = GetAllItems();
+            SelectedItem = items.FirstOrDefault(x => x.Value != null && x.Value.Equals(SelectedValue));
+            SelectedItems = items.Where((x => x.Value != null && SelectedValues.Contains(x.Value)));
         }
 
         protected async Task OnDoubleClickHandler(MouseEventArgs args, T itemValue)
