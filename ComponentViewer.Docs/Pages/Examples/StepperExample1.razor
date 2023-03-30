@@ -5,15 +5,20 @@
 
 <MudGrid Class="cursor-default">
     <MudItem xs="12" sm="8">
-        @if (_checking)
-        {
-            <MudAlert Severity="Severity.Info">CHECKING</MudAlert>
-        }
         <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant" 
                     DisableAnimation="_disableAnimation" DisablePreviousButton="_disablePreviousButton" DisableNextButton="_disableNextButton" 
                     DisableSkipButton="_disableSkipButton" DisableStepResultIndicator="_disableStepResultIndicator" HeaderTextView="_headerTextView"
                     PreventStepChangeAsync="new Func<StepChangeDirection, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
-                    MobileView="_mobileView" IconActionButtons="_iconActionButtons">
+                    MobileView="_mobileView" IconActionButtons="_iconActionButtons" Loading="_loading">
+            <StaticContent>
+                @if (_showStaticContent)
+                {
+                    <MudStack Row="true" AlignItems="AlignItems.Center">
+                        <MudAvatar Color="_color">ST</MudAvatar>
+                        <MudText>This is a static content which shows with each step.</MudText>
+                    </MudStack>
+                }
+            </StaticContent>
             <ChildContent>
                 <MudStep Title="Customer Info" StatusChanged="StatusChanged">
                     <MudForm @ref="_form">
@@ -75,6 +80,7 @@
             <MudSwitchM3 @bind-Checked="_addResultStep" Color="Color.Primary" Label="Has Result Step" />
             <MudSwitchM3 @bind-Checked="_checkValidationBeforeComplete" Color="Color.Primary" Label="Check Validation Before Complete Step" />
             <MudSwitchM3 @bind-Checked="_customLocalization" Color="Color.Primary" Label="Custom Localization (German)" />
+            <MudSwitchM3 @bind-Checked="_showStaticContent" Color="Color.Primary" Label="Show Some Static Content" />
             <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant">
                 @foreach (Variant item in Enum.GetValues<Variant>())
                 {
@@ -117,7 +123,8 @@
     bool _customLocalization = false;
     Color _color = Color.Primary;
     int _activeIndex = 0;
-    bool _checking;
+    bool _loading;
+    bool _showStaticContent = false;
 
     private async Task<bool> CheckChange(StepChangeDirection direction)
     {
@@ -130,21 +137,21 @@
             }
             if (_stepper.GetActiveIndex() == 0)
             {
-                _checking = true;
+                _loading = true;
                 StateHasChanged();
                 await Task.Delay(1000);
                 await _form.Validate();
-                _checking = false;
+                _loading = false;
                 StateHasChanged();
                 return !_form.IsValid;
             }
             else if (_stepper.GetActiveIndex() == 2)
             {
-                _checking = true;
+                _loading = true;
                 StateHasChanged();
                 await Task.Delay(1000);
                 await _form2.Validate();
-                _checking = false;
+                _loading = false;
                 StateHasChanged();
                 return !_form2.IsValid;
             }

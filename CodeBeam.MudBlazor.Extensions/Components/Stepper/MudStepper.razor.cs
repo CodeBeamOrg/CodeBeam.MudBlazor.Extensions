@@ -104,6 +104,18 @@ namespace MudExtensions
         public bool MobileView { get; set; }
 
         /// <summary>
+        /// If true, a linear loading indicator shows under the header.
+        /// </summary>
+        [Parameter]
+        public bool Loading { get; set; }
+
+        /// <summary>
+        /// A static content that always show with all steps.
+        /// </summary>
+        [Parameter]
+        public RenderFragment StaticContent { get; set; }
+
+        /// <summary>
         /// If true, action buttons have icons instead of text to gain more space.
         /// </summary>
         [Parameter]

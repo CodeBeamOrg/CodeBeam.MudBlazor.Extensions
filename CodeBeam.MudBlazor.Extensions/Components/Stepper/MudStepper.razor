@@ -53,6 +53,11 @@
             
             
         </MudStack>
+        @if (Loading)
+        {
+            <MudProgressLinear Indeterminate="true" Color="@Color" />
+        }
+        @StaticContent
         <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
             <div class="@ContentClassname" style="@ContentStyle">
                 @ChildContent
