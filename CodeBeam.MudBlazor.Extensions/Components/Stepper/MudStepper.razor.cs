@@ -223,11 +223,15 @@ namespace MudExtensions
                 return;
             }
 
-            var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
-            if (result == true)
+            if (PreventStepChangeAsync != null)
             {
-                return;
+                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                if (result == true)
+                {
+                    return;
+                }
             }
+            
 
             int backupActiveIndex = ActiveIndex;
             if (_animate != null)
@@ -308,10 +312,13 @@ namespace MudExtensions
                     return;
                 }
 
-                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
-                if (result == true)
+                if (PreventStepChangeAsync != null)
                 {
-                    return;
+                    var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                    if (result == true)
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -337,10 +344,13 @@ namespace MudExtensions
                     return;
                 }
 
-                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
-                if (result == true)
+                if (PreventStepChangeAsync != null)
                 {
-                    return;
+                    var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                    if (result == true)
+                    {
+                        return;
+                    }
                 }
             }
 
