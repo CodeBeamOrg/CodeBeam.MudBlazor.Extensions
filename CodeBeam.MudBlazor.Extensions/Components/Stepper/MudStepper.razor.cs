@@ -156,8 +156,12 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<int> ActiveStepChanged { get; set; }
 
+        [Obsolete("Use PreventStepChangeAsync instead.")]
         [Parameter]
         public Func<StepChangeDirection, bool> PreventStepChange { get; set; }
+
+        [Parameter]
+        public Func<StepChangeDirection, Task<bool>> PreventStepChangeAsync { get; set; }
 
         List<MudStep> _steps = new();
         List<MudStep> _allSteps = new();
@@ -215,6 +219,12 @@ namespace MudExtensions
             );
 
             if (!skipPreventProcess && PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
+            {
+                return;
+            }
+
+            var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+            if (result == true)
             {
                 return;
             }
@@ -297,6 +307,12 @@ namespace MudExtensions
                 {
                     return;
                 }
+
+                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                if (result == true)
+                {
+                    return;
+                }
             }
 
             Steps[index].SetStatus(StepStatus.Completed);
@@ -317,6 +333,12 @@ namespace MudExtensions
             {
                 var stepChangeDirection = (moveToNextStep ? StepChangeDirection.Forward : StepChangeDirection.None);
                 if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
+                {
+                    return;
+                }
+
+                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                if (result == true)
                 {
                     return;
                 }

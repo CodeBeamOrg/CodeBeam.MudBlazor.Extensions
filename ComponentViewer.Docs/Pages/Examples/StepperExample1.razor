@@ -5,10 +5,14 @@
 
 <MudGrid Class="cursor-default">
     <MudItem xs="12" sm="8">
+        @if (_checking)
+        {
+            <MudAlert Severity="Severity.Error">CHECKING</MudAlert>
+        }
         <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant" 
                     DisableAnimation="_disableAnimation" DisablePreviousButton="_disablePreviousButton" DisableNextButton="_disableNextButton" 
                     DisableSkipButton="_disableSkipButton" DisableStepResultIndicator="_disableStepResultIndicator" HeaderTextView="_headerTextView"
-                    PreventStepChange="new Func<StepChangeDirection, bool>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
+                    PreventStepChangeAsync="new Func<StepChangeDirection, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
                     MobileView="_mobileView" IconActionButtons="_iconActionButtons">
             <ChildContent>
                 <MudStep Title="Customer Info" StatusChanged="StatusChanged">
@@ -113,8 +117,9 @@
     bool _customLocalization = false;
     Color _color = Color.Primary;
     int _activeIndex = 0;
+    bool _checking;
 
-    private bool CheckChange(StepChangeDirection direction)
+    private async Task<bool> CheckChange(StepChangeDirection direction)
     {
         if (_checkValidationBeforeComplete == true)
         {
@@ -125,12 +130,22 @@
             }
             if (_stepper.GetActiveIndex() == 0)
             {
-                _form.Validate();
+                _checking = true;
+                StateHasChanged();
+                await Task.Delay(1000);
+                await _form.Validate();
+                _checking = false;
+                StateHasChanged();
                 return !_form.IsValid;
             }
             else if (_stepper.GetActiveIndex() == 2)
             {
-                _form2.Validate();
+                _checking = true;
+                StateHasChanged();
+                await Task.Delay(1000);
+                await _form2.Validate();
+                _checking = false;
+                StateHasChanged();
                 return !_form2.IsValid;
             }
             else
