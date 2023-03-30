@@ -143,11 +143,11 @@ namespace MudExtensions
             InvokeAsync(StateHasChanged);
             if (!MultiSelection)
             {
-                MudSelectExtended.CloseMenu().AndForgetExt();
+                MudSelectExtended?.CloseMenu().AndForgetExt();
             }
             else
             {
-                MudSelectExtended.FocusAsync().AndForgetExt();
+                MudSelectExtended?.FocusAsync().AndForgetExt();
             }
             OnClick.InvokeAsync().AndForgetExt();
         }
