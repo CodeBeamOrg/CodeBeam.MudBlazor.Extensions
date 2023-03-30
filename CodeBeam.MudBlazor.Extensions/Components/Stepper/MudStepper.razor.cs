@@ -104,6 +104,18 @@ namespace MudExtensions
         public bool MobileView { get; set; }
 
         /// <summary>
+        /// If true, a linear loading indicator shows under the header.
+        /// </summary>
+        [Parameter]
+        public bool Loading { get; set; }
+
+        /// <summary>
+        /// A static content that always show with all steps.
+        /// </summary>
+        [Parameter]
+        public RenderFragment StaticContent { get; set; }
+
+        /// <summary>
         /// If true, action buttons have icons instead of text to gain more space.
         /// </summary>
         [Parameter]
@@ -156,8 +168,12 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<int> ActiveStepChanged { get; set; }
 
+        [Obsolete("Use PreventStepChangeAsync instead.")]
         [Parameter]
         public Func<StepChangeDirection, bool> PreventStepChange { get; set; }
+
+        [Parameter]
+        public Func<StepChangeDirection, Task<bool>> PreventStepChangeAsync { get; set; }
 
         List<MudStep> _steps = new();
         List<MudStep> _allSteps = new();
@@ -218,6 +234,16 @@ namespace MudExtensions
             {
                 return;
             }
+
+            if (PreventStepChangeAsync != null)
+            {
+                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                if (result == true)
+                {
+                    return;
+                }
+            }
+            
 
             int backupActiveIndex = ActiveIndex;
             if (_animate != null)
@@ -297,6 +323,15 @@ namespace MudExtensions
                 {
                     return;
                 }
+
+                if (PreventStepChangeAsync != null)
+                {
+                    var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                    if (result == true)
+                    {
+                        return;
+                    }
+                }
             }
 
             Steps[index].SetStatus(StepStatus.Completed);
@@ -319,6 +354,15 @@ namespace MudExtensions
                 if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
                 {
                     return;
+                }
+
+                if (PreventStepChangeAsync != null)
+                {
+                    var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                    if (result == true)
+                    {
+                        return;
+                    }
                 }
             }
 
