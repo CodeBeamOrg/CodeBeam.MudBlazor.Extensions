@@ -68,6 +68,9 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<StepStatus> StatusChanged { get; set; }
 
+        [Parameter]
+        public RenderFragment Template { get; set; }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
