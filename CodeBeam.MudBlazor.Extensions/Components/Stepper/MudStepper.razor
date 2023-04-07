@@ -24,7 +24,7 @@
                         }
                         @if(step.Template != null)
                         {
-                            @step.Template    
+                            @step.Template(step)
                         }
                         else
                         {
@@ -69,7 +69,7 @@
 
             }              
             </ol>
-            <MudProgressLinear Color="Color.Primary"  Value="@ProgressValue" Min="0" Max="100" Style="@GetProgressLinearStyle()" />
+            <MudProgressLinear Color="Color.Primary" Value="@ProgressValue" Min="0" Max="100" Style="@GetProgressLinearStyle()" />
         </div>
         <MudStack Row="true" AlignItems="@(HeaderTextView == HeaderTextView.NewLine ? AlignItems.Start : AlignItems.Center)"> @*Row="!Vertical"*@
             @foreach (MudStep step in _steps)

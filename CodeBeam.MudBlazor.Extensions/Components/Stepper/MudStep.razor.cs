@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MudExtensions.Extensions;
+using Microsoft.AspNetCore.Components.Rendering;
 
 namespace MudExtensions
 {
@@ -20,13 +21,23 @@ namespace MudExtensions
             .Build();
 
         [CascadingParameter]
-        protected MudStepper MudStepper { get; set; }
+        public MudStepper MudStepper { get; set; }
 
         /// <summary>
         /// Step text to show on header.
         /// </summary>
         [Parameter]
         public string Title { get; set; }
+
+
+        public bool IsActive
+        {
+            get
+            {
+                return MudStepper.ActiveIndex == this.Number;
+            }
+        }
+
 
         StepStatus _status = StepStatus.Continued;
         /// <summary>
@@ -69,7 +80,13 @@ namespace MudExtensions
         public EventCallback<StepStatus> StatusChanged { get; set; }
 
         [Parameter]
-        public RenderFragment Template { get; set; }
+        public int Number { get; set; }
+
+        [Parameter]
+        public RenderFragment<MudStep> Template { get; set; }
+
+        [Parameter]
+        public string Icon { get; set; }
 
         protected override void OnInitialized()
         {
