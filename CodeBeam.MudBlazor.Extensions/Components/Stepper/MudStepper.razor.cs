@@ -4,14 +4,6 @@ using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using static MudBlazor.Colors;
-using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -235,7 +227,7 @@ namespace MudExtensions
                 return;
             }
 
-            if (PreventStepChangeAsync != null)
+            if (skipPreventProcess == false && PreventStepChangeAsync != null)
             {
                 var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
                 if (result == true)
@@ -292,6 +284,15 @@ namespace MudExtensions
             if (!skipPreventProcess && PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
             {
                 return;
+            }
+
+            if (skipPreventProcess == false && PreventStepChangeAsync != null)
+            {
+                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                if (result == true)
+                {
+                    return;
+                }
             }
 
             if (ActiveIndex == index || index < 0 || Steps.Count < index)

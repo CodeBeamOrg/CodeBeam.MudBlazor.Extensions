@@ -3,6 +3,7 @@ using FluentAssertions;
 using MudBlazor;
 using MudExtensions;
 using MudExtensions.Enums;
+using MudExtensions.UnitTests.TestComponents;
 
 namespace MudExtensions.UnitTests.Components
 {
@@ -313,6 +314,21 @@ namespace MudExtensions.UnitTests.Components
 
             // Assert
             stepper.Instance.ActiveIndex.Should().Be(stepper.Instance.Steps.IndexOf(step0.Instance));
+        }
+
+        [Test]
+        public async Task StepperCheckChangeCountTest()
+        {
+            // Arrange
+            var comp = Context.RenderComponent<StepperTest1>();
+            var stepper = comp.FindComponent<MudStepper>();
+            comp.Instance.CheckChangeCount.Should().Be(0);
+
+            await comp.InvokeAsync(() => stepper.Instance.SetActiveIndex(1));
+            comp.WaitForAssertion(() => comp.Instance.CheckChangeCount.Should().Be(1));
+
+            await comp.InvokeAsync(() => stepper.Instance.SetActiveStepByIndex(0));
+            comp.WaitForAssertion(() => comp.Instance.CheckChangeCount.Should().Be(2));
         }
     }
 }
