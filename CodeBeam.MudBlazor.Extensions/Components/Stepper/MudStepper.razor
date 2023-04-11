@@ -71,22 +71,15 @@
 
                 @if (!DisablePreviousButton && ActiveIndex != 0)
                 {
-                    if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued || showResultStep)
+                    if (IconActionButtons || MobileView)
                     {
-                        <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Material.Filled.ChevronLeft" OnClick="@(() => SetActiveIndex(-1))" />
+                        <MudTooltip Text="@LocalizedStrings.Previous" Delay="300">
+                            <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Material.Filled.ChevronLeft" OnClick="@(() => SetActiveIndex(-1))" />
+                        </MudTooltip>
                     }
                     else
                     {
-                        if (IconActionButtons || MobileView)
-                        {
-                            <MudTooltip Text="@LocalizedStrings.Previous" Delay="300">
-                                <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Material.Filled.ChevronLeft" OnClick="@(() => SetActiveIndex(-1))" />
-                            </MudTooltip>
-                        }
-                        else
-                        {
-                            <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(-1))">@LocalizedStrings.Previous</MudButton>
-                        }
+                        <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(-1))">@LocalizedStrings.Previous</MudButton>
                     }
                 }
 
@@ -132,7 +125,16 @@
                 {
                     if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued)
                     {
-                        <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Material.Filled.ChevronRight" OnClick="@(() => SetActiveIndex(1))" />
+                        if (IconActionButtons || MobileView)
+                        {
+                            <MudTooltip Text="@GetNextButtonString()" Delay="300">
+                                <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Material.Filled.ChevronRight" OnClick="@(() => SetActiveIndex(1))"/>
+                            </MudTooltip>
+                        }
+                        else
+                        {
+                            <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(1))">@GetNextButtonString()</MudButton>
+                        }
                     }
                     else
                     {

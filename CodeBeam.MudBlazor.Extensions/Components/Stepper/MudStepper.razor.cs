@@ -381,19 +381,12 @@ namespace MudExtensions
 
         protected int CompletedStepCount()
         {
-            return Steps.Where(x => x.Status != Enums.StepStatus.Continued).Count();
+            return Steps.Count(x => x.Status != StepStatus.Continued);
         }
 
         protected string GetNextButtonString()
         {
-            if (Steps.Count - 1 == CompletedStepCount())
-            {
-                return LocalizedStrings.Finish;
-            }
-            else
-            {
-                return LocalizedStrings.Next;
-            }
+            return ActiveIndex >= Steps.Count - 1 ? LocalizedStrings.Finish : LocalizedStrings.Next;
         }
 
         protected internal bool ShowResultStep()
