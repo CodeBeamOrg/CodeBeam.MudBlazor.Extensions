@@ -16,10 +16,31 @@ namespace MudExtensions
         public EventCallback<string> ValueChanged { get; set; }
 
         [Parameter]
-        public int Width { get; set; } = 100;
+        public BarcodeFormat BarcodeFormat { get; set; } = BarcodeFormat.QR_CODE;
 
         [Parameter]
-        public int Height { get; set; } = 100;
+        public int Width { get; set; } = 200;
+
+        [Parameter]
+        public int Height { get; set; } = 200;
+
+        /// <summary>
+        /// If true, it goes to specified href when click.
+        /// </summary>
+        [Parameter]
+        public bool Clickable { get; set; }
+
+        [Parameter]
+        public string Target { get; set; } = "_blank";
+
+        [Parameter]
+        public string ErrorText { get; set; }
+
+        /// <summary>
+        /// If true, no text show on barcode format.
+        /// </summary>
+        [Parameter]
+        public bool PureBarcode { get; set; }
 
         protected byte[] GetQrCode()
         {
@@ -28,23 +49,34 @@ namespace MudExtensions
                 return null;
             }
 
-            BarcodeWriter writer = new BarcodeWriter
+            try
             {
-                Format = BarcodeFormat.QR_CODE,
-                Options = new QrCodeEncodingOptions
+                BarcodeWriter writer = new BarcodeWriter
                 {
-                    Width = Width,
-                    Height = Height,
+                    Format = BarcodeFormat,
+                    Options = new QrCodeEncodingOptions
+                    {
+                        Width = Width,
+                        Height = Height,
+                        PureBarcode = PureBarcode,
+                    }
+                };
+
+                var qrCodeImage = writer.Write(Value);
+
+                using (var stream = new MemoryStream())
+                {
+                    qrCodeImage.Encode(stream, SKEncodedImageFormat.Png, 100);
+                    ErrorText = null;
+                    return stream.ToArray();
                 }
-            };
-
-            var qrCodeImage = writer.Write(Value);
-
-            using (var stream = new MemoryStream())
+            }
+            catch (Exception ex)
             {
-                qrCodeImage.Encode(stream, SKEncodedImageFormat.Png, 100);
-                return stream.ToArray();
+                ErrorText = ex.Message;
+                return null;
             }
         }
+
     }
 }
