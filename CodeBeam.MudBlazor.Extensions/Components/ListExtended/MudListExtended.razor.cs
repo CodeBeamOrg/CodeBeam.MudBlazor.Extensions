@@ -807,6 +807,24 @@ namespace MudExtensions
                         await _searchField.SelectAsync();
                     }
                     break;
+                case "ArrowUp":
+                case "ArrowDown":
+                    await HandleKeyDown(obj);
+                    break;
+                case "Enter":
+                case "NumpadEnter":
+                    await HandleKeyDown(obj);
+                    if (MudSelectExtended != null && MultiSelection == false)
+                    {
+                        await MudSelectExtended.CloseMenu();
+                        await MudSelectExtended.FocusAsync();
+                    }
+                    break;
+                case "Tab":
+                    await Task.Delay(10);
+                    await ActiveFirstItem();
+                    StateHasChanged();
+                    break;
             }
         }
 

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using MudExtensions.Utilities;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
-using MudExtensions.Utilities;
 
 namespace MudExtensions
 {
@@ -12,7 +12,8 @@ namespace MudExtensions
         MudAnimate _animate;
         Guid _animateGuid = Guid.NewGuid();
 
-        protected string HeaderClassname => new CssBuilder("d-flex align-center gap-4 pa-2")
+        protected string HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-2")
+            .AddClass("mud-ripple", !DisableRipple && !Linear)
             .AddClass("cursor-pointer mud-stepper-header-non-linear", !Linear)
             .AddClass("flex-column", HeaderTextView == HeaderTextView.NewLine)
             .Build();
@@ -32,41 +33,7 @@ namespace MudExtensions
                 .Build();
         }
 
-        protected string GetStepperStyle()
-        {
-            var count = Steps.Count * 2;
-            string style = $"display: grid;grid-template-columns: repeat({count}, 1fr);";
-            return style;
-        }
-
-        protected string GetStepPercent()
-        {
-            var dPercent = 100.0 / Steps.Count;
-
-            string percent = $"width:{dPercent}%";
-
-            return percent;
-        }
-
-        protected string GetProgressLinearStyle()
-        {
-            var colEnd = Steps.Count * 2;
-            string style = $"z-index: -10;grid-column-start: 2; grid-column-end: {colEnd};grid-row: 1 / -1;display: inline-grid;top:26px";
-            return style;
-        }
-
-        private int _activeIndex;
-        internal int ActiveIndex 
-        {
-            get => _activeIndex; 
-            set
-            {
-                _activeIndex = value;
-                ProgressValue = _activeIndex * (100.0 / (Steps.Count - 1));
-            }
-        }
-
-        internal double ProgressValue;
+        internal int ActiveIndex { get; set; }
 
         /// <summary>
         /// Provides CSS classes for the step content.
@@ -260,7 +227,7 @@ namespace MudExtensions
                 return;
             }
 
-            if (PreventStepChangeAsync != null)
+            if (skipPreventProcess == false && PreventStepChangeAsync != null)
             {
                 var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
                 if (result == true)
@@ -317,6 +284,15 @@ namespace MudExtensions
             if (!skipPreventProcess && PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
             {
                 return;
+            }
+
+            if (skipPreventProcess == false && PreventStepChangeAsync != null)
+            {
+                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                if (result == true)
+                {
+                    return;
+                }
             }
 
             if (ActiveIndex == index || index < 0 || Steps.Count < index)
