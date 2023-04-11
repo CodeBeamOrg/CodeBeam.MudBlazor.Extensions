@@ -1,0 +1,18 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+@using MudBlazor
+@using Microsoft.JSInterop
+@using System.Drawing.Imaging;
+@using SkiaSharp;
+@using ZXing;
+@using ZXing.Common;
+@using ZXing.SkiaSharp;
+@using ZXing.QrCode;
+@inject IJSRuntime JSRuntime
+
+<a href="@Value" target="_blank">
+    @{
+        var content = GetQrCode();
+    }
+    <MudImage Src="@(content == null ? null : String.Format("data:image/png;base64,{0}", Convert.ToBase64String(content)))" Height="200" Width="200" />
+</a>

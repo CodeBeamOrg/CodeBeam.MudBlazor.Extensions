@@ -7,32 +7,38 @@ using ZXing.SkiaSharp;
 
 namespace MudExtensions
 {
-    public partial class MudQrGenerator : MudComponentBase
+    public partial class MudQrCode : MudComponentBase
     {
-        string _content = "";
+        [Parameter]
+        public string Value { get; set; }
 
-        public byte[] Value { get; set; }
+        [Parameter]
+        public EventCallback<string> ValueChanged { get; set; }
 
-        public void Refresh(string value)
+        [Parameter]
+        public int Width { get; set; } = 100;
+
+        [Parameter]
+        public int Height { get; set; } = 100;
+
+        protected byte[] GetQrCode()
         {
-            _content = value;
-            Value = CreateQrCode(value);
-            StateHasChanged();
-        }
+            if (string.IsNullOrEmpty(Value))
+            {
+                return null;
+            }
 
-        public byte[] CreateQrCode(string content)
-        {
             BarcodeWriter writer = new BarcodeWriter
             {
                 Format = BarcodeFormat.QR_CODE,
                 Options = new QrCodeEncodingOptions
                 {
-                    Width = 100,
-                    Height = 100,
+                    Width = Width,
+                    Height = Height,
                 }
             };
 
-            var qrCodeImage = writer.Write(content);
+            var qrCodeImage = writer.Write(Value);
 
             using (var stream = new MemoryStream())
             {

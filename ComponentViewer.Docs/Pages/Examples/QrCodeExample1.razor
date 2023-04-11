@@ -1,0 +1,16 @@
+﻿
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex justify-center">
+        <MudQrCode @bind-Value="_qrValue" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudTextField T="string" @bind-Value="_qrValue" Label="Value" Variant="Variant.Outlined" Immediate="true" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    string _qrValue;
+}
