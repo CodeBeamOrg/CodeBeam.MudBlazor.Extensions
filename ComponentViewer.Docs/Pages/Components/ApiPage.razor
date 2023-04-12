@@ -341,6 +341,27 @@
         </MudTable>
     </ExampleCard>
 
+    <ExampleCard Title="Api - MudQrCode" HasExpansionPanel="true">
+        <MudTable Items="@(typeof(MudQrCode).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.PropertyType.Name</MudTd>
+                <MudTd>
+                    @if (true)
+                    {
+                        MudQrCode instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
     <ExampleCard Title="Api - MudScrollbar" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudScrollbar).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>

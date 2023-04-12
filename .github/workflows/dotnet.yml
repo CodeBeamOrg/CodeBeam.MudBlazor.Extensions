@@ -22,6 +22,8 @@ jobs:
         publish-coverage: true
     - name: Restore dependencies
       run: dotnet restore
+    - name: Restore workloads
+      run: dotnet workload install wasm-tools
     - name: Build
       run: dotnet build --no-restore
     - name: Test
