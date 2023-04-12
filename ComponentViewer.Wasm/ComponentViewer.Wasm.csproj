@@ -5,6 +5,14 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  
+  <!-- List of libs to lazy load for QR -->
+  <ItemGroup>
+    <BlazorWebAssemblyLazyLoad Include="SkiaSharp.dll" />
+    <BlazorWebAssemblyLazyLoad Include="zxing.dll" />
+    <BlazorWebAssemblyLazyLoad Include="ZXing.SkiaSharp.dll" />
+    <BlazorWebAssemblyLazyLoad Include="SkiaSharp.Views.Blazor.dll" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.1" />

@@ -1,4 +1,11 @@
-﻿<Router AppAssembly="@typeof(ComponentViewer.Docs.Pages.Index).Assembly">
+﻿@using System.Reflection
+@using Microsoft.AspNetCore.Components.WebAssembly.Services
+@inject LazyAssemblyLoader AssemblyLoader
+@inject ILogger<App> Logger
+
+<Router AppAssembly="@typeof(ComponentViewer.Docs.Pages.Index).Assembly"
+        AdditionalAssemblies="@_lazyLoadedAssemblies" 
+        OnNavigateAsync="@OnNavigateAsync">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(ComponentViewer.Docs.Shared.MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -10,3 +17,32 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code
+{
+    private readonly List<Assembly> _lazyLoadedAssemblies = new();
+
+    private async Task OnNavigateAsync(NavigationContext args)
+    {
+        try
+        {
+            //Route to the component that contains the QR
+            if (args.Path == "mudqrcode")
+            {
+                var assemblies = await AssemblyLoader
+                    .LoadAssembliesAsync(new[]
+                    {
+                        "SkiaSharp.dll",
+                        "zxing.dll",
+                        "ZXing.SkiaSharp.dll",
+                        "SkiaSharp.Views.Blazor.dll"
+                    });
+                _lazyLoadedAssemblies.AddRange(assemblies);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Error: {Message}", ex.Message);
+        }
+    }
+}
