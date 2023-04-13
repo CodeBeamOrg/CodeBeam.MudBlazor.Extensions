@@ -9,7 +9,7 @@
     {
         <MudText Align="Align.Center" Color="@Color">@Label</MudText>
     }
-    <MudSwipeArea Class="@InnerClassname" Style="@GetStylename()" Sensitivity="@Sensitivity" OnSwipe="@(async(d) => await HandleOnSwipe(d))" @onwheel="HandleOnWheel" PreventDefault="true">
+    <MudSwipeArea Class="@InnerClassname" Style="@GetStylename()" Sensitivity="@Sensitivity" OnSwipeEnd="HandleOnSwipe" @onwheel="HandleOnWheel" PreventDefault="true">
 
         @if (true)
         {
