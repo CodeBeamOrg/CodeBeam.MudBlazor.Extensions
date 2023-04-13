@@ -292,14 +292,14 @@ namespace MudExtensions
 
         protected bool _isFocused;
 
-        protected internal virtual void OnBlurred(FocusEventArgs obj)
+        protected internal virtual async Task OnBlurredAsync(FocusEventArgs obj)
         {
             _isFocused = false;
 
             if (!OnlyValidateIfDirty || _isDirty)
             {
                 Touched = true;
-                BeginValidateAfter(OnBlur.InvokeAsync(obj));
+                await BeginValidationAfterAsync(OnBlur.InvokeAsync(obj));
             }
         }
 
@@ -383,7 +383,7 @@ namespace MudExtensions
                 if (updateText)
                     await UpdateTextPropertyAsync(false);
                 await ValueChanged.InvokeAsync(Value);
-                BeginValidate();
+                await BeginValidateAsync();
                 FieldChanged(Value);
             }
         }
@@ -457,10 +457,10 @@ namespace MudExtensions
                 Label = For.GetLabelString();
         }
 
-        public virtual void ForceRender(bool forceTextUpdate)
+        public virtual async Task ForceRender(bool forceTextUpdate)
         {
             _forceTextUpdate = true;
-            UpdateTextPropertyAsync(false).AndForget();
+            await UpdateTextPropertyAsync(false);
             StateHasChanged();
         }
 
