@@ -25,9 +25,6 @@
 		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
 		<PackageReference Include="CsvHelper" Version="30.0.1" />
 		<PackageReference Include="MudBlazor" Version="6.2.1" />
-		<PackageReference Include="SkiaSharp.Views.Blazor" Version="2.88.3" />
-		<PackageReference Include="ZXing.Net" Version="0.16.9" />
-		<PackageReference Include="ZXing.Net.Bindings.SkiaSharp" Version="0.16.13" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
@@ -67,7 +64,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<None Include="..\..\..\..\Desktop\MudBuilder\Mud_Secondary.png">
+		<None Include="wwwroot\Mud_Secondary.png">
 		  <Pack>True</Pack>
 		  <PackagePath>\</PackagePath>
 		</None>

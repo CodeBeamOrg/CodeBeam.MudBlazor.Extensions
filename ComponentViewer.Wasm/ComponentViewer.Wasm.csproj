@@ -11,6 +11,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.1" PrivateAssets="all" />
   </ItemGroup>
 
+	<ItemGroup>
+		<BlazorWebAssemblyLazyLoad Include="SkiaSharp.dll" />
+		<BlazorWebAssemblyLazyLoad Include="zxing.dll" />
+		<BlazorWebAssemblyLazyLoad Include="ZXing.SkiaSharp.dll" />
+		<BlazorWebAssemblyLazyLoad Include="SkiaSharp.Views.Blazor.dll" />
+	</ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
     <ProjectReference Include="..\ComponentViewer.Docs\ComponentViewer.Docs.csproj" />
