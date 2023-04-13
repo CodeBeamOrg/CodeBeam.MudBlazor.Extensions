@@ -821,7 +821,7 @@ namespace MudExtensions
             await OnKeyUp.InvokeAsync(obj);
         }
 
-        internal void OnLostFocus(FocusEventArgs obj)
+        protected internal async Task OnLostFocus(FocusEventArgs obj)
         {
             //if (_isOpen)
             //{
@@ -831,7 +831,7 @@ namespace MudExtensions
             //}
             //base.OnBlur.InvokeAsync(obj).AndForget();
 
-            OnBlurred(obj);
+            await OnBlurredAsync(obj);
         }
 
         public override ValueTask FocusAsync()
