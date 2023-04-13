@@ -1,28 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using SkiaSharp;
 using ZXing;
-using ZXing.QrCode;
-using ZXing.SkiaSharp;
+using ZXing.Common;
 
 namespace MudExtensions
 {
     public partial class MudQrCode : MudComponentBase
     {
-        [Parameter]
-        public string Value { get; set; }
-
-        [Parameter]
-        public EventCallback<string> ValueChanged { get; set; }
+        private static readonly Writer Encoder = new MultiFormatWriter();
 
         [Parameter]
         public BarcodeFormat BarcodeFormat { get; set; } = BarcodeFormat.QR_CODE;
-
-        [Parameter]
-        public int Width { get; set; } = 200;
-
-        [Parameter]
-        public int Height { get; set; } = 200;
 
         /// <summary>
         /// If true, it goes to specified href when click.
@@ -31,18 +19,24 @@ namespace MudExtensions
         public bool Clickable { get; set; }
 
         [Parameter]
+        public string ErrorText { get; set; }
+
+        [Parameter]
+        public int Width { get; set; } = 200;
+
+        [Parameter]
+        public int Height { get; set; } = 200;
+
+        [Parameter]
         public string Target { get; set; } = "_blank";
 
         [Parameter]
-        public string ErrorText { get; set; }
+        public string Value { get; set; }
 
-        /// <summary>
-        /// If true, no text show on barcode format.
-        /// </summary>
         [Parameter]
-        public bool PureBarcode { get; set; }
+        public EventCallback<string> ValueChanged { get; set; }
 
-        protected byte[] GetQrCode()
+        protected QRCodeResult GetCode()
         {
             if (string.IsNullOrEmpty(Value))
             {
@@ -51,25 +45,29 @@ namespace MudExtensions
 
             try
             {
-                BarcodeWriter writer = new BarcodeWriter
-                {
-                    Format = BarcodeFormat,
-                    Options = new QrCodeEncodingOptions
-                    {
-                        Width = Width,
-                        Height = Height,
-                        PureBarcode = PureBarcode,
-                    }
-                };
+                var width = Width;
+                var height = Height;
 
-                var qrCodeImage = writer.Write(Value);
-
-                using (var stream = new MemoryStream())
+                if (BarcodeFormat == BarcodeFormat.All_1D)
                 {
-                    qrCodeImage.Encode(stream, SKEncodedImageFormat.Png, 100);
-                    ErrorText = null;
-                    return stream.ToArray();
                 }
+                else
+                {
+                    if (width > height)
+                    {
+                        width = height;
+                    }
+                    else
+                    {
+                        height = width;
+                    }
+                }
+
+                var matrix = Encoder.encode(Value, BarcodeFormat, 0, 0);
+
+                var moduleSizeX = width / matrix.Width;
+                var moduleSizeY = height / matrix.Height;
+                return new QRCodeResult(matrix, moduleSizeX, moduleSizeY);
             }
             catch (Exception ex)
             {
