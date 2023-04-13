@@ -30,10 +30,10 @@
                 var assemblies = await AssemblyLoader
                     .LoadAssembliesAsync(new[]
                     {
-                        "SkiaSharp.dll",
+                        //"SkiaSharp.dll",
                         "zxing.dll",
-                        "ZXing.SkiaSharp.dll",
-                        "SkiaSharp.Views.Blazor.dll"
+                        //"ZXing.SkiaSharp.dll",
+                        //"SkiaSharp.Views.Blazor.dll"
                     });
                 _lazyLoadedAssemblies.AddRange(assemblies);
             }

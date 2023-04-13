@@ -2,7 +2,7 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex justify-center">
-        <MudQrCode @ref="_qrCode" @bind-Value="_qrValue" Width="_width" Height="_height" BarcodeFormat="_barcodeFormat" Clickable="_clickable" PureBarcode="_pureBarcode" />
+        <MudQrCode @ref="_qrCode" @bind-Value="_qrValue" Width="_width" Height="_height" BarcodeFormat="_barcodeFormat" Clickable="_clickable" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -13,7 +13,6 @@
             <MudSelectExtended ItemCollection="@(Enum.GetValues<BarcodeFormat>())" @bind-Value="_barcodeFormat" Label="Barcode Format" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
             <MudText Color="Color.Error">@(_qrCode.ErrorText == null ? null : "Error: " + _qrCode.ErrorText)</MudText>
             <MudSwitchM3 @bind-Checked="_clickable" Color="Color.Secondary" Label="Clickable" />
-            <MudSwitchM3 @bind-Checked="_pureBarcode" Color="Color.Secondary" Label="Pure Barcode" />
         </MudStack>
     </MudItem>
 </MudGrid>
@@ -25,5 +24,4 @@
     int _height = 200;
     BarcodeFormat _barcodeFormat = BarcodeFormat.QR_CODE;
     bool _clickable = false;
-    bool _pureBarcode = false;
 }

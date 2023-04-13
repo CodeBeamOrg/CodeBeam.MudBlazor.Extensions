@@ -22,13 +22,10 @@ namespace MudExtensions
         public string ErrorText { get; set; }
 
         [Parameter]
-        public int Height { get; set; } = 200;
+        public int Width { get; set; } = 200;
 
-        /// <summary>
-        /// If true, no text show on barcode format.
-        /// </summary>
         [Parameter]
-        public bool PureBarcode { get; set; }
+        public int Height { get; set; } = 200;
 
         [Parameter]
         public string Target { get; set; } = "_blank";
@@ -39,10 +36,7 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<string> ValueChanged { get; set; }
 
-        [Parameter]
-        public int Width { get; set; } = 200;
-
-        protected CodeResult GetCode()
+        protected QRCodeResult GetCode()
         {
             if (string.IsNullOrEmpty(Value))
             {
@@ -73,7 +67,7 @@ namespace MudExtensions
 
                 var moduleSizeX = width / matrix.Width;
                 var moduleSizeY = height / matrix.Height;
-                return new CodeResult(matrix, moduleSizeX, moduleSizeY);
+                return new QRCodeResult(matrix, moduleSizeX, moduleSizeY);
             }
             catch (Exception ex)
             {
@@ -82,23 +76,5 @@ namespace MudExtensions
             }
         }
 
-        protected class CodeResult
-        {
-            private readonly BitMatrix bitMatrix;
-
-            public CodeResult(BitMatrix bitMatrix, int moduleSizeX, int moduleSizeY)
-            {
-                this.bitMatrix = bitMatrix ?? throw new ArgumentNullException(nameof(bitMatrix));
-                ModuleSizeX = moduleSizeX;
-                ModuleSizeY = moduleSizeY;
-            }
-
-            public int Columns => bitMatrix.Width;
-            public int ModuleSizeX { get; }
-            public int ModuleSizeY { get; }
-            public int Rows => bitMatrix.Height;
-
-            public bool this[int x, int y] => bitMatrix[x, y];
-        }
     }
 }

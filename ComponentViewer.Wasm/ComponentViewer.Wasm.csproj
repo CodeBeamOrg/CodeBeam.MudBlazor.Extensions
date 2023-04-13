@@ -12,10 +12,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<BlazorWebAssemblyLazyLoad Include="SkiaSharp.dll" />
 		<BlazorWebAssemblyLazyLoad Include="zxing.dll" />
-		<BlazorWebAssemblyLazyLoad Include="ZXing.SkiaSharp.dll" />
-		<BlazorWebAssemblyLazyLoad Include="SkiaSharp.Views.Blazor.dll" />
 	</ItemGroup>
 	
   <ItemGroup>
