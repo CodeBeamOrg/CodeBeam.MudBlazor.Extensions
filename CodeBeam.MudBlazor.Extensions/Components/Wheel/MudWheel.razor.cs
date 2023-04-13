@@ -60,10 +60,10 @@ namespace MudExtensions
         public int WheelLevel { get; set; } = 2;
 
         /// <summary>
-        /// The minimum swipe delta to change wheel value on touch devices. Default is 30.
+        /// The minimum swipe delta to change wheel value on touch devices. Default is 40.
         /// </summary>
         [Parameter]
-        public int Sensitivity { get; set; } = 30;
+        public int Sensitivity { get; set; } = 40;
 
         [Parameter]
         public string InnerClass { get; set; }
@@ -143,18 +143,18 @@ namespace MudExtensions
             await Task.Delay(300);
         }
 
-        protected async Task HandleOnSwipe(SwipeDirection direction)
+        protected async Task HandleOnSwipe(SwipeEventArgs args)
         {
             if (Disabled || ReadOnly)
             {
                 return;
             }
             int index = GetIndex();
-            if ((direction == SwipeDirection.TopToBottom && index == 0) || (direction == SwipeDirection.BottomToTop && index == ItemCollection.Count - 1))
+            if ((args.SwipeDirection == SwipeDirection.TopToBottom && index == 0) || (args.SwipeDirection == SwipeDirection.BottomToTop && index == ItemCollection.Count - 1))
             {
                 return;
             }
-            if (direction == SwipeDirection.BottomToTop)
+            if (args.SwipeDirection == SwipeDirection.BottomToTop)
             {
                 _animateValue = GetAnimateValue();
             }
@@ -163,19 +163,34 @@ namespace MudExtensions
                 _animateValue = - GetAnimateValue();
             }
 
-
-            await _animate.Refresh();
-            if (direction == SwipeDirection.TopToBottom)
+            int changedCount = (Math.Abs((int)args.SwipeDelta) / (Sensitivity == 0 ? 1 : Sensitivity));
+            for (int i = 0; i < changedCount; i++)
             {
-                T val = ItemCollection[index - 1];
-                await SetValueAsync(val);
+                await _animate.Refresh();
+                StateHasChanged();
+                if (args.SwipeDirection == SwipeDirection.TopToBottom)
+                {
+                    if (index - 1 < 0)
+                    {
+                        break;
+                    }
+                    T val = ItemCollection[index - 1];
+                    index--;
+                    await SetValueAsync(val);
+                    StateHasChanged();
+                }
+                else if (args.SwipeDirection == SwipeDirection.BottomToTop)
+                {
+                    if (ItemCollection.Count <= index + 1)
+                    {
+                        break;
+                    }
+                    T val = ItemCollection[index + 1];
+                    index++;
+                    await SetValueAsync(val);
+                    StateHasChanged();
+                }
             }
-            else if (direction == SwipeDirection.BottomToTop)
-            {
-                T val = ItemCollection[index + 1];
-                await SetValueAsync(val);
-            }
-
         }
 
         public async Task ChangeWheel(int changeCount)
