@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions.MudQrCode\CodeBeam.MudBlazor.Extensions.MudQrCode.csproj" />
     <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
   </ItemGroup>
 
