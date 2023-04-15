@@ -5,7 +5,7 @@ using ZXing.Common;
 
 namespace MudExtensions
 {
-    public partial class MudQrCode : MudComponentBase
+    public partial class MudBarcode : MudComponentBase
     {
         private static readonly Writer Encoder = new MultiFormatWriter();
 
@@ -36,7 +36,7 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<string> ValueChanged { get; set; }
 
-        protected QRCodeResult GetCode()
+        protected BarcodeResult GetCode()
         {
             if (string.IsNullOrEmpty(Value))
             {
@@ -52,7 +52,9 @@ namespace MudExtensions
 
                 var moduleSizeX = width / matrix.Width;
                 var moduleSizeY = height / matrix.Height;
-                return new QRCodeResult(matrix, moduleSizeX, moduleSizeY);
+                var result = new BarcodeResult(matrix, moduleSizeX, moduleSizeY);
+                ErrorText = null;
+                return result;
             }
             catch (Exception ex)
             {

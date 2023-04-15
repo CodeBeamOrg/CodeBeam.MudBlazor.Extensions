@@ -1,0 +1,28 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+<a href="@(Clickable ? Value : null)" target="@Target">
+   @{
+        var content = GetCode();
+    }
+    @if (content != null)
+    {
+        <svg width="@Width" height="@Height">
+            @for (int y = 0; y < content.Rows; y++)
+            {
+                @for(int x = 0; x < content.Columns; x++)
+                {
+                    @if(content[x,y])
+                    {
+                        <rect width="@content.ModuleSizeX" height="@content.ModuleSizeY" style="fill:black; stroke-width:1px; stroke:black" 
+                              x="@(x * content.ModuleSizeX)" y="@(y * content.ModuleSizeY)" />
+                    }
+                }
+            }
+        </svg>
+    }
+    else
+    {
+        <MudImage Height="Height" Width="Width" Class="@Class" Style="@Style" />
+    }
+</a>
