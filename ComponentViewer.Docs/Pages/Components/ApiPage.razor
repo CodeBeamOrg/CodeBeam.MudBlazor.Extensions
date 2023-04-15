@@ -25,6 +25,27 @@
         </MudTable>
     </ExampleCard>
 
+    <ExampleCard Title="Api - MudBarcode" HasExpansionPanel="true">
+        <MudTable Items="@(typeof(MudBarcode).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
+                    @if (true)
+                    {
+                        MudBarcode instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
     <ExampleCard Title="Api - MudChipField" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudChipField<string>).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
@@ -344,27 +365,6 @@
                     @if (true)
                     {
                         MudPopup instance = new();
-                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
-                    }
-                </MudTd>
-            </RowTemplate>
-        </MudTable>
-    </ExampleCard>
-
-    <ExampleCard Title="Api - MudQrCode" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudQrCode).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
-            <HeaderContent>
-                <MudTh>Name</MudTh>
-                <MudTh>Type</MudTh>
-                <MudTh>Default</MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd DataLabel="Name">@context.Name</MudTd>
-                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
-                <MudTd DataLabel="Default">
-                    @if (true)
-                    {
-                        MudQrCode instance = new();
                         <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
                     }
                 </MudTd>
