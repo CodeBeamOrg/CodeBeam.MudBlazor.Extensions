@@ -1121,7 +1121,7 @@ namespace MudExtensions
                 {
                     if (item.IsSelected)
                     {
-                        item.SetSelected(false);
+                        item.SetSelected(false, returnIfDisabled: true);
                     }
                 }
                 _allSelected = false;
@@ -1132,7 +1132,7 @@ namespace MudExtensions
                 {
                     if (!item.IsSelected)
                     {
-                        item.SetSelected(true);
+                        item.SetSelected(true, returnIfDisabled: true);
                     }
                 }
                 _allSelected = true;
