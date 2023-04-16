@@ -21,6 +21,16 @@ namespace MudExtensions.Services
         }
 
         /// <summary>
+        /// Adds ScrollManagerExtended as a transient instance.
+        /// </summary>
+        /// <param name="services">IServiceCollection</param>
+        public static IServiceCollection AddMudCssManager(this IServiceCollection services)
+        {
+            services.TryAddTransient<MudCssManager>();
+            return services;
+        }
+
+        /// <summary>
         /// Adds common services required by MudBlazor components
         /// </summary>
         /// <param name="services">IServiceCollection</param>
@@ -30,7 +40,8 @@ namespace MudExtensions.Services
         {
             configuration ??= new MudServicesConfiguration();
             return services
-                .AddScrollManagerExtended();
+                .AddScrollManagerExtended()
+                .AddMudCssManager();
         }
 
         /// <summary>
@@ -46,7 +57,8 @@ namespace MudExtensions.Services
             var options = new MudServicesConfiguration();
             configuration(options);
             return services
-                .AddScrollManagerExtended();
+                .AddScrollManagerExtended()
+                .AddMudCssManager();
         }
     }
 }
