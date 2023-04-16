@@ -60,6 +60,13 @@
     public string Color { get; set; }
 
     /// <summary>
+    /// Scrollbar's color when container hovered. Supports hex values, color names and MudTheme color keywords (ex. "primary", "secondary"). Doesn't support by firefox (see FirefoxStyle).
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public string ContainerHoverColor { get; set; }
+
+    /// <summary>
     /// Hover color for scrollbar thumb on hover. Supports hex values, color names and MudTheme color keywords (ex. "primary", "secondary"). Doesn't support by firefox (see FirefoxStyle).
     /// </summary>
     [Parameter]
@@ -130,6 +137,18 @@
         }
         border-radius: @(BorderRadius)px !important;
         @(ThumbStyle)
+    }
+
+    @(Selector):hover::-webkit-scrollbar-thumb {
+        @if (IsThemeColor(ContainerHoverColor))
+        {
+            <MudRender>background-color: var(--mud-palette-@(ContainerHoverColor)) !important;</MudRender>
+        }
+        else
+        {
+            <MudRender>background-color: @(ContainerHoverColor) !important;</MudRender>
+        }
+        border-radius: @(BorderRadius)px !important;
     }
 
     @(Selector)::-webkit-scrollbar-thumb:hover {

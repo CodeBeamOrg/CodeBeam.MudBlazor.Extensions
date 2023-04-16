@@ -3,7 +3,7 @@
 <MudScrollbar Selector="@_selectedOption" Width="@_width" HoverWidth="@_hoverWidth" BorderRadius="@_borderRadius" Hide="_hide"
               Color="@(string.IsNullOrEmpty(_pickerColor?.Value) ? _color : _pickerColor.Value)"
               TrackColor="@(string.IsNullOrEmpty(_pickerTrackColor?.Value) ? _trackColor : _pickerTrackColor.Value)"
-              HoverColor="@_hoverColor?.Value" />
+              HoverColor="@_hoverColor?.Value" ContainerHoverColor="@_containerHoverColor?.Value" />
 
 <MudGrid>
     <MudItem xs="12" sm="8">
@@ -58,39 +58,38 @@
 
             <MudField Label="Selector Id" Variant="Variant.Outlined">
                 <MudRadioGroup T="string" @bind-SelectedOption="@_selectedOption">
-                    <MudRadio Option="@("")" Color="Color.Primary">All</MudRadio>
-                    <MudRadio Option="@(".id1")" Color="Color.Primary">Only First</MudRadio>
-                    <MudRadio Option="@(".id2")" Color="Color.Primary">Only Last</MudRadio>
+                    <MudRadio Option="@("")" Color="Color.Primary" Dense="true">All</MudRadio>
+                    <MudRadio Option="@(".id1")" Color="Color.Primary" Dense="true">Only First</MudRadio>
+                    <MudRadio Option="@(".id2")" Color="Color.Primary" Dense="true">Only Last</MudRadio>
                 </MudRadioGroup>
             </MudField>
 
-            <MudNumericField @bind-Value="@_width" Variant="Variant.Outlined" Label="Scrollbar Width" />
-
-            <MudNumericField @bind-Value="@_hoverWidth" Variant="Variant.Outlined" Label="Scrollbar Width (Hover)" Clearable="true" />
-
-            <MudNumericField @bind-Value="@_borderRadius" Variant="Variant.Outlined" Label="Border Radius" />
+            <MudNumericField @bind-Value="@_width" Variant="Variant.Outlined" Label="Scrollbar Width" Margin="Margin.Dense" />
+            <MudNumericField @bind-Value="@_hoverWidth" Variant="Variant.Outlined" Label="Scrollbar Width (Hover)" Clearable="true" Margin="Margin.Dense" />
+            <MudNumericField @bind-Value="@_borderRadius" Variant="Variant.Outlined" Label="Border Radius" Margin="Margin.Dense" />
 
             <MudField Label="Thumb Color" Variant="Variant.Outlined">
                 <MudRadioGroup @bind-SelectedOption="@_color">
-                    <MudRadio Option="@("primary")" Color="Color.Primary">Primary</MudRadio>
-                    <MudRadio Option="@("secondary")" Color="Color.Secondary">Secondary</MudRadio>
-                    <MudRadio Option="@("tertiary")" Color="Color.Tertiary">Tertiary</MudRadio>
+                    <MudRadio Option="@("primary")" Color="Color.Secondary" Dense="true">Primary</MudRadio>
+                    <MudRadio Option="@("secondary")" Color="Color.Secondary" Dense="true">Secondary</MudRadio>
+                    <MudRadio Option="@("tertiary")" Color="Color.Secondary" Dense="true">Tertiary</MudRadio>
+                    <MudRadio Option="@("transparent")" Color="Color.Secondary" Dense="true">Transparent</MudRadio>
                 </MudRadioGroup>
             </MudField>
 
-            <MudColorPicker @bind-Value="_pickerColor" Label="Custom Thumb Color" ColorPickerView="ColorPickerView.Grid" Variant="Variant.Outlined" />
+            <MudColorPicker @bind-Value="_pickerColor" Label="Custom Thumb Color" ColorPickerView="ColorPickerView.Grid" Variant="Variant.Outlined" Margin="Margin.Dense" />
 
             <MudField Label="Track Color" Variant="Variant.Outlined">
                 <MudRadioGroup @bind-SelectedOption="@_trackColor">
-                    <MudRadio Option="@("primary")" Color="Color.Primary">Primary</MudRadio>
-                    <MudRadio Option="@("secondary")" Color="Color.Secondary">Secondary</MudRadio>
-                    <MudRadio Option="@("tertiary")" Color="Color.Tertiary">Tertiary</MudRadio>
+                    <MudRadio Option="@("primary")" Color="Color.Secondary" Dense="true">Primary</MudRadio>
+                    <MudRadio Option="@("secondary")" Color="Color.Secondary" Dense="true">Secondary</MudRadio>
+                    <MudRadio Option="@("tertiary")" Color="Color.Secondary" Dense="true">Tertiary</MudRadio>
                 </MudRadioGroup>
             </MudField>
 
-            <MudColorPicker @bind-Value="_pickerTrackColor" Label="Custom Track Color" ColorPickerView="ColorPickerView.Grid" Variant="Variant.Outlined" Clearable="true" />
-
-            <MudColorPicker @bind-Value="_hoverColor" Label="Hover Color" ColorPickerView="ColorPickerView.Grid" Variant="Variant.Outlined" Clearable="true" />
+            <MudColorPicker @bind-Value="_pickerTrackColor" Label="Custom Track Color" ColorPickerView="ColorPickerView.Grid" Variant="Variant.Outlined" Clearable="true" Margin="Margin.Dense" />
+            <MudColorPicker @bind-Value="_hoverColor" Label="Hover Color" ColorPickerView="ColorPickerView.Grid" Variant="Variant.Outlined" Clearable="true" Margin="Margin.Dense" />
+            <MudColorPicker @bind-Value="_containerHoverColor" Label="Container Hover Color" ColorPickerView="ColorPickerView.Grid" Variant="Variant.Outlined" Clearable="true" Margin="Margin.Dense" />
         </MudStack>
     </MudItem>
 </MudGrid>
@@ -105,5 +104,6 @@
     string _trackColor = "default";
     MudColor _pickerTrackColor;
     MudColor _hoverColor;
+    MudColor _containerHoverColor;
     bool _hide;
 }
