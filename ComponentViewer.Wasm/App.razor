@@ -25,15 +25,12 @@
         try
         {
             //Route to the component that contains the QR
-            if (args.Path == "mudqrcode")
+            if (args.Path == "mudbarcode" || args.Path == "api")
             {
                 var assemblies = await AssemblyLoader
                     .LoadAssembliesAsync(new[]
                     {
-                        "SkiaSharp.dll",
                         "zxing.dll",
-                        "ZXing.SkiaSharp.dll",
-                        "SkiaSharp.Views.Blazor.dll"
                     });
                 _lazyLoadedAssemblies.AddRange(assemblies);
             }
