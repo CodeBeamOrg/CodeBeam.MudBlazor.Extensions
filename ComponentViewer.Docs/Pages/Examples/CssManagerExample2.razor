@@ -1,0 +1,19 @@
+﻿@using MudExtensions.Utilities
+@inject MudCssManager MudCssManager
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center" Style="height: 500px">
+        <div class="css-manager d-flex align-center justify-center" style="height: 200px; width: 200px; background-color: blue; color: white">
+            This is a div
+        </div>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudButton OnClick="@(async() => await MudCssManager.SetCss("css-manager", CssProp.Cursor, CursorCssProp.Default))" Variant="Variant.Filled" Color="Color.Secondary">Cursor Default</MudButton>
+            <MudButton OnClick="@(async() => await MudCssManager.SetCss("css-manager", CssProp.Cursor, CursorCssProp.Pointer))" Variant="Variant.Filled" Color="Color.Secondary">Cursor Pointer</MudButton>
+            <MudButton OnClick="@(async() => await MudCssManager.SetCss("css-manager", CssProp.Cursor, CursorCssProp.Grab))" Variant="Variant.Filled" Color="Color.Secondary">Cursor Grab</MudButton>
+            <MudButton OnClick="@(async() => await MudCssManager.SetCss("css-manager", CssProp.Cursor, CursorCssProp.Crosshair))" Variant="Variant.Filled" Color="Color.Secondary">Cursor Crosshair</MudButton>
+        </MudStack>
+    </MudItem>
+</MudGrid>
