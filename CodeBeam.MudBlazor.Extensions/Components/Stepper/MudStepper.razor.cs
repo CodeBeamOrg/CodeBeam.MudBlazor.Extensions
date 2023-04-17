@@ -33,7 +33,39 @@ namespace MudExtensions
                 .Build();
         }
 
-        internal int ActiveIndex { get; set; }
+        protected string GetStepperStyle()
+        {
+            var count = Steps.Count * 2;
+            string style = $"display:grid;grid-template-columns:repeat({count}, 1fr);";
+            return style;
+        }
+
+        protected string GetStepPercent()
+        {
+            var dPercent = 100.0 / Steps.Count;
+            string percent = $"width:{dPercent}%";
+            return percent;
+        }
+
+        protected string GetProgressLinearStyle()
+        {
+            var colEnd = Steps.Count * 2;
+            string style = $"z-index:-10;grid-column-start:2;grid-column-end:{colEnd};grid-row:1/-1;display:inline-grid;top:26px";
+            return style;
+        }
+
+        private int _activeIndex;
+        internal int ActiveIndex 
+        {
+            get => _activeIndex; 
+            set
+            {
+                _activeIndex = value;
+                ProgressValue = _activeIndex * (100.0 / (Steps.Count - 1));
+            }
+        }
+
+        internal double ProgressValue;
 
         /// <summary>
         /// Provides CSS classes for the step content.
