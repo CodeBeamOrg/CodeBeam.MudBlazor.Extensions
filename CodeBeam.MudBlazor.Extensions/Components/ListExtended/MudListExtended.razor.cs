@@ -1395,7 +1395,7 @@ namespace MudExtensions
                 return ItemCollection.Where(x => SearchFunc.Invoke(x, _searchString)).ToList();
             }
 
-            return ItemCollection.Where(x => Converter.Set(x).Contains(_searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            return ItemCollection.Where(x => Converter.Set(x).Contains(_searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
 
         public async Task ForceUpdate()

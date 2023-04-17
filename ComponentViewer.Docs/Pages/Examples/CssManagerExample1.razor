@@ -1,10 +1,13 @@
-﻿@inject MudCssManager MudCssManager
+﻿@using MudExtensions.Utilities
+@inject MudCssManager MudCssManager
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center" Style="height: 500px">
         <div class="css-manager d-flex align-center justify-center" style="height: 200px; width: 200px; background-color: blue; color: white">
             This is a div
         </div>
+
+        <MudButton Class="css-manager">Button</MudButton>
     </MudItem>
 
     <MudItem xs="12" sm="4">
