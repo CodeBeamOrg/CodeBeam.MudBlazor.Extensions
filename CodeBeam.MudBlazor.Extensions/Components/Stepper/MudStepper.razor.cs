@@ -15,7 +15,7 @@ namespace MudExtensions
         protected string HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-2")
             .AddClass("mud-ripple", !DisableRipple && !Linear)
             .AddClass("cursor-pointer mud-stepper-header-non-linear", !Linear)
-            .AddClass("flex-column", HeaderTextView == HeaderTextView.NewLine)
+            .AddClass("flex-column")
             .Build();
 
         protected string ContentClassname => new CssBuilder($"mud-stepper-ani-{_animateGuid.ToString()}")
@@ -27,7 +27,7 @@ namespace MudExtensions
             return new CssBuilder("mud-stepper-header-dash flex-grow-1 mx-auto")
                 .AddClass("mud-stepper-header-dash-completed", step.Status != StepStatus.Continued)
                 //.AddClass("mud-stepper-header-dash-vertical", Vertical)
-                .AddClass("mt-5", HeaderTextView == HeaderTextView.NewLine)
+                .AddClass("mt-5")
                 //.AddClass("dash-tiny", Vertical && ActiveIndex != Steps.IndexOf(step))
                 .AddClass($"mud-stepper-border-{Color.ToDescriptionString()}")
                 .Build();
@@ -50,7 +50,7 @@ namespace MudExtensions
         protected string GetProgressLinearStyle()
         {
             var colEnd = Steps.Count * 2;
-            string style = $"z-index:-10;grid-column-start:2;grid-column-end:{colEnd};grid-row:1/-1;display:inline-grid;top:26px";
+            string style = $"grid-column-start:2;grid-column-end:{colEnd};grid-row:1/-1;display:inline-grid;top:26px";
             return style;
         }
 
@@ -156,12 +156,6 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public Variant Variant { get; set; }
-
-        /// <summary>
-        /// Choose header text view. Default is all.
-        /// </summary>
-        [Parameter]
-        public HeaderTextView HeaderTextView { get; set; } = HeaderTextView.All;
 
         // TODO
         //[Parameter]

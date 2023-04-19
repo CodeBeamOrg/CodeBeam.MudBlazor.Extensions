@@ -5,7 +5,7 @@
 
 <MudGrid Class="cursor-default">
     <MudItem xs="12" sm="8">
-        <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant" 
+        <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant"
                     DisableAnimation="_disableAnimation" DisablePreviousButton="_disablePreviousButton" DisableNextButton="_disableNextButton" 
                     DisableSkipButton="_disableSkipButton" DisableStepResultIndicator="_disableStepResultIndicator" HeaderTextView="_headerTextView"
                     PreventStepChangeAsync="new Func<StepChangeDirection, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
@@ -20,39 +20,59 @@
                 }
             </StaticContent>
             <ChildContent>
-                <MudStep Title="Customer Info" StatusChanged="StatusChanged">
-                    <MudForm @ref="_form">
-                        <MudStack>
-                            <MudTextField T="string" Label="Name" Variant="_variant" Required="true" />
-                            <MudTextField T="string" Label="Last Name" Variant="_variant" />
-                            <MudTextField T="string" Label="Adress" Variant="_variant" />
-                        </MudStack>
-                    </MudForm>
-                </MudStep>
-                <MudStep Title="Booking Spec." Optional="true">
-                    <MudCheckBox T="bool" Label="Early Check-in" Color="_color" />
-                    <MudCheckBox T="bool" Label="Late Check-out" Color="_color" />
-                    <MudCheckBox T="bool" Label="Twin Bed" Color="_color" />
-                </MudStep>
-                <MudStep Title="Payment">
-                    <MudForm @ref="_form2">
-                        <MudStack>
-                            <MudTextField T="string" Label="Card Number" Variant="_variant" Required="true" />
-                            <MudStack Row="true">
-                                <MudTextField T="string" Label="Expire Date" Variant="_variant" Required="true" />
-                                <MudTextField T="string" Label="CVC" Variant="_variant" Required="true" />
+                <MudStep Icon="@Icons.Material.Filled.Approval" Title="Customer Info" StatusChanged="StatusChanged">    
+                    <Template>
+                        <MudStepTemplate Step="@context" />
+                    </Template>
+                    <ChildContent>
+                        <MudForm @ref="_form">
+                            <MudStack>
+                                <MudTextField T="string" Label="Name" Variant="_variant" Required="true" />
+                                <MudTextField T="string" Label="Last Name" Variant="_variant" />
+                                <MudTextField T="string" Label="Adress" Variant="_variant" />
                             </MudStack>
-                        </MudStack>
-                    </MudForm>
+                        </MudForm>
+                    </ChildContent>
+                </MudStep>
+                <MudStep Icon="@Icons.Material.Filled.DataObject" Title="Booking Spec." Optional="true">
+                    <Template>
+                        <MudStepTemplate Step="@context"/>
+                    </Template>
+                    <ChildContent>
+                        <MudCheckBox T="bool" Label="Early Check-in" Color="_color" />
+                        <MudCheckBox T="bool" Label="Late Check-out" Color="_color" />
+                        <MudCheckBox T="bool" Label="Twin Bed" Color="_color" />
+                    </ChildContent>
+                </MudStep>
+                <MudStep Icon="@Icons.Material.Filled.People" Title="Payment">
+                    <Template>
+                        <MudStepTemplate Step="@context"/>
+                    </Template>
+                    <ChildContent>
+                        <MudForm @ref="_form2">
+                            <MudStack>
+                                <MudTextField T="string" Label="Card Number" Variant="_variant" Required="true" />
+                                <MudStack Row="true">
+                                    <MudTextField T="string" Label="Expire Date" Variant="_variant" Required="true" />
+                                    <MudTextField T="string" Label="CVC" Variant="_variant" Required="true" />
+                                </MudStack>
+                            </MudStack>
+                        </MudForm>
+                    </ChildContent>
                 </MudStep>
 
                 @if (_addResultStep)
                 {
-                    <MudStep Title="Result Step" IsResultStep="true">
-                        <div class="d-flex flex-column align-center justify-center" style="height: 200px">
-                            <MudIconButton Icon="@Icons.Material.Filled.DoneAll" Size="Size.Large" Variant="Variant.Filled" Color="Color.Success" />
-                            <MudText>Your reservation succesfully completed.</MudText>
-                        </div>
+                    <MudStep Icon="@Icons.Material.Filled.Alarm" Title="Result Step" IsResultStep="true">
+                        <Template>
+                            <MudStepTemplate Step="@context"/>
+                        </Template>
+                        <ChildContent>
+                            <div class="d-flex flex-column align-center justify-center" style="height: 200px">
+                                <MudIconButton Icon="@Icons.Material.Filled.DoneAll" Size="Size.Large" Variant="Variant.Filled" Color="Color.Success" />
+                                <MudText>Your reservation succesfully completed.</MudText>
+                            </div>
+                        </ChildContent>
                     </MudStep>
                 }
             </ChildContent>
@@ -93,12 +113,6 @@
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSelect @bind-Value="_headerTextView" Variant="Variant.Outlined" Label="Header Text View">
-                @foreach (HeaderTextView item in Enum.GetValues<HeaderTextView>())
-                {
-                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
-                }
-            </MudSelect>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => _stepper.Reset())">Reset</MudButton>
         </MudStack>
     </MudItem>
@@ -125,6 +139,7 @@
     int _activeIndex = 0;
     bool _loading;
     bool _showStaticContent = false;
+    bool _vertical = false;
 
     private async Task<bool> CheckChange(StepChangeDirection direction)
     {

@@ -11,9 +11,12 @@
                 }
                 @foreach (MudStep step in _steps)
             {
-                @if (step.IsResultStep || (MobileView == true && IsStepActive(step) == false))
+                @if(IsStepActive(step))
                 {
                     currentStep = step;
+                }
+                @if (step.IsResultStep || (MobileView == true && IsStepActive(step) == false))
+                {
                     continue;
                 }
 
@@ -42,13 +45,13 @@
                                 @(Steps.IndexOf(step) + 1)
                             }
                         </MudAvatar>
-                        @if (HeaderTextView == HeaderTextView.All || HeaderTextView == HeaderTextView.NewLine || (HeaderTextView == HeaderTextView.OnlyActiveText && active))
+                        @if (active)
                         {
                             <div>
                                 <MudText Align="Align.Center" Color="@(active ? Color : Color.Default)" Style="@(active ? "font-weight: 900" : null)">@step.Title</MudText>
                                 @if (step.Optional == true)
                                 {
-                                    <MudText Align="@(HeaderTextView == HeaderTextView.NewLine ? Align.Center : Align.Start)" Typo="Typo.subtitle2" Color="@(active ? Color : Color.Default)" Style="@(active ? "font-weight: 500" : null)">@LocalizedStrings.Optional</MudText>
+                                    <MudText Align="@Align.Center" Typo="Typo.subtitle2" Color="@(active ? Color : Color.Default)" Style="@(active ? "font-weight: 500" : null)">@LocalizedStrings.Optional</MudText>
                                 }
                             </div>
                         }
