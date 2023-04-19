@@ -1,0 +1,39 @@
+﻿@using MudExtensions.Utilities
+@inject MudCssManager MudCssManager
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center" Style="height: 500px">
+        <div class="css-manager d-flex align-center justify-center" style="height: 200px; width: 200px; background-color: blue; color: white">
+            This is a div
+        </div>
+
+        <MudButton Class="css-manager">Button</MudButton>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudButton OnClick="SetCss" Variant="Variant.Filled" Color="Color.Secondary">Set Css</MudButton>
+            <MudTextField @bind-Value="_val" Label="Value" Variant="Variant.Outlined" autocomplete="new-password" />
+            <MudSelectExtended T="CssProp" @bind-Value="_cssProp" ItemCollection="@(Enum.GetValues<CssProp>())" SearchBox="true" SearchBoxAutoFocus="true" Label="Css Prop" Variant="Variant.Outlined" Dense="true" />
+            <MudDivider Class="ma-4" />
+            <MudButton OnClick="GetCss" Variant="Variant.Filled" Color="Color.Secondary">Get Css</MudButton>
+            <MudText>Value: @_getValue</MudText>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code{
+    CssProp _cssProp;
+    string _val;
+    string _getValue;
+
+    private async Task SetCss()
+    {
+        await MudCssManager.SetCss("css-manager", _cssProp, _val);
+    }
+
+    private async Task GetCss()
+    {
+        _getValue = await MudCssManager.GetCss("css-manager", _cssProp);
+    }
+}
