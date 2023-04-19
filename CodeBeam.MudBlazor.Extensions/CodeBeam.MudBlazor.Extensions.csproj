@@ -4,7 +4,7 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>6.4.9</Version>
+		<Version>6.4.10</Version>
 		<Title>CodeBeam.MudBlazor.Extensions</Title>
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
@@ -65,11 +65,11 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<None Include="wwwroot\Mud_Secondary.png">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
-		</None>
 		<None Include="bundleconfig.json" />
+		<None Include="..\..\..\..\Desktop\MudBuilder\Mud_Secondary.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 		<!--<None Include="wwwroot\MudExtensions.js" />-->
 		<!--<None Include="Components\ListExtended\MudListExtended.razor" />
 		<None Include="Components\ListExtended\MudListItemExtended.razor" />
@@ -82,6 +82,13 @@
 		<Content Update="Components\Splitter\MudSplitter.razor">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Mud_Secondary.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>
