@@ -15,7 +15,7 @@ namespace MudExtensions
            .AddClass(Class)
            .Build();
 
-        public MudInput<string> InputReference { get; private set; }
+        public MudInputExtended<string> InputReference { get; private set; }
         InputType _passwordInput = InputType.Password;
         string _passwordIcon = Icons.Material.Filled.VisibilityOff;
         bool _passwordMode = true;

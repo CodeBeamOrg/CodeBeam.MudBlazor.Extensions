@@ -807,6 +807,24 @@ namespace MudExtensions
                         await _searchField.SelectAsync();
                     }
                     break;
+                case "ArrowUp":
+                case "ArrowDown":
+                    await HandleKeyDown(obj);
+                    break;
+                case "Enter":
+                case "NumpadEnter":
+                    await HandleKeyDown(obj);
+                    if (MudSelectExtended != null && MultiSelection == false)
+                    {
+                        await MudSelectExtended.CloseMenu();
+                        await MudSelectExtended.FocusAsync();
+                    }
+                    break;
+                case "Tab":
+                    await Task.Delay(10);
+                    await ActiveFirstItem();
+                    StateHasChanged();
+                    break;
             }
         }
 
@@ -1103,7 +1121,7 @@ namespace MudExtensions
                 {
                     if (item.IsSelected)
                     {
-                        item.SetSelected(false);
+                        item.SetSelected(false, returnIfDisabled: true);
                     }
                 }
                 _allSelected = false;
@@ -1114,7 +1132,7 @@ namespace MudExtensions
                 {
                     if (!item.IsSelected)
                     {
-                        item.SetSelected(true);
+                        item.SetSelected(true, returnIfDisabled: true);
                     }
                 }
                 _allSelected = true;
@@ -1377,7 +1395,7 @@ namespace MudExtensions
                 return ItemCollection.Where(x => SearchFunc.Invoke(x, _searchString)).ToList();
             }
 
-            return ItemCollection.Where(x => Converter.Set(x).Contains(_searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            return ItemCollection.Where(x => Converter.Set(x).Contains(_searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
 
         public async Task ForceUpdate()

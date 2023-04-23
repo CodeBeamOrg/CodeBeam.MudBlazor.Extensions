@@ -4,14 +4,6 @@ using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using static MudBlazor.Colors;
-using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -104,6 +96,18 @@ namespace MudExtensions
         public bool MobileView { get; set; }
 
         /// <summary>
+        /// If true, a linear loading indicator shows under the header.
+        /// </summary>
+        [Parameter]
+        public bool Loading { get; set; }
+
+        /// <summary>
+        /// A static content that always show with all steps.
+        /// </summary>
+        [Parameter]
+        public RenderFragment StaticContent { get; set; }
+
+        /// <summary>
         /// If true, action buttons have icons instead of text to gain more space.
         /// </summary>
         [Parameter]
@@ -156,8 +160,12 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<int> ActiveStepChanged { get; set; }
 
+        [Obsolete("Use PreventStepChangeAsync instead.")]
         [Parameter]
         public Func<StepChangeDirection, bool> PreventStepChange { get; set; }
+
+        [Parameter]
+        public Func<StepChangeDirection, Task<bool>> PreventStepChangeAsync { get; set; }
 
         List<MudStep> _steps = new();
         List<MudStep> _allSteps = new();
@@ -219,6 +227,16 @@ namespace MudExtensions
                 return;
             }
 
+            if (skipPreventProcess == false && PreventStepChangeAsync != null)
+            {
+                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                if (result == true)
+                {
+                    return;
+                }
+            }
+            
+
             int backupActiveIndex = ActiveIndex;
             if (_animate != null)
             {
@@ -268,6 +286,15 @@ namespace MudExtensions
                 return;
             }
 
+            if (skipPreventProcess == false && PreventStepChangeAsync != null)
+            {
+                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                if (result == true)
+                {
+                    return;
+                }
+            }
+
             if (ActiveIndex == index || index < 0 || Steps.Count < index)
             {
                 return;
@@ -297,6 +324,15 @@ namespace MudExtensions
                 {
                     return;
                 }
+
+                if (PreventStepChangeAsync != null)
+                {
+                    var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                    if (result == true)
+                    {
+                        return;
+                    }
+                }
             }
 
             Steps[index].SetStatus(StepStatus.Completed);
@@ -320,6 +356,15 @@ namespace MudExtensions
                 {
                     return;
                 }
+
+                if (PreventStepChangeAsync != null)
+                {
+                    var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                    if (result == true)
+                    {
+                        return;
+                    }
+                }
             }
 
             Steps[index].SetStatus(StepStatus.Skipped);
@@ -336,19 +381,12 @@ namespace MudExtensions
 
         protected int CompletedStepCount()
         {
-            return Steps.Where(x => x.Status != Enums.StepStatus.Continued).Count();
+            return Steps.Count(x => x.Status != StepStatus.Continued);
         }
 
         protected string GetNextButtonString()
         {
-            if (Steps.Count - 1 == CompletedStepCount())
-            {
-                return LocalizedStrings.Finish;
-            }
-            else
-            {
-                return LocalizedStrings.Next;
-            }
+            return ActiveIndex >= Steps.Count - 1 ? LocalizedStrings.Finish : LocalizedStrings.Next;
         }
 
         protected internal bool ShowResultStep()

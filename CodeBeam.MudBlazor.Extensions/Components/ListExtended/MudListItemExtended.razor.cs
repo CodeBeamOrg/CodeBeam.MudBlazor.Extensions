@@ -326,10 +326,12 @@ namespace MudExtensions
             get => _active;
         }
 
-        public void SetSelected(bool selected, bool forceRender = true)
+        public void SetSelected(bool selected, bool forceRender = true, bool returnIfDisabled = false)
         {
-            if (Disabled)
+            if (returnIfDisabled == true && Disabled)
+            {
                 return;
+            }
             if (_selected == selected)
                 return;
             _selected = selected;

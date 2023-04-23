@@ -12,12 +12,33 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudAnimate instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
+    <ExampleCard Title="Api - MudBarcode" HasExpansionPanel="true">
+        <MudTable Items="@(typeof(MudBarcode).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
+                    @if (true)
+                    {
+                        MudBarcode instance = new();
                         <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
                     }
                 </MudTd>
@@ -33,13 +54,23 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudChipField<string> instance = new();
-                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                        string val = context.GetValue(instance)?.ToString() ?? "null";
+                        if (context.Name.Contains("icon", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            <MudIcon Icon="val" />
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.body2">@(val.Contains("EventCallback") ? "EventCallback" : val)</MudText>
+                        }
+                        
+                        
                     }
                 </MudTd>
             </RowTemplate>
@@ -54,9 +85,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudCodeInput<string> instance = new();
@@ -75,9 +106,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudColorProvider instance = new();
@@ -96,9 +127,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudCsvMapper instance = new();
@@ -118,9 +149,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudDateWheelPicker instance = new();
@@ -139,9 +170,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudGallery animate = new();
@@ -160,9 +191,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudInputStyler animate = new();
@@ -181,9 +212,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudListExtended<string> instance = new();
@@ -202,9 +233,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudLoading instance = new();
@@ -223,9 +254,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudLoadingButton instance = new();
@@ -244,9 +275,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudPage instance = new();
@@ -265,9 +296,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudSelectExtended<string> instance = new();
@@ -286,9 +317,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudSection instance = new();
@@ -307,9 +338,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudPasswordField<string> instance = new();
@@ -328,9 +359,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudPopup instance = new();
@@ -349,9 +380,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudScrollbar instance = new();
@@ -370,9 +401,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudSpeedDial instance = new();
@@ -390,9 +421,9 @@
                 <MudTh>Type</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudSplitter instance = new();
@@ -412,9 +443,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudStepper instance = new();
@@ -431,9 +462,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.ReturnType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.ReturnType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudStepper instance = new();
@@ -450,9 +481,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudStep instance = new();
@@ -471,9 +502,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudSwitchM3<bool> instance = new();
@@ -492,9 +523,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudTextFieldExtended<string> instance = new();
@@ -513,9 +544,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudTransferList<string> instance = new();
@@ -534,9 +565,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudWheel<string> instance = new();
@@ -555,9 +586,9 @@
                 <MudTh>Default</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.PropertyType.Name</MudTd>
-                <MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
                     @if (true)
                     {
                         MudWatch instance = new();

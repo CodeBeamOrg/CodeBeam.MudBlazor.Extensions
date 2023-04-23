@@ -8,9 +8,14 @@
 [![Nuget version](https://img.shields.io/nuget/v/CodeBeam.mudblazor.extensions?color=ff4081&label=nuget%20version&logo=nuget&style=flat-square)](https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions)
 [![Nuget downloads](https://img.shields.io/nuget/dt/CodeBeam.mudblazor.extensions?color=ff4081&label=nuget%20downloads&logo=nuget&style=flat-square)](https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions)
 
+## Utilities
+
+- MudCssManager
+
 ## Components
 
 - MudAnimate
+- MudBarcode
 - MudChipField
 - MudCodeInput
 - MudColorProvider
@@ -62,7 +67,8 @@ https://codebeam-mudextensions.pages.dev/api
 | 6.1.0 - 6.1.4 | 6.1.0 - 6.1.2 | .Net 6 & .Net 7 |
 | 6.1.5 - 6.1.9 | 6.1.4 - 6.1.7 | .Net 6 & .Net 7 |
 | 6.2.0 - 6.2.5 | 6.1.8 | .Net 6 & .Net 7 |
-| 6.2.6 - 6.4.5 | 6.1.9 - 6.2.0 | .Net 6 & .Net 7 |
+| 6.2.6 - 6.4.8 | 6.1.9 - 6.2.0 | .Net 6 & .Net 7 |
+| 6.4.9 - 6.4.10 | 6.2.1 - 6.2.2 | .Net 6 & .Net 7 |
 
 ## Installation
 This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />

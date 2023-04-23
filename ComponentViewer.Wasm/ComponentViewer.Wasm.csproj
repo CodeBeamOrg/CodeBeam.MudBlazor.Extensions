@@ -9,9 +9,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.1" PrivateAssets="all" />
-    <PackageReference Include="MudBlazor" Version="6.1.9" />
   </ItemGroup>
 
+	<ItemGroup>
+		<BlazorWebAssemblyLazyLoad Include="zxing.dll" />
+	</ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
     <ProjectReference Include="..\ComponentViewer.Docs\ComponentViewer.Docs.csproj" />

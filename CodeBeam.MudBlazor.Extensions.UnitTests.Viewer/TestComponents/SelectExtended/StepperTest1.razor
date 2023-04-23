@@ -1,12 +1,14 @@
-﻿@inject ISnackbar Snackbar
+﻿@namespace MudExtensions.UnitTests.TestComponents
+@inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 @using MudBlazor.Extensions
+@using MudExtensions.Enums;
 @using MudExtensions.Utilities
 
 <MudGrid Class="cursor-default">
     <MudItem xs="12" sm="8">
-        <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant" 
-                    DisableAnimation="_disableAnimation" DisablePreviousButton="_disablePreviousButton" DisableNextButton="_disableNextButton" 
+        <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant"
+                    DisableAnimation="_disableAnimation" DisablePreviousButton="_disablePreviousButton" DisableNextButton="_disableNextButton"
                     DisableSkipButton="_disableSkipButton" DisableStepResultIndicator="_disableStepResultIndicator" HeaderTextView="_headerTextView"
                     PreventStepChangeAsync="new Func<StepChangeDirection, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
                     MobileView="_mobileView" IconActionButtons="_iconActionButtons" Loading="_loading">
@@ -126,8 +128,12 @@
     bool _loading;
     bool _showStaticContent = false;
 
+    [Parameter]
+    public int CheckChangeCount { get; set; }
+
     private async Task<bool> CheckChange(StepChangeDirection direction)
     {
+        CheckChangeCount += 1;
         if (_checkValidationBeforeComplete == true)
         {
             // Always allow stepping backwards, even if forms are invalid
@@ -180,15 +186,15 @@
         else
         {
             return new StepperLocalizedStrings()
-            {
-                Completed = "Abgeschlossen",
-                Finish = "Fertig",
-                Next = "Nächste",
-                Optional = "Optional",
-                Previous = "Früher",
-                Skip = "überspringen",
-                Skipped = "übersprungen",
-            };
+                {
+                    Completed = "Abgeschlossen",
+                    Finish = "Fertig",
+                    Next = "Nächste",
+                    Optional = "Optional",
+                    Previous = "Früher",
+                    Skip = "überspringen",
+                    Skipped = "übersprungen",
+                };
         }
     }
 }
