@@ -44,6 +44,11 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<MouseEventArgs> OnClearButtonClick { get; set; }
 
+        /// <summary>
+        /// RenderFragment for end adornment.
+        /// </summary>
+        [Parameter] public RenderFragment CustomAdornment { get; set; }
+
         public override ValueTask FocusAsync()
         {
             return InputReference.FocusAsync();
