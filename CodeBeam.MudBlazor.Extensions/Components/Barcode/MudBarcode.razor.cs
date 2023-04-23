@@ -24,6 +24,12 @@ namespace MudExtensions
         [Parameter]
         public int Width { get; set; } = 200;
 
+        /// <summary>
+        /// Increase the stroke width if readers can not read the barcode easily.
+        /// </summary>
+        [Parameter]
+        public int StrokeWidth { get; set; }
+
         [Parameter]
         public int Height { get; set; } = 200;
 
@@ -32,6 +38,12 @@ namespace MudExtensions
 
         [Parameter]
         public string Value { get; set; }
+
+        [Parameter]
+        public string Color { get; set; } = "black";
+
+        [Parameter]
+        public string BackgroundColor { get; set; } = "white";
 
         [Parameter]
         public EventCallback<string> ValueChanged { get; set; }

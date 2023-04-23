@@ -2,7 +2,7 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex justify-center">
-        <MudBarcode @ref="_barcode" @bind-Value="_qrValue" Width="_width" Height="_height" BarcodeFormat="_barcodeFormat" Clickable="_clickable" />
+        <MudBarcode @ref="_barcode" @bind-Value="_qrValue" Width="_width" Height="_height" BarcodeFormat="_barcodeFormat" Clickable="_clickable" Color="@_color" BackgroundColor="@_backgroundColor" StrokeWidth="_strokeWidth" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -13,6 +13,9 @@
             <MudSelectExtended ItemCollection="@(Enum.GetValues<BarcodeFormat>())" @bind-Value="_barcodeFormat" Label="Barcode Format" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
             <MudText Color="Color.Error">@(_barcode.ErrorText == null ? null : "Error: " + _barcode.ErrorText)</MudText>
             <MudSwitchM3 @bind-Checked="_clickable" Color="Color.Secondary" Label="Clickable" />
+            <MudTextField T="string" @bind-Value="_color" Label="Color" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+            <MudTextField T="string" @bind-Value="_backgroundColor" Label="BackgroundColor" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+            <MudNumericField @bind-Value="_strokeWidth" Label="StrokeWidth" Min="0" Max="10" Variant="Variant.Outlined" Margin="Margin.Dense" />
         </MudStack>
     </MudItem>
 </MudGrid>
@@ -24,4 +27,7 @@
     int _height = 200;
     BarcodeFormat _barcodeFormat = BarcodeFormat.QR_CODE;
     bool _clickable = false;
+    string _color = "black";
+    string _backgroundColor = "white";
+    int _strokeWidth = 0;
 }
