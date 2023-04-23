@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
 using MudBlazor.Extensions;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MudExtensions.Utilities
 {
@@ -34,6 +28,21 @@ namespace MudExtensions.Utilities
             await JSRuntime.InvokeVoidAsync("setcss", parameters);
         }
 
+        public async Task SetCss(string className, string cssPropName, string value)
+        {
+            if (className == null)
+            {
+                return;
+            }
+            if (className.StartsWith('.') == false)
+            {
+                className = "." + className;
+            }
+
+            object[] parameters = new object[] { className, cssPropName, value };
+            await JSRuntime.InvokeVoidAsync("setcss", parameters);
+        }
+
         public async Task<string> GetCss(string className, CssProp cssProp)
         {
             if (className == null)
@@ -49,81 +58,99 @@ namespace MudExtensions.Utilities
             var result = await JSRuntime.InvokeAsync<string>("getcss", parameters);
             return result;
         }
+
+        public async Task<string> GetCss(string className, string cssPropName)
+        {
+            if (className == null)
+            {
+                return null;
+            }
+            if (className.StartsWith('.') == false)
+            {
+                className = "." + className;
+            }
+
+            object[] parameters = new object[] { className, cssPropName };
+            var result = await JSRuntime.InvokeAsync<string>("getcss", parameters);
+            return result;
+        }
     }
 
     public enum CssProp
     {
-        [Description("aligncontent")]
+        [Description("align-content")]
         AlignContent,
-        [Description("alignitems")]
+        [Description("align-items")]
         AlignItems,
-        [Description("alignself")]
+        [Description("align-self")]
         AlignSelf,
         [Description("animation")]
         Animation,
-        [Description("animationdelay")]
+        [Description("animation-delay")]
         AnimationDelay,
-        [Description("animationdirection")]
+        [Description("animation-direction")]
         AnimationDirection,
-        [Description("animationduration")]
+        [Description("animation-duration")]
         AnimationDuration, 
-        [Description("animationfillmode")]
+        [Description("animation-fill-mode")]
         AnimationFillMode,
-        [Description("animationiterationcount")]
+        [Description("animation-iteration-count")]
         AnimationIterationCount,
         [Description("animationname")]
         AnimationName,
-        [Description("animationplaystate")]
+        [Description("animation-play-state")]
         AnimationPlayState,
-        [Description("animationtimingfunction")]
+        [Description("animation-timing-function")]
         AnimationTimingFunction,
+        [Description("backdrop-filter")]
+        BackdropFilter,
         [Description("background")]
         Background,
-        [Description("backgroundattachment")]
+        [Description("background-attachment")]
         BackgroundAttachment,
-        [Description("backgroundblendmode")]
+        [Description("background-blend-mode")]
         BackgroundBlendMode,
-        [Description("backgroundclip")]
+        [Description("background-clip")]
         BackgroundClip,
-        [Description("backgroundcolor")]
+        [Description("background-color")]
         BackgroundColor,
-        [Description("backgroundimage")]
+        [Description("background-image")]
         BackgroundImage,
-        [Description("backgroundorigin")]
+        [Description("background-origin")]
         BackgroundOrigin,
-        [Description("backgroundposition")]
+        [Description("background-position")]
         BackgroundPosition,
-        [Description("backgroundrepeat")]
+        [Description("background-repeat")]
         BackgroundRepeat,
-        [Description("backgroundsize")]
+        [Description("background-size")]
         BackgroundSize,
         [Description("border")]
         Border,
-        [Description("borderimage")]
+        [Description("border-image")]
         BorderImage,
-        [Description("borderleft")]
+        [Description("border-left")]
         BorderLeft,
-        [Description("borderright")]
+        [Description("border-right")]
         BorderRight,
-        [Description("bordertop")]
+        [Description("border-top")]
         BorderTop,
-        [Description("borderbottom")]
+        [Description("border-bottom")]
         BorderBottom,
-        [Description("borderradius")]
+        [Description("border-radius")]
         BorderRadius,
-        [Description("borderspacing")]
+        [Description("border-spacing")]
         BorderSpacing,
-        [Description("borderstyle")]
+        [Description("border-style")]
         BorderStyle,
-        [Description("borderwidth")]
+        [Description("border-width")]
         BorderWidth,
         [Description("bottom")]
         Bottom,
-        [Description("boxshadow")]
+        [Description("box-shadow")]
         BoxShadow,
-        [Description("boxsizing")]
+        [Description("box-sizing")]
         BoxSizing,
-        [Description("caretcolor")]
+        [Description("caret-color")]
         CaretColor,
         [Description("clip")]
         Clip,
@@ -139,89 +166,89 @@ namespace MudExtensions.Utilities
         Filter,
         [Description("flex")]
         Flex,
-        [Description("flexbasis")]
+        [Description("flex-basis")]
         FlexBasis,
-        [Description("flexdirection")]
+        [Description("flexd-irection")]
         FlexDirection,
-        [Description("flexflow")]
+        [Description("flex-flow")]
         FlexFlow,
-        [Description("flexgrow")]
+        [Description("flex-grow")]
         FlexGrow,
-        [Description("flexshrink")]
+        [Description("flex-shrink")]
         FlexShrink,
-        [Description("flexwrap")]
+        [Description("flex-wrap")]
         FlexWrap,
         [Description("float")]
         Float,
         [Description("font")]
         Font,
-        [Description("fontfamily")]
+        [Description("font-family")]
         FontFamily,
-        [Description("fontkerning")]
+        [Description("font-kerning")]
         FontKerning,
-        [Description("fontsize")]
+        [Description("font-size")]
         FontSize,
-        [Description("fontsizeadjust")]
+        [Description("font-size-adjust")]
         FontSizeAdjust,
-        [Description("fontstretch")]
+        [Description("font-stretch")]
         FontStretch,
-        [Description("fontstyle")]
+        [Description("font-style")]
         FontStyle,
-        [Description("fontvariant")]
+        [Description("font-variant")]
         FontVariant,
-        [Description("fontweight")]
+        [Description("font-weight")]
         FontWeight,
         [Description("grid")]
         Grid,
-        [Description("gridarea")]
+        [Description("grid-area")]
         GridArea,
-        [Description("gridcolumn")]
+        [Description("grid-column")]
         GridColumn,
-        [Description("gridrow")]
+        [Description("grid-row")]
         GridRow,
-        [Description("gridtemplate")]
+        [Description("grid-template")]
         GridTemplate,
-        [Description("gridtemplateareas")]
+        [Description("grid-template-areas")]
         GridTemplateAreas,
-        [Description("gridtemplatecolumns")]
+        [Description("grid-template-columns")]
         GridTemplateColumns,
-        [Description("gridtemplaterows")]
+        [Description("grid-template-rows")]
         GridTemplateRows,
         [Description("height")]
         Height,
         [Description("hyphens")]
         Hyphens,
-        [Description("justifycontent")]
+        [Description("justify-content")]
         JustifyContent,
         [Description("left")]
         Left,
-        [Description("letterspacing")]
+        [Description("letter-spacing")]
         LetterSpacing,
         [Description("lineheight")]
         LineHeight,
-        [Description("liststyle")]
+        [Description("list-style")]
         ListStyle,
         [Description("margin")]
         Margin,
-        [Description("marginbottom")]
+        [Description("margin-bottom")]
         MarginBottom,
-        [Description("marginleft")]
+        [Description("margin-left")]
         MarginLeft,
-        [Description("marginright")]
+        [Description("margin-right")]
         MarginRight,
-        [Description("margintop")]
+        [Description("margin-top")]
         MarginTop,
-        [Description("maxheight")]
+        [Description("max-height")]
         MaxHeight,
-        [Description("maxwidth")]
+        [Description("max-width")]
         MaxWidth,
-        [Description("minheight")]
+        [Description("min-height")]
         MinHeight,
-        [Description("minwidth")]
+        [Description("min-width")]
         MinWidth,
-        [Description("objectfit")]
+        [Description("object-fit")]
         ObjectFit,
-        [Description("objectposition")]
+        [Description("object-position")]
         ObjectPosition,
         [Description("opacity")]
         Opacity,
@@ -231,21 +258,21 @@ namespace MudExtensions.Utilities
         Outline,
         [Description("overflow")]
         Overflow,
-        [Description("overflowx")]
+        [Description("overflow-x")]
         OverflowX,
-        [Description("overflowy")]
+        [Description("overflow-y")]
         OverflowY,
         [Description("padding")]
         Padding,
-        [Description("paddingbottom")]
+        [Description("padding-bottom")]
         PaddingBottom,
-        [Description("paddingleft")]
+        [Description("padding-left")]
         PaddingLeft,
-        [Description("paddingright")]
+        [Description("padding-right")]
         PaddingRight,
-        [Description("paddingtop")]
+        [Description("padding-top")]
         PaddingTop,
-        [Description("pointerevents")]
+        [Description("pointer-events")]
         PointerEvents,
         [Description("position")]
         Position,
@@ -257,25 +284,25 @@ namespace MudExtensions.Utilities
         Transform,
         [Description("transition")]
         Transition,
-        [Description("userselect")]
+        [Description("user-select")]
         UserSelect,
-        [Description("verticalalign")]
+        [Description("vertical-align")]
         VerticalAlign,
         [Description("visibility")]
         Visibility,
-        [Description("whitespace")]
+        [Description("white-space")]
         WhiteSpace,
-        [Description("wordbreak")]
+        [Description("word-break")]
         WordBreak,
-        [Description("wordspacing")]
+        [Description("word-spacing")]
         WordSpacing,
-        [Description("wordwrap")]
+        [Description("word-wrap")]
         WordWrap,
-        [Description("writingmode")]
+        [Description("writing-mode")]
         WritingMode,
         [Description("width")]
         Width,
-        [Description("zindex")]
+        [Description("z-index")]
         ZIndex,
     }
 
