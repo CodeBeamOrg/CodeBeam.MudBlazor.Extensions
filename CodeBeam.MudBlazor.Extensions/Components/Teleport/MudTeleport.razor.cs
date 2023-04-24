@@ -28,11 +28,6 @@ namespace MudExtensions
         [Parameter] public string OwnClass { get; set; }
 
         /// <summary>
-        /// If true the content never show on container. Default is false.
-        /// </summary>
-        [Parameter] public bool HideOnContainer { get; set; }
-
-        /// <summary>
         /// If true teleported content returns the container, otherwise the content remains the last teleported place. Default is false.
         /// </summary>
         [Parameter] public bool ReturnWhenNotFound { get; set; }
@@ -43,7 +38,6 @@ namespace MudExtensions
 
         private string _to;
         private bool _mustUpdate = true;
-        private string _lastUpdatedState = "not found";
 
         protected override void OnParametersSet()
         {
@@ -68,15 +62,6 @@ namespace MudExtensions
             await base.OnAfterRenderAsync(firstRender);
         }
 
-        protected bool ShouldShow()
-        {
-            if (HideOnContainer == true && _lastUpdatedState != "ok")
-            {
-                return false;
-            }
-            return true;
-        }
-
         public async Task Update()
         {
             var result = await MudTeleportManager.Teleport(_ref, To);
@@ -84,7 +69,13 @@ namespace MudExtensions
             {
                 await MudTeleportManager.Teleport(_ref, _generatedClass);
             }
-            _lastUpdatedState = result;
+        }
+
+        public async Task Reset()
+        {
+            To = null;
+            await MudTeleportManager.Teleport(_ref, _generatedClass);
+            StateHasChanged();
         }
 
         public async ValueTask DisposeAsync()

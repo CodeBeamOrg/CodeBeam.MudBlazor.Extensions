@@ -1,7 +1,7 @@
 ﻿<MudGrid>
     <MudItem xs="12" sm="8" >
         <div class="d-flex flex-wrap gap-4 align-center justify-space-between">
-            <MudCard Style="height: 260px; width: 240px">
+            <MudCard Style="height: 280px; width: 240px">
                 <MudCardHeader Class="mud-theme-primary">
                     <MudText>Area: id1</MudText>
                 </MudCardHeader>
@@ -12,7 +12,7 @@
                 </MudCardContent>
             </MudCard>
 
-            <MudCard Style="height: 260px; width: 240px">
+            <MudCard Style="height: 280px; width: 240px">
                 <MudCardHeader Class="mud-theme-secondary">
                     <MudText>Area: id2</MudText>
                 </MudCardHeader>
@@ -25,7 +25,7 @@
                 </MudCardContent>
             </MudCard>
 
-            <MudCard Style="height: 260px; width: 240px">
+            <MudCard Style="height: 280px; width: 240px">
                 <MudCardHeader Class="mud-theme-tertiary">
                     <MudText>Area: id3</MudText>
                 </MudCardHeader>
@@ -46,7 +46,7 @@
             </MudCardHeader>
 
             <MudCardContent>
-                <MudTeleport To="@_id" ReturnWhenNotFound="_returnWhenNotFound" HideOnContainer="_hideOnContainer" OwnClass="@_ownClass">
+                <MudTeleport @ref="_teleport" To="@_id" ReturnWhenNotFound="_returnWhenNotFound" OwnClass="@_ownClass">
                     <div class="d-flex flex-column align-center justify-center my-4">
                         <MudText Align="Align.Center">@(_id == null || _id == "teleport" ? "Waiting for teleport" : "Teleported text")</MudText>
                             <MudButton OnClick="Teleport" Variant="Variant.Filled">Teleport</MudButton>
@@ -65,16 +65,16 @@
         <MudStack Spacing="4">
             <MudTextFieldExtended @bind-Value="_id" Label="To" Immediate="true" autocomplete="new-password" Variant="Variant.Outlined" />
             <MudSwitchM3 @bind-Checked="_returnWhenNotFound" Label="Return When Not Found" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="_hideOnContainer" Label="Show" Color="Color.Secondary" />
             <MudTextFieldExtended @bind-Value="_ownClass" Label="Own Class" Immediate="true" Variant="Variant.Outlined" />
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="@(async() => { _id = null; await _teleport.Reset(); })">Reset</MudButton>
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code{
+    MudTeleport _teleport;
     string _id;
     bool _returnWhenNotFound = false;
-    bool _hideOnContainer = false;
     string _ownClass;
 
     private void Teleport()
@@ -102,9 +102,6 @@
 
     public void ToggleOpen()
     {
-        if (_isOpen)
-            _isOpen = false;
-        else
-            _isOpen = true;
+        _isOpen = !_isOpen;
     }
 }
