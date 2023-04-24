@@ -69,7 +69,7 @@
             </div>
             @if (MobileView == true)
             {
-                <MudText Style="grid-row:1;" Typo="Typo.body2" Color="@Color">@(_steps?.IndexOf(currentStep) + 1) / @(_steps?.Count)</MudText>
+                <MudText Style="@GetMobileStyle()" Typo="Typo.body2" Color="@Color">@(_steps?.IndexOf(currentStep) + 1) / @(_steps?.Count)</MudText>
             }
             <MudProgressLinear Vertical="@Vertical" Color="Color.Primary" Value="@ProgressValue" Min="0" Max="100" Style="@GetProgressLinearStyle()" />
 

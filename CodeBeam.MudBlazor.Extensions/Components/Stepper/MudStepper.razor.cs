@@ -36,6 +36,17 @@ namespace MudExtensions
                 .Build();
         }
 
+        protected string GetMobileStyle()
+        {
+            if(Vertical)
+            {
+                return "grid-column:1;";
+            }
+            else
+            {
+                return "grid-row:1;";
+            }
+        }
         protected string GetStepperStyle()
         {
             var count = Steps.Count * 2;
