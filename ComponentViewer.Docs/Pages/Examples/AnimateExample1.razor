@@ -3,6 +3,7 @@
 <MudAnimate @ref="_animate" Selector=".id1" Duration="_duration" AnimationType="_animationType" Value="_value" ValueSecondary="_valueSecondary" Hover="_hover" Delay="_delay" Infinite="_infinite" IterationCount="_iterationCount"
             AnimationTiming="_animationTiming" AnimationDirection="_animationDirection" AnimationFillMode="_animationFillMode" Paused="_paused" />
 
+            <MudCssWriter Selector=".my-class" CssText="@_cssText" />
 <MudGrid>
     <MudItem xs="12" sm="8">
         <div class="d-flex align-center justify-center ma-0" style="height:500px;">
@@ -13,7 +14,7 @@
             else
             {
                 <div>
-                    <MudPaper Class="id1 d-flex align-center justify-center" Elevation="0" Height="200px" Width="200px" Style="background-color: blue">
+                    <MudPaper Class="id1 d-flex align-center justify-center my-class" Elevation="0" Height="200px" Width="200px" Style="background-color: blue">
                         <MudText Class="white-text" Typo="Typo.h1" Style="outline: none;">A</MudText>
                     </MudPaper>
                     @if (_animationType == AnimationType.Blur)
@@ -27,6 +28,7 @@
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
+            <MudTextField @bind-Value="_cssText" Variant="Variant.Outlined" Immediate="true" />
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(async() => await _animate.Refresh())">Refresh</MudButton>
             <MudSelect @bind-Value="_animationType" Variant="Variant.Outlined" Label="Type" Margin="Margin.Dense" Dense="true">
                 @foreach (AnimationType item in Enum.GetValues(typeof(AnimationType)))
@@ -79,4 +81,6 @@
     bool _paused;
     double _value = 360;
     double? _valueSecondary;
+
+    string _cssText;
 }
