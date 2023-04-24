@@ -1,0 +1,11 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+
+<div @ref="_ref" class="@Class" style="@Style @(HideOnContainer == true && _lastUpdatedState != "ok" ? "display: none" : null)">
+    @ChildContent
+</div>
+
+<div class="@_generatedClass @OwnClass">
+
+</div>
+

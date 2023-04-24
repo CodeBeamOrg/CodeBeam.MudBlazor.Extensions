@@ -1,0 +1,110 @@
+﻿<MudGrid>
+    <MudItem xs="12" sm="8" >
+        <div class="d-flex flex-wrap gap-4 align-center justify-space-between">
+            <MudCard Style="height: 260px; width: 240px">
+                <MudCardHeader Class="mud-theme-primary">
+                    <MudText>Area: id1</MudText>
+                </MudCardHeader>
+
+                <MudCardContent Class="id1">
+                    <MudText Class="mb-4">Teleported content shows below me</MudText>
+                    <MudDivider />
+                </MudCardContent>
+            </MudCard>
+
+            <MudCard Style="height: 260px; width: 240px">
+                <MudCardHeader Class="mud-theme-secondary">
+                    <MudText>Area: id2</MudText>
+                </MudCardHeader>
+
+                <MudCardContent Class="id2 d-flex flex-column align-center justify-center">
+                    <MudButton Class="mb-4" Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleOpen">Open Popover</MudButton>
+                    <MudPopover Open="@_isOpen" Fixed="true" Class="id2-popover d-flex flex-column justify-center" Style="width: 300px">
+                        <MudButton OnClick="@ToggleOpen" Class="my-4" Color="Color.Error">Close</MudButton>
+                    </MudPopover>
+                </MudCardContent>
+            </MudCard>
+
+            <MudCard Style="height: 260px; width: 240px">
+                <MudCardHeader Class="mud-theme-tertiary">
+                    <MudText>Area: id3</MudText>
+                </MudCardHeader>
+
+                <MudCardContent>
+                    <div class="id3">
+
+                    </div>
+                    <MudDivider />
+                    <MudText>Teleported content shows above me</MudText>
+                </MudCardContent>
+            </MudCard>
+        </div>
+        
+        <MudCard Class="mt-4">
+            <MudCardHeader Class="mud-theme-info">
+                <MudText>Teleport Container</MudText>
+            </MudCardHeader>
+
+            <MudCardContent>
+                <MudTeleport To="@_id" ReturnWhenNotFound="_returnWhenNotFound" HideOnContainer="_hideOnContainer" OwnClass="@_ownClass">
+                    <div class="d-flex flex-column align-center justify-center my-4">
+                        <MudText Align="Align.Center">@(_id == null || _id == "teleport" ? "Waiting for teleport" : "Teleported text")</MudText>
+                            <MudButton OnClick="Teleport" Variant="Variant.Filled">Teleport</MudButton>
+                            @if (_id == "id2" || _id == ".id2")
+                        {
+                            <MudButton Class="mt-2" OnClick="TeleportIntoPopover" Color="Color.Info" Variant="Variant.Filled">Teleport Into Popover</MudButton>
+                        }
+                    </div>
+                </MudTeleport>
+            </MudCardContent>
+        </MudCard>
+        
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudTextFieldExtended @bind-Value="_id" Label="To" Immediate="true" autocomplete="new-password" Variant="Variant.Outlined" />
+            <MudSwitchM3 @bind-Checked="_returnWhenNotFound" Label="Return When Not Found" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="_hideOnContainer" Label="Show" Color="Color.Secondary" />
+            <MudTextFieldExtended @bind-Value="_ownClass" Label="Own Class" Immediate="true" Variant="Variant.Outlined" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code{
+    string _id;
+    bool _returnWhenNotFound = false;
+    bool _hideOnContainer = false;
+    string _ownClass;
+
+    private void Teleport()
+    {
+        if (_id != null && _id.Contains("id2"))
+        {
+            _id = "id3";
+        }
+        else if (_id == "id1" || _id == ".id1")
+        {
+            _id = "id2";
+        }
+        else
+        {
+            _id = "id1";
+        }
+    }
+
+    private void TeleportIntoPopover()
+    {
+        _id = "id2-popover";
+    }
+
+    public bool _isOpen;
+
+    public void ToggleOpen()
+    {
+        if (_isOpen)
+            _isOpen = false;
+        else
+            _isOpen = true;
+    }
+}
