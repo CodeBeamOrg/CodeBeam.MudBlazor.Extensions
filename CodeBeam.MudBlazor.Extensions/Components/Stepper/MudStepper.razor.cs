@@ -12,10 +12,13 @@ namespace MudExtensions
         MudAnimate _animate;
         Guid _animateGuid = Guid.NewGuid();
 
-        protected string HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-2")
+
+
+        protected string HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-3")
             .AddClass("mud-ripple", !DisableRipple && !Linear)
             .AddClass("cursor-pointer mud-stepper-header-non-linear", !Linear)
-            .AddClass("flex-column")
+            .AddClass("flex-column", !Vertical)
+            .AddClass("flex-row", Vertical)
             .Build();
 
         protected string ContentClassname => new CssBuilder($"mud-stepper-ani-{_animateGuid.ToString()}")
@@ -36,28 +39,58 @@ namespace MudExtensions
         protected string GetStepperStyle()
         {
             var count = Steps.Count * 2;
-            string style = $"display:grid;grid-template-columns:repeat({count}, 1fr);";
-            return style;
+            if (Vertical)
+            {
+                return $"display:grid;grid-template-rows:repeat({count}, 1fr);";
+            }
+            else
+            {
+                return $"display:grid;grid-template-columns:repeat({count}, 1fr);";
+            }
+        }
+
+        protected string GetStepperSubStyle()
+        {
+            if (Vertical)
+            {
+                return "grid-row-start:1;grid-row-end:-1;flex-direction:column;grid-column:1;list-style:none;display:flex;";
+            }
+            else
+            {
+                return "grid-column-start:1;grid-column-end:-1;flex-direction:row;grid-row:1;list-style:none;display:flex;";
+            }
         }
 
         protected string GetStepPercent()
         {
             var dPercent = 100.0 / Steps.Count;
-            string percent = $"width:{dPercent}%";
-            return percent;
+            if (Vertical)
+            {
+                return $"height:{dPercent}%";
+            }
+            else
+            {
+                return $"width:{dPercent}%";
+            }
         }
 
         protected string GetProgressLinearStyle()
         {
-            var colEnd = Steps.Count * 2;
-            string style = $"grid-column-start:2;grid-column-end:{colEnd};grid-row:1/-1;display:inline-grid;top:26px";
-            return style;
+            var end = Steps.Count * 2;
+            if (Vertical)
+            {
+                return $"grid-row-start:2;grid-row-end:{end};grid-column:1/-1;display:inline-grid;left:30px;top:-30px;z-index:10;transform:rotateX(180deg);";
+            }
+            else
+            {
+                return $"grid-column-start:2;grid-column-end:{end};grid-row:1/-1;display:inline-grid;top:30px;z-index:10";
+            }
         }
 
         private int _activeIndex;
-        internal int ActiveIndex 
+        internal int ActiveIndex
         {
-            get => _activeIndex; 
+            get => _activeIndex;
             set
             {
                 _activeIndex = value;
@@ -157,9 +190,17 @@ namespace MudExtensions
         [Parameter]
         public Variant Variant { get; set; }
 
-        // TODO
-        //[Parameter]
-        //public bool Vertical { get; set; }
+        /// <summary>
+        /// Choose header text view. Default is all.
+        /// </summary>
+        [Parameter]
+        public HeaderTextView HeaderTextView { get; set; } = HeaderTextView.None;
+
+        /// <summary>
+        /// Choose header alignment
+        /// </summary>
+        [Parameter]
+        public bool Vertical { get; set; }
 
         /// <summary>
         /// A class for provide all local strings at once.
@@ -261,7 +302,7 @@ namespace MudExtensions
                     return;
                 }
             }
-            
+
 
             int backupActiveIndex = ActiveIndex;
             if (_animate != null)

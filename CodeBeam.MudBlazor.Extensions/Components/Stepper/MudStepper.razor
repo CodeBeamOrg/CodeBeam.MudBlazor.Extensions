@@ -3,9 +3,9 @@
 @using MudExtensions.Enums
 
 <CascadingValue Value="this" IsFixed="true">
-    <MudStack Class="@Class" Style="@Style"> @*Row="Vertical"*@
+    <MudStack Row="@Vertical" Class="@Class" Style="@Style">
         <div style="@GetStepperStyle()">
-            <div style="grid-column-start: 1; grid-column-end: -1;flex-direction:row;grid-row:1;list-style: none;display: flex;">
+            <div style=@GetStepperSubStyle()>
                 @{
                     MudStep currentStep = null;
                 }
@@ -21,7 +21,7 @@
                 }
 
                 <div style="@GetStepPercent()">
-                    <div @onclick="@(Linear ? null : () => SetActiveIndex(step))" Class="@HeaderClassname">
+                    <div @onclick="@(Linear ? null : () => SetActiveIndex(step))" class="@HeaderClassname">
                     @{
                         bool active = IsStepActive(step);
                     }
@@ -31,29 +31,36 @@
                     }
                     else
                     {
-                        <MudAvatar Class="@((active || step.Status != StepStatus.Continued) ? $"mud-theme-{Color.ToDescriptionString()}" : null)" Variant="@Variant" Size="Size.Small">
-                            @if (step.Status == Enums.StepStatus.Completed)
-                            {
-                                <MudIcon Icon="@Icons.Material.Filled.Done" Size="Size.Small" />
-                            }
-                            else if (step.Status == StepStatus.Skipped)
-                            {
-                                <MudIcon Icon="@Icons.Material.Filled.Remove" Size="Size.Small" />
-                            }
-                            else
-                            {
-                                @(Steps.IndexOf(step) + 1)
-                            }
-                        </MudAvatar>
-                        @if (active)
+                        @if (step.Status == MudExtensions.Enums.StepStatus.Completed)
                         {
-                            <div>
-                                <MudText Align="Align.Center" Color="@(active ? Color : Color.Default)" Style="@(active ? "font-weight: 900" : null)">@step.Title</MudText>
-                                @if (step.Optional == true)
+                            <MudBadge Content="3" Overlap="true" Class="" Icon="@Icons.Material.Filled.Done">
+                                <MudAvatar Class="mud-theme-primary" Style="z-index:20;" Variant="Variant.Filled">
+                                    @if (!string.IsNullOrWhiteSpace(step.Icon))
+                                    {
+                                        <MudIcon Class="pa-1" Icon="@step.Icon" Size="Size.Large" />
+                                    }
+                                </MudAvatar>
+                            </MudBadge>
+                        }
+                        else
+                        {
+                            <MudAvatar Class="mud-theme-primary" Style="z-index:20;" Variant="Variant.Filled">
+                                <MudIcon Class="pa-1" Icon="@step.Icon" Size="Size.Large" />
+                            </MudAvatar>
+                        }
+                        @if (HeaderTextView == HeaderTextView.All || HeaderTextView == HeaderTextView.OnlyActiveText)
+                        {
+                            <MudText>
+                                @if (step.MudStepper.GetActiveIndex() == @step.MudStepper.Steps.IndexOf(@step))
                                 {
-                                    <MudText Align="@Align.Center" Typo="Typo.subtitle2" Color="@(active ? Color : Color.Default)" Style="@(active ? "font-weight: 500" : null)">@LocalizedStrings.Optional</MudText>
+
+                                    <MudText><b>@step.Title</b></MudText>
                                 }
-                            </div>
+                                else if(HeaderTextView != HeaderTextView.OnlyActiveText)
+                                {
+                                    <MudText>@step.Title</MudText>
+                                }
+                            </MudText>
                         }
                     }
                     </div>
@@ -64,7 +71,7 @@
             {
                 <MudText Style="grid-row:1;" Typo="Typo.body2" Color="@Color">@(_steps?.IndexOf(currentStep) + 1) / @(_steps?.Count)</MudText>
             }
-            <MudProgressLinear Color="Color.Primary" Value="@ProgressValue" Min="0" Max="100" Style="@GetProgressLinearStyle()" />
+            <MudProgressLinear Vertical="@Vertical" Color="Color.Primary" Value="@ProgressValue" Min="0" Max="100" Style="@GetProgressLinearStyle()" />
 
         </div>
         @if (Loading)

@@ -21,9 +21,6 @@
             </StaticContent>
             <ChildContent>
                 <MudStep Icon="@Icons.Material.Filled.Approval" Title="Customer Info" StatusChanged="StatusChanged">    
-                    <Template>
-                        <MudStepTemplate Step="@context" />
-                    </Template>
                     <ChildContent>
                         <MudForm @ref="_form">
                             <MudStack>
@@ -34,10 +31,7 @@
                         </MudForm>
                     </ChildContent>
                 </MudStep>
-                <MudStep Icon="@Icons.Material.Filled.DataObject" Title="Booking Spec." Optional="true">
-                    <Template>
-                        <MudStepTemplate Step="@context"/>
-                    </Template>
+                <MudStep Title="Booking Spec." Optional="true">
                     <ChildContent>
                         <MudCheckBox T="bool" Label="Early Check-in" Color="_color" />
                         <MudCheckBox T="bool" Label="Late Check-out" Color="_color" />
@@ -45,9 +39,6 @@
                     </ChildContent>
                 </MudStep>
                 <MudStep Icon="@Icons.Material.Filled.People" Title="Payment">
-                    <Template>
-                        <MudStepTemplate Step="@context"/>
-                    </Template>
                     <ChildContent>
                         <MudForm @ref="_form2">
                             <MudStack>
@@ -64,9 +55,6 @@
                 @if (_addResultStep)
                 {
                     <MudStep Icon="@Icons.Material.Filled.Alarm" Title="Result Step" IsResultStep="true">
-                        <Template>
-                            <MudStepTemplate Step="@context"/>
-                        </Template>
                         <ChildContent>
                             <div class="d-flex flex-column align-center justify-center" style="height: 200px">
                                 <MudIconButton Icon="@Icons.Material.Filled.DoneAll" Size="Size.Large" Variant="Variant.Filled" Color="Color.Success" />
@@ -89,6 +77,7 @@
     <MudItem xs="12" sm="4" Style="box-shadow: rgba(240, 46, 170, 0.4) -3px 3px;">
         <MudStack Spacing="4">
             <MudNumericField @bind-Value="_activeIndex" Label="Change ActiveIndex" @bind-Value:after="(() => _stepper.SetActiveStepByIndex(_activeIndex))" Margin="Margin.Dense" />
+            <MudCheckBox @bind-Checked="_vertical" Color="Color.Primary" Label="Vertical" Dense="true" />
             <MudCheckBox @bind-Checked="_linear" Color="Color.Primary" Label="Linear" Dense="true" />
             <MudCheckBox @bind-Checked="_disableAnimation" Color="Color.Primary" Label="Disable Animation" Dense="true" />
             <MudCheckBox @bind-Checked="_disablePreviousButton" Color="Color.Primary" Label="Disable Previous Step Action Button" Dense="true" />
@@ -109,6 +98,12 @@
             </MudSelect>
             <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color">
                 @foreach (Color item in Enum.GetValues<Color>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="_headerTextView" Variant="Variant.Outlined" Label="Header Text View">
+                @foreach (HeaderTextView item in Enum.GetValues<HeaderTextView>())
                 {
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
