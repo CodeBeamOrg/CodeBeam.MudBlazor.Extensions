@@ -880,7 +880,6 @@ namespace MudExtensions
 
             //disable escape propagation: if selectmenu is open, only the select popover should close and underlying components should not handle escape key
             await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "Key+none" });
-            await ScrollToMiddleAsync(GetSelectedItem());
             await OnOpen.InvokeAsync();
         }
 
