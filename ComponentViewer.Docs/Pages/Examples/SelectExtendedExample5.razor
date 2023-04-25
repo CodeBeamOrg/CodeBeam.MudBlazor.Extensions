@@ -16,6 +16,23 @@
                 <MudSelectItemExtended T="string" Value="@state" Text="@state" />
             }
         </MudSelectExtended>
+
+        <MudSelectExtended ItemCollection="states" MultiSelectionTextFunc="@(_radioGroup?.SelectedOption == 1 ? new Func<List<string>, string>(GetMultiSelectionText2) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="stringValue" @bind-SelectedValues="stringValues" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter"
+                           ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant">
+        </MudSelectExtended>
+
+        <MudSelectExtended T="TestValue"
+                           ItemCollection="TestValues"
+                           @bind-SelectedValues="SelectedTsSearchBoxItems"
+                           Label="Test Values"
+                           ToStringFunc="@(v => v?.Value)"
+                           Variant="Variant.Text"
+                           ValuePresenter="_valuePresenter"
+                           Virtualize="true"
+                           ChipCloseable="true"
+                           ChipVariant="MudBlazor.Variant.Filled"
+                           ChipSize="MudBlazor.Size.Small"
+                           MultiSelection="true" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -109,5 +126,18 @@
         {
             _valuePresenter = ValuePresenter.Text;
         }
+    }
+
+    public record TestValue(int Number, string Value);
+
+    List<TestValue>? TestValues { get; set; }
+    IEnumerable<TestValue> SelectedTsSearchBoxItems { get; set; }
+
+    protected override void OnInitialized()
+    {
+        TestValues = Enumerable.Range(0, 1000)
+            .Select(n => new TestValue(n, $"Value-{n.ToString("0000")}"))
+            .ToList();
+        base.OnInitialized();
     }
 }
