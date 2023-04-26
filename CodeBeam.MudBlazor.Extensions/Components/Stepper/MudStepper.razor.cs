@@ -12,28 +12,96 @@ namespace MudExtensions
         MudAnimate _animate;
         Guid _animateGuid = Guid.NewGuid();
 
-        protected string HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-2")
+        protected string HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-3")
             .AddClass("mud-ripple", !DisableRipple && !Linear)
             .AddClass("cursor-pointer mud-stepper-header-non-linear", !Linear)
-            .AddClass("flex-column", HeaderTextView == HeaderTextView.NewLine)
+            .AddClass("flex-column", !Vertical)
+            .AddClass("flex-row", Vertical)
             .Build();
 
         protected string ContentClassname => new CssBuilder($"mud-stepper-ani-{_animateGuid.ToString()}")
             .AddClass(ContentClass)
             .Build();
 
-        protected string GetDashClassname(MudStep step)
+        protected string AvatarStylename => new StyleBuilder()
+            .AddStyle("z-index: 20")
+            .AddStyle("background-color", "var(--mud-palette-background)", Variant == Variant.Outlined)
+            .Build();
+
+        protected string GetMobileStyle()
         {
-            return new CssBuilder("mud-stepper-header-dash flex-grow-1 mx-auto")
-                .AddClass("mud-stepper-header-dash-completed", step.Status != StepStatus.Continued)
-                //.AddClass("mud-stepper-header-dash-vertical", Vertical)
-                .AddClass("mt-5", HeaderTextView == HeaderTextView.NewLine)
-                //.AddClass("dash-tiny", Vertical && ActiveIndex != Steps.IndexOf(step))
-                .AddClass($"mud-stepper-border-{Color.ToDescriptionString()}")
-                .Build();
+            if(Vertical)
+            {
+                return "grid-column:1;margin-inline-start:22px;";
+            }
+            else
+            {
+                return "grid-row:1;margin-top:22px;";
+            }
+        }
+        protected string GetStepperStyle()
+        {
+            var count = Steps.Count * 2;
+            if (Vertical)
+            {
+                return $"display:grid;grid-template-rows:repeat({count}, 1fr);";
+            }
+            else
+            {
+                return $"display:grid;grid-template-columns:repeat({count}, 1fr);";
+            }
         }
 
-        internal int ActiveIndex { get; set; }
+        protected string GetStepperSubStyle()
+        {
+            if (Vertical)
+            {
+                return "grid-row-start:1;grid-row-end:-1;flex-direction:column;grid-column:1;list-style:none;display:flex;";
+            }
+            else
+            {
+                return "grid-column-start:1;grid-column-end:-1;flex-direction:row;grid-row:1;list-style:none;display:flex;";
+            }
+        }
+
+        protected string GetStepPercent()
+        {
+            var dPercent = (100.0 / Steps.Count).ToInvariantString();
+            if (Vertical)
+            {
+                return $"height:{dPercent}%";
+            }
+            else
+            {
+                return $"width:{dPercent}%";
+            }
+        }
+
+        protected string GetProgressLinearStyle()
+        {
+            var end = Steps.Count * 2;
+            if (Vertical)
+            {
+                return $"grid-row-start:2;grid-row-end:{end};grid-column:1/-1;display:inline-grid;left:{(HeaderSize == Size.Medium ? 30 : HeaderSize == Size.Large ? 38 : 22)}px;top:-34px;z-index:10;transform:rotateX(180deg);";
+            }
+            else
+            {
+                return $"grid-column-start:2;grid-column-end:{end};grid-row:1/-1;display:inline-grid;top:{(HeaderSize == Size.Medium ? 30 : HeaderSize == Size.Large ? 38 : 22)}px;{(HeaderSize == Size.Small ? "height:2px;" : HeaderSize == Size.Medium ? "height:3px;" : null)}{(MobileView ? "margin-inline-start:40px;" : null)}z-index:10";
+            }
+        }
+
+        private int _activeIndex;
+        internal int ActiveIndex
+        {
+            get => _activeIndex;
+            set
+            {
+                _activeIndex = value;
+                ProgressValue = _activeIndex * (100.0 / (Steps.Count - 1));
+            }
+        }
+
+        internal double ProgressValue;
 
         /// <summary>
         /// Provides CSS classes for the step content.
@@ -129,11 +197,19 @@ namespace MudExtensions
         /// Choose header text view. Default is all.
         /// </summary>
         [Parameter]
-        public HeaderTextView HeaderTextView { get; set; } = HeaderTextView.All;
+        public Size HeaderSize { get; set; } = Size.Medium;
 
-        // TODO
-        //[Parameter]
-        //public bool Vertical { get; set; }
+        /// <summary>
+        /// Choose header text view. Default is all.
+        /// </summary>
+        [Parameter]
+        public HeaderTextView HeaderTextView { get; set; } = HeaderTextView.None;
+
+        /// <summary>
+        /// Choose header alignment
+        /// </summary>
+        [Parameter]
+        public bool Vertical { get; set; }
 
         /// <summary>
         /// A class for provide all local strings at once.
@@ -235,7 +311,7 @@ namespace MudExtensions
                     return;
                 }
             }
-            
+
 
             int backupActiveIndex = ActiveIndex;
             if (_animate != null)
