@@ -240,37 +240,8 @@
   .mud-stepper-header.mud-stepper-header-non-linear:hover {
     background-color: var(--mud-palette-action-default-hover); }
 
-.mud-stepper-header-dash {
-  min-width: 50px;
-  border-bottom: 1px solid;
-  border-left: none;
-  height: 50%;
-  border-color: var(--mud-palette-text-primary); }
-  .mud-stepper-header-dash.mud-stepper-header-dash-vertical {
-    min-width: unset;
-    border-bottom: none;
-    border-left: 2px solid;
-    border-color: var(--mud-palette-primary); }
-    .mud-stepper-header-dash.mud-stepper-header-dash-vertical.dash-tiny {
-      height: 20px; }
-  .mud-stepper-header-dash.mud-stepper-header-dash-completed {
-    border-bottom: 2px solid; }
-    .mud-stepper-header-dash.mud-stepper-header-dash-completed.mud-stepper-border-primary {
-      border-color: var(--mud-palette-primary); }
-    .mud-stepper-header-dash.mud-stepper-header-dash-completed.mud-stepper-border-secondary {
-      border-color: var(--mud-palette-secondary); }
-    .mud-stepper-header-dash.mud-stepper-header-dash-completed.mud-stepper-border-tertiary {
-      border-color: var(--mud-palette-tertiary); }
-    .mud-stepper-header-dash.mud-stepper-header-dash-completed.mud-stepper-border-info {
-      border-color: var(--mud-palette-info); }
-    .mud-stepper-header-dash.mud-stepper-header-dash-completed.mud-stepper-border-success {
-      border-color: var(--mud-palette-success); }
-    .mud-stepper-header-dash.mud-stepper-header-dash-completed.mud-stepper-border-warning {
-      border-color: var(--mud-palette-warning); }
-    .mud-stepper-header-dash.mud-stepper-header-dash-completed.mud-stepper-border-error {
-      border-color: var(--mud-palette-error); }
-    .mud-stepper-header-dash.mud-stepper-header-dash-completed.mud-stepper-border-dark {
-      border-color: var(--mud-palette-dark); }
+.mud-stepper-badge {
+  z-index: 21; }
 
 .mud-switch-m3 {
   cursor: pointer;

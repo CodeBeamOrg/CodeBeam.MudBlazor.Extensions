@@ -12,8 +12,6 @@ namespace MudExtensions
         MudAnimate _animate;
         Guid _animateGuid = Guid.NewGuid();
 
-
-
         protected string HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-3")
             .AddClass("mud-ripple", !DisableRipple && !Linear)
             .AddClass("cursor-pointer mud-stepper-header-non-linear", !Linear)
@@ -25,26 +23,20 @@ namespace MudExtensions
             .AddClass(ContentClass)
             .Build();
 
-        protected string GetDashClassname(MudStep step)
-        {
-            return new CssBuilder("mud-stepper-header-dash flex-grow-1 mx-auto")
-                .AddClass("mud-stepper-header-dash-completed", step.Status != StepStatus.Continued)
-                //.AddClass("mud-stepper-header-dash-vertical", Vertical)
-                .AddClass("mt-5")
-                //.AddClass("dash-tiny", Vertical && ActiveIndex != Steps.IndexOf(step))
-                .AddClass($"mud-stepper-border-{Color.ToDescriptionString()}")
-                .Build();
-        }
+        protected string AvatarStylename => new StyleBuilder()
+            .AddStyle("z-index: 20")
+            .AddStyle("background-color", "var(--mud-palette-background)", Variant == Variant.Outlined)
+            .Build();
 
         protected string GetMobileStyle()
         {
             if(Vertical)
             {
-                return "grid-column:1;";
+                return "grid-column:1;margin-inline-start:22px;";
             }
             else
             {
-                return "grid-row:1;";
+                return "grid-row:1;margin-top:22px;";
             }
         }
         protected string GetStepperStyle()
@@ -90,11 +82,11 @@ namespace MudExtensions
             var end = Steps.Count * 2;
             if (Vertical)
             {
-                return $"grid-row-start:2;grid-row-end:{end};grid-column:1/-1;display:inline-grid;left:30px;top:-30px;z-index:10;transform:rotateX(180deg);";
+                return $"grid-row-start:2;grid-row-end:{end};grid-column:1/-1;display:inline-grid;left:{(HeaderSize == Size.Medium ? 30 : HeaderSize == Size.Large ? 38 : 22)}px;top:-34px;z-index:10;transform:rotateX(180deg);";
             }
             else
             {
-                return $"grid-column-start:2;grid-column-end:{end};grid-row:1/-1;display:inline-grid;top:30px;z-index:10";
+                return $"grid-column-start:2;grid-column-end:{end};grid-row:1/-1;display:inline-grid;top:{(HeaderSize == Size.Medium ? 30 : HeaderSize == Size.Large ? 38 : 22)}px;{(HeaderSize == Size.Small ? "height:2px;" : HeaderSize == Size.Medium ? "height:3px;" : null)}{(MobileView ? "margin-inline-start:40px;" : null)}z-index:10";
             }
         }
 
@@ -200,6 +192,12 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public Variant Variant { get; set; }
+
+        /// <summary>
+        /// Choose header text view. Default is all.
+        /// </summary>
+        [Parameter]
+        public Size HeaderSize { get; set; } = Size.Medium;
 
         /// <summary>
         /// Choose header text view. Default is all.
