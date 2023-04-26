@@ -7,6 +7,7 @@ using MudBlazor.Utilities;
 using MudExtensions.Utilities;
 using System.Globalization;
 using System.Text;
+using CsvHelper.Configuration;
 
 namespace MudExtensions
 {
@@ -103,6 +104,9 @@ namespace MudExtensions
         [Parameter]
         public bool NormalizeHeaders { get; set; }
 
+        [Parameter]
+        public string Delimter { get; set; } = ",";
+
         [Inject] private IDialogService _dialogService { get; set; }
         [Inject] private NavigationManager _navigationManager { get; set; }
 
@@ -169,7 +173,14 @@ namespace MudExtensions
         private void CreateCsvContent()
         {
             using var reader = new StreamReader(new MemoryStream(FileContentByte), Encoding.Default);
-            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = Delimter,
+                IgnoreBlankLines = true,
+                HasHeaderRecord = true
+            };
+            
+            using var csv = new CsvReader(reader, config);
             CsvContent = csv.GetRecords<dynamic>().Select(x => (IDictionary<string, object>)x).ToList();
         }
         private void MatchCsvHeadersWithExpectedHeaders()

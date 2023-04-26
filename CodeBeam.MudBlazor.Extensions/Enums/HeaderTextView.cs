@@ -8,8 +8,6 @@ namespace MudExtensions.Enums
         None,
         [Description("only-active-text")]
         OnlyActiveText,
-        [Description("new-line")]
-        NewLine,
         [Description("all")]
         All,
     }

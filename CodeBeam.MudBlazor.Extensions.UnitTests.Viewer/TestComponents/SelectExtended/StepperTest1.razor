@@ -95,12 +95,6 @@
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSelect @bind-Value="_headerTextView" Variant="Variant.Outlined" Label="Header Text View">
-                @foreach (HeaderTextView item in Enum.GetValues<HeaderTextView>())
-                {
-                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
-                }
-            </MudSelect>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => _stepper.Reset())">Reset</MudButton>
         </MudStack>
     </MudItem>
@@ -127,6 +121,7 @@
     int _activeIndex = 0;
     bool _loading;
     bool _showStaticContent = false;
+    bool _vertical = false;
 
     [Parameter]
     public int CheckChangeCount { get; set; }

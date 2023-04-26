@@ -1,0 +1,46 @@
+﻿@namespace MudExtensions
+@inherits ComponentBase
+
+@if (Step != null)
+{
+    @if (Step.Status == MudExtensions.Enums.StepStatus.Completed)
+    {
+        <MudBadge Content="3" Overlap="true" Class="" Icon="@Icons.Material.Filled.Done">
+            <MudAvatar Class="mud-theme-primary" Style="z-index:20;" Variant="Variant.Filled">
+            @if(!string.IsNullOrWhiteSpace(Step.Icon))
+            {
+                <MudIcon Class="pa-1" Icon="@Step.Icon" Size="Size.Large" />
+            }
+            </MudAvatar>
+        </MudBadge>
+        <MudText>
+
+            @if (Step.MudStepper.GetActiveIndex() == @Step.MudStepper.Steps.IndexOf(@Step))
+            {
+
+                <MudText><b>@Step.Title</b></MudText>
+            }
+            else
+            {
+                <MudText>@Step.Title</MudText>
+            }
+        </MudText>
+    }
+    else
+    {
+        <MudAvatar Class="mud-theme-primary" Style="z-index:20;" Variant="Variant.Filled">
+            <MudIcon Class="pa-1" Icon="@Step.Icon" Size="Size.Large" />
+        </MudAvatar>
+        <MudText>
+
+            @if (Step.MudStepper.GetActiveIndex() == @Step.MudStepper.Steps.IndexOf(@Step))
+            {
+                <MudText><b>@Step.Title</b></MudText>
+            }
+            else
+            {
+                <MudText>@Step.Title</MudText>
+            }
+        </MudText>
+    }
+}

@@ -34,7 +34,7 @@ namespace MudExtensions
         {
             get
             {
-                return MudStepper.ActiveIndex == this.Number;
+                return MudStepper?.ActiveIndex == this.Number;
             }
         }
 
