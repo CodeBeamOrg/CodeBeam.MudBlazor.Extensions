@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Components;
+﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MudBlazor.Services;
@@ -22,12 +20,18 @@ namespace MudExtensions.Services
         }
 
         /// <summary>
-        /// Adds ScrollManagerExtended as a transient instance.
+        /// Adds CssManager as a transient instance.
         /// </summary>
         /// <param name="services">IServiceCollection</param>
         public static IServiceCollection AddMudCssManager(this IServiceCollection services)
         {
             services.TryAddTransient<MudCssManager>();
+            return services;
+        }
+
+        public static IServiceCollection AddMudTeleportManager(this IServiceCollection services)
+        {
+            services.TryAddTransient<MudTeleportManager>();
             return services;
         }
 
@@ -42,7 +46,8 @@ namespace MudExtensions.Services
             configuration ??= new MudServicesConfiguration();
             return services
                 .AddScrollManagerExtended()
-                .AddMudCssManager();
+                .AddMudCssManager()
+                .AddMudTeleportManager();
         }
 
         /// <summary>
@@ -59,7 +64,8 @@ namespace MudExtensions.Services
             configuration(options);
             return services
                 .AddScrollManagerExtended()
-                .AddMudCssManager();
+                .AddMudCssManager()
+                .AddMudTeleportManager();
         }
     }
 }

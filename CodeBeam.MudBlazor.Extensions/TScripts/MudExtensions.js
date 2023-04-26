@@ -28,3 +28,20 @@ function setcss(classe, cssprop, value) {
         elements[i].style.setProperty(cssprop, value);
     }
 }
+
+
+window.mudTeleport = {
+    teleport: (source, to) => {
+        const target = document.querySelector(to);
+        if (!target) {
+            //throw new Error(`teleport: ${to} is not found on the DOM`);
+            return "not found";
+        }
+        target.appendChild(source);
+        return "ok";
+    },
+
+    removeFromDOM: (el) => {
+        if (el && el.__internalId !== null) el.remove();
+    },
+};
