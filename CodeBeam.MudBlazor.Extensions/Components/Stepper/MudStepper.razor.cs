@@ -74,7 +74,7 @@ namespace MudExtensions
 
         protected string GetStepPercent()
         {
-            var dPercent = 100.0 / Steps.Count;
+            var dPercent = (100.0 / Steps.Count).ToInvariantString();
             if (Vertical)
             {
                 return $"height:{dPercent}%";
