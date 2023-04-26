@@ -7,7 +7,7 @@
          <MudSwitch @bind-Checked="_customLocalization" Color="Color.Primary" Label="Custom Localization (German)" />
     </MudItem>
     <MudItem xs="12">
-        <MudCsvMapper @ref="_csvMapper" Class="pa-4" AllowCreateExpectedHeaders="true" AutoMatch="AutoMatching.Partial" NormalizeHeaders="true" ShowIncludeUnmappedData="true"  ExpectedHeaders="_expectedFields" OnImported="Upload" LocalizedStrings="GetLocalizedStrings()"></MudCsvMapper>
+        <MudCsvMapper @ref="_csvMapper" Delimter="," Class="pa-4" AllowCreateExpectedHeaders="true" AutoMatch="AutoMatching.Partial" NormalizeHeaders="true" ShowIncludeUnmappedData="true"  ExpectedHeaders="_expectedFields" OnImported="Upload" LocalizedStrings="GetLocalizedStrings()"></MudCsvMapper>
     </MudItem>
 </MudGrid>
 
