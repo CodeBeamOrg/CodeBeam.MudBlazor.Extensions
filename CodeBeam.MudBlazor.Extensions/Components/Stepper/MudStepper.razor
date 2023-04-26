@@ -33,7 +33,7 @@
                             {
                                 @if (step.Status == MudExtensions.Enums.StepStatus.Completed)
                                 {
-                                    <MudBadge BadgeClass="mud-stepper-badge" Content="3" Overlap="true" Bordered="true" Color="@Color" Icon="@Icons.Material.Filled.Done">
+                                    <MudBadge BadgeClass="mud-stepper-badge" Overlap="true" Bordered="true" Color="@Color" Icon="@Icons.Material.Filled.Done">
                                         <MudAvatar Style="@AvatarStylename" Color="@Color" Variant="@Variant" Size="@HeaderSize">
                                             @if (!string.IsNullOrWhiteSpace(step.Icon))
                                             {
