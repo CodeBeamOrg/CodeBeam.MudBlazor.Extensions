@@ -46,40 +46,35 @@
     }
     else
     {
-        <div class="d-flex flex-wrap mud-width-full">
-            @if (DataVisualiser != null)
-            {
-                @DataVisualiser
-            }
-            <div class="mud-input mud-width-full">
-                <input class="@InputClassname"
-                   @ref="ElementReference"
-                   @attributes="UserAttributes"
-                       type="@InputTypeString"
-                       value="@_internalText"
-                   @oninput="OnInputHandler"
-                   @onchange="OnChangeHandler"
-                       placeholder="@Placeholder"
-                       disabled=@Disabled
-                       readonly="@ReadOnly"
-                   @onblur="@OnBlurredAsync"
-                       inputmode="@InputMode.ToString()"
-                       pattern="@Pattern"
-                   @onkeydown="@InvokeKeyDown"
-                   @onkeypress="@InvokeKeyPress"
-                   @onkeyup="@InvokeKeyUp"
-                       maxlength="@MaxLength"
-                   @onkeydown:preventDefault="KeyDownPreventDefault"
-                   @onkeypress:preventDefault="@KeyPressPreventDefault"
-                   @onkeyup:preventDefault="@KeyUpPreventDefault"
-                   @onmousewheel="@OnMouseWheel"
-                   @onwheel="@OnMouseWheel"
-                       aria-invalid="@Error.ToString().ToLower()"
-                       aria-describedby="@ErrorId" />
-            </div>
-            
-        
-        
+        @if (DataVisualiser != null)
+        {
+            @DataVisualiser
+        }
+
+        <input class="@InputClassname"
+           @ref="ElementReference"
+           @attributes="UserAttributes"
+           type="@InputTypeString"
+           value="@_internalText"
+           @oninput="OnInputHandler"
+           @onchange="OnChangeHandler"
+           placeholder="@Placeholder"
+           disabled=@Disabled
+           readonly="@ReadOnly"
+           @onblur="@OnBlurredAsync"
+           inputmode="@InputMode.ToString()"
+           pattern="@Pattern"
+           @onkeydown="@InvokeKeyDown"
+           @onkeypress="@InvokeKeyPress"
+           @onkeyup="@InvokeKeyUp"
+           maxlength="@MaxLength"
+           @onkeydown:preventDefault="KeyDownPreventDefault"
+           @onkeypress:preventDefault="@KeyPressPreventDefault"
+           @onkeyup:preventDefault="@KeyUpPreventDefault"
+           @onmousewheel="@OnMouseWheel"
+           @onwheel="@OnMouseWheel"
+           aria-invalid="@Error.ToString().ToLower()"
+           aria-describedby="@ErrorId" />
         @*Note: double mouse wheel handlers needed for Firefox because it doesn't know onmousewheel*@
 
         @if (Disabled)
@@ -103,7 +98,6 @@
                     @ChildContent
             </div>
         }
-        </div>
     }
 
     @if (_showClearable && !Disabled)

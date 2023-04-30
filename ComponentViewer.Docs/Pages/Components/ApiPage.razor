@@ -119,27 +119,6 @@
         </MudTable>
     </ExampleCard>
 
-    <ExampleCard Title="Api - MudCombobox" HasExpansionPanel="true">
-        <MudTable Items="@(typeof(MudCombobox<string>).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
-            <HeaderContent>
-                <MudTh>Name</MudTh>
-                <MudTh>Type</MudTh>
-                <MudTh>Default</MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd DataLabel="Name">@context.Name</MudTd>
-                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
-                <MudTd DataLabel="Default">
-                    @if (true)
-                    {
-                        MudCombobox<string> instance = new();
-                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
-                    }
-                </MudTd>
-            </RowTemplate>
-        </MudTable>
-    </ExampleCard>
-
     <ExampleCard Title="Api - MudCsvMapper" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudCsvMapper).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
