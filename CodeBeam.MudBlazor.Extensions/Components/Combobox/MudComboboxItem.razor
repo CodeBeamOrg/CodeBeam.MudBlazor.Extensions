@@ -1,0 +1,14 @@
+﻿@namespace MudExtensions
+@inherits MudBaseSelectItem
+@typeparam T
+
+<div tabindex="0" @attributes="UserAttributes" class="@Classname" @onclick="HandleOnClick" @onclick:stopPropagation="true" style="@Style">
+    @if (ChildContent != null && MudCombobox?.ItemCollection == null)
+    {
+        @ChildContent
+    }
+    else
+    {
+        @DisplayString
+    }
+</div>
