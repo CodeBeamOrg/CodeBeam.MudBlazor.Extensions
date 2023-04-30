@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
+using MudExtensions.Extensions;
+using System.Net.Http.Headers;
 
 namespace MudExtensions
 {
@@ -20,13 +21,12 @@ namespace MudExtensions
 
         [Inject] private IKeyInterceptorFactory KeyInterceptorFactory { get; set; }
 
-        private bool _dense;
         private string multiSelectionText;
         private IKeyInterceptor _keyInterceptor;
-        /// <summary>
-        /// The collection of items within this select
-        /// </summary>
 
+        /// <summary>
+        /// The collection of items within this combobox
+        /// </summary>
         protected internal List<MudComboboxItem<T>> Items { get; set; } = new();
 
         private MudInputExtended<string> _elementReference;
@@ -372,24 +372,37 @@ namespace MudExtensions
                 if (value != _multiSelection)
                 {
                     _multiSelection = value;
-                    UpdateTextPropertyAsync(false).AndForget();
+                    //UpdateTextPropertyAsync(false).AndForgetExt();
+                    //SyncMultiselectionValues(_multiSelection).AndForgetExt();
                 }
             }
         }
 
-        /// <summary>
-        /// The MultiSelectionComponent's placement. Accepts Align.Start and Align.End
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.List.Behavior)]
-        public Align MultiSelectionAlign { get; set; } = Align.Start;
+        bool _oldMultiselection = false;
+        protected override async Task OnParametersSetAsync()
+        {
+            await base.OnParametersSetAsync();
+            UpdateIcon();
+            if (MultiSelection != _oldMultiselection)
+            {
+                await SyncMultiselectionValues(MultiSelection);
+                await UpdateTextPropertyAsync(false);
+            }
+            _oldMultiselection = MultiSelection;
+        }
 
-        /// <summary>
-        /// The component which shows as a MultiSelection check.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.List.Behavior)]
-        public MultiSelectionComponent MultiSelectionComponent { get; set; } = MultiSelectionComponent.CheckBox;
+        protected async Task SyncMultiselectionValues(bool singleToMultiselection)
+        {
+            if (singleToMultiselection == true)
+            {
+                SelectedValues = new HashSet<T>() { Value };
+                await SelectedValuesChanged.InvokeAsync(_selectedValues);
+            }
+            else 
+            {
+                await SetValueAsync(SelectedValues.LastOrDefault());
+            }
+        }
 
         private IEqualityComparer<T> _comparer;
         /// <summary>
@@ -466,15 +479,15 @@ namespace MudExtensions
                     return;
 
                 _selectedValues = new HashSet<T>(set, _comparer);
-                if (!MultiSelection)
-                {
-                    SetValueAsync(_selectedValues.FirstOrDefault()).AndForget();
-                }
-                else
-                {
-                    SetValueAsync(_selectedValues.LastOrDefault(), false).AndForget();
-                    UpdateTextPropertyAsync(false).AndForget();
-                }
+                //if (!MultiSelection)
+                //{
+                //    SetValueAsync(_selectedValues.FirstOrDefault()).AndForget();
+                //}
+                //else
+                //{
+                //    SetValueAsync(_selectedValues.LastOrDefault(), false).AndForget();
+                //    UpdateTextPropertyAsync(false).AndForget();
+                //}
 
                 SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer)).AndForget();
                 //Console.WriteLine("SelectedValues setter ended");
@@ -525,7 +538,7 @@ namespace MudExtensions
         /// <summary>
         /// Should only be used for debugging and development purposes.
         /// </summary>
-        [Parameter] public EventCallback<IEnumerable<MudComboboxItem<T>>> SelectedListItemsChanged { get; set; }
+        [Parameter] public EventCallback<IEnumerable<MudComboboxItem<T>>> SelectedItemsChanged { get; set; }
 
         protected async Task SetCustomizedTextAsync(string text, bool updateValue = true,
             List<T> selectedConvertedValues = null,
@@ -642,7 +655,7 @@ namespace MudExtensions
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            UpdateIcon();
+            //UpdateIcon();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -871,6 +884,42 @@ namespace MudExtensions
             await SelectOption(Items[index].Value);
         }
 
+        protected internal async Task ToggleOption(MudComboboxItem<T> item, bool selected)
+        {
+            if (selected == false)
+            {
+                if (MultiSelection == false && Value.Equals(item.Value))
+                {
+                    await SetValueAsync(default(T));
+                }
+                else if (MultiSelection == true && SelectedValues.Contains(item.Value))
+                {
+                    SelectedValues = SelectedValues.Where(x => x.Equals(item.Value) == false);
+                }
+            }
+            else
+            {
+                if (MultiSelection == false)
+                {
+                    await SetValueAsync(item.Value);
+                }
+                else if (SelectedValues.Contains(item.Value) == false)
+                {
+                    SelectedValues = SelectedValues.Append(item.Value);
+                    await SelectedValuesChanged.InvokeAsync(_selectedValues);
+                }
+            }
+
+            if (MultiSelection == false)
+            {
+                await CloseMenu();
+            }
+            else
+            {
+                await FocusAsync();
+            }
+        }
+
         public async Task SelectOption(object obj)
         {
             var value = (T)obj;
@@ -943,7 +992,7 @@ namespace MudExtensions
             {
                 return;
             }
-            Items.Remove(item);
+            Items.Remove(Items.FirstOrDefault(x => x.Value.Equals(item.Value)));
         }
 
         #endregion

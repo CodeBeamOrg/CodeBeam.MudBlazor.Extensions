@@ -1,13 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
-using MudExtensions.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MudExtensions
 {
@@ -16,16 +9,14 @@ namespace MudExtensions
         protected string Classname => new CssBuilder("mud-list-item")
             .AddClass("mud-list-item-dense", (MudCombobox?.Dense) ?? false)
             .AddClass("mud-ripple", !DisableRipple && !Disabled)
-            .AddClass($"mud-selected-item mud-{MudCombobox?.Color.ToDescriptionString()}-text mud-{MudCombobox?.Color.ToDescriptionString()}-hover", !Disabled)
+            .AddClass("mud-list-item-gutters-extended")
+            .AddClass("mud-list-item-clickable-extended")
+            .AddClass("mud-list-item-dense-extended", MudCombobox?.Dense == true)
+            .AddClass($"mud-selected-item mud-{MudCombobox?.Color.ToDescriptionString()}-text mud-{MudCombobox?.Color.ToDescriptionString()}-hover", Selected && !Disabled)
             .AddClass("mud-list-item-disabled", Disabled)
             .AddClass(Class)
             .Build();
 
-        private String GetCssClasses() => new CssBuilder()
-            .AddClass(Class)
-            .Build();
-
-        //internal MudCombobox<T> MudCombobox;
         internal string ItemId { get; } = "comboboxItem_" + Guid.NewGuid().ToString().Substring(0, 8);
 
         /// <summary>
@@ -48,22 +39,15 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Behavior)]
         public string Text { get; set; }
 
-        /// <summary>
-        /// Select items with HideContent==true are only there to register their RenderFragment with the select but
-        /// wont render and have no other purpose!
-        /// </summary>
-        [CascadingParameter(Name = "HideContent")]
-        internal bool HideContent { get; set; }
-
-        private void OnUpdateSelectionStateFromOutside(IEnumerable<T> selection)
-        {
-            if (selection == null)
-                return;
-            var old_is_selected = IsSelected;
-            IsSelected = selection.Contains(Value);
-            if (old_is_selected != IsSelected)
-                InvokeAsync(StateHasChanged);
-        }
+        //private void OnUpdateSelectionStateFromOutside(IEnumerable<T> selection)
+        //{
+        //    if (selection == null)
+        //        return;
+        //    var old_is_selected = Selected;
+        //    Selected = selection.Contains(Value);
+        //    if (old_is_selected != Selected)
+        //        InvokeAsync(StateHasChanged);
+        //}
 
         /// <summary>
         /// A user-defined option that can be selected
@@ -75,27 +59,17 @@ namespace MudExtensions
         /// <summary>
         /// Mirrors the MultiSelection status of the parent select
         /// </summary>
-        protected bool MultiSelection
-        {
-            get
-            {
-                if (MudCombobox == null)
-                    return false;
-                return MudCombobox.MultiSelection;
-            }
-        }
+        //protected bool MultiSelection
+        //{
+        //    get
+        //    {
+        //        if (MudCombobox == null)
+        //            return false;
+        //        return MudCombobox.MultiSelection;
+        //    }
+        //}
 
-        private bool _isSelected;
-        internal bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                if (_isSelected == value)
-                    return;
-                _isSelected = value;
-            }
-        }
+        protected internal bool Selected { get; set; }
 
         protected string DisplayString
         {
@@ -114,20 +88,61 @@ namespace MudExtensions
             MudCombobox?.Add(this);
         }
 
-        protected void HandleOnClick()
+        bool? _oldSelected;
+        bool _selectedChanged = false;
+        protected override async Task OnParametersSetAsync()
         {
-            // Selection works on list. We arrange only popover state and some minor arrangements on click.
-            MudCombobox?.SelectOption(Value).AndForgetExt();
-            InvokeAsync(StateHasChanged);
-            if (!MultiSelection)
+            await base.OnParametersSetAsync();
+            SyncSelected();
+            if (_oldSelected != Selected)
             {
-                MudCombobox?.CloseMenu().AndForgetExt();
+                _selectedChanged = true;
+            }
+            _oldSelected = Selected;
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+            if (_selectedChanged)
+            {
+                _selectedChanged = false;
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+
+        protected void SyncSelected()
+        {
+            if (MudCombobox == null)
+            {
+                return;
+            }
+
+            if (MudCombobox.SelectedValues.Contains(Value)) 
+            {
+                Selected = true;
             }
             else
             {
-                MudCombobox?.FocusAsync().AndForgetExt();
+                Selected = false;
             }
-            OnClick.InvokeAsync().AndForgetExt();
+        }
+
+        protected async Task HandleOnClick()
+        {
+            Selected = !Selected;
+            await MudCombobox.ToggleOption(this, Selected);
+            //await MudCombobox?.SelectOption(Value);
+            await InvokeAsync(StateHasChanged);
+            //if (MudCombobox.MultiSelection == false)
+            //{
+            //    await MudCombobox?.CloseMenu();
+            //}
+            //else
+            //{
+            //    await MudCombobox.FocusAsync();
+            //}
+            await OnClick.InvokeAsync();
         }
 
         protected bool GetDisabledStatus()
