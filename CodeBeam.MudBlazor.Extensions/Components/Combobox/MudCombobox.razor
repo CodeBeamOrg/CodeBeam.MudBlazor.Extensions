@@ -9,13 +9,14 @@
             <MudInputControl Label="@Label" Variant="@Variant" HelperText="@HelperText" HelperTextOnFocus="@HelperTextOnFocus" FullWidth="@FullWidth" Margin="@Margin" Class="@Classname" Style="@Style"
                              Error="@Error" ErrorText="@ErrorText" ErrorId="@ErrorId" Disabled="@Disabled" @onclick="@ToggleMenu" Required="@Required" ForId="@FieldId">
                 <InputContent>
-                    <MudInputExtended @ref="_elementReference" InputType="@(Editable ? InputType.Text : InputType.Hidden)" MockInputStyle="@(ValuePresenter == ValuePresenter.Chip ? "width: 0px" : null)"
+                    <MudInputExtended @ref="_elementReference" T="T" InputType="@(Editable ? InputType.Text : InputType.Hidden)" MockInputStyle="@(ValuePresenter == ValuePresenter.Chip ? "width: 0px" : null)"
                                       Class="@InputClassname" Style="@InputStyle" Margin="@Margin" Placeholder="@Placeholder"
-                                      Variant="@Variant"
+                                      Variant="@Variant" Immediate="true"
                                       TextUpdateSuppression="false"
-                                      Value="@(Strict && !IsValueInList ? null : Text)" DisableUnderLine="@DisableUnderLine"
+                                      Value="Value" @bind-Text="@Text"
+                                      DisableUnderLine="@DisableUnderLine"
                                       Disabled="@Disabled" ReadOnly="@ReadOnly" Error="@Error" ErrorId="@ErrorId"
-                                      Clearable="@Clearable" OnClearButtonClick="(async (e) => await SelectClearButtonClickHandlerAsync(e))"
+                                      Clearable="@Clearable" OnClearButtonClick="(async (e) => await ClearButtonClickHandlerAsync(e))"
                                       @attributes="UserAttributes" OnBlur="@OnLostFocus" ForceShrink="@ForceShrink">
 
                         <AdornmentEnd>
@@ -107,7 +108,7 @@
                         </ChildContent>
                     </MudInputExtended>
 
-                    <MudPopover Open="@_isOpen" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" Class="@PopoverClass" RelativeWidth="@RelativeWidth">
+                    <MudPopover Open="true" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" Class="@PopoverClassname" RelativeWidth="@RelativeWidth">
                         <CascadingValue Value="@this" IsFixed="true">
                             @ChildContent
                         </CascadingValue>
@@ -118,11 +119,9 @@
 
         @*To Be Discussed as Second ShadowItems: Needed to render directly into select to has initial values*@
 
-        <div style="display: none">
-            <CascadingValue Value="@this" IsFixed="true">
-                @ChildContent
-            </CascadingValue>
-        </div>
+@*        <div class="d-none">
+            @ChildContent
+        </div>*@
     </CascadingValue>
 
     @*Shadow select items for IsValueInList and CanRenderValue*@

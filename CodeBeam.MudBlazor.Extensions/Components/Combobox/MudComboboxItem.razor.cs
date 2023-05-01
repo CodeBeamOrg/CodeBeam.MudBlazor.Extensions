@@ -14,6 +14,7 @@ namespace MudExtensions
             .AddClass("mud-list-item-dense-extended", MudCombobox?.Dense == true)
             .AddClass($"mud-selected-item mud-{MudCombobox?.Color.ToDescriptionString()}-text mud-{MudCombobox?.Color.ToDescriptionString()}-hover", Selected && !Disabled)
             .AddClass("mud-list-item-disabled", Disabled)
+            .AddClass("d-none", Eligible == false)
             .AddClass(Class)
             .Build();
 
@@ -71,6 +72,9 @@ namespace MudExtensions
 
         protected internal bool Selected { get; set; }
 
+        [Parameter]
+        public bool Eligible { get; set; } = true;
+
         protected string DisplayString
         {
             get
@@ -82,23 +86,25 @@ namespace MudExtensions
             }
         }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
-            await base.OnInitializedAsync();
             MudCombobox?.Add(this);
         }
 
         bool? _oldSelected;
         bool _selectedChanged = false;
-        protected override async Task OnParametersSetAsync()
+        bool? _oldEligible = true;
+        bool _eligibleChanged = false;
+        protected override void OnParametersSet()
         {
-            await base.OnParametersSetAsync();
-            SyncSelected();
-            if (_oldSelected != Selected)
-            {
-                _selectedChanged = true;
-            }
-            _oldSelected = Selected;
+            base.OnParametersSetAsync();
+            //SyncSelected();
+            //if (_oldSelected != Selected || _oldEligible != Eligible)
+            //{
+            //    _selectedChanged = true;
+            //}
+            //_oldSelected = Selected;
+            CheckEligible();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -109,6 +115,41 @@ namespace MudExtensions
                 _selectedChanged = false;
                 await InvokeAsync(StateHasChanged);
             }
+        }
+
+        protected void CheckEligible()
+        {
+            Eligible = IsEligible();
+        }
+
+        protected bool IsEligible()
+        {
+            if (MudCombobox == null || MudCombobox.Editable == false)
+            {
+                return true;
+            }
+
+            if (MudCombobox.Text == null && MudCombobox.Value == null)
+            {
+                return true;
+            }
+
+            if (Text != null)
+            {
+                if (Text.Contains(MudCombobox.Text ?? MudCombobox.Converter.Set(MudCombobox.Value), StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (MudCombobox.Converter.Set(Value).Contains(MudCombobox.Text ?? MudCombobox.Converter.Set(MudCombobox.Value), StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         protected void SyncSelected()
@@ -130,8 +171,8 @@ namespace MudExtensions
 
         protected async Task HandleOnClick()
         {
-            Selected = !Selected;
-            await MudCombobox.ToggleOption(this, Selected);
+            //Selected = !Selected;
+            await MudCombobox.ToggleOption(this, !Selected);
             //await MudCombobox?.SelectOption(Value);
             await InvokeAsync(StateHasChanged);
             //if (MudCombobox.MultiSelection == false)

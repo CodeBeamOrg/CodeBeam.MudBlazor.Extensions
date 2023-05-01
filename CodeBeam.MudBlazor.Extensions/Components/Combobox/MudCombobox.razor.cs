@@ -4,8 +4,6 @@ using MudBlazor;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
-using MudExtensions.Extensions;
-using System.Net.Http.Headers;
 
 namespace MudExtensions
 {
@@ -24,12 +22,9 @@ namespace MudExtensions
         private string multiSelectionText;
         private IKeyInterceptor _keyInterceptor;
 
-        /// <summary>
-        /// The collection of items within this combobox
-        /// </summary>
-        protected internal List<MudComboboxItem<T>> Items { get; set; } = new();
-
-        private MudInputExtended<string> _elementReference;
+        public List<MudComboboxItem<T>> Items = new();
+        protected internal List<MudComboboxItem<T>> EligibleItems { get; set; } = new();
+        private MudInputExtended<T> _elementReference;
         internal bool _isOpen;
         protected internal string _currentIcon { get; set; }
 
@@ -41,6 +36,12 @@ namespace MudExtensions
         protected string InputClassname =>
             new CssBuilder("mud-select-input-extended")
             .AddClass(InputClass)
+            .Build();
+
+        protected string PopoverClassname =>
+            new CssBuilder()
+            .AddClass("d-none", _isOpen == false)
+            .AddClass(PopoverClass)
             .Build();
 
         private string _elementId = "combobox_" + Guid.NewGuid().ToString().Substring(0, 8);
@@ -395,7 +396,14 @@ namespace MudExtensions
         {
             if (singleToMultiselection == true)
             {
-                SelectedValues = new HashSet<T>() { Value };
+                if (Value == null)
+                {
+                    SelectedValues = new HashSet<T>();
+                }
+                else
+                {
+                    SelectedValues = new HashSet<T>() { Value };
+                }
                 await SelectedValuesChanged.InvokeAsync(_selectedValues);
             }
             else 
@@ -890,24 +898,28 @@ namespace MudExtensions
             {
                 if (MultiSelection == false && Value.Equals(item.Value))
                 {
-                    await SetValueAsync(default(T));
+                    await SetValueAsync(default(T));   
                 }
                 else if (MultiSelection == true && SelectedValues.Contains(item.Value))
                 {
                     SelectedValues = SelectedValues.Where(x => x.Equals(item.Value) == false);
                 }
+                item.Selected = false;
             }
             else
             {
                 if (MultiSelection == false)
                 {
+                    DeselectAllItems();
                     await SetValueAsync(item.Value);
+                    
                 }
                 else if (SelectedValues.Contains(item.Value) == false)
                 {
                     SelectedValues = SelectedValues.Append(item.Value);
                     await SelectedValuesChanged.InvokeAsync(_selectedValues);
                 }
+                item.Selected = true;
             }
 
             if (MultiSelection == false)
@@ -918,6 +930,10 @@ namespace MudExtensions
             {
                 await FocusAsync();
             }
+        }
+        protected void DeselectAllItems()
+        {
+            Items.ForEach(x => x.Selected = false);
         }
 
         public async Task SelectOption(object obj)
@@ -992,7 +1008,8 @@ namespace MudExtensions
             {
                 return;
             }
-            Items.Remove(Items.FirstOrDefault(x => x.Value.Equals(item.Value)));
+            //Items.Remove(Items.FirstOrDefault(x => x.Value.Equals(item.Value)));
+            Items.Remove(item);
         }
 
         #endregion
@@ -1003,13 +1020,14 @@ namespace MudExtensions
         /// <summary>
         /// Extra handler for clearing selection.
         /// </summary>
-        protected async ValueTask SelectClearButtonClickHandlerAsync(MouseEventArgs e)
+        protected async ValueTask ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
             await SetValueAsync(default, false);
             await SetTextAsync(default, false);
             _selectedValues.Clear();
             SelectedItem = null;
             SelectedItems = null;
+            DeselectAllItems();
             await BeginValidateAsync();
             StateHasChanged();
             await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
@@ -1091,5 +1109,6 @@ namespace MudExtensions
             SelectedValues = SelectedValues.Where(x => x.Equals(chip.Value) == false);
             await SelectedValuesChanged.InvokeAsync(SelectedValues);
         }
+
     }
 }
