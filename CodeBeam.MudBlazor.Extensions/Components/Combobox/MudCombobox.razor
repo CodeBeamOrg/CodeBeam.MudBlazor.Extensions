@@ -13,7 +13,7 @@
                                       Class="@InputClassname" Style="@InputStyle" Margin="@Margin" Placeholder="@Placeholder"
                                       Variant="@Variant" Immediate="true"
                                       TextUpdateSuppression="false"
-                                      Value="Value" @bind-Text="@Text"
+                                      @bind-Value="Value" @bind-Text="@Text"
                                       DisableUnderLine="@DisableUnderLine"
                                       Disabled="@Disabled" ReadOnly="@ReadOnly" Error="@Error" ErrorId="@ErrorId"
                                       Clearable="@Clearable" OnClearButtonClick="(async (e) => await ClearButtonClickHandlerAsync(e))"
@@ -36,7 +36,7 @@
                                     }
                                     else
                                     {
-                                        foreach (var item in Items?.Where(x => SelectedValues.Contains(x.Value)) ?? new List<MudComboboxItem<T>>())
+                                        foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value.Equals(x.Value))) ?? new List<MudComboboxItem<T>>())
                                         {
                                             <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
                                         }
@@ -52,15 +52,7 @@
                                     //Show nothing
                                     <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
                                 }
-                                else if (ValuePresenter == ValuePresenter.Text)
-                                {
-                                    @if (string.IsNullOrEmpty(Text))
-                                    {
-                                        <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
-                                    }
-
-                                    <MudRender>@GetSelectTextPresenter()</MudRender>
-                                }
+                                
                                 else if (ValuePresenter == ValuePresenter.Chip)
                                 {
                                     if (SelectedValues == null || !SelectedValues.Any())
@@ -71,6 +63,10 @@
                                     {
                                         @*Chips show under DataVisualiser RenderFragment*@
                                     }
+                                }
+                                else if (ValuePresenter == ValuePresenter.Text)
+                                {
+                                    <div>@_dataVisualiserText</div>
                                 }
                                 else if (ValuePresenter == ValuePresenter.ItemContent)
                                 {
@@ -96,11 +92,6 @@
                                     }
                                     else
                                     {
-                                        @if (string.IsNullOrEmpty(Text))
-                                        {
-                                            <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
-                                        }
-
                                         <MudRender>@GetSelectTextPresenter()</MudRender>
                                     }
                                 }

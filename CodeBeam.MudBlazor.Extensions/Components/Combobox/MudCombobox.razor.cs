@@ -379,6 +379,10 @@ namespace MudExtensions
             }
         }
 
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public bool ToggleSelection { get; set; }
+
         bool _oldMultiselection = false;
         protected override async Task OnParametersSetAsync()
         {
@@ -387,8 +391,9 @@ namespace MudExtensions
             if (MultiSelection != _oldMultiselection)
             {
                 await SyncMultiselectionValues(MultiSelection);
-                await UpdateTextPropertyAsync(false);
+                
             }
+            await UpdateDataVisualiserTextAsync();
             _oldMultiselection = MultiSelection;
         }
 
@@ -575,7 +580,67 @@ namespace MudExtensions
             return Task.CompletedTask;
         }
 
-        protected override Task UpdateTextPropertyAsync(bool updateValue)
+        //protected override Task UpdateTextPropertyAsync(bool updateValue)
+        //{
+        //    List<string> textList = new List<string>();
+        //    if (Items != null && Items.Any())
+        //    {
+        //        if (ItemCollection != null)
+        //        {
+        //            foreach (var val in SelectedValues)
+        //            {
+        //                var collectionValue = ItemCollection.FirstOrDefault(x => x != null && (Comparer != null ? Comparer.Equals(x, val) : x.Equals(val)));
+        //                if (collectionValue != null)
+        //                {
+        //                    textList.Add(Converter.Set(collectionValue));
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            foreach (var val in SelectedValues)
+        //            {
+        //                if (!Strict && !Items.Select(x => x.Value).Contains(val))
+        //                {
+        //                    textList.Add(ToStringFunc != null ? ToStringFunc(val) : Converter.Set(val));
+        //                    continue;
+        //                }
+        //                var item = Items.FirstOrDefault(x => x != null && (x.Value == null ? val == null : Comparer != null ? Comparer.Equals(x.Value, val) : x.Value.Equals(val)));
+        //                if (item != null)
+        //                {
+        //                    textList.Add(!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    // when multiselection is true, we return
+        //    // a comma separated list of selected values
+        //    if (MultiSelection)
+        //    {
+        //        if (MultiSelectionTextFunc != null)
+        //        {
+        //            return SetCustomizedTextAsync(string.Join(Delimiter, textList),
+        //                selectedConvertedValues: SelectedValues.ToList(),
+        //                multiSelectionTextFunc: MultiSelectionTextFunc, updateValue: updateValue);
+        //        }
+        //        else
+        //        {
+        //            return SetTextAsync(string.Join(Delimiter, textList), updateValue: updateValue);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        var item = Items.FirstOrDefault(x => Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(Value, x.Value) : Value.Equals(x.Value));
+        //        if (item == null)
+        //        {
+        //            return SetTextAsync(Converter.Set(Value), false);
+        //        }
+        //        return SetTextAsync((!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value)), updateValue: updateValue);
+        //    }
+        //}
+
+        protected Task UpdateDataVisualiserTextAsync()
         {
             List<string> textList = new List<string>();
             if (Items != null && Items.Any())
@@ -615,13 +680,17 @@ namespace MudExtensions
             {
                 if (MultiSelectionTextFunc != null)
                 {
-                    return SetCustomizedTextAsync(string.Join(Delimiter, textList),
-                        selectedConvertedValues: SelectedValues.ToList(),
-                        multiSelectionTextFunc: MultiSelectionTextFunc, updateValue: updateValue);
+                    _dataVisualiserText = MultiSelectionTextFunc.Invoke(SelectedValues.ToList());
+                    //return SetCustomizedTextAsync(string.Join(Delimiter, textList),
+                    //    selectedConvertedValues: SelectedValues.ToList(),
+                    //    multiSelectionTextFunc: MultiSelectionTextFunc, updateValue: updateValue);
+                    return Task.CompletedTask;
                 }
                 else
                 {
-                    return SetTextAsync(string.Join(Delimiter, textList), updateValue: updateValue);
+                    //return SetTextAsync(string.Join(Delimiter, textList), updateValue: updateValue);
+                    _dataVisualiserText = string.Join(Delimiter, textList);
+                    return Task.CompletedTask;
                 }
             }
             else
@@ -629,15 +698,21 @@ namespace MudExtensions
                 var item = Items.FirstOrDefault(x => Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(Value, x.Value) : Value.Equals(x.Value));
                 if (item == null)
                 {
-                    return SetTextAsync(Converter.Set(Value), false);
+                    _dataVisualiserText = Converter.Set(Value);
+                    //SetTextAsync(Converter.Set(Value), false);
+                    return Task.CompletedTask;
                 }
-                return SetTextAsync((!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value)), updateValue: updateValue);
+                //SetTextAsync((!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value)), updateValue: false);
+                _dataVisualiserText = (!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
+                return Task.CompletedTask;
             }
         }
 
+        protected internal string _dataVisualiserText;
+
         private string GetSelectTextPresenter()
         {
-            return Text;
+            return _dataVisualiserText;
         }
 
         #endregion
@@ -692,7 +767,7 @@ namespace MudExtensions
                 });
                 _keyInterceptor.KeyDown += HandleKeyDown;
                 _keyInterceptor.KeyUp += HandleKeyUp;
-                await UpdateTextPropertyAsync(false);
+                await UpdateDataVisualiserTextAsync();
                 StateHasChanged();
             }
             //Console.WriteLine("Select rendered");
@@ -878,7 +953,6 @@ namespace MudExtensions
 
         #endregion
 
-
         #region Item Registration & Selection
 
         public async Task SelectOption(int index)
@@ -898,13 +972,17 @@ namespace MudExtensions
             {
                 if (MultiSelection == false && Value.Equals(item.Value))
                 {
-                    await SetValueAsync(default(T));   
+                    if (ToggleSelection)
+                    {
+                        await SetValueAsync(default(T));
+                        item.Selected = false;
+                    }
                 }
                 else if (MultiSelection == true && SelectedValues.Contains(item.Value))
                 {
                     SelectedValues = SelectedValues.Where(x => x.Equals(item.Value) == false);
+                    item.Selected = false;
                 }
-                item.Selected = false;
             }
             else
             {
@@ -921,7 +999,7 @@ namespace MudExtensions
                 }
                 item.Selected = true;
             }
-
+            await UpdateDataVisualiserTextAsync();
             if (MultiSelection == false)
             {
                 await CloseMenu();
@@ -941,7 +1019,7 @@ namespace MudExtensions
             var value = (T)obj;
             if (MultiSelection)
             {
-                await UpdateTextPropertyAsync(false);
+                await UpdateDataVisualiserTextAsync();
                 //UpdateSelectAllChecked();
                 await BeginValidateAsync();
             }

@@ -6,7 +6,7 @@ namespace MudExtensions
 {
     public partial class MudComboboxItem<T> : MudBaseSelectItem, IDisposable
     {
-        protected string Classname => new CssBuilder("mud-list-item")
+        protected string Classname => new CssBuilder("mud-list-item-extended")
             .AddClass("mud-list-item-dense", (MudCombobox?.Dense) ?? false)
             .AddClass("mud-ripple", !DisableRipple && !Disabled)
             .AddClass("mud-list-item-gutters-extended")
