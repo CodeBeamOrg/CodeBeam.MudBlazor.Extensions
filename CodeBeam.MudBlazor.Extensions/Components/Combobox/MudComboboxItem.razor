@@ -6,7 +6,7 @@
     
     @if (MudCombobox != null && MudCombobox.MultiSelection == true)
     {
-        <MudCheckBox Color="@MudCombobox.Color" Disabled="@Disabled" @bind-Checked="Selected" @onclick="OnClickHandler" Dense="true" />
+        <MudCheckBox Class="me-4" Color="@MudCombobox.Color" Disabled="@Disabled" @bind-Checked="Selected" @onclick="OnClickHandler" Dense="true" />
     }
 
     @if (ChildContent != null && MudCombobox?.ItemCollection == null)

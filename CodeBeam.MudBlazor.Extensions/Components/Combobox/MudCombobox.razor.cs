@@ -4,6 +4,7 @@ using MudBlazor;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
+using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -15,6 +16,7 @@ namespace MudExtensions
         {
             Adornment = Adornment.End;
             IconSize = Size.Medium;
+            base.SkipUpdateProcessOnSetParameters = true;
         }
 
         [Inject] private IKeyInterceptorFactory KeyInterceptorFactory { get; set; }
@@ -280,7 +282,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public Origin AnchorOrigin { get; set; } = Origin.TopCenter;
+        public Origin AnchorOrigin { get; set; } = Origin.BottomCenter;
 
         /// <summary>
         /// Sets the transform origin point for the popover.
@@ -383,20 +385,6 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public bool ToggleSelection { get; set; }
 
-        bool _oldMultiselection = false;
-        protected override async Task OnParametersSetAsync()
-        {
-            await base.OnParametersSetAsync();
-            UpdateIcon();
-            if (MultiSelection != _oldMultiselection)
-            {
-                await SyncMultiselectionValues(MultiSelection);
-                
-            }
-            await UpdateDataVisualiserTextAsync();
-            _oldMultiselection = MultiSelection;
-        }
-
         protected async Task SyncMultiselectionValues(bool singleToMultiselection)
         {
             if (singleToMultiselection == true)
@@ -413,7 +401,7 @@ namespace MudExtensions
             }
             else 
             {
-                await SetValueAsync(SelectedValues.LastOrDefault());
+                await SetValueAsync(SelectedValues.LastOrDefault(), false);
             }
         }
 
@@ -503,6 +491,7 @@ namespace MudExtensions
                 //}
 
                 SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer)).AndForget();
+                ForceUpdateItems().AndForgetExt();
                 //Console.WriteLine("SelectedValues setter ended");
             }
         }
@@ -553,90 +542,22 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<IEnumerable<MudComboboxItem<T>>> SelectedItemsChanged { get; set; }
 
-        protected async Task SetCustomizedTextAsync(string text, bool updateValue = true,
-            List<T> selectedConvertedValues = null,
-            Func<List<T>, string> multiSelectionTextFunc = null)
-        {
-            // The Text property of the control is updated
-            Text = multiSelectionTextFunc?.Invoke(selectedConvertedValues);
-
-            // The comparison is made on the multiSelectionText variable
-            if (multiSelectionText != text)
-            {
-                multiSelectionText = text;
-                if (!string.IsNullOrWhiteSpace(multiSelectionText))
-                    Touched = true;
-                if (updateValue)
-                    await UpdateValuePropertyAsync(false);
-                await TextChanged.InvokeAsync(multiSelectionText);
-            }
-        }
-
-        protected override Task UpdateValuePropertyAsync(bool updateText)
-        {
-            // For MultiSelection of non-string T's we don't update the Value!!!
-            //if (typeof(T) == typeof(string) || !MultiSelection)
-            base.UpdateValuePropertyAsync(updateText).AndForget();
-            return Task.CompletedTask;
-        }
-
-        //protected override Task UpdateTextPropertyAsync(bool updateValue)
+        //protected async Task SetCustomizedTextAsync(string text, bool updateValue = true,
+        //    List<T> selectedConvertedValues = null,
+        //    Func<List<T>, string> multiSelectionTextFunc = null)
         //{
-        //    List<string> textList = new List<string>();
-        //    if (Items != null && Items.Any())
-        //    {
-        //        if (ItemCollection != null)
-        //        {
-        //            foreach (var val in SelectedValues)
-        //            {
-        //                var collectionValue = ItemCollection.FirstOrDefault(x => x != null && (Comparer != null ? Comparer.Equals(x, val) : x.Equals(val)));
-        //                if (collectionValue != null)
-        //                {
-        //                    textList.Add(Converter.Set(collectionValue));
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            foreach (var val in SelectedValues)
-        //            {
-        //                if (!Strict && !Items.Select(x => x.Value).Contains(val))
-        //                {
-        //                    textList.Add(ToStringFunc != null ? ToStringFunc(val) : Converter.Set(val));
-        //                    continue;
-        //                }
-        //                var item = Items.FirstOrDefault(x => x != null && (x.Value == null ? val == null : Comparer != null ? Comparer.Equals(x.Value, val) : x.Value.Equals(val)));
-        //                if (item != null)
-        //                {
-        //                    textList.Add(!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
-        //                }
-        //            }
-        //        }
-        //    }
+        //    // The Text property of the control is updated
+        //    Text = multiSelectionTextFunc?.Invoke(selectedConvertedValues);
 
-        //    // when multiselection is true, we return
-        //    // a comma separated list of selected values
-        //    if (MultiSelection)
+        //    // The comparison is made on the multiSelectionText variable
+        //    if (multiSelectionText != text)
         //    {
-        //        if (MultiSelectionTextFunc != null)
-        //        {
-        //            return SetCustomizedTextAsync(string.Join(Delimiter, textList),
-        //                selectedConvertedValues: SelectedValues.ToList(),
-        //                multiSelectionTextFunc: MultiSelectionTextFunc, updateValue: updateValue);
-        //        }
-        //        else
-        //        {
-        //            return SetTextAsync(string.Join(Delimiter, textList), updateValue: updateValue);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        var item = Items.FirstOrDefault(x => Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(Value, x.Value) : Value.Equals(x.Value));
-        //        if (item == null)
-        //        {
-        //            return SetTextAsync(Converter.Set(Value), false);
-        //        }
-        //        return SetTextAsync((!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value)), updateValue: updateValue);
+        //        multiSelectionText = text;
+        //        if (!string.IsNullOrWhiteSpace(multiSelectionText))
+        //            Touched = true;
+        //        if (updateValue)
+        //            await UpdateValuePropertyAsync(false);
+        //        await TextChanged.InvokeAsync(multiSelectionText);
         //    }
         //}
 
@@ -733,12 +654,34 @@ namespace MudExtensions
                 // TODO: Check this line again
                 SetValueAsync(SelectedValues.FirstOrDefault()).AndForget();
             }
+            
         }
 
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
             //UpdateIcon();
+            _allSelected = GetAllSelectedState();
+        }
+
+        T _oldValue;
+        bool _oldMultiselection = false;
+        protected override async Task OnParametersSetAsync()
+        {
+            await base.OnParametersSetAsync();
+            UpdateIcon();
+            if (MultiSelection != _oldMultiselection)
+            {
+                await SyncMultiselectionValues(MultiSelection);
+                await ForceRenderItems();
+            }
+            if ((Value == null && _oldValue != null) || (Value != null && Value.Equals(_oldValue) == false))
+            {
+                await ForceUpdateItems();
+            }
+            await UpdateDataVisualiserTextAsync();
+            _oldMultiselection = MultiSelection;
+            _oldValue = Value;
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -955,17 +898,6 @@ namespace MudExtensions
 
         #region Item Registration & Selection
 
-        public async Task SelectOption(int index)
-        {
-            if (index < 0 || index >= Items.Count)
-            {
-                if (!MultiSelection)
-                    await CloseMenu();
-                return;
-            }
-            await SelectOption(Items[index].Value);
-        }
-
         protected internal async Task ToggleOption(MudComboboxItem<T> item, bool selected)
         {
             if (selected == false)
@@ -981,7 +913,9 @@ namespace MudExtensions
                 else if (MultiSelection == true && SelectedValues.Contains(item.Value))
                 {
                     SelectedValues = SelectedValues.Where(x => x.Equals(item.Value) == false);
+                    await SetValueAsync(SelectedValues.LastOrDefault(), false);
                     item.Selected = false;
+                    _allSelected = GetAllSelectedState();
                 }
             }
             else
@@ -989,13 +923,15 @@ namespace MudExtensions
                 if (MultiSelection == false)
                 {
                     DeselectAllItems();
-                    await SetValueAsync(item.Value);
+                    await SetValueAsync(item.Value, false);
                     
                 }
                 else if (SelectedValues.Contains(item.Value) == false)
                 {
+                    await SetValueAsync(item.Value, false);
                     SelectedValues = SelectedValues.Append(item.Value);
                     await SelectedValuesChanged.InvokeAsync(_selectedValues);
+                    _allSelected = GetAllSelectedState();
                 }
                 item.Selected = true;
             }
@@ -1014,41 +950,6 @@ namespace MudExtensions
             Items.ForEach(x => x.Selected = false);
         }
 
-        public async Task SelectOption(object obj)
-        {
-            var value = (T)obj;
-            if (MultiSelection)
-            {
-                await UpdateDataVisualiserTextAsync();
-                //UpdateSelectAllChecked();
-                await BeginValidateAsync();
-            }
-            else
-            {
-                // single selection
-                // CloseMenu(true) doesn't close popover in BSS
-                await CloseMenu();
-
-                if (EqualityComparer<T>.Default.Equals(Value, value))
-                {
-                    StateHasChanged();
-                    return;
-                }
-
-                await SetValueAsync(value);
-                //await UpdateTextPropertyAsync(false);
-                _elementReference.SetText(Text).AndForget();
-                //_selectedValues.Clear();
-                //_selectedValues.Add(value);
-            }
-
-            //await SelectedValuesChanged.InvokeAsync(SelectedValues);
-            //if (MultiSelection && typeof(T) == typeof(string))
-            //await SetValueAsync((T)(object)Text, updateText: false);
-            await InvokeAsync(StateHasChanged);
-        }
-
-        //TODO: will override this method when core library will have the base one.
         public override async Task ForceUpdate()
         {
             await base.ForceUpdate();
@@ -1186,6 +1087,58 @@ namespace MudExtensions
             //SelectedValues = SelectedValues.Where(x => Converter.Set(x)?.ToString() != chip.Value?.ToString());
             SelectedValues = SelectedValues.Where(x => x.Equals(chip.Value) == false);
             await SelectedValuesChanged.InvokeAsync(SelectedValues);
+        }
+
+        private bool? _allSelected;
+        protected async Task SelectAllItems()
+        {
+            if (_allSelected == null || _allSelected == false)
+            {
+                SelectedValues = new List<T>();
+                foreach (var item in Items)
+                {
+                    item.Selected = true;
+                    SelectedValues = SelectedValues.Append(item.Value);
+                }
+                await SelectedValuesChanged.InvokeAsync(SelectedValues);
+                await SetValueAsync(SelectedValues.LastOrDefault(), false);
+                _allSelected = true;
+            }
+            else
+            {
+                foreach (var item in Items)
+                {
+                    item.Selected = false;
+                }
+                SelectedValues = null;
+                await SelectedValuesChanged.InvokeAsync(SelectedValues);
+                _allSelected = false;
+            }
+        }
+
+        protected bool? GetAllSelectedState()
+        {
+            if (MultiSelection == true && SelectedValues.Count() == Items.Count)
+            {
+                return true;
+            }
+
+            if (MultiSelection == true && SelectedValues.Count() == 0)
+            {
+                return false;
+            }
+
+            return null;
+        }
+
+        protected async Task ForceRenderItems()
+        {
+            Items.ForEach(async(x) => await x.ForceRender());
+        }
+
+        protected async Task ForceUpdateItems()
+        {
+            Items.ForEach(async (x) => await x.ForceUpdate());
         }
 
     }

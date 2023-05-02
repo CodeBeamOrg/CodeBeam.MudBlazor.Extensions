@@ -466,10 +466,15 @@ namespace MudExtensions
 
         protected bool _forceTextUpdate;
 
+        protected virtual bool SkipUpdateProcessOnSetParameters { get; set; }
+
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             await base.SetParametersAsync(parameters);
-
+            if (SkipUpdateProcessOnSetParameters == true)
+            {
+                return;
+            }
             var hasText = parameters.Contains<string>(nameof(Text));
             var hasValue = parameters.Contains<T>(nameof(Value));
 
@@ -491,7 +496,7 @@ namespace MudExtensions
                 if (updateText)
                 {
                     _forceTextUpdate = false;
-                    await UpdateTextPropertyAsync(false);
+                    //await UpdateTextPropertyAsync(false);
                 }
             }
         }

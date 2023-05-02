@@ -24,25 +24,29 @@
                         </AdornmentEnd>
 
                         <DataVisualiser>
-                            @if (ValuePresenter == ValuePresenter.Chip)
-                            {
-                                <MudChipSet Class="d-flex flex-wrap mud-width-full" Style="row-gap: 4px" AllClosable="ChipCloseable" OnClose="ChipClosed">
-                                    @if (ItemCollection != null)
-                                    {
-                                        foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
+                                @if (ValuePresenter == ValuePresenter.Chip)
+                                {
+                                    <MudChipSet Class="d-flex flex-wrap mud-width-full" Style="row-gap: 4px" AllClosable="ChipCloseable" OnClose="ChipClosed">
+                                        @if (ItemCollection != null)
                                         {
-                                            <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                            foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
+                                            {
+                                                <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                            }
                                         }
-                                    }
-                                    else
-                                    {
-                                        foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value.Equals(x.Value))) ?? new List<MudComboboxItem<T>>())
+                                        else
                                         {
-                                            <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                            foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboboxItem<T>>())
+                                            {
+                                                <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                            }
                                         }
-                                    }
-                                </MudChipSet>
-                            }
+                                    </MudChipSet>
+                                }
+                                else if (ValuePresenter == ValuePresenter.Text && Editable)
+                                {
+                                    <div>@_dataVisualiserText</div>
+                                }
                         </DataVisualiser>
 
                         <ChildContent>
@@ -64,7 +68,7 @@
                                         @*Chips show under DataVisualiser RenderFragment*@
                                     }
                                 }
-                                else if (ValuePresenter == ValuePresenter.Text)
+                                else if (ValuePresenter == ValuePresenter.Text & Editable == false)
                                 {
                                     <div>@_dataVisualiserText</div>
                                 }
@@ -101,6 +105,15 @@
 
                     <MudPopover Open="true" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" Class="@PopoverClassname" RelativeWidth="@RelativeWidth">
                         <CascadingValue Value="@this" IsFixed="true">
+                            @if (MultiSelection && SelectAll)
+                            {
+                                <div class="mud-list-item-extended mud-list-item-clickable-extended mud-ripple d-flex" @onclick="SelectAllItems" @onclick:stopPropagation="true">
+                                    <MudCheckBox Class="mx-4" @bind-Checked="_allSelected" Color="@Color" @onclick="SelectAllItems" Dense="true" />
+                                    <MudText Typo="Typo.body2">@SelectAllText</MudText>
+                                </div>
+                                <MudDivider />
+                            }
+                            
                             @ChildContent
                         </CascadingValue>
                     </MudPopover>

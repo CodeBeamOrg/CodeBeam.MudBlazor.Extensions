@@ -86,11 +86,23 @@ namespace MudExtensions
             }
         }
 
+        public async Task ForceRender()
+        {
+            await InvokeAsync(StateHasChanged);
+        }
+
+        public async Task ForceUpdate()
+        {
+            SyncSelected();
+            await InvokeAsync(StateHasChanged);
+        }
+
         protected override void OnInitialized()
         {
             MudCombobox?.Add(this);
         }
 
+        bool? _oldMultiselection;
         bool? _oldSelected;
         bool _selectedChanged = false;
         bool? _oldEligible = true;
@@ -159,7 +171,11 @@ namespace MudExtensions
                 return;
             }
 
-            if (MudCombobox.SelectedValues.Contains(Value)) 
+            if (MudCombobox.MultiSelection == true && MudCombobox.SelectedValues.Contains(Value)) 
+            {
+                Selected = true;
+            }
+            else if (MudCombobox.MultiSelection == false && ((MudCombobox.Value == null && Value == null) || MudCombobox.Value?.Equals(Value) == true))
             {
                 Selected = true;
             }
