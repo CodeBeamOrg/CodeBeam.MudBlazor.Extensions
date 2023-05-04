@@ -16,17 +16,18 @@ namespace MudExtensions
         {
             Adornment = Adornment.End;
             IconSize = Size.Medium;
-            base.SkipUpdateProcessOnSetParameters = true;
+            //base.SkipUpdateProcessOnSetParameters = true;
         }
 
         [Inject] private IKeyInterceptorFactory KeyInterceptorFactory { get; set; }
 
+        internal string _searchString;
         private string multiSelectionText;
         private IKeyInterceptor _keyInterceptor;
 
         public List<MudComboboxItem<T>> Items = new();
         protected internal List<MudComboboxItem<T>> EligibleItems { get; set; } = new();
-        private MudInputExtended<T> _elementReference;
+        private MudInputExtended<string> _inputReference;
         internal bool _isOpen;
         protected internal string _currentIcon { get; set; }
 
@@ -46,11 +47,19 @@ namespace MudExtensions
             .AddClass(PopoverClass)
             .Build();
 
+        protected string MockInputStylename =>
+            new StyleBuilder()
+            //.AddStyle("width", "0px", ValuePresenter == ValuePresenter.Chip)
+            .AddStyle("height: auto")
+            .AddStyle("min-height: 1.1876em")
+            .AddStyle("display", "inline", Value != null || SelectedValues.Count() != 0)
+            .Build();
+
         private string _elementId = "combobox_" + Guid.NewGuid().ToString().Substring(0, 8);
         private string _popoverId = "comboboxpopover_" + Guid.NewGuid().ToString().Substring(0, 8);
 
         /// <summary>
-        /// User class names for the input, separated by space
+        /// If true, combobox goes to autocomplete mode.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
         [Parameter] public bool Editable { get; set; }
@@ -142,13 +151,6 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public bool DisablePopoverPadding { get; set; }
 
-        /// <summary>
-        /// If true, selected items doesn't have a selected background color.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.List.Appearance)]
-        public bool DisableSelectedItemStyle { get; set; }
-
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public string SearchBoxPlaceholder { get; set; }
@@ -168,18 +170,18 @@ namespace MudExtensions
         public string OpenIcon { get; set; } = Icons.Material.Filled.ArrowDropDown;
 
         /// <summary>
-        /// Dropdown color of select. Supports theme colors.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.Appearance)]
-        public Color Color { get; set; } = Color.Primary;
-
-        /// <summary>
         /// The Close Select Icon
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public string CloseIcon { get; set; } = Icons.Material.Filled.ArrowDropUp;
+
+        /// <summary>
+        /// Dropdown color of select. Supports theme colors.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public Color Color { get; set; } = Color.Primary;
 
         /// <summary>
         /// The value presenter.
@@ -292,9 +294,7 @@ namespace MudExtensions
         public Origin TransformOrigin { get; set; } = Origin.TopCenter;
 
         /// <summary>
-        /// If true, the Select's input will not show any values that are not defined in the dropdown.
-        /// This can be useful if Value is bound to a variable which is initialized to a value which is not in the list
-        /// and you want the Select to show the label / placeholder instead.
+        /// If false, combobox allows value from out of bound.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
@@ -402,6 +402,7 @@ namespace MudExtensions
             else 
             {
                 await SetValueAsync(SelectedValues.LastOrDefault(), false);
+                _searchString = Converter.Set(SelectedValues.LastOrDefault());
             }
         }
 
@@ -496,51 +497,10 @@ namespace MudExtensions
             }
         }
 
-        private MudComboboxItem<T> _selectedItem;
-        private HashSet<MudComboboxItem<T>> _selectedItems;
-
-        protected internal MudComboboxItem<T> SelectedItem
-        {
-            get => _selectedItem;
-
-            set
-            {
-                if (_selectedItem == value)
-                {
-                    return;
-                }
-                _selectedItem = value;
-            }
-        }
-
-        protected internal IEnumerable<MudComboboxItem<T>> SelectedItems
-        {
-            get => _selectedItems;
-
-            set
-            {
-                if (value == null && _selectedItems == null)
-                {
-                    return;
-                }
-
-                if (value != null && _selectedItems != null && _selectedItems.SetEquals(value))
-                {
-                    return;
-                }
-                _selectedItems = value == null ? null : value.ToHashSet();
-            }
-        }
-
         /// <summary>
         /// Fires when SelectedValues changes.
         /// </summary>
         [Parameter] public EventCallback<IEnumerable<T>> SelectedValuesChanged { get; set; }
-
-        /// <summary>
-        /// Should only be used for debugging and development purposes.
-        /// </summary>
-        [Parameter] public EventCallback<IEnumerable<MudComboboxItem<T>>> SelectedItemsChanged { get; set; }
 
         //protected async Task SetCustomizedTextAsync(string text, bool updateValue = true,
         //    List<T> selectedConvertedValues = null,
@@ -664,12 +624,26 @@ namespace MudExtensions
             _allSelected = GetAllSelectedState();
         }
 
+        protected async Task UpdateComboboxValueAsync(T value, bool updateText = true, bool updateSearchString = false, bool force = false)
+        {
+            await SetValueAsync(value, updateText, force);
+            if (updateSearchString)
+            {
+                _searchString = Converter.Set(Value);
+                await _inputReference.SetText(_searchString);
+            }
+        }
+
         T _oldValue;
         bool _oldMultiselection = false;
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
             UpdateIcon();
+            //if (Editable == false)
+            //{
+            //    _searchString = Converter.Set(Value);
+            //}
             if (MultiSelection != _oldMultiselection)
             {
                 await SyncMultiselectionValues(MultiSelection);
@@ -678,6 +652,8 @@ namespace MudExtensions
             if ((Value == null && _oldValue != null) || (Value != null && Value.Equals(_oldValue) == false))
             {
                 await ForceUpdateItems();
+                _searchString = Converter.Set(Value);
+                await _inputReference.SetText(_searchString);
             }
             await UpdateDataVisualiserTextAsync();
             _oldMultiselection = MultiSelection;
@@ -796,7 +772,7 @@ namespace MudExtensions
                         }
                         else
                         {
-                            await _elementReference.SetText(Text);
+                            await _inputReference.SetText(Text);
                             break;
                         }
                     }
@@ -810,7 +786,7 @@ namespace MudExtensions
             await OnKeyUp.InvokeAsync(obj);
         }
 
-        protected internal async Task OnLostFocus(FocusEventArgs obj)
+        protected internal async Task HandleOnBlur(FocusEventArgs obj)
         {
             //if (_isOpen)
             //{
@@ -820,27 +796,55 @@ namespace MudExtensions
             //}
             //base.OnBlur.InvokeAsync(obj).AndForget();
 
+            if (Strict == true)
+            {
+                if (Items.Select(x => x.Value).Contains(Converter.Get(_searchString)))
+                {
+                    await SetValueAsync(Converter.Get(_searchString));
+                }
+                else
+                {
+                    _searchString = Converter.Set(Value);
+                    await _inputReference.SetText(_searchString);
+                    StateHasChanged();
+                }
+            }
+            else if (Editable == true)
+            {
+                await SetValueAsync(Converter.Get(_searchString));
+            }
+
+
             await OnBlurredAsync(obj);
+        }
+
+        protected async Task HandleInternalValueChanged(string val)
+        {
+            _searchString = val;
+            //if (Strict == false || Items.Select(x => x.Value).Contains(_internalValue))
+            //{
+            //    await SetValueAsync(_internalValue);
+            //}
         }
 
         public override ValueTask FocusAsync()
         {
-            return _elementReference.FocusAsync();
+            return _inputReference.FocusAsync();
         }
 
         public override ValueTask BlurAsync()
         {
-            return _elementReference.BlurAsync();
+            return _inputReference.BlurAsync();
         }
 
         public override ValueTask SelectAsync()
         {
-            return _elementReference.SelectAsync();
+            return _inputReference.SelectAsync();
         }
 
         public override ValueTask SelectRangeAsync(int pos1, int pos2)
         {
-            return _elementReference.SelectRangeAsync(pos1, pos2);
+            return _inputReference.SelectRangeAsync(pos1, pos2);
         }
 
         #endregion
@@ -906,6 +910,7 @@ namespace MudExtensions
                 {
                     if (ToggleSelection)
                     {
+                        await UpdateComboboxValueAsync(default(T), updateSearchString: true);
                         await SetValueAsync(default(T));
                         item.Selected = false;
                     }
@@ -923,8 +928,7 @@ namespace MudExtensions
                 if (MultiSelection == false)
                 {
                     DeselectAllItems();
-                    await SetValueAsync(item.Value, false);
-                    
+                    await UpdateComboboxValueAsync(item.Value, updateSearchString: true);
                 }
                 else if (SelectedValues.Contains(item.Value) == false)
                 {
@@ -932,6 +936,9 @@ namespace MudExtensions
                     SelectedValues = SelectedValues.Append(item.Value);
                     await SelectedValuesChanged.InvokeAsync(_selectedValues);
                     _allSelected = GetAllSelectedState();
+                    _searchString = null;
+                    await Task.Delay(1);
+                    await _inputReference.SetText(null);
                 }
                 item.Selected = true;
             }
@@ -945,6 +952,7 @@ namespace MudExtensions
                 await FocusAsync();
             }
         }
+
         protected void DeselectAllItems()
         {
             Items.ForEach(x => x.Selected = false);
@@ -1001,11 +1009,10 @@ namespace MudExtensions
         /// </summary>
         protected async ValueTask ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
-            await SetValueAsync(default, false);
+            await SetValueAsync(default(T), false);
+            _searchString = null;
             await SetTextAsync(default, false);
             _selectedValues.Clear();
-            SelectedItem = null;
-            SelectedItems = null;
             DeselectAllItems();
             await BeginValidateAsync();
             StateHasChanged();
@@ -1019,6 +1026,7 @@ namespace MudExtensions
         public async Task Clear()
         {
             await SetValueAsync(default, false);
+            _searchString = null;
             await SetTextAsync(default, false);
             _selectedValues.Clear();
             await BeginValidateAsync();
@@ -1102,6 +1110,7 @@ namespace MudExtensions
                 }
                 await SelectedValuesChanged.InvokeAsync(SelectedValues);
                 await SetValueAsync(SelectedValues.LastOrDefault(), false);
+                _searchString = Converter.Set(SelectedValues.LastOrDefault());
                 _allSelected = true;
             }
             else

@@ -9,24 +9,25 @@
             <MudInputControl Label="@Label" Variant="@Variant" HelperText="@HelperText" HelperTextOnFocus="@HelperTextOnFocus" FullWidth="@FullWidth" Margin="@Margin" Class="@Classname" Style="@Style"
                              Error="@Error" ErrorText="@ErrorText" ErrorId="@ErrorId" Disabled="@Disabled" @onclick="@ToggleMenu" Required="@Required" ForId="@FieldId">
                 <InputContent>
-                    <MudInputExtended @ref="_elementReference" T="T" InputType="@(Editable ? InputType.Text : InputType.Hidden)" MockInputStyle="@(ValuePresenter == ValuePresenter.Chip ? "width: 0px" : null)"
+                    <MudInputExtended @ref="_inputReference" T="string" InputType="@(Editable ? InputType.Text : InputType.Hidden)"
                                       Class="@InputClassname" Style="@InputStyle" Margin="@Margin" Placeholder="@Placeholder"
                                       Variant="@Variant" Immediate="true"
-                                      TextUpdateSuppression="false"
-                                      @bind-Value="Value" @bind-Text="@Text"
+                                      TextUpdateSuppression="false" ShowVisualiser="@(SelectedValues.Count() != 0 || Editable == false)" DataVisualiserStyle="min-height: 1.1876em"
+                                      Value="@_searchString" ValueChanged="@HandleInternalValueChanged"
                                       DisableUnderLine="@DisableUnderLine"
                                       Disabled="@Disabled" ReadOnly="@ReadOnly" Error="@Error" ErrorId="@ErrorId"
                                       Clearable="@Clearable" OnClearButtonClick="(async (e) => await ClearButtonClickHandlerAsync(e))"
-                                      @attributes="UserAttributes" OnBlur="@OnLostFocus" ForceShrink="@ForceShrink">
+                                      @attributes="UserAttributes" OnBlur="@HandleOnBlur" ForceShrink="@(SelectedValues.Count() != 0 || ForceShrink)">
 
                         <AdornmentEnd>
                             <MudIcon Icon="@_currentIcon" Color="@AdornmentColor" Size="@IconSize" @onclick="OnAdornmentClick" />
                         </AdornmentEnd>
 
                         <DataVisualiser>
+                            <div style="flex-basis: content; flex-grow: 0">
                                 @if (ValuePresenter == ValuePresenter.Chip)
                                 {
-                                    <MudChipSet Class="d-flex flex-wrap mud-width-full" Style="row-gap: 4px" AllClosable="ChipCloseable" OnClose="ChipClosed">
+                                    <MudChipSet Class="d-flex flex-wrap mud-width-full" Style="row-gap: 2px" AllClosable="ChipCloseable" OnClose="ChipClosed">
                                         @if (ItemCollection != null)
                                         {
                                             foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
@@ -43,21 +44,16 @@
                                         }
                                     </MudChipSet>
                                 }
-                                else if (ValuePresenter == ValuePresenter.Text && Editable)
+                                else if (ValuePresenter == ValuePresenter.Text && (Editable == false || (MultiSelection == true && Editable == true)))
                                 {
-                                    <div>@_dataVisualiserText</div>
+                                    <div style="white-space: break-spaces">@_dataVisualiserText</div>
                                 }
+                            </div> 
                         </DataVisualiser>
 
                         <ChildContent>
                             <div class="@TemplateClass">
-                                @if (Strict && !IsValueInList)
-                                {
-                                    //Show nothing
-                                    <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
-                                }
-                                
-                                else if (ValuePresenter == ValuePresenter.Chip)
+                                @if (ValuePresenter == ValuePresenter.Chip)
                                 {
                                     if (SelectedValues == null || !SelectedValues.Any())
                                     {
@@ -65,34 +61,49 @@
                                     }
                                     else
                                     {
-                                        @*Chips show under DataVisualiser RenderFragment*@
+                                        @*<MudChipSet Class="d-flex flex-wrap" Style="row-gap: 4px" AllClosable="ChipCloseable" OnClose="ChipClosed">
+                                            @if (ItemCollection != null)
+                                            {
+                                                foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
+                                                {
+                                                    <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboboxItem<T>>())
+                                                {
+                                                    <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                                }
+                                            }
+                                        </MudChipSet>*@
                                     }
                                 }
-                                else if (ValuePresenter == ValuePresenter.Text & Editable == false)
+                                else if (ValuePresenter == ValuePresenter.Text && MultiSelection == true)
                                 {
-                                    <div>@_dataVisualiserText</div>
+                                    @*<div style="white-space: break-spaces">@_dataVisualiserText</div>*@
                                 }
                                 else if (ValuePresenter == ValuePresenter.ItemContent)
                                 {
-                                    if (SelectedItem == null)
+                                    if (SelectedValues == null)
                                     {
                                         <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
 
                                     }
                                     else if (ItemTemplate != null)
                                     {
-                                        if (SelectedItem != null && SelectedItem.Value != null)
+                                        if (Value != null)
                                         {
-                                            @ItemTemplate(SelectedItem)
+                                            @ItemTemplate(Items.FirstOrDefault(x => x.Value.Equals(Value)))
                                         }
                                         else if (!string.IsNullOrEmpty(Placeholder))
                                         {
                                             <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
                                         }
                                     }
-                                    else if (SelectedItem.ChildContent != null)
+                                    else if (Items.FirstOrDefault(x => x.Value.Equals(Value)).ChildContent != null)
                                     {
-                                        <MudRender>@SelectedItem.ChildContent</MudRender>
+                                        <MudRender>@Items.FirstOrDefault(x => x.Value.Equals(Value)).ChildContent</MudRender>
                                     }
                                     else
                                     {

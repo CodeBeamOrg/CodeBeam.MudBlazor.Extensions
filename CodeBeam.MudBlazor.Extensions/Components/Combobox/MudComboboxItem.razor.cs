@@ -109,7 +109,7 @@ namespace MudExtensions
         bool _eligibleChanged = false;
         protected override void OnParametersSet()
         {
-            base.OnParametersSetAsync();
+            base.OnParametersSet();
             //SyncSelected();
             //if (_oldSelected != Selected || _oldEligible != Eligible)
             //{
@@ -141,21 +141,21 @@ namespace MudExtensions
                 return true;
             }
 
-            if (MudCombobox.Text == null && MudCombobox.Value == null)
+            if (MudCombobox.Text == null && MudCombobox._searchString == null)
             {
                 return true;
             }
 
             if (Text != null)
             {
-                if (Text.Contains(MudCombobox.Text ?? MudCombobox.Converter.Set(MudCombobox.Value), StringComparison.CurrentCultureIgnoreCase))
+                if (Text.Contains(MudCombobox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return true;
                 }
             }
             else
             {
-                if (MudCombobox.Converter.Set(Value).Contains(MudCombobox.Text ?? MudCombobox.Converter.Set(MudCombobox.Value), StringComparison.CurrentCultureIgnoreCase))
+                if (MudCombobox.Converter.Set(Value).Contains(MudCombobox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return true;
                 }

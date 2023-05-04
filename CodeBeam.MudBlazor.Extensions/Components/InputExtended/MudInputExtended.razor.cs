@@ -42,6 +42,12 @@ namespace MudExtensions
                     .AddClass("mud-icon-button-edge-margin-end", Adornment != Adornment.End && HideSpinButtons)
                     .Build();
 
+        protected string ChildContentClassname =>
+                    new CssBuilder()
+                    .AddClass("d-inline", InputType == InputType.Hidden && ChildContent != null && ShowVisualiser == false)
+                    .AddClass("d-none", !(InputType == InputType.Hidden && ChildContent != null && ShowVisualiser == false))
+                    .Build();
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
@@ -55,6 +61,8 @@ namespace MudExtensions
             }
         }
 
+        [Parameter] public bool ShowVisualiser { get; set; }
+        [Parameter] public string DataVisualiserStyle { get; set; }
 
         /// <summary>
         /// Type of the input element. It should be a valid HTML5 input type.

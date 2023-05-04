@@ -225,7 +225,7 @@ namespace MudExtensions
         public virtual string Pattern { get; set; }
 
         [Parameter]
-        public string MockInputStyle { get; set; }
+        public string ChildContentStyle { get; set; }
 
         /// <summary>
         /// Sync the value, values and text, calls validation manually. Useful to call after user changes value or text programmatically.
