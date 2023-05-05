@@ -11,6 +11,7 @@ namespace MudExtensions
             .AddClass("mud-ripple", !DisableRipple && !Disabled)
             .AddClass("mud-list-item-gutters-extended")
             .AddClass("mud-list-item-clickable-extended")
+            .AddClass("mud-list-item-hilight-extended", Active && !Disabled)
             .AddClass("mud-list-item-dense-extended", MudCombobox?.Dense == true)
             .AddClass($"mud-selected-item mud-{MudCombobox?.Color.ToDescriptionString()}-text mud-{MudCombobox?.Color.ToDescriptionString()}-hover", Selected && !Disabled)
             .AddClass("mud-list-item-disabled", Disabled)
@@ -18,7 +19,7 @@ namespace MudExtensions
             .AddClass(Class)
             .Build();
 
-        internal string ItemId { get; } = "comboboxItem_" + Guid.NewGuid().ToString().Substring(0, 8);
+        internal string ItemId { get; } = "_" + Guid.NewGuid().ToString().Substring(0, 8);
 
         /// <summary>
         /// The parent select component
@@ -71,6 +72,13 @@ namespace MudExtensions
         //}
 
         protected internal bool Selected { get; set; }
+        protected internal bool Active { get; set; }
+
+        public void SetActive(bool isActive)
+        {
+            Active = isActive;
+            StateHasChanged();
+        }
 
         [Parameter]
         public bool Eligible { get; set; } = true;

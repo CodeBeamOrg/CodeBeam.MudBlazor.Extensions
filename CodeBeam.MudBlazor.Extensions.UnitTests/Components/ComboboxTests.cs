@@ -191,7 +191,7 @@ namespace MudExtensions.UnitTests.Components
             //Check user on blur implementation works
             var @switch = comp.FindComponent<MudSwitch<bool>>();
             @switch.Instance.Checked = true;
-            await comp.InvokeAsync(() => combobox.Instance.OnLostFocus(new FocusEventArgs()));
+            await comp.InvokeAsync(() => combobox.Instance.HandleOnBlur(new FocusEventArgs()));
             comp.WaitForAssertion(() => @switch.Instance.Checked.Should().Be(false));
         }
 

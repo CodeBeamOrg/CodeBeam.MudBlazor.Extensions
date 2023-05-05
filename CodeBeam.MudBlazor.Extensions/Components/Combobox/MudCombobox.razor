@@ -118,7 +118,7 @@
 
                     <MudPopover Open="true" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" Class="@PopoverClassname" RelativeWidth="@RelativeWidth">
                         <CascadingValue Value="@this" IsFixed="true">
-                            <div>
+                            <div id="@_popoverId">
                             @if (MultiSelection)
                             {
                                 if (Editable)

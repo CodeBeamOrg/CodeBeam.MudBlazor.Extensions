@@ -5,6 +5,7 @@ using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using MudExtensions.Extensions;
+using MudExtensions.Services;
 
 namespace MudExtensions
 {
@@ -19,13 +20,16 @@ namespace MudExtensions
             //base.SkipUpdateProcessOnSetParameters = true;
         }
 
-        [Inject] private IKeyInterceptorFactory KeyInterceptorFactory { get; set; }
+        [Inject] IKeyInterceptorFactory KeyInterceptorFactory { get; set; }
+        [Inject] IScrollManagerExtended ScrollManagerExtended { get; set; }
+        [Inject] IScrollManager ScrollManager { get; set; }
 
         internal string _searchString;
         private string multiSelectionText;
         private IKeyInterceptor _keyInterceptor;
 
         public List<MudComboboxItem<T>> Items = new();
+        internal MudComboboxItem<T> _lastActivatedItem;
         protected internal List<MudComboboxItem<T>> EligibleItems { get; set; } = new();
         private MudInputExtended<string> _inputReference;
         internal bool _isOpen;
@@ -726,6 +730,12 @@ namespace MudExtensions
                 case "Tab":
                     await CloseMenu();
                     break;
+                case "Home":
+                    await ActiveFirstItem();
+                    break;
+                case "End":
+                    await ActiveLastItem();
+                    break;
                 case "ArrowUp":
                     if (obj.AltKey)
                     {
@@ -734,6 +744,10 @@ namespace MudExtensions
                     else if (!_isOpen)
                     {
                         await OpenMenu();
+                    }
+                    else
+                    {
+                        await ActiveAdjacentItem(-1);
                     }
                     break;
                 case "ArrowDown":
@@ -744,6 +758,10 @@ namespace MudExtensions
                     else if (!_isOpen)
                     {
                         await OpenMenu();
+                    }
+                    else
+                    {
+                        await ActiveAdjacentItem(1);
                     }
                     break;
                 case " ":
@@ -1152,6 +1170,180 @@ namespace MudExtensions
         {
             Items.ForEach(async (x) => await x.ForceUpdate());
         }
+
+        #region Active (Hilight)
+
+        protected int GetActiveItemIndex()
+        {
+            if (_lastActivatedItem == null)
+            {
+                var a = Items.FindIndex(x => x.Active == true);
+                return a;
+            }
+            else
+            {
+                var a = Items.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
+                return a;
+            }
+        }
+
+        protected T GetActiveItemValue()
+        {
+            if (_lastActivatedItem == null)
+            {
+                return Items.FirstOrDefault(x => x.Active == true).Value;
+            }
+            else
+            {
+                return _lastActivatedItem.Value;
+            }
+        }
+
+        protected internal void UpdateLastActivatedItem(T value)
+        {
+            _lastActivatedItem = Items.FirstOrDefault(x => value == null ? x.Value == null : Comparer != null ? Comparer.Equals(value, x.Value) : value.Equals(x.Value));
+        }
+
+        protected void DeactiveAllItems()
+        {
+            foreach (var item in Items)
+            {
+                item.SetActive(false);
+            }
+        }
+
+#pragma warning disable BL0005
+        public async Task ActiveFirstItem(string startChar = null)
+        {
+            if (Items == null || Items.Count == 0 || Items[0].Disabled)
+            {
+                return;
+            }
+            DeactiveAllItems();
+
+            if (string.IsNullOrWhiteSpace(startChar))
+            {
+                Items[0].SetActive(true);
+                _lastActivatedItem = Items[0];
+                //await ScrollToMiddleAsync(Items[0]);
+                return;
+            }
+
+            if (Editable == true)
+            {
+                return;
+            }
+
+            // find first item that starts with the letter
+            var possibleItems = Items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? "").StartsWith(startChar, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            if (possibleItems == null || !possibleItems.Any())
+            {
+                if (_lastActivatedItem == null)
+                {
+                    return;
+                }
+                _lastActivatedItem.SetActive(true);
+                //await ScrollToMiddleAsync(_lastActivatedItem);
+                return;
+            }
+
+            var theItem = possibleItems.FirstOrDefault(x => x == _lastActivatedItem);
+            if (theItem == null)
+            {
+                possibleItems[0].SetActive(true);
+                _lastActivatedItem = possibleItems[0];
+                //await ScrollToMiddleAsync(possibleItems[0]);
+                return;
+            }
+
+            if (theItem == possibleItems.LastOrDefault())
+            {
+                possibleItems[0].SetActive(true);
+                _lastActivatedItem = possibleItems[0];
+                //await ScrollToMiddleAsync(possibleItems[0]);
+            }
+            else
+            {
+                var item = possibleItems[possibleItems.IndexOf(theItem) + 1];
+                item.SetActive(true);
+                _lastActivatedItem = item;
+                //await ScrollToMiddleAsync(item);
+            }
+        }
+
+        public async Task ActiveAdjacentItem(int changeCount)
+        {
+            if (Items == null || Items.Count == 0)
+            {
+                return;
+            }
+            int index = GetActiveItemIndex();
+            if (index + changeCount >= Items.Count || 0 > index + changeCount)
+            {
+                return;
+            }
+            if (Items[index + changeCount].Disabled)
+            {
+                // Recursive
+                await ActiveAdjacentItem(changeCount > 0 ? changeCount + 1 : changeCount - 1);
+                return;
+            }
+            DeactiveAllItems();
+            Items[index + changeCount].SetActive(true);
+            _lastActivatedItem = Items[index + changeCount];
+
+            await ScrollToMiddleAsync(Items[index + changeCount]);
+            //await ScrollToItemAsync(_lastActivatedItem);
+        }
+
+        public async Task ActivePreviousItem()
+        {
+            if (Items == null || Items.Count == 0)
+            {
+                return;
+            }
+            int index = GetActiveItemIndex();
+            if (0 > index - 1)
+            {
+                return;
+            }
+            DeactiveAllItems();
+            Items[index - 1].SetActive(true);
+            _lastActivatedItem = Items[index - 1];
+
+            //await ScrollToMiddleAsync(Items[index - 1]);
+        }
+
+        public async Task ActiveLastItem()
+        {
+            if (Items == null || Items.Count == 0)
+            {
+                return;
+            }
+            var properLastIndex = Items.Count - 1;
+            DeactiveAllItems();
+            for (int i = 0; i < Items.Count; i++)
+            {
+                if (!Items[properLastIndex - i].Disabled)
+                {
+                    properLastIndex -= i;
+                    break;
+                }
+            }
+            Items[properLastIndex].SetActive(true);
+            _lastActivatedItem = Items[properLastIndex];
+
+            //await ScrollToMiddleAsync(Items[properLastIndex]);
+        }
+#pragma warning restore BL0005
+
+        #endregion
+
+        protected internal ValueTask ScrollToMiddleAsync(MudComboboxItem<T> item)
+            => ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId);
+
+        private ValueTask ScrollToItemAsync(MudComboboxItem<T> item)
+            => item != null ? ScrollManager.ScrollToListItemAsync(item.ItemId) : ValueTask.CompletedTask;
 
     }
 }
