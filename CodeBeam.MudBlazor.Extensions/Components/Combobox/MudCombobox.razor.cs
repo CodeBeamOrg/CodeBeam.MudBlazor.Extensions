@@ -640,20 +640,23 @@ namespace MudExtensions
         {
             await base.OnParametersSetAsync();
             UpdateIcon();
-            //if (Editable == false)
-            //{
-            //    _searchString = Converter.Set(Value);
-            //}
             if (MultiSelection != _oldMultiselection)
             {
                 await SyncMultiselectionValues(MultiSelection);
                 await ForceRenderItems();
+                if (MultiSelection == true)
+                {
+                    _searchString = null;
+                }
             }
             if ((Value == null && _oldValue != null) || (Value != null && Value.Equals(_oldValue) == false))
             {
                 await ForceUpdateItems();
-                _searchString = Converter.Set(Value);
-                await _inputReference.SetText(_searchString);
+                if (MultiSelection == false)
+                {
+                    _searchString = Converter.Set(Value);
+                    await _inputReference.SetText(_searchString);
+                }
             }
             await UpdateDataVisualiserTextAsync();
             _oldMultiselection = MultiSelection;
@@ -818,7 +821,7 @@ namespace MudExtensions
             await OnBlurredAsync(obj);
         }
 
-        protected async Task HandleInternalValueChanged(string val)
+        protected void HandleInternalValueChanged(string val)
         {
             _searchString = val;
             //if (Strict == false || Items.Select(x => x.Value).Contains(_internalValue))
@@ -932,13 +935,14 @@ namespace MudExtensions
                 }
                 else if (SelectedValues.Contains(item.Value) == false)
                 {
+                    //_searchString = null;
                     await SetValueAsync(item.Value, false);
                     SelectedValues = SelectedValues.Append(item.Value);
                     await SelectedValuesChanged.InvokeAsync(_selectedValues);
                     _allSelected = GetAllSelectedState();
-                    _searchString = null;
+                    
                     await Task.Delay(1);
-                    await _inputReference.SetText(null);
+                    //await _inputReference.SetText(null);
                 }
                 item.Selected = true;
             }
@@ -949,7 +953,7 @@ namespace MudExtensions
             }
             else
             {
-                await FocusAsync();
+                //await FocusAsync();
             }
         }
 
@@ -1073,7 +1077,6 @@ namespace MudExtensions
         //}
 
         /// <summary>
-        /// Fixes issue #4328
         /// Returns true when MultiSelection is true and it has selected values(Since Value property is not used when MultiSelection=true
         /// </summary>
         /// <param name="value"></param>

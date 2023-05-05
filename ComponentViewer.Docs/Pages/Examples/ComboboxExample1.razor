@@ -5,7 +5,7 @@
     <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center justify-center" Style="height: 500px">
         <MudCombobox @ref="_combobox" @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Text" Label="Text" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
                 AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" autocomplete="new-password"
-                Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter" Strict="_strict">
+                Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter" Strict="_strict">
             <MudComboboxItem Value="@("Foo")" Text="Foo">Foo</MudComboboxItem>
             <MudComboboxItem Value="@("Bar")" Text="Bar">Bar</MudComboboxItem>
             <MudComboboxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboboxItem>
@@ -17,7 +17,7 @@
         </MudCombobox>
         <MudCombobox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Outlined" Label="Outlined" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
                      AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" autocomplete="new-password"
-                     Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter">
+                     Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter">
             <MudComboboxItem Value="@("Foo")">Foo</MudComboboxItem>
             <MudComboboxItem Value="@("Bar")">Bar</MudComboboxItem>
             <MudComboboxItem Value="@("Fizz")">Fizz</MudComboboxItem>
@@ -29,7 +29,7 @@
         </MudCombobox>
         <MudCombobox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Filled" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
                      AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" autocomplete="new-password"
-                     Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter">
+                     Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter">
             <MudComboboxItem Value="@("Foo")">Foo</MudComboboxItem>
             <MudComboboxItem Value="@("Bar")">Bar</MudComboboxItem>
             <MudComboboxItem Value="@("Fizz")">Fizz</MudComboboxItem>

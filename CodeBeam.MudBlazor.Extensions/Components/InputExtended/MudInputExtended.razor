@@ -50,7 +50,7 @@
 
             @if (ShowVisualiser == true)
             {
-                <div class="@InputClassname" style="height: auto; @DataVisualiserStyle">
+                <div class="@InputClassname" style="height: auto; @DataVisualiserStyle" @ref="@_elementReference1">
                     @DataVisualiser
                 </div>
             }
@@ -81,24 +81,28 @@
                        aria-invalid="@Error.ToString().ToLower()"
                        aria-describedby="@ErrorId" />
             </div>
-            
+
         @*Note: double mouse wheel handlers needed for Firefox because it doesn't know onmousewheel*@
 
-        @if (Disabled)
-        {
-            <div class="@InputClassname @ChildContentClassname" style="@ChildContentStyle"
-                 @onblur="@OnBlurredAsync" @ref="@_elementReference1">
-                    @ChildContent
-            </div>
-        }
-        else
-        {
-            <div class="@InputClassname @ChildContentClassname" style="@ChildContentStyle"
-                 tabindex="@(InputType == InputType.Hidden && ChildContent != null ? 0 : -1)"
-                 @onblur="@OnBlurredAsync" @ref="@_elementReference1">
-                    @ChildContent
-            </div>
-        }
+            @if (ShowVisualiser == false)
+            {
+                if (Disabled)
+                {
+                    <div class="@InputClassname @ChildContentClassname" style="@ChildContentStyle"
+             @onblur="@OnBlurredAsync" @ref="@_elementReference1">
+                        @ChildContent
+                    </div>
+                }
+                else
+                {
+                    <div class="@InputClassname @ChildContentClassname" style="@ChildContentStyle"
+                         tabindex="@(InputType == InputType.Hidden && ChildContent != null ? 0 : -1)"
+             @onblur="@OnBlurredAsync" @ref="@_elementReference1">
+                        @ChildContent
+                    </div>
+                }
+            }
+
         </div>
     }
 

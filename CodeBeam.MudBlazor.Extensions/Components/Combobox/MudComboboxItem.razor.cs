@@ -129,7 +129,7 @@ namespace MudExtensions
             }
         }
 
-        protected void CheckEligible()
+        protected internal void CheckEligible()
         {
             Eligible = IsEligible();
         }
@@ -141,7 +141,7 @@ namespace MudExtensions
                 return true;
             }
 
-            if (MudCombobox.Text == null && MudCombobox._searchString == null)
+            if (string.IsNullOrEmpty(MudCombobox._searchString))
             {
                 return true;
             }

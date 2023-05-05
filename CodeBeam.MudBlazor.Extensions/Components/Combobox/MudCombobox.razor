@@ -9,15 +9,17 @@
             <MudInputControl Label="@Label" Variant="@Variant" HelperText="@HelperText" HelperTextOnFocus="@HelperTextOnFocus" FullWidth="@FullWidth" Margin="@Margin" Class="@Classname" Style="@Style"
                              Error="@Error" ErrorText="@ErrorText" ErrorId="@ErrorId" Disabled="@Disabled" @onclick="@ToggleMenu" Required="@Required" ForId="@FieldId">
                 <InputContent>
-                    <MudInputExtended @ref="_inputReference" T="string" InputType="@(Editable ? InputType.Text : InputType.Hidden)"
+                    @*DataVisualiserStyle="@($"min-height: 1.1876em;{(HasValue(Value) && Editable == true ? "padding-bottom: 0px" : null)}")"*@
+                    <MudInputExtended @ref="_inputReference" T="string" InputType="@(Editable && MultiSelection == false ? InputType.Text : InputType.Hidden)"
                                       Class="@InputClassname" Style="@InputStyle" Margin="@Margin" Placeholder="@Placeholder"
                                       Variant="@Variant" Immediate="true"
-                                      TextUpdateSuppression="false" ShowVisualiser="@(SelectedValues.Count() != 0 || Editable == false)" DataVisualiserStyle="min-height: 1.1876em"
+                                      TextUpdateSuppression="false"
+                                      ShowVisualiser="@((MultiSelection == true && SelectedValues.Count() != 0) || Editable == false)" DataVisualiserStyle="min-height: 1.1876em"
                                       Value="@_searchString" ValueChanged="@HandleInternalValueChanged"
                                       DisableUnderLine="@DisableUnderLine"
                                       Disabled="@Disabled" ReadOnly="@ReadOnly" Error="@Error" ErrorId="@ErrorId"
                                       Clearable="@Clearable" OnClearButtonClick="(async (e) => await ClearButtonClickHandlerAsync(e))"
-                                      @attributes="UserAttributes" OnBlur="@HandleOnBlur" ForceShrink="@(SelectedValues.Count() != 0 || ForceShrink)">
+                                      @attributes="UserAttributes" OnBlur="@HandleOnBlur" ForceShrink="@(HasValue(Value) || _isOpen || ForceShrink)">
 
                         <AdornmentEnd>
                             <MudIcon Icon="@_currentIcon" Color="@AdornmentColor" Size="@IconSize" @onclick="OnAdornmentClick" />
@@ -116,16 +118,33 @@
 
                     <MudPopover Open="true" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" Class="@PopoverClassname" RelativeWidth="@RelativeWidth">
                         <CascadingValue Value="@this" IsFixed="true">
-                            @if (MultiSelection && SelectAll)
+                            <div>
+                            @if (MultiSelection)
                             {
-                                <div class="mud-list-item-extended mud-list-item-clickable-extended mud-ripple d-flex" @onclick="SelectAllItems" @onclick:stopPropagation="true">
-                                    <MudCheckBox Class="mx-4" @bind-Checked="_allSelected" Color="@Color" @onclick="SelectAllItems" Dense="true" />
-                                    <MudText Typo="Typo.body2">@SelectAllText</MudText>
-                                </div>
-                                <MudDivider />
+                                if (Editable)
+                                {
+                                        <div Class="pa-2" Style="position: sticky; top: 0px; background-color: var(--mud-palette-background); z-index: 2">
+                                            <MudTextFieldExtended T="string" Value="_searchString" ValueChanged="@HandleInternalValueChanged" Margin="Margin.Dense"
+                                                          Variant="Variant.Outlined" Immediate="true">
+                                                <AdornmentEnd>
+                                                    <MudIcon Icon="@Icons.Material.Filled.Search" Color="@Color" />
+                                                </AdornmentEnd>
+                                            </MudTextFieldExtended>
+                                        </div>
+                                }
+
+                                if (SelectAll)
+                                {
+                                    <div class="mud-list-item-extended mud-list-item-clickable-extended mud-ripple d-flex" @onclick="SelectAllItems" @onclick:stopPropagation="true">
+                                        <MudCheckBox Class="mx-4" @bind-Checked="_allSelected" Color="@Color" @onclick="SelectAllItems" Dense="true" />
+                                        <MudText Typo="Typo.body2">@SelectAllText</MudText>
+                                    </div>
+                                    <MudDivider />
+                                }
                             }
                             
                             @ChildContent
+                            </div>
                         </CascadingValue>
                     </MudPopover>
                 </InputContent>

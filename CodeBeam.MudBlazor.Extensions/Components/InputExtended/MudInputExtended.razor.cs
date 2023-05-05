@@ -198,7 +198,7 @@ namespace MudExtensions
                 {
                     return;
                 }
-                _showClearable = value;
+                UpdateClearable(Value);
             }
         }
 
@@ -233,7 +233,7 @@ namespace MudExtensions
 
         private void UpdateClearable(object value)
         {
-            var showClearable = Clearable && ((value is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (value is not string && value is not null));
+            var showClearable = HasValue((T)value);
             if (_showClearable != showClearable)
                 _showClearable = showClearable;
         }
