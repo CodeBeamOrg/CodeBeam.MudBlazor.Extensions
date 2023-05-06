@@ -4,17 +4,20 @@
 
 <div tabindex="0" @attributes="UserAttributes" id="@ItemId" class="@Classname" @onclick="HandleOnClick" @onclick:stopPropagation="true" style="@Style">
     
-    @if (MudCombobox != null && MudCombobox.MultiSelection == true)
+    @if (MudCombobox != null && MudCombobox.MultiSelection == true && MudCombobox.ShowCheckbox == true)
     {
         <MudCheckBox Class="me-4" Color="@MudCombobox.Color" Disabled="@Disabled" @bind-Checked="Selected" @onclick="OnClickHandler" Dense="true" />
     }
 
-    @if (ChildContent != null && MudCombobox?.ItemCollection == null)
-    {
-        @ChildContent
-    }
-    else
-    {
-        @DisplayString
-    }
+    <MudText Typo="GetTypo()">
+        @if (ChildContent != null && MudCombobox?.ItemCollection == null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @DisplayString
+        }
+    </MudText>
+    
 </div>

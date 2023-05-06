@@ -1,20 +1,24 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using MudBlazor.Utilities;
+using MudExtensions.Enums;
 
 namespace MudExtensions
 {
     public partial class MudComboboxItem<T> : MudBaseSelectItem, IDisposable
     {
-        protected string Classname => new CssBuilder("mud-list-item-extended")
-            .AddClass("mud-list-item-dense", (MudCombobox?.Dense) ?? false)
+        protected string Classname => new CssBuilder("mud-combobox-item")
+            .AddClass($"mud-combobox-item-{MudCombobox?.Dense.ToDescriptionString()}")
             .AddClass("mud-ripple", !DisableRipple && !Disabled)
-            .AddClass("mud-list-item-gutters-extended")
-            .AddClass("mud-list-item-clickable-extended")
-            .AddClass("mud-list-item-hilight-extended", Active && !Disabled)
-            .AddClass("mud-list-item-dense-extended", MudCombobox?.Dense == true)
-            .AddClass($"mud-selected-item mud-{MudCombobox?.Color.ToDescriptionString()}-text mud-{MudCombobox?.Color.ToDescriptionString()}-hover", Selected && !Disabled)
-            .AddClass("mud-list-item-disabled", Disabled)
+            .AddClass("mud-combobox-item-gutters")
+            .AddClass("mud-combobox-item-clickable")
+            .AddClass("mud-combobox-item-hilight", Active && !Disabled)
+            .AddClass("mud-combobox-item-hilight-selected", Active && Selected && !Disabled)
+            .AddClass($"mud-selected-item mud-{MudCombobox?.Color.ToDescriptionString()}-text mud-{MudCombobox?.Color.ToDescriptionString()}-hover", Selected && !Disabled && !Active)
+            .AddClass("mud-combobox-item-disabled", Disabled)
+            .AddClass("mud-combobox-item-bordered", MudCombobox?.Bordered == true && Active)
+            .AddClass($"mud-combobox-item-bordered-{MudCombobox?.Color.ToDescriptionString()}", MudCombobox?.Bordered == true && Selected)
             .AddClass("d-none", Eligible == false)
             .AddClass(Class)
             .Build();
@@ -26,6 +30,21 @@ namespace MudExtensions
         /// </summary>
         [CascadingParameter]
         internal MudCombobox<T> MudCombobox { get; set; }
+
+        protected Typo GetTypo()
+        {
+            if (MudCombobox == null)
+            {
+                return Typo.body1;
+            }
+
+            if (MudCombobox.Dense == Dense.Slim || MudCombobox.Dense == Dense.Superslim)
+            {
+                return Typo.body2;
+            }
+
+            return Typo.body1;
+        }
 
         /// <summary>
         /// Functional items does not hold values. If a value set on Functional item, it ignores by the MudSelect. They cannot be subject of keyboard navigation and selection.
@@ -207,6 +226,7 @@ namespace MudExtensions
             //{
             //    await MudCombobox.FocusAsync();
             //}
+            await MudCombobox.FocusAsync();
             await OnClick.InvokeAsync();
         }
 

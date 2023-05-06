@@ -39,6 +39,7 @@
             <MudText>Value: @_value</MudText>
             <MudText>Selected Values: @(string.Join(", ", _selectedValues ?? new List<string>()))</MudText>
                 <MudSelectExtended @bind-Value="_valuePresenter" ItemCollection="@(Enum.GetValues<ValuePresenter>())" Variant="Variant.Outlined" Label="Value Presenter" Margin="Margin.Dense" Dense="true" />
+                <MudSelectExtended @bind-Value="_dense" ItemCollection="@(Enum.GetValues<Dense>())" Variant="Variant.Outlined" Label="Dense" Margin="Margin.Dense" Dense="true" />
                 <MudSwitchM3 @bind-Checked="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
                 <MudSwitchM3 @bind-Checked="@_selectAll" Label="Select All" Color="Color.Secondary" />
                 <MudSwitchM3 @bind-Checked="@_editable" Label="Editable" Color="Color.Secondary" />
@@ -55,7 +56,7 @@
     Variant _variant = Variant.Outlined;
     Margin _margin;
     Color _color = Color.Primary;
-    bool _dense;
+    Dense _dense = Dense.Standard;
     bool _multiselection;
     bool _selectAll;
     bool _placeholder;

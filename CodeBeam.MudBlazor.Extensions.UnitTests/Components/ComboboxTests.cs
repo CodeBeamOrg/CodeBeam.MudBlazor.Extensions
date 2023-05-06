@@ -174,8 +174,8 @@ namespace MudExtensions.UnitTests.Components
             input.Click();
             menu.ClassList.Should().NotContain("d-none");
             // now click an item and see the value change
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
-            var items = comp.FindAll("div.mud-list-item-extended").ToArray();
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().BeGreaterThan(0));
+            var items = comp.FindAll("div.mud-combobox-item").ToArray();
             items[1].Click();
             // menu should be closed now
             comp.WaitForAssertion(() => menu.ClassList.Should().Contain("d-none"));
@@ -183,8 +183,8 @@ namespace MudExtensions.UnitTests.Components
             // now we cheat and click the list without opening the menu ;)
 
             input.Click();
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
-            items = comp.FindAll("div.mud-list-item-extended").ToArray();
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().BeGreaterThan(0));
+            items = comp.FindAll("div.mud-combobox-item").ToArray();
 
             items[0].Click();
             comp.WaitForAssertion(() => combobox.Instance.Value.Should().Be("1"));

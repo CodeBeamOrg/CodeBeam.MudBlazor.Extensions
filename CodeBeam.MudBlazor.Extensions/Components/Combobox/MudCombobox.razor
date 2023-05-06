@@ -29,7 +29,7 @@
                             <div style="flex-basis: content; flex-grow: 0">
                                 @if (ValuePresenter == ValuePresenter.Chip)
                                 {
-                                    <MudChipSet Class="d-flex flex-wrap mud-width-full" Style="row-gap: 2px" AllClosable="ChipCloseable" OnClose="ChipClosed">
+                                    <MudChipSet Class="d-flex flex-wrap mud-width-full" AllClosable="ChipCloseable" OnClose="ChipClosed">
                                         @if (ItemCollection != null)
                                         {
                                             foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))

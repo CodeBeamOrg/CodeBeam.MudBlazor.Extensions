@@ -53,7 +53,6 @@ namespace MudExtensions
 
         protected string MockInputStylename =>
             new StyleBuilder()
-            //.AddStyle("width", "0px", ValuePresenter == ValuePresenter.Chip)
             .AddStyle("height: auto")
             .AddStyle("min-height: 1.1876em")
             .AddStyle("display", "inline", Value != null || SelectedValues.Count() != 0)
@@ -67,6 +66,12 @@ namespace MudExtensions
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
         [Parameter] public bool Editable { get; set; }
+
+        /// <summary>
+        /// If true, selected or active items in popover has border.
+        /// </summary>
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        [Parameter] public bool Bordered { get; set; }
 
         /// <summary>
         /// User class names for the input, separated by space
@@ -164,7 +169,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public bool Dense { get; set; }
+        public Dense Dense { get; set; } = Dense.Standard;
 
         /// <summary>
         /// The Open Select Icon
@@ -193,6 +198,13 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public ValuePresenter ValuePresenter { get; set; } = ValuePresenter.Text;
+
+        /// <summary>
+        /// If true, shows checkbox when multiselection is true. Default is true.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public bool ShowCheckbox { get; set; } = true;
 
         /// <summary>
         /// If set to true and the MultiSelection option is set to true, a "select all" checkbox is added at the top of the list of items.
@@ -659,7 +671,10 @@ namespace MudExtensions
                 if (MultiSelection == false)
                 {
                     _searchString = Converter.Set(Value);
-                    await _inputReference.SetText(_searchString);
+                    if (_inputReference != null)
+                    {
+                        await _inputReference?.SetText(_searchString);
+                    }
                 }
             }
             await UpdateDataVisualiserTextAsync();
@@ -772,28 +787,30 @@ namespace MudExtensions
                     break;
                 case "Enter":
                 case "NumpadEnter":
-                    if (!MultiSelection)
+                    if (MultiSelection == false)
                     {
-                        if (!_isOpen)
+                        if (_isOpen == false)
                         {
                             await OpenMenu();
                         }
                         else
                         {
-                            await CloseMenu();
+                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem.Selected);
+                            await SetTextAsync(Converter.Set(Value), false);
                         }
                         break;
                     }
                     else
                     {
-                        if (!_isOpen)
+                        if (_isOpen == false)
                         {
                             await OpenMenu();
                             break;
                         }
                         else
                         {
-                            await _inputReference.SetText(Text);
+                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem.Selected);
+                            //await _inputReference.SetText(Text);
                             break;
                         }
                     }
@@ -927,11 +944,11 @@ namespace MudExtensions
         {
             if (selected == false)
             {
-                if (MultiSelection == false && Value.Equals(item.Value))
+                if (MultiSelection == false && Value?.Equals(item.Value) == true)
                 {
                     if (ToggleSelection)
                     {
-                        await UpdateComboboxValueAsync(default(T), updateSearchString: true);
+                        await UpdateComboboxValueAsync(default(T), updateText: false, updateSearchString: true);
                         await SetValueAsync(default(T));
                         item.Selected = false;
                     }
@@ -949,7 +966,7 @@ namespace MudExtensions
                 if (MultiSelection == false)
                 {
                     DeselectAllItems();
-                    await UpdateComboboxValueAsync(item.Value, updateSearchString: true);
+                    await UpdateComboboxValueAsync(item.Value, updateText: false, updateSearchString: true);
                 }
                 else if (SelectedValues.Contains(item.Value) == false)
                 {
@@ -964,6 +981,8 @@ namespace MudExtensions
                 }
                 item.Selected = true;
             }
+            DeactiveAllItems();
+            _lastActivatedItem = item;
             await UpdateDataVisualiserTextAsync();
             if (MultiSelection == false)
             {
@@ -1294,24 +1313,6 @@ namespace MudExtensions
 
             await ScrollToMiddleAsync(Items[index + changeCount]);
             //await ScrollToItemAsync(_lastActivatedItem);
-        }
-
-        public async Task ActivePreviousItem()
-        {
-            if (Items == null || Items.Count == 0)
-            {
-                return;
-            }
-            int index = GetActiveItemIndex();
-            if (0 > index - 1)
-            {
-                return;
-            }
-            DeactiveAllItems();
-            Items[index - 1].SetActive(true);
-            _lastActivatedItem = Items[index - 1];
-
-            //await ScrollToMiddleAsync(Items[index - 1]);
         }
 
         public async Task ActiveLastItem()

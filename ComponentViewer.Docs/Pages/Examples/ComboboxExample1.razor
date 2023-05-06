@@ -5,7 +5,7 @@
     <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center justify-center" Style="height: 500px">
         <MudCombobox @ref="_combobox" @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Text" Label="Text" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
                 AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" autocomplete="new-password"
-                Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter" Strict="_strict">
+                Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter" Strict="_strict" Bordered="true" ShowCheckbox="false">
             <MudComboboxItem Value="@("Foo")" Text="Foo">Foo</MudComboboxItem>
             <MudComboboxItem Value="@("Bar")" Text="Bar">Bar</MudComboboxItem>
             <MudComboboxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboboxItem>
@@ -49,9 +49,9 @@
             <MudText>Text: @_text</MudText>
             <MudText>Selected Values: @(string.Join(", ", _selectedValues ?? new List<string>()))</MudText>
             <MudSelectExtended @bind-Value="_margin" ItemCollection="@(Enum.GetValues<Margin>())" Variant="Variant.Outlined" Label="Margin" Margin="Margin.Dense" Dense="true" />
+            <MudSelectExtended @bind-Value="_dense" ItemCollection="@(Enum.GetValues<Dense>())" Variant="Variant.Outlined" Label="Dense" Margin="Margin.Dense" Dense="true" />
             <MudSelectExtended @bind-Value="_color" ItemCollection="@(Enum.GetValues<Color>())" Variant="Variant.Outlined" Label="Color" Margin="Margin.Dense" Dense="true" />
             <MudSelectExtended @bind-Value="_valuePresenter" ItemCollection="@(Enum.GetValues<ValuePresenter>())" Variant="Variant.Outlined" Label="Value Presenter" Margin="Margin.Dense" Dense="true" />
-            <MudSwitchM3 @bind-Checked="@_dense" Label="Dense" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="@_disabled" Label="Disabled" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="@_readonly" Label="ReadOnly" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
@@ -71,8 +71,8 @@
     IEnumerable<string> _selectedValues;
     Variant _variant = Variant.Outlined;
     Margin _margin;
+    Dense _dense = Dense.Standard;
     Color _color = Color.Primary;
-    bool _dense;
     bool _disabled;
     bool _readonly;
     bool _multiselection;
