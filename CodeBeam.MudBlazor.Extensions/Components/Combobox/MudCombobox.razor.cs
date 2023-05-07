@@ -32,6 +32,7 @@ namespace MudExtensions
         internal MudComboboxItem<T> _lastActivatedItem;
         protected internal List<MudComboboxItem<T>> EligibleItems { get; set; } = new();
         private MudInputExtended<string> _inputReference;
+        private MudTextFieldExtended<string> _searchbox;
         internal bool _isOpen;
         protected internal string _currentIcon { get; set; }
 
@@ -811,12 +812,37 @@ namespace MudExtensions
                         {
                             await ToggleOption(_lastActivatedItem, !_lastActivatedItem.Selected);
                             //await _inputReference.SetText(Text);
+                            if (_lastActivatedItem.Selected == false)
+                            {
+                                _lastActivatedItem.SetActive(true);
+                            }
                             break;
                         }
                     }
             }
             await OnKeyDown.InvokeAsync(obj);
+        }
 
+        protected internal async Task SearchBoxHandleKeyDown(KeyboardEventArgs obj)
+        {
+            if (Disabled)
+                return;
+            switch (obj.Key)
+            {
+                case "ArrowUp":
+                case "ArrowDown":
+                    HandleKeyDown(obj);
+                    break;
+                case "Enter":
+                case "NumpadEnter":
+                    HandleKeyDown(obj);
+                    break;
+                case "Tab":
+                    //await Task.Delay(10);
+                    //await ActiveFirstItem();
+                    //StateHasChanged();
+                    break;
+            }
         }
 
         protected internal async void HandleKeyUp(KeyboardEventArgs obj)
@@ -911,7 +937,18 @@ namespace MudExtensions
             _isOpen = true;
             UpdateIcon();
             StateHasChanged();
-
+            if (Editable)
+            {
+                if (MultiSelection == true)
+                {
+                    await Task.Delay(1);
+                    await _searchbox.SelectAsync();
+                }
+                else
+                {
+                    await _inputReference.SelectAsync();
+                }
+            }
             //disable escape propagation: if selectmenu is open, only the select popover should close and underlying components should not handle escape key
             await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "Key+none" });
             await OnOpen.InvokeAsync();
@@ -1207,6 +1244,21 @@ namespace MudExtensions
             }
         }
 
+        protected int GetActiveProperItemIndex()
+        {
+            var properItems = GetEligibleAndNonDisabledItems();
+            if (_lastActivatedItem == null)
+            {
+                var a = properItems.FindIndex(x => x.Active == true);
+                return a;
+            }
+            else
+            {
+                var a = properItems.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
+                return a;
+            }
+        }
+
         protected T GetActiveItemValue()
         {
             if (_lastActivatedItem == null)
@@ -1240,11 +1292,11 @@ namespace MudExtensions
                 return;
             }
             DeactiveAllItems();
-
+            var properItems = GetEligibleAndNonDisabledItems();
             if (string.IsNullOrWhiteSpace(startChar))
             {
-                Items[0].SetActive(true);
-                _lastActivatedItem = Items[0];
+                properItems[0].SetActive(true);
+                _lastActivatedItem = properItems[0];
                 //await ScrollToMiddleAsync(Items[0]);
                 return;
             }
@@ -1297,20 +1349,25 @@ namespace MudExtensions
             {
                 return;
             }
-            int index = GetActiveItemIndex();
-            if (index + changeCount >= Items.Count || 0 > index + changeCount)
+
+            var properItems = GetEligibleAndNonDisabledItems();
+            int index = GetActiveProperItemIndex();
+            if (index + changeCount >= properItems.Count || 0 > index + changeCount)
             {
                 return;
             }
-            if (Items[index + changeCount].Disabled)
-            {
-                // Recursive
-                await ActiveAdjacentItem(changeCount > 0 ? changeCount + 1 : changeCount - 1);
-                return;
-            }
+            
+            //if (Items[index + changeCount].Disabled || Items[index + changeCount].Eligible == false)
+            //{
+            //    // Recursive
+            //    await ActiveAdjacentItem(changeCount > 0 ? changeCount + 1 : changeCount - 1);
+            //    return;
+            //}
             DeactiveAllItems();
-            Items[index + changeCount].SetActive(true);
-            _lastActivatedItem = Items[index + changeCount];
+            //Items[index + changeCount].SetActive(true);
+            //_lastActivatedItem = Items[index + changeCount];
+            properItems[index + changeCount].SetActive(true);
+            _lastActivatedItem = properItems[index + changeCount];
 
             await ScrollToMiddleAsync(Items[index + changeCount]);
             //await ScrollToItemAsync(_lastActivatedItem);
@@ -1322,24 +1379,25 @@ namespace MudExtensions
             {
                 return;
             }
-            var properLastIndex = Items.Count - 1;
             DeactiveAllItems();
-            for (int i = 0; i < Items.Count; i++)
-            {
-                if (!Items[properLastIndex - i].Disabled)
-                {
-                    properLastIndex -= i;
-                    break;
-                }
-            }
-            Items[properLastIndex].SetActive(true);
-            _lastActivatedItem = Items[properLastIndex];
+            var properItems = GetEligibleAndNonDisabledItems();
+            properItems.Last().SetActive(true);
+            _lastActivatedItem = properItems.Last();
 
             //await ScrollToMiddleAsync(Items[properLastIndex]);
         }
 #pragma warning restore BL0005
 
         #endregion
+
+        protected List<MudComboboxItem<T>> GetEligibleAndNonDisabledItems()
+        {
+            if (Items == null)
+            {
+                return new();
+            }
+            return Items.Where(x => x.Eligible == true && x.Disabled == false).ToList();
+        }
 
         protected internal ValueTask ScrollToMiddleAsync(MudComboboxItem<T> item)
             => ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId);

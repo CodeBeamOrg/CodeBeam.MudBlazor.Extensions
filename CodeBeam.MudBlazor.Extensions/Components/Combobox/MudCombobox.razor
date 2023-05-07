@@ -131,9 +131,9 @@
                             {
                                 if (Editable)
                                 {
-                                        <div Class="pa-2" Style="position: sticky; top: 0px; background-color: var(--mud-palette-background); z-index: 2">
-                                            <MudTextFieldExtended T="string" Value="_searchString" ValueChanged="@HandleInternalValueChanged" Margin="Margin.Dense"
-                                                          Variant="Variant.Outlined" Immediate="true">
+                                        <div Class="pa-2" Style="position: sticky; top: 0px; background-color: var(--mud-palette-background); z-index: 2" @onkeydown:stopPropagation>
+                                            <MudTextFieldExtended @ref="_searchbox" T="string" Value="_searchString" ValueChanged="@HandleInternalValueChanged" Margin="Margin.Dense"
+                                                          Variant="Variant.Outlined" Immediate="true" OnKeyDown="SearchBoxHandleKeyDown">
                                                 <AdornmentEnd>
                                                     <MudIcon Icon="@Icons.Material.Filled.Search" Color="@Color" />
                                                 </AdornmentEnd>
