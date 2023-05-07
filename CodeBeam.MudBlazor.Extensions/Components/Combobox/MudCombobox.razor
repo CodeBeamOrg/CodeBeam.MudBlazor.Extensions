@@ -7,7 +7,7 @@
     <CascadingValue Value="@this" IsFixed="true">
         <div class="mud-select-extended" id="@_elementId">
             <MudInputControl Label="@Label" Variant="@Variant" HelperText="@HelperText" HelperTextOnFocus="@HelperTextOnFocus" FullWidth="@FullWidth" Margin="@Margin" Class="@Classname" Style="@Style"
-                             Error="@Error" ErrorText="@ErrorText" ErrorId="@ErrorId" Disabled="@Disabled" @onclick="@ToggleMenu" Required="@Required" ForId="@FieldId">
+                             Error="@Error" ErrorText="@ErrorText" ErrorId="@ErrorId" Disabled="@Disabled" @onmousedown="@ToggleMenu" Required="@Required" ForId="@FieldId">
                 <InputContent>
                     @*DataVisualiserStyle="@($"min-height: 1.1876em;{(HasValue(Value) && Editable == true ? "padding-bottom: 0px" : null)}")"*@
                     <MudInputExtended @ref="_inputReference" T="string" InputType="@(Editable && MultiSelection == false ? InputType.Text : InputType.Hidden)"
@@ -27,7 +27,11 @@
 
                         <DataVisualiser>
                             <div style="flex-basis: content; flex-grow: 0">
-                                @if (ValuePresenter == ValuePresenter.Chip)
+                                @if (HasValue(Value) == false && string.IsNullOrEmpty(Placeholder) == false)
+                                {
+                                    <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
+                                }
+                                else if (ValuePresenter == ValuePresenter.Chip)
                                 {
                                     <MudChipSet Class="d-flex flex-wrap mud-width-full" AllClosable="ChipCloseable" OnClose="ChipClosed">
                                         @if (ItemCollection != null)
@@ -55,7 +59,11 @@
 
                         <ChildContent>
                             <div class="@TemplateClass">
-                                @if (ValuePresenter == ValuePresenter.Chip)
+                                @if (HasValue(Value) == false && string.IsNullOrEmpty(Placeholder) == false)
+                                {
+                                    <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
+                                }
+                                else if (ValuePresenter == ValuePresenter.Chip)
                                 {
                                     if (SelectedValues == null || !SelectedValues.Any())
                                     {

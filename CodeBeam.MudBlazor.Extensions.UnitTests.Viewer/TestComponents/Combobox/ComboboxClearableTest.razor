@@ -1,0 +1,20 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudCombobox @bind-Value="value" Clearable="true" OnClearButtonClick="@ClearButtonClickHandler">
+    <MudComboboxItem Value="@("1")" />
+    <MudComboboxItem Value="@("2")" />
+    <MudComboboxItem Value="@("3")" />
+</MudCombobox>
+
+@code {
+
+    string value = null;
+
+    public bool ClearButtonClicked { get; set; }
+
+    private void ClearButtonClickHandler(MouseEventArgs e)
+    {
+        ClearButtonClicked = true;
+    }
+}

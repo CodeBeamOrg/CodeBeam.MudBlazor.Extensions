@@ -1050,7 +1050,8 @@ namespace MudExtensions
         /// </summary>
         protected async ValueTask ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
-            await SetValueAsync(default(T), false);
+            //await SetValueAsync(default(T), false);
+            await UpdateComboboxValueAsync(default(T));
             _searchString = null;
             await SetTextAsync(default, false);
             _selectedValues.Clear();

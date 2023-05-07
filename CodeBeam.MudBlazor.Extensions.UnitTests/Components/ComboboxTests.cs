@@ -171,7 +171,7 @@ namespace MudExtensions.UnitTests.Components
             combobox.Instance.Value.Should().BeNullOrEmpty();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
             // click and check if it has toggled the menu
-            input.Click();
+            input.MouseDown();
             menu.ClassList.Should().NotContain("d-none");
             // now click an item and see the value change
             comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().BeGreaterThan(0));
@@ -182,7 +182,7 @@ namespace MudExtensions.UnitTests.Components
             combobox.Instance.Value.Should().Be("2");
             // now we cheat and click the list without opening the menu ;)
 
-            input.Click();
+            input.MouseDown();
             comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().BeGreaterThan(0));
             items = comp.FindAll("div.mud-combobox-item").ToArray();
 
@@ -193,6 +193,32 @@ namespace MudExtensions.UnitTests.Components
             @switch.Instance.Checked = true;
             await comp.InvokeAsync(() => combobox.Instance.HandleOnBlur(new FocusEventArgs()));
             comp.WaitForAssertion(() => @switch.Instance.Checked.Should().Be(false));
+        }
+
+        [Test]
+        public async Task ComboboxClearableTest()
+        {
+            var comp = Context.RenderComponent<ComboboxClearableTest>();
+            var combobox = comp.FindComponent<MudCombobox<string>>();
+            var input = comp.Find("div.mud-input-control");
+
+            // No button when initialized
+            comp.FindAll("button").Should().BeEmpty();
+
+            input.MouseDown();
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().BeGreaterThan(0));
+            // Button shows after selecting item
+            var items = comp.FindAll("div.mud-combobox-item").ToArray();
+            items[1].Click();
+            //comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
+            comp.WaitForAssertion(() => combobox.Instance.Value.Should().Be("2"));
+            comp.Find("button").Should().NotBeNull();
+            // Selection cleared and button removed after clicking clear button
+            comp.Find("button").MouseDown();
+            comp.WaitForAssertion(() => combobox.Instance.Value.Should().BeNullOrEmpty());
+            comp.FindAll("button").Should().BeEmpty();
+            // Clear button click handler should have been invoked
+            comp.Instance.ClearButtonClicked.Should().BeTrue();
         }
 
         /// <summary>
@@ -256,6 +282,6 @@ namespace MudExtensions.UnitTests.Components
         //    //Console.WriteLine(comp.Markup);
         //}
 
-        
+
     }
 }

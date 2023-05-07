@@ -803,7 +803,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => select.Instance.Value.Should().Be("2"));
             comp.Find("button").Should().NotBeNull();
             // Selection cleared and button removed after clicking clear button
-            comp.Find("button").Click();
+            comp.Find("button").MouseDown();
             comp.WaitForAssertion(() => select.Instance.Value.Should().BeNullOrEmpty());
             comp.FindAll("button").Should().BeEmpty();
             // Clear button click handler should have been invoked

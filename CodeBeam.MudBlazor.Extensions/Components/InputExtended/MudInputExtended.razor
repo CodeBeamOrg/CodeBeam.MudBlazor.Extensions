@@ -108,12 +108,14 @@
 
     @if (_showClearable && !Disabled)
     {
-        <MudIconButton Class="@ClearButtonClassname"
-                   Color="@Color.Default"
-                   Icon="@ClearIcon"
-                   Size="@Size.Small"
-                   OnClick="@ClearButtonClickHandlerAsync"
-                   tabindex="-1" />
+        <div @onmousedown:stopPropagation>
+            <MudIconButton Class="@ClearButtonClassname"
+                       Color="@Color.Default"
+                       Icon="@ClearIcon"
+                       Size="@Size.Small"
+                       @onmousedown="@ClearButtonClickHandlerAsync"
+                           tabindex="-1" />
+        </div>
     }
 
     @if (AdornmentEnd != null)
