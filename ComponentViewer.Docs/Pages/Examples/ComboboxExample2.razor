@@ -2,68 +2,40 @@
 @using MudBlazor.Extensions
 
 <MudGrid>
-    <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center justify-center" Style="height: 500px">
-        <MudCombobox @ref="_combobox" @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Text" Label="Text" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable"
-                     MultiSelection="@_multiselection" SelectAll="_selectAll"
-                     autocomplete="new-password"
-                     Clearable="_clearable" ValuePresenter="_valuePresenter">
+    <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center justify-center">
+        <MudCombobox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled"
+            Label="Single Selection" HelperText="Standard combobox" Editable="_editable" autocomplete="new-password">
             <MudComboboxItem Value="@("Foo")" Text="Foo">Foo</MudComboboxItem>
             <MudComboboxItem Value="@("Bar")" Text="Bar">Bar</MudComboboxItem>
             <MudComboboxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboboxItem>
             <MudComboboxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboboxItem>
         </MudCombobox>
-        <MudCombobox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Outlined" Label="Outlined" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable"
-                     MultiSelection="@_multiselection" SelectAll="_selectAll"
-                     autocomplete="new-password"
-                     Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter">
-            <MudComboboxItem Value="@("Foo")">Foo</MudComboboxItem>
-            <MudComboboxItem Value="@("Bar")">Bar</MudComboboxItem>
-            <MudComboboxItem Value="@("Fizz")">Fizz</MudComboboxItem>
-            <MudComboboxItem Value="@("Buzz")">Buzz</MudComboboxItem>
+        <MudCombobox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" ToggleSelection="true"
+                     Label="Toggle Selection" HelperText="Can unselect the item" Editable="_editable" autocomplete="new-password">
+            <MudComboboxItem Value="@("Foo")" Text="Foo">Foo</MudComboboxItem>
+            <MudComboboxItem Value="@("Bar")" Text="Bar">Bar</MudComboboxItem>
+            <MudComboboxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboboxItem>
+            <MudComboboxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboboxItem>
         </MudCombobox>
-        <MudCombobox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Filled" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable"
-                     MultiSelection="@_multiselection" SelectAll="_selectAll"
-                     autocomplete="new-password"
-                     Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter">
-            <MudComboboxItem Value="@("Foo")">Foo</MudComboboxItem>
-            <MudComboboxItem Value="@("Bar")">Bar</MudComboboxItem>
-            <MudComboboxItem Value="@("Fizz")">Fizz</MudComboboxItem>
-            <MudComboboxItem Value="@("Buzz")">Buzz</MudComboboxItem>
+        <MudCombobox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" MultiSelection="true"
+                     Label="Multi Selection" HelperText="Can select multiple items" Editable="_editable" autocomplete="new-password">
+            <MudComboboxItem Value="@("Foo")" Text="Foo">Foo</MudComboboxItem>
+            <MudComboboxItem Value="@("Bar")" Text="Bar">Bar</MudComboboxItem>
+            <MudComboboxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboboxItem>
+            <MudComboboxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboboxItem>
         </MudCombobox>
     </MudItem>
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
-            <MudButton OnClick="StateHasChanged">Refresh</MudButton>
-            <MudText>Item Count: @_combobox?.Items.Count()</MudText>
-            <MudText>Value: @_value</MudText>
-            <MudText>Selected Values: @(string.Join(", ", _selectedValues ?? new List<string>()))</MudText>
-                <MudSelectExtended @bind-Value="_valuePresenter" ItemCollection="@(Enum.GetValues<ValuePresenter>())" Variant="Variant.Outlined" Label="Value Presenter" Margin="Margin.Dense" Dense="true" />
-                <MudSelectExtended @bind-Value="_dense" ItemCollection="@(Enum.GetValues<Dense>())" Variant="Variant.Outlined" Label="Dense" Margin="Margin.Dense" Dense="true" />
-                <MudSwitchM3 @bind-Checked="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
-                <MudSwitchM3 @bind-Checked="@_selectAll" Label="Select All" Color="Color.Secondary" />
-                <MudSwitchM3 @bind-Checked="@_editable" Label="Editable" Color="Color.Secondary" />
-                <MudSwitchM3 @bind-Checked="@_placeholder" Label="Placeholder" Color="Color.Secondary" />
-                <MudSwitchM3 @bind-Checked="@_clearable" Label="Clearable" Color="Color.Secondary" />
-            </MudStack>
-        </MudItem>
-    </MudGrid>
+            <MudSwitchM3 @bind-Checked="@_editable" Label="Editable" Color="Color.Secondary" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
 
-    @code {
-    MudCombobox<string> _combobox;
+    @code{
     string _value;
+    string _text;
     IEnumerable<string> _selectedValues;
-    Variant _variant = Variant.Outlined;
-    Margin _margin;
-    Color _color = Color.Primary;
-    Dense _dense = Dense.Standard;
-    bool _multiselection;
-    bool _selectAll;
-    bool _placeholder;
     bool _editable;
-    bool _clearable;
-    bool _toggleSelection;
-    ValuePresenter _valuePresenter = ValuePresenter.Text;
-
-    IEnumerable<int> _numbers = Enumerable.Range(0, 1000);
 }

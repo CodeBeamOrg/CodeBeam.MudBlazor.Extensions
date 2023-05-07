@@ -5,7 +5,7 @@
     <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center justify-center" Style="height: 500px">
         <MudCombobox @ref="_combobox" @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Text" Label="Text" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
                 AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" autocomplete="new-password"
-                Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter" Strict="_strict" Bordered="true" ShowCheckbox="false"
+                Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" ValuePresenter="_valuePresenter" Strict="_strict" Bordered="true" ShowCheckbox="false"
                 HelperText="@(_helperText ? "Helper Text" : null)" HelperTextOnFocus="_helperTextOnFocus">
             <MudComboboxItem Value="@("Foo")" Text="Foo">Foo</MudComboboxItem>
             <MudComboboxItem Value="@("Bar")" Text="Bar">Bar</MudComboboxItem>
@@ -18,7 +18,7 @@
         </MudCombobox>
         <MudCombobox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Outlined" Label="Outlined" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
                      AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" autocomplete="new-password"
-                     Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter"
+                     Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" ValuePresenter="_valuePresenter"
                      HelperText="@(_helperText ? "Helper Text" : null)" HelperTextOnFocus="_helperTextOnFocus">
             <MudComboboxItem Value="@("Foo")">Foo</MudComboboxItem>
             <MudComboboxItem Value="@("Bar")">Bar</MudComboboxItem>
@@ -31,7 +31,7 @@
         </MudCombobox>
         <MudCombobox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Filled" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
                      AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" autocomplete="new-password"
-                     Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" ToggleSelection="_toggleSelection" ValuePresenter="_valuePresenter"
+                     Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" ValuePresenter="_valuePresenter"
                      HelperText="@(_helperText ? "Helper Text" : null)" HelperTextOnFocus="_helperTextOnFocus">
             <MudComboboxItem Value="@("Foo")">Foo</MudComboboxItem>
             <MudComboboxItem Value="@("Bar")">Bar</MudComboboxItem>
@@ -46,7 +46,6 @@
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
-            <MudButton OnClick="StateHasChanged">Refresh</MudButton>
             <MudText>Item Count: @_combobox?.Items.Count()</MudText>
             <MudText>Value: @_value</MudText>
             <MudText>Text: @_text</MudText>
@@ -62,7 +61,6 @@
             <MudSwitchM3 @bind-Checked="@_strict" Label="Strict" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="@_placeholder" Label="Placeholder" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="@_clearable" Label="Clearable" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_toggleSelection" Label="ToggleSelection" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="@_helperText" Label="HelperText" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="@_helperTextOnFocus" Label="HelperTextOnFocus" Color="Color.Secondary" />
         </MudStack>
@@ -84,7 +82,6 @@
     bool _placeholder;
     bool _editable;
     bool _clearable;
-    bool _toggleSelection;
     bool _strict;
     bool _helperText;
     bool _helperTextOnFocus;

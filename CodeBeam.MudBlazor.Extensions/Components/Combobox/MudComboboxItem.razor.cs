@@ -60,35 +60,12 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Behavior)]
         public string Text { get; set; }
 
-        //private void OnUpdateSelectionStateFromOutside(IEnumerable<T> selection)
-        //{
-        //    if (selection == null)
-        //        return;
-        //    var old_is_selected = Selected;
-        //    Selected = selection.Contains(Value);
-        //    if (old_is_selected != Selected)
-        //        InvokeAsync(StateHasChanged);
-        //}
-
         /// <summary>
         /// A user-defined option that can be selected
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public T Value { get; set; }
-
-        /// <summary>
-        /// Mirrors the MultiSelection status of the parent select
-        /// </summary>
-        //protected bool MultiSelection
-        //{
-        //    get
-        //    {
-        //        if (MudCombobox == null)
-        //            return false;
-        //        return MudCombobox.MultiSelection;
-        //    }
-        //}
 
         protected internal bool Selected { get; set; }
         protected internal bool Active { get; set; }
@@ -113,9 +90,10 @@ namespace MudExtensions
             }
         }
 
-        public async Task ForceRender()
+        public void ForceRender()
         {
-            await InvokeAsync(StateHasChanged);
+            CheckEligible();
+            StateHasChanged();
         }
 
         public async Task ForceUpdate()
@@ -173,7 +151,7 @@ namespace MudExtensions
                 return true;
             }
 
-            if (Text != null)
+            if (string.IsNullOrEmpty(Text) == false)
             {
                 if (Text.Contains(MudCombobox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
                 {

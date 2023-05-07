@@ -124,16 +124,17 @@
                         </ChildContent>
                     </MudInputExtended>
 
-                    <MudPopover Open="true" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" Class="@PopoverClassname" RelativeWidth="@RelativeWidth">
+                    <MudPopover Open="true" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" OverflowBehavior="OverflowBehavior.FlipAlways" Class="@PopoverClassname" RelativeWidth="@RelativeWidth">
                         <CascadingValue Value="@this" IsFixed="true">
                             <div id="@_popoverId">
+                                @PopoverStartContent
                             @if (MultiSelection)
                             {
                                 if (Editable)
                                 {
                                         <div Class="pa-2" Style="position: sticky; top: 0px; background-color: var(--mud-palette-background); z-index: 2" @onkeydown:stopPropagation>
                                             <MudTextFieldExtended @ref="_searchbox" T="string" Value="_searchString" ValueChanged="@HandleInternalValueChanged" Margin="Margin.Dense"
-                                                          Variant="Variant.Outlined" Immediate="true" OnKeyDown="SearchBoxHandleKeyDown">
+                                                          Variant="Variant.Outlined" Immediate="true" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="SearchBoxHandleKeyUp">
                                                 <AdornmentEnd>
                                                     <MudIcon Icon="@Icons.Material.Filled.Search" Color="@Color" />
                                                 </AdornmentEnd>
@@ -143,15 +144,16 @@
 
                                 if (SelectAll)
                                 {
-                                    <div class="mud-list-item-extended mud-list-item-clickable-extended mud-ripple d-flex" @onclick="SelectAllItems" @onclick:stopPropagation="true">
+                                        <div class="@($"mud-combobox-item mud-combobox-item-clickable mud-combobox-item-{Dense.ToDescriptionString()} mud-ripple d-flex")" @onclick="SelectAllItems" @onclick:stopPropagation="true">
                                         <MudCheckBox Class="mx-4" @bind-Checked="_allSelected" Color="@Color" @onclick="SelectAllItems" Dense="true" />
-                                        <MudText Typo="Typo.body2">@SelectAllText</MudText>
+                                        <MudText Typo="GetTypo()">@SelectAllText</MudText>
                                     </div>
                                     <MudDivider />
                                 }
                             }
                             
                             @ChildContent
+                            @PopoverEndContent
                             </div>
                         </CascadingValue>
                     </MudPopover>

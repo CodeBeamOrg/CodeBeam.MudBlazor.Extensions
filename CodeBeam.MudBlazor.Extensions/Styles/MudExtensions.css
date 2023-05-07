@@ -761,6 +761,7 @@
   flex-basis: 0;
   min-width: 0;
   position: relative;
+  height: fit-content;
   /*overflow-x: auto;*/ }
   .mud-select-extended.mud-autocomplete {
     display: block; }

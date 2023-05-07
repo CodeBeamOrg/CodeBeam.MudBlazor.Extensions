@@ -105,6 +105,14 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public RenderFragment ChildContent { get; set; }
 
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public RenderFragment PopoverStartContent { get; set; }
+
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public RenderFragment PopoverEndContent { get; set; }
+
         /// <summary>
         /// Optional presentation template for items
         /// </summary>
@@ -634,10 +642,21 @@ namespace MudExtensions
             
         }
 
+        bool _oldShowCheckbox = true;
+        bool _oldBordered;
+        Dense _oldDense = Dense.Standard;
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            //UpdateIcon();
+            if (_oldShowCheckbox != ShowCheckbox ||
+                _oldBordered != Bordered ||
+                _oldDense != Dense)
+            {
+                ForceRenderItems();
+            }
+            _oldShowCheckbox = ShowCheckbox;
+            _oldBordered = Bordered;
+            _oldDense = Dense;
             _allSelected = GetAllSelectedState();
         }
 
@@ -660,7 +679,7 @@ namespace MudExtensions
             if (MultiSelection != _oldMultiselection)
             {
                 await SyncMultiselectionValues(MultiSelection);
-                await ForceRenderItems();
+                ForceRenderItems();
                 if (MultiSelection == true)
                 {
                     _searchString = null;
@@ -810,11 +829,11 @@ namespace MudExtensions
                         }
                         else
                         {
-                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem.Selected);
+                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem?.Selected ?? true);
                             //await _inputReference.SetText(Text);
-                            if (_lastActivatedItem.Selected == false)
+                            if (_lastActivatedItem?.Selected == false)
                             {
-                                _lastActivatedItem.SetActive(true);
+                                _lastActivatedItem?.SetActive(true);
                             }
                             break;
                         }
@@ -843,6 +862,12 @@ namespace MudExtensions
                     //StateHasChanged();
                     break;
             }
+            
+        }
+
+        protected internal async Task SearchBoxHandleKeyUp(KeyboardEventArgs obj)
+        {
+            ForceRenderItems();
         }
 
         protected internal async void HandleKeyUp(KeyboardEventArgs obj)
@@ -979,6 +1004,11 @@ namespace MudExtensions
 
         protected internal async Task ToggleOption(MudComboboxItem<T> item, bool selected)
         {
+            if (item == null)
+            {
+                return;
+            }
+
             if (selected == false)
             {
                 if (MultiSelection == false && Value?.Equals(item.Value) == true)
@@ -1218,9 +1248,10 @@ namespace MudExtensions
             return null;
         }
 
-        protected async Task ForceRenderItems()
+        protected void ForceRenderItems()
         {
-            Items.ForEach(async(x) => await x.ForceRender());
+            Items.ForEach((x) => x.ForceRender());
+            StateHasChanged();
         }
 
         protected async Task ForceUpdateItems()
@@ -1397,6 +1428,16 @@ namespace MudExtensions
                 return new();
             }
             return Items.Where(x => x.Eligible == true && x.Disabled == false).ToList();
+        }
+
+        protected Typo GetTypo()
+        {
+            if (Dense == Dense.Slim || Dense == Dense.Superslim)
+            {
+                return Typo.body2;
+            }
+
+            return Typo.body1;
         }
 
         protected internal ValueTask ScrollToMiddleAsync(MudComboboxItem<T> item)
