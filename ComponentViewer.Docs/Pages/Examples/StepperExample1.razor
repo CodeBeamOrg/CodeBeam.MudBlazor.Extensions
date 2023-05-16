@@ -7,9 +7,9 @@
     <MudItem xs="12" sm="8" Class="d-flex align-center">
         <MudStepper @ref="_stepper" Class="mud-width-full" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant"
                     DisableAnimation="_disableAnimation" DisablePreviousButton="_disablePreviousButton" DisableNextButton="_disableNextButton" 
-                    DisableSkipButton="_disableSkipButton" DisableStepResultIndicator="_disableStepResultIndicator" HeaderTextView="_headerTextView"
-                    PreventStepChangeAsync="new Func<StepChangeDirection, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
-                    MobileView="_mobileView" IconActionButtons="_iconActionButtons" Loading="_loading" HeaderSize="_headerSize">
+                    DisableSkipButton="_disableSkipButton" DisableStepResultIndicator="_disableStepResultIndicator" HeaderBadgeView="_headerBadgeView" 
+                    HeaderTextView="_headerTextView" PreventStepChangeAsync="new Func<StepChangeDirection, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
+                    MobileView="_mobileView" IconActionButtons="_iconActionButtons" Loading="_loading" HeaderSize="_headerSize" HeaderIcon="false">
             <StaticContent>
                 @if (_showStaticContent)
                 {
@@ -109,6 +109,12 @@
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
+            <MudSelect @bind-Value="_headerBadgeView" Variant="Variant.Outlined" Label="Header Badge View" Margin="Margin.Dense" Dense="true">
+                @foreach (HeaderBadgeView item in Enum.GetValues<HeaderBadgeView>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
             <MudSelectExtended @bind-Value="_headerSize" ItemCollection="@(Enum.GetValues<Size>())" Variant="Variant.Outlined" Label="Header Size" Margin="Margin.Dense" Dense="true" />
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => _stepper.Reset())">Reset</MudButton>
         </MudStack>
@@ -124,6 +130,7 @@
     bool _mobileView;
     bool _iconActionButtons;
     Variant _variant = Variant.Filled;
+    HeaderBadgeView _headerBadgeView = HeaderBadgeView.All;
     HeaderTextView _headerTextView = HeaderTextView.All;
     bool _disableAnimation = false;
     bool _disablePreviousButton = false;
