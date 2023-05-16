@@ -44,7 +44,8 @@
                                 }
                                 else
                                 {
-                                    <MudAvatar Style="@AvatarStylename" Color="@Color" Variant="@Variant" Size="@HeaderSize">
+                                    Color incompleteColor = (HeaderBadgeView == HeaderBadgeView.GreyOutIncomplete) && !active ? Color.Transparent : @Color;
+                                    <MudAvatar Style="@AvatarStylename" Color="@incompleteColor" Variant="@Variant" Size="@HeaderSize">
                                         <MudIcon Class="pa-1" Icon="@step.Icon" Size="@HeaderSize" />
                                     </MudAvatar>
                                 }
