@@ -77,12 +77,24 @@ namespace MudExtensions
             }
         }
 
+        protected string GetStepClass()
+        {
+            if (Vertical)
+            {
+                return $"d-flex";
+            }
+            else
+            {
+                return $"";
+            }
+        }
+
         protected string GetProgressLinearStyle()
         {
             var end = Steps.Count * 2;
             if (Vertical)
             {
-                return $"grid-row-start:2;grid-row-end:{end};grid-column:1/-1;display:inline-grid;left:{(HeaderSize == Size.Medium ? 30 : HeaderSize == Size.Large ? 38 : 22)}px;top:-34px;z-index:10;transform:rotateX(180deg);";
+                return $"grid-row-start:2;grid-row-end:{end};grid-column:1/-1;display:inline-grid;left:{(HeaderSize == Size.Medium ? 30 : HeaderSize == Size.Large ? 38 : 22)}px;z-index:10;transform:rotateX(180deg);";
             }
             else
             {

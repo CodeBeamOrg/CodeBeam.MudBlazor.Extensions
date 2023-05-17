@@ -20,7 +20,7 @@
                         continue;
                     }
 
-                    <div style="@GetStepPercent()">
+                    <div class="@GetStepClass()" style="@GetStepPercent()">
                         <div @onclick="@(Linear ? null : () => SetActiveIndex(step))" class="@HeaderClassname">
                             @{
                                 bool active = IsStepActive(step);
