@@ -496,7 +496,7 @@ namespace MudExtensions
                 if (updateText)
                 {
                     _forceTextUpdate = false;
-                    //await UpdateTextPropertyAsync(false);
+                    await UpdateTextPropertyAsync(false);
                 }
             }
         }

@@ -35,7 +35,7 @@ namespace MudExtensions.UnitTests.Components
 
             combobox.Instance.Value.Should().Be("1");
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
-            combobox.Instance.Text.Should().Be(null);
+            combobox.Instance.Text.Should().Be("1");
         }
 
         // Note: MudSelect doesn't guaranteed the consequences of changing SelectedValues if MultiSelection is false for now.
@@ -94,12 +94,12 @@ namespace MudExtensions.UnitTests.Components
             comp.SetParam("SelectedValues", new HashSet<string>() { "1" });
             combobox.Instance.Value.Should().Be(null);
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
-            combobox.Instance.Text.Should().Be("1");
+            combobox.Instance.Text.Should().Be(null);
 
             comp.SetParam("SelectedValues", new HashSet<string>() { "2", "1" });
             combobox.Instance.Value.Should().Be(null);
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2", "1" });
-            combobox.Instance.Text.Should().Be("2, 1");
+            combobox.Instance.Text.Should().Be(null);
         }
 
         [Test]
