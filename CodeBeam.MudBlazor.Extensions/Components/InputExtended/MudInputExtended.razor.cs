@@ -189,18 +189,18 @@ namespace MudExtensions
         /// <summary>
         /// Show clear button.
         /// </summary>
-        [Parameter] public bool Clearable
-        {
-            get => _showClearable;
-            set
-            {
-                if (_showClearable == value)
-                {
-                    return;
-                }
-                UpdateClearable(Value);
-            }
-        }
+        [Parameter] public bool Clearable { get; set; }
+        //{
+        //    get => _showClearable;
+        //    set
+        //    {
+        //        if (_showClearable == value)
+        //        {
+        //            return;
+        //        }
+        //        UpdateClearable(Value);
+        //    }
+        //}
 
         /// <summary>
         /// Button click event for clear button. Called after text and value has been cleared.
@@ -234,9 +234,11 @@ namespace MudExtensions
         private void UpdateClearable(object value)
         {
             var showClearable = HasValue((T)value);
-            if (_showClearable != showClearable)
-                _showClearable = showClearable;
+            if (Clearable != showClearable)
+                Clearable = showClearable;
         }
+
+        private bool GetClearable() => Clearable && ((Value is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (Value is not string && Value is not null));
 
         protected override async Task UpdateTextPropertyAsync(bool updateValue)
         {

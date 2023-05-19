@@ -6,6 +6,7 @@ using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using MudExtensions.Extensions;
 using MudExtensions.Services;
+using static MudBlazor.CategoryTypes;
 
 namespace MudExtensions
 {
@@ -516,6 +517,12 @@ namespace MudExtensions
                 //    UpdateTextPropertyAsync(false).AndForget();
                 //}
 
+                //if (MultiSelection)
+                //{
+                //    UpdateComboboxValueAsync(_selectedValues.LastOrDefault(), updateText: false).AndForgetExt();
+                //    UpdateTextPropertyAsync(false).AndForget();
+                //}
+
                 SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer)).AndForget();
                 ForceUpdateItems().AndForgetExt();
                 //Console.WriteLine("SelectedValues setter ended");
@@ -877,30 +884,26 @@ namespace MudExtensions
 
         protected internal async Task HandleOnBlur(FocusEventArgs obj)
         {
-            //if (_isOpen)
-            //{
-            //    // when the menu is open we immediately get back the focus if we lose it (i.e. because of checkboxes in multi-select)
-            //    // otherwise we can't receive key strokes any longer
-            //    _elementReference.FocusAsync().AndForget(TaskOption.Safe);
-            //}
-            //base.OnBlur.InvokeAsync(obj).AndForget();
 
-            if (Strict == true)
+            if (Strict == false)
             {
-                if (Items.Select(x => x.Value).Contains(Converter.Get(_searchString)))
-                {
-                    await SetValueAsync(Converter.Get(_searchString));
-                }
-                else
-                {
-                    _searchString = Converter.Set(Value);
-                    await _inputReference.SetText(_searchString);
-                    StateHasChanged();
-                }
+                await UpdateComboboxValueAsync(Converter.Get(_searchString), updateText: true, updateSearchString: true);
             }
-            else if (Editable == true)
+            else
             {
-                await SetValueAsync(Converter.Get(_searchString));
+                if (Items.Select(x => x.Value).Contains(Converter.Get(_searchString)) == false)
+                {
+                    if (Items.Select(x => x.Value).Contains(Value))
+                    {
+                        await ToggleOption(Items.FirstOrDefault(x => x.Value.Equals(Value)), true);
+                    }
+                    else
+                    {
+                        await Clear();
+                    }
+                        
+                    _searchString = Text;
+                }
             }
 
 
@@ -946,7 +949,9 @@ namespace MudExtensions
             if (Disabled || ReadOnly)
                 return;
             if (_isOpen)
+            {
                 await CloseMenu();
+            }
             else
             {
                 await OpenMenu();

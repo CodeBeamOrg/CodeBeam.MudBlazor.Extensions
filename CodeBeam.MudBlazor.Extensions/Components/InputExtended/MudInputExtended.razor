@@ -106,7 +106,7 @@
         </div>
     }
 
-    @if (_showClearable && !Disabled)
+    @if (GetClearable() && Disabled == false && ReadOnly == false)
     {
         <div @onmousedown:stopPropagation>
             <MudIconButton Class="@ClearButtonClassname"
