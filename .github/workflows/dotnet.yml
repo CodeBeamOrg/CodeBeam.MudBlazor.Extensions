@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: |
           6.0.x
-          7.0.x
+          7.0.203
         publish-coverage: true
     - name: Restore dependencies
       run: dotnet restore
