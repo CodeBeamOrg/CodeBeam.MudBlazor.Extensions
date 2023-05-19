@@ -204,6 +204,12 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public Variant Variant { get; set; }
+        
+        /// <summary>
+        /// Choose header badge view. Default is all.
+        /// </summary>
+        [Parameter]
+        public HeaderBadgeView HeaderBadgeView { get; set; } = HeaderBadgeView.All;
 
         /// <summary>
         /// Choose header text view. Default is all.
