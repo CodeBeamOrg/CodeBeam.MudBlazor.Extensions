@@ -138,7 +138,7 @@
 
                     <MudPopover Open="true" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" OverflowBehavior="OverflowBehavior.FlipAlways" Class="@PopoverClassname" RelativeWidth="@RelativeWidth">
                         <CascadingValue Value="@this" IsFixed="true">
-                            <div id="@_popoverId">
+                            <div id="@_popoverId" style="overflow-y: auto; max-height: 300px">
                                 @PopoverStartContent
                             @if (MultiSelection)
                             {

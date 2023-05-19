@@ -982,6 +982,16 @@ namespace MudExtensions
             }
             //disable escape propagation: if selectmenu is open, only the select popover should close and underlying components should not handle escape key
             await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "Key+none" });
+
+            if (MultiSelection)
+            {
+                _lastActivatedItem = Items.LastOrDefault(x => x.Value.Equals(SelectedValues.LastOrDefault()));
+            }
+            else
+            {
+                _lastActivatedItem = Items.FirstOrDefault(x => x.Value.Equals(Value));
+            }
+            await ScrollToMiddleAsync(_lastActivatedItem);
             await OnOpen.InvokeAsync();
         }
 
@@ -989,6 +999,7 @@ namespace MudExtensions
         {
             _isOpen = false;
             UpdateIcon();
+            DeactiveAllItems();
             StateHasChanged();
             //if (focusAgain == true)
             //{
@@ -1334,7 +1345,7 @@ namespace MudExtensions
             {
                 properItems[0].SetActive(true);
                 _lastActivatedItem = properItems[0];
-                //await ScrollToMiddleAsync(Items[0]);
+                await ScrollToMiddleAsync(Items[0]);
                 return;
             }
 
@@ -1352,7 +1363,7 @@ namespace MudExtensions
                     return;
                 }
                 _lastActivatedItem.SetActive(true);
-                //await ScrollToMiddleAsync(_lastActivatedItem);
+                await ScrollToMiddleAsync(_lastActivatedItem);
                 return;
             }
 
@@ -1361,7 +1372,7 @@ namespace MudExtensions
             {
                 possibleItems[0].SetActive(true);
                 _lastActivatedItem = possibleItems[0];
-                //await ScrollToMiddleAsync(possibleItems[0]);
+                await ScrollToMiddleAsync(possibleItems[0]);
                 return;
             }
 
@@ -1369,14 +1380,14 @@ namespace MudExtensions
             {
                 possibleItems[0].SetActive(true);
                 _lastActivatedItem = possibleItems[0];
-                //await ScrollToMiddleAsync(possibleItems[0]);
+                await ScrollToMiddleAsync(possibleItems[0]);
             }
             else
             {
                 var item = possibleItems[possibleItems.IndexOf(theItem) + 1];
                 item.SetActive(true);
                 _lastActivatedItem = item;
-                //await ScrollToMiddleAsync(item);
+                await ScrollToMiddleAsync(item);
             }
         }
 
@@ -1407,7 +1418,6 @@ namespace MudExtensions
             _lastActivatedItem = properItems[index + changeCount];
 
             await ScrollToMiddleAsync(Items[index + changeCount]);
-            //await ScrollToItemAsync(_lastActivatedItem);
         }
 
         public async Task ActiveLastItem()
@@ -1421,7 +1431,7 @@ namespace MudExtensions
             properItems.Last().SetActive(true);
             _lastActivatedItem = properItems.Last();
 
-            //await ScrollToMiddleAsync(Items[properLastIndex]);
+            await ScrollToMiddleAsync(_lastActivatedItem);
         }
 #pragma warning restore BL0005
 
@@ -1447,7 +1457,14 @@ namespace MudExtensions
         }
 
         protected internal ValueTask ScrollToMiddleAsync(MudComboboxItem<T> item)
-            => ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId);
+        {
+            if (item == null)
+            {
+                return ValueTask.CompletedTask;
+            }
+            ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId);
+            return ValueTask.CompletedTask;
+        }
 
         private ValueTask ScrollToItemAsync(MudComboboxItem<T> item)
             => item != null ? ScrollManager.ScrollToListItemAsync(item.ItemId) : ValueTask.CompletedTask;
