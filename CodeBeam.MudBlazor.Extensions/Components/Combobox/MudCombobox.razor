@@ -31,7 +31,7 @@
                                 {
                                     <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
                                 }
-                                else if (ValuePresenter == ValuePresenter.Chip)
+                                else if (InputPresenter == ValuePresenter.Chip)
                                 {
                                     <MudChipSet Class="d-flex flex-wrap mud-width-full" AllClosable="ChipCloseable" OnClose="ChipClosed">
                                         @if (ItemCollection != null)
@@ -50,9 +50,47 @@
                                         }
                                     </MudChipSet>
                                 }
-                                else if (ValuePresenter == ValuePresenter.Text && (Editable == false || (MultiSelection == true && Editable == true)))
+                                else if (InputPresenter == ValuePresenter.Text && (Editable == false || (MultiSelection == true && Editable == true)))
                                 {
                                     <div style="white-space: break-spaces">@_dataVisualiserText</div>
+                                }
+                                else if (InputPresenter == ValuePresenter.ItemContent)
+                                {
+                                    if (SelectedValues == null)
+                                    {
+                                        <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
+
+                                    }
+                                    else if (ItemTemplate != null)
+                                    {
+                                        if (Value != null)
+                                        {
+                                            @ItemTemplate(Items.FirstOrDefault(x => x.Value.Equals(Value)))
+                                        }
+                                        else if (!string.IsNullOrEmpty(Placeholder))
+                                        {
+                                            <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
+                                        }
+                                    }
+                                    else if (Items.FirstOrDefault(x => x.Value.Equals(Value))?.ChildContent != null)
+                                    {
+                                        if (MultiSelection)
+                                        {
+                                            @foreach (var item in Items.Where(x => SelectedValues.Contains(x.Value)))
+                                            {
+                                                <MudRender>@item.ChildContent</MudRender>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <MudRender>@Items.FirstOrDefault(x => x.Value.Equals(Value))?.ChildContent</MudRender>
+                                        }
+                                        
+                                    }
+                                    else
+                                    {
+                                        <MudRender>@GetSelectTextPresenter()</MudRender>
+                                    }
                                 }
                             </div> 
                         </DataVisualiser>
@@ -63,7 +101,7 @@
                                 {
                                     <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
                                 }
-                                else if (ValuePresenter == ValuePresenter.Chip)
+                                else if (InputPresenter == ValuePresenter.Chip)
                                 {
                                     if (SelectedValues == null || !SelectedValues.Any())
                                     {
@@ -89,37 +127,11 @@
                                         </MudChipSet>*@
                                     }
                                 }
-                                else if (ValuePresenter == ValuePresenter.Text && MultiSelection == true)
+                                else if (InputPresenter == ValuePresenter.Text && MultiSelection == true)
                                 {
                                     @*<div style="white-space: break-spaces">@_dataVisualiserText</div>*@
                                 }
-                                else if (ValuePresenter == ValuePresenter.ItemContent)
-                                {
-                                    if (SelectedValues == null)
-                                    {
-                                        <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
-
-                                    }
-                                    else if (ItemTemplate != null)
-                                    {
-                                        if (Value != null)
-                                        {
-                                            @ItemTemplate(Items.FirstOrDefault(x => x.Value.Equals(Value)))
-                                        }
-                                        else if (!string.IsNullOrEmpty(Placeholder))
-                                        {
-                                            <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
-                                        }
-                                    }
-                                    else if (Items.FirstOrDefault(x => x.Value.Equals(Value)).ChildContent != null)
-                                    {
-                                        <MudRender>@Items.FirstOrDefault(x => x.Value.Equals(Value)).ChildContent</MudRender>
-                                    }
-                                    else
-                                    {
-                                        <MudRender>@GetSelectTextPresenter()</MudRender>
-                                    }
-                                }
+                                
                             </div>
                         </ChildContent>
                     </MudInputExtended>

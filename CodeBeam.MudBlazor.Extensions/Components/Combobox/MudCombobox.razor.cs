@@ -203,11 +203,18 @@ namespace MudExtensions
         public Color Color { get; set; } = Color.Primary;
 
         /// <summary>
-        /// The value presenter.
+        /// The input's visual.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public ValuePresenter ValuePresenter { get; set; } = ValuePresenter.Text;
+        public ValuePresenter InputPresenter { get; set; } = ValuePresenter.Text;
+
+        /// <summary>
+        /// The items' visual in popover.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public ValuePresenter ItemPresenter { get; set; } = ValuePresenter.Text;
 
         /// <summary>
         /// If true, shows checkbox when multiselection is true. Default is true.

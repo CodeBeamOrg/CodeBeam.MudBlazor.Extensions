@@ -84,6 +84,13 @@ namespace MudExtensions
             get
             {
                 var converter = MudCombobox?.Converter;
+                if (MudCombobox?.ItemPresenter == ValuePresenter.None)
+                {
+                    if (converter == null)
+                        return Value.ToString();
+                    return converter.Set(Value);
+                }
+                
                 if (converter == null)
                     return $"{(string.IsNullOrEmpty(Text) ? Value : Text)}";
                 return !string.IsNullOrEmpty(Text) ? Text : converter.Set(Value);

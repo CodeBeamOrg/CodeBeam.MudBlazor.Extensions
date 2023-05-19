@@ -1,4 +1,5 @@
 ﻿@namespace MudExtensions
+@using MudExtensions.Enums;
 @inherits MudBaseSelectItem
 @typeparam T
 
@@ -10,7 +11,7 @@
     }
 
     <MudText Typo="GetTypo()">
-        @if (ChildContent != null && MudCombobox?.ItemCollection == null)
+        @if (ChildContent != null && MudCombobox?.ItemPresenter == ValuePresenter.ItemContent)
         {
             @ChildContent
         }
