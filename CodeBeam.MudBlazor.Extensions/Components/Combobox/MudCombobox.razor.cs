@@ -517,12 +517,6 @@ namespace MudExtensions
                 //    UpdateTextPropertyAsync(false).AndForget();
                 //}
 
-                //if (MultiSelection)
-                //{
-                //    UpdateComboboxValueAsync(_selectedValues.LastOrDefault(), updateText: false).AndForgetExt();
-                //    UpdateTextPropertyAsync(false).AndForget();
-                //}
-
                 SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer)).AndForget();
                 ForceUpdateItems().AndForgetExt();
                 //Console.WriteLine("SelectedValues setter ended");
