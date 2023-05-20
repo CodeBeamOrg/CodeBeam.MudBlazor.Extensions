@@ -594,6 +594,11 @@ namespace MudExtensions
             {
                 if (MultiSelectionTextFunc != null)
                 {
+                    if (SelectedValues.Count() == 0)
+                    {
+                        _dataVisualiserText = null;
+                        return Task.CompletedTask;
+                    }
                     _dataVisualiserText = MultiSelectionTextFunc.Invoke(SelectedValues.ToList());
                     //return SetCustomizedTextAsync(string.Join(Delimiter, textList),
                     //    selectedConvertedValues: SelectedValues.ToList(),

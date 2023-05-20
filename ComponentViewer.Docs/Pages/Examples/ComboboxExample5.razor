@@ -47,6 +47,15 @@
                     </ChildContent>
                 </MudCombobox>
             </MudItem>
+
+            <MudItem xs="12">
+                <MudCombobox MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="_multiselection" @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" T="string" Label="Text Func" Variant="Variant.Filled" Placeholder="Placeholder">
+                    @foreach (var item in characters)
+                    {
+                        <MudComboboxItem T="string" Value="@item" Text="@item">@item</MudComboboxItem>
+                    }
+                </MudCombobox>
+            </MudItem>
         </MudGrid>
         
 
@@ -69,4 +78,9 @@
     {
         "Harry Potter", "Ron Weasley", "Hermione Granger", "Seamus Finnigan", "Oliver Wood"
     };
+
+    private string GetMultiSelectionText(List<string> selectedValues)
+    {
+        return $"{selectedValues.Count()} {(selectedValues.Count > 1 ? "sorcerers:" : "sorcerer:")} {string.Join(", ", selectedValues)} {(selectedValues.Count > 1 ? "are" : "is")} ready!";
+    }
 }

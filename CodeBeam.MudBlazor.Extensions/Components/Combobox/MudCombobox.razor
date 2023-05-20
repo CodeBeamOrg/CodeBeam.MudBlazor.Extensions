@@ -38,14 +38,14 @@
                                         {
                                             foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
                                             {
-                                                <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                                <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
                                             }
                                         }
                                         else
                                         {
                                             foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboboxItem<T>>())
                                             {
-                                                <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                                <MudChip Class="@ChipClass" Value="item.Value" Text="@(ToStringFunc != null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
                                             }
                                         }
                                     </MudChipSet>
