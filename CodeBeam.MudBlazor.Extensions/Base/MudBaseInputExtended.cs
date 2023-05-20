@@ -14,12 +14,11 @@ namespace MudExtensions
 
         protected MudBaseInputExtended() : base(new DefaultConverter<T>()) { }
 
-        /// <summary>
-        /// If true, the input element will be disabled.
-        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Disabled { get; set; }
+        [CascadingParameter(Name = "ParentDisabled")] private bool ParentDisabled { get; set; }
+        protected bool GetDisabledState() => Disabled || ParentDisabled;
 
         /// <summary>
         /// If true, the input will be read-only.
@@ -27,6 +26,8 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool ReadOnly { get; set; }
+        [CascadingParameter(Name = "ParentReadOnly")] private bool ParentReadOnly { get; set; }
+        protected bool GetReadOnlyState() => ReadOnly || ParentReadOnly;
 
         /// <summary>
         /// If true, the input will take up the full width of its container.

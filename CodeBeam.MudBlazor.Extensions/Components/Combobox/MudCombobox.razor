@@ -18,7 +18,7 @@
                                       Value="@_searchString" ValueChanged="@HandleInternalValueChanged"
                                       DisableUnderLine="@DisableUnderLine"
                                       Disabled="@Disabled" ReadOnly="@ReadOnly" Error="@Error" ErrorId="@ErrorId"
-                                      Clearable="@Clearable" OnClearButtonClick="(async (e) => await ClearButtonClickHandlerAsync(e))"
+                                      Clearable="@Clearable" ForceClearable="HasValue(Value)" OnClearButtonClick="(async (e) => await ClearButtonClickHandlerAsync(e))"
                                       @attributes="UserAttributes" OnBlur="@HandleOnBlur" ForceShrink="@(HasValue(Value) || _isOpen || ForceShrink)">
 
                         <AdornmentEnd>

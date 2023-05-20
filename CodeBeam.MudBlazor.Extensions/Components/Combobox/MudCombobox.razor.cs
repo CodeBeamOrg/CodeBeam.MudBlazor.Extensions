@@ -1489,8 +1489,5 @@ namespace MudExtensions
             return ValueTask.CompletedTask;
         }
 
-        private ValueTask ScrollToItemAsync(MudComboboxItem<T> item)
-            => item != null ? ScrollManager.ScrollToListItemAsync(item.ItemId) : ValueTask.CompletedTask;
-
     }
 }

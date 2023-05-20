@@ -190,17 +190,8 @@ namespace MudExtensions
         /// Show clear button.
         /// </summary>
         [Parameter] public bool Clearable { get; set; }
-        //{
-        //    get => _showClearable;
-        //    set
-        //    {
-        //        if (_showClearable == value)
-        //        {
-        //            return;
-        //        }
-        //        UpdateClearable(Value);
-        //    }
-        //}
+
+        [Parameter] public bool ForceClearable { get; set; }
 
         /// <summary>
         /// Button click event for clear button. Called after text and value has been cleared.
