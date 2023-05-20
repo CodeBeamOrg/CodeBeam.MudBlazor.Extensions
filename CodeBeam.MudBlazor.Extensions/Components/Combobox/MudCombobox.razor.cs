@@ -114,6 +114,10 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public RenderFragment PopoverEndContent { get; set; }
 
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public RenderFragment NoItemsContent { get; set; }
+
         /// <summary>
         /// Optional presentation template for items
         /// </summary>
@@ -331,14 +335,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public bool Strict { get; set; }
+        public bool Strict { get; set; } = true;
 
         /// <summary>
         /// Show clear button.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public bool Clearable { get; set; } = false;
+        public bool Clearable { get; set; }
 
         /// <summary>
         /// If true, shows a searchbox for filtering items. Only works with ItemCollection approach.
@@ -885,6 +889,7 @@ namespace MudExtensions
 
         protected internal async void HandleKeyUp(KeyboardEventArgs obj)
         {
+            ForceRenderItems();
             await OnKeyUp.InvokeAsync(obj);
         }
 
@@ -1449,6 +1454,11 @@ namespace MudExtensions
                 return new();
             }
             return Items.Where(x => x.Eligible == true && x.Disabled == false).ToList();
+        }
+
+        protected bool HasEligibleItems()
+        {
+            return Items.Any(x => x.Eligible == true);
         }
 
         protected Typo GetTypo()

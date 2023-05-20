@@ -165,6 +165,12 @@
                             }
                             
                             @ChildContent
+                            @if (NoItemsContent != null && HasEligibleItems() == false)
+                            {
+                                <div class="pa-1">
+                                    @NoItemsContent
+                                </div>
+                            }
                             @PopoverEndContent
                             </div>
                         </CascadingValue>
