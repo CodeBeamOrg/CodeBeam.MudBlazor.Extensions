@@ -1,0 +1,48 @@
+﻿@namespace MudBlazor
+
+@code {
+    [Parameter]
+    public string Selector { get; set; }
+
+    [Parameter]
+    public string CssText { get; set; }
+
+    protected Dictionary<string, string> ProcessCssText()
+    {
+        if (string.IsNullOrEmpty(CssText))
+        {
+            return new Dictionary<string, string>();
+        }
+        Dictionary<string, string> result = new();
+        var splittedText = CssText.Split(" ");
+        foreach (var item in splittedText)
+        {
+            var itemPartial = item.Trim().Split("--");
+            if (itemPartial.Count() == 2)
+            {
+                result.Add(itemPartial[0], itemPartial[1]);
+            }
+        }
+
+        return result;
+    }
+}
+
+<style>
+    @{
+        Dictionary<string, string> cssTextList = ProcessCssText();
+    }
+    @(Selector) {
+        @foreach (var css in cssTextList)
+        {
+            if (css.Value.EndsWith('!'))
+            {
+                @($"{css.Key}: {css.Value.Substring(0, css.Value.Length - 1)} !important;");
+            }
+            else
+            {
+                @($"{css.Key}: {css.Value}");
+            }
+        }
+    }
+</style>

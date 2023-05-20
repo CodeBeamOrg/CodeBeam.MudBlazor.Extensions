@@ -1,0 +1,26 @@
+﻿@using MudExtensions.Enums
+@using MudBlazor.Extensions
+
+<MudCssWriter Selector=".my-class" CssText="@_cssText" />
+
+<MudGrid>
+    <MudItem xs="12" sm="8">
+
+        <div>
+            <MudPaper Class="id1 d-flex align-center justify-center my-class" Elevation="0" Height="200px" Width="200px" Style="background-color: blue">
+                <MudText Class="white-text" Typo="Typo.h1" Style="outline: none;">A</MudText>
+            </MudPaper>
+        </div>
+
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudTextField @bind-Value="_cssText" Variant="Variant.Outlined" Label="Css Text" autocomplete="new-password" Immediate="true" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    string _cssText;
+}
