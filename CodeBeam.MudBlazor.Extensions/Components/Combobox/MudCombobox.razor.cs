@@ -70,6 +70,12 @@ namespace MudExtensions
         [Parameter] public bool Editable { get; set; }
 
         /// <summary>
+        /// If true, searched text has highlight.
+        /// </summary>
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        [Parameter] public bool Highlight { get; set; }
+
+        /// <summary>
         /// If true, selected or active items in popover has border.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
@@ -1460,6 +1466,8 @@ namespace MudExtensions
         {
             return Items.Any(x => x.Eligible == true);
         }
+
+        protected internal string GetSearchString() => _searchString;
 
         protected Typo GetTypo()
         {

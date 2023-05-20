@@ -17,7 +17,7 @@
         }
         else
         {
-            @DisplayString
+            <MudHighlighter Text="@DisplayString" HighlightedText="@(MudCombobox.Highlight == false ? null : MudCombobox?.GetSearchString())" Style="background-color:transparent;font-weight:bold;text-decoration:underline" />
         }
     </MudText>
     
