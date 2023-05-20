@@ -1,0 +1,13 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudCombobox @bind-SelectedValues="values" MultiSelection="true">
+    <MudComboboxItem Value="@("1")">1</MudComboboxItem>
+    <MudComboboxItem Value="@("2")">2</MudComboboxItem>
+    <MudComboboxItem Value="@("3")">3</MudComboboxItem>
+</MudCombobox>
+
+
+@code {
+    IEnumerable<string> values = new HashSet<string>();
+}

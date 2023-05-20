@@ -1,0 +1,24 @@
+﻿@namespace MudExtensions
+@using MudExtensions.Enums;
+@inherits MudBaseSelectItem
+@typeparam T
+
+<div tabindex="0" @attributes="UserAttributes" id="@ItemId" class="@Classname" @onclick="HandleOnClick" @onclick:stopPropagation="true" style="@Style">
+    
+    @if (MudCombobox != null && MudCombobox.MultiSelection == true && MudCombobox.ShowCheckbox == true)
+    {
+        <MudCheckBox Class="me-4" Color="@MudCombobox.Color" Disabled="@Disabled" @bind-Checked="Selected" @onclick="OnClickHandler" Dense="true" />
+    }
+
+    <MudText Typo="GetTypo()">
+        @if (ChildContent != null && MudCombobox?.ItemPresenter == ValuePresenter.ItemContent)
+        {
+            @ChildContent
+        }
+        else
+        {
+            <MudHighlighter Text="@DisplayString" HighlightedText="@(MudCombobox.Highlight == false ? null : MudCombobox?.GetSearchString())" Style="background-color:transparent;font-weight:bold;text-decoration:underline" />
+        }
+    </MudText>
+    
+</div>

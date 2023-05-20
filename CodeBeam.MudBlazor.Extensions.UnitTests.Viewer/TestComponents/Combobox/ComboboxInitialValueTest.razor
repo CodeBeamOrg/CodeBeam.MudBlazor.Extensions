@@ -1,0 +1,18 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudCombobox @bind-Value="SelectedValue" @bind-SelectedValues="SelectedValues" MultiSelection="MultiSelection">
+    <MudComboboxItem Value="@("1")"/>
+    <MudComboboxItem Value="@("2")"/>
+    <MudComboboxItem Value="@("3")"/>
+    <MudComboboxItem Value="@("4")" Disabled="true"/>
+</MudCombobox>
+
+@code {
+    [Parameter]
+    public string SelectedValue { get; set; }
+    [Parameter]
+    public IEnumerable<string> SelectedValues { get; set; }
+    [Parameter]
+    public bool MultiSelection { get; set; }
+}

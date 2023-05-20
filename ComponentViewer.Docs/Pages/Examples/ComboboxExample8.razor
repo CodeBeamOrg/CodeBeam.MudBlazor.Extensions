@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Components
+@using MudBlazor.Extensions
+
+<MudGrid>
+    <MudItem xs="12" Class="d-flex gap-4 align-center justify-center">
+        <MudCombobox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled"
+            Label="Standard (Contains)" Editable="true"  autocomplete="new-password">
+            <MudComboboxItem Value="@("Foo")" Text="Foo">Foo</MudComboboxItem>
+            <MudComboboxItem Value="@("Bar")" Text="Bar">Bar</MudComboboxItem>
+            <MudComboboxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboboxItem>
+            <MudComboboxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboboxItem>
+        </MudCombobox>
+        <MudCombobox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" ToggleSelection="true"
+                     Label="Custom (StartsWith)" Editable="true" SearchFunc="@(new Func<string, string, string, bool>(SearchStartWith))" autocomplete="new-password">
+            <MudComboboxItem Value="@("Foo")" Text="Foo">Foo</MudComboboxItem>
+            <MudComboboxItem Value="@("Bar")" Text="Bar">Bar</MudComboboxItem>
+            <MudComboboxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboboxItem>
+            <MudComboboxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboboxItem>
+        </MudCombobox>
+    </MudItem>
+</MudGrid>
+
+@code{
+    string _value;
+    string _text;
+    IEnumerable<string> _selectedValues;
+
+    private bool SearchStartWith(string value, string text, string searchString)
+    {
+        if (value.StartsWith(searchString, StringComparison.CurrentCultureIgnoreCase))
+        {
+            return true;
+        }
+        return false;
+    }
+}

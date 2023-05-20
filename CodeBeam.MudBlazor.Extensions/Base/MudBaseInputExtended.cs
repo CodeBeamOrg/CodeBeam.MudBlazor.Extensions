@@ -14,12 +14,11 @@ namespace MudExtensions
 
         protected MudBaseInputExtended() : base(new DefaultConverter<T>()) { }
 
-        /// <summary>
-        /// If true, the input element will be disabled.
-        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Disabled { get; set; }
+        [CascadingParameter(Name = "ParentDisabled")] private bool ParentDisabled { get; set; }
+        protected bool GetDisabledState() => Disabled || ParentDisabled;
 
         /// <summary>
         /// If true, the input will be read-only.
@@ -27,6 +26,8 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool ReadOnly { get; set; }
+        [CascadingParameter(Name = "ParentReadOnly")] private bool ParentReadOnly { get; set; }
+        protected bool GetReadOnlyState() => ReadOnly || ParentReadOnly;
 
         /// <summary>
         /// If true, the input will take up the full width of its container.
@@ -225,7 +226,7 @@ namespace MudExtensions
         public virtual string Pattern { get; set; }
 
         [Parameter]
-        public string MockInputStyle { get; set; }
+        public string ChildContentStyle { get; set; }
 
         /// <summary>
         /// Sync the value, values and text, calls validation manually. Useful to call after user changes value or text programmatically.
@@ -466,10 +467,15 @@ namespace MudExtensions
 
         protected bool _forceTextUpdate;
 
+        protected virtual bool SkipUpdateProcessOnSetParameters { get; set; }
+
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             await base.SetParametersAsync(parameters);
-
+            if (SkipUpdateProcessOnSetParameters == true)
+            {
+                return;
+            }
             var hasText = parameters.Contains<string>(nameof(Text));
             var hasValue = parameters.Contains<T>(nameof(Value));
 

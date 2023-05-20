@@ -15,7 +15,6 @@ namespace MudExtensions
                 .AddClass("mud-shrink", when: shrinkWhen)
                 .AddClass("mud-disabled", baseInput.Disabled)
                 .AddClass("mud-input-error", baseInput.HasErrors)
-                //.AddClass("d-flex align-center")
                 .AddClass("mud-ltr", baseInput.GetInputType() == InputType.Email || baseInput.GetInputType() == InputType.Telephone)
                 .AddClass(baseInput.Class)
                 .Build();
