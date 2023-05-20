@@ -221,66 +221,89 @@ namespace MudExtensions.UnitTests.Components
             comp.Instance.ClearButtonClicked.Should().BeTrue();
         }
 
+        [Test]
+        public void MultiSelect_SelectAll()
+        {
+            var comp = Context.RenderComponent<ComboboxMultiSelectTest2>();
+            // select element needed for the test
+            var combobox = comp.FindComponent<MudCombobox<string>>();
+            var menu = comp.Find("div.mud-popover");
+            var input = combobox.Find("div.mud-input-control");
+            // Open the menu
+            input.MouseDown();
+            comp.WaitForAssertion(() => menu.ClassList.Should().Contain("mud-popover-open"));
+
+            comp.FindAll("div.mud-combobox-item")[0].Click();
+
+            // validate the result. all items should be selected
+            comp.WaitForAssertion(() => combobox.Instance.GetSelectTextPresenter().Should().Be("FirstA^SecondA^ThirdA"));
+            combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "FirstA", "SecondA", "ThirdA" });
+
+            comp.FindAll("div.mud-combobox-item")[0].Click();
+            comp.WaitForAssertion(() => combobox.Instance.GetSelectTextPresenter().Should().Be(""));
+            combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>());
+        }
+
         /// <summary>
         /// Click should not close the menu and selecting multiple values should update the bindable value with a comma separated list.
         /// </summary>
-        //[Test]
-        //public async Task Combobox_MultiSelectTest1()
-        //{
-        //    var comp = Context.RenderComponent<ComboboxMultiSelectTest1>();
-        //    // print the generated html
-        //    Console.WriteLine(comp.Markup);
-        //    // select elements needed for the test
-        //    var combobox = comp.FindComponent<MudCombobox<string>>();
-        //    var menu = comp.Find("div.mud-popover");
-        //    var input = comp.Find("div.mud-input-control");
-        //    // check initial state
-        //    combobox.Instance.Value.Should().BeNullOrEmpty();
-        //    comp.WaitForAssertion(() =>
-        //        comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
-        //    // click and check if it has toggled the menu
-        //    await comp.InvokeAsync(() => input.Click());
-        //    comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none"));
-        //    // now click an item and see the value change
-        //    comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
-        //    var items = comp.FindAll("div.mud-list-item-extended").ToArray();
-        //    items[1].Click();
-        //    // menu should still be open now!!
-        //    comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none");
-        //    comp.WaitForAssertion(() => combobox.Instance.Text.Should().Be("2"));
-        //    items[0].Click();
-        //    comp.WaitForAssertion(() => combobox.Instance.Text.Should().Be("2, 1"));
-        //    items[2].Click();
-        //    comp.WaitForAssertion(() => combobox.Instance.Text.Should().Be("2, 1, 3"));
-        //    items[0].Click();
-        //    comp.WaitForAssertion(() => combobox.Instance.Text.Should().Be("2, 3"));
-        //    combobox.Instance.SelectedValues.Count().Should().Be(2);
-        //    combobox.Instance.SelectedValues.Should().Contain("2");
-        //    combobox.Instance.SelectedValues.Should().Contain("3");
-        //    //Console.WriteLine(comp.Markup);
-        //    const string @unchecked =
-        //        "M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z";
-        //    const string @checked =
-        //        "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z";
-        //    // check that the correct items are checked
-        //    comp.WaitForAssertion(() =>
-        //        comp.FindAll("div.mud-list-item-extended path")[1].Attributes["d"].Value.Should().Be(@unchecked));
-        //    comp.FindAll("div.mud-list-item-extended path")[3].Attributes["d"].Value.Should().Be(@checked);
-        //    comp.FindAll("div.mud-list-item-extended path")[5].Attributes["d"].Value.Should().Be(@checked);
-        //    // now check how setting the SelectedValues makes items checked or unchecked
-        //    // Note: If popover is open, selecting values programmatically doesn't work for now.
-        //    await comp.InvokeAsync(() => combobox.Instance.CloseMenu());
-        //    await comp.InvokeAsync(() =>
-        //    {
-        //        combobox.Instance.SelectedValues = new HashSet<string>() { "1", "2" };
-        //    });
-        //    await comp.InvokeAsync(() => input.Click());
-        //    comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended path")[1].Attributes["d"].Value.Should().Be(@checked));
-        //    comp.FindAll("div.mud-list-item-extended path")[3].Attributes["d"].Value.Should().Be(@checked);
-        //    combobox.Instance.SelectedValues.Should().NotContain("3");
-        //    comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended path")[5].Attributes["d"].Value.Should().Be(@unchecked));
-        //    //Console.WriteLine(comp.Markup);
-        //}
+        [Test]
+        public async Task Combobox_MultiSelectTest1()
+        {
+            var comp = Context.RenderComponent<ComboboxMultiSelectTest1>();
+            // print the generated html
+            Console.WriteLine(comp.Markup);
+            // select elements needed for the test
+            var combobox = comp.FindComponent<MudCombobox<string>>();
+            var menu = comp.Find("div.mud-popover");
+            var input = combobox.Find("div.mud-input-control");
+            // check initial state
+            combobox.Instance.Value.Should().BeNullOrEmpty();
+            comp.WaitForAssertion(() =>
+                comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
+            // click and check if it has toggled the menu
+            await comp.InvokeAsync(() => input.MouseDown());
+            comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none"));
+            // now click an item and see the value change
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().BeGreaterThan(0));
+            var items = comp.FindAll("div.mud-combobox-item").ToArray();
+            items[1].Click();
+            // menu should still be open now!!
+            comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none");
+            comp.WaitForAssertion(() => combobox.Instance.GetSelectTextPresenter().Should().Be("2"));
+            items[0].Click();
+            comp.WaitForAssertion(() => combobox.Instance.GetSelectTextPresenter().Should().Be("2, 1"));
+            items[2].Click();
+            comp.WaitForAssertion(() => combobox.Instance.GetSelectTextPresenter().Should().Be("2, 1, 3"));
+            items[0].Click();
+            comp.WaitForAssertion(() => combobox.Instance.GetSelectTextPresenter().Should().Be("2, 3"));
+            combobox.Instance.SelectedValues.Count().Should().Be(2);
+            combobox.Instance.SelectedValues.Should().Contain("2");
+            combobox.Instance.SelectedValues.Should().Contain("3");
+            //Console.WriteLine(comp.Markup);
+            const string @unchecked =
+                "M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z";
+            const string @checked =
+                "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z";
+            // check that the correct items are checked
+            comp.WaitForAssertion(() =>
+                comp.FindAll("div.mud-combobox-item path")[1].Attributes["d"].Value.Should().Be(@unchecked));
+            comp.FindAll("div.mud-combobox-item path")[3].Attributes["d"].Value.Should().Be(@checked);
+            comp.FindAll("div.mud-combobox-item path")[5].Attributes["d"].Value.Should().Be(@checked);
+            // now check how setting the SelectedValues makes items checked or unchecked
+            // Note: If popover is open, selecting values programmatically doesn't work for now.
+            await comp.InvokeAsync(() => combobox.Instance.CloseMenu());
+            await comp.InvokeAsync(() =>
+            {
+                combobox.Instance.SelectedValues = new HashSet<string>() { "1", "2" };
+            });
+            await comp.InvokeAsync(() => input.MouseDown());
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item path")[1].Attributes["d"].Value.Should().Be(@checked));
+            comp.FindAll("div.mud-combobox-item path")[3].Attributes["d"].Value.Should().Be(@checked);
+            combobox.Instance.SelectedValues.Should().NotContain("3");
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item path")[5].Attributes["d"].Value.Should().Be(@unchecked));
+            //Console.WriteLine(comp.Markup);
+        }
 
 
     }

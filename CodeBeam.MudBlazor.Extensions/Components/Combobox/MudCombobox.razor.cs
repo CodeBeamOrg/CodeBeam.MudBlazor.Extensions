@@ -160,11 +160,11 @@ namespace MudExtensions
         public string TemplateClass { get; set; }
 
         /// <summary>
-        /// If true the active (hilighted) item select on tab key. Designed for only single selection. Default is true.
+        /// If true the active (hilighted) item select on tab key. Designed for only single selection. Default is false.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Selecting)]
-        public bool SelectValueOnTab { get; set; } = true;
+        public bool SelectValueOnTab { get; set; }
 
         /// <summary>
         /// User class names for the popover, separated by space
@@ -639,7 +639,7 @@ namespace MudExtensions
 
         protected internal string _dataVisualiserText;
 
-        private string GetSelectTextPresenter()
+        protected internal string GetSelectTextPresenter()
         {
             return _dataVisualiserText;
         }
@@ -786,6 +786,10 @@ namespace MudExtensions
             switch (obj.Key)
             {
                 case "Tab":
+                    if (MultiSelection == false && SelectValueOnTab)
+                    {
+                        await ToggleOption(_lastActivatedItem, true);
+                    }
                     await CloseMenu();
                     break;
                 case "Home":
@@ -1007,6 +1011,7 @@ namespace MudExtensions
             {
                 _lastActivatedItem = Items.FirstOrDefault(x => x.Value.Equals(Value));
             }
+            _allSelected = GetAllSelectedState();
             await ScrollToMiddleAsync(_lastActivatedItem);
             await OnOpen.InvokeAsync();
         }
@@ -1048,8 +1053,8 @@ namespace MudExtensions
                 {
                     if (ToggleSelection)
                     {
-                        await UpdateComboboxValueAsync(default(T), updateText: false, updateSearchString: true);
-                        await SetValueAsync(default(T));
+                        await UpdateComboboxValueAsync(default(T), updateText: true, updateSearchString: true);
+                        //await SetValueAsync(default(T));
                         item.Selected = false;
                     }
                 }
@@ -1066,7 +1071,7 @@ namespace MudExtensions
                 if (MultiSelection == false)
                 {
                     DeselectAllItems();
-                    await UpdateComboboxValueAsync(item.Value, updateText: false, updateSearchString: true);
+                    await UpdateComboboxValueAsync(item.Value, updateText: true, updateSearchString: true);
                 }
                 else if (SelectedValues.Contains(item.Value) == false)
                 {

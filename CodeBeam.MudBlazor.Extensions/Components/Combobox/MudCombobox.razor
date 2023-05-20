@@ -18,8 +18,8 @@
                                       Value="@_searchString" ValueChanged="@HandleInternalValueChanged"
                                       DisableUnderLine="@DisableUnderLine"
                                       Disabled="@Disabled" ReadOnly="@ReadOnly" Error="@Error" ErrorId="@ErrorId"
-                                      Clearable="@Clearable" ForceClearable="HasValue(Value)" OnClearButtonClick="(async (e) => await ClearButtonClickHandlerAsync(e))"
-                                      @attributes="UserAttributes" OnBlur="@HandleOnBlur" ForceShrink="@(HasValue(Value) || _isOpen || ForceShrink)">
+                                      Clearable="@Clearable" ForceClearable="@(Clearable && HasValue(Value))" OnClearButtonClick="(async (e) => await ClearButtonClickHandlerAsync(e))"
+                    @attributes="UserAttributes" OnBlur="@HandleOnBlur" ForceShrink="@(HasValue(Value) || _isOpen || ForceShrink)">
 
                         <AdornmentEnd>
                             <MudIcon Icon="@_currentIcon" Color="@AdornmentColor" Size="@IconSize" @onclick="OnAdornmentClick" />
@@ -85,113 +85,69 @@
                                         {
                                             <MudRender>@Items.FirstOrDefault(x => x.Value.Equals(Value))?.ChildContent</MudRender>
                                         }
-                                        
+
                                     }
                                     else
                                     {
                                         <MudRender>@GetSelectTextPresenter()</MudRender>
                                     }
                                 }
-                            </div> 
+                            </div>
                         </DataVisualiser>
-
                         <ChildContent>
                             <div class="@TemplateClass">
                                 @if (HasValue(Value) == false && string.IsNullOrEmpty(Placeholder) == false)
                                 {
                                     <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
                                 }
-                                else if (InputPresenter == ValuePresenter.Chip)
-                                {
-                                    if (SelectedValues == null || !SelectedValues.Any())
-                                    {
-                                        <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
-                                    }
-                                    else
-                                    {
-                                        @*<MudChipSet Class="d-flex flex-wrap" Style="row-gap: 4px" AllClosable="ChipCloseable" OnClose="ChipClosed">
-                                            @if (ItemCollection != null)
-                                            {
-                                                foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
-                                                {
-                                                    <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
-                                                }
-                                            }
-                                            else
-                                            {
-                                                foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboboxItem<T>>())
-                                                {
-                                                    <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
-                                                }
-                                            }
-                                        </MudChipSet>*@
-                                    }
-                                }
-                                else if (InputPresenter == ValuePresenter.Text && MultiSelection == true)
-                                {
-                                    @*<div style="white-space: break-spaces">@_dataVisualiserText</div>*@
-                                }
-                                
                             </div>
                         </ChildContent>
+
                     </MudInputExtended>
 
                     <MudPopover Open="true" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" OverflowBehavior="OverflowBehavior.FlipAlways" Class="@PopoverClassname" RelativeWidth="@RelativeWidth">
                         <CascadingValue Value="@this" IsFixed="true">
                             <div id="@_popoverId" style="overflow-y: auto; max-height: 300px">
                                 @PopoverStartContent
-                            @if (MultiSelection)
-                            {
-                                if (Editable)
+                                @if (MultiSelection)
                                 {
+                                    if (Editable)
+                                    {
                                         <div Class="pa-2" Style="position: sticky; top: 0px; background-color: var(--mud-palette-background); z-index: 2" @onkeydown:stopPropagation>
                                             <MudTextFieldExtended @ref="_searchbox" T="string" Value="_searchString" ValueChanged="@HandleInternalValueChanged" Margin="Margin.Dense"
-                                                          Variant="Variant.Outlined" Immediate="true" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="SearchBoxHandleKeyUp">
+                                                                  Variant="Variant.Outlined" Immediate="true" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="SearchBoxHandleKeyUp">
                                                 <AdornmentEnd>
                                                     <MudIcon Icon="@Icons.Material.Filled.Search" Color="@Color" />
                                                 </AdornmentEnd>
                                             </MudTextFieldExtended>
                                         </div>
+                                    }
+
+                                    if (SelectAll)
+                                    {
+                                        <div class="@($"mud-combobox-item mud-combobox-item-clickable mud-combobox-item-{Dense.ToDescriptionString()} mud-ripple d-flex")" @onclick="SelectAllItems" @onclick:stopPropagation="true">
+                                            <MudCheckBox Class="mx-4" @bind-Checked="_allSelected" Color="@Color" @onclick="SelectAllItems" Dense="true" />
+                                            <MudText Typo="GetTypo()">@SelectAllText</MudText>
+                                        </div>
+                                        <MudDivider />
+                                    }
                                 }
 
-                                if (SelectAll)
+                                @ChildContent
+                                @if (NoItemsContent != null && HasEligibleItems() == false)
                                 {
-                                        <div class="@($"mud-combobox-item mud-combobox-item-clickable mud-combobox-item-{Dense.ToDescriptionString()} mud-ripple d-flex")" @onclick="SelectAllItems" @onclick:stopPropagation="true">
-                                        <MudCheckBox Class="mx-4" @bind-Checked="_allSelected" Color="@Color" @onclick="SelectAllItems" Dense="true" />
-                                        <MudText Typo="GetTypo()">@SelectAllText</MudText>
+                                    <div class="pa-2">
+                                        @NoItemsContent
                                     </div>
-                                    <MudDivider />
                                 }
-                            }
-                            
-                            @ChildContent
-                            @if (NoItemsContent != null && HasEligibleItems() == false)
-                            {
-                                <div class="pa-2">
-                                    @NoItemsContent
-                                </div>
-                            }
-                            @PopoverEndContent
+                                @PopoverEndContent
                             </div>
                         </CascadingValue>
                     </MudPopover>
                 </InputContent>
             </MudInputControl>
         </div>
-
-        @*To Be Discussed as Second ShadowItems: Needed to render directly into select to has initial values*@
-
-@*        <div class="d-none">
-            @ChildContent
-        </div>*@
     </CascadingValue>
-
-    @*Shadow select items for IsValueInList and CanRenderValue*@
-    @*<CascadingValue Value="@((IMudShadowSelectExtended)this)" IsFixed="true">
-        <CascadingValue Name="HideContent" Value="true">
-            @ChildContent
-        </CascadingValue>
-    </CascadingValue>*@
 
 </CascadingValue>
 <!-- mousedown instead of click needed to close the menu before OnLostFocus runs -->
