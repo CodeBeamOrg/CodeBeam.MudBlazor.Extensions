@@ -266,7 +266,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T, string, bool> SearchFunc { get; set; }
+        public Func<T, string, string, bool> SearchFunc { get; set; }
 
         /// <summary>
         /// If not null, select items will automatically created regard to the collection.

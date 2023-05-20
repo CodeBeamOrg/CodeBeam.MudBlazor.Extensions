@@ -158,6 +158,11 @@ namespace MudExtensions
                 return true;
             }
 
+            if (MudCombobox?.SearchFunc != null)
+            {
+                return MudCombobox.SearchFunc.Invoke(Value, Text, MudCombobox.GetSearchString());
+            }
+
             if (string.IsNullOrEmpty(Text) == false)
             {
                 if (Text.Contains(MudCombobox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
