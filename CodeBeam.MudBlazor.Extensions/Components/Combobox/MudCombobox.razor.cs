@@ -271,16 +271,16 @@ namespace MudExtensions
         /// <summary>
         /// If not null, select items will automatically created regard to the collection.
         /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.Behavior)]
-        public ICollection<T> ItemCollection { get; set; } = null;
+        //[Parameter]
+        //[Category(CategoryTypes.FormComponent.Behavior)]
+        //public ICollection<T> ItemCollection { get; set; } = null;
 
         /// <summary>
         /// Allows virtualization. Only work is ItemCollection parameter is not null.
         /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.List.Behavior)]
-        public bool Virtualize { get; set; }
+        //[Parameter]
+        //[Category(CategoryTypes.List.Behavior)]
+        //public bool Virtualize { get; set; }
 
         /// <summary>
         /// If true, chips has close button and remove from SelectedValues when pressed the close button.
@@ -316,7 +316,7 @@ namespace MudExtensions
         public bool RelativeWidth { get; set; } = true;
 
         /// <summary>
-        /// Sets the maxheight the Select can have when open.
+        /// Sets the maxheight of the popover.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
@@ -362,7 +362,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public bool SearchBoxAutoFocus { get; set; }
+        public bool SearchBoxAutoFocus { get; set; } = true;
 
         /// <summary>
         /// If true, the search-box has a clear icon.
@@ -382,20 +382,6 @@ namespace MudExtensions
         /// Button click event for clear button. Called after text and value has been cleared.
         /// </summary>
         [Parameter] public EventCallback<MouseEventArgs> OnClearButtonClick { get; set; }
-
-        /// <summary>
-        /// Custom checked icon.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string CheckedIcon { get; set; } = Icons.Material.Filled.CheckBox;
-
-        /// <summary>
-        /// Custom unchecked icon.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string UncheckedIcon { get; set; } = Icons.Material.Filled.CheckBoxOutlineBlank;
 
         /// <summary>
         /// Custom indeterminate icon.
@@ -418,8 +404,6 @@ namespace MudExtensions
                 if (value != _multiSelection)
                 {
                     _multiSelection = value;
-                    //UpdateTextPropertyAsync(false).AndForgetExt();
-                    //SyncMultiselectionValues(_multiSelection).AndForgetExt();
                 }
             }
         }
@@ -524,15 +508,6 @@ namespace MudExtensions
                     return;
 
                 _selectedValues = new HashSet<T>(set, _comparer);
-                //if (!MultiSelection)
-                //{
-                //    SetValueAsync(_selectedValues.FirstOrDefault()).AndForget();
-                //}
-                //else
-                //{
-                //    SetValueAsync(_selectedValues.LastOrDefault(), false).AndForget();
-                //    UpdateTextPropertyAsync(false).AndForget();
-                //}
 
                 SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer)).AndForget();
                 ForceUpdateItems().AndForgetExt();
@@ -545,40 +520,21 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<IEnumerable<T>> SelectedValuesChanged { get; set; }
 
-        //protected async Task SetCustomizedTextAsync(string text, bool updateValue = true,
-        //    List<T> selectedConvertedValues = null,
-        //    Func<List<T>, string> multiSelectionTextFunc = null)
-        //{
-        //    // The Text property of the control is updated
-        //    Text = multiSelectionTextFunc?.Invoke(selectedConvertedValues);
-
-        //    // The comparison is made on the multiSelectionText variable
-        //    if (multiSelectionText != text)
-        //    {
-        //        multiSelectionText = text;
-        //        if (!string.IsNullOrWhiteSpace(multiSelectionText))
-        //            Touched = true;
-        //        if (updateValue)
-        //            await UpdateValuePropertyAsync(false);
-        //        await TextChanged.InvokeAsync(multiSelectionText);
-        //    }
-        //}
-
         protected Task UpdateDataVisualiserTextAsync()
         {
             List<string> textList = new List<string>();
             if (Items != null && Items.Any())
             {
-                if (ItemCollection != null)
+                if (false) // ItemCollection != null
                 {
-                    foreach (var val in SelectedValues)
-                    {
-                        var collectionValue = ItemCollection.FirstOrDefault(x => x != null && (Comparer != null ? Comparer.Equals(x, val) : x.Equals(val)));
-                        if (collectionValue != null)
-                        {
-                            textList.Add(Converter.Set(collectionValue));
-                        }
-                    }
+                    //foreach (var val in SelectedValues)
+                    //{
+                    //    var collectionValue = ItemCollection.FirstOrDefault(x => x != null && (Comparer != null ? Comparer.Equals(x, val) : x.Equals(val)));
+                    //    if (collectionValue != null)
+                    //    {
+                    //        textList.Add(Converter.Set(collectionValue));
+                    //    }
+                    //}
                 }
                 else
                 {
@@ -610,14 +566,10 @@ namespace MudExtensions
                         return Task.CompletedTask;
                     }
                     _dataVisualiserText = MultiSelectionTextFunc.Invoke(SelectedValues.ToList());
-                    //return SetCustomizedTextAsync(string.Join(Delimiter, textList),
-                    //    selectedConvertedValues: SelectedValues.ToList(),
-                    //    multiSelectionTextFunc: MultiSelectionTextFunc, updateValue: updateValue);
                     return Task.CompletedTask;
                 }
                 else
                 {
-                    //return SetTextAsync(string.Join(Delimiter, textList), updateValue: updateValue);
                     _dataVisualiserText = string.Join(Delimiter, textList);
                     return Task.CompletedTask;
                 }
@@ -628,10 +580,8 @@ namespace MudExtensions
                 if (item == null)
                 {
                     _dataVisualiserText = Converter.Set(Value);
-                    //SetTextAsync(Converter.Set(Value), false);
                     return Task.CompletedTask;
                 }
-                //SetTextAsync((!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value)), updateValue: false);
                 _dataVisualiserText = (!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
                 return Task.CompletedTask;
             }
@@ -884,15 +834,15 @@ namespace MudExtensions
                     HandleKeyDown(obj);
                     break;
                 case "Tab":
-                    //await Task.Delay(10);
-                    //await ActiveFirstItem();
-                    //StateHasChanged();
+                    await ActiveFirstItem();
+                    await FocusAsync();
+                    StateHasChanged();
                     break;
             }
             
         }
 
-        protected internal async Task SearchBoxHandleKeyUp(KeyboardEventArgs obj)
+        protected internal void SearchBoxHandleKeyUp(KeyboardEventArgs obj)
         {
             ForceRenderItems();
         }
@@ -934,10 +884,6 @@ namespace MudExtensions
         protected void HandleInternalValueChanged(string val)
         {
             _searchString = val;
-            //if (Strict == false || Items.Select(x => x.Value).Contains(_internalValue))
-            //{
-            //    await SetValueAsync(_internalValue);
-            //}
         }
 
         public override ValueTask FocusAsync()
@@ -990,7 +936,7 @@ namespace MudExtensions
             StateHasChanged();
             if (Editable)
             {
-                if (MultiSelection == true)
+                if (MultiSelection == true && SearchBoxAutoFocus == true)
                 {
                     await Task.Delay(1);
                     await _searchbox.SelectAsync();
@@ -1000,7 +946,6 @@ namespace MudExtensions
                     await _inputReference.SelectAsync();
                 }
             }
-            //disable escape propagation: if selectmenu is open, only the select popover should close and underlying components should not handle escape key
             await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "Key+none" });
 
             if (MultiSelection)
@@ -1022,15 +967,7 @@ namespace MudExtensions
             UpdateIcon();
             DeactiveAllItems();
             StateHasChanged();
-            //if (focusAgain == true)
-            //{
-            //    StateHasChanged();
-            //    await OnBlur.InvokeAsync(new FocusEventArgs());
-            //    _elementReference.FocusAsync().AndForget(TaskOption.Safe);
-            //    StateHasChanged();
-            //}
 
-            //enable escape propagation: the select popover was closed, now underlying components are allowed to handle escape key
             await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "none" });
 
             await OnClose.InvokeAsync();
@@ -1054,7 +991,6 @@ namespace MudExtensions
                     if (ToggleSelection)
                     {
                         await UpdateComboboxValueAsync(default(T), updateText: true, updateSearchString: true);
-                        //await SetValueAsync(default(T));
                         item.Selected = false;
                     }
                 }
@@ -1075,14 +1011,12 @@ namespace MudExtensions
                 }
                 else if (SelectedValues.Contains(item.Value) == false)
                 {
-                    //_searchString = null;
                     await SetValueAsync(item.Value, false);
                     SelectedValues = SelectedValues.Append(item.Value);
                     await SelectedValuesChanged.InvokeAsync(_selectedValues);
                     _allSelected = GetAllSelectedState();
                     
-                    await Task.Delay(1);
-                    //await _inputReference.SetText(null);
+                    //await Task.Delay(1);
                 }
                 item.Selected = true;
             }
@@ -1141,7 +1075,6 @@ namespace MudExtensions
             {
                 return;
             }
-            //Items.Remove(Items.FirstOrDefault(x => x.Value.Equals(item.Value)));
             Items.Remove(item);
         }
 
@@ -1155,7 +1088,6 @@ namespace MudExtensions
         /// </summary>
         protected async ValueTask ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
-            //await SetValueAsync(default(T), false);
             await UpdateComboboxValueAsync(default(T));
             _searchString = null;
             await SetTextAsync(default, false);
@@ -1189,24 +1121,6 @@ namespace MudExtensions
 
         #endregion
 
-        protected bool IsValueInList
-        {
-            get
-            {
-                if (Value == null)
-                    return false;
-                //return _shadowLookup.TryGetValue(Value, out var _);
-                foreach (var value in Items.Select(x => x.Value))
-                {
-                    if (Comparer != null ? Comparer.Equals(value, Value) : value.Equals(Value)) //(Converter.Set(item.Value) == Converter.Set(Value))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-
         protected void UpdateIcon()
         {
             _currentIcon = !string.IsNullOrWhiteSpace(AdornmentIcon) ? AdornmentIcon : _isOpen ? CloseIcon : OpenIcon;
@@ -1219,11 +1133,6 @@ namespace MudExtensions
         //        throw new GenericTypeMismatchException("MudSelectExtended", "MudSelectItemExtended", typeof(T), itemT);
         //}
 
-        /// <summary>
-        /// Returns true when MultiSelection is true and it has selected values(Since Value property is not used when MultiSelection=true
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns>True when component has a value</returns>
         protected override bool HasValue(T value)
         {
             if (MultiSelection)
@@ -1426,15 +1335,7 @@ namespace MudExtensions
                 return;
             }
             
-            //if (Items[index + changeCount].Disabled || Items[index + changeCount].Eligible == false)
-            //{
-            //    // Recursive
-            //    await ActiveAdjacentItem(changeCount > 0 ? changeCount + 1 : changeCount - 1);
-            //    return;
-            //}
             DeactiveAllItems();
-            //Items[index + changeCount].SetActive(true);
-            //_lastActivatedItem = Items[index + changeCount];
             properItems[index + changeCount].SetActive(true);
             _lastActivatedItem = properItems[index + changeCount];
 

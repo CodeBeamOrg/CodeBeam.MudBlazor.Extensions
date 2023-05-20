@@ -34,7 +34,11 @@
                                 else if (InputPresenter == ValuePresenter.Chip)
                                 {
                                     <MudChipSet Class="d-flex flex-wrap mud-width-full" AllClosable="ChipCloseable" OnClose="ChipClosed">
-                                        @if (ItemCollection != null)
+                                        @foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboboxItem<T>>())
+                                            {
+                                                <MudChip Class="@ChipClass" Value="item.Value" Text="@(ToStringFunc != null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
+                                            }
+                                        @*@if (ItemCollection != null)
                                         {
                                             foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
                                             {
@@ -47,7 +51,7 @@
                                             {
                                                 <MudChip Class="@ChipClass" Value="item.Value" Text="@(ToStringFunc != null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
                                             }
-                                        }
+                                        }*@
                                     </MudChipSet>
                                 }
                                 else if (InputPresenter == ValuePresenter.Text && (Editable == false || (MultiSelection == true && Editable == true)))
@@ -107,7 +111,7 @@
 
                     <MudPopover Open="true" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" OverflowBehavior="OverflowBehavior.FlipAlways" Class="@PopoverClassname" RelativeWidth="@RelativeWidth">
                         <CascadingValue Value="@this" IsFixed="true">
-                            <div id="@_popoverId" style="overflow-y: auto; max-height: 300px">
+                            <div id="@_popoverId" style="@($"overflow-y: auto; max-height: {MaxHeight}px")">
                                 @PopoverStartContent
                                 @if (MultiSelection)
                                 {
@@ -115,7 +119,7 @@
                                     {
                                         <div Class="pa-2" Style="position: sticky; top: 0px; background-color: var(--mud-palette-background); z-index: 2" @onkeydown:stopPropagation>
                                             <MudTextFieldExtended @ref="_searchbox" T="string" Value="_searchString" ValueChanged="@HandleInternalValueChanged" Margin="Margin.Dense"
-                                                                  Variant="Variant.Outlined" Immediate="true" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="SearchBoxHandleKeyUp">
+                                                                  Variant="Variant.Outlined" Immediate="true" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="SearchBoxHandleKeyUp" Clearable="@SearchBoxClearable">
                                                 <AdornmentEnd>
                                                     <MudIcon Icon="@Icons.Material.Filled.Search" Color="@Color" />
                                                 </AdornmentEnd>
