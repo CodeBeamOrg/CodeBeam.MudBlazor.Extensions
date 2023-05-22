@@ -178,3 +178,9 @@ $mud-palette-colors: primary, secondary, tertiary, info, success, warning, error
     min-width: 56px;
     flex-shrink: 0;
 }
+
+.mud-combobox-highlighter {
+    background-color: transparent;
+    font-weight: bold;
+    text-decoration: underline;
+}

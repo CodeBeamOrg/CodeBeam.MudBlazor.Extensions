@@ -1,7 +1,7 @@
 ﻿@namespace MudExtensions.UnitTests.TestComponents
 <MudPopoverProvider></MudPopoverProvider>
 
-<MudCombobox Label="Select Item" 
+<MudComboBox Label="Select Item" 
     MultiSelection="true" 
     T="string" 
     Delimiter="^"
@@ -10,9 +10,9 @@
 
     @foreach (var item in AllItems)
     {
-        <MudComboboxItem T="string" Value="@item">@item</MudComboboxItem>
+        <MudComboBoxItem T="string" Value="@item">@item</MudComboBoxItem>
     }
-</MudCombobox>
+</MudComboBox>
 
 @code {
     public static string __description__ = "Test for the Select All option";

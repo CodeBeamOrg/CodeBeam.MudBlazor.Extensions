@@ -6,21 +6,26 @@ using MudExtensions.Enums;
 
 namespace MudExtensions
 {
-    public partial class MudComboboxItem<T> : MudBaseSelectItem, IDisposable
+    public partial class MudComboBoxItem<T> : MudBaseSelectItem, IDisposable
     {
         protected string Classname => new CssBuilder("mud-combobox-item")
-            .AddClass($"mud-combobox-item-{MudCombobox?.Dense.ToDescriptionString()}")
+            .AddClass($"mud-combobox-item-{MudComboBox?.Dense.ToDescriptionString()}")
             .AddClass("mud-ripple", !DisableRipple && !Disabled)
             .AddClass("mud-combobox-item-gutters")
             .AddClass("mud-combobox-item-clickable")
             .AddClass("mud-combobox-item-hilight", Active && !Disabled)
             .AddClass("mud-combobox-item-hilight-selected", Active && Selected && !Disabled)
-            .AddClass($"mud-selected-item mud-{MudCombobox?.Color.ToDescriptionString()}-text mud-{MudCombobox?.Color.ToDescriptionString()}-hover", Selected && !Disabled && !Active)
+            .AddClass($"mud-selected-item mud-{MudComboBox?.Color.ToDescriptionString()}-text mud-{MudComboBox?.Color.ToDescriptionString()}-hover", Selected && !Disabled && !Active)
             .AddClass("mud-combobox-item-disabled", Disabled)
-            .AddClass("mud-combobox-item-bordered", MudCombobox?.Bordered == true && Active)
-            .AddClass($"mud-combobox-item-bordered-{MudCombobox?.Color.ToDescriptionString()}", MudCombobox?.Bordered == true && Selected)
+            .AddClass("mud-combobox-item-bordered", MudComboBox?.Bordered == true && Active)
+            .AddClass($"mud-combobox-item-bordered-{MudComboBox?.Color.ToDescriptionString()}", MudComboBox?.Bordered == true && Selected)
             .AddClass("d-none", Eligible == false)
             .AddClass(Class)
+            .Build();
+
+        protected string HighlighterClassname => new CssBuilder()
+            .AddClass("mud-combobox-highlighter", string.IsNullOrEmpty(MudComboBox?.HighlightClass))
+            .AddClass(MudComboBox?.HighlightClass)
             .Build();
 
         internal string ItemId { get; } = "_" + Guid.NewGuid().ToString().Substring(0, 8);
@@ -29,16 +34,16 @@ namespace MudExtensions
         /// The parent select component
         /// </summary>
         [CascadingParameter]
-        internal MudCombobox<T> MudCombobox { get; set; }
+        internal MudComboBox<T> MudComboBox { get; set; }
 
         protected Typo GetTypo()
         {
-            if (MudCombobox == null)
+            if (MudComboBox == null)
             {
                 return Typo.body1;
             }
 
-            if (MudCombobox.Dense == Dense.Slim || MudCombobox.Dense == Dense.Superslim)
+            if (MudComboBox.Dense == Dense.Slim || MudComboBox.Dense == Dense.Superslim)
             {
                 return Typo.body2;
             }
@@ -83,8 +88,8 @@ namespace MudExtensions
         {
             get
             {
-                var converter = MudCombobox?.Converter;
-                if (MudCombobox?.ItemPresenter == ValuePresenter.None)
+                var converter = MudComboBox?.Converter;
+                if (MudComboBox?.ItemPresenter == ValuePresenter.None)
                 {
                     if (converter == null)
                         return Value.ToString();
@@ -111,7 +116,7 @@ namespace MudExtensions
 
         protected override void OnInitialized()
         {
-            MudCombobox?.Add(this);
+            MudComboBox?.Add(this);
         }
 
         bool? _oldMultiselection;
@@ -148,31 +153,31 @@ namespace MudExtensions
 
         protected bool IsEligible()
         {
-            if (MudCombobox == null || MudCombobox.Editable == false)
+            if (MudComboBox == null || MudComboBox.Editable == false)
             {
                 return true;
             }
 
-            if (string.IsNullOrEmpty(MudCombobox._searchString))
+            if (string.IsNullOrEmpty(MudComboBox._searchString))
             {
                 return true;
             }
 
-            if (MudCombobox?.SearchFunc != null)
+            if (MudComboBox?.SearchFunc != null)
             {
-                return MudCombobox.SearchFunc.Invoke(Value, Text, MudCombobox.GetSearchString());
+                return MudComboBox.SearchFunc.Invoke(Value, Text, MudComboBox.GetSearchString());
             }
 
             if (string.IsNullOrEmpty(Text) == false)
             {
-                if (Text.Contains(MudCombobox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
+                if (Text.Contains(MudComboBox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return true;
                 }
             }
             else
             {
-                if (MudCombobox.Converter.Set(Value).Contains(MudCombobox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
+                if (MudComboBox.Converter.Set(Value).Contains(MudComboBox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return true;
                 }
@@ -183,16 +188,16 @@ namespace MudExtensions
 
         protected void SyncSelected()
         {
-            if (MudCombobox == null)
+            if (MudComboBox == null)
             {
                 return;
             }
 
-            if (MudCombobox.MultiSelection == true && MudCombobox.SelectedValues.Contains(Value)) 
+            if (MudComboBox.MultiSelection == true && MudComboBox.SelectedValues.Contains(Value)) 
             {
                 Selected = true;
             }
-            else if (MudCombobox.MultiSelection == false && ((MudCombobox.Value == null && Value == null) || MudCombobox.Value?.Equals(Value) == true))
+            else if (MudComboBox.MultiSelection == false && ((MudComboBox.Value == null && Value == null) || MudComboBox.Value?.Equals(Value) == true))
             {
                 Selected = true;
             }
@@ -205,26 +210,26 @@ namespace MudExtensions
         protected async Task HandleOnClick()
         {
             //Selected = !Selected;
-            await MudCombobox.ToggleOption(this, !Selected);
-            //await MudCombobox?.SelectOption(Value);
+            await MudComboBox.ToggleOption(this, !Selected);
+            //await MudComboBox?.SelectOption(Value);
             await InvokeAsync(StateHasChanged);
-            //if (MudCombobox.MultiSelection == false)
+            //if (MudComboBox.MultiSelection == false)
             //{
-            //    await MudCombobox?.CloseMenu();
+            //    await MudComboBox?.CloseMenu();
             //}
             //else
             //{
-            //    await MudCombobox.FocusAsync();
+            //    await MudComboBox.FocusAsync();
             //}
-            await MudCombobox.FocusAsync();
+            await MudComboBox.FocusAsync();
             await OnClick.InvokeAsync();
         }
 
         protected bool GetDisabledStatus()
         {
-            if (MudCombobox?.ItemDisabledFunc != null)
+            if (MudComboBox?.ItemDisabledFunc != null)
             {
-                return MudCombobox.ItemDisabledFunc(Value);
+                return MudComboBox.ItemDisabledFunc(Value);
             }
             return Disabled;
         }
@@ -233,7 +238,7 @@ namespace MudExtensions
         {
             try
             {
-                MudCombobox?.Remove(this);
+                MudComboBox?.Remove(this);
             }
             catch (Exception) { }
         }

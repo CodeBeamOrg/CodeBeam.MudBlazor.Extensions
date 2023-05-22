@@ -3,45 +3,45 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center justify-center" Style="height: 500px">
-        <MudCombobox @ref="_combobox" @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Text" Label="Text" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
+        <MudComboBox @ref="_combobox" @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Text" Label="Text" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
                 autocomplete="new-password"
                 Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" SelectValueOnTab="_selectValueOnTab" Bordered="true" ShowCheckbox="false"
                 HelperText="@(_helperText ? "Helper Text" : null)" HelperTextOnFocus="_helperTextOnFocus">
-            <MudComboboxItem Value="@("Foo")" Text="Foo">Foo</MudComboboxItem>
-            <MudComboboxItem Value="@("Bar")" Text="Bar">Bar</MudComboboxItem>
-            <MudComboboxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboboxItem>
-            <MudComboboxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboboxItem>
+            <MudComboBoxItem Value="@("Foo")" Text="Foo">Foo</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Bar")" Text="Bar">Bar</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboBoxItem>
             @foreach (var state in states)
             {
-                <MudComboboxItem Value="@state" Text="@state">@state</MudComboboxItem>
+                <MudComboBoxItem Value="@state" Text="@state">@state</MudComboBoxItem>
             }
-        </MudCombobox>
-        <MudCombobox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Outlined" Label="Outlined" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
+        </MudComboBox>
+        <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Outlined" Label="Outlined" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
                      autocomplete="new-password"
                      Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" SelectValueOnTab="_selectValueOnTab"
                      HelperText="@(_helperText ? "Helper Text" : null)" HelperTextOnFocus="_helperTextOnFocus">
-            <MudComboboxItem Value="@("Foo")">Foo</MudComboboxItem>
-            <MudComboboxItem Value="@("Bar")">Bar</MudComboboxItem>
-            <MudComboboxItem Value="@("Fizz")">Fizz</MudComboboxItem>
-            <MudComboboxItem Value="@("Buzz")">Buzz</MudComboboxItem>
+            <MudComboBoxItem Value="@("Foo")">Foo</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Bar")">Bar</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Fizz")">Fizz</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Buzz")">Buzz</MudComboBoxItem>
             @foreach (var state in states)
             {
-                <MudComboboxItem Value="@state" Text="@state">@state</MudComboboxItem>
+                <MudComboBoxItem Value="@state" Text="@state">@state</MudComboBoxItem>
             }
-        </MudCombobox>
-        <MudCombobox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Filled" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
+        </MudComboBox>
+        <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Filled" Placeholder="@(_placeholder ? "Placeholder" : null)" Editable="_editable" Disabled="_disabled" ReadOnly="_readonly" MultiSelection="@_multiselection"
                      autocomplete="new-password"
                      Margin="_margin" Dense="_dense" Color="_color" Clearable="_clearable" SelectValueOnTab="_selectValueOnTab"
                      HelperText="@(_helperText ? "Helper Text" : null)" HelperTextOnFocus="_helperTextOnFocus">
-            <MudComboboxItem Value="@("Foo")">Foo</MudComboboxItem>
-            <MudComboboxItem Value="@("Bar")">Bar</MudComboboxItem>
-            <MudComboboxItem Value="@("Fizz")">Fizz</MudComboboxItem>
-            <MudComboboxItem Value="@("Buzz")">Buzz</MudComboboxItem>
+            <MudComboBoxItem Value="@("Foo")">Foo</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Bar")">Bar</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Fizz")">Fizz</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Buzz")">Buzz</MudComboBoxItem>
             @foreach (var state in states)
             {
-                <MudComboboxItem Value="@state" Text="@state">@state</MudComboboxItem>
+                <MudComboBoxItem Value="@state" Text="@state">@state</MudComboBoxItem>
             }
-        </MudCombobox>
+        </MudComboBox>
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -67,7 +67,7 @@
 </MudGrid>
 
     @code{
-    MudCombobox<string> _combobox;
+    MudComboBox<string> _combobox;
     string _value;
     string _text;
     IEnumerable<string> _selectedValues;
@@ -102,29 +102,4 @@
         "Texas", "Utah", "Vermont", "Virgin Island", "Virginia",
         "Washington", "West Virginia", "Wisconsin", "Wyoming",
     };
-}
-
-<MudCombobox Label="Select Item"
-             MultiSelection="true"
-             T="string"
-             Delimiter="^"
-             SelectAll="true"
-             @bind-SelectedValues="@SelectedItems">
-
-    @foreach (var item in AllItems)
-    {
-        <MudComboboxItem T="string" Value="@item">@item</MudComboboxItem>
-    }
-</MudCombobox>
-
-@code {
-    public static string __description__ = "Test for the Select All option";
-    private List<string> AllItems = new();
-    private IEnumerable<string> SelectedItems = new HashSet<string>();
-    protected override void OnInitialized()
-    {
-        AllItems.Add("FirstA");
-        AllItems.Add("SecondA");
-        AllItems.Add("ThirdA");
-    }
 }

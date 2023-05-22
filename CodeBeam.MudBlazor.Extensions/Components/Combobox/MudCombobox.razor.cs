@@ -6,15 +6,16 @@ using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using MudExtensions.Extensions;
 using MudExtensions.Services;
+using System.Text.RegularExpressions;
 using static MudBlazor.CategoryTypes;
 
 namespace MudExtensions
 {
-    public partial class MudCombobox<T> : MudBaseInputExtended<T>
+    public partial class MudComboBox<T> : MudBaseInputExtended<T>
     {
         #region Constructor, Injected Services, Parameters, Fields
 
-        public MudCombobox()
+        public MudComboBox()
         {
             Adornment = Adornment.End;
             IconSize = Size.Medium;
@@ -29,9 +30,9 @@ namespace MudExtensions
         private string multiSelectionText;
         private IKeyInterceptor _keyInterceptor;
 
-        public List<MudComboboxItem<T>> Items = new();
-        internal MudComboboxItem<T> _lastActivatedItem;
-        protected internal List<MudComboboxItem<T>> EligibleItems { get; set; } = new();
+        public List<MudComboBoxItem<T>> Items = new();
+        internal MudComboBoxItem<T> _lastActivatedItem;
+        protected internal List<MudComboBoxItem<T>> EligibleItems { get; set; } = new();
         private MudInputExtended<string> _inputReference;
         private MudTextFieldExtended<string> _searchbox;
         internal bool _isOpen;
@@ -74,6 +75,12 @@ namespace MudExtensions
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
         [Parameter] public bool Highlight { get; set; }
+
+        /// <summary>
+        /// Overrides the highlight class.
+        /// </summary>
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        [Parameter] public string HighlightClass { get; set; }
 
         /// <summary>
         /// If true, selected or active items in popover has border.
@@ -129,21 +136,21 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public RenderFragment<MudComboboxItem<T>> ItemTemplate { get; set; }
+        public RenderFragment<MudComboBoxItem<T>> ItemTemplate { get; set; }
 
         /// <summary>
         /// Optional presentation template for selected items
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public RenderFragment<MudComboboxItem<T>> ItemSelectedTemplate { get; set; }
+        public RenderFragment<MudComboBoxItem<T>> ItemSelectedTemplate { get; set; }
 
         /// <summary>
         /// Optional presentation template for disabled items
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public RenderFragment<MudComboboxItem<T>> ItemDisabledTemplate { get; set; }
+        public RenderFragment<MudComboBoxItem<T>> ItemDisabledTemplate { get; set; }
 
         /// <summary>
         /// Function to be invoked when checking whether an item should be disabled or not. Works both with renderfragment and ItemCollection approach.
@@ -587,9 +594,19 @@ namespace MudExtensions
             }
         }
 
+        protected async Task UpdateComboBoxValueAsync(T value, bool updateText = true, bool updateSearchString = false, bool force = false)
+        {
+            await SetValueAsync(value, updateText, force);
+            if (updateSearchString)
+            {
+                _searchString = Converter.Set(Value);
+                await _inputReference.SetText(_searchString);
+            }
+        }
+
         protected internal string _dataVisualiserText;
 
-        protected internal string GetSelectTextPresenter()
+        protected internal string GetPresenterText()
         {
             return _dataVisualiserText;
         }
@@ -633,16 +650,6 @@ namespace MudExtensions
             _allSelected = GetAllSelectedState();
         }
 
-        protected async Task UpdateComboboxValueAsync(T value, bool updateText = true, bool updateSearchString = false, bool force = false)
-        {
-            await SetValueAsync(value, updateText, force);
-            if (updateSearchString)
-            {
-                _searchString = Converter.Set(Value);
-                await _inputReference.SetText(_searchString);
-            }
-        }
-
         T _oldValue;
         bool _oldMultiselection = false;
         protected override async Task OnParametersSetAsync()
@@ -656,6 +663,11 @@ namespace MudExtensions
                 if (MultiSelection == true)
                 {
                     _searchString = null;
+                }
+                else
+                {
+                    DeselectAllItems();
+                    Items.FirstOrDefault(x => x.Value.Equals(Value)).Selected = true;
                 }
             }
             if ((Value == null && _oldValue != null) || (Value != null && Value.Equals(_oldValue) == false))
@@ -733,6 +745,13 @@ namespace MudExtensions
             if (Disabled || ReadOnly)
                 return;
 
+            var key = obj.Key.ToLowerInvariant();
+            if (Editable == false && key.Length == 1 && key != " " && !(obj.CtrlKey || obj.ShiftKey || obj.AltKey || obj.MetaKey))
+            {
+                await ActiveFirstItem(key);
+                return;
+            }
+
             switch (obj.Key)
             {
                 case "Tab":
@@ -741,6 +760,16 @@ namespace MudExtensions
                         await ToggleOption(_lastActivatedItem, true);
                     }
                     await CloseMenu();
+                    break;
+                case "a":
+                case "A":
+                    if (obj.CtrlKey)
+                    {
+                        if (MultiSelection)
+                        {
+                            await SelectAllItems();
+                        }
+                    }
                     break;
                 case "Home":
                     await ActiveFirstItem();
@@ -792,8 +821,7 @@ namespace MudExtensions
                         }
                         else
                         {
-                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem.Selected);
-                            await SetTextAsync(Converter.Set(Value), false);
+                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem?.Selected ?? true);
                         }
                         break;
                     }
@@ -827,6 +855,8 @@ namespace MudExtensions
             {
                 case "ArrowUp":
                 case "ArrowDown":
+                case "Home":
+                case "End":
                     HandleKeyDown(obj);
                     break;
                 case "Enter":
@@ -858,7 +888,7 @@ namespace MudExtensions
 
             if (Strict == false)
             {
-                await UpdateComboboxValueAsync(Converter.Get(_searchString), updateText: true, updateSearchString: true);
+                await UpdateComboBoxValueAsync(Converter.Get(_searchString), updateText: true, updateSearchString: true);
             }
             else
             {
@@ -975,9 +1005,10 @@ namespace MudExtensions
 
         #endregion
 
+
         #region Item Registration & Selection
 
-        protected internal async Task ToggleOption(MudComboboxItem<T> item, bool selected)
+        protected internal async Task ToggleOption(MudComboBoxItem<T> item, bool selected)
         {
             if (item == null)
             {
@@ -990,7 +1021,7 @@ namespace MudExtensions
                 {
                     if (ToggleSelection)
                     {
-                        await UpdateComboboxValueAsync(default(T), updateText: true, updateSearchString: true);
+                        await UpdateComboBoxValueAsync(default(T), updateText: true, updateSearchString: true);
                         item.Selected = false;
                     }
                 }
@@ -1007,7 +1038,7 @@ namespace MudExtensions
                 if (MultiSelection == false)
                 {
                     DeselectAllItems();
-                    await UpdateComboboxValueAsync(item.Value, updateText: true, updateSearchString: true);
+                    await UpdateComboBoxValueAsync(item.Value, updateText: true, updateSearchString: true);
                 }
                 else if (SelectedValues.Contains(item.Value) == false)
                 {
@@ -1056,7 +1087,7 @@ namespace MudExtensions
             await BeginValidateAsync();
         }
 
-        protected internal bool? Add(MudComboboxItem<T> item)
+        protected internal bool? Add(MudComboBoxItem<T> item)
         {
             if (item == null)
                 return false;
@@ -1069,7 +1100,7 @@ namespace MudExtensions
             return result;
         }
 
-        protected internal void Remove(MudComboboxItem<T> item)
+        protected internal void Remove(MudComboBoxItem<T> item)
         {
             if (Items == null)
             {
@@ -1088,7 +1119,7 @@ namespace MudExtensions
         /// </summary>
         protected async ValueTask ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
-            await UpdateComboboxValueAsync(default(T));
+            await UpdateComboBoxValueAsync(default(T));
             _searchString = null;
             await SetTextAsync(default, false);
             _selectedValues.Clear();
@@ -1359,7 +1390,7 @@ namespace MudExtensions
 
         #endregion
 
-        protected List<MudComboboxItem<T>> GetEligibleAndNonDisabledItems()
+        protected List<MudComboBoxItem<T>> GetEligibleAndNonDisabledItems()
         {
             if (Items == null)
             {
@@ -1385,7 +1416,7 @@ namespace MudExtensions
             return Typo.body1;
         }
 
-        protected internal ValueTask ScrollToMiddleAsync(MudComboboxItem<T> item)
+        protected internal ValueTask ScrollToMiddleAsync(MudComboBoxItem<T> item)
         {
             if (item == null)
             {

@@ -157,6 +157,11 @@
   min-width: 56px;
   flex-shrink: 0; }
 
+.mud-combobox-highlighter {
+  background-color: transparent;
+  font-weight: bold;
+  text-decoration: underline; }
+
 .mud-gallery-selected-toolbox {
   left: 0;
   right: 0;
