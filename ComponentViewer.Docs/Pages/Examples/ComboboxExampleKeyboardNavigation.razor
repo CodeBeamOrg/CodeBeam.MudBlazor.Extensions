@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNetCore.Components
+@using MudBlazor.Extensions
+
+<MudDataGrid Items="@_keys" Dense="true" Striped="true">
+    <Columns>
+        <PropertyColumn Property="x => x.Key" />
+        <PropertyColumn Property="x => x.Description" />
+    </Columns>
+</MudDataGrid>
+
+@code{
+    List<Keys> _keys = new();
+
+    protected override void OnInitialized()
+    {
+        _keys.Add(new Keys() { Key = "Space", Description = "Toggle Open/Close" });
+        _keys.Add(new Keys() { Key = "Escape", Description = "Close" });
+        _keys.Add(new Keys() { Key = "Enter", Description = "Open/Select" });
+        _keys.Add(new Keys() { Key = "NumpadEnter", Description = "Open/Select" });
+        _keys.Add(new Keys() { Key = "ArrowUp", Description = "Active Previous Item" });
+        _keys.Add(new Keys() { Key = "ArrowDown", Description = "Active Next Item" });
+        _keys.Add(new Keys() { Key = "Home", Description = "Active First Item" });
+        _keys.Add(new Keys() { Key = "End", Description = "Active Last Item" });
+        _keys.Add(new Keys() { Key = "Ctrl + a", Description = "Select All (Multiselection)" });
+        _keys.Add(new Keys() { Key = "Printable Characters", Description = "Active Next Item Which Starts With Pressed Key" });
+    }
+
+    protected class Keys
+    {
+        public string Key { get; set; }
+        public string Description { get; set; }
+    }
+}

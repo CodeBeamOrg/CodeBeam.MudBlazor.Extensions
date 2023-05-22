@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Components
+@using MudBlazor.Extensions
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center justify-center">
+        <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Highlighted" Editable="true" MultiSelection="@_multiselection"
+                     autocomplete="new-password" Color="_color" Clearable="_clearable" Strict="_strict" Highlight="true" HighlightClass="@(_customHighlightClass ? "mud-theme-primary" : null)">
+            <MudComboBoxItem Value="@("Foo")">Foo</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Bar")">Bar</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Fizz")">Fizz</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Buzz")">Buzz</MudComboBoxItem>
+            @foreach (var state in states)
+            {
+                <MudComboBoxItem Value="@state" Text="@state">@state</MudComboBoxItem>
+            }
+        </MudComboBox>
+
+        <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="With NoItemsContent" Editable="true" MultiSelection="@_multiselection"
+                     autocomplete="new-password" Color="_color" Clearable="_clearable" Strict="_strict">
+            <ChildContent>
+                <MudComboBoxItem Value="@("Foo")">Foo</MudComboBoxItem>
+                <MudComboBoxItem Value="@("Bar")">Bar</MudComboBoxItem>
+                <MudComboBoxItem Value="@("Fizz")">Fizz</MudComboBoxItem>
+                <MudComboBoxItem Value="@("Buzz")">Buzz</MudComboBoxItem>
+                @foreach (var state in states)
+                {
+                    <MudComboBoxItem Value="@state" Text="@state">@state</MudComboBoxItem>
+                }
+            </ChildContent>
+            <NoItemsContent>
+                No Items Found
+            </NoItemsContent>
+
+        </MudComboBox>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudSelectExtended @bind-Value="_color" ItemCollection="@(Enum.GetValues<Color>())" Variant="Variant.Outlined" Label="Color" Margin="Margin.Dense" Dense="true" />
+            <MudSwitchM3 @bind-Checked="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="@_strict" Label="Strict" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="@_clearable" Label="Clearable" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="@_customHighlightClass" Label="Custom Highlight" Color="Color.Secondary" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    MudComboBox<string> _combobox;
+    string _value;
+    string _text;
+    IEnumerable<string> _selectedValues;
+    Variant _variant = Variant.Outlined;
+    Color _color = Color.Primary;
+    bool _multiselection;
+    bool _clearable;
+    bool _strict;
+    bool _customHighlightClass;
+
+    private string[] states =
+    {
+        "Alabama", "Alaska", "American Samoa", "Arizona",
+        "Arkansas", "California", "Colorado", "Connecticut",
+        "Delaware", "District of Columbia", "Federated States of Micronesia",
+        "Florida", "Georgia", "Guam", "Hawaii", "Idaho",
+        "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+        "Louisiana", "Maine", "Marshall Islands", "Maryland",
+        "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+        "Missouri", "Montana", "Nebraska", "Nevada",
+        "New Hampshire", "New Jersey", "New Mexico", "New York",
+        "North Carolina", "North Dakota", "Northern Mariana Islands", "Ohio",
+        "Oklahoma", "Oregon", "Palau", "Pennsylvania", "Puerto Rico",
+        "Rhode Island", "South Carolina", "South Dakota", "Tennessee",
+        "Texas", "Utah", "Vermont", "Virgin Island", "Virginia",
+        "Washington", "West Virginia", "Wisconsin", "Wyoming",
+    };
+}

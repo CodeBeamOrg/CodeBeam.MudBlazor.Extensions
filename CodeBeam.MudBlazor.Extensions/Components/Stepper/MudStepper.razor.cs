@@ -77,12 +77,24 @@ namespace MudExtensions
             }
         }
 
+        protected string GetStepClass()
+        {
+            if (Vertical)
+            {
+                return $"d-flex";
+            }
+            else
+            {
+                return $"";
+            }
+        }
+
         protected string GetProgressLinearStyle()
         {
             var end = Steps.Count * 2;
             if (Vertical)
             {
-                return $"grid-row-start:2;grid-row-end:{end};grid-column:1/-1;display:inline-grid;left:{(HeaderSize == Size.Medium ? 30 : HeaderSize == Size.Large ? 38 : 22)}px;top:-34px;z-index:10;transform:rotateX(180deg);";
+                return $"grid-row-start:2;grid-row-end:{end};grid-column:1/-1;display:inline-grid;left:{(HeaderSize == Size.Medium ? 30 : HeaderSize == Size.Large ? 38 : 22)}px;z-index:10;transform:rotateX(180deg);";
             }
             else
             {
@@ -192,6 +204,12 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public Variant Variant { get; set; }
+        
+        /// <summary>
+        /// Choose header badge view. Default is all.
+        /// </summary>
+        [Parameter]
+        public HeaderBadgeView HeaderBadgeView { get; set; } = HeaderBadgeView.All;
 
         /// <summary>
         /// Choose header text view. Default is all.
@@ -280,14 +298,9 @@ namespace MudExtensions
             StateHasChanged();
         }
 
-        protected internal async Task SetActiveIndex(MudStep step)
+        protected internal async Task SetActiveIndex(MudStep step, bool skipPreventProcess = false)
         {
-            if (_animate != null)
-            {
-                await _animate.Refresh();
-            }
-            ActiveIndex = Steps.IndexOf(step);
-            await ActiveStepChanged.InvokeAsync(ActiveIndex);
+            await SetActiveStepByIndex(Steps.IndexOf(step), skipPreventProcess: skipPreventProcess);
         }
 
         public async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)

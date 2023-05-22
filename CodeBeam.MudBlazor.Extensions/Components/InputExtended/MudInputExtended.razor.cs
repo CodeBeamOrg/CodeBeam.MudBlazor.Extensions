@@ -42,6 +42,12 @@ namespace MudExtensions
                     .AddClass("mud-icon-button-edge-margin-end", Adornment != Adornment.End && HideSpinButtons)
                     .Build();
 
+        protected string ChildContentClassname =>
+                    new CssBuilder()
+                    .AddClass("d-inline", InputType == InputType.Hidden && ChildContent != null && ShowVisualiser == false)
+                    .AddClass("d-none", !(InputType == InputType.Hidden && ChildContent != null && ShowVisualiser == false))
+                    .Build();
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
@@ -55,6 +61,8 @@ namespace MudExtensions
             }
         }
 
+        [Parameter] public bool ShowVisualiser { get; set; }
+        [Parameter] public string DataVisualiserStyle { get; set; }
 
         /// <summary>
         /// Type of the input element. It should be a valid HTML5 input type.
@@ -181,18 +189,9 @@ namespace MudExtensions
         /// <summary>
         /// Show clear button.
         /// </summary>
-        [Parameter] public bool Clearable
-        {
-            get => _showClearable;
-            set
-            {
-                if (_showClearable == value)
-                {
-                    return;
-                }
-                _showClearable = value;
-            }
-        }
+        [Parameter] public bool Clearable { get; set; }
+
+        [Parameter] public bool ForceClearable { get; set; }
 
         /// <summary>
         /// Button click event for clear button. Called after text and value has been cleared.
@@ -225,10 +224,12 @@ namespace MudExtensions
 
         private void UpdateClearable(object value)
         {
-            var showClearable = Clearable && ((value is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (value is not string && value is not null));
-            if (_showClearable != showClearable)
-                _showClearable = showClearable;
+            var showClearable = HasValue((T)value);
+            if (Clearable != showClearable)
+                Clearable = showClearable;
         }
+
+        private bool GetClearable() => Clearable && ((Value is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (Value is not string && Value is not null));
 
         protected override async Task UpdateTextPropertyAsync(bool updateValue)
         {

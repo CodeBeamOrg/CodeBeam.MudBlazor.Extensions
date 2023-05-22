@@ -1,0 +1,62 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+
+<MudPopoverProvider></MudPopoverProvider>
+<MudComboBox @ref="_combobox" T="string" ValueChanged="ValueChanged" SelectedValuesChanged="ValuesChanged" MultiSelection="MultiSelection">
+    <MudComboBoxItem @ref="FirstItem" T="string" Value="@("1")" />
+    <MudComboBoxItem @ref="SecondItem" T="string" Value="@("2")" />
+    <MudComboBoxItem @ref="ThirdItem" T="string" Value="@("3")" />
+    <MudComboBoxItem T="string" Value="@("4")" Disabled="true" />
+</MudComboBox>
+
+@code {
+    [Parameter]
+    public bool MultiSelection { get; set; }
+
+    public int ValueChangeCount { get; set; }
+    public int ValuesChangeCount { get; set; }
+    public int ItemChangeCount { get; set; }
+    public int ItemsChangeCount { get; set; }
+
+    MudComboBox<string> _combobox;
+    MudComboBoxItem<string> FirstItem { get; set; }
+    MudComboBoxItem<string> SecondItem { get; set; }
+    MudComboBoxItem<string> ThirdItem { get; set; }
+
+    //public void SetSelectedItem()
+    //{
+    //    #pragma warning disable BL0005
+    //    _select.SelectedItem = SecondItem;
+    //}
+
+    //public void SetSelectedItems()
+    //{
+    //    _select.SelectedItems = new HashSet<MudSelectItem<string>>() { SecondItem, ThirdItem };
+    //    //StateHasChanged();
+    //}
+
+    //public void SetReverseSelectedItems()
+    //{
+    //    _select.SelectedItems = new HashSet<MudSelectItem<string>>() { ThirdItem, FirstItem };
+    //    //StateHasChanged();
+    //}
+
+    private void ValueChanged()
+    {
+        ValueChangeCount++;
+    }
+
+    private void ValuesChanged()
+    {
+        ValuesChangeCount++;
+    }
+
+    private void ItemChanged()
+    {
+        ItemChangeCount++;
+    }
+
+    private void ItemsChanged()
+    {
+        ItemsChangeCount++;
+    }
+}

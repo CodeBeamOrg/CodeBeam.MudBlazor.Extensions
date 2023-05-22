@@ -1,0 +1,100 @@
+﻿@using Microsoft.AspNetCore.Components
+@using MudBlazor.Extensions
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex flex-column gap-4 justify-center">
+        <MudComboBox @bind-Value="@_stringValue" @bind-SelectedValues="@_stringSelectedValues" Variant="Variant.Filled" Label="String Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
+                     ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color">
+            <ChildContent>
+                @foreach (var state in states)
+                {
+                    <MudComboBoxItem Value="@state" Text="@state">@state</MudComboBoxItem>
+                }
+            </ChildContent>
+        </MudComboBox>
+
+        <MudComboBox @bind-Value="@_intValue" @bind-SelectedValues="@_intSelectedValues" Variant="Variant.Filled" Label="Int Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
+                     ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color">
+            <ChildContent>
+                @foreach (var num in _numbers)
+                {
+                    <MudComboBoxItem Value="@num" Text="@num.ToString()">@num</MudComboBoxItem>
+                }
+            </ChildContent>
+        </MudComboBox>
+
+        <MudComboBox @bind-Value="@_complexValue" @bind-SelectedValues="@_complexSelectedValues" Variant="Variant.Filled" Label="Complex Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
+                     ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color" ToStringFunc="@(e => e?.Id + " - " + e?.Name)">
+            <ChildContent>
+                @foreach (var item in _complexItems)
+                {
+                    <MudComboBoxItem Value="@item" Text="@item.Name">@item.Name</MudComboBoxItem>
+                }
+            </ChildContent>
+        </MudComboBox>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudSwitchM3 @bind-Checked="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="@_chipCloseable" Label="Chip Closeable" Color="Color.Secondary" />
+            <MudSelectExtended @bind-Value="_chipSize" ItemCollection="@(Enum.GetValues<Size>())" Label="Size" Variant="Variant.Outlined" Dense="true" />
+            <MudSelectExtended @bind-Value="_chipVariant" ItemCollection="@(Enum.GetValues<Variant>())" Label="Variant" Variant="Variant.Outlined" Dense="true" />
+            <MudSelectExtended @bind-Value="_color" ItemCollection="@(Enum.GetValues<Color>())" Label="Color" Variant="Variant.Outlined" Dense="true" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    string _stringValue;
+    int _intValue;
+    ComplexType _complexValue;
+    IEnumerable<string> _stringSelectedValues;
+    IEnumerable<int> _intSelectedValues;
+    IEnumerable<ComplexType> _complexSelectedValues;
+    bool _multiselection = true;
+    bool _chipCloseable;
+    Size _chipSize = Size.Medium;
+    Variant _chipVariant = Variant.Filled;
+    Color _color = Color.Primary;
+
+    private string[] states =
+    {
+        "Alabama", "Alaska", "American Samoa", "Arizona",
+        "Arkansas", "California", "Colorado", "Connecticut",
+        "Delaware", "District of Columbia", "Federated States of Micronesia",
+        "Florida", "Georgia", "Guam", "Hawaii", "Idaho",
+        "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+        "Louisiana", "Maine", "Marshall Islands", "Maryland",
+        "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+        "Missouri", "Montana", "Nebraska", "Nevada",
+        "New Hampshire", "New Jersey", "New Mexico", "New York",
+        "North Carolina", "North Dakota", "Northern Mariana Islands", "Ohio",
+        "Oklahoma", "Oregon", "Palau", "Pennsylvania", "Puerto Rico",
+        "Rhode Island", "South Carolina", "South Dakota", "Tennessee",
+        "Texas", "Utah", "Vermont", "Virgin Island", "Virginia",
+        "Washington", "West Virginia", "Wisconsin", "Wyoming",
+    };
+
+    private List<int> _numbers = Enumerable.Range(0, 20).ToList();
+
+    List<ComplexType> _complexItems = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _complexItems.Add(new ComplexType() { Id = 1, Name = "John" });
+        _complexItems.Add(new ComplexType() { Id = 2, Name = "Mary" });
+        _complexItems.Add(new ComplexType() { Id = 3, Name = "Peter" });
+        _complexItems.Add(new ComplexType() { Id = 4, Name = "Jennifer" });
+        _complexItems.Add(new ComplexType() { Id = 5, Name = "Michael" });
+        _complexItems.Add(new ComplexType() { Id = 6, Name = "Diana" });
+    }
+
+    protected class ComplexType
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+}

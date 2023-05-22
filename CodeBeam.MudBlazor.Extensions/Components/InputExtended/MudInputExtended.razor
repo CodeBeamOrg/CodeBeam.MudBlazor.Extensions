@@ -46,68 +46,76 @@
     }
     else
     {
-        @if (DataVisualiser != null)
-        {
-            @DataVisualiser
-        }
+        <div class="d-flex flex-wrap align-center mud-width-full">
 
-        <input class="@InputClassname"
-           @ref="ElementReference"
-           @attributes="UserAttributes"
-           type="@InputTypeString"
-           value="@_internalText"
-           @oninput="OnInputHandler"
-           @onchange="OnChangeHandler"
-           placeholder="@Placeholder"
-           disabled=@Disabled
-           readonly="@ReadOnly"
-           @onblur="@OnBlurredAsync"
-           inputmode="@InputMode.ToString()"
-           pattern="@Pattern"
-           @onkeydown="@InvokeKeyDown"
-           @onkeypress="@InvokeKeyPress"
-           @onkeyup="@InvokeKeyUp"
-           maxlength="@MaxLength"
-           @onkeydown:preventDefault="KeyDownPreventDefault"
-           @onkeypress:preventDefault="@KeyPressPreventDefault"
-           @onkeyup:preventDefault="@KeyUpPreventDefault"
-           @onmousewheel="@OnMouseWheel"
-           @onwheel="@OnMouseWheel"
-           aria-invalid="@Error.ToString().ToLower()"
-           aria-describedby="@ErrorId" />
+            @if (ShowVisualiser == true)
+            {
+                <div class="@InputClassname" style="height: auto; @DataVisualiserStyle" tabindex="0" @ref="@_elementReference1">
+                    @DataVisualiser
+                </div>
+            }
+
+            <div class="mud-input" style="flex-basis: 20px; flex-grow: 1">
+                <input class="@InputClassname"
+                   @ref="ElementReference"
+                   @attributes="UserAttributes"
+                       type="@InputTypeString"
+                       value="@_internalText"
+                   @oninput="OnInputHandler"
+                   @onchange="OnChangeHandler"
+                       placeholder="@Placeholder"
+                       disabled=@Disabled
+                       readonly="@ReadOnly"
+                   @onblur="@OnBlurredAsync"
+                       inputmode="@InputMode.ToString()"
+                       pattern="@Pattern"
+                   @onkeydown="@InvokeKeyDown"
+                   @onkeypress="@InvokeKeyPress"
+                   @onkeyup="@InvokeKeyUp"
+                       maxlength="@MaxLength"
+                   @onkeydown:preventDefault="KeyDownPreventDefault"
+                   @onkeypress:preventDefault="@KeyPressPreventDefault"
+                   @onkeyup:preventDefault="@KeyUpPreventDefault"
+                   @onmousewheel="@OnMouseWheel"
+                   @onwheel="@OnMouseWheel"
+                       aria-invalid="@Error.ToString().ToLower()"
+                       aria-describedby="@ErrorId" />
+            </div>
+
         @*Note: double mouse wheel handlers needed for Firefox because it doesn't know onmousewheel*@
 
-        @if (Disabled)
-        {
-            @*Note: this div must always be there to avoid crashes in WASM, but it is hidden most of the time except if ChildContent should be shown.
-    In Disabled state the tabindex attribute must NOT be set at all or else it will get focus on click
-    *@
-            <div class="@InputClassname"
-                style="@($"display:{(InputType == InputType.Hidden && ChildContent != null ? "inline" : "none")}; {MockInputStyle}")"
-                 @onblur="@OnBlurredAsync" @ref="@_elementReference1">
-                    @ChildContent
-            </div>
-        }
-        else
-        {
-            @*Note: this div must always be there to avoid crashes in WASM, but it is hidden most of the time except if ChildContent should be shown.*@
-            <div class="@InputClassname"
-                 style="@($"display:{(InputType == InputType.Hidden && ChildContent != null ? "inline" : "none")}; {MockInputStyle}")"
-                 tabindex="@(InputType == InputType.Hidden && ChildContent != null ? 0 : -1)"
-                 @onblur="@OnBlurredAsync" @ref="@_elementReference1">
-                    @ChildContent
-            </div>
-        }
+            @if (ShowVisualiser == false)
+            {
+                if (Disabled)
+                {
+                    <div class="@InputClassname @ChildContentClassname" style="@ChildContentStyle"
+             @onblur="@OnBlurredAsync" @ref="@_elementReference1">
+                        @ChildContent
+                    </div>
+                }
+                else
+                {
+                    <div class="@InputClassname @ChildContentClassname" style="@ChildContentStyle"
+                         tabindex="@(InputType == InputType.Hidden && ChildContent != null ? 0 : -1)"
+             @onblur="@OnBlurredAsync" @ref="@_elementReference1">
+                        @ChildContent
+                    </div>
+                }
+            }
+
+        </div>
     }
 
-    @if (_showClearable && !Disabled)
+    @if (GetClearable() && !GetDisabledState() || ForceClearable)
     {
-        <MudIconButton Class="@ClearButtonClassname"
-                   Color="@Color.Default"
-                   Icon="@ClearIcon"
-                   Size="@Size.Small"
-                   OnClick="@ClearButtonClickHandlerAsync"
-                   tabindex="-1" />
+        <div @onmousedown:stopPropagation>
+            <MudIconButton Class="@ClearButtonClassname"
+                       Color="@Color.Default"
+                       Icon="@ClearIcon"
+                       Size="@Size.Small"
+                       @onmousedown="@ClearButtonClickHandlerAsync"
+                           tabindex="-1" />
+        </div>
     }
 
     @if (AdornmentEnd != null)

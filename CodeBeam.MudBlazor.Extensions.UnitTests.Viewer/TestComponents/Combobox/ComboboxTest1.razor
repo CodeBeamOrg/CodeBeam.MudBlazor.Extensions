@@ -1,0 +1,27 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudComboBox T="string" @bind-Value="value" PopoverClass="combobox-popover-class" @onfocus="Focused" OnBlur="Blurred">
+    <MudComboBoxItem Value="@("1")"/>
+    <MudComboBoxItem Value="@("2")"/>
+    <MudComboBoxItem Value="@("3")"/>
+    <MudComboBoxItem Value="@("4")" Disabled="true"/>
+</MudComboBox>
+
+<MudSwitch @bind-Checked="@_focused" />
+
+@code {
+
+	string value = null;
+	bool _focused = false;
+
+	private void Focused()
+	{
+		_focused = true;
+	}
+
+	private void Blurred()
+	{
+		_focused = false;
+	}
+}

@@ -15,6 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudBlazor.Extensio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudBlazor.Extensions.UnitTests.Viewer", "CodeBeam.MudBlazor.Extensions.UnitTests.Viewer\CodeBeam.MudBlazor.Extensions.UnitTests.Viewer.csproj", "{590CCBEC-3D84-42C8-A925-C0CD2135268C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{42A7CB80-994B-49A1-A4B8-E2162F54E67B}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

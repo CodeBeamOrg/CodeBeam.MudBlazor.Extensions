@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Components
+@using MudBlazor.Extensions
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center justify-center">
+        <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled"
+            Label="Single Selection" HelperText="Standard combobox" Editable="_editable" autocomplete="new-password">
+            <MudComboBoxItem Value="@("Foo")" Text="Foo">Foo</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Bar")" Text="Bar">Bar</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboBoxItem>
+        </MudComboBox>
+        <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" ToggleSelection="true"
+                     Label="Toggle Selection" HelperText="Can unselect the item" Editable="_editable" autocomplete="new-password">
+            <MudComboBoxItem Value="@("Foo")" Text="Foo">Foo</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Bar")" Text="Bar">Bar</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboBoxItem>
+            <MudComboBoxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboBoxItem>
+        </MudComboBox>
+        <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" MultiSelection="true"
+                     Label="Multi Selection" HelperText="Can select multiple items" Editable="_editable" autocomplete="new-password">
+                <MudComboBoxItem Value="@("Foo")" Text="Foo">Foo</MudComboBoxItem>
+                <MudComboBoxItem Value="@("Bar")" Text="Bar">Bar</MudComboBoxItem>
+                <MudComboBoxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboBoxItem>
+                <MudComboBoxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboBoxItem>
+        </MudComboBox>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudSwitchM3 @bind-Checked="@_editable" Label="Editable" Color="Color.Secondary" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code{
+    string _value;
+    string _text;
+    IEnumerable<string> _selectedValues;
+    bool _editable;
+}
