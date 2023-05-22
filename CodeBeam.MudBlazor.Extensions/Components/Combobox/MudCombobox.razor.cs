@@ -77,6 +77,12 @@ namespace MudExtensions
         [Parameter] public bool Highlight { get; set; }
 
         /// <summary>
+        /// Overrides the highlight class.
+        /// </summary>
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        [Parameter] public string HighlightClass { get; set; }
+
+        /// <summary>
         /// If true, selected or active items in popover has border.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]

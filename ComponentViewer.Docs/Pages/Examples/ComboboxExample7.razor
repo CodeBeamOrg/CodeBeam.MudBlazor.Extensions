@@ -4,8 +4,7 @@
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center justify-center">
         <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Highlighted" Editable="true" MultiSelection="@_multiselection"
-                     autocomplete="new-password"
-                     Color="_color" Clearable="_clearable" Strict="_strict" Highlight="true">
+                     autocomplete="new-password" Color="_color" Clearable="_clearable" Strict="_strict" Highlight="true" HighlightClass="@(_customHighlightClass ? "mud-theme-primary" : null)">
             <MudComboBoxItem Value="@("Foo")">Foo</MudComboBoxItem>
             <MudComboBoxItem Value="@("Bar")">Bar</MudComboBoxItem>
             <MudComboBoxItem Value="@("Fizz")">Fizz</MudComboBoxItem>
@@ -17,8 +16,7 @@
         </MudComboBox>
 
         <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="With NoItemsContent" Editable="true" MultiSelection="@_multiselection"
-                     autocomplete="new-password"
-                     Color="_color" Clearable="_clearable" Strict="_strict">
+                     autocomplete="new-password" Color="_color" Clearable="_clearable" Strict="_strict">
             <ChildContent>
                 <MudComboBoxItem Value="@("Foo")">Foo</MudComboBoxItem>
                 <MudComboBoxItem Value="@("Bar")">Bar</MudComboBoxItem>
@@ -42,6 +40,7 @@
             <MudSwitchM3 @bind-Checked="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="@_strict" Label="Strict" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="@_clearable" Label="Clearable" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="@_customHighlightClass" Label="Custom Highlight" Color="Color.Secondary" />
         </MudStack>
     </MudItem>
 </MudGrid>
@@ -56,6 +55,7 @@
     bool _multiselection;
     bool _clearable;
     bool _strict;
+    bool _customHighlightClass;
 
     private string[] states =
     {
