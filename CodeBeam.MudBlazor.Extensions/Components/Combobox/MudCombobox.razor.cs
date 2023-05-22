@@ -594,6 +594,16 @@ namespace MudExtensions
             }
         }
 
+        protected async Task UpdateComboBoxValueAsync(T value, bool updateText = true, bool updateSearchString = false, bool force = false)
+        {
+            await SetValueAsync(value, updateText, force);
+            if (updateSearchString)
+            {
+                _searchString = Converter.Set(Value);
+                await _inputReference.SetText(_searchString);
+            }
+        }
+
         protected internal string _dataVisualiserText;
 
         protected internal string GetPresenterText()
@@ -640,16 +650,6 @@ namespace MudExtensions
             _allSelected = GetAllSelectedState();
         }
 
-        protected async Task UpdateComboBoxValueAsync(T value, bool updateText = true, bool updateSearchString = false, bool force = false)
-        {
-            await SetValueAsync(value, updateText, force);
-            if (updateSearchString)
-            {
-                _searchString = Converter.Set(Value);
-                await _inputReference.SetText(_searchString);
-            }
-        }
-
         T _oldValue;
         bool _oldMultiselection = false;
         protected override async Task OnParametersSetAsync()
@@ -663,6 +663,11 @@ namespace MudExtensions
                 if (MultiSelection == true)
                 {
                     _searchString = null;
+                }
+                else
+                {
+                    DeselectAllItems();
+                    Items.FirstOrDefault(x => x.Value.Equals(Value)).Selected = true;
                 }
             }
             if ((Value == null && _oldValue != null) || (Value != null && Value.Equals(_oldValue) == false))
