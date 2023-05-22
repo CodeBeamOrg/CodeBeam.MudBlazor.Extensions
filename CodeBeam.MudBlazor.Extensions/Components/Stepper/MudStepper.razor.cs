@@ -298,14 +298,9 @@ namespace MudExtensions
             StateHasChanged();
         }
 
-        protected internal async Task SetActiveIndex(MudStep step)
+        protected internal async Task SetActiveIndex(MudStep step, bool skipPreventProcess = false)
         {
-            if (_animate != null)
-            {
-                await _animate.Refresh();
-            }
-            ActiveIndex = Steps.IndexOf(step);
-            await ActiveStepChanged.InvokeAsync(ActiveIndex);
+            await SetActiveStepByIndex(Steps.IndexOf(step), skipPreventProcess: skipPreventProcess);
         }
 
         public async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)
