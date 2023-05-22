@@ -3,13 +3,13 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex gap-4 justify-center">
-        <MudCombobox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Gryffindor" MultiSelection="true" Editable="_editable"
+        <MudComboBox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Gryffindor" MultiSelection="true" Editable="_editable"
                      SelectAll="_selectAll" ShowCheckbox="_showCheckbox" Bordered="_bordered" Dense="_dense"
                      autocomplete="new-password" Color="_color" Clearable="_clearable">
             <ChildContent>
                 @foreach (var item in characters)
                 {
-                    <MudComboboxItem Value="@item" Text="@item"></MudComboboxItem>
+                    <MudComboBoxItem Value="@item" Text="@item"></MudComboBoxItem>
                 }
             </ChildContent>
 
@@ -19,7 +19,7 @@
                     <MudTextFieldExtended @bind-Value="_toBeAddedValue" Variant="Variant.Outlined" Margin="Margin.Dense" />
                 </div>
             </PopoverEndContent>
-        </MudCombobox>
+        </MudComboBox>
     </MudItem>
 
     <MudItem xs="12" sm="4">

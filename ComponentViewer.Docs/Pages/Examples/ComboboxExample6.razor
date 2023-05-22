@@ -3,35 +3,35 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex flex-column gap-4 justify-center">
-        <MudCombobox @bind-Value="@_stringValue" @bind-SelectedValues="@_stringSelectedValues" Variant="Variant.Filled" Label="String Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
+        <MudComboBox @bind-Value="@_stringValue" @bind-SelectedValues="@_stringSelectedValues" Variant="Variant.Filled" Label="String Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
                      ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color">
             <ChildContent>
                 @foreach (var state in states)
                 {
-                    <MudComboboxItem Value="@state" Text="@state">@state</MudComboboxItem>
+                    <MudComboBoxItem Value="@state" Text="@state">@state</MudComboBoxItem>
                 }
             </ChildContent>
-        </MudCombobox>
+        </MudComboBox>
 
-        <MudCombobox @bind-Value="@_intValue" @bind-SelectedValues="@_intSelectedValues" Variant="Variant.Filled" Label="Int Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
+        <MudComboBox @bind-Value="@_intValue" @bind-SelectedValues="@_intSelectedValues" Variant="Variant.Filled" Label="Int Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
                      ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color">
             <ChildContent>
                 @foreach (var num in _numbers)
                 {
-                    <MudComboboxItem Value="@num" Text="@num.ToString()">@num</MudComboboxItem>
+                    <MudComboBoxItem Value="@num" Text="@num.ToString()">@num</MudComboBoxItem>
                 }
             </ChildContent>
-        </MudCombobox>
+        </MudComboBox>
 
-        <MudCombobox @bind-Value="@_complexValue" @bind-SelectedValues="@_complexSelectedValues" Variant="Variant.Filled" Label="Complex Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
+        <MudComboBox @bind-Value="@_complexValue" @bind-SelectedValues="@_complexSelectedValues" Variant="Variant.Filled" Label="Complex Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
                      ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color" ToStringFunc="@(e => e?.Id + " - " + e?.Name)">
             <ChildContent>
                 @foreach (var item in _complexItems)
                 {
-                    <MudComboboxItem Value="@item" Text="@item.Name">@item.Name</MudComboboxItem>
+                    <MudComboBoxItem Value="@item" Text="@item.Name">@item.Name</MudComboBoxItem>
                 }
             </ChildContent>
-        </MudCombobox>
+        </MudComboBox>
     </MudItem>
 
     <MudItem xs="12" sm="4">

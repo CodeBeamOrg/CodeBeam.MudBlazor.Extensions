@@ -1,12 +1,12 @@
 ﻿@namespace MudExtensions.UnitTests.TestComponents
 
 <MudPopoverProvider></MudPopoverProvider>
-<MudCombobox @ref="_combobox" T="string" ValueChanged="ValueChanged" SelectedValuesChanged="ValuesChanged" MultiSelection="MultiSelection">
-    <MudComboboxItem @ref="FirstItem" T="string" Value="@("1")" />
-    <MudComboboxItem @ref="SecondItem" T="string" Value="@("2")" />
-    <MudComboboxItem @ref="ThirdItem" T="string" Value="@("3")" />
-    <MudComboboxItem T="string" Value="@("4")" Disabled="true" />
-</MudCombobox>
+<MudComboBox @ref="_combobox" T="string" ValueChanged="ValueChanged" SelectedValuesChanged="ValuesChanged" MultiSelection="MultiSelection">
+    <MudComboBoxItem @ref="FirstItem" T="string" Value="@("1")" />
+    <MudComboBoxItem @ref="SecondItem" T="string" Value="@("2")" />
+    <MudComboBoxItem @ref="ThirdItem" T="string" Value="@("3")" />
+    <MudComboBoxItem T="string" Value="@("4")" Disabled="true" />
+</MudComboBox>
 
 @code {
     [Parameter]
@@ -17,10 +17,10 @@
     public int ItemChangeCount { get; set; }
     public int ItemsChangeCount { get; set; }
 
-    MudCombobox<string> _combobox;
-    MudComboboxItem<string> FirstItem { get; set; }
-    MudComboboxItem<string> SecondItem { get; set; }
-    MudComboboxItem<string> ThirdItem { get; set; }
+    MudComboBox<string> _combobox;
+    MudComboBoxItem<string> FirstItem { get; set; }
+    MudComboBoxItem<string> SecondItem { get; set; }
+    MudComboBoxItem<string> ThirdItem { get; set; }
 
     //public void SetSelectedItem()
     //{

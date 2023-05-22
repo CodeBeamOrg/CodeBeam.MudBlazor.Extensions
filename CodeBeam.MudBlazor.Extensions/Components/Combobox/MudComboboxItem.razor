@@ -5,19 +5,19 @@
 
 <div tabindex="0" @attributes="UserAttributes" id="@ItemId" class="@Classname" @onclick="HandleOnClick" @onclick:stopPropagation="true" style="@Style">
     
-    @if (MudCombobox != null && MudCombobox.MultiSelection == true && MudCombobox.ShowCheckbox == true)
+    @if (MudComboBox != null && MudComboBox.MultiSelection == true && MudComboBox.ShowCheckbox == true)
     {
-        <MudCheckBox Class="me-4" Color="@MudCombobox.Color" Disabled="@Disabled" @bind-Checked="Selected" @onclick="OnClickHandler" Dense="true" />
+        <MudCheckBox Class="me-4" Color="@MudComboBox.Color" Disabled="@Disabled" @bind-Checked="Selected" @onclick="OnClickHandler" Dense="true" />
     }
 
     <MudText Typo="GetTypo()">
-        @if (ChildContent != null && MudCombobox?.ItemPresenter == ValuePresenter.ItemContent)
+        @if (ChildContent != null && MudComboBox?.ItemPresenter == ValuePresenter.ItemContent)
         {
             @ChildContent
         }
         else
         {
-            <MudHighlighter Text="@DisplayString" HighlightedText="@(MudCombobox.Highlight == false ? null : MudCombobox?.GetSearchString())" Style="background-color:transparent;font-weight:bold;text-decoration:underline" />
+            <MudHighlighter Text="@DisplayString" HighlightedText="@(MudComboBox.Highlight == false ? null : MudComboBox?.GetSearchString())" Style="background-color:transparent;font-weight:bold;text-decoration:underline" />
         }
     </MudText>
     
