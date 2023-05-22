@@ -300,12 +300,7 @@ namespace MudExtensions
 
         protected internal async Task SetActiveIndex(MudStep step)
         {
-            if (_animate != null)
-            {
-                await _animate.Refresh();
-            }
-            ActiveIndex = Steps.IndexOf(step);
-            await ActiveStepChanged.InvokeAsync(ActiveIndex);
+            await SetActiveStepByIndex(Steps.IndexOf(step));
         }
 
         public async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)
