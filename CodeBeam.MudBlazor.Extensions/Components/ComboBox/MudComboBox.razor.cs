@@ -429,7 +429,15 @@ namespace MudExtensions
                 }
                 else
                 {
-                    SelectedValues = new HashSet<T>() { Value };
+                    if (Value is string && string.IsNullOrEmpty(Converter.Set(Value)))
+                    {
+                        SelectedValues = new HashSet<T>();
+                    }
+                    else
+                    {
+                        SelectedValues = new HashSet<T>() { Value };
+                    }
+                    
                 }
                 await SelectedValuesChanged.InvokeAsync(_selectedValues);
             }
@@ -650,6 +658,7 @@ namespace MudExtensions
             _allSelected = GetAllSelectedState();
         }
 
+        bool _firstRendered = false;
         T _oldValue;
         bool _oldMultiselection = false;
         protected override async Task OnParametersSetAsync()
@@ -658,7 +667,10 @@ namespace MudExtensions
             UpdateIcon();
             if (MultiSelection != _oldMultiselection)
             {
-                await SyncMultiselectionValues(MultiSelection);
+                if (_firstRendered == true)
+                {
+                    await SyncMultiselectionValues(MultiSelection);
+                }
                 ForceRenderItems();
                 if (MultiSelection == true)
                 {
@@ -714,6 +726,7 @@ namespace MudExtensions
                 _keyInterceptor.KeyDown += HandleKeyDown;
                 _keyInterceptor.KeyUp += HandleKeyUp;
                 await UpdateDataVisualiserTextAsync();
+                _firstRendered = true;
                 StateHasChanged();
             }
             //Console.WriteLine("Select rendered");
@@ -1095,6 +1108,10 @@ namespace MudExtensions
             if (Items?.Select(x => x.Value).Contains(item.Value) == false)
             {
                 Items.Add(item);
+                if (MultiSelection == true && SelectedValues.Contains(item.Value))
+                {
+                    item.Selected = true;
+                }
                 result = true;
             }
             return result;

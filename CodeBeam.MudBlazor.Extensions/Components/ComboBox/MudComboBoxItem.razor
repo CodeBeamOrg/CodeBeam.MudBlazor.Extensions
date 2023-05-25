@@ -7,7 +7,7 @@
     
     @if (MudComboBox != null && MudComboBox.MultiSelection == true && MudComboBox.ShowCheckbox == true)
     {
-        <MudCheckBox Class="me-4" Color="@MudComboBox.Color" Disabled="@Disabled" @bind-Checked="Selected" @onclick="OnClickHandler" Dense="true" />
+        <MudCheckBox Class="me-4" Color="@MudComboBox.Color" Disabled="@Disabled" @bind-Checked="Selected" @onclick="HandleOnClick" Dense="true" />
     }
 
     <MudText Typo="GetTypo()">
