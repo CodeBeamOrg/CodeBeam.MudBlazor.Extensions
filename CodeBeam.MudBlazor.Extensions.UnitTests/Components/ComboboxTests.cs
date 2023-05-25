@@ -139,17 +139,17 @@ namespace MudExtensions.UnitTests.Components
             var combobox = comp.FindComponent<MudComboBox<string>>();
 
             comp.Instance.ValueChangeCount.Should().Be(0);
-            comp.Instance.ValuesChangeCount.Should().Be(1);
+            comp.Instance.ValuesChangeCount.Should().Be(0);
 
             await comp.InvokeAsync(() => combobox.SetParam("SelectedValues", new HashSet<string>() { "1" }));
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(0));
-            comp.WaitForAssertion(() => comp.Instance.ValuesChangeCount.Should().Be(2));
+            comp.WaitForAssertion(() => comp.Instance.ValuesChangeCount.Should().Be(1));
 
 
             // Setting same value should not fire events
             await comp.InvokeAsync(() => combobox.SetParam("SelectedValues", new HashSet<string>() { "1" }));
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(0));
-            comp.Instance.ValuesChangeCount.Should().Be(2);
+            comp.Instance.ValuesChangeCount.Should().Be(1);
         }
 
         /// <summary>
