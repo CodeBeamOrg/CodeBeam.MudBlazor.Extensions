@@ -29,7 +29,7 @@
 
 @code {
     string _value;
-    IEnumerable<string> _selectedValues;
+    IEnumerable<string> _selectedValues = new HashSet<string>() { "Harry Potter", "Ron Weasley" };
     Dense _dense = Dense.Standard;
     Color _color = Color.Primary;
     bool _selectAll;
