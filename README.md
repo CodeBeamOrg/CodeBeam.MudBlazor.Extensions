@@ -19,6 +19,7 @@
 - MudChipField
 - MudCodeInput
 - MudColorProvider
+- MudComboBox
 - MudCsvMapper
 - MudDateWheelPicker
 - MudFontPicker
@@ -69,7 +70,7 @@ https://codebeam-mudextensions.pages.dev/api
 | 6.1.5 - 6.1.9 | 6.1.4 - 6.1.7 | .Net 6 & .Net 7 |
 | 6.2.0 - 6.2.5 | 6.1.8 | .Net 6 & .Net 7 |
 | 6.2.6 - 6.4.8 | 6.1.9 - 6.2.0 | .Net 6 & .Net 7 |
-| 6.4.9 - 6.4.13 | 6.2.1 - 6.2.5 | .Net 6 & .Net 7 |
+| 6.4.9 - 6.5.0 | 6.2.1 - 6.3.0 | .Net 6 & .Net 7 |
 
 ## Installation
 This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />
