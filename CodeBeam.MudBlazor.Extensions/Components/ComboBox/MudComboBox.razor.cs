@@ -1213,7 +1213,6 @@ namespace MudExtensions
                 }
                 await SelectedValuesChanged.InvokeAsync(SelectedValues);
                 await SetValueAsync(SelectedValues.LastOrDefault(), false);
-                _searchString = Converter.Set(SelectedValues.LastOrDefault());
                 _allSelected = true;
             }
             else

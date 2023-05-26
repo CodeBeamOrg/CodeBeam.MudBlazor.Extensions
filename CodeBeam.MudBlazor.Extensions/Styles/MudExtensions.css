@@ -799,9 +799,10 @@
     height: 2px; }
   .mud-select-extended .mud-select-input-extended {
     cursor: pointer; }
+    .mud-select-extended .mud-select-input-extended .mud-select-extended-nowrap {
+      white-space: nowrap; }
     .mud-select-extended .mud-select-input-extended .mud-input-slot {
       overflow: hidden;
-      white-space: nowrap;
       text-overflow: ellipsis; }
     .mud-select-extended .mud-select-input-extended .mud-input-adornment-end {
       margin-left: 0; }
