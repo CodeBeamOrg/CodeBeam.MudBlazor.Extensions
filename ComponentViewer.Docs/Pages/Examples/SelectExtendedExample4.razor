@@ -10,7 +10,7 @@
     </MudItem>
 
     <MudItem xs="12" sm="6">
-        <MudSelectExtended ItemCollection="_players" ValuePresenter="ValuePresenter.ItemContent" TemplateClass="d-flex align-center" Placeholder="Template & ItemContent" Label="Select Player" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectExtended ItemCollection="_players" ValuePresenter="ValuePresenter.ItemContent" Placeholder="Template & ItemContent" Label="Select Player" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
             <ItemTemplate>
                 <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
                     <MudText><b>@context.Value.Item1</b></MudText>
@@ -27,7 +27,7 @@
         </MudItem>
 
         <MudItem xs="12" sm="6">
-            <MudSelectExtended ItemCollection="_players" DisableSelectedBackground="true" ValuePresenter="ValuePresenter.Chip" MultiSelection="true" TemplateClass="d-flex align-center" Placeholder="Both Templates & MultiSelection" Label="Select Player" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+            <MudSelectExtended ItemCollection="_players" DisableSelectedBackground="true" ValuePresenter="ValuePresenter.Chip" MultiSelection="true" Placeholder="Both Templates & MultiSelection" Label="Select Player" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
                 <ItemTemplate>
                     <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
                         <MudText><b>@context.Value.Item1</b></MudText>

@@ -60,9 +60,12 @@
     .mud-select-input-extended {
         cursor: pointer;
 
+        & .mud-select-extended-nowrap {
+            white-space: nowrap;
+        }
+
         & .mud-input-slot {
             overflow: hidden;
-            white-space: nowrap;
             text-overflow: ellipsis;
         }
 
