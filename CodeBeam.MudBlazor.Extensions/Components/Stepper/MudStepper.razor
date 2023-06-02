@@ -51,7 +51,7 @@
                                 }
                                 @if (HeaderTextView == HeaderTextView.All || HeaderTextView == HeaderTextView.OnlyActiveText)
                                 {
-                                    <MudText Class="mt-n1">
+                                    <MudText Align="Align.Center" Class="mt-n1">
                                         @if (step.MudStepper.GetActiveIndex() == @step.MudStepper.Steps.IndexOf(@step))
                                         {
                                             <MudText Color="@(step.Status != StepStatus.Continued ? Color : Color.Inherit)"><b>@step.Title</b></MudText>
