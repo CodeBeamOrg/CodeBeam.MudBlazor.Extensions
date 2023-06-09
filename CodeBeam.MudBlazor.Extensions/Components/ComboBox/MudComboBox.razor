@@ -115,9 +115,10 @@
                                 @PopoverStartContent
                                 @if (MultiSelection)
                                 {
-                                    if (Editable)
+                                    <div Style="position: sticky; top: 0px; background-color: var(--mud-palette-background); z-index: 2" @onkeydown:stopPropagation>
+                                    @if (Editable)
                                     {
-                                        <div Class="pa-2" Style="position: sticky; top: 0px; background-color: var(--mud-palette-background); z-index: 2" @onkeydown:stopPropagation>
+                                        <div class="pa-2">
                                             <MudTextFieldExtended @ref="_searchbox" T="string" Value="_searchString" ValueChanged="@HandleInternalValueChanged" Margin="Margin.Dense"
                                                                   Variant="Variant.Outlined" Immediate="true" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="SearchBoxHandleKeyUp" Clearable="@SearchBoxClearable">
                                                 <AdornmentEnd>
@@ -127,7 +128,7 @@
                                         </div>
                                     }
 
-                                    if (SelectAll)
+                                    @if (SelectAll)
                                     {
                                         <div class="@($"mud-combobox-item mud-combobox-item-clickable mud-combobox-item-{Dense.ToDescriptionString()} mud-ripple d-flex")" @onclick="SelectAllItems" @onclick:stopPropagation="true">
                                             <MudCheckBox Class="mx-4" @bind-Checked="_allSelected" Color="@Color" @onclick="SelectAllItems" Dense="true" />
@@ -135,6 +136,7 @@
                                         </div>
                                         <MudDivider />
                                     }
+                                    </div>
                                 }
 
                                 @ChildContent

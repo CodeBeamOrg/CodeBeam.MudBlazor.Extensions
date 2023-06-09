@@ -52,6 +52,7 @@ namespace MudExtensions
 
         protected string InputClassname =>
             new CssBuilder("mud-select-input-extended")
+            .AddClass("mud-select-extended-nowrap", NoWrap)
             .AddClass(InputClass)
             .Build();
 
@@ -130,6 +131,13 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.List.Selecting)]
         public bool SelectValueOnTab { get; set; } = true;
+
+        /// <summary>
+        /// If false multiline text show. Default is false.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Selecting)]
+        public bool NoWrap { get; set; }
 
         /// <summary>
         /// User class names for the popover, separated by space
