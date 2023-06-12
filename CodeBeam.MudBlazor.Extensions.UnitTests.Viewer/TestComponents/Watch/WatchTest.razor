@@ -1,0 +1,9 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+@using MudExtensions.Enums;
+
+<MudWatch Mode="WatchMode.StopWatch" @bind-Value="_value" Wheel="false" ShowHour="true" ShowMinute="true" ShowSecond="true" ShowMillisecond="false" Typo="Typo.h6" />
+
+@code
+{
+    TimeSpan _value = new TimeSpan(1, 0, 0);
+}

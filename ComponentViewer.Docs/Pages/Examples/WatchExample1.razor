@@ -8,7 +8,6 @@
             <MudWatch @ref="_watch" Interval="TimeSpan.FromMilliseconds(1)" Mode="_watchMode" LapRecords="_lapRecords" LapRecordsChanged="@(() => Snackbar.Add("Lap updated."))"
                       Wheel="_wheel" ShowHour="_showHour" ShowMinute="_showMinute" ShowSecond="_showSecond" ShowMillisecond="_showMillisecond"
                       Delimiter="@_delimiter" Typo="_typo" TypoMillisecond="_typoMillisecond" Color="_color" CountdownCompleted="@(() => Snackbar.Add("Completed"))" />
-
             <MudStack Row="true">
                 <MudButton OnClick="@(() => _watch.Start())">Start</MudButton>
                 <MudButton OnClick="@(() => _watch.Stop())">Stop</MudButton>
@@ -70,10 +69,11 @@
     bool _showHour = true;
     bool _showMinute = true;
     bool _showSecond = true;
-    bool _showMillisecond = true;
+    bool _showMillisecond = false;
     string _delimiter = ":";
     Typo _typo = Typo.h6;
     Typo _typoMillisecond = Typo.h6;
     Color _color;
     List<LapRecord> _lapRecords = new();
+    TimeSpan _value = new TimeSpan(0, 0, 0);
 }
