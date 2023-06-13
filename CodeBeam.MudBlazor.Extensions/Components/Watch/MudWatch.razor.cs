@@ -37,17 +37,19 @@ namespace MudExtensions
             {
                 Value = CountdownTime;
             }
-            else if (Mode == WatchMode.StopWatch)
-            {
-                Value = TimeSpan.FromSeconds(0);
-            }
 
             if (Mode == WatchMode.Watch)
             {
                 SetWatchMode(Mode).AndForgetExt();
                 Start();
             }
+            if (Mode == WatchMode.StopWatch)
+            {
+                _initialValue = Value;
+            }
         }
+
+        TimeSpan _initialValue = new();
 
         TimeSpan _value;
         [Parameter]
@@ -61,6 +63,7 @@ namespace MudExtensions
                     return;
                 }
                 _value = value;
+                InvokeAsync(() => ValueChanged.InvokeAsync(_value)).AndForgetExt();
                 SetInternalValues();
             }
         }
@@ -171,7 +174,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public EventCallback ValueChanged { get; set; }
+        public EventCallback<TimeSpan> ValueChanged { get; set; }
 
         /// <summary>
         /// Fires when countdown reach to 0.
@@ -250,7 +253,8 @@ namespace MudExtensions
             else
             {
                 int oldSecondValue = ((int)Value.TotalSeconds);
-                Value = TimeSpan.FromMilliseconds(_stopwatch.ElapsedMilliseconds);
+                Value = _initialValue + TimeSpan.FromMilliseconds(_stopwatch.ElapsedMilliseconds);
+
             }
 #pragma warning disable CS4014
             if (Wheel)
@@ -284,10 +288,14 @@ namespace MudExtensions
             if (Mode == WatchMode.CountDown)
             {
                 Value = CountdownTime - TimeSpan.FromMilliseconds(_stopwatch.ElapsedMilliseconds);
+                if (Value < TimeSpan.Zero)
+                {
+                    Value = TimeSpan.Zero;
+                }
             }
             else if (Mode == WatchMode.StopWatch)
             {
-                Value = TimeSpan.FromMilliseconds(_stopwatch.ElapsedMilliseconds);
+                Value = _initialValue + TimeSpan.FromMilliseconds(_stopwatch.ElapsedMilliseconds);
             }
 
             await InvokeAsync(StateHasChanged);
@@ -310,7 +318,7 @@ namespace MudExtensions
             else
             {
                 _stopwatch.Reset();
-                Value = TimeSpan.Zero;
+                Value = _initialValue;
                 LapRecords.Clear();
                 await LapRecordsChanged.InvokeAsync();
             }
