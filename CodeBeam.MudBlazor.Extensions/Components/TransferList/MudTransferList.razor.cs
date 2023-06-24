@@ -77,10 +77,28 @@ namespace MudExtensions
         public Func<ICollection<T>, ICollection<T>> OrderFunc { get; set; }
 
         [Parameter]
+        public RenderFragment StartTitleContent { get; set; }
+
+        [Parameter]
+        public RenderFragment EndTitleContent { get; set; }
+
+        [Parameter]
+        public string StartTitle { get; set; }
+
+        [Parameter]
+        public string EndTitle { get; set; }
+
+        [Parameter]
         public bool Vertical { get; set; }
 
         [Parameter]
         public bool Disabled { get; set; }
+
+        [Parameter]
+        public bool SearchBoxStart { get; set; }
+
+        [Parameter]
+        public bool SearchBoxEnd { get; set; }
 
         /// <summary>
         /// If true, double click transfers the item. Doesn't have any effect on multitransfer is true.

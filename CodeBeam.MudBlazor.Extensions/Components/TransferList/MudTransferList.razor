@@ -4,14 +4,25 @@
 @using MudExtensions.Enums
 
 <MudStack Class="@Class" Style="@Style" Row="!Vertical" Spacing="Spacing">
-    <MudListExtended @ref="_startList" Class="@StartClassname" Style="@StartStylename" OnDoubleClick="DoubleClick" T="T" ItemCollection="@StartCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color" ToStringFunc="ToStringFunc">
-        <SelectAllTemplate>
-            @if (SelectAllType == SelectAllType.SelectAllItem)
-            {
-                <MudListItemExtended T="T" IsFunctional="true" Text="@SelectAllText" SecondaryText="@($"{(_startList == null ? 0 : _startList.SelectedValues == null ? 0 : _startList.SelectedValues.Count())} / {StartCollection.Count}")" OnClickStopPropagation="false" />
-            }
-        </SelectAllTemplate>
-    </MudListExtended>
+    <div>
+        @if (StartTitleContent != null)
+        {
+            @StartTitleContent
+        }
+        else if (string.IsNullOrEmpty(StartTitle) == false)
+        {
+            <MudListItemExtended T="string"><MudText>@StartTitle</MudText></MudListItemExtended>
+        }
+        <MudListExtended @ref="_startList" Class="@StartClassname" Style="@StartStylename" SearchBox="SearchBoxStart" OnDoubleClick="DoubleClick" T="T" ItemCollection="@StartCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color" ToStringFunc="ToStringFunc">
+            <SelectAllTemplate>
+                @if (SelectAllType == SelectAllType.SelectAllItem)
+                {
+                    <MudListItemExtended T="T" IsFunctional="true" Text="@SelectAllText" SecondaryText="@($"{(_startList == null ? 0 : _startList.SelectedValues == null ? 0 : _startList.SelectedValues.Count())} / {StartCollection.Count}")" OnClickStopPropagation="false" />
+                }
+            </SelectAllTemplate>
+        </MudListExtended>
+    </div>
+    
     <div class="@($"{(Vertical ? "d-flex" : "d-flex flex-column")} gap-{ButtonSpacing} align-center justify-center")">
         @if (SelectAllType == SelectAllType.Buttons)
         {
@@ -24,12 +35,23 @@
             <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardDoubleArrowUp : Icons.Material.Filled.KeyboardDoubleArrowLeft)" Disabled="Disabled" Color="@Color" Variant="@ButtonVariant" OnClick="@(() => TransferAll(false))" />
         }
     </div>
-    <MudListExtended @ref="_endList" Class="@EndClassname" Style="@EndStylename" OnDoubleClick="DoubleClick" T="T" ItemCollection="@EndCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color" ToStringFunc="ToStringFunc">
-        <SelectAllTemplate>
-            @if (SelectAllType == SelectAllType.SelectAllItem)
-            {
-                <MudListItemExtended T="T" IsFunctional="true" Text="@SelectAllText" SecondaryText="@($"{(_endList == null ? 0 : _endList.SelectedValues == null ? 0 : _endList.SelectedValues.Count())} / {EndCollection.Count}")" OnClickStopPropagation="false" />
-            }
-        </SelectAllTemplate>
-    </MudListExtended>
+    <div>
+        @if (EndTitleContent != null)
+        {
+            @EndTitleContent
+        }
+        else if (string.IsNullOrEmpty(EndTitle) == false)
+        {
+            <MudListItemExtended T="string"><MudText>@EndTitle</MudText></MudListItemExtended>
+        }
+        <MudListExtended @ref="_endList" Class="@EndClassname" Style="@EndStylename" SearchBox="SearchBoxEnd" OnDoubleClick="DoubleClick" T="T" ItemCollection="@EndCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color" ToStringFunc="ToStringFunc">
+            <SelectAllTemplate>
+                @if (SelectAllType == SelectAllType.SelectAllItem)
+                {
+                    <MudListItemExtended T="T" IsFunctional="true" Text="@SelectAllText" SecondaryText="@($"{(_endList == null ? 0 : _endList.SelectedValues == null ? 0 : _endList.SelectedValues.Count())} / {EndCollection.Count}")" OnClickStopPropagation="false" />
+                }
+            </SelectAllTemplate>
+        </MudListExtended>
+    </div>
+    
 </MudStack>
