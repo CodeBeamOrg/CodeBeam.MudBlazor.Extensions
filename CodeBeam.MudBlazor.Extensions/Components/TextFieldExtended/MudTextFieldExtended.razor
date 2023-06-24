@@ -56,7 +56,9 @@
                                       AdornmentStart="@AdornmentStart"
                                       AdornmentEnd="@AdornmentEnd"
                                       AutoSize="AutoSize"
-                                      ForceShrink="@ForceShrink">
+                                      ForceShrink="@ForceShrink"
+                                      ShowVisualiser="@(DataVisualiser != null && ShowVisualiser)"
+                                      DataVisualiserStyle="@(DataVisualiser != null ? "min-height: 1.1876em" : null)">
                                     <DataVisualiser>
                                         @DataVisualiser
                                     </DataVisualiser>
