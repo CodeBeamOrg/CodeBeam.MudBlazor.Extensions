@@ -48,6 +48,10 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Clearable { get; set; } = false;
 
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool ShowVisualiser { get; set; }
+
         /// <summary>
         /// Button click event for clear button. Called after text and value has been cleared.
         /// </summary>
