@@ -5,22 +5,27 @@
         <MudTransferList @ref="_transferList" T="string" @bind-StartCollection="_startCollection" @bind-EndCollection="_endCollection" Vertical="_vertical" Color="_color"
             StyleListCommon="background-color: var(--mud-palette-background-grey); width: 200px" MultiSelection="_multiSelection" MaxItems="_maxItems" SelectAllType="_selectAllType"
             PreventTransfer="@(new Func<bool, bool>(CheckTransfer))" OrderFunc="@(_orderOnTransfer == false ? null : new Func<ICollection<string>, ICollection<string>>(OrderMethod))" ButtonVariant="_buttonVariant"
-            AllowDoubleClick="_allowDoubleClick" />
+            AllowDoubleClick="_allowDoubleClick" SearchBoxStart="_searchboxStart" SearchBoxEnd="_searchboxEnd"
+            StartTitle="@_startTitle" EndTitle="@_endTitle" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
             <MudText><b>Start Collection:</b> @string.Join(", ", _startCollection ?? new List<string>())</MudText>
             <MudText><b>End Collection:</b> @string.Join(", ", _endCollection ?? new List<string>())</MudText>
-            <MudSwitchM3 @bind-Checked="_vertical" Label="Vertical" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Checked="_multiSelection" Label="MultiSelection" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Checked="_preventTurkeyTransfer" Label="Prevent Transfer If Turkey Selected" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Checked="_orderOnTransfer" Label="Order on Transfer" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Checked="_allowDoubleClick" Label="Allow Double Click" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Checked="_vertical" Label="Vertical" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="_multiSelection" Label="MultiSelection" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="_preventTurkeyTransfer" Label="Prevent Transfer If Turkey Selected" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="_orderOnTransfer" Label="Order on Transfer" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="_allowDoubleClick" Label="Allow Double Click" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="_searchboxStart" Label="SearchBox Start" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="_searchboxEnd" Label="SearchBox End" Color="Color.Secondary" />
             <MudNumericField @bind-Value="_maxItems" Clearable="true" Label="MaxItems" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudSelectExtended @bind-Value="_selectAllType" ItemCollection="@(Enum.GetValues<SelectAllType>())" Label="SelectAll Type" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
             <MudSelectExtended @bind-Value="_color" ItemCollection="@(Enum.GetValues<Color>())" Label="Color" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
             <MudSelectExtended @bind-Value="_buttonVariant" ItemCollection="@(Enum.GetValues<Variant>())" Label="Button Variant" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
+            <MudTextFieldExtended @bind-Value="_startTitle" Label="Start Title" Variant="Variant.Outlined" Immediate="true" />
+            <MudTextFieldExtended @bind-Value="_endTitle" Label="End Title" Variant="Variant.Outlined" Immediate="true" />
         </MudStack>
     </MudItem>
 </MudGrid>
@@ -35,10 +40,14 @@
     bool _preventTurkeyTransfer;
     bool _orderOnTransfer;
     bool _allowDoubleClick;
+    bool _searchboxStart;
+    bool _searchboxEnd;
     int? _maxItems;
     SelectAllType _selectAllType = SelectAllType.Buttons;
     Color _color = Color.Primary;
     Variant _buttonVariant = Variant.Text;
+    string _startTitle = "Country Group 1";
+    string _endTitle = "Country Group 2";
 
     private bool CheckTransfer(bool startToEnd)
     {
