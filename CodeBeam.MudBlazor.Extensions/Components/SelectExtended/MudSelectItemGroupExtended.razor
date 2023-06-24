@@ -7,7 +7,7 @@
 
     if (Nested == true)
     {
-        <MudListItemExtended T="T" Text="@Text" InitiallyExpanded="@InitiallyExpanded" ExpandedChanged="HandleExpandedChanged">
+        <MudListItemExtended T="T" Class="@Class" Style="@Style" Text="@Text" InitiallyExpanded="@InitiallyExpanded" ExpandedChanged="HandleExpandedChanged">
             <NestedList>
                 @ChildContent
             </NestedList>
@@ -15,7 +15,7 @@
     }
     else
     {
-        <MudListSubheaderExtended T="T" Sticky="@Sticky">@Text</MudListSubheaderExtended>
+        <MudListSubheaderExtended Class="@Class" Style="@Style" T="T" Sticky="@Sticky">@Text</MudListSubheaderExtended>
         @ChildContent
     }
 }
