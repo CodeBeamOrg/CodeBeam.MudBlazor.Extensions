@@ -20,6 +20,7 @@ namespace MudExtensions
 
         private IMudSelectExtended _parent;
         internal MudSelectExtended<T> MudSelectExtended => (MudSelectExtended<T>)IMudSelectExtended;
+        public MudListItemExtended<T> ListItem { get; set; }
         internal string ItemId { get; } = "selectItem_"+Guid.NewGuid().ToString().Substring(0,8);
 
         /// <summary>
