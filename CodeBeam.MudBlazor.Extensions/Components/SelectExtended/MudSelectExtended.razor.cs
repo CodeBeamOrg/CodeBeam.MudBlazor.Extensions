@@ -721,6 +721,7 @@ namespace MudExtensions
                 _keyInterceptor.KeyUp += HandleKeyUp;
                 await UpdateTextPropertyAsync(false);
                 _list?.ForceUpdateItems();
+                SelectedListItem = Items.FirstOrDefault(x => x.Value != null && Value != null && x.Value.Equals(Value))?.ListItem;
                 StateHasChanged();
             }
             //Console.WriteLine("Select rendered");

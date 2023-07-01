@@ -4,7 +4,7 @@
 
 @if (HideContent == false)
 {
-    <MudListItemExtended @attributes="UserAttributes" T="T" Value="@Value" Text="@Text" id="@ItemId" OnClick="@HandleOnClick" IsFunctional="@IsFunctional" Href="@Href" Disabled="@GetDisabledStatus()" Class="@GetCssClasses()" Style="@Style">
+    <MudListItemExtended @ref="@ListItem" @attributes="UserAttributes" T="T" Value="@Value" Text="@Text" id="@ItemId" OnClick="@HandleOnClick" IsFunctional="@IsFunctional" Href="@Href" Disabled="@GetDisabledStatus()" Class="@GetCssClasses()" Style="@Style">
         @if (ChildContent != null && MudSelectExtended?.ItemCollection == null)
         {
             @ChildContent
