@@ -762,6 +762,11 @@ namespace MudExtensions
                 //SelectedItem = item;
                 //SelectedItemChanged.InvokeAsync(item);
             }
+
+            if (MultiSelection && SelectedValues != null && SelectedValues.Contains(item.Value))
+            {
+                item.SetSelected(true);
+            }
         }
 
         protected internal void Unregister(MudListItemExtended<T> item)
