@@ -1,0 +1,70 @@
+﻿@using MudBlazor.Utilities
+
+<MudStack Spacing="1" Class="d-flex flex-grow-1">
+    <MudStack Justify="Justify.SpaceBetween" Class="flex-grow-1" Spacing="0" Style="@BackgroundColor">
+        <MudStack Justify="Justify.SpaceAround" AlignItems="AlignItems.Stretch" Spacing="0" Class="pa-2">
+            <MudTextM3 Class="align-self-start" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Medium" Style="@OnTextColor">@Label</MudTextM3>
+            <MudTextM3 Class="align-self-end" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Small" Style="@OnTextColor">P-@KeyTone</MudTextM3>
+        </MudStack>
+        <MudStack Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Row="true" Spacing="0" Class="pa-2" Style="@OnBackgroundColor">
+            <MudTextM3 TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Medium" Style="@TextColor">On @Label</MudTextM3>
+            <MudTextM3 Class="justify-end" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Small" Style="@TextColor">P-@OnKeyTone</MudTextM3>
+        </MudStack>
+    </MudStack>
+    <MudStack Justify="Justify.SpaceBetween" Class="flex-grow-1" Spacing="0" Style="@ContainerBackgroundColor">
+        <MudStack Justify="Justify.SpaceAround" AlignItems="AlignItems.Stretch" Spacing="0" Class="pa-2">
+            <MudTextM3 Class="align-self-start" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Medium" Style="@OnContainerTextColor">@Label Container</MudTextM3>
+            <MudTextM3 Class="align-self-end" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Small" Style="@OnContainerTextColor">P-@ContainerTone</MudTextM3>
+        </MudStack>
+        <MudStack Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Row="true" Spacing="0" Class="pa-2" Style="@OnContainerBackgroundColor">
+            <MudTextM3 TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Medium" Style="@ContainerTextColor">On @Label Container</MudTextM3>
+            <MudTextM3 Class="justify-end" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Small" Style="@ContainerTextColor">P-@OnContainerTone</MudTextM3>
+        </MudStack>
+    </MudStack>
+</MudStack>
+
+
+@code {
+    [Parameter]
+    public string Color { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string KeyTone { get; set; }
+
+    [Parameter]
+    public string OnKeyTone { get; set; }
+
+    [Parameter]
+    public string ContainerTone { get; set; }
+
+    [Parameter]
+    public string OnContainerTone { get; set; }
+
+    protected string BackgroundColor = string.Empty;
+    protected string OnBackgroundColor = string.Empty;
+    protected string ContainerBackgroundColor = string.Empty;
+    protected string OnContainerBackgroundColor = string.Empty;
+
+    protected string TextColor = string.Empty;
+    protected string OnTextColor = string.Empty;
+    protected string ContainerTextColor = string.Empty;
+    protected string OnContainerTextColor = string.Empty;
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        BackgroundColor = $"background-color:var(--mud-m3-{Color})";
+        OnBackgroundColor = $"background-color:var(--mud-m3-on-{Color})";
+        ContainerBackgroundColor = $"background-color:var(--mud-m3-{Color}-container)";
+        OnContainerBackgroundColor = $"background-color:var(--mud-m3-on-{Color}-container)";
+
+        TextColor = $"color:var(--mud-m3-{Color})";
+        OnTextColor = $"color:var(--mud-m3-on-{Color}";
+        ContainerTextColor = $"color:var(--mud-m3-{Color}-container)";
+        OnContainerTextColor = $"color:var(--mud-m3-on-{Color}-container)";
+    }
+}
+
