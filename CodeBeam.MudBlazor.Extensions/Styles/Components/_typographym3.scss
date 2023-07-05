@@ -1,0 +1,15 @@
+$typography-styles: ("display", "headline", "title", "body", "label");
+$typography-sizes: ("large", "medium", "small");
+
+@each $style in $typography-styles {
+    @each $size in $typography-sizes {
+
+        .mud-typographym3-#{$style}-#{$size} {
+            font-family: var(--mud-typographym3-#{$style}-#{$size}-font);
+            line-height: var(--mud-typographym3-#{$style}-#{$size}-line-height);
+            font-size: var(--mud-typographym3-#{$style}-#{$size}-size);
+            letter-spacing: var(--mud-typographym3-#{$style}-#{$size}-tracking);
+            font-weight: var(--mud-typographym3-#{$style}-#{$size}-weight);
+        }
+    }
+}
