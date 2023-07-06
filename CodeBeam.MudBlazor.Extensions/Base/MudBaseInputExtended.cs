@@ -384,8 +384,8 @@ namespace MudExtensions
                 await ValueChanged.InvokeAsync(Value);
                 if (updateText)
                     await UpdateTextPropertyAsync(false);
-                await BeginValidateAsync();
                 FieldChanged(Value);
+                await BeginValidateAsync();
             }
         }
 
