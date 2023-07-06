@@ -14,8 +14,6 @@ namespace MudExtensions
         [Category(CategoryTypes.Item.Behavior)]
         public TypographyM3 TypographyM3 { get; set; }
 
-        
-
         public MudTypographyProvider()
             :base()
         {

@@ -9,7 +9,7 @@ namespace MudExtensions
     public partial class MudTextM3 : MudComponentBase
     {
         protected string ClassName => new CssBuilder("mud-typographym3")
-            .AddClass($"mud-typographym3-{TypeStyle.ToString().ToLower()}-{TypeSize.ToString().ToLower()}") // .mud-typographym3-#{$style}-#{$size}
+            .AddClass($"mud-typographym3-{Typo.ToString().ToLower()}-{Size.ToString().ToLower()}") // .mud-typographym3-#{$style}-#{$size}
             .AddClass(Class)
             .Build();
 
@@ -22,13 +22,13 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Text.Appearance)]
-        public TypeStyle TypeStyle { get; set; } = TypeStyle.Body;
+        public TypoM3 Typo { get; set; } = TypoM3.Body;
         /// <summary>
         /// Set the text-align on the component.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Text.Appearance)]
-        public TypeSize TypeSize { get; set; } = TypeSize.Large;
+        public Size Size { get; set; } = Size.Large; 
 
         /// <summary>
         /// Child content of component.

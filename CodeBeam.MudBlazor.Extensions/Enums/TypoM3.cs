@@ -2,7 +2,7 @@
 
 namespace MudExtensions.Enums
 {
-    public enum TypeStyle
+    public enum TypoM3
     {
         [Description("Display")]
         Display,
@@ -14,15 +14,5 @@ namespace MudExtensions.Enums
         Body,
         [Description("Label")]
         Label
-    }
-
-    public enum TypeSize
-    {
-        [Description("Large")]
-        Large,
-        [Description("Medium")]
-        Medium,
-        [Description("Small")]
-        Small
     }
 }
