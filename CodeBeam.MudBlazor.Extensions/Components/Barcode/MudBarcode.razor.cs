@@ -28,7 +28,7 @@ namespace MudExtensions
         /// Increase the stroke width if readers can not read the barcode easily.
         /// </summary>
         [Parameter]
-        public int StrokeWidth { get; set; }
+        public double StrokeWidth { get; set; }
 
         [Parameter]
         public int Height { get; set; } = 200;
@@ -57,14 +57,9 @@ namespace MudExtensions
 
             try
             {
-                var width = Width;
-                var height = Height;
-
                 var matrix = Encoder.encode(Value, BarcodeFormat, 0, 0);
 
-                var moduleSizeX = width / matrix.Width;
-                var moduleSizeY = height / matrix.Height;
-                var result = new BarcodeResult(matrix, moduleSizeX, moduleSizeY);
+                var result = new BarcodeResult(matrix, 1, 1);
                 ErrorText = null;
                 return result;
             }
