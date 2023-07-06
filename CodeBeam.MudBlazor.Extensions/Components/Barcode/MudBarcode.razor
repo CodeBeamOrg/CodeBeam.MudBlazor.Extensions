@@ -2,17 +2,20 @@
 @inherits MudComponentBase
 
 <a href="@(Clickable ? Value : null)" target="@Target">
-   @{
+    @{
         var content = GetCode();
     }
     @if (content != null)
     {
-        <svg width="@Width" height="@Height" style="background-color:@BackgroundColor">
+        var viewBoxWidth = @content.ModuleSizeX * content.Columns;
+        var viewBoxHeight = @content.ModuleSizeY * content.Rows;
+
+        <svg width="@Width" height="@Height" style="background-color:@BackgroundColor" viewBox="0 0 @viewBoxWidth @viewBoxHeight">
             @for (int y = 0; y < content.Rows; y++)
             {
-                @for(int x = 0; x < content.Columns; x++)
+                @for (int x = 0; x < content.Columns; x++)
                 {
-                    @if(content[x,y])
+                    @if (content[x, y])
                     {
                         <rect class="d-flex align-center justify-center" width="@content.ModuleSizeX" height="@content.ModuleSizeY" style="@($"fill:{Color}; stroke-width:{StrokeWidth}px; stroke:{Color}")"
                               x="@(x * content.ModuleSizeX)" y="@(y * content.ModuleSizeY)" />
