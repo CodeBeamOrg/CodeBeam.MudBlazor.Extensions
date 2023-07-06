@@ -400,7 +400,6 @@ namespace MudExtensions
             else if (changedValueType == "MultiSelectionOff")
             {
                 SelectedValue = SelectedValues == null ? default(T) : SelectedValues.FirstOrDefault();
-                var items = CollectAllMudListItems(true);
                 SelectedValues = SelectedValue == null ? null : new HashSet<T>(_comparer) { SelectedValue };
                 UpdateSelectedItem();
             }
@@ -1073,7 +1072,11 @@ namespace MudExtensions
                 {
                     _allSelected = false;
                 }
-                else if (CollectAllMudListItems(true).Count() == _selectedValues.Count)
+                else if (ItemCollection != null && ItemCollection.Count == _selectedValues.Count)
+                {
+                    _allSelected = true;
+                }
+                else if (ItemCollection == null && CollectAllMudListItems(true).Count() == _selectedValues.Count)
                 {
                     _allSelected = true;
                 }
@@ -1139,7 +1142,15 @@ namespace MudExtensions
                 _allSelected = true;
             }
 
-            SelectedValues = items.Where(x => x.IsSelected).Select(y => y.Value).ToHashSet(_comparer);
+            if (ItemCollection != null)
+            {
+                SelectedValues = deselect == true ? Enumerable.Empty<T>() : ItemCollection.ToHashSet(_comparer);
+            }
+            else
+            {
+                SelectedValues = items.Where(x => x.IsSelected).Select(y => y.Value).ToHashSet(_comparer);
+            }
+
             if (MudSelectExtended != null)
             {
                 MudSelectExtended.BeginValidatePublic();
