@@ -3,7 +3,7 @@
 @using MudBlazor.Extensions
 
 
-<MudGrid Style="background-color: var(--mud-m3-secondary-container)">
+<MudGrid>
     <MudItem xs="12" sm="8">
         <MudColorProvider Override="true"
                           Primary="@_primaryColor?.Value.ToString()"
@@ -16,7 +16,7 @@
                           ContainerTone="_containerTone"
                           DarkMode="_darkMode"
                           CustomColors="@_customColors" />
-        <MudStack>
+        <MudStack Spacing="3">
             <MudStack Row="true">
                 @for (var i = 0; i < 4; i++)
                 {
@@ -74,7 +74,7 @@
                         <MudTextM3 Typo="TypoM3.Label" Size="Size.Medium" Style="color: var(--mud-m3-on-surface)">Surface Container</MudTextM3>
                         <MudTextM3 Class="d-flex justify-end" Typo="TypoM3.Label" Size="Size.Small" Style="color: var(--mud-m3-on-surface)">N-@(_darkMode ? "12" : "94")</MudTextM3>
                 </MudStack>
-                <MudStack Justify="Justify.SpaceBetween" Class="pa-2" Style="background-color: var(--mud-m3-surface-container-hight)">
+                <MudStack Justify="Justify.SpaceBetween" Class="pa-2" Style="background-color: var(--mud-m3-surface-container-high)">
                         <MudTextM3 Typo="TypoM3.Label" Size="Size.Medium" Style="color: var(--mud-m3-on-surface)">Surface Container High</MudTextM3>
                         <MudTextM3 Class="d-flex justify-end" Typo="TypoM3.Label" Size="Size.Small" Style="color: var(--mud-m3-on-surface)">N-@(_darkMode ? "17" : "92")</MudTextM3>
                 </MudStack>
