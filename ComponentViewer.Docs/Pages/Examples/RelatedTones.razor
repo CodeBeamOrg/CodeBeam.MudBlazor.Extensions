@@ -3,22 +3,22 @@
 <MudStack Spacing="1" Class="d-flex flex-grow-1">
     <MudStack Justify="Justify.SpaceBetween" Class="flex-grow-1" Spacing="0" Style="@BackgroundColor">
         <MudStack Justify="Justify.SpaceAround" AlignItems="AlignItems.Stretch" Spacing="0" Class="pa-2">
-            <MudTextM3 Class="align-self-start" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Medium" Style="@OnTextColor">@Label</MudTextM3>
-            <MudTextM3 Class="align-self-end" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Small" Style="@OnTextColor">P-@KeyTone</MudTextM3>
+            <MudTextM3 Class="align-self-start" Typo="TypoM3.Label" Size="Size.Medium" Style="@OnTextColor">@Label</MudTextM3>
+            <MudTextM3 Class="align-self-end" Typo="TypoM3.Label" Size="Size.Small" Style="@OnTextColor">P-@KeyTone</MudTextM3>
         </MudStack>
         <MudStack Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Row="true" Spacing="0" Class="pa-2" Style="@OnBackgroundColor">
-            <MudTextM3 TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Medium" Style="@TextColor">On @Label</MudTextM3>
-            <MudTextM3 Class="justify-end" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Small" Style="@TextColor">P-@OnKeyTone</MudTextM3>
+            <MudTextM3 Typo="TypoM3.Label" Size="Size.Medium" Style="@TextColor">On @Label</MudTextM3>
+            <MudTextM3 Class="justify-end" Typo="TypoM3.Label" Size="Size.Small" Style="@TextColor">P-@OnKeyTone</MudTextM3>
         </MudStack>
     </MudStack>
     <MudStack Justify="Justify.SpaceBetween" Class="flex-grow-1" Spacing="0" Style="@ContainerBackgroundColor">
         <MudStack Justify="Justify.SpaceAround" AlignItems="AlignItems.Stretch" Spacing="0" Class="pa-2">
-            <MudTextM3 Class="align-self-start" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Medium" Style="@OnContainerTextColor">@Label Container</MudTextM3>
-            <MudTextM3 Class="align-self-end" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Small" Style="@OnContainerTextColor">P-@ContainerTone</MudTextM3>
+            <MudTextM3 Class="align-self-start" Typo="TypoM3.Label" Size="Size.Medium" Style="@OnContainerTextColor">@Label Container</MudTextM3>
+            <MudTextM3 Class="align-self-end" Typo="TypoM3.Label" Size="Size.Small" Style="@OnContainerTextColor">P-@ContainerTone</MudTextM3>
         </MudStack>
         <MudStack Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Row="true" Spacing="0" Class="pa-2" Style="@OnContainerBackgroundColor">
-            <MudTextM3 TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Medium" Style="@ContainerTextColor">On @Label Container</MudTextM3>
-            <MudTextM3 Class="justify-end" TypeStyle="TypeStyle.Label" TypeSize="TypeSize.Small" Style="@ContainerTextColor">P-@OnContainerTone</MudTextM3>
+            <MudTextM3 Typo="TypoM3.Label" Size="Size.Medium" Style="@ContainerTextColor">On @Label Container</MudTextM3>
+            <MudTextM3 Class="justify-end" Typo="TypoM3.Label" Size="Size.Small" Style="@ContainerTextColor">P-@OnContainerTone</MudTextM3>
         </MudStack>
     </MudStack>
 </MudStack>
@@ -62,7 +62,7 @@
         OnContainerBackgroundColor = $"background-color:var(--mud-m3-on-{Color}-container)";
 
         TextColor = $"color:var(--mud-m3-{Color})";
-        OnTextColor = $"color:var(--mud-m3-on-{Color}";
+        OnTextColor = $"color:var(--mud-m3-on-{Color})";
         ContainerTextColor = $"color:var(--mud-m3-{Color}-container)";
         OnContainerTextColor = $"color:var(--mud-m3-on-{Color}-container)";
     }
