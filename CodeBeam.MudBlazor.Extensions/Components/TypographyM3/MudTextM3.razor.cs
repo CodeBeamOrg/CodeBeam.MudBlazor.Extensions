@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
 
@@ -9,7 +10,7 @@ namespace MudExtensions
     public partial class MudTextM3 : MudComponentBase
     {
         protected string ClassName => new CssBuilder("mud-typographym3")
-            .AddClass($"mud-typographym3-{Typo.ToString().ToLower()}-{Size.ToString().ToLower()}") // .mud-typographym3-#{$style}-#{$size}
+            .AddClass($"mud-typographym3-{Typo.ToDescriptionString()}-{Size.ToDescriptionString()}") // .mud-typographym3-#{$style}-#{$size}
             .AddClass(Class)
             .Build();
 
