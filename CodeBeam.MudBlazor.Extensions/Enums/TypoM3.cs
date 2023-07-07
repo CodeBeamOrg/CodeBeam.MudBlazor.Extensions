@@ -4,15 +4,15 @@ namespace MudExtensions.Enums
 {
     public enum TypoM3
     {
-        [Description("Display")]
+        [Description("display")]
         Display,
-        [Description("Headline")]
+        [Description("headline")]
         Headline,
-        [Description("Title")]
+        [Description("title")]
         Title,
-        [Description("Body")]
+        [Description("body")]
         Body,
-        [Description("Label")]
+        [Description("label")]
         Label
     }
 }
