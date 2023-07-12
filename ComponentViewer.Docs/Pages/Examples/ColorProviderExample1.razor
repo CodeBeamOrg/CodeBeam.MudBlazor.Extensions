@@ -126,13 +126,23 @@
 
                     <RelatedTones Color="@color" Label="@label" KeyTone="@keyTone" OnKeyTone="@onKeyTone" ContainerTone="@containerTone" OnContainerTone="@onContainerTone" />
                 }
-
             </MudStack>
+
+            @if (_showAllTones)
+            {
+                <Tones Color="primary"/>
+                <Tones Color="secondary"/>
+                <Tones Color="tertiary" />
+                <Tones Color="error" />
+                <Tones Color="hailnavy" />
+                <Tones Color="maize" />
+            }
         </MudStack>
 
     </MudItem>
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
+            <MudSwitchM3 @bind-Checked="_showAllTones" Label="Show All Tones" Color="Color.Primary" />
             <MudSwitchM3 @bind-Checked="_darkMode" Label="Dark Mode" Color="Color.Primary" />
             <MudColorPicker @bind-Value="_primaryColor" Variant="Variant.Outlined" Label="Primary Color" />
             <MudColorPicker @bind-Value="_secondaryColor" Variant="Variant.Outlined" Label="Secondary Color" />

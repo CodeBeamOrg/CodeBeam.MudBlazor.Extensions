@@ -1,0 +1,73 @@
+﻿
+<MudStack Row="true" Class="pa-4" Style="background:var(--mud-m3-surface)">
+    <style>
+        .circle {
+            width: 100px;
+            height: 100px;
+
+            border-radius: 50%;
+        }
+
+        .arrow-container {
+            padding: 10px;
+        }
+
+        .arrow-right {
+            width: 100px;
+            height: 10px;
+            position: relative;
+        }
+
+            .arrow-right::after {
+                content: '';
+                position: absolute;
+                top: -5px;
+                right: -15px;
+                border: solid transparent;
+                border-width: 10px;
+                border-left-color: var(--arrow-color);
+            }
+    </style>
+    <MudStack>
+        <MudTextM3 Style="color:var(--mud-m3-on-surface)">@CapitalizedColor Key Color</MudTextM3>
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+            <div class="circle" style="@CircleStyle"></div>
+            <div class="arrow-container">
+                <div class="arrow-right" style="@ArrowStyle"></div>
+            </div>
+        </MudStack>
+
+    </MudStack>
+    <MudStack Row="true" Spacing="0" Class="flex-grow-1">
+        <Tone Color="@Color" ToneValue="0" />
+        <Tone Color="@Color" ToneValue="10" />
+        <Tone Color="@Color" ToneValue="20" />
+        <Tone Color="@Color" ToneValue="30" />
+        <Tone Color="@Color" ToneValue="40" />
+        <Tone Color="@Color" ToneValue="50" />
+        <Tone Color="@Color" ToneValue="60" />
+        <Tone Color="@Color" ToneValue="70" />
+        <Tone Color="@Color" ToneValue="80" />
+        <Tone Color="@Color" ToneValue="90" />
+        <Tone Color="@Color" ToneValue="100" />
+    </MudStack>
+</MudStack>
+
+@code {
+    [Parameter]
+    public string Color { get; set; }
+
+    protected string CapitalizedColor { get; set; }
+
+    protected string CircleStyle;
+    protected string ArrowStyle;
+
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        CircleStyle = $"background-color: var(--mud-{Color}-40);";
+        ArrowStyle = $"--arrow-color: var(--mud-{Color}-40);background-color: var(--mud-{Color}-40);";
+        CapitalizedColor = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Color);
+    }
+}

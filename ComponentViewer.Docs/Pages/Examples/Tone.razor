@@ -1,0 +1,45 @@
+﻿@using MudBlazor.Utilities
+
+<MudStack Spacing="1" Class="d-flex flex-grow-1" Style="@BackgroundColor" AlignItems="AlignItems.Center" Justify="Justify.Center">
+    <div>
+        <MudTextM3 Typo="TypoM3.Label" Size="Size.Medium" Style="@TextColor">@ToneValue</MudTextM3>
+    </div>
+</MudStack>
+
+@code {
+    [Parameter]
+    public string Color { get; set; }
+
+    [Parameter]
+    public int ToneValue { get; set; }
+
+    protected string BackgroundColor = string.Empty;
+    protected string OnBackgroundColor = string.Empty;
+    protected string TextColor = string.Empty;
+    protected int Diff;
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        BackgroundColor = $"background-color:var(--mud-{Color}-{ToneValue})";
+        OnBackgroundColor = $"background-color:var(--mud-m3-on-{Color})";
+
+        var inverseToneValue = 100 - ToneValue;
+        Diff = ToneValue - inverseToneValue;
+
+
+        if (Diff <= -40)
+        {
+            TextColor = $"color:var(--mud-{Color}-90)";
+        }
+        else if (Diff < 20)
+        {
+            TextColor = $"color:var(--mud-{Color}-100)";
+        }
+        else
+        {
+            TextColor = $"color:var(--mud-{Color}-0)";
+        }
+    }
+}
+
