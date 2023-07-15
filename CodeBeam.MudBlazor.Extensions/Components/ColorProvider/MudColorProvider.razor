@@ -90,18 +90,34 @@
             @($"--mud-tertiary-{a}: {GetRGBString(Tertiary, a)};")
             @($"--mud-error-{a}: {GetRGBString(Error, a)};")
             @($"--mud-neutral-{a}: {GetRGBString(Neutral, a)};")
-            @($"--mud-neutralvariant-{a}: {GetRGBString(NeutralVariant, a)};")
+            @($"--mud-neutral-variant-{a}: {GetRGBString(NeutralVariant, a)};")
 
             @foreach(var customColor in CustomColors)
             {
                 @($"--mud-{customColor.Key}-{a}: {GetRGBString(customColor.Value, a)};")
             }
         } 
+
+        @($"--mud-neutral-87: {GetRGBString(Neutral, 87)};")
+        @for(int i = 92; i < 100; i = i + 1)
+        {
+            int a = i;
+            @($"--mud-neutral-{a}: {GetRGBString(Neutral, a)};")
+        }
+
+        @($"--mud-neutral-4: {GetRGBString(Neutral, 4)};")
+        @($"--mud-neutral-6: {GetRGBString(Neutral, 6)};")
+        @($"--mud-neutral-12: {GetRGBString(Neutral, 12)};")
+        @($"--mud-neutral-17: {GetRGBString(Neutral, 17)};")
+        @($"--mud-neutral-22: {GetRGBString(Neutral, 22)};")
+        @($"--mud-neutral-24: {GetRGBString(Neutral, 24)};")
+
+
         @($"--mud-primary-{MainTone}: {GetRGBString(Primary, MainTone)};") 
         @($"--mud-secondary-{MainTone}: {GetRGBString(Secondary, MainTone)};") 
         @($"--mud-tertiary-{MainTone}: {GetRGBString(Tertiary, MainTone)};")
         @($"--mud-neutral-{MainTone}: {GetRGBString(Neutral, MainTone)};")
-        @($"--mud-neutralvariant-{MainTone}: {GetRGBString(NeutralVariant, MainTone)};")
+        @($"--mud-neutral-variant-{MainTone}: {GetRGBString(NeutralVariant, MainTone)};")
         @($"--mud-error-{MainTone}: {GetRGBString(Error, MainTone)};") 
         @foreach(var customColor in CustomColors)
         {
@@ -112,7 +128,7 @@
         @($"--mud-secondary-{ContainerTone}: {GetRGBString(Secondary, ContainerTone)};") 
         @($"--mud-tertiary-{ContainerTone}: {GetRGBString(Tertiary, ContainerTone)};") 
         @($"--mud-neutral-{ContainerTone}: {GetRGBString(Neutral, ContainerTone)};")
-        @($"--mud-neutralvariant-{ContainerTone}: {GetRGBString(NeutralVariant, ContainerTone)};")
+        @($"--mud-neutral-variant-{ContainerTone}: {GetRGBString(NeutralVariant, ContainerTone)};")
         @($"--mud-error-{ContainerTone}: {GetRGBString(Error, ContainerTone)};") 
         @foreach(var customColor in CustomColors)
         {
@@ -123,7 +139,7 @@
         @($"--mud-secondary-{100 - ContainerTone}: {GetRGBString(Secondary, 100 - ContainerTone)};") 
         @($"--mud-tertiary-{100 - ContainerTone}: {GetRGBString(Tertiary, 100 - ContainerTone)};")
         @($"--mud-neutral-{100 - ContainerTone}: {GetRGBString(Neutral, 100 - ContainerTone)};")
-        @($"--mud-neutralvariant-{100 - ContainerTone}: {GetRGBString(NeutralVariant, 100 - ContainerTone)};")
+        @($"--mud-neutral-variant-{100 - ContainerTone}: {GetRGBString(NeutralVariant, 100 - ContainerTone)};")
         @($"--mud-error-{100 - ContainerTone}: {GetRGBString(Error, 100 - ContainerTone)};") 
         @foreach(var customColor in CustomColors)
         {
@@ -134,7 +150,7 @@
         @($"--mud-secondary-99: {GetRGBString(Secondary, 99)};")
         @($"--mud-tertiary-99: {GetRGBString(Tertiary, 99)};")
         @($"--mud-neutral-99: {GetRGBString(Neutral, 99)};")
-        @($"--mud-neutralvariant-99: {GetRGBString(NeutralVariant, 99)};")
+        @($"--mud-neutral-variant-99: {GetRGBString(NeutralVariant, 99)};")
         @($"--mud-error-99: {GetRGBString(Error, 99)};") 
         @foreach(var customColor in CustomColors)
         {
@@ -149,8 +165,8 @@
         --mud-tertiary-100: rgb(255, 255, 255);
         --mud-neutral-0: rgb(0, 0, 0);
         --mud-neutral-100: rgb(255, 255, 255);
-        --mud-neutralvariant-0: rgb(0, 0, 0);
-        --mud-neutralvariant-100: rgb(255, 255, 255);
+        --mud-neutral-variant-0: rgb(0, 0, 0);
+        --mud-neutral-variant-100: rgb(255, 255, 255);
         --mud-error-0: rgb(0, 0, 0);
         --mud-error-100: rgb(255, 255, 255);
         @foreach(var customColor in CustomColors)
@@ -160,44 +176,53 @@
         }
 
 
-        --mud-m3-primary: var(--mud-primary-@($"{(MainTone == 40 && DarkMode == true ? "80" : MainTone.ToString())}"));
-        --mud-m3-onprimary: var(--mud-primary-@(DarkMode ? "20" : "100"));
-        --mud-m3-primary-container: var(--mud-primary-@($"{(ContainerTone == 90 && DarkMode == true ? "30" : ContainerTone.ToString())}"));
-        --mud-m3-onprimary-container: var(--mud-primary-@($"{(ContainerTone == 90 && DarkMode == true ? "90" : 100 - ContainerTone)}"));
+        --mud-m3-primary:               var(--mud-primary-@(DarkMode ? "80" : "40"));
+        --mud-m3-primary-container:     var(--mud-primary-@(DarkMode ? "30" : "90"));
+        --mud-m3-on-primary:            var(--mud-primary-@(DarkMode ? "20" : "100"));
+        --mud-m3-on-primary-container:  var(--mud-primary-@(DarkMode ? "90" : "10"));
+        --mud-m3-inverse-primary:       var(--mud-primary-@(DarkMode ? "40" : "80"));
 
-        --mud-m3-secondary: var(--mud-secondary-@($"{(MainTone == 40 && DarkMode == true ? "80" : MainTone.ToString())}"));
-        --mud-m3-onsecondary: var(--mud-secondary-@(DarkMode ? "20" : "100"));
-        --mud-m3-secondary-container: var(--mud-secondary-@($"{(ContainerTone == 90 && DarkMode == true ? "30" : ContainerTone.ToString())}"));
-        --mud-m3-onsecondary-container: var(--mud-secondary-@($"{(ContainerTone == 90 && DarkMode == true ? "90" : 100 - ContainerTone)}"));
+        --mud-m3-secondary:               var(--mud-secondary-@(DarkMode ? "80" : "40"));
+        --mud-m3-secondary-container:     var(--mud-secondary-@(DarkMode ? "30" : "90"));
+        --mud-m3-on-secondary:            var(--mud-secondary-@(DarkMode ? "20" : "100"));
+        --mud-m3-on-secondary-container:  var(--mud-secondary-@(DarkMode ? "90" : "10"));
 
-        --mud-m3-tertiary: var(--mud-tertiary-@($"{(MainTone == 40 && DarkMode == true ? "80" : MainTone.ToString())}"));
-        --mud-m3-ontertiary: var(--mud-tertiary-@(DarkMode ? "20" : "100"));
-        --mud-m3-tertiary-container: var(--mud-tertiary-@($"{(ContainerTone == 90 && DarkMode == true ? "30" : ContainerTone.ToString())}"));
-        --mud-m3-ontertiary-container: var(--mud-tertiary-@($"{(ContainerTone == 90 && DarkMode == true ? "90" : 100 - ContainerTone)}"));
+        --mud-m3-tertiary:               var(--mud-tertiary-@(DarkMode ? "80" : "40"));
+        --mud-m3-tertiary-container:     var(--mud-tertiary-@(DarkMode ? "30" : "90"));
+        --mud-m3-on-tertiary:            var(--mud-tertiary-@(DarkMode ? "20" : "100"));
+        --mud-m3-on-tertiary-container:  var(--mud-tertiary-@(DarkMode ? "90" : "10"));
 
-        --mud-m3-neutral: var(--mud-neutral-@($"{(MainTone == 40 && DarkMode == true ? "80" : MainTone.ToString())}"));
-        --mud-m3-onneutral: var(--mud-neutral-@(DarkMode ? "20" : "100"));
-        --mud-m3-neutral-container: var(--mud-neutral-@($"{(ContainerTone == 90 && DarkMode == true ? "30" : ContainerTone.ToString())}"));
-        --mud-m3-onneutral-container: var(--mud-neutral-@($"{(ContainerTone == 90 && DarkMode == true ? "90" : 100 - ContainerTone)}"));
+        --mud-m3-surface:                   var(--mud-neutral-@(DarkMode == true ? "6" : "98"));
+        --mud-m3-surface-dim:               var(--mud-neutral-@(DarkMode == true ? "6" : "87"));
+        --mud-m3-surface-bright:            var(--mud-neutral-@(DarkMode == true ? "24" : "98"));
+        --mud-m3-surface-container-lowest:  var(--mud-neutral-@(DarkMode == true ? "4" : "100"));
+        --mud-m3-surface-container-low:     var(--mud-neutral-@(DarkMode == true ? "10" : "96"));
+        --mud-m3-surface-container:         var(--mud-neutral-@(DarkMode == true ? "12" : "94"));
+        --mud-m3-surface-container-high:    var(--mud-neutral-@(DarkMode == true ? "17" : "92"));
+        --mud-m3-surface-container-highest: var(--mud-neutral-@(DarkMode == true ? "22" : "90"));
+        --mud-m3-surface-variant:           var(--mud-neutral-variant-@(DarkMode == true ? "30" : "90"));
+        --mud-m3-on-surface:                var(--mud-neutral-@(DarkMode == true ? "90" : "10"));
+        --mud-m3-on-surface-variant:        var(--mud-neutral-variant-@(DarkMode == true ? "80" : "30"));
+        --mud-m3-inverse-surface:           var(--mud-neutral-@(DarkMode == true ? "90" : "20"));
+        --mud-m3-inverse-on-surface:        var(--mud-neutral-@(DarkMode == true ? "20" : "95"));
+        --mud-m3-background:                var(--mud-neutral-@(DarkMode == true ? "6" : "98"));
+        --mud-m3-on-background:             var(--mud-neutral-@(DarkMode == true ? "90" : "10"));
 
-        --mud-m3-neutralvariant: var(--mud-neutralvariant-@($"{(MainTone == 40 && DarkMode == true ? "80" : MainTone.ToString())}"));
-        --mud-m3-onneutralvariant: var(--mud-neutralvariant-@(DarkMode ? "20" : "100"));
-        --mud-m3-neutralvariant-container: var(--mud-neutralvariant-@($"{(ContainerTone == 90 && DarkMode == true ? "30" : ContainerTone.ToString())}"));
-        --mud-m3-onneutralvariant-container: var(--mud-neutralvariant-@($"{(ContainerTone == 90 && DarkMode == true ? "90" : 100 - ContainerTone)}"));
+        --mud-m3-error:               var(--mud-error-@(DarkMode ? "80" : "40"));
+        --mud-m3-error-container:     var(--mud-error-@(DarkMode ? "30" : "90"));
+        --mud-m3-on-error:            var(--mud-error-@(DarkMode ? "20" : "100"));
+        --mud-m3-on-error-container:  var(--mud-error-@(DarkMode ? "90" : "10"));
 
-        --mud-m3-error: var(--mud-error-@($"{(MainTone == 40 && DarkMode == true ? "80" : MainTone.ToString())}"));
-        --mud-m3-onerror: var(--mud-error-@(DarkMode ? "20" : "100"));
-        --mud-m3-error-container: var(--mud-error-@($"{(ContainerTone == 90 && DarkMode == true ? "30" : ContainerTone.ToString())}"));
-        --mud-m3-onerror-container: var(--mud-error-@($"{(ContainerTone == 90 && DarkMode == true ? "90" : 100 - ContainerTone)}"));
+        --mud-m3-outline: var(--mud-neutral-variant-@(DarkMode == true ? "60" : "50"));
+        --mud-m3-outline-variant: var(--mud-neutral-variant-@(DarkMode == true ? "30" : "80"));
 
         @foreach(var customColor in CustomColors)
         {
             @($"--mud-m3-{customColor.Key}: var(--mud-{customColor.Key}-{(MainTone == 40 && DarkMode == true ? "80" : MainTone.ToString())});");
-            @($"--mud-m3-on{customColor.Key}: var(--mud-{customColor.Key}-{(DarkMode ? "20" : "100")});");
+            @($"--mud-m3-on-{customColor.Key}: var(--mud-{customColor.Key}-{(DarkMode ? "20" : "100")});");
             @($"--mud-m3-{customColor.Key}-container: var(--mud-{customColor.Key}-{(ContainerTone == 90 && DarkMode == true ? "30" : ContainerTone.ToString())});");
-            @($"--mud-m3-on{customColor.Key}-container: var(--mud-{customColor.Key}-{(ContainerTone == 90 && DarkMode == true ? "90" : 100 - ContainerTone)});");
+            @($"--mud-m3-on-{customColor.Key}-container: var(--mud-{customColor.Key}-{(ContainerTone == 90 && DarkMode == true ? "90" : 100 - ContainerTone)});");
         }
-
 
         @if (Override)
         {
@@ -220,91 +245,91 @@
     }
 
     .mud-m3-theme-primary {
-        color: var(--mud-m3-onprimary);
+        color: var(--mud-m3-on-primary);
         background-color: var(--mud-m3-primary);
     }
 
     .mud-m3-theme-primary-reverse {
         color: var(--mud-m3-primary);
-        background-color: var(--mud-m3-onprimary);
+        background-color: var(--mud-m3-on-primary);
     }
 
     .mud-m3-theme-primary-container {
-        color: var(--mud-m3-onprimary-container);
+        color: var(--mud-m3-on-primary-container);
         background-color: var(--mud-m3-primary-container);
     }
 
     .mud-m3-theme-primary-container-reverse {
         color: var(--mud-m3-primary-container);
-        background-color: var(--mud-m3-onprimary-container);
+        background-color: var(--mud-m3-on-primary-container);
     }
 
     .mud-m3-theme-secondary {
-        color: var(--mud-m3-onsecondary);
+        color: var(--mud-m3-on-secondary);
         background-color: var(--mud-m3-secondary);
     }
 
     .mud-m3-theme-secondary-reverse {
         color: var(--mud-m3-secondary);
-        background-color: var(--mud-m3-onsecondary);
+        background-color: var(--mud-m3-on-secondary);
     }
 
     .mud-m3-theme-secondary-container {
-        color: var(--mud-m3-onsecondary-container);
+        color: var(--mud-m3-on-secondary-container);
         background-color: var(--mud-m3-secondary-container);
     }
 
     .mud-m3-theme-secondary-container-reverse {
         color: var(--mud-m3-secondary-container);
-        background-color: var(--mud-m3-onsecondary-container);
+        background-color: var(--mud-m3-on-secondary-container);
     }
 
     .mud-m3-theme-tertiary {
-        color: var(--mud-m3-ontertiary);
+        color: var(--mud-m3-on-tertiary);
         background-color: var(--mud-m3-tertiary);
     }
 
     .mud-m3-theme-tertiary-reverse {
         color: var(--mud-m3-tertiary);
-        background-color: var(--mud-m3-ontertiary);
+        background-color: var(--mud-m3-on-tertiary);
     }
 
     .mud-m3-theme-tertiary-container {
-        color: var(--mud-m3-ontertiary-container);
+        color: var(--mud-m3-on-tertiary-container);
         background-color: var(--mud-m3-tertiary-container);
     }
 
     .mud-m3-theme-tertiary-container-reverse {
         color: var(--mud-m3-tertiary-container);
-        background-color: var(--mud-m3-ontertiary-container);
+        background-color: var(--mud-m3-on-tertiary-container);
     }
 
     .mud-m3-theme-error {
-        color: var(--mud-m3-onerror);
+        color: var(--mud-m3-on-error);
         background-color: var(--mud-m3-error);
     }
 
     .mud-m3-theme-error-reverse {
         color: var(--mud-m3-error);
-        background-color: var(--mud-m3-onerror);
+        background-color: var(--mud-m3-on-error);
     }
 
     .mud-m3-theme-error-container {
-        color: var(--mud-m3-onerror-container);
+        color: var(--mud-m3-on-error-container);
         background-color: var(--mud-m3-error-container);
     }
 
     .mud-m3-theme-error-container-reverse {
         color: var(--mud-m3-error-container);
-        background-color: var(--mud-m3-onerror-container);
+        background-color: var(--mud-m3-on-error-container);
     }
 
     @foreach(var customColor in CustomColors)
     {
         @($".mud-m3-theme-{customColor.Key} {{ color: var(--mud-m3-on{customColor.Key});background-color: var(--mud-m3-{customColor.Key});}}");
         @($".mud-m3-theme-{customColor.Key}-reverse {{ color: var(--mud-m3-{customColor.Key});background-color: var(--mud-m3-on{customColor.Key});}}");
-        @($".mud-m3-theme-{customColor.Key}-container {{ color: var(--mud-m3-on{customColor.Key}-container);background-color: var(--mud-m3-{customColor.Key}-container);}}");
-        @($".mud-m3-theme-{customColor.Key}-container-reverse {{ color: var(--mud-m3-{customColor.Key}-container);background-color: var(--mud-m3-on{customColor.Key}-container);}}");
+        @($".mud-m3-theme-{customColor.Key}-container {{ color: var(--mud-m3-on-{customColor.Key}-container);background-color: var(--mud-m3-{customColor.Key}-container);}}");
+        @($".mud-m3-theme-{customColor.Key}-container-reverse {{ color: var(--mud-m3-{customColor.Key}-container);background-color: var(--mud-m3-on-{customColor.Key}-container);}}");
     }
 
 </style>
