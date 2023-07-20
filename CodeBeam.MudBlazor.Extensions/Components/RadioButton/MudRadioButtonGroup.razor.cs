@@ -141,17 +141,6 @@ namespace MudExtensions
 				_selectedRadio = null;
 		}
 
-		protected override Task ResetValueAsync()
-		{
-			if (_selectedRadio != null)
-			{
-				_selectedRadio.SetChecked(false);
-				_selectedRadio = null;
-			}
-
-			return base.ResetValueAsync();
-		}
-
 		private static T GetOptionOrDefault(MudRadioButton<T> radio)
 		{
 			return radio != null ? radio.Option : default;

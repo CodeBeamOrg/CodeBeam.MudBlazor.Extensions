@@ -173,10 +173,8 @@ namespace MudExtensions
 					Select();
 					break;
 				case "Backspace":
-					if (MudRadioButtonGroup is not null)
-					{
-						await MudRadioButtonGroup.ResetAsync();
-					}
+					// Should be async on newer versions of MudBlazor.
+					MudRadioButtonGroup?.Reset();
 
 					break;
 			}
