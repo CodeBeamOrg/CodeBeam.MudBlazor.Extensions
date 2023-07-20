@@ -1,0 +1,13 @@
+﻿@namespace MudExtensions
+@typeparam T
+@inherits MudFormComponent<T, T>
+
+<MudInputControl Class="@Classname" Style="@Style" Error="@HasErrors" ErrorText="@GetErrorText()" Required="@Required">
+    <InputContent>
+        <CascadingValue Value="@((IMudRadioButtonGroup)this)" IsFixed="false">
+            <div role="radiogroup" @attributes="UserAttributes" class="@GetInputClass()" style="@InputStyle">
+                @ChildContent
+            </div>
+        </CascadingValue>
+    </InputContent>
+</MudInputControl>
