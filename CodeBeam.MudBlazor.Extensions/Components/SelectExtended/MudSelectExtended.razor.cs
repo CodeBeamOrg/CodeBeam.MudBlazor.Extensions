@@ -365,6 +365,20 @@ namespace MudExtensions
         public bool SearchBoxClearable { get; set; }
 
         /// <summary>
+        /// Search box text field variant.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Variant SearchBoxVariant { get; set; } = Variant.Outlined;
+
+        /// <summary>
+        /// Search box icon position.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Adornment SearchBoxAdornment { get; set; } = Adornment.End;
+
+        /// <summary>
         /// If true, prevent scrolling while dropdown is open.
         /// </summary>
         [Parameter]
