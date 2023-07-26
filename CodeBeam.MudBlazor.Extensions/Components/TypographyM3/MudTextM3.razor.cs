@@ -37,5 +37,19 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.Text.Behavior)]
         public RenderFragment? ChildContent { get; set; }
+
+        /// <summary>
+        /// Set the text-align on the component.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.Text.Appearance)]
+        public Align Align { get; set; } = Align.Inherit;
+
+        /// <summary>
+        /// The color of the component. It supports the theme colors.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.Text.Appearance)]
+        public Color Color { get; set; } = Color.Inherit;
     }
 }
