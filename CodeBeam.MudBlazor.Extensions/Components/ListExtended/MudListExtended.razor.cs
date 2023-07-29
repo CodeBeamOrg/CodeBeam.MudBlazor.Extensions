@@ -154,6 +154,20 @@ namespace MudExtensions
         public bool SearchBox { get; set; }
 
         /// <summary>
+        /// Search box text field variant.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Variant SearchBoxVariant { get; set; } = Variant.Outlined;
+
+        /// <summary>
+        /// Search box icon position.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Adornment SearchBoxAdornment { get; set; } = Adornment.End;
+
+        /// <summary>
         /// If true, the search-box will be focused when the dropdown is opened.
         /// </summary>
         [Parameter]
