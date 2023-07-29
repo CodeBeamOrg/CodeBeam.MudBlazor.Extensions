@@ -1,12 +1,14 @@
 # CodeBeam.MudExtensions
+
 #### Useful third party extension components for MudBlazor, from the community contributors.
+
 ##### `TheMudSecondary`
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/codebeamorg/codebeam.mudblazor.extensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudblazor.extensions/stargazers)
 [![GitHub last commit](https://img.shields.io/github/last-commit/codebeamorg/codebeam.mudblazor.extensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudblazor.extensions)
 [![Contributors](https://img.shields.io/github/contributors/codebeamorg/codebeam.mudblazor.extensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudblazor.extensions/graphs/contributors)
-[![Nuget version](https://img.shields.io/nuget/v/CodeBeam.mudblazor.extensions?color=ff4081&label=nuget%20version&logo=nuget&style=flat-square)](https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions)
-[![Nuget downloads](https://img.shields.io/nuget/dt/CodeBeam.mudblazor.extensions?color=ff4081&label=nuget%20downloads&logo=nuget&style=flat-square)](https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions)
+[![NuGet version](https://img.shields.io/nuget/v/CodeBeam.mudblazor.extensions?color=ff4081&label=nuget%20version&logo=nuget&style=flat-square)](https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions)
+[![NuGet downloads](https://img.shields.io/nuget/dt/CodeBeam.mudblazor.extensions?color=ff4081&label=nuget%20downloads&logo=nuget&style=flat-square)](https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions)
 
 ## Utilities
 
@@ -49,54 +51,63 @@
 - MudSelectExtended
 - MudTextFieldExtended
 
-
 ## Playground
+
 - **Docs**
 https://codebeam-mudextensions.pages.dev/
 - **Try MudExtensions**
 https://trymudextensions.pages.dev/
 
 ## Breaking Changes
+
 Look at the [Breaking Changes](https://github.com/CodeBeamOrg/CodeBeam.MudBlazor.Extensions/blob/dev/BreakingChanges.md)
 
 ## API
+
 https://codebeam-mudextensions.pages.dev/api
 
 ## Supported MudBlazor Versions
-| MudExtensions | MudBlazor | .Net |
-| :---  |    :----:   | :---: |
-| 6.0.0 - 6.0.3 | 6.0.16 | .Net 6 |
-| 6.0.4 - 6.0.12 | 6.0.17 - 6.0.18 | .Net 6 |
-| 6.1.0 - 6.1.4 | 6.1.0 - 6.1.2 | .Net 6 & .Net 7 |
-| 6.1.5 - 6.1.9 | 6.1.4 - 6.1.7 | .Net 6 & .Net 7 |
-| 6.2.0 - 6.2.5 | 6.1.8 | .Net 6 & .Net 7 |
-| 6.2.6 - 6.4.8 | 6.1.9 - 6.2.0 | .Net 6 & .Net 7 |
-| 6.4.9 - 6.5.5 | 6.2.1 - 6.7.0 | .Net 6 & .Net 7 |
+
+| MudExtensions  |    MudBlazor    |      .NET       |
+| :------------- | :-------------: | :-------------: |
+| 6.0.0 - 6.0.3  |     6.0.16      |     .NET 6      |
+| 6.0.4 - 6.0.12 | 6.0.17 - 6.0.18 |     .NET 6      |
+| 6.1.0 - 6.1.4  |  6.1.0 - 6.1.2  | .NET 6 & .NET 7 |
+| 6.1.5 - 6.1.9  |  6.1.4 - 6.1.7  | .NET 6 & .NET 7 |
+| 6.2.0 - 6.2.5  |      6.1.8      | .NET 6 & .NET 7 |
+| 6.2.6 - 6.4.8  |  6.1.9 - 6.2.0  | .NET 6 & .NET 7 |
+| 6.4.9 - 6.5.5  |  6.2.1 - 6.7.0  | .NET 6 & .NET 7 |
 
 ## Installation
+
 This extension uses MudBlazor features (need to set up MudBlazor if you didn't before), so only need to add this line described below:<br /><br />
 Add the following to your HTML **head** section, it's either `index.html` or `_Layout.cshtml`/`_Host.cshtml` depending on whether you're running Server-Side or WASM.
+
 ```html
 <link href="_content/CodeBeam.MudBlazor.Extensions/MudExtensions.min.css" rel="stylesheet" />
 ```
 
 Add the following to your HTML **body** section
+
 ```html
 <script src="_content/CodeBeam.MudBlazor.Extensions/MudExtensions.min.js"></script>
 ```
 
-Add the extension services into program.cs
-```razor
+Add the extension services into `Program.cs`
+
+```cs
 using MudExtensions.Services;
 builder.Services.AddMudExtensions();
 ```
 
 Adding namespace to `_Imports.razor` is not obligatory, but useful.
+
 ```razor
 @using MudExtensions
 ```
 
 ## Examples
+
 Each example is recorded in the playground website.
 
 ### MudAnimate
@@ -139,6 +150,6 @@ https://user-images.githubusercontent.com/78308169/195593490-6fd8d5fe-0472-4b9b-
 
 https://user-images.githubusercontent.com/78308169/195979884-7cf1698c-ce0a-400f-83a7-2accf6fff8c5.mp4
 
-
 ## Contribution
+
 Feel free to contribute.
