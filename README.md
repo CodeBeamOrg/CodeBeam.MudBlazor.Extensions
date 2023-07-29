@@ -76,7 +76,7 @@ https://codebeam-mudextensions.pages.dev/api
 | 6.1.5 - 6.1.9  |  6.1.4 - 6.1.7  | .NET 6 & .NET 7 |
 | 6.2.0 - 6.2.5  |      6.1.8      | .NET 6 & .NET 7 |
 | 6.2.6 - 6.4.8  |  6.1.9 - 6.2.0  | .NET 6 & .NET 7 |
-| 6.4.9 - 6.5.5  |  6.2.1 - 6.7.0  | .NET 6 & .NET 7 |
+| 6.4.9 - 6.5.6  |  6.2.1 - 6.7.0  | .NET 6 & .NET 7 |
 
 ## Installation
 
