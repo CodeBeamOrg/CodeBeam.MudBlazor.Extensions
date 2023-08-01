@@ -8,7 +8,21 @@
     var left = CalculateLeft().ToString(CultureInfo.InvariantCulture);
     var upperLeft = (CalculateWidth() + CalculateLeft()).ToString(CultureInfo.InvariantCulture);
 }
+<style>
+    .mud-range-container {
+    align-items: center;
+    margin: 20px 0;
+}
 
+.mud-range-container .mud-slider-input {
+    position: absolute;
+    pointer-events: none;
+}
+
+.mud-range-container input[type=range]::-webkit-slider-thumb {
+    pointer-events: all;
+}
+</style>
 <div class="@Classname" style="@Style">
     @if (ChildContent != null)
     {
@@ -20,26 +34,26 @@
         @if (Variant == Variant.Filled)
         {
             <div class="mud-slider-inner-container">
-                <div class="mud-slider-filled" style="@(Range ? $"width:{width}%; margin-left:{left}%; margin-top:22px;" : $"width:{width}%;")"></div>
+                <div class="mud-slider-filled" style="@(Range ? $"width:{width}%; margin-left:{left}%;" : $"width:{width}%;")"></div>
             </div>
         }
 
         @if (TickMarks)
         {
-            <div class="mud-slider-inner-container" style="@(Range ? $"margin-top:11px;" : "")">
+            <div class="mud-slider-inner-container">
                 @SliderTickMarks()
             </div>
         }
 
         <input class="mud-slider-input" aria-valuenow="@Value" aria-valuemin="@_min" aria-valuemax="@_max" role="slider" @attributes="UserAttributes" type="range" min="@_min" max="@_max" step="@_step" disabled="@(Disabled || _userInvalidatedRange)"
-        @bind-value="@Text" @bind-value:event="oninput" />
+        @bind-value="@Text" @bind-value:event="@((Immediate ? "oninput" : "onchange"))" />
 
         @SliderValueLabel(left, Value?.ToString())
 
         @if (Range)
         {
             <input class="mud-slider-input" aria-valuenow="@UpperValue" aria-valuemin="@_min" aria-valuemax="@_max" role="slider" @attributes="UserAttributes" type="range" min="@_min" max="@_max" step="@_step" disabled="@(Disabled || _userInvalidatedRange)"
-            @bind-value="@UpperText" @bind-value:event="oninput" />
+            @bind-value="@UpperText" @bind-value:event="@((Immediate ? "oninput" : "onchange"))" />
 
             @SliderValueLabel(upperLeft, UpperValue?.ToString())
         }

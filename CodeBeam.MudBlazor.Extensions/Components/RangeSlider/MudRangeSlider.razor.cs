@@ -257,6 +257,22 @@ namespace MudExtensions
 
                 _tickMarkCount = 1 + (int)((max - min) / step);
             }
+
+            if (Range)
+            {
+                //if no Value was set or no Upper Value set, default to min and max
+                if (string.IsNullOrEmpty(_value) && !string.IsNullOrEmpty(_min))
+                {
+                    _value = _min;
+                    ValueChanged.InvokeAsync(Value);
+                }
+
+                if (string.IsNullOrEmpty(_upperValue) && !string.IsNullOrEmpty(_max))
+                {
+                    _upperValue = _max;
+                    UpperValueChanged.InvokeAsync(UpperValue);
+                }
+            }
         }
 
         private double CalculateWidth()
