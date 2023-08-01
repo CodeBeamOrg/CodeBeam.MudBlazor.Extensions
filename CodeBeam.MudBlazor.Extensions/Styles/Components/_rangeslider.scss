@@ -1,0 +1,8 @@
+﻿.mud-range-container .mud-slider-input {
+    position: absolute;
+    pointer-events: none;
+}
+
+.mud-range-container input[type=range]::-webkit-slider-thumb {
+    pointer-events: all;
+}
