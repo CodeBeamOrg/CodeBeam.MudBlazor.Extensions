@@ -32,14 +32,14 @@
         }
 
         <input class="mud-slider-input" aria-valuenow="@Value" aria-valuemin="@_min" aria-valuemax="@_max" role="slider" @attributes="UserAttributes" type="range" min="@_min" max="@_max" step="@_step" disabled="@(Disabled || _userInvalidatedRange)"
-        @bind-value="@Text" @bind-value:event="onchange" />
+        @bind-value="@Text" @bind-value:event="oninput" />
 
         @SliderValueLabel(left, Value?.ToString())
 
         @if (Range)
         {
             <input class="mud-slider-input" aria-valuenow="@UpperValue" aria-valuemin="@_min" aria-valuemax="@_max" role="slider" @attributes="UserAttributes" type="range" min="@_min" max="@_max" step="@_step" disabled="@(Disabled || _userInvalidatedRange)"
-            @bind-value="@UpperText" @bind-value:event="onchange" />
+            @bind-value="@UpperText" @bind-value:event="oninput" />
 
             @SliderValueLabel(upperLeft, UpperValue?.ToString())
         }

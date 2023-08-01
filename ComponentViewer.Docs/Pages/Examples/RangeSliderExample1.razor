@@ -1,0 +1,18 @@
+﻿@using Microsoft.AspNetCore.Components
+@using MudBlazor.Extensions
+@using MudBlazor.Utilities
+
+<MudGrid>
+    <MudItem xs="12">
+        Lower Value: @_value.ToString()
+        Upper Value: @_upperValue.ToString()
+   </MudItem>
+    <MudItem xs="12">
+        <MudRangeSlider @bind-Value="@_value" @bind-UpperValue="@_upperValue" Variant="Variant.Filled" ValueLabel="true" Range="true" TickMarks="true" >Range</MudRangeSlider>
+   </MudItem>
+</MudGrid>
+
+@code {
+    private int _value = 25;
+    private int _upperValue = 75;
+}
