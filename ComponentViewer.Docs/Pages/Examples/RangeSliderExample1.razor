@@ -3,16 +3,32 @@
 @using MudBlazor.Utilities
 
 <MudGrid>
-    <MudItem xs="12">
-        Lower Value: @_value.ToString()
-        Upper Value: @_upperValue.ToString()
+    <MudItem xs="12" sm="8">
+        <MudRangeSlider @bind-Value="@_value" @bind-UpperValue="@_upperValue" Size="Size.Large" Variant="Variant.Filled" ValueLabel="_valueLabel" Range="_range" TickMarks="_tickmarks"
+                        Min="_min" Max="_max" Step="_step">Range</MudRangeSlider>
    </MudItem>
-    <MudItem xs="12">
-        <MudRangeSlider @bind-Value="@_value" @bind-UpperValue="@_upperValue" Size="Size.Large" Variant="Variant.Filled" ValueLabel="true" Range="true" TickMarks="true" >Range</MudRangeSlider>
+
+    <MudItem xs="12" sm="4">
+        <MudStack>
+            <MudNumericField @bind-Value="_value" Label="Lower Value" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudNumericField @bind-Value="_upperValue" Label="Upper Value" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudSwitchM3 @bind-Checked="_valueLabel" Label="ValueLabel" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="_range" Label="Range" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="_tickmarks" Label="Tickmarks" Color="Color.Secondary" />
+            <MudNumericField @bind-Value="_min" Label="Min" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudNumericField @bind-Value="_max" Label="Max" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudNumericField @bind-Value="_step" Label="Step" Variant="Variant.Outlined" Margin="Margin.Dense" />
+        </MudStack>
    </MudItem>
 </MudGrid>
 
 @code {
     private int _value = 25;
     private int _upperValue = 75;
+    bool _valueLabel = true;
+    bool _range = true;
+    bool _tickmarks = false;
+    int _min = 0;
+    int _max = 100;
+    int _step = 1;
 }
