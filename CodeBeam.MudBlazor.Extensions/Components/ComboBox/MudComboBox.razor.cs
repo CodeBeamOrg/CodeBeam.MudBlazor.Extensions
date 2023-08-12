@@ -71,6 +71,12 @@ namespace MudExtensions
         [Parameter] public bool Editable { get; set; }
 
         /// <summary>
+        /// If true, all items are eligible regarding what user search in textfield. Default is false.
+        /// </summary>
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        [Parameter] public bool DisableFilter { get; set; } = false;
+
+        /// <summary>
         /// If true, searched text has highlight.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]

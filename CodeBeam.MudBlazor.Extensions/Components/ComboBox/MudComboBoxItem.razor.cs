@@ -153,7 +153,7 @@ namespace MudExtensions
 
         protected bool IsEligible()
         {
-            if (MudComboBox == null || MudComboBox.Editable == false)
+            if (MudComboBox == null || MudComboBox.Editable == false || MudComboBox.DisableFilter == true)
             {
                 return true;
             }
