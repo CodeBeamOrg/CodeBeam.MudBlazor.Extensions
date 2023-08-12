@@ -7,7 +7,7 @@
         <span tabindex="0" class="@SwitchClassname">
             <span class="mud-switch-button-m3">
                 <input tabindex="-1" @attributes="UserAttributes" aria-checked="@((BoolValue == true).ToString().ToLower())" aria-readonly="@(Disabled.ToString().ToLower())" type="checkbox" class="mud-switch-input-m3" checked="@BoolValue" @onchange="@OnChange" disabled="@Disabled" @onclick:preventDefault="@ReadOnly" />
-                <span class="mud-switch-thumb-m3 @(BoolValue == false ? $"mud-switch-thumb-{Color.ToDescriptionString()}-m3" : null) @(string.IsNullOrEmpty(ThumbOffIcon) ? null : "mud-switch-thumb-off-icon-m3") d-flex align-center justify-center">
+                <span class="mud-switch-thumb-m3 @(BoolValue != true ? $"mud-switch-thumb-{Color.ToDescriptionString()}-m3" : null) @(string.IsNullOrEmpty(ThumbOffIcon) ? null : "mud-switch-thumb-off-icon-m3") d-flex align-center justify-center">
                     @if (!string.IsNullOrEmpty(ThumbIcon) && BoolValue == true)
                     {
                         <MudIcon Color="@Color" Icon="@ThumbIcon" Style="height:16px; width:16px;" />
