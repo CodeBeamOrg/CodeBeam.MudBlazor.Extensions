@@ -1,7 +1,7 @@
-﻿using System.Globalization;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
+using System.Globalization;
 
 namespace MudExtensions
 {
@@ -20,6 +20,7 @@ namespace MudExtensions
         protected string? _min = "0";
         protected string? _max = "100";
         protected string? _step = "1";
+        protected string? _gap = "1";
 
         protected bool _range = false;
         protected string? _upperValue;
@@ -64,6 +65,18 @@ namespace MudExtensions
         {
             get => Converter.Get(_max);
             set => _max = Converter.Set(value);
+        }
+
+        /// <summary>
+        /// The minimum distance between the upper and lower values
+        /// </summary>
+        /// 
+        [Parameter]
+        [Category(CategoryTypes.Slider.Validation)]
+        public T? Gap
+        {
+            get => Converter.Get(_gap);
+            set => _gap = Converter.Set(value);
         }
 
         /// <summary>
@@ -113,7 +126,7 @@ namespace MudExtensions
                     return;
                 }
 
-                if (Range && _upperValue != null && Convert.ToDecimal(d) >= Convert.ToDecimal(UpperValue))
+                if (Range && _upperValue != null && Convert.ToDecimal(d) + Convert.ToDecimal(Gap) > Convert.ToDecimal(UpperValue))
                 {
                     _userInvalidatedRange = true;
                     return;
@@ -137,7 +150,7 @@ namespace MudExtensions
                     return;
                 }
 
-                if (Range && _value != null && Convert.ToDecimal(d) <= Convert.ToDecimal(Value))
+                if (Range && _upperValue != null && _value != null && Convert.ToDecimal(d) - Convert.ToDecimal(Gap) < Convert.ToDecimal(Value))
                 {
                     _userInvalidatedRange = true;
                     return;
@@ -155,6 +168,32 @@ namespace MudExtensions
         [Category(CategoryTypes.Slider.Appearance)]
         public Color Color { get; set; } = Color.Primary;
 
+
+        protected string DisplayText
+        {
+            get
+            {
+                if (!Range) return Text;
+
+                //if both lower and upper are not set then it is any
+                if ((Convert.ToDouble(Value) == Convert.ToDouble(Min)) &&
+                (Convert.ToDouble(UpperValue) == Convert.ToDouble(Max) || Convert.ToDouble(UpperValue) == 0))
+                    return $"{Min} - {Max}";
+
+                string displayText = $"{Text} - {UpperText}";
+
+                //If lower is min or not defined 
+                if (Convert.ToDouble(Value) == Convert.ToDouble(Min))
+                    displayText = $"{Min} - {UpperText}";
+
+                //if upper is max or not defined
+                if (Convert.ToDouble(UpperValue) == Convert.ToDouble(Max) || Convert.ToDouble(UpperValue) == 0)
+                    displayText = $"{Text} - {Max}";                                
+
+                return displayText;
+            }
+        }
+
         protected string? Text
         {
             get => _value;
@@ -164,7 +203,7 @@ namespace MudExtensions
                 {
                     return;
                 }
-                if (Range && Convert.ToDecimal(value) >= Convert.ToDecimal(UpperValue))
+                if (Range && Convert.ToDecimal(value) + Convert.ToDecimal(Gap) > Convert.ToDecimal(UpperValue))
                 {
                     _userInvalidatedRange = true;
                     return;
@@ -185,7 +224,7 @@ namespace MudExtensions
                     return;
                 }
 
-                if (Range && Convert.ToDecimal(value) <= Convert.ToDecimal(Value))
+                if (Range && Convert.ToDecimal(value) - Convert.ToDecimal(Gap) < Convert.ToDecimal(Value))
                 {
                     _userInvalidatedRange = true;
                     return;
@@ -195,6 +234,12 @@ namespace MudExtensions
                 UpperValueChanged.InvokeAsync(UpperValue);
             }
         }
+        /// <summary>
+        /// If true, displays the Values below the slider
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.Slider.Appearance)]
+        public bool Display { get; set; } = false;
 
         /// <summary>
         /// If true, the dragging the slider will update the Value immediately.
@@ -294,8 +339,6 @@ namespace MudExtensions
 
         private double CalculateLeft()
         {
-            if (!Range) return 0;
-
             var min = Convert.ToDouble(Min);
             var max = Convert.ToDouble(Max);
             var value = Convert.ToDouble(Value);

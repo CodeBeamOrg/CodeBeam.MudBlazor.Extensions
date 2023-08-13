@@ -3,11 +3,16 @@
     margin: 20px 0;
 }
 
-.mud-range-container .mud-slider-input {
+.mud-range-container .mud-slider-input:last-of-type {
     position: absolute;
     pointer-events: none;
+    top: 0;
 }
 
 .mud-range-container input[type=range]::-webkit-slider-thumb {
     pointer-events: all;
+}
+
+.mud-range-display {
+    text-align: center;
 }
