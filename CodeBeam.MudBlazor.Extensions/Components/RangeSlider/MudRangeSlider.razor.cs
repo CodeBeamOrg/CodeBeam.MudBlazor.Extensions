@@ -20,7 +20,7 @@ namespace MudExtensions
         protected string? _min = "0";
         protected string? _max = "100";
         protected string? _step = "1";
-        protected string? _gap = "1";
+        protected string? _minDistance = "1";
 
         protected bool _range = false;
         protected string? _upperValue;
@@ -73,10 +73,10 @@ namespace MudExtensions
         /// 
         [Parameter]
         [Category(CategoryTypes.Slider.Validation)]
-        public T? Gap
+        public T? MinDistance
         {
-            get => Converter.Get(_gap);
-            set => _gap = Converter.Set(value);
+            get => Converter.Get(_minDistance);
+            set => _minDistance = Converter.Set(value);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace MudExtensions
                     return;
                 }
 
-                if (Range && _upperValue != null && Convert.ToDecimal(d) + Convert.ToDecimal(Gap) > Convert.ToDecimal(UpperValue))
+                if (Range && _upperValue != null && Convert.ToDecimal(d) + Convert.ToDecimal(MinDistance) > Convert.ToDecimal(UpperValue))
                 {
                     _userInvalidatedRange = true;
                     return;
@@ -150,7 +150,7 @@ namespace MudExtensions
                     return;
                 }
 
-                if (Range && _upperValue != null && _value != null && Convert.ToDecimal(d) - Convert.ToDecimal(Gap) < Convert.ToDecimal(Value))
+                if (Range && _upperValue != null && _value != null && Convert.ToDecimal(d) - Convert.ToDecimal(MinDistance) < Convert.ToDecimal(Value))
                 {
                     _userInvalidatedRange = true;
                     return;
@@ -203,7 +203,7 @@ namespace MudExtensions
                 {
                     return;
                 }
-                if (Range && Convert.ToDecimal(value) + Convert.ToDecimal(Gap) > Convert.ToDecimal(UpperValue))
+                if (Range && Convert.ToDecimal(value) + Convert.ToDecimal(MinDistance) > Convert.ToDecimal(UpperValue))
                 {
                     _userInvalidatedRange = true;
                     return;
@@ -224,7 +224,7 @@ namespace MudExtensions
                     return;
                 }
 
-                if (Range && Convert.ToDecimal(value) - Convert.ToDecimal(Gap) < Convert.ToDecimal(Value))
+                if (Range && Convert.ToDecimal(value) - Convert.ToDecimal(MinDistance) < Convert.ToDecimal(Value))
                 {
                     _userInvalidatedRange = true;
                     return;
