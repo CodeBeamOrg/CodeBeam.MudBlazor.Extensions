@@ -5,7 +5,7 @@
 <MudGrid>
     <MudItem xs="12" sm="8">
         <MudRangeSlider @bind-Value="@_value" @bind-UpperValue="@_upperValue" Size="Size.Large" Variant="Variant.Filled" ValueLabel="_valueLabel" Range="_range" TickMarks="_tickmarks"
-                        Min="_min" Max="_max" Step="_step" Display="_display" MinDistance="_gap">@_label</MudRangeSlider>
+                        Min="_min" Max="_max" Step="_step" Display="_display" MinDistance="_minDistance">@_label</MudRangeSlider>
    </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -20,7 +20,7 @@
             <MudNumericField @bind-Value="_min" Label="Min" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudNumericField @bind-Value="_max" Label="Max" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudNumericField @bind-Value="_step" Label="Step" Variant="Variant.Outlined" Margin="Margin.Dense" />
-            <MudNumericField @bind-Value="_gap" Label="Gap" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudNumericField @bind-Value="_minDistance" Label="Min Distance" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudButton OnClick="ClearValues" Color="Color.Primary" Variant="Variant.Filled" Margin="Margin.Dense">Clear Values</MudButton>
         </MudStack>
    </MudItem>
@@ -37,7 +37,7 @@
     int _min = 0;
     int _max = 100;
     int _step = 1;
-    int _gap = 2;
+    int _minDistance = 2;
 
     void ClearValues()
     {
