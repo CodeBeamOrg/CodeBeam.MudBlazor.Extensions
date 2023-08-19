@@ -39,7 +39,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.1.*" />
 	</ItemGroup>
 
-	<!--Uncomment it on development and debug to generate min.css on rebuild-->
+	<!--Uncomment it on development and debug to compile scss and generate min.css on rebuild-->
 	<!--This sections causes to fail auto deployment to CloudFlare-->
 	<!--<Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
 		<Exec Command="dotnet tool restore" StandardOutputImportance="high" />

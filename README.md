@@ -32,6 +32,7 @@
 - MudPage
 - MudPasswordField
 - MudPopup
+- MudRangeSlider
 - MudScrollbar
 - MudSection
 - MudSpeedDial
@@ -153,3 +154,16 @@ https://user-images.githubusercontent.com/78308169/195979884-7cf1698c-ce0a-400f-
 ## Contribution
 
 Feel free to contribute.
+
+## Updating css / Compiling from scss
+- If you update or create an new scss file you will need to compile the scss to css using excubo webcompiler during a solution rebuild.
+- Install Nuget Package [Excubo.WebCompiler](https://www.nuget.org/packages/Excubo.WebCompiler) for SCSS 
+	- From command line run: **dotnet add package Excubo.WebCompiler**
+- If add a new scss file you will need to add define it in the [MudExtensions.scs](https://github.com/CodeBeamOrg/CodeBeam.MudExtensions/blob/dev/CodeBeam.MudBlazor.Extensions/Styles/MudExtensions.css)
+- [Uncomment this line](https://github.com/CodeBeamOrg/CodeBeam.MudBlazor.Extensions/blob/9d46ab49cc39bcbc5ed7f3c184db57201eca91cb/CodeBeam.MudBlazor.Extensions/CodeBeam.MudBlazor.Extensions.csproj#L42)
+- The css will compile when you "rebuild" the solution
+- Re-Comment the code you un commented in the previous step
+- The css will compile on rebuild
+- Re-Comment the code you un commented.
+### If adding a scss you will need to add define it in the [MudExtensions.scs](https://github.com/enkodellc/CodeBeam.MudExtensions/blob/dev/CodeBeam.MudBlazor.Extensions/Styles/MudExtensions.css)
+
