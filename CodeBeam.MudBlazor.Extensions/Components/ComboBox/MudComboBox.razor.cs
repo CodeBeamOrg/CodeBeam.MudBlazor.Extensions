@@ -1212,7 +1212,7 @@ namespace MudExtensions
             if (_allSelected == null || _allSelected == false)
             {
                 SelectedValues = new List<T>();
-                foreach (var item in Items)
+                foreach (var item in Items.Where(x => x.Eligible == true))
                 {
                     item.Selected = true;
                     SelectedValues = SelectedValues.Append(item.Value);
