@@ -5,7 +5,7 @@
 <MudGrid>
     <MudItem xs="12" sm="8">
         <MudRangeSlider @bind-Value="@_value" @bind-UpperValue="@_upperValue" Size="Size.Large" Variant="Variant.Filled" ValueLabel="_valueLabel" Range="_range" TickMarks="_tickmarks"
-                        Min="_min" Max="_max" Step="_step" Display="_display" MinDistance="_minDistance">@_label</MudRangeSlider>
+                        Min="_min" Max="_max" Step="_step" Display="_display" MinDistance="_minDistance" DisableMin="_disableMin" DisableMax="_disableMax">@_label</MudRangeSlider>
    </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -16,6 +16,8 @@
             <MudSwitchM3 @bind-Checked="_valueLabel" Label="ValueLabel" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="_range" Label="Range" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="_tickmarks" Label="Tickmarks" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="_disableMin" Label="DisableMin" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Checked="_disableMax" Label="DisableMax" Color="Color.Secondary" />
             <MudSwitchM3 @bind-Checked="_display" Label="Display" Color="Color.Secondary" />
             <MudNumericField @bind-Value="_min" Label="Min" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudNumericField @bind-Value="_max" Label="Max" Variant="Variant.Outlined" Margin="Margin.Dense" />
@@ -34,6 +36,8 @@
     bool _display = true;
     bool _range = true;
     bool _tickmarks = false;
+    bool _disableMin = false;
+    bool _disableMax = false;
     int _min = 0;
     int _max = 100;
     int _step = 1;

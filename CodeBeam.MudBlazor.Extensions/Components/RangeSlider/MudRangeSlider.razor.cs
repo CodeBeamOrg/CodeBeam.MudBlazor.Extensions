@@ -91,18 +91,34 @@ namespace MudExtensions
             set => _step = Converter.Set(value);
         }
 
-        /// <summary>
-        /// If true, the slider will be disabled.
-        /// </summary>
-        /// 
-        [Parameter]
-        [Category(CategoryTypes.Slider.Behavior)]
-        public bool Disabled { get; set; } = false;
+		/// <summary>
+		/// If true, the slider will be disabled.
+		/// </summary>
+		/// 
+		[Parameter]
+		[Category(CategoryTypes.Slider.Behavior)]
+		public bool Disabled { get; set; } = false;
 
-        /// <summary>
-        /// Child content of component.
-        /// </summary>
-        [Parameter]
+		/// <summary>
+		/// If true and <seealso cref="Range"/>, the slider's min value will be disabled.
+		/// </summary>
+		/// 
+		[Parameter]
+		[Category(CategoryTypes.Slider.Behavior)]
+		public bool DisableMin { get; set; } = false;
+
+		/// <summary>
+		/// If true and <seealso cref="Range"/>, the slider's max value will be disabled.
+		/// </summary>
+		/// 
+		[Parameter]
+		[Category(CategoryTypes.Slider.Behavior)]
+		public bool DisableMax { get; set; } = false;
+
+		/// <summary>
+		/// Child content of component.
+		/// </summary>
+		[Parameter]
         [Category(CategoryTypes.Slider.Behavior)]
         public RenderFragment? ChildContent { get; set; }
 
