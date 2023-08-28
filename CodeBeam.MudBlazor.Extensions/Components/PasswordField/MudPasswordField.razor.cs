@@ -40,6 +40,13 @@ namespace MudExtensions
         public bool Clearable { get; set; } = false;
 
         /// <summary>
+        /// If true, adornment button accepts tab stop. Default is false.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool AdornmentTabStop { get; set; }
+
+        /// <summary>
         /// Button click event for clear button. Called after text and value has been cleared.
         /// </summary>
         [Parameter] public EventCallback<MouseEventArgs> OnClearButtonClick { get; set; }
