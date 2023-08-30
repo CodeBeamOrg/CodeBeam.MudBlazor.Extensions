@@ -32,8 +32,8 @@
                         {
                             <MudCheckBox CheckedIcon="@SelectAllCheckBoxIcon" Color="@Color" @bind-Checked="_allSelected" @onclick="() => SelectAllItems(_allSelected)" Dense="true" />
                         }
-                        <MudTextField @ref="_searchField" @bind-Value="@_searchString" Class="@ClassSearchBox" Placeholder="@SearchBoxPlaceholder" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="@(() => UpdateSelectedStyles())" OnClearButtonClick="@(() => UpdateSelectedStyles())" Immediate="true" Variant="Variant.Outlined" Margin="Margin.Dense"
-                            Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color" AutoFocus="@SearchBoxAutoFocus" Clearable="@SearchBoxClearable" />
+                        <MudTextField @ref="_searchField" @bind-Value="@_searchString" Class="@ClassSearchBox" Placeholder="@SearchBoxPlaceholder" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="@(() => UpdateSelectedStyles())" OnClearButtonClick="@(() => UpdateSelectedStyles())" Immediate="true" Variant="SearchBoxVariant" Margin="Margin.Dense"
+                            Adornment="SearchBoxAdornment" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color" AutoFocus="@SearchBoxAutoFocus" Clearable="@SearchBoxClearable" />
                     </div>
                 </MudListSubheaderExtended>
                 @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.AfterSearchBox && ParentList == null)

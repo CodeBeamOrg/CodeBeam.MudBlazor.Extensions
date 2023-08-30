@@ -30,6 +30,9 @@ namespace MudExtensions
             .Build();
 
         [Parameter]
+        public string PopoverClass { get; set; }
+
+        [Parameter]
         public bool Open { get; set; }
 
         [Parameter]
@@ -37,6 +40,9 @@ namespace MudExtensions
 
         [Parameter]
         public bool OpenOnClick { get; set; } = true;
+
+        [Parameter]
+        public bool CloseWhenClick { get; set; } = false;
 
         [Parameter]
         public int Padding { get; set; }
@@ -157,6 +163,14 @@ namespace MudExtensions
             if (!_popoverMouseEnter && !_rootMouseEnter)
             {
                 CloseMenu();
+            }
+        }
+
+        protected void HandlePopoverClick()
+        {
+            if (CloseWhenClick)
+            {
+                ChangeMenu(false);
             }
         }
 

@@ -71,6 +71,12 @@ namespace MudExtensions
         [Parameter] public bool Editable { get; set; }
 
         /// <summary>
+        /// If true, all items are eligible regarding what user search in textfield. Default is false.
+        /// </summary>
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        [Parameter] public bool DisableFilter { get; set; } = false;
+
+        /// <summary>
         /// If true, searched text has highlight.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
@@ -1206,7 +1212,7 @@ namespace MudExtensions
             if (_allSelected == null || _allSelected == false)
             {
                 SelectedValues = new List<T>();
-                foreach (var item in Items)
+                foreach (var item in Items.Where(x => x.Eligible == true))
                 {
                     item.Selected = true;
                     SelectedValues = SelectedValues.Append(item.Value);

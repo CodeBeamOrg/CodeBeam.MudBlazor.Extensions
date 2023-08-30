@@ -309,6 +309,27 @@
         </MudTable>
     </ExampleCard>
 
+    <ExampleCard Title="Api - MudRangeSlider" HasExpansionPanel="true">
+        <MudTable Items="@(typeof(MudRangeSlider<int>).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>Default</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+                <MudTd DataLabel="Default">
+                    @if (true)
+                    {
+                        MudRangeSlider<int> instance = new();
+                        <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+                    }
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </ExampleCard>
+
     <ExampleCard Title="Api - MudSelectExtended" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudSelectExtended<string>).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
