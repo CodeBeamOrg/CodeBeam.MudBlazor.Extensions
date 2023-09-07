@@ -95,7 +95,7 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<bool> OnImported { get; set; }
 
-        [Parameter] 
+        [Parameter]
         public bool ShowIncludeUnmappedData { get; set; }
 
         [Parameter]
@@ -179,7 +179,7 @@ namespace MudExtensions
                 IgnoreBlankLines = true,
                 HasHeaderRecord = true
             };
-            
+
             using var csv = new CsvReader(reader, config);
             CsvContent = csv.GetRecords<dynamic>().Select(x => (IDictionary<string, object>)x).ToList();
         }
@@ -196,7 +196,7 @@ namespace MudExtensions
             }
 
             IsValid();
-            
+
         }
         private bool TryExactMatch(string csvField)
         {
