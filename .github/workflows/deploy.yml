@@ -16,7 +16,7 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release --no-restore
     - name: Publish
-      run: dotnet publish CodeBeamMudExtensions.sln -c Release -f net7.0 --output ./Release
+      run: dotnet publish ~/projects/ComponentViewer.Wasm/ComponentViewer.Wasm.csproj -c Release -f net7.0 --output ./Release
     
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
