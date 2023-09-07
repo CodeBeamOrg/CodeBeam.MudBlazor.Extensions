@@ -16,7 +16,7 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release --no-restore
     - name: Publish
-      run: dotnet publish CodeBeamMudExtensions.sln -c Release --output ./Release
+      run: dotnet publish CodeBeamMudExtensions.sln -c Release -f net7.0 --output ./Release
     
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
