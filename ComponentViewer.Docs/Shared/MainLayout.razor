@@ -12,7 +12,7 @@
             <MudIconButton Class="white-text" Icon="@Icons.Material.Filled.Menu" OnClick="@(() => _drawerOpen = !_drawerOpen)"></MudIconButton>
             <MudIconButton Class="white-text" Icon="@Icons.Custom.Brands.MudBlazor" Href="https://mudblazor.com/" Target="_blank" />
             <MudSpacer />
-            <MudText Style="font-weight: 900; color: white">CodeBeam MudExtensions</MudText>
+            <MudText Style="font-weight: 900; color: white">CodeBeam MudExtensions @Version</MudText>
             <MudSpacer />
             <div class="d-flex">
                 <MudToggleIconButton @bind-Toggled="IsDarkMode" Class="white-text" Icon="@Icons.Material.Filled.DarkMode" ToggledIcon="@Icons.Material.Filled.LightMode"/>
@@ -173,4 +173,13 @@
         _borderRadius = val;
         FontChanged();
     }
+
+    private string Version
+        {
+            get
+            {
+                var v = typeof(MudAnimate).Assembly.GetName().Version;
+                return $"v{v.Major}.{v.Minor}.{v.Build}";
+            }
+        }
 }
