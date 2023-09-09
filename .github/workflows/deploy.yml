@@ -19,6 +19,7 @@ jobs:
       run: dotnet publish /home/runner/work/CodeBeam.MudBlazor.Extensions/CodeBeam.MudBlazor.Extensions/ComponentViewer.Wasm/ComponentViewer.Wasm.csproj -c Release -f net7.0 --output ./Release
     
     - name: 📂 Sync files
+      if: ${{ github.repository_owner == 'CodeBeamOrg' }}
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: codebeam.org
