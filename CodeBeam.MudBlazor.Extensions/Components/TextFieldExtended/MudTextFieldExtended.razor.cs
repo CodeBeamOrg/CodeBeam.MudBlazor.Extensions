@@ -25,6 +25,11 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public bool AutoSize { get; set; }
 
+        public async Task ForceAutoSize()
+        {
+            await InputReference.ForceAutoSize();
+        }
+
         /// <summary>
         /// The render fragment for child content.
         /// </summary>

@@ -102,6 +102,11 @@ namespace MudExtensions
             }
         }
 
+        public virtual async Task ForceAutoSize()
+        {
+            await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+        }
+
         /// <summary>
         /// If true, automatically resize the height regard to the text. Needs Lines parameter to set more than 1.
         /// </summary>

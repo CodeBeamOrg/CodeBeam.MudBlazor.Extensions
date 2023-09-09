@@ -2,6 +2,20 @@
 <MudGrid>
     <MudItem xs="12" sm="8">
         <div class="d-flex gap-4">
+            <h3>test</h3>
+
+            <MudTextFieldExtended @ref="_textFieldExtended" Label="test" @bind-Value="testText" Variant="Variant.Text" AutoSize="true" Lines="2" Immediate="true" />
+            <MudButton OnClick="Gen">Generate</MudButton>
+            @code {
+        MudTextFieldExtended<string> _textFieldExtended;
+        private string testText { get; set; } = "very long text";
+        public async Task Gen()
+        {
+            testText += "very long text\n";
+            await Task.Delay(1);
+            await _textFieldExtended.ForceAutoSize();
+        }
+            }
             @if (_adornmentStart)
             {
                 <MudTextFieldExtended T="string" Immediate="true" Label="@(_showLabel ? "Extended TextField" : null)" Variant="Variant.Text" Margin="@(_dense ? Margin.Dense : Margin.Normal)" Clearable="_clearable">
