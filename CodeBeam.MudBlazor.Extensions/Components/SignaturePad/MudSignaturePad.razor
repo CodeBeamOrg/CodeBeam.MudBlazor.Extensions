@@ -6,7 +6,7 @@
 @inject IJSRuntime JsRuntime
 @inherits ComponentBase
 
-<MudPaper Elevation="4" Class="ma-4">
+<MudPaper Elevation="@Elevation" Class="@OuterClass">
     <div style="@CanvasContainerStyle" class="@CanvasContainerClass">
         <canvas @ref="_reference" id="@_id"></canvas>
     </div>
@@ -14,15 +14,16 @@
         <MudStack Row="true" Class="justify-content-between align-center">
             @if (ShowLineWidth)
             {
-                <MudNumericField T="decimal" Value="Options.LineWidth" ValueChanged="LineWidthUpdated" Label="Line Width" Min="1" Step="1"></MudNumericField>
+                <MudNumericField T="decimal" Value="Options.LineWidth" ValueChanged="LineWidthUpdated" Label="@LocalizedStrings.LineWidth" Min="1" Step="1"></MudNumericField>
             }
             @if (ShowStrokeStyle)
             {
-                <MudColorPicker Value="Options.StrokeStyle" ValueChanged="StrokeStyleUpdated" Label="Stroke Color"></MudColorPicker>
+                <MudColorPicker Value="Options.StrokeStyle" ValueChanged="StrokeStyleUpdated" Label="@LocalizedStrings.StrokeColor"></MudColorPicker>
             }
             @if (ShowLineJoinStyle)
             {
-                <MudSelect T="LineJoinTypes" Value="Options.LineJoinStyle" ValueChanged="LineJoinTypeUpdated" ToStringFunc="x => x.ToString()" Label="Line Join Style">
+                <MudSelect T="LineJoinTypes" Value="Options.LineJoinStyle" ValueChanged="LineJoinTypeUpdated" ToStringFunc="x => x.ToString()"
+                           Label="@LocalizedStrings.LineJoinStyle">
                     @foreach (var value in Enum.GetValues<LineJoinTypes>())
                     {
                         <MudSelectItem T="LineJoinTypes" Value="value"></MudSelectItem>
@@ -31,7 +32,8 @@
             }
             @if (ShowLineCapStyle)
             {
-                <MudSelect T="LineCapTypes" Value="Options.LineCapStyle" ValueChanged="LineCapTypeUpdated" ToStringFunc="x => x.ToString()" Label="Line Cap Style">
+                <MudSelect T="LineCapTypes" Value="Options.LineCapStyle" ValueChanged="LineCapTypeUpdated" ToStringFunc="x => x.ToString()"
+                           Label="@LocalizedStrings.LineCapStyle">
                     @foreach (var value in Enum.GetValues<LineCapTypes>())
                     {
                         <MudSelectItem T="LineCapTypes" Value="value"></MudSelectItem>
@@ -45,11 +47,11 @@
             </MudChip>
             @if (ShowDownload)
             {
-                <MudChip OnClick="Download" Variant="Variant.Filled" Icon="@Icons.Material.Filled.Download">Download</MudChip>
+                <MudChip OnClick="Download" Variant="Variant.Filled" Icon="@Icons.Material.Filled.Download">@LocalizedStrings.Download</MudChip>
             }
             @if (ShowClear)
             {
-                <MudChip OnClick="ClearPad" Variant="Variant.Filled" Icon="@Icons.Material.Filled.Clear">Clear</MudChip>
+                <MudChip OnClick="ClearPad" Variant="Variant.Filled" Icon="@Icons.Material.Filled.Clear">@LocalizedStrings.Clear</MudChip>
             }
         </MudStack>
     </MudToolBar>

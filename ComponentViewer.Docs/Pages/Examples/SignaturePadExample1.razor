@@ -1,5 +1,6 @@
 ﻿@using MudBlazor.Utilities
 @using System.Text
+@using MudExtensions.Utilities
 <MudStack Class="mud-full-width">
     <MudItem xs="12" md="12">
         <MudSignaturePad Value="_value" ValueChanged="BytesChanged" Options="_options"
@@ -8,7 +9,8 @@
                          ShowLineWidth="_showLineWidth"
                          ShowStrokeStyle="_showStrokeStyle"
                          ShowLineCapStyle="_showLineCapStyle"
-                         ShowLineJoinStyle="_showLineJoinStyle">
+                         ShowLineJoinStyle="_showLineJoinStyle"
+                         LocalizedStrings="_localizedStrings">
         </MudSignaturePad>
     </MudItem>
     <MudGrid>
@@ -41,6 +43,8 @@
     bool _showStrokeStyle = true;
     bool _showLineCapStyle = true;
     bool _showLineJoinStyle = true;
+
+    SignaturePadLocalizedStrings _localizedStrings = new SignaturePadLocalizedStrings();
 
     SignaturePadOptions _options = new SignaturePadOptions()
     {

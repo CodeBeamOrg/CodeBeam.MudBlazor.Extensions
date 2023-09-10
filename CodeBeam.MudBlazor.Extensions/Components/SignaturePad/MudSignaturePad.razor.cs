@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Utilities;
+using MudExtensions.Utilities;
 
 namespace MudExtensions;
 
@@ -19,7 +20,7 @@ public partial class MudSignaturePad : IAsyncDisposable
     int _lineWidth = 3;
     private byte[] _value = Array.Empty<byte>();
     readonly string _id = Guid.NewGuid().ToString();
-    string DrawEraseChipText => _isErasing ? "Eraser" : "Pen";
+    string DrawEraseChipText => _isErasing ? LocalizedStrings.Eraser : LocalizedStrings.Pen;
     string DrawEraseChipIcon => _isErasing ? @Icons.Material.Filled.DeleteSweep : @Icons.Material.Filled.Edit;
 
     private object JsOptionsStruct => new
@@ -43,11 +44,12 @@ public partial class MudSignaturePad : IAsyncDisposable
     }
 
     [Parameter] public EventCallback<byte[]> ValueChanged { get; set; }
-
+    [Parameter] public SignaturePadLocalizedStrings LocalizedStrings { get; set; } = new();
     [Parameter] public SignaturePadOptions Options { get; set; } = new SignaturePadOptions();
 
     [Parameter] public string ToolbarStyle { get; set; } = string.Empty;
-
+    [Parameter] public string OuterClass { get; set; } = "pa-4";
+    [Parameter] public int Elevation { get; set; } = 4;
     [Parameter] public string CanvasContainerClass { get; set; } = "border-solid border-2 mud-border-primary";
     [Parameter] public string CanvasContainerStyle { get; set; } = "height: 100%;width: 100%;";
     [Parameter] public bool ShowClear { get; set; } = true;
