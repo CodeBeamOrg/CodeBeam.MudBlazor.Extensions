@@ -1,0 +1,56 @@
+﻿@using Microsoft.JSInterop
+@using MudBlazor.Charts
+@using MudBlazor.Utilities
+@using System.Text
+@namespace MudExtensions
+@inject IJSRuntime JsRuntime
+@inherits ComponentBase
+
+<MudPaper Elevation="4" Class="ma-4">
+    <div style="@CanvasContainerStyle" class="@CanvasContainerClass">
+        <canvas @ref="_reference" id="@_id"></canvas>
+    </div>
+    <MudToolBar Style="@ToolbarStyle" Class="my-2">
+        <MudStack Row="true" Class="justify-content-between align-center">
+            @if (ShowLineWidth)
+            {
+                <MudNumericField T="decimal" Value="Options.LineWidth" ValueChanged="LineWidthUpdated" Label="Line Width" Min="1" Step="1"></MudNumericField>
+            }
+            @if (ShowStrokeStyle)
+            {
+                <MudColorPicker Value="Options.StrokeStyle" ValueChanged="StrokeStyleUpdated" Label="Stroke Color"></MudColorPicker>
+            }
+            @if (ShowLineJoinStyle)
+            {
+                <MudSelect T="LineJoinTypes" Value="Options.LineJoinStyle" ValueChanged="LineJoinTypeUpdated" ToStringFunc="x => x.ToString()" Label="Line Join Style">
+                    @foreach (var value in Enum.GetValues<LineJoinTypes>())
+                    {
+                        <MudSelectItem T="LineJoinTypes" Value="value"></MudSelectItem>
+                    }
+                </MudSelect>
+            }
+            @if (ShowLineCapStyle)
+            {
+                <MudSelect T="LineCapTypes" Value="Options.LineCapStyle" ValueChanged="LineCapTypeUpdated" ToStringFunc="x => x.ToString()" Label="Line Cap Style">
+                    @foreach (var value in Enum.GetValues<LineCapTypes>())
+                    {
+                        <MudSelectItem T="LineCapTypes" Value="value"></MudSelectItem>
+                    }
+                </MudSelect>
+            }
+
+            <MudChip Variant="Variant.Filled" Icon="@DrawEraseChipIcon"
+                     Value="_isErasing" OnClick="async () => await IsEditToggled()">
+                @DrawEraseChipText
+            </MudChip>
+            @if (ShowDownload)
+            {
+                <MudChip OnClick="Download" Variant="Variant.Filled" Icon="@Icons.Material.Filled.Download">Download</MudChip>
+            }
+            @if (ShowClear)
+            {
+                <MudChip OnClick="ClearPad" Variant="Variant.Filled" Icon="@Icons.Material.Filled.Clear">Clear</MudChip>
+            }
+        </MudStack>
+    </MudToolBar>
+</MudPaper>
