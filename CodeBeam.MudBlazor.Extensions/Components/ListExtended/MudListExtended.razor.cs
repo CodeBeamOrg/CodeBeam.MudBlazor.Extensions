@@ -1156,13 +1156,14 @@ namespace MudExtensions
                 _allSelected = true;
             }
 
+            var selectedItems = items.Where(x => x.IsSelected).Select(y => y.Value).ToHashSet(_comparer);
             if (ItemCollection != null)
             {
-                SelectedValues = deselect == true ? Enumerable.Empty<T>() : ItemCollection.ToHashSet(_comparer);
+                SelectedValues = deselect == true ? Enumerable.Empty<T>() : selectedItems;
             }
             else
             {
-                SelectedValues = items.Where(x => x.IsSelected).Select(y => y.Value).ToHashSet(_comparer);
+                SelectedValues = selectedItems;
             }
 
             if (MudSelectExtended != null)
