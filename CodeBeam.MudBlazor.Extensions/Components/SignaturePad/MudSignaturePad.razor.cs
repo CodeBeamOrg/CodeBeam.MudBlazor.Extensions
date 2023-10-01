@@ -14,6 +14,16 @@ public partial class MudSignaturePad : IAsyncDisposable
         _dotnetObjectRef = DotNetObjectReference.Create<MudSignaturePad>(this);
     }
 
+    protected string CanvasContainerClassname => new CssBuilder()
+        //.AddClass($"border-solid border-2 mud-border-{Color.ToDescriptionString()}")
+        .AddClass(CanvasContainerClass)
+        .Build();
+
+    protected string ToolbarClassname => new CssBuilder()
+        .AddClass("pa-2 d-flex flex-wrap gap-2")
+        .AddClass(ToolbarClass)
+        .Build();
+
     private DotNetObjectReference<MudSignaturePad> _dotnetObjectRef;
     ElementReference _reference;
     bool _isErasing = true;
@@ -21,7 +31,7 @@ public partial class MudSignaturePad : IAsyncDisposable
     private byte[] _value = Array.Empty<byte>();
     readonly string _id = Guid.NewGuid().ToString();
     string DrawEraseChipText => _isErasing ? LocalizedStrings.Eraser : LocalizedStrings.Pen;
-    string DrawEraseChipIcon => _isErasing ? @Icons.Material.Filled.DeleteSweep : @Icons.Material.Filled.Edit;
+    string DrawEraseChipIcon => _isErasing ? Icons.Material.Filled.Edit : Icons.Material.Filled.EditOff;
 
     private object JsOptionsStruct => new
     {
@@ -47,17 +57,22 @@ public partial class MudSignaturePad : IAsyncDisposable
     [Parameter] public SignaturePadLocalizedStrings LocalizedStrings { get; set; } = new();
     [Parameter] public SignaturePadOptions Options { get; set; } = new SignaturePadOptions();
 
-    [Parameter] public string ToolbarStyle { get; set; } = string.Empty;
-    [Parameter] public string OuterClass { get; set; } = "pa-4";
+    [Parameter] public string ToolbarClass { get; set; }
+    [Parameter] public string ToolbarStyle { get; set; }
+    [Parameter] public string OuterClass { get; set; }
     [Parameter] public int Elevation { get; set; } = 4;
-    [Parameter] public string CanvasContainerClass { get; set; } = "border-solid border-2 mud-border-primary";
-    [Parameter] public string CanvasContainerStyle { get; set; } = "height: 100%;width: 100%;";
+    [Parameter] public string CanvasContainerClass { get; set; }
+    [Parameter] public string CanvasContainerStyle { get; set; } = "height: 100%;width: 100%; box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;";
     [Parameter] public bool ShowClear { get; set; } = true;
     [Parameter] public bool ShowLineWidth { get; set; } = true;
     [Parameter] public bool ShowStrokeStyle { get; set; } = true;
     [Parameter] public bool ShowDownload { get; set; } = true;
     [Parameter] public bool ShowLineJoinStyle { get; set; } = true;
     [Parameter] public bool ShowLineCapStyle { get; set; } = true;
+    [Parameter] public bool Dense { get; set; }
+    [Parameter] public Variant Variant  { get; set; }
+    [Parameter] public Color Color { get; set; }
+    [Parameter] public RenderFragment ToolbarContent { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -125,7 +140,14 @@ public partial class MudSignaturePad : IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        await JsRuntime.InvokeVoidAsync("mudSignaturePad.disposePad", _reference);
+        try
+        {
+            await JsRuntime.InvokeVoidAsync("mudSignaturePad.disposePad", _reference);
+        }
+        catch
+        {
+            //ignore
+        }
     }
 
     [JSInvokable]

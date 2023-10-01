@@ -7,52 +7,51 @@
 @inherits ComponentBase
 
 <MudPaper Elevation="@Elevation" Class="@OuterClass">
-    <div style="@CanvasContainerStyle" class="@CanvasContainerClass">
+    <div class="@ToolbarClassname" style="@ToolbarStyle">
+        <MudIconButton Variant="@Variant" Icon="@DrawEraseChipIcon" Color="@Color" OnClick="async () => await IsEditToggled()" Size="@(Dense ? Size.Small : Size.Medium)" />
+        @if (ShowClear)
+        {
+            <MudIconButton OnClick="ClearPad" Variant="@Variant" Color="@Color" Icon="@Icons.Material.Filled.Clear" Size="@(Dense ? Size.Small : Size.Medium)" />
+        }
+        @if (ShowDownload)
+        {
+            <MudIconButton OnClick="Download" Variant="@Variant" Color="@Color" Icon="@Icons.Material.Filled.Download" Size="@(Dense ? Size.Small : Size.Medium)" />
+        }
+        @ToolbarContent
+    </div>
+    <div class="@CanvasContainerClassname" style="@CanvasContainerStyle">
         <canvas @ref="_reference" id="@_id"></canvas>
     </div>
-    <MudToolBar Style="@ToolbarStyle" Class="my-2">
-        <MudStack Row="true" Class="justify-content-between align-center">
-            @if (ShowLineWidth)
-            {
-                <MudNumericField T="decimal" Value="Options.LineWidth" ValueChanged="LineWidthUpdated" Label="@LocalizedStrings.LineWidth" Min="1" Step="1"></MudNumericField>
-            }
-            @if (ShowStrokeStyle)
-            {
-                <MudColorPicker Value="Options.StrokeStyle" ValueChanged="StrokeStyleUpdated" Label="@LocalizedStrings.StrokeColor"></MudColorPicker>
-            }
-            @if (ShowLineJoinStyle)
-            {
-                <MudSelect T="LineJoinTypes" Value="Options.LineJoinStyle" ValueChanged="LineJoinTypeUpdated" ToStringFunc="x => x.ToString()"
-                           Label="@LocalizedStrings.LineJoinStyle">
-                    @foreach (var value in Enum.GetValues<LineJoinTypes>())
-                    {
-                        <MudSelectItem T="LineJoinTypes" Value="value"></MudSelectItem>
-                    }
-                </MudSelect>
-            }
-            @if (ShowLineCapStyle)
-            {
-                <MudSelect T="LineCapTypes" Value="Options.LineCapStyle" ValueChanged="LineCapTypeUpdated" ToStringFunc="x => x.ToString()"
-                           Label="@LocalizedStrings.LineCapStyle">
-                    @foreach (var value in Enum.GetValues<LineCapTypes>())
-                    {
-                        <MudSelectItem T="LineCapTypes" Value="value"></MudSelectItem>
-                    }
-                </MudSelect>
-            }
-
-            <MudChip Variant="Variant.Filled" Icon="@DrawEraseChipIcon"
-                     Value="_isErasing" OnClick="async () => await IsEditToggled()">
-                @DrawEraseChipText
-            </MudChip>
-            @if (ShowDownload)
-            {
-                <MudChip OnClick="Download" Variant="Variant.Filled" Icon="@Icons.Material.Filled.Download">@LocalizedStrings.Download</MudChip>
-            }
-            @if (ShowClear)
-            {
-                <MudChip OnClick="ClearPad" Variant="Variant.Filled" Icon="@Icons.Material.Filled.Clear">@LocalizedStrings.Clear</MudChip>
-            }
-        </MudStack>
-    </MudToolBar>
+    <div class="@ToolbarClassname" style="@ToolbarStyle">
+        @if (ShowLineWidth)
+        {
+            <MudNumericField T="decimal" Value="Options.LineWidth" ValueChanged="LineWidthUpdated" Label="@LocalizedStrings.LineWidth"
+                             Variant="@Variant" Margin="@(Dense ? Margin.Dense : Margin.Normal)" Min="1" Step="1" />
+        }
+        @if (ShowStrokeStyle)
+        {
+            <MudColorPicker Value="Options.StrokeStyle" ValueChanged="StrokeStyleUpdated" Label="@LocalizedStrings.StrokeColor"
+                            Variant="@Variant" Margin="@(Dense ? Margin.Dense : Margin.Normal)" />
+        }
+        @if (ShowLineJoinStyle)
+        {
+            <MudSelect T="LineJoinTypes" Value="Options.LineJoinStyle" ValueChanged="LineJoinTypeUpdated" ToStringFunc="x => x.ToString()"
+                       Label="@LocalizedStrings.LineJoinStyle" Variant="@Variant" Margin="@(Dense ? Margin.Dense : Margin.Normal)" Dense="@Dense">
+                @foreach (var value in Enum.GetValues<LineJoinTypes>())
+                {
+                    <MudSelectItem T="LineJoinTypes" Value="value"></MudSelectItem>
+                }
+            </MudSelect>
+        }
+        @if (ShowLineCapStyle)
+        {
+            <MudSelect T="LineCapTypes" Value="Options.LineCapStyle" ValueChanged="LineCapTypeUpdated" ToStringFunc="x => x.ToString()"
+                       Label="@LocalizedStrings.LineCapStyle" Variant="@Variant" Margin="@(Dense ? Margin.Dense : Margin.Normal)" Dense="@Dense">
+                @foreach (var value in Enum.GetValues<LineCapTypes>())
+                {
+                    <MudSelectItem T="LineCapTypes" Value="value"></MudSelectItem>
+                }
+            </MudSelect>
+        }
+    </div>
 </MudPaper>

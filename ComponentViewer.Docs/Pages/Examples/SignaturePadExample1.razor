@@ -1,8 +1,8 @@
 ﻿@using MudBlazor.Utilities
 @using System.Text
 @using MudExtensions.Utilities
-<MudStack Class="mud-full-width">
-    <MudItem xs="12" md="12">
+<MudGrid>
+    <MudItem xs="12" sm="8">
         <MudSignaturePad Value="_value" ValueChanged="BytesChanged" Options="_options"
                          ShowDownload="_showDownload"
                          ShowClear="_showClear"
@@ -10,31 +10,28 @@
                          ShowStrokeStyle="_showStrokeStyle"
                          ShowLineCapStyle="_showLineCapStyle"
                          ShowLineJoinStyle="_showLineJoinStyle"
-                         LocalizedStrings="_localizedStrings">
+                         LocalizedStrings="_localizedStrings"
+                         Variant="@_variant"
+                         Color="@_color"
+                         Dense="@_dense"
+                         Elevation="@_elevation">
         </MudSignaturePad>
     </MudItem>
-    <MudGrid>
-        <MudItem md="6">
-            <MudSwitchM3 T="bool" @bind-Checked="_showDownload" Label="Show Download"></MudSwitchM3>
-        </MudItem>
-        <MudItem md="6">
-            <MudSwitchM3 T="bool" @bind-Checked="_showClear" Label="Show Clear"></MudSwitchM3>
-        </MudItem>
-        <MudItem md="6">
-            <MudSwitchM3 T="bool" @bind-Checked="_showLineWidth" Label="Show Line Width"></MudSwitchM3>
-        </MudItem>
-        <MudItem md="6">
-            <MudSwitchM3 T="bool" @bind-Checked="_showStrokeStyle" Label="Show Stroke Color"></MudSwitchM3>
-        </MudItem>
-        <MudItem md="6">
-            <MudSwitchM3 T="bool" @bind-Checked="_showLineCapStyle" Label="Show Line Cap Style"></MudSwitchM3>
-        </MudItem>
-        <MudItem md="6">
-            <MudSwitchM3 T="bool" @bind-Checked="_showLineJoinStyle" Label="Show Line Join Style"></MudSwitchM3>
-        </MudItem>
-
-    </MudGrid>
-</MudStack>
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="2">
+            <MudSwitchM3 T="bool" @bind-Checked="_showDownload" Label="Show Download" Color="Color.Secondary" />
+            <MudSwitchM3 T="bool" @bind-Checked="_showClear" Label="Show Clear" Color="Color.Secondary" />
+            <MudSwitchM3 T="bool" @bind-Checked="_showLineWidth" Label="Show Line Width" Color="Color.Secondary" />
+            <MudSwitchM3 T="bool" @bind-Checked="_showStrokeStyle" Label="Show Stroke Color" Color="Color.Secondary" />
+            <MudSwitchM3 T="bool" @bind-Checked="_showLineCapStyle" Label="Show Line Cap Style" Color="Color.Secondary" />
+            <MudSwitchM3 T="bool" @bind-Checked="_showLineJoinStyle" Label="Show Line Join Style" Color="Color.Secondary" />
+            <MudSwitchM3 T="bool" @bind-Checked="_dense" Label="Dense" Color="Color.Secondary" />
+            <MudSelectExtended @bind-Value="@_variant" ItemCollection="@(Enum.GetValues<Variant>())" Label="Variant" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
+            <MudSelectExtended @bind-Value="@_color" ItemCollection="@(Enum.GetValues<Color>())" Label="Color" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
+            <MudNumericField @bind-Value="@_elevation" Min="0" Max="25" Label="Elevation" Variant="Variant.Outlined" Margin="Margin.Dense" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
 
 @code {
     bool _showDownload = true;
@@ -43,16 +40,20 @@
     bool _showStrokeStyle = true;
     bool _showLineCapStyle = true;
     bool _showLineJoinStyle = true;
+    bool _dense;
+    Variant _variant;
+    Color _color;
+    int _elevation = 4;
 
     SignaturePadLocalizedStrings _localizedStrings = new SignaturePadLocalizedStrings();
 
     SignaturePadOptions _options = new SignaturePadOptions()
-    {
-        LineWidth = 4,
-        LineCapStyle = LineCapTypes.Round,
-        LineJoinStyle = LineJoinTypes.Round,
-        StrokeStyle = new MudColor("#000000")
-    };
+        {
+            LineWidth = 4,
+            LineCapStyle = LineCapTypes.Round,
+            LineJoinStyle = LineJoinTypes.Round,
+            StrokeStyle = new MudColor("#000000")
+        };
 
     byte[] _value = Convert.FromBase64String(existingSignature);
 
