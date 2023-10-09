@@ -6,8 +6,7 @@ using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using MudExtensions.Extensions;
 using MudExtensions.Services;
-using System.Text.RegularExpressions;
-using static MudBlazor.CategoryTypes;
+using System.Runtime.InteropServices;
 
 namespace MudExtensions
 {
@@ -443,11 +442,11 @@ namespace MudExtensions
                     {
                         SelectedValues = new HashSet<T>() { Value };
                     }
-                    
+
                 }
                 await SelectedValuesChanged.InvokeAsync(_selectedValues);
             }
-            else 
+            else
             {
                 await SetValueAsync(SelectedValues.LastOrDefault(), false);
                 _searchString = Converter.Set(SelectedValues.LastOrDefault());
@@ -633,7 +632,7 @@ namespace MudExtensions
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            UpdateIcon();
+            _ = UpdateIcon();
             if (!MultiSelection && Value != null)
             {
                 _selectedValues = new HashSet<T>(_comparer) { Value };
@@ -643,7 +642,7 @@ namespace MudExtensions
                 // TODO: Check this line again
                 SetValueAsync(SelectedValues.FirstOrDefault()).AndForget();
             }
-            
+
         }
 
         bool _oldShowCheckbox = true;
@@ -656,7 +655,7 @@ namespace MudExtensions
                 _oldBordered != Bordered ||
                 _oldDense != Dense)
             {
-                ForceRenderItems();
+                _ = ForceRenderItems();
             }
             _oldShowCheckbox = ShowCheckbox;
             _oldBordered = Bordered;
@@ -670,21 +669,21 @@ namespace MudExtensions
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
-            UpdateIcon();
+            _ = UpdateIcon();
             if (MultiSelection != _oldMultiselection)
             {
                 if (_firstRendered == true)
                 {
                     await SyncMultiselectionValues(MultiSelection);
                 }
-                ForceRenderItems();
+                _ = ForceRenderItems();
                 if (MultiSelection == true)
                 {
                     _searchString = null;
                 }
                 else
                 {
-                    DeselectAllItems();
+                    _ = DeselectAllItems();
                     Items.FirstOrDefault(x => x.Value.Equals(Value)).Selected = true;
                 }
             }
@@ -731,7 +730,7 @@ namespace MudExtensions
                 });
                 _keyInterceptor.KeyDown += HandleKeyDown;
                 _keyInterceptor.KeyUp += HandleKeyUp;
-                await UpdateDataVisualiserTextAsync();
+                _ = UpdateDataVisualiserTextAsync();
                 _firstRendered = true;
                 StateHasChanged();
             }
@@ -767,7 +766,7 @@ namespace MudExtensions
             var key = obj.Key.ToLowerInvariant();
             if (Editable == false && key.Length == 1 && key != " " && !(obj.CtrlKey || obj.ShiftKey || obj.AltKey || obj.MetaKey))
             {
-                await ActiveFirstItem(key);
+                _ = ActiveFirstItem(key);
                 return;
             }
 
@@ -776,9 +775,9 @@ namespace MudExtensions
                 case "Tab":
                     if (MultiSelection == false && SelectValueOnTab)
                     {
-                        await ToggleOption(_lastActivatedItem, true);
+                        _ = ToggleOption(_lastActivatedItem, true);
                     }
-                    await CloseMenu();
+                    _ = CloseMenu();
                     break;
                 case "a":
                 case "A":
@@ -786,49 +785,49 @@ namespace MudExtensions
                     {
                         if (MultiSelection)
                         {
-                            await SelectAllItems();
+                            _ = SelectAllItems();
                         }
                     }
                     break;
                 case "Home":
-                    await ActiveFirstItem();
+                    _ = ActiveFirstItem();
                     break;
                 case "End":
-                    await ActiveLastItem();
+                    _ = ActiveLastItem();
                     break;
                 case "ArrowUp":
                     if (obj.AltKey)
                     {
-                        await CloseMenu();
+                        _ = CloseMenu();
                     }
                     else if (!_isOpen)
                     {
-                        await OpenMenu();
+                        _ = OpenMenu();
                     }
                     else
                     {
-                        await ActiveAdjacentItem(-1);
+                        _ = ActiveAdjacentItem(-1);
                     }
                     break;
                 case "ArrowDown":
                     if (obj.AltKey)
                     {
-                        await OpenMenu();
+                        _ = OpenMenu();
                     }
                     else if (!_isOpen)
                     {
-                        await OpenMenu();
+                        _ = OpenMenu();
                     }
                     else
                     {
-                        await ActiveAdjacentItem(1);
+                        _ = ActiveAdjacentItem(1);
                     }
                     break;
                 case " ":
-                    await ToggleMenu();
+                    _ = ToggleMenu();
                     break;
                 case "Escape":
-                    await CloseMenu();
+                    _ = CloseMenu();
                     break;
                 case "Enter":
                 case "NumpadEnter":
@@ -836,11 +835,11 @@ namespace MudExtensions
                     {
                         if (_isOpen == false)
                         {
-                            await OpenMenu();
+                            _ = OpenMenu();
                         }
                         else
                         {
-                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem?.Selected ?? true);
+                            _ = ToggleOption(_lastActivatedItem, !_lastActivatedItem?.Selected ?? true);
                         }
                         break;
                     }
@@ -848,12 +847,12 @@ namespace MudExtensions
                     {
                         if (_isOpen == false)
                         {
-                            await OpenMenu();
+                            _ = OpenMenu();
                             break;
                         }
                         else
                         {
-                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem?.Selected ?? true);
+                            _ = ToggleOption(_lastActivatedItem, !_lastActivatedItem?.Selected ?? true);
                             //await _inputReference.SetText(Text);
                             if (_lastActivatedItem?.Selected == false)
                             {
@@ -868,37 +867,35 @@ namespace MudExtensions
 
         protected internal async Task SearchBoxHandleKeyDown(KeyboardEventArgs obj)
         {
-            if (Disabled)
-                return;
-            switch (obj.Key)
-            {
-                case "ArrowUp":
-                case "ArrowDown":
-                case "Home":
-                case "End":
-                    HandleKeyDown(obj);
-                    break;
-                case "Enter":
-                case "NumpadEnter":
-                    HandleKeyDown(obj);
-                    break;
-                case "Tab":
-                    await ActiveFirstItem();
-                    await FocusAsync();
-                    StateHasChanged();
-                    break;
-            }
-            
+            if (!Disabled)
+                switch (obj.Key)
+                {
+                    case "ArrowUp":
+                    case "ArrowDown":
+                    case "Home":
+                    case "End":
+                        HandleKeyDown(obj);
+                        break;
+                    case "Escape":
+                        _ = CloseMenu();
+                        break;
+                    case "Enter":
+                    case "NumpadEnter":
+                        HandleKeyDown(obj);
+                        break;
+                    case "Tab":
+                        _ = ActiveFirstItem();
+                        await FocusAsync();
+                        StateHasChanged();
+                        break;
+                }
         }
 
-        protected internal void SearchBoxHandleKeyUp(KeyboardEventArgs obj)
-        {
-            ForceRenderItems();
-        }
+        protected internal Task SearchBoxHandleKeyUp(KeyboardEventArgs obj) => ForceRenderItems();
 
         protected internal async void HandleKeyUp(KeyboardEventArgs obj)
         {
-            ForceRenderItems();
+            _ = ForceRenderItems();
             await OnKeyUp.InvokeAsync(obj);
         }
 
@@ -915,13 +912,13 @@ namespace MudExtensions
                 {
                     if (Items.Select(x => x.Value).Contains(Value))
                     {
-                        await ToggleOption(Items.FirstOrDefault(x => x.Value.Equals(Value)), true);
+                        _ = ToggleOption(Items.FirstOrDefault(x => x.Value.Equals(Value)), true);
                     }
                     else
                     {
                         await Clear();
                     }
-                        
+
                     _searchString = Text;
                 }
             }
@@ -960,20 +957,16 @@ namespace MudExtensions
 
         #region PopoverState
 
-        public async Task ToggleMenu()
+        public Task ToggleMenu()
         {
-            if (Disabled || ReadOnly)
-                return;
-            if (_isOpen)
+            if (!Disabled && !ReadOnly)
             {
-                await CloseMenu();
+                if (_isOpen)
+                    _ = CloseMenu();
+                else
+                    _ = OpenMenu();
             }
-            else
-            {
-                await OpenMenu();
-
-            }
-
+            return Task.CompletedTask;
         }
 
         public async Task OpenMenu()
@@ -981,7 +974,7 @@ namespace MudExtensions
             if (Disabled || ReadOnly)
                 return;
             _isOpen = true;
-            UpdateIcon();
+            _ = UpdateIcon();
             StateHasChanged();
             if (Editable)
             {
@@ -1006,15 +999,15 @@ namespace MudExtensions
                 _lastActivatedItem = Items.FirstOrDefault(x => x.Value.Equals(Value));
             }
             _allSelected = GetAllSelectedState();
-            await ScrollToMiddleAsync(_lastActivatedItem);
+            _ = ScrollToMiddleAsync(_lastActivatedItem);
             await OnOpen.InvokeAsync();
         }
 
         public async Task CloseMenu()
         {
             _isOpen = false;
-            UpdateIcon();
-            DeactiveAllItems();
+            _ = UpdateIcon();
+            _ = DeactiveAllItems();
             StateHasChanged();
 
             await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "none" });
@@ -1056,8 +1049,8 @@ namespace MudExtensions
             {
                 if (MultiSelection == false)
                 {
-                    DeselectAllItems();
-                    await UpdateComboBoxValueAsync(item.Value, updateText: true, updateSearchString: true);
+                    _ = DeselectAllItems();
+                    _ = UpdateComboBoxValueAsync(item.Value, updateText: true, updateSearchString: true);
                 }
                 else if (SelectedValues.Contains(item.Value) == false)
                 {
@@ -1065,17 +1058,17 @@ namespace MudExtensions
                     SelectedValues = SelectedValues.Append(item.Value);
                     await SelectedValuesChanged.InvokeAsync(_selectedValues);
                     _allSelected = GetAllSelectedState();
-                    
+
                     //await Task.Delay(1);
                 }
                 item.Selected = true;
             }
-            DeactiveAllItems();
+            _ = DeactiveAllItems();
             _lastActivatedItem = item;
-            await UpdateDataVisualiserTextAsync();
+            _ = UpdateDataVisualiserTextAsync();
             if (MultiSelection == false)
             {
-                await CloseMenu();
+                _ = CloseMenu();
             }
             else
             {
@@ -1083,9 +1076,13 @@ namespace MudExtensions
             }
         }
 
-        protected void DeselectAllItems()
+        protected Task DeselectAllItems()
         {
-            Items.ForEach(x => x.Selected = false);
+            foreach (var item in CollectionsMarshal.AsSpan(Items))
+            {
+                item.Selected = false;
+            }
+            return Task.CompletedTask;
         }
 
         public override async Task ForceUpdate()
@@ -1140,18 +1137,18 @@ namespace MudExtensions
         /// <summary>
         /// Extra handler for clearing selection.
         /// </summary>
-        protected async ValueTask ClearButtonClickHandlerAsync(MouseEventArgs e)
+        protected async Task ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
             await UpdateComboBoxValueAsync(default(T));
             _searchString = null;
             await SetTextAsync(default, false);
             _selectedValues.Clear();
-            DeselectAllItems();
+            _ = DeselectAllItems();
             await BeginValidateAsync();
             await ForceUpdateItems();
             StateHasChanged();
             await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
-            await OnClearButtonClick.InvokeAsync(e);
+            _ = OnClearButtonClick.InvokeAsync(e);
         }
 
         /// <summary>
@@ -1176,9 +1173,10 @@ namespace MudExtensions
 
         #endregion
 
-        protected void UpdateIcon()
+        protected Task UpdateIcon()
         {
             _currentIcon = !string.IsNullOrWhiteSpace(AdornmentIcon) ? AdornmentIcon : _isOpen ? CloseIcon : OpenIcon;
+            return Task.CompletedTask;
         }
 
         //public void CheckGenericTypeMatch(object select_item)
@@ -1236,28 +1234,37 @@ namespace MudExtensions
 
         protected bool? GetAllSelectedState()
         {
-            if (MultiSelection == true && SelectedValues.Count() == Items.Count)
+            if (MultiSelection == true)
             {
-                return true;
-            }
+                var count = SelectedValues.Count();
+                if (count == 0)
+                    return false;
 
-            if (MultiSelection == true && SelectedValues.Count() == 0)
-            {
-                return false;
-            }
+                if (count == Items.Count)
+                    return true;
 
+            }
             return null;
         }
 
-        protected void ForceRenderItems()
+        protected Task ForceRenderItems()
         {
-            Items.ForEach((x) => x.ForceRender());
+            foreach (var item in CollectionsMarshal.AsSpan(Items))
+            {
+                item.ForceRender();
+            }
             StateHasChanged();
+            return Task.CompletedTask;
         }
 
-        protected async Task ForceUpdateItems()
+        protected Task ForceUpdateItems()
         {
-            Items.ForEach(async (x) => await x.ForceUpdate());
+            foreach (var item in CollectionsMarshal.AsSpan(Items))
+            {
+                _ = item.ForceUpdate();
+            }
+            StateHasChanged();
+            return Task.CompletedTask;
         }
 
         #region Active (Hilight)
@@ -1308,12 +1315,14 @@ namespace MudExtensions
             _lastActivatedItem = Items.FirstOrDefault(x => value == null ? x.Value == null : Comparer != null ? Comparer.Equals(value, x.Value) : value.Equals(x.Value));
         }
 
-        protected void DeactiveAllItems()
+        protected Task DeactiveAllItems()
         {
-            foreach (var item in Items)
+            foreach (var item in CollectionsMarshal.AsSpan(Items))
             {
                 item.SetActive(false);
             }
+            StateHasChanged();
+            return Task.CompletedTask;
         }
 
 #pragma warning disable BL0005
@@ -1323,13 +1332,13 @@ namespace MudExtensions
             {
                 return;
             }
-            DeactiveAllItems();
+            _ = DeactiveAllItems();
             var properItems = GetEligibleAndNonDisabledItems();
             if (string.IsNullOrWhiteSpace(startChar))
             {
                 properItems[0].SetActive(true);
                 _lastActivatedItem = properItems[0];
-                await ScrollToMiddleAsync(Items[0]);
+                _ = ScrollToMiddleAsync(Items[0]);
                 return;
             }
 
@@ -1347,7 +1356,7 @@ namespace MudExtensions
                     return;
                 }
                 _lastActivatedItem.SetActive(true);
-                await ScrollToMiddleAsync(_lastActivatedItem);
+                _ = ScrollToMiddleAsync(_lastActivatedItem);
                 return;
             }
 
@@ -1356,7 +1365,7 @@ namespace MudExtensions
             {
                 possibleItems[0].SetActive(true);
                 _lastActivatedItem = possibleItems[0];
-                await ScrollToMiddleAsync(possibleItems[0]);
+                _ = ScrollToMiddleAsync(possibleItems[0]);
                 return;
             }
 
@@ -1364,50 +1373,48 @@ namespace MudExtensions
             {
                 possibleItems[0].SetActive(true);
                 _lastActivatedItem = possibleItems[0];
-                await ScrollToMiddleAsync(possibleItems[0]);
+                _ = ScrollToMiddleAsync(possibleItems[0]);
             }
             else
             {
                 var item = possibleItems[possibleItems.IndexOf(theItem) + 1];
                 item.SetActive(true);
                 _lastActivatedItem = item;
-                await ScrollToMiddleAsync(item);
+                _ = ScrollToMiddleAsync(item);
             }
         }
 
-        public async Task ActiveAdjacentItem(int changeCount)
+        public Task ActiveAdjacentItem(int changeCount)
         {
             if (Items == null || Items.Count == 0)
-            {
-                return;
-            }
+                return Task.CompletedTask;
 
             var properItems = GetEligibleAndNonDisabledItems();
             int index = GetActiveProperItemIndex();
             if (index + changeCount >= properItems.Count || 0 > index + changeCount)
-            {
-                return;
-            }
-            
-            DeactiveAllItems();
+                return Task.CompletedTask;
+
+            _ = DeactiveAllItems();
             properItems[index + changeCount].SetActive(true);
             _lastActivatedItem = properItems[index + changeCount];
 
-            await ScrollToMiddleAsync(Items[index + changeCount]);
+            _ = ScrollToMiddleAsync(Items[index + changeCount]);
+            return Task.CompletedTask;
         }
 
-        public async Task ActiveLastItem()
+        public Task ActiveLastItem()
         {
             if (Items == null || Items.Count == 0)
             {
-                return;
+                return Task.CompletedTask; ;
             }
-            DeactiveAllItems();
+            _ = DeactiveAllItems();
             var properItems = GetEligibleAndNonDisabledItems();
             properItems.Last().SetActive(true);
             _lastActivatedItem = properItems.Last();
 
-            await ScrollToMiddleAsync(_lastActivatedItem);
+            _ = ScrollToMiddleAsync(_lastActivatedItem);
+            return Task.CompletedTask;
         }
 #pragma warning restore BL0005
 
@@ -1439,14 +1446,11 @@ namespace MudExtensions
             return Typo.body1;
         }
 
-        protected internal ValueTask ScrollToMiddleAsync(MudComboBoxItem<T> item)
+        protected internal Task ScrollToMiddleAsync(MudComboBoxItem<T> item)
         {
-            if (item == null)
-            {
-                return ValueTask.CompletedTask;
-            }
-            ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId);
-            return ValueTask.CompletedTask;
+            if (item != null)
+                _ = ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId);
+            return Task.CompletedTask;
         }
 
     }

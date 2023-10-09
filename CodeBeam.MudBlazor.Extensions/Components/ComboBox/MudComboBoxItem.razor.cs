@@ -95,23 +95,25 @@ namespace MudExtensions
                         return Value.ToString();
                     return converter.Set(Value);
                 }
-                
+
                 if (converter == null)
                     return $"{(string.IsNullOrEmpty(Text) ? Value : Text)}";
                 return !string.IsNullOrEmpty(Text) ? Text : converter.Set(Value);
             }
         }
 
-        public void ForceRender()
+        public Task ForceRender()
         {
             CheckEligible();
             StateHasChanged();
+            return Task.CompletedTask;
         }
 
-        public async Task ForceUpdate()
+        public Task ForceUpdate()
         {
             SyncSelected();
-            await InvokeAsync(StateHasChanged);
+            StateHasChanged();
+            return Task.CompletedTask;
         }
 
         protected override void OnInitialized()
@@ -193,7 +195,7 @@ namespace MudExtensions
                 return;
             }
 
-            if (MudComboBox.MultiSelection == true && MudComboBox.SelectedValues.Contains(Value)) 
+            if (MudComboBox.MultiSelection == true && MudComboBox.SelectedValues.Contains(Value))
             {
                 Selected = true;
             }
@@ -210,7 +212,7 @@ namespace MudExtensions
         protected async Task HandleOnClick()
         {
             //Selected = !Selected;
-            await MudComboBox.ToggleOption(this, !Selected);
+            _ = MudComboBox.ToggleOption(this, !Selected);
             //await MudComboBox?.SelectOption(Value);
             await InvokeAsync(StateHasChanged);
             //if (MudComboBox.MultiSelection == false)
