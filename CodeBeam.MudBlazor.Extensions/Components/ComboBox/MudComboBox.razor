@@ -39,19 +39,19 @@
                                             <MudChip Class="@ChipClass" Value="item.Value" Text="@(ToStringFunc != null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
                                         }
                                         @*@if (ItemCollection != null)
-                                    {
-                                    foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
-                                    {
-                                    <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
-                                    }
-                                    }
-                                    else
-                                    {
-                                    foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboboxItem<T>>())
-                                    {
-                                    <MudChip Class="@ChipClass" Value="item.Value" Text="@(ToStringFunc != null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
-                                    }
-                                    }*@
+                                        {
+                                        foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
+                                        {
+                                        <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
+                                        }
+                                        }
+                                        else
+                                        {
+                                        foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboboxItem<T>>())
+                                        {
+                                        <MudChip Class="@ChipClass" Value="item.Value" Text="@(ToStringFunc != null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
+                                        }
+                                        }*@
                                     </MudChipSet>
                                 }
                                 else if (InputPresenter == ValuePresenter.Text && (Editable == false || (MultiSelection == true && Editable == true)))
@@ -116,26 +116,26 @@
                                 @if (MultiSelection)
                                 {
                                     <div Style="position: sticky; top: 0px; background-color: var(--mud-palette-background); z-index: 2" @onkeydown:stopPropagation>
-                                        @if (Editable)
-                                        {
-                                            <div class="pa-2">
-                                                <MudTextFieldExtended @ref="_searchbox" T="string" Value="_searchString" ValueChanged="@HandleInternalValueChanged" Margin="Margin.Dense"
-                                                                      Variant="Variant.Outlined" Immediate="true" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="SearchBoxHandleKeyUp" Clearable="@SearchBoxClearable">
-                                                    <AdornmentEnd>
-                                                        <MudIcon Icon="@Icons.Material.Filled.Search" Color="@Color" />
-                                                    </AdornmentEnd>
-                                                </MudTextFieldExtended>
-                                            </div>
-                                        }
+                                    @if (Editable)
+                                    {
+                                        <div class="pa-2">
+                                            <MudTextFieldExtended @ref="_searchbox" T="string" Value="_searchString" ValueChanged="@HandleInternalValueChanged" Margin="Margin.Dense"
+                                                                    Variant="Variant.Outlined" Immediate="true" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="SearchBoxHandleKeyUp" Clearable="@SearchBoxClearable">
+                                                <AdornmentEnd>
+                                                    <MudIcon Icon="@Icons.Material.Filled.Search" Color="@Color" />
+                                                </AdornmentEnd>
+                                            </MudTextFieldExtended>
+                                        </div>
+                                    }
 
-                                        @if (SelectAll)
-                                        {
-                                            <div class="@($"mud-combobox-item mud-combobox-item-clickable mud-combobox-item-{Dense.ToDescriptionString()} mud-ripple d-flex")" @onclick="SelectAllItems" @onclick:stopPropagation="true">
-                                                <MudCheckBox Class="mx-4" @bind-Checked="_allSelected" Color="@Color" @onclick="SelectAllItems" Dense="true" />
-                                                <MudText Typo="GetTypo()">@SelectAllText</MudText>
-                                            </div>
-                                            <MudDivider />
-                                        }
+                                    @if (SelectAll)
+                                    {
+                                        <div class="@($"mud-combobox-item mud-combobox-item-clickable mud-combobox-item-{Dense.ToDescriptionString()} mud-ripple d-flex")" @onclick="SelectAllItems" @onclick:stopPropagation="true">
+                                            <MudCheckBox Class="mx-4" @bind-Checked="_allSelected" Color="@Color" @onclick="SelectAllItems" Dense="true" />
+                                            <MudText Typo="GetTypo()">@SelectAllText</MudText>
+                                        </div>
+                                        <MudDivider />
+                                    }
                                     </div>
                                 }
 
