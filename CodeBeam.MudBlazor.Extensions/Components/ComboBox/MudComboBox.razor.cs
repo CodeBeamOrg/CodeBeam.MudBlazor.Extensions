@@ -1148,6 +1148,7 @@ namespace MudExtensions
             _selectedValues.Clear();
             DeselectAllItems();
             await BeginValidateAsync();
+            await ForceUpdateItems();
             StateHasChanged();
             await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
             await OnClearButtonClick.InvokeAsync(e);
