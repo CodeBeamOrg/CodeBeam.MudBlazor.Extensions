@@ -18,7 +18,7 @@
                                       Value="@_searchString" ValueChanged="@HandleInternalValueChanged"
                                       DisableUnderLine="@DisableUnderLine"
                                       Disabled="@Disabled" ReadOnly="@ReadOnly" Error="@Error" ErrorId="@ErrorId"
-                                      Clearable="@Clearable" ForceClearable="@(Clearable && HasValue(Value))" OnClearButtonClick="(async (e) => await ClearButtonClickHandlerAsync(e))"
+                                      Clearable="@Clearable" ForceClearable="@(Clearable && HasValue(Value))" OnClearButtonClick="@ClearButtonClickHandlerAsync"
                     @attributes="UserAttributes" OnBlur="@HandleOnBlur" ForceShrink="@(HasValue(Value) || _isOpen || ForceShrink)">
 
                         <AdornmentEnd>
@@ -131,7 +131,7 @@
                                     @if (SelectAll)
                                     {
                                         <div class="@($"mud-combobox-item mud-combobox-item-clickable mud-combobox-item-{Dense.ToDescriptionString()} mud-ripple d-flex")" @onclick="SelectAllItems" @onclick:stopPropagation="true">
-                                            <MudCheckBox Class="mx-4" @bind-Checked="_allSelected" Color="@Color" @onclick="SelectAllItems" Dense="true" />
+                                            <MudCheckBox Class="mx-4" @bind-Checked="@_allSelected" Color="@Color" @onclick="SelectAllItems" Dense="true" />
                                             <MudText Typo="GetTypo()">@SelectAllText</MudText>
                                         </div>
                                         <MudDivider />
@@ -157,6 +157,4 @@
 
 </CascadingValue>
 <!-- mousedown instead of click needed to close the menu before OnLostFocus runs -->
-<MudOverlay Visible="_isOpen" @onmousedown="@(() => CloseMenu())" LockScroll="@LockScroll" />
-
-
+<MudOverlay Visible="_isOpen" @onmousedown="@CloseMenu" LockScroll="@LockScroll" />
