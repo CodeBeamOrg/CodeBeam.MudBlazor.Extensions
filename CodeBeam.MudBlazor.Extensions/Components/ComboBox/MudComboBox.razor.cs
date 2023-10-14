@@ -758,7 +758,7 @@ namespace MudExtensions
             var key = obj.Key.ToLowerInvariant();
             if (Editable == false && key.Length == 1 && key != " " && !(obj.CtrlKey || obj.ShiftKey || obj.AltKey || obj.MetaKey))
             {
-                await ActiveFirstItem(key[0]);
+                await ActiveFirstItem(key);
                 return;
             }
 
@@ -1302,23 +1302,20 @@ namespace MudExtensions
         }
 
 #pragma warning disable BL0005
-        public async Task ActiveFirstItem(char? startChar = null)
+        public async Task ActiveFirstItem(string startChar = null)
         {
             if (Items == null || Items.Count == 0 || Items[0].Disabled)
             {
                 return;
             }
             DeactiveAllItems();
-            if (startChar is not null)
+            var properItems = GetEligibleAndNonDisabledItems();
+            if (string.IsNullOrWhiteSpace(startChar))
             {
-                var properItems = GetEligibleAndNonDisabledItems();
-                if (properItems.Any())
-                {
-                    properItems[0].SetActive(true);
-                    _lastActivatedItem = properItems[0];
-                    await ScrollToMiddleAsync(Items[0]);
-                    return;
-                }
+                properItems[0].SetActive(true);
+                _lastActivatedItem = properItems[0];
+                await ScrollToMiddleAsync(Items[0]);
+                return;
             }
 
             if (Editable == true)
@@ -1327,7 +1324,7 @@ namespace MudExtensions
             }
 
             // find first item that starts with the letter
-            var possibleItems = Items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? string.Empty).StartsWith(startChar.Value)).ToList();
+            var possibleItems = Items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? string.Empty).StartsWith(startChar, StringComparison.OrdinalIgnoreCase)).ToList();
             if (possibleItems == null || !possibleItems.Any())
             {
                 if (_lastActivatedItem == null)

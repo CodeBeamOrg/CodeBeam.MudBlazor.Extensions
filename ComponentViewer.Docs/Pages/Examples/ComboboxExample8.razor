@@ -27,7 +27,7 @@
 
     private bool SearchStartWith(string value, string text, string searchString)
     {
-        if (value.StartsWith(searchString, StringComparison.CurrentCultureIgnoreCase))
+        if (value.StartsWith(searchString, StringComparison.OrdinalIgnoreCase))
         {
             return true;
         }
