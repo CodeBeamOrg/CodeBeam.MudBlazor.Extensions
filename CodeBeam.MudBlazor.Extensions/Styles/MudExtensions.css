@@ -124,31 +124,40 @@
   background-color: var(--mud-palette-lines-default) !important; }
 
 .mud-combobox-item-bordered {
-  border-left: 4px solid var(--mud-palette-lines-default); }
+  border-left: 4px solid var(--mud-palette-lines-default);
+  padding-inline-start: 12px; }
 
 .mud-combobox-item-bordered-primary {
-  border-left: 4px solid var(--mud-palette-primary); }
+  border-left: 4px solid var(--mud-palette-primary);
+  padding-inline-start: 12px; }
 
 .mud-combobox-item-bordered-secondary {
-  border-left: 4px solid var(--mud-palette-secondary); }
+  border-left: 4px solid var(--mud-palette-secondary);
+  padding-inline-start: 12px; }
 
 .mud-combobox-item-bordered-tertiary {
-  border-left: 4px solid var(--mud-palette-tertiary); }
+  border-left: 4px solid var(--mud-palette-tertiary);
+  padding-inline-start: 12px; }
 
 .mud-combobox-item-bordered-info {
-  border-left: 4px solid var(--mud-palette-info); }
+  border-left: 4px solid var(--mud-palette-info);
+  padding-inline-start: 12px; }
 
 .mud-combobox-item-bordered-success {
-  border-left: 4px solid var(--mud-palette-success); }
+  border-left: 4px solid var(--mud-palette-success);
+  padding-inline-start: 12px; }
 
 .mud-combobox-item-bordered-warning {
-  border-left: 4px solid var(--mud-palette-warning); }
+  border-left: 4px solid var(--mud-palette-warning);
+  padding-inline-start: 12px; }
 
 .mud-combobox-item-bordered-error {
-  border-left: 4px solid var(--mud-palette-error); }
+  border-left: 4px solid var(--mud-palette-error);
+  padding-inline-start: 12px; }
 
 .mud-combobox-item-bordered-dark {
-  border-left: 4px solid var(--mud-palette-dark); }
+  border-left: 4px solid var(--mud-palette-dark);
+  padding-inline-start: 12px; }
 
 .mud-combobox-item-nested-background {
   background-color: var(--mud-palette-background-grey); }
