@@ -36,6 +36,7 @@ namespace MudExtensions
         /// <summary>
         /// The height of splitter. For example: "400px"
         /// </summary>
+        /// <remarks>The default is 100%</remarks>
         [Parameter]
         public string Height { get; set; }
 
