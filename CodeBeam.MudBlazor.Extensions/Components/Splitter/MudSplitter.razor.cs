@@ -36,6 +36,7 @@ namespace MudExtensions
         /// <summary>
         /// The height of splitter. For example: "400px"
         /// </summary>
+        /// <remarks>The default is 100%</remarks>
         [Parameter]
         public string Height { get; set; }
 
@@ -139,7 +140,7 @@ namespace MudExtensions
 
         string EffectiveStartStyle { get { return !string.IsNullOrWhiteSpace(StartContentStyle) ? StartContentStyle : !string.IsNullOrWhiteSpace(ContentStyle) ? ContentStyle : StyleContent; } }
         string EffectiveEndStyle { get { return !string.IsNullOrWhiteSpace(EndContentStyle) ? EndContentStyle : !string.IsNullOrWhiteSpace(ContentStyle) ? ContentStyle : StyleContent; } }
-        string EffectiveHeight { get { return $"height:{(!string.IsNullOrWhiteSpace(Height) ? Height : "0px")} !important;"; } }
+        string EffectiveHeight { get { return $"height:{(!string.IsNullOrWhiteSpace(Height) ? Height : null)} !important;"; } }
         string EffectiveBarStyle { get { return !string.IsNullOrWhiteSpace(BarStyle) ? BarStyle : StyleBar; } }
         string EffectiveColor { get { return $"background-color:var(--mud-palette-{(Color == Color.Default ? "action-default" : Color.ToDescriptionString())}) !important;"; } }
 
