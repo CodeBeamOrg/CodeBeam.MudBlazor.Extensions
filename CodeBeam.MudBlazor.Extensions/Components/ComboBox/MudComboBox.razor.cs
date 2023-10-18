@@ -58,7 +58,7 @@ namespace MudExtensions
             new StyleBuilder()
             .AddStyle("height: auto")
             .AddStyle("min-height: 1.1876em")
-            .AddStyle("display", "inline", Value != null || SelectedValues.Count() != 0)
+            .AddStyle("display", "inline", Value != null || SelectedValues.Any())
             .Build();
 
         private string _elementId = "combobox_" + Guid.NewGuid().ToString().Substring(0, 8);
@@ -581,7 +581,7 @@ namespace MudExtensions
             {
                 if (MultiSelectionTextFunc != null)
                 {
-                    if (SelectedValues.Count() == 0)
+                    if (!SelectedValues.Any())
                     {
                         _dataVisualiserText = null;
                         return Task.CompletedTask;
@@ -685,7 +685,8 @@ namespace MudExtensions
                 else
                 {
                     DeselectAllItems();
-                    Items.FirstOrDefault(x => x.Value.Equals(Value)).Selected = true;
+                    if (Value is not null)
+                        Items.FirstOrDefault(x => x.Value.Equals(Value)).Selected = true;
                 }
             }
             if ((Value == null && _oldValue != null) || (Value != null && Value.Equals(_oldValue) == false))
@@ -1191,7 +1192,7 @@ namespace MudExtensions
         protected override bool HasValue(T value)
         {
             if (MultiSelection)
-                return SelectedValues?.Count() > 0;
+                return SelectedValues.Any();
             else
                 return base.HasValue(value);
         }
@@ -1236,16 +1237,16 @@ namespace MudExtensions
 
         protected bool? GetAllSelectedState()
         {
-            if (MultiSelection == true && SelectedValues.Count() == Items.Count)
+            if (MultiSelection)
             {
-                return true;
-            }
+                var count = SelectedValues.Count();
+                if (count == 0)
+                    return false;
 
-            if (MultiSelection == true && SelectedValues.Count() == 0)
-            {
-                return false;
-            }
+                if (count == Items.Count)
+                    return true;
 
+            }
             return null;
         }
 
@@ -1279,16 +1280,20 @@ namespace MudExtensions
         protected int GetActiveProperItemIndex()
         {
             var properItems = GetEligibleAndNonDisabledItems();
-            if (_lastActivatedItem == null)
+            if (properItems.Any())
             {
-                var a = properItems.FindIndex(x => x.Active == true);
-                return a;
+                if (_lastActivatedItem == null)
+                {
+                    var a = properItems.FindIndex(x => x.Active == true);
+                    return a;
+                }
+                else
+                {
+                    var a = properItems.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
+                    return a;
+                }
             }
-            else
-            {
-                var a = properItems.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
-                return a;
-            }
+            return -1;
         }
 
         protected T GetActiveItemValue()
@@ -1339,7 +1344,7 @@ namespace MudExtensions
             }
 
             // find first item that starts with the letter
-            var possibleItems = Items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? "").StartsWith(startChar, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            var possibleItems = Items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? "").StartsWith(startChar, StringComparison.OrdinalIgnoreCase)).ToList();
             if (possibleItems == null || !possibleItems.Any())
             {
                 if (_lastActivatedItem == null)
@@ -1404,8 +1409,13 @@ namespace MudExtensions
             }
             DeactiveAllItems();
             var properItems = GetEligibleAndNonDisabledItems();
-            properItems.Last().SetActive(true);
-            _lastActivatedItem = properItems.Last();
+            if (properItems.Any())
+            {
+                properItems.Last().SetActive(true);
+                _lastActivatedItem = properItems.Last();
+            }
+            else
+                _lastActivatedItem = null;
 
             await ScrollToMiddleAsync(_lastActivatedItem);
         }
