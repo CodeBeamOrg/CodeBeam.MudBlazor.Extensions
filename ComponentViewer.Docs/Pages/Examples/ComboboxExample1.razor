@@ -46,7 +46,7 @@
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
-            <MudText>Item Count: @_combobox?.Items.Count()</MudText>
+            <MudText>Item Count: @_combobox?.Items.Count</MudText>
             <MudText>Value: @_value</MudText>
             <MudText>Text: @_text</MudText>
             <MudText>Selected Values: @(string.Join(", ", _selectedValues ?? new List<string>()))</MudText>
@@ -102,4 +102,11 @@
         "Texas", "Utah", "Vermont", "Virgin Island", "Virginia",
         "Washington", "West Virginia", "Wisconsin", "Wyoming",
     };
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        if (firstRender)
+            StateHasChanged();
+    }
 }

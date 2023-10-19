@@ -6,8 +6,7 @@ using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using MudExtensions.Extensions;
 using MudExtensions.Services;
-using System.Text.RegularExpressions;
-using static MudBlazor.CategoryTypes;
+using System.Runtime.InteropServices;
 
 namespace MudExtensions
 {
@@ -30,7 +29,7 @@ namespace MudExtensions
         private string multiSelectionText;
         private IKeyInterceptor _keyInterceptor;
 
-        public List<MudComboBoxItem<T>> Items = new();
+        public List<MudComboBoxItem<T>> Items { get; set; } = new();
         internal MudComboBoxItem<T> _lastActivatedItem;
         protected internal List<MudComboBoxItem<T>> EligibleItems { get; set; } = new();
         private MudInputExtended<string> _inputReference;
@@ -61,8 +60,8 @@ namespace MudExtensions
             .AddStyle("display", "inline", Value != null || SelectedValues.Any())
             .Build();
 
-        private string _elementId = "combobox_" + Guid.NewGuid().ToString().Substring(0, 8);
-        private string _popoverId = "comboboxpopover_" + Guid.NewGuid().ToString().Substring(0, 8);
+        private string _elementId = string.Concat("combobox_", Guid.NewGuid().ToString().AsSpan(0, 8));
+        private string _popoverId = string.Concat("comboboxpopover_", Guid.NewGuid().ToString().AsSpan(0, 8));
 
         /// <summary>
         /// If true, combobox goes to autocomplete mode.
@@ -403,23 +402,12 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public string IndeterminateIcon { get; set; } = Icons.Material.Filled.IndeterminateCheckBox;
 
-        private bool _multiSelection = false;
         /// <summary>
         /// If true, multiple values can be selected via checkboxes which are automatically shown in the dropdown
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public bool MultiSelection
-        {
-            get => _multiSelection;
-            set
-            {
-                if (value != _multiSelection)
-                {
-                    _multiSelection = value;
-                }
-            }
-        }
+        public bool MultiSelection { get; set; }
 
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
@@ -510,8 +498,7 @@ namespace MudExtensions
         {
             get
             {
-                if (_selectedValues == null)
-                    _selectedValues = new HashSet<T>(_comparer);
+                _selectedValues ??= new HashSet<T>(_comparer);
                 return _selectedValues;
             }
             set
@@ -598,12 +585,10 @@ namespace MudExtensions
             else
             {
                 var item = Items.FirstOrDefault(x => Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(Value, x.Value) : Value.Equals(x.Value));
-                if (item == null)
-                {
-                    _dataVisualiserText = Converter.Set(Value);
-                    return Task.CompletedTask;
-                }
-                _dataVisualiserText = (!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
+                _dataVisualiserText = item is null
+                    ? Converter.Set(Value)
+                    : (!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
+
                 return Task.CompletedTask;
             }
         }
@@ -1113,7 +1098,7 @@ namespace MudExtensions
             if (item == null)
                 return false;
             bool? result = null;
-            if (Items?.Select(x => x.Value).Contains(item.Value) == false)
+            if (Items.Select(x => x.Value).Contains(item.Value) == false)
             {
                 Items.Add(item);
                 if (MultiSelection == true && SelectedValues.Contains(item.Value))
@@ -1215,7 +1200,7 @@ namespace MudExtensions
             if (_allSelected == null || _allSelected == false)
             {
                 SelectedValues = new List<T>();
-                foreach (var item in Items.Where(x => x.Eligible == true))
+                foreach (var item in Items.Where(x => x.Eligible))
                 {
                     item.Selected = true;
                     SelectedValues = SelectedValues.Append(item.Value);
@@ -1226,7 +1211,7 @@ namespace MudExtensions
             }
             else
             {
-                foreach (var item in Items)
+                foreach (var item in Items.Where(x => x.Selected))
                 {
                     item.Selected = false;
                 }
@@ -1264,19 +1249,19 @@ namespace MudExtensions
 
         #region Active (Hilight)
 
-        protected int GetActiveItemIndex()
-        {
-            if (_lastActivatedItem == null)
-            {
-                var a = Items.FindIndex(x => x.Active == true);
-                return a;
-            }
-            else
-            {
-                var a = Items.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
-                return a;
-            }
-        }
+        //protected int GetActiveItemIndex()
+        //{
+        //    if (_lastActivatedItem == null)
+        //    {
+        //        var a = Items.FindIndex(x => x.Active == true);
+        //        return a;
+        //    }
+        //    else
+        //    {
+        //        var a = Items.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
+        //        return a;
+        //    }
+        //}
 
         protected int GetActiveProperItemIndex()
         {
@@ -1316,9 +1301,10 @@ namespace MudExtensions
 
         protected void DeactiveAllItems()
         {
-            foreach (var item in Items)
+            foreach (var item in CollectionsMarshal.AsSpan(Items))
             {
-                item.SetActive(false);
+                if (item.Active)
+                    item.SetActive(false);
             }
         }
 
@@ -1345,7 +1331,7 @@ namespace MudExtensions
             }
 
             // find first item that starts with the letter
-            var possibleItems = Items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? "").StartsWith(startChar, StringComparison.OrdinalIgnoreCase)).ToList();
+            var possibleItems = Items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? string.Empty).StartsWith(startChar, StringComparison.OrdinalIgnoreCase)).ToList();
             if (possibleItems == null || !possibleItems.Any())
             {
                 if (_lastActivatedItem == null)
@@ -1404,21 +1390,17 @@ namespace MudExtensions
 
         public async Task ActiveLastItem()
         {
-            if (Items == null || Items.Count == 0)
-            {
+            if (!(Items.Count > 0))
                 return;
-            }
+
             DeactiveAllItems();
             var properItems = GetEligibleAndNonDisabledItems();
-            if (properItems.Any())
-            {
-                properItems.Last().SetActive(true);
-                _lastActivatedItem = properItems.Last();
-            }
-            else
-                _lastActivatedItem = null;
+            var lastItem = properItems.LastOrDefault();
+            lastItem?.SetActive(true);
+            _lastActivatedItem = lastItem;
 
-            await ScrollToMiddleAsync(_lastActivatedItem);
+            if (_lastActivatedItem is not null)
+                await ScrollToMiddleAsync(_lastActivatedItem);
         }
 #pragma warning restore BL0005
 
@@ -1450,15 +1432,7 @@ namespace MudExtensions
             return Typo.body1;
         }
 
-        protected internal ValueTask ScrollToMiddleAsync(MudComboBoxItem<T> item)
-        {
-            if (item == null)
-            {
-                return ValueTask.CompletedTask;
-            }
-            ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId);
-            return ValueTask.CompletedTask;
-        }
-
+        protected internal ValueTask ScrollToMiddleAsync(MudComboBoxItem<T> item) =>
+            item is not null ? ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId) : ValueTask.CompletedTask;
     }
 }
