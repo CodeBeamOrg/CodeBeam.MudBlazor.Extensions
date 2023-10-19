@@ -873,6 +873,7 @@ namespace MudExtensions
                 return;
             switch (obj.Key)
             {
+                case "Escape":
                 case "ArrowUp":
                 case "ArrowDown":
                 case "Home":
