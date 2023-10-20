@@ -896,28 +896,16 @@ namespace MudExtensions
 
         protected internal async Task HandleOnBlur(FocusEventArgs obj)
         {
-
-            if (Strict == false)
+            if (Strict)
             {
-                await UpdateComboBoxValueAsync(Converter.Get(_searchString), updateText: true, updateSearchString: true);
+                var item = Items.FirstOrDefault(x => Converter.Set(x.Value).Equals(_searchString, StringComparison.OrdinalIgnoreCase));
+                if (item is not null)
+                    await ToggleOption(item, true);
+                else
+                    await Clear();
             }
             else
-            {
-                if (Items.Select(x => x.Value).Contains(Converter.Get(_searchString)) == false)
-                {
-                    if (Items.Select(x => x.Value).Contains(Value))
-                    {
-                        await ToggleOption(Items.FirstOrDefault(x => x.Value.Equals(Value)), true);
-                    }
-                    else
-                    {
-                        await Clear();
-                    }
-
-                    //_searchString = Text;
-                }
-            }
-
+                await UpdateComboBoxValueAsync(Converter.Get(_searchString), updateText: true, updateSearchString: true);
 
             await OnBlurredAsync(obj);
         }
