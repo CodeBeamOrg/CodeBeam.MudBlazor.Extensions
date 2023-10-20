@@ -28,7 +28,7 @@ namespace MudExtensions
             .AddClass(MudComboBox?.HighlightClass)
             .Build();
 
-        internal string ItemId { get; } = "_" + Guid.NewGuid().ToString().Substring(0, 8);
+        internal string ItemId { get; } = string.Concat("_", Guid.NewGuid().ToString().AsSpan(0, 8));
 
         /// <summary>
         /// The parent select component
@@ -119,11 +119,11 @@ namespace MudExtensions
             MudComboBox?.Add(this);
         }
 
-        bool? _oldMultiselection;
-        bool? _oldSelected;
+        //bool? _oldMultiselection;
+        //bool? _oldSelected;
         bool _selectedChanged = false;
-        bool? _oldEligible = true;
-        bool _eligibleChanged = false;
+        //bool? _oldEligible = true;
+        //bool _eligibleChanged = false;
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
@@ -238,9 +238,9 @@ namespace MudExtensions
         {
             try
             {
-                MudComboBox?.Remove(this);
+                MudComboBox?.RemoveItem(this);
             }
-            catch (Exception) { }
+            catch { }
         }
     }
 }

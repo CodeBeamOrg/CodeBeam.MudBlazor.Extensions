@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 
 namespace MudExtensions
 {
-    public partial class MudComboBox<T> : MudBaseInputExtended<T>
+    public partial class MudComboBox<T> : MudBaseInputExtended<T>, IDisposable
     {
         #region Constructor, Injected Services, Parameters, Fields
 
@@ -31,7 +31,7 @@ namespace MudExtensions
         }
 
         internal string _searchString { get; set; }
-        private string multiSelectionText;
+        private readonly string multiSelectionText;
         private IKeyInterceptor _keyInterceptor;
 
         public List<MudComboBoxItem<T>> Items { get; set; } = new();
@@ -65,8 +65,8 @@ namespace MudExtensions
             .AddStyle("display", "inline", Value != null || SelectedValues.Any())
             .Build();
 
-        private string _elementId = string.Concat("combobox_", Guid.NewGuid().ToString().AsSpan(0, 8));
-        private string _popoverId = string.Concat("comboboxpopover_", Guid.NewGuid().ToString().AsSpan(0, 8));
+        private readonly string _elementId = string.Concat("combobox_", Guid.NewGuid().ToString().AsSpan(0, 8));
+        private readonly string _popoverId = string.Concat("comboboxpopover_", Guid.NewGuid().ToString().AsSpan(0, 8));
 
         /// <summary>
         /// If true, combobox goes to autocomplete mode.
@@ -535,7 +535,7 @@ namespace MudExtensions
 
         protected Task UpdateDataVisualiserTextAsync()
         {
-            List<string> textList = new List<string>();
+            var textList = new List<string>();
             if (Items != null && Items.Any())
             {
                 if (false) // ItemCollection != null
@@ -1032,7 +1032,7 @@ namespace MudExtensions
                 {
                     if (ToggleSelection)
                     {
-                        await UpdateComboBoxValueAsync(default(T), updateText: true, updateSearchString: true);
+                        await UpdateComboBoxValueAsync(default, updateText: true, updateSearchString: true);
                         item.Selected = false;
                     }
                 }
@@ -1115,14 +1115,7 @@ namespace MudExtensions
             return result;
         }
 
-        protected internal void Remove(MudComboBoxItem<T> item)
-        {
-            if (Items == null)
-            {
-                return;
-            }
-            Items.Remove(item);
-        }
+        protected internal void RemoveItem(MudComboBoxItem<T> item) => Items.Remove(item);
 
         #endregion
 
@@ -1134,7 +1127,7 @@ namespace MudExtensions
         /// </summary>
         protected async ValueTask ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
-            await UpdateComboBoxValueAsync(default(T));
+            await UpdateComboBoxValueAsync(default);
             _searchString = null;
             await SetTextAsync(default, false);
             _selectedValues.Clear();
@@ -1313,7 +1306,6 @@ namespace MudExtensions
             }
         }
 
-#pragma warning disable BL0005
         public async Task ActiveFirstItem(string startChar = null)
         {
             if (Items == null || Items.Count == 0 || Items[0].Disabled)
@@ -1407,7 +1399,6 @@ namespace MudExtensions
             if (_lastActivatedItem is not null)
                 await ScrollToMiddleAsync(_lastActivatedItem);
         }
-#pragma warning restore BL0005
 
         #endregion
 
@@ -1439,5 +1430,11 @@ namespace MudExtensions
 
         protected internal ValueTask ScrollToMiddleAsync(MudComboBoxItem<T> item) =>
             item is not null ? ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId) : ValueTask.CompletedTask;
+
+
+        public void Dispose()
+        {
+            Items.Clear();
+        }
     }
 }
