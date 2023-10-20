@@ -1306,6 +1306,8 @@ namespace MudExtensions
             }
         }
 
+        [Obsolete("Please use ActivateFirstItem() method")]
+        public Task ActiveFirstItem(string startChar = null) => ActivateFirstItem(startChar);
         public async Task ActivateFirstItem(string startsWith = null)
         {
             var item = Items.FirstOrDefault();
@@ -1365,6 +1367,8 @@ namespace MudExtensions
             }
         }
 
+        [Obsolete("Please use ActivateAdjacentItem() method")]
+        public Task ActiveAdjacentItem(int changeCount) => ActivateAdjacentItem(changeCount);
         public async Task ActivateAdjacentItem(int changeCount)
         {
             if (Items == null || Items.Count == 0)
@@ -1386,6 +1390,8 @@ namespace MudExtensions
             await ScrollToMiddleAsync(Items[index + changeCount]);
         }
 
+        [Obsolete("Please use ActivateLastItem() method")]
+        public Task ActiveLastItem() => ActivateLastItem();
         public async Task ActivateLastItem()
         {
             if (!(Items.Count > 0))
