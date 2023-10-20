@@ -119,7 +119,7 @@
                                     @if (Editable)
                                     {
                                         <div class="pa-2">
-                                            <MudTextFieldExtended @ref="_searchbox" T="string" Value="_searchString" ValueChanged="@HandleInternalValueChanged" Margin="Margin.Dense"
+                                            <MudTextFieldExtended id="@($"{_elementId}-autocomplete")" @ref="_searchbox" T="string" Value="_searchString" ValueChanged="@HandleInternalValueChanged" Margin="Margin.Dense"
                                                                   Variant="Variant.Outlined" Immediate="true" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="SearchBoxHandleKeyUp" Clearable="@SearchBoxClearable">
                                                 <AdornmentEnd>
                                                     <MudIcon Icon="@Icons.Material.Filled.Search" Color="@Color" />

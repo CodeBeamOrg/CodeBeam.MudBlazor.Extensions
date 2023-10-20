@@ -25,7 +25,12 @@ namespace MudExtensions
         [Inject] IScrollManagerExtended ScrollManagerExtended { get; set; }
         [Inject] IScrollManager ScrollManager { get; set; }
 
-        internal string _searchString;
+        protected internal void SetSearchString(T value)
+        {
+            _searchString = Converter.Set(value);
+        }
+
+        internal string _searchString { get; set; }
         private string multiSelectionText;
         private IKeyInterceptor _keyInterceptor;
 
@@ -321,7 +326,7 @@ namespace MudExtensions
         public string Delimiter { get; set; } = ", ";
 
         /// <summary>
-        /// If true popover width will be the same as the select component.
+        /// If true popover width will be the same as the combobox component.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
@@ -335,7 +340,7 @@ namespace MudExtensions
         public int MaxHeight { get; set; } = 300;
 
         /// <summary>
-        /// Set the anchor origin point to determen where the popover will open from.
+        /// Set the anchor origin point to determine where the popover will open from.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
@@ -908,8 +913,8 @@ namespace MudExtensions
                     {
                         await Clear();
                     }
-                        
-                    _searchString = Text;
+
+                    //_searchString = Text;
                 }
             }
 
@@ -917,7 +922,7 @@ namespace MudExtensions
             await OnBlurredAsync(obj);
         }
 
-        protected void HandleInternalValueChanged(string val)
+        protected internal void HandleInternalValueChanged(string val)
         {
             _searchString = val;
         }
@@ -1236,13 +1241,13 @@ namespace MudExtensions
             return null;
         }
 
-        protected void ForceRenderItems()
+        protected internal void ForceRenderItems()
         {
             Items.ForEach((x) => x.ForceRender());
             StateHasChanged();
         }
 
-        protected async Task ForceUpdateItems()
+        protected internal async Task ForceUpdateItems()
         {
             Items.ForEach(async (x) => await x.ForceUpdate());
         }
@@ -1406,7 +1411,7 @@ namespace MudExtensions
 
         #endregion
 
-        protected List<MudComboBoxItem<T>> GetEligibleAndNonDisabledItems()
+        protected internal List<MudComboBoxItem<T>> GetEligibleAndNonDisabledItems()
         {
             if (Items == null)
             {
