@@ -10,7 +10,7 @@
         var viewBoxWidth = @content.ModuleSizeX * content.Columns;
         var viewBoxHeight = @content.ModuleSizeY * content.Rows;
 
-        <svg width="@Width" height="@Height" style="background-color:@BackgroundColor" viewBox="0 0 @viewBoxWidth @viewBoxHeight">
+        <svg width="@Width" height="@Height" class="@Class" style="background-color:@BackgroundColor; @Style" viewBox="0 0 @viewBoxWidth @viewBoxHeight">
             @for (int y = 0; y < content.Rows; y++)
             {
                 @for (int x = 0; x < content.Columns; x++)
