@@ -263,12 +263,12 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none"));
             // now click an item and see the value change
             comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().Be(4));
-            comp.WaitForAssertion(() => combobox.Instance.GetEligibleAndNonDisabledItems().Count.Should().Be(4));
+            comp.WaitForAssertion(() => combobox.Instance.GetEnabledAndEligibleItems().Count.Should().Be(4));
             var items = comp.FindAll("div.mud-combobox-item").ToArray();
             await comp.InvokeAsync(() => combobox.Instance.HandleInternalValueChanged("t"));
             await comp.InvokeAsync(() => combobox.Instance.ForceRenderItems());
             items = comp.FindAll("div.mud-combobox-item").ToArray();
-            comp.WaitForAssertion(() => combobox.Instance.GetEligibleAndNonDisabledItems().Count.Should().Be(2));
+            comp.WaitForAssertion(() => combobox.Instance.GetEnabledAndEligibleItems().Count.Should().Be(2));
         }
 
         /// <summary>
