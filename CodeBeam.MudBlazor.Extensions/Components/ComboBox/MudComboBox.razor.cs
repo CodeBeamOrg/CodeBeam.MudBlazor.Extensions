@@ -758,7 +758,7 @@ namespace MudExtensions
             var key = obj.Key.ToLowerInvariant();
             if (Editable == false && key.Length == 1 && key != " " && !(obj.CtrlKey || obj.ShiftKey || obj.AltKey || obj.MetaKey))
             {
-                await ActiveFirstItem(key);
+                await ActivateFirstItem(key);
                 return;
             }
 
@@ -782,10 +782,10 @@ namespace MudExtensions
                     }
                     break;
                 case "Home":
-                    await ActiveFirstItem();
+                    await ActivateFirstItem();
                     break;
                 case "End":
-                    await ActiveLastItem();
+                    await ActivateLastItem();
                     break;
                 case "ArrowUp":
                     if (obj.AltKey)
@@ -798,7 +798,7 @@ namespace MudExtensions
                     }
                     else
                     {
-                        await ActiveAdjacentItem(-1);
+                        await ActivateAdjacentItem(-1);
                     }
                     break;
                 case "ArrowDown":
@@ -812,7 +812,7 @@ namespace MudExtensions
                     }
                     else
                     {
-                        await ActiveAdjacentItem(1);
+                        await ActivateAdjacentItem(1);
                     }
                     break;
                 case " ":
@@ -875,7 +875,7 @@ namespace MudExtensions
                     HandleKeyDown(obj);
                     break;
                 case "Tab":
-                    await ActiveFirstItem();
+                    await ActivateFirstItem();
                     await FocusAsync();
                     StateHasChanged();
                     break;
@@ -1263,7 +1263,7 @@ namespace MudExtensions
 
         protected int GetActiveProperItemIndex()
         {
-            var properItems = GetEligibleAndNonDisabledItems();
+            var properItems = GetEnabledAndEligibleItems();
             if (properItems.Any())
             {
                 if (_lastActivatedItem == null)
@@ -1306,72 +1306,73 @@ namespace MudExtensions
             }
         }
 
-        public async Task ActiveFirstItem(string startChar = null)
+        public async Task ActivateFirstItem(string startsWith = null)
         {
-            if (Items == null || Items.Count == 0 || Items[0].Disabled)
-            {
+            var item = Items.FirstOrDefault();
+            if (item is null || item.Disabled)
                 return;
-            }
+
             DeactiveAllItems();
-            var properItems = GetEligibleAndNonDisabledItems();
-            if (string.IsNullOrWhiteSpace(startChar))
+            if (string.IsNullOrWhiteSpace(startsWith))
             {
-                properItems[0].SetActive(true);
-                _lastActivatedItem = properItems[0];
-                await ScrollToMiddleAsync(Items[0]);
-                return;
-            }
-
-            if (Editable == true)
-            {
-                return;
-            }
-
-            // find first item that starts with the letter
-            var possibleItems = Items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? string.Empty).StartsWith(startChar, StringComparison.OrdinalIgnoreCase)).ToList();
-            if (possibleItems == null || !possibleItems.Any())
-            {
-                if (_lastActivatedItem == null)
+                item = GetEnabledAndEligibleItems().FirstOrDefault();
+                if (item is not null)
                 {
-                    return;
+                    item.SetActive(true);
+                    await ScrollToMiddleAsync(item);
                 }
-                _lastActivatedItem.SetActive(true);
-                await ScrollToMiddleAsync(_lastActivatedItem);
+                _lastActivatedItem = item;
                 return;
             }
 
-            var theItem = possibleItems.FirstOrDefault(x => x == _lastActivatedItem);
-            if (theItem == null)
+            if (Editable)
+                return;
+
+            var foundItems = Items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? string.Empty).StartsWith(startsWith, StringComparison.OrdinalIgnoreCase)).ToList();
+            if (!foundItems.Any())
             {
-                possibleItems[0].SetActive(true);
-                _lastActivatedItem = possibleItems[0];
-                await ScrollToMiddleAsync(possibleItems[0]);
+                if (_lastActivatedItem is not null)
+                {
+                    _lastActivatedItem.SetActive(true);
+                    await ScrollToMiddleAsync(_lastActivatedItem);
+                }
                 return;
             }
 
-            if (theItem == possibleItems.LastOrDefault())
+            item = foundItems.FirstOrDefault(x => x == _lastActivatedItem);
+            if (item is null)
             {
-                possibleItems[0].SetActive(true);
-                _lastActivatedItem = possibleItems[0];
-                await ScrollToMiddleAsync(possibleItems[0]);
+                item = foundItems[0];
+                item.SetActive(true);
+                await ScrollToMiddleAsync(item);
+                _lastActivatedItem = item;
+                return;
+            }
+
+            if (item == foundItems.LastOrDefault())
+            {
+                item = foundItems[0];
+                item.SetActive(true);
+                await ScrollToMiddleAsync(item);
+                _lastActivatedItem = item;
             }
             else
             {
-                var item = possibleItems[possibleItems.IndexOf(theItem) + 1];
+                item = foundItems[foundItems.IndexOf(item) + 1];
                 item.SetActive(true);
-                _lastActivatedItem = item;
                 await ScrollToMiddleAsync(item);
+                _lastActivatedItem = item;
             }
         }
 
-        public async Task ActiveAdjacentItem(int changeCount)
+        public async Task ActivateAdjacentItem(int changeCount)
         {
             if (Items == null || Items.Count == 0)
             {
                 return;
             }
 
-            var properItems = GetEligibleAndNonDisabledItems();
+            var properItems = GetEnabledAndEligibleItems();
             int index = GetActiveProperItemIndex();
             if (index + changeCount >= properItems.Count || 0 > index + changeCount)
             {
@@ -1385,31 +1386,25 @@ namespace MudExtensions
             await ScrollToMiddleAsync(Items[index + changeCount]);
         }
 
-        public async Task ActiveLastItem()
+        public async Task ActivateLastItem()
         {
             if (!(Items.Count > 0))
                 return;
 
             DeactiveAllItems();
-            var properItems = GetEligibleAndNonDisabledItems();
-            var lastItem = properItems.LastOrDefault();
-            lastItem?.SetActive(true);
-            _lastActivatedItem = lastItem;
-
-            if (_lastActivatedItem is not null)
-                await ScrollToMiddleAsync(_lastActivatedItem);
+            var item = GetEnabledAndEligibleItems().LastOrDefault();
+            if (item is not null)
+            {
+                item.SetActive(true);
+                await ScrollToMiddleAsync(item);
+            }
+            _lastActivatedItem = item;
         }
-
+        
         #endregion
 
-        protected internal List<MudComboBoxItem<T>> GetEligibleAndNonDisabledItems()
-        {
-            if (Items == null)
-            {
-                return new();
-            }
-            return Items.Where(x => x.Eligible == true && x.Disabled == false).ToList();
-        }
+        protected internal List<MudComboBoxItem<T>> GetEnabledAndEligibleItems() => Items.Where(x => !x.Disabled && x.Eligible).ToList();
+        
 
         protected bool HasEligibleItems()
         {
