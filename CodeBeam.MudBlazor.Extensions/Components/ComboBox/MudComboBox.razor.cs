@@ -898,9 +898,9 @@ namespace MudExtensions
         {
             if (Strict)
             {
-                var foundItem = Items.FirstOrDefault(x => Converter.Set(x.Value).Equals(_searchString, StringComparison.OrdinalIgnoreCase));
-                if (foundItem is not null)
-                    await ToggleOption(foundItem, true);
+                var item = Items.FirstOrDefault(x => Converter.Set(x.Value).Equals(_searchString, StringComparison.OrdinalIgnoreCase));
+                if (item is not null)
+                    await ToggleOption(item, true);
                 else
                     await Clear();
             }
