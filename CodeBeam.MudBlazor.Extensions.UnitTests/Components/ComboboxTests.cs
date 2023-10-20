@@ -244,6 +244,33 @@ namespace MudExtensions.UnitTests.Components
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>());
         }
 
+        [Test]
+        public async Task Combobox_MultiSelectEditable()
+        {
+            var comp = Context.RenderComponent<ComboboxMultiSelectEditableTest>();
+            // print the generated html
+            Console.WriteLine(comp.Markup);
+            // select elements needed for the test
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            var menu = comp.Find("div.mud-popover");
+            var input = combobox.Find("div.mud-input-control");
+            // check initial state
+            combobox.Instance.Value.Should().BeNullOrEmpty();
+            comp.WaitForAssertion(() =>
+                comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
+            // click and check if it has toggled the menu
+            await comp.InvokeAsync(() => input.MouseDown());
+            comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none"));
+            // now click an item and see the value change
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().Be(4));
+            comp.WaitForAssertion(() => combobox.Instance.GetEligibleAndNonDisabledItems().Count.Should().Be(4));
+            var items = comp.FindAll("div.mud-combobox-item").ToArray();
+            await comp.InvokeAsync(() => combobox.Instance.HandleInternalValueChanged("t"));
+            await comp.InvokeAsync(() => combobox.Instance.ForceRenderItems());
+            items = comp.FindAll("div.mud-combobox-item").ToArray();
+            comp.WaitForAssertion(() => combobox.Instance.GetEligibleAndNonDisabledItems().Count.Should().Be(2));
+        }
+
         /// <summary>
         /// Click should not close the menu and selecting multiple values should update the bindable value with a comma separated list.
         /// </summary>
