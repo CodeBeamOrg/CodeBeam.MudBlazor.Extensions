@@ -24,8 +24,8 @@ namespace MudExtensions
             .Build();
 
         protected string HighlighterClassname => new CssBuilder()
-            .AddClass("mud-combobox-highlighter", string.IsNullOrEmpty(MudComboBox?.HighlightClass))
-            .AddClass(MudComboBox?.HighlightClass)
+            .AddClass("mud-combobox-highlighter", MudComboBox is not null && MudComboBox.Highlight && string.IsNullOrEmpty(MudComboBox.HighlightClass))
+            .AddClass(MudComboBox?.HighlightClass, MudComboBox is not null && MudComboBox.Highlight)
             .Build();
 
         internal string ItemId { get; } = string.Concat("_", Guid.NewGuid().ToString().AsSpan(0, 8));
