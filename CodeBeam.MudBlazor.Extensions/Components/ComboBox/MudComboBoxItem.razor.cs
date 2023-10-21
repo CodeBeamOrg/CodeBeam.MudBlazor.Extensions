@@ -51,12 +51,12 @@ namespace MudExtensions
             return Typo.body1;
         }
 
-        /// <summary>
-        /// Functional items does not hold values. If a value set on Functional item, it ignores by the MudSelect. They cannot be subject of keyboard navigation and selection.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.List.Behavior)]
-        public bool IsFunctional { get; set; }
+        ///// <summary>
+        ///// Functional items does not hold values. If a value set on Functional item, it ignores by the MudSelect. They cannot be subject of keyboard navigation and selection.
+        ///// </summary>
+        //[Parameter]
+        //[Category(CategoryTypes.List.Behavior)]
+        //public bool IsFunctional { get; set; }
 
         /// <summary>
         /// The text to display
@@ -95,7 +95,7 @@ namespace MudExtensions
                         return Value.ToString();
                     return converter.Set(Value);
                 }
-                
+
                 if (converter == null)
                     return $"{(string.IsNullOrEmpty(Text) ? Value : Text)}";
                 return !string.IsNullOrEmpty(Text) ? Text : converter.Set(Value);
@@ -193,7 +193,7 @@ namespace MudExtensions
                 return;
             }
 
-            if (MudComboBox.MultiSelection == true && MudComboBox.SelectedValues.Contains(Value)) 
+            if (MudComboBox.MultiSelection == true && MudComboBox.SelectedValues.Contains(Value))
             {
                 Selected = true;
             }
