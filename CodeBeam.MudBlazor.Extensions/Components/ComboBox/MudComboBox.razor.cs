@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 
 namespace MudExtensions
 {
-    public partial class MudComboBox<T> : MudBaseInputExtended<T>, IDisposable
+    public partial class MudComboBox<T> : MudBaseInputExtended<T>
     {
         #region Constructor, Injected Services, Parameters, Fields
 
@@ -740,8 +740,11 @@ namespace MudExtensions
                 {
                     _keyInterceptor.KeyDown -= HandleKeyDown;
                     _keyInterceptor.KeyUp -= HandleKeyUp;
+                    _keyInterceptor.Dispose();
+                    _keyInterceptor = null;
                 }
-                _keyInterceptor?.Dispose();
+
+                Items.Clear();
             }
         }
 
@@ -1419,11 +1422,5 @@ namespace MudExtensions
 
         protected internal ValueTask ScrollToMiddleAsync(MudComboBoxItem<T> item) =>
             item is not null ? ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId) : ValueTask.CompletedTask;
-
-
-        public void Dispose()
-        {
-            Items.Clear();
-        }
     }
 }
