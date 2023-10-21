@@ -4,21 +4,21 @@
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center justify-center">
         <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled"
-            Label="Single Selection" HelperText="Standard combobox" Editable="_editable" autocomplete="new-password">
+            Label="Single Selection" HelperText="Standard combobox" Editable="_editable" autocomplete="new-password" Clearable>
             <MudComboBoxItem Value="@("Foo")" Text="Foo">Foo</MudComboBoxItem>
             <MudComboBoxItem Value="@("Bar")" Text="Bar">Bar</MudComboBoxItem>
             <MudComboBoxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboBoxItem>
             <MudComboBoxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboBoxItem>
         </MudComboBox>
         <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" ToggleSelection="true"
-                     Label="Toggle Selection" HelperText="Can unselect the item" Editable="_editable" autocomplete="new-password">
+                     Label="Toggle Selection" HelperText="Can unselect the item" Editable="_editable" autocomplete="new-password" Clearable>
             <MudComboBoxItem Value="@("Foo")" Text="Foo">Foo</MudComboBoxItem>
             <MudComboBoxItem Value="@("Bar")" Text="Bar">Bar</MudComboBoxItem>
             <MudComboBoxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboBoxItem>
             <MudComboBoxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboBoxItem>
         </MudComboBox>
         <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" MultiSelection="true"
-                     Label="Multi Selection" HelperText="Can select multiple items" Editable="_editable" autocomplete="new-password">
+                     Label="Multi Selection" HelperText="Can select multiple items" Editable="_editable" autocomplete="new-password" Clearable>
                 <MudComboBoxItem Value="@("Foo")" Text="Foo">Foo</MudComboBoxItem>
                 <MudComboBoxItem Value="@("Bar")" Text="Bar">Bar</MudComboBoxItem>
                 <MudComboBoxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboBoxItem>
