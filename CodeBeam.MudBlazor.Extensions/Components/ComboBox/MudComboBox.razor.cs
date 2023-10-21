@@ -33,6 +33,25 @@ namespace MudExtensions
         internal string _searchString { get; set; }
         private readonly string multiSelectionText;
         private IKeyInterceptor _keyInterceptor;
+        static readonly KeyInterceptorOptions _keyInterceptorOptions = new()
+        {
+            //EnableLogging = true,
+            TargetClass = "mud-input-control",
+            Keys =
+            {
+                new KeyOptions { Key=" ", PreventDown = "key+none" }, //prevent scrolling page, toggle open/close
+                new KeyOptions { Key="ArrowUp", PreventDown = "key+none" }, // prevent scrolling page, instead hilight previous item
+                new KeyOptions { Key="ArrowDown", PreventDown = "key+none" }, // prevent scrolling page, instead hilight next item
+                new KeyOptions { Key="Home", PreventDown = "key+none" },
+                new KeyOptions { Key="End", PreventDown = "key+none" },
+                new KeyOptions { Key="Escape" },
+                new KeyOptions { Key="Enter", PreventDown = "key+none" },
+                new KeyOptions { Key="NumpadEnter", PreventDown = "key+none" },
+                new KeyOptions { Key="a", PreventDown = "key+ctrl" }, // select all items instead of all page text
+                new KeyOptions { Key="A", PreventDown = "key+ctrl" }, // select all items instead of all page text
+                new KeyOptions { Key="/./", SubscribeDown = true, SubscribeUp = true }, // for our users
+            }
+        };
 
         public List<MudComboBoxItem<T>> Items { get; set; } = new();
         internal MudComboBoxItem<T> _lastActivatedItem;
@@ -702,24 +721,7 @@ namespace MudExtensions
             if (firstRender)
             {
                 _keyInterceptor = KeyInterceptorFactory.Create();
-                await _keyInterceptor.Connect(_elementId, new KeyInterceptorOptions()
-                {
-                    //EnableLogging = true,
-                    TargetClass = "mud-input-control",
-                    Keys = {
-                        new KeyOptions { Key=" ", PreventDown = "key+none" }, //prevent scrolling page, toggle open/close
-                        new KeyOptions { Key="ArrowUp", PreventDown = "key+none" }, // prevent scrolling page, instead hilight previous item
-                        new KeyOptions { Key="ArrowDown", PreventDown = "key+none" }, // prevent scrolling page, instead hilight next item
-                        new KeyOptions { Key="Home", PreventDown = "key+none" },
-                        new KeyOptions { Key="End", PreventDown = "key+none" },
-                        new KeyOptions { Key="Escape" },
-                        new KeyOptions { Key="Enter", PreventDown = "key+none" },
-                        new KeyOptions { Key="NumpadEnter", PreventDown = "key+none" },
-                        new KeyOptions { Key="a", PreventDown = "key+ctrl" }, // select all items instead of all page text
-                        new KeyOptions { Key="A", PreventDown = "key+ctrl" }, // select all items instead of all page text
-                        new KeyOptions { Key="/./", SubscribeDown = true, SubscribeUp = true }, // for our users
-                    },
-                });
+                await _keyInterceptor.Connect(_elementId, _keyInterceptorOptions);
                 _keyInterceptor.KeyDown += HandleKeyDown;
                 _keyInterceptor.KeyUp += HandleKeyUp;
                 await UpdateDataVisualiserTextAsync();
