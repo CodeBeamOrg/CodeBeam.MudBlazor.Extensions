@@ -33,7 +33,7 @@ namespace MudExtensions
         internal string _searchString { get; set; }
         private readonly string multiSelectionText;
         private IKeyInterceptor _keyInterceptor;
-        static KeyInterceptorOptions _keyInterceptorOptions = new()
+        static readonly KeyInterceptorOptions _keyInterceptorOptions = new()
         {
             //EnableLogging = true,
             TargetClass = "mud-input-control",
