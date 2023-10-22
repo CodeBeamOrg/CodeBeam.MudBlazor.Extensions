@@ -14,7 +14,7 @@ using MudExtensions.UnitTests.Extensions;
 namespace MudExtensions.UnitTests.Components
 {
     [TestFixture]
-    public class ComboboxTests : BunitTest
+    public class ComboBoxTests : BunitTest
     {
 
 
@@ -23,9 +23,9 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         [TestCase(false)]
         //[TestCase(true)]
-        public void Combobox_InitialValueTest(bool multiSelection)
+        public void ComboBox_InitialValueTest(bool multiSelection)
         {
-            var comp = Context.RenderComponent<ComboboxInitialValueTest>(x =>
+            var comp = Context.RenderComponent<ComboBoxInitialValueTest>(x =>
             {
                 x.Add(c => c.SelectedValue, "1");
                 x.Add(c => c.MultiSelection, multiSelection);
@@ -42,9 +42,9 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         //[TestCase(false)]
         [TestCase(true)]
-        public void Combobox_InitialValuesTest(bool multiSelection)
+        public void ComboBox_InitialValuesTest(bool multiSelection)
         {
-            var comp = Context.RenderComponent<ComboboxInitialValueTest>(x =>
+            var comp = Context.RenderComponent<ComboBoxInitialValueTest>(x =>
             {
                 x.Add(c => c.SelectedValues, new HashSet<string>() { "1" });
                 x.Add(c => c.MultiSelection, multiSelection);
@@ -57,9 +57,9 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
-        public async Task Combobox_ValueBubblingTest()
+        public async Task ComboBox_ValueBubblingTest()
         {
-            var comp = Context.RenderComponent<ComboboxInitialValueTest>();
+            var comp = Context.RenderComponent<ComboBoxInitialValueTest>();
             var combobox = comp.FindComponent<MudComboBox<string>>();
 
             combobox.Instance.Value.Should().BeNull();
@@ -80,9 +80,9 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
-        public void Combobox_ValueBubblingTest_MultiSelection()
+        public void ComboBox_ValueBubblingTest_MultiSelection()
         {
-            var comp = Context.RenderComponent<ComboboxInitialValueTest>(x =>
+            var comp = Context.RenderComponent<ComboBoxInitialValueTest>(x =>
             {
                 x.Add(c => c.MultiSelection, true);
             });
@@ -103,9 +103,9 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
-        public async Task Combobox_ValueChangeEventCountTest()
+        public async Task ComboBox_ValueChangeEventCountTest()
         {
-            var comp = Context.RenderComponent<ComboboxEventCountTest>(x =>
+            var comp = Context.RenderComponent<ComboBoxEventCountTest>(x =>
             {
                 x.Add(c => c.MultiSelection, false);
             });
@@ -130,9 +130,9 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
-        public async Task Combobox_ValueChangeEventCountTest_MultiSelection()
+        public async Task ComboBox_ValueChangeEventCountTest_MultiSelection()
         {
-            var comp = Context.RenderComponent<ComboboxEventCountTest>(x =>
+            var comp = Context.RenderComponent<ComboBoxEventCountTest>(x =>
             {
                 x.Add(c => c.MultiSelection, true);
             });
@@ -156,9 +156,9 @@ namespace MudExtensions.UnitTests.Components
         /// Click should open the Menu and selecting a value should update the bindable value.
         /// </summary>
         [Test]
-        public async Task ComboboxTest1()
+        public async Task ComboBoxTest1()
         {
-            var comp = Context.RenderComponent<ComboboxTest1>();
+            var comp = Context.RenderComponent<ComboBoxTest1>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -196,9 +196,9 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
-        public async Task ComboboxClearableTest()
+        public async Task ComboBoxClearableTest()
         {
-            var comp = Context.RenderComponent<ComboboxClearableTest>();
+            var comp = Context.RenderComponent<ComboBoxClearableTest>();
             var combobox = comp.FindComponent<MudComboBox<string>>();
             var input = comp.Find("div.mud-input-control");
 
@@ -224,7 +224,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void MultiSelect_SelectAll()
         {
-            var comp = Context.RenderComponent<ComboboxMultiSelectTest2>();
+            var comp = Context.RenderComponent<ComboBoxMultiSelectTest2>();
             // select element needed for the test
             var combobox = comp.FindComponent<MudComboBox<string>>();
             var menu = comp.Find("div.mud-popover");
@@ -245,9 +245,9 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
-        public async Task Combobox_MultiSelectEditable()
+        public async Task ComboBox_MultiSelectEditable()
         {
-            var comp = Context.RenderComponent<ComboboxMultiSelectEditableTest>();
+            var comp = Context.RenderComponent<ComboBoxMultiSelectEditableTest>();
             // print the generated html
             Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -275,9 +275,9 @@ namespace MudExtensions.UnitTests.Components
         /// Click should not close the menu and selecting multiple values should update the bindable value with a comma separated list.
         /// </summary>
         [Test]
-        public async Task Combobox_MultiSelectTest1()
+        public async Task ComboBox_MultiSelectTest1()
         {
-            var comp = Context.RenderComponent<ComboboxMultiSelectTest1>();
+            var comp = Context.RenderComponent<ComboBoxMultiSelectTest1>();
             // print the generated html
             Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -333,9 +333,9 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
-        public async Task ComboboxTest_KeyboardNavigation_SingleSelect()
+        public async Task ComboBoxTest_KeyboardNavigation_SingleSelect()
         {
-            var comp = Context.RenderComponent<ComboboxTest1>();
+            var comp = Context.RenderComponent<ComboBoxTest1>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -420,9 +420,9 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
-        public async Task ComboboxTest_KeyboardNavigation_ToggleSelect()
+        public async Task ComboBoxTest_KeyboardNavigation_ToggleSelect()
         {
-            var comp = Context.RenderComponent<ComboboxTest1>();
+            var comp = Context.RenderComponent<ComboBoxTest1>();
             var combobox = comp.FindComponent<MudComboBox<string>>().Instance;
             combobox.ToggleSelection = true;
             await comp.InvokeAsync(() => combobox.HandleKeyDown(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
@@ -441,9 +441,9 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
-        public async Task ComboboxTest_KeyboardNavigation_MultiSelect()
+        public async Task ComboBoxTest_KeyboardNavigation_MultiSelect()
         {
-            var comp = Context.RenderComponent<ComboboxMultiSelectTest3>();
+            var comp = Context.RenderComponent<ComboBoxMultiSelectTest3>();
             var combobox = comp.FindComponent<MudComboBox<string>>();
 
             await comp.InvokeAsync(() => combobox.Instance.HandleKeyDown(new KeyboardEventArgs() { Key = " ", Type = "keydown", }));
