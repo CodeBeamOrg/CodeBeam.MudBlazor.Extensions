@@ -5,7 +5,7 @@
     <MudItem xs="12" sm="8" Class="d-flex gap-4 justify-center">
         <MudGrid>
             <MudItem xs="12" Class="d-flex gap-4 justify-center">
-                <MudComboBox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Text" InputPresenter="ValuePresenter.Text" MultiSelection="_multiselection">
+                <MudComboBox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Text" InputPresenter="ValuePresenter.Text" MultiSelection="_multiselection" Clearable>
                     <ChildContent>
                         @foreach (var item in characters)
                         {
@@ -14,7 +14,7 @@
                     </ChildContent>
                 </MudComboBox>
 
-                <MudComboBox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Chip" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection">
+                <MudComboBox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Chip" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection" Clearable>
                     <ChildContent>
                         @foreach (var item in characters)
                         {
@@ -25,7 +25,7 @@
             </MudItem>
 
             <MudItem xs="12" Class="d-flex gap-4 justify-center">
-                <MudComboBox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="InputContent" InputPresenter="ValuePresenter.ItemContent" MultiSelection="_multiselection">
+                <MudComboBox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="InputContent" InputPresenter="ValuePresenter.ItemContent" MultiSelection="_multiselection" Clearable>
                     <ChildContent>
                         @foreach (var item in characters)
                         {
@@ -36,7 +36,7 @@
                     </ChildContent>
                 </MudComboBox>
 
-                <MudComboBox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Input&ItemContent" InputPresenter="ValuePresenter.ItemContent" ItemPresenter="ValuePresenter.ItemContent"  MultiSelection="_multiselection">
+                <MudComboBox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Input&ItemContent" InputPresenter="ValuePresenter.ItemContent" ItemPresenter="ValuePresenter.ItemContent" MultiSelection="_multiselection" Clearable>
                     <ChildContent>
                         @foreach (var item in characters)
                         {
@@ -49,7 +49,7 @@
             </MudItem>
 
             <MudItem xs="12">
-                <MudComboBox MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="_multiselection" @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" T="string" Label="Text Func" Variant="Variant.Filled" Placeholder="Placeholder">
+                <MudComboBox MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="_multiselection" @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" T="string" Label="Text Func" Variant="Variant.Filled" Placeholder="Placeholder" Clearable>
                     @foreach (var item in characters)
                     {
                         <MudComboBoxItem T="string" Value="@item" Text="@item">@item</MudComboBoxItem>

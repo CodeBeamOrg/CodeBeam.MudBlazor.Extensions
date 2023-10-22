@@ -97,7 +97,7 @@ namespace MudExtensions
         /// If true, all items are eligible regarding what user search in textfield. Default is false.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
-        [Parameter] public bool DisableFilter { get; set; } = false;
+        [Parameter] public bool DisableFilter { get; set; }
 
         /// <summary>
         /// If true, searched text has highlight.
@@ -223,6 +223,7 @@ namespace MudExtensions
         /// <summary>
         /// If true, compact vertical padding will be applied to all Select items.
         /// </summary>
+        /// <remarks>The default is <see cref="Dense.Standard"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public Dense Dense { get; set; } = Dense.Standard;
@@ -230,6 +231,7 @@ namespace MudExtensions
         /// <summary>
         /// The Open Select Icon
         /// </summary>
+        /// <remarks>The default is <see cref="Icons.Material.Filled.ArrowDropDown"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public string OpenIcon { get; set; } = Icons.Material.Filled.ArrowDropDown;
@@ -237,6 +239,7 @@ namespace MudExtensions
         /// <summary>
         /// The Close Select Icon
         /// </summary>
+        /// <remarks>The default is <see cref="Icons.Material.Filled.ArrowDropUp"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public string CloseIcon { get; set; } = Icons.Material.Filled.ArrowDropUp;
@@ -244,6 +247,7 @@ namespace MudExtensions
         /// <summary>
         /// Dropdown color of select. Supports theme colors.
         /// </summary>
+        /// <remarks>The default is <see cref="Color.Primary"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public Color Color { get; set; } = Color.Primary;
@@ -251,6 +255,7 @@ namespace MudExtensions
         /// <summary>
         /// The input's visual.
         /// </summary>
+        /// <remarks>The default is <see cref="ValuePresenter.Text"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public ValuePresenter InputPresenter { get; set; } = ValuePresenter.Text;
@@ -258,13 +263,15 @@ namespace MudExtensions
         /// <summary>
         /// The items' visual in popover.
         /// </summary>
+        /// <remarks>The default is <see cref="ValuePresenter.Text"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public ValuePresenter ItemPresenter { get; set; } = ValuePresenter.Text;
 
         /// <summary>
-        /// If true, shows checkbox when multiselection is true. Default is true.
+        /// If true, shows checkbox when multiselection is true.
         /// </summary>
+        /// <remarks>The default is <c>true</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public bool ShowCheckbox { get; set; } = true;
@@ -279,6 +286,7 @@ namespace MudExtensions
         /// <summary>
         /// Sets position of the Select All checkbox
         /// </summary>
+        /// <remarks>The default is <see cref="SelectAllPosition.BeforeSearchBox"/></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
         public SelectAllPosition SelectAllPosition { get; set; } = SelectAllPosition.BeforeSearchBox;
@@ -286,6 +294,7 @@ namespace MudExtensions
         /// <summary>
         /// Define the text of the Select All option.
         /// </summary>
+        /// <remarks>The default is <c>Select All</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public string SelectAllText { get; set; } = "Select All";
@@ -329,10 +338,12 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Behavior)]
         public string ChipClass { get; set; }
 
+        /// <remarks>The default is <see cref="Variant.Filled"/></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public Variant ChipVariant { get; set; } = Variant.Filled;
 
+        /// <remarks>The default is <see cref="Size.Small"/></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public Size ChipSize { get; set; } = Size.Small;
@@ -340,6 +351,7 @@ namespace MudExtensions
         /// <summary>
         /// Parameter to define the delimited string separator.
         /// </summary>
+        /// <remarks>The default is <c>, </c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public string Delimiter { get; set; } = ", ";
@@ -347,6 +359,7 @@ namespace MudExtensions
         /// <summary>
         /// If true popover width will be the same as the combobox component.
         /// </summary>
+        /// <remarks>The default is <c>true</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool RelativeWidth { get; set; } = true;
@@ -354,6 +367,7 @@ namespace MudExtensions
         /// <summary>
         /// Sets the maxheight of the popover.
         /// </summary>
+        /// <remarks>The default is <c>300</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public int MaxHeight { get; set; } = 300;
@@ -361,6 +375,7 @@ namespace MudExtensions
         /// <summary>
         /// Set the anchor origin point to determine where the popover will open from.
         /// </summary>
+        /// <remarks>The default is <see cref="Origin.BottomCenter"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public Origin AnchorOrigin { get; set; } = Origin.BottomCenter;
@@ -368,6 +383,7 @@ namespace MudExtensions
         /// <summary>
         /// Sets the transform origin point for the popover.
         /// </summary>
+        /// <remarks>The default is <see cref="Origin.TopCenter"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public Origin TransformOrigin { get; set; } = Origin.TopCenter;
@@ -375,6 +391,7 @@ namespace MudExtensions
         /// <summary>
         /// If false, combobox allows value from out of bound.
         /// </summary>
+        /// <remarks>The default is <c>true</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Strict { get; set; } = true;
@@ -396,6 +413,7 @@ namespace MudExtensions
         /// <summary>
         /// If true, the search-box will be focused when the dropdown is opened.
         /// </summary>
+        /// <remarks>The default is <c>true</c></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public bool SearchBoxAutoFocus { get; set; } = true;
@@ -412,7 +430,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public bool LockScroll { get; set; } = false;
+        public bool LockScroll { get; set; }
 
         /// <summary>
         /// Button click event for clear button. Called after text and value has been cleared.
@@ -422,6 +440,7 @@ namespace MudExtensions
         /// <summary>
         /// Custom indeterminate icon.
         /// </summary>
+        /// <remarks>The default is <see cref="Icons.Material.Filled.IndeterminateCheckBox"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public string IndeterminateIcon { get; set; } = Icons.Material.Filled.IndeterminateCheckBox;

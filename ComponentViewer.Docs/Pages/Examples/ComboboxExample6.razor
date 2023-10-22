@@ -4,7 +4,7 @@
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex flex-column gap-4 justify-center">
         <MudComboBox @bind-Value="@_stringValue" @bind-SelectedValues="@_stringSelectedValues" Variant="Variant.Filled" Label="String Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
-                     ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color">
+                     ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color" Clearable>
             <ChildContent>
                 @foreach (var state in states)
                 {
@@ -14,7 +14,7 @@
         </MudComboBox>
 
         <MudComboBox @bind-Value="@_intValue" @bind-SelectedValues="@_intSelectedValues" Variant="Variant.Filled" Label="Int Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
-                     ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color">
+                     ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color" Clearable>
             <ChildContent>
                 @foreach (var num in _numbers)
                 {
@@ -24,7 +24,7 @@
         </MudComboBox>
 
         <MudComboBox @bind-Value="@_complexValue" @bind-SelectedValues="@_complexSelectedValues" Variant="Variant.Filled" Label="Complex Type" InputPresenter="ValuePresenter.Chip" MultiSelection="_multiselection"
-                     ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color" ToStringFunc="@(e => e?.Id + " - " + e?.Name)">
+                     ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" Color="_color" ToStringFunc="@(e => e?.Id + " - " + e?.Name)" Clearable>
             <ChildContent>
                 @foreach (var item in _complexItems)
                 {

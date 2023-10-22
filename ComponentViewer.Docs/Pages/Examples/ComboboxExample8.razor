@@ -3,14 +3,14 @@
 
 <MudGrid>
     <MudItem xs="12" Class="d-flex gap-4 align-center justify-center">
-        <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled"
+        <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Clearable
             Label="Standard (Contains)" Editable="true"  autocomplete="new-password">
             <MudComboBoxItem Value="@("Foo")" Text="Foo">Foo</MudComboBoxItem>
             <MudComboBoxItem Value="@("Bar")" Text="Bar">Bar</MudComboBoxItem>
             <MudComboBoxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboBoxItem>
             <MudComboBoxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboBoxItem>
         </MudComboBox>
-        <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" ToggleSelection="true"
+         <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" ToggleSelection="true" Clearable
                      Label="Custom (StartsWith)" Editable="true" SearchFunc="@(new Func<string, string, string, bool>(SearchStartWith))" autocomplete="new-password">
             <MudComboBoxItem Value="@("Foo")" Text="Foo">Foo</MudComboBoxItem>
             <MudComboBoxItem Value="@("Bar")" Text="Bar">Bar</MudComboBoxItem>
