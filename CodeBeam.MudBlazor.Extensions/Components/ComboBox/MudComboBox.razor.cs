@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.Charts;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
@@ -428,9 +429,10 @@ namespace MudExtensions
         /// <summary>
         /// If true, prevent scrolling while dropdown is open.
         /// </summary>
+        /// <remarks>The default is <c>true</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public bool LockScroll { get; set; }
+        public bool LockScroll { get; set; } = true;
 
         /// <summary>
         /// Button click event for clear button. Called after text and value has been cleared.
@@ -779,130 +781,129 @@ namespace MudExtensions
             if (Disabled || ReadOnly)
                 return;
 
-            var key = obj.Key.ToLowerInvariant();
-            if (Editable == false && key.Length == 1 && key != " " && !(obj.CtrlKey || obj.ShiftKey || obj.AltKey || obj.MetaKey))
+            // Select mode: Jump to item which starts with "key".
+            if (!Editable && obj.Key.Length == 1 && obj.Key[0] != 32 && !(obj.CtrlKey || obj.ShiftKey || obj.AltKey || obj.MetaKey))
             {
-                await ActivateFirstItem(key);
+                await ActivateFirstItem(obj.Key);
+                await OnKeyDown.InvokeAsync(obj);
                 return;
             }
 
             switch (obj.Key)
             {
-                case "Tab":
-                    if (MultiSelection == false && SelectValueOnTab)
-                    {
-                        await ToggleOption(_lastActivatedItem, true);
-                    }
+                case " ":
+                    // Only open the ComboBox menu when search string is empty.
+                    if (!Editable || _searchString is null || _searchString.Length == 0)
+                        await ToggleMenu();
+                    else
+                        // For example: "new jersey"
+                        _searchString += " ";
+                    break;
+
+                case "Escape":
                     await CloseMenu();
                     break;
-                case "a":
-                case "A":
-                    if (obj.CtrlKey)
-                    {
-                        if (MultiSelection)
-                        {
-                            await SelectAllItems();
-                        }
-                    }
-                    break;
+
                 case "Home":
+                    if (!_isOpen)
+                        await OpenMenu();
                     await ActivateFirstItem();
                     break;
                 case "End":
+                    if (!_isOpen)
+                        await OpenMenu();
                     await ActivateLastItem();
+                    break;
+                case "PageUp":
+                    if (_isOpen)
+                        await ActivateAdjacentItem(-3);
+                    break;
+                case "PageDown":
+                    if (_isOpen)
+                        await ActivateAdjacentItem(3);
                     break;
                 case "ArrowUp":
                     if (obj.AltKey)
-                    {
                         await CloseMenu();
-                    }
-                    else if (!_isOpen)
-                    {
-                        await OpenMenu();
-                    }
                     else
                     {
+                        if (!_isOpen)
+                            await OpenMenu();
                         await ActivateAdjacentItem(-1);
                     }
                     break;
                 case "ArrowDown":
                     if (obj.AltKey)
-                    {
                         await OpenMenu();
-                    }
-                    else if (!_isOpen)
-                    {
-                        await OpenMenu();
-                    }
                     else
                     {
+                        if (!_isOpen)
+                            await OpenMenu();
                         await ActivateAdjacentItem(1);
                     }
                     break;
-                case " ":
-                    await ToggleMenu();
-                    break;
-                case "Escape":
-                    await CloseMenu();
-                    break;
+
                 case "Enter":
                 case "NumpadEnter":
-                    if (MultiSelection == false)
-                    {
-                        if (_isOpen == false)
-                        {
-                            await OpenMenu();
-                        }
-                        else
-                        {
-                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem?.Selected ?? true);
-                        }
-                        break;
-                    }
+                    var doSelect = _lastActivatedItem is null || !_lastActivatedItem.Selected;
+
+                    if (_isOpen)
+                        await ToggleOption(_lastActivatedItem, doSelect);
                     else
+                        await OpenMenu();
+
+                    if (MultiSelection)
                     {
-                        if (_isOpen == false)
-                        {
-                            await OpenMenu();
-                            break;
-                        }
-                        else
-                        {
-                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem?.Selected ?? true);
-                            //await _inputReference.SetText(Text);
-                            if (_lastActivatedItem?.Selected == false)
-                            {
-                                _lastActivatedItem?.SetActive(true);
-                            }
-                            break;
-                        }
+                        if (_isOpen && !doSelect)
+                            _lastActivatedItem.SetActive(true);
                     }
+                    break;
+
+                case "Tab":
+                    if (SelectValueOnTab && !MultiSelection)
+                        await ToggleOption(_lastActivatedItem, true);
+                    await CloseMenu();
+                    break;
+
+                case "a":
+                case "A":
+                    if (obj.CtrlKey)
+                    {
+                        if (MultiSelection)
+                            await SelectAllItems();
+                    }
+                    break;
             }
+
             await OnKeyDown.InvokeAsync(obj);
         }
 
         protected internal async Task SearchBoxHandleKeyDown(KeyboardEventArgs obj)
         {
-            if (Disabled)
+            if (Disabled || ReadOnly)
                 return;
+
             switch (obj.Key)
             {
                 case "Escape":
-                case "ArrowUp":
-                case "ArrowDown":
                 case "Home":
                 case "End":
+                case "PageUp":
+                case "PageDown":
+                case "ArrowUp":
+                case "ArrowDown":
                 case "Enter":
                 case "NumpadEnter":
                     HandleKeyDown(obj);
-                    break;
+                    return;
+
                 case "Tab":
                     await ActivateFirstItem();
                     await FocusAsync();
-                    StateHasChanged();
                     break;
             }
 
+            await OnKeyDown.InvokeAsync(obj);
         }
 
         protected internal void SearchBoxHandleKeyUp(KeyboardEventArgs obj)
@@ -933,13 +934,16 @@ namespace MudExtensions
                         // Restore the previous selected item, if any.
                         if (Value is not null)
                         {
-                            item = Items.FirstOrDefault(x => x.Value.Equals(Value));
-                            if (item is not null)
-                                await ToggleOption(item, true);
+                            if (!Editable)
+                            {
+                                item = Items.FirstOrDefault(x => x.Value.Equals(Value));
+                                if (item is not null)
+                                    await ToggleOption(item, true);
 
-                            // Remove non-matching search string.
-                            else
-                                await Clear();
+                                // Remove non-matching search string.
+                                else
+                                    await Clear();
+                            }
                         }
 
                         // There was no previous selected item. Remove non-matching search string.
@@ -950,6 +954,7 @@ namespace MudExtensions
                 else
                     await UpdateComboBoxValueAsync(Converter.Get(_searchString), updateText: true, updateSearchString: true);
             }
+
             await OnBlurredAsync(obj);
         }
 
@@ -1001,9 +1006,20 @@ namespace MudExtensions
         {
             if (Disabled || ReadOnly)
                 return;
+
             _isOpen = true;
             UpdateIcon();
-            StateHasChanged();
+
+            // Disable escape propagation: if ComboBox menu is open, only the ComboBox popover should close and underlying components should not handle escape key.
+            await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "Key+none" });
+
+            _allSelected = GetAllSelectedState();
+
+            _lastActivatedItem = Items.FirstOrDefault(x => x.Value.Equals(MultiSelection ? SelectedValues.LastOrDefault() : Value));
+            if (_lastActivatedItem is not null)
+                await ScrollToMiddleAsync(_lastActivatedItem);
+            else
+                await ActivateFirstItem();
 
             if (Editable)
             {
@@ -1019,19 +1035,6 @@ namespace MudExtensions
                     await _inputReference.SelectAsync();
             }
 
-            // Disable escape propagation: if ComboBox menu is open, only the ComboBox popover should close and underlying components should not handle escape key.
-            await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "Key+none" });
-
-            if (MultiSelection)
-            {
-                _lastActivatedItem = Items.LastOrDefault(x => x.Value.Equals(SelectedValues.LastOrDefault()));
-            }
-            else
-            {
-                _lastActivatedItem = Items.FirstOrDefault(x => x.Value.Equals(Value));
-            }
-            _allSelected = GetAllSelectedState();
-            await ScrollToMiddleAsync(_lastActivatedItem);
             await OnOpen.InvokeAsync();
         }
 
@@ -1040,7 +1043,6 @@ namespace MudExtensions
             _isOpen = false;
             UpdateIcon();
             DeactiveAllItems();
-            StateHasChanged();
 
             // Enable escape propagation: The ComboBox popover was closed, no underlying components are allowed to handle escape key.
             await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "none" });
@@ -1111,7 +1113,11 @@ namespace MudExtensions
 
         protected void DeselectAllItems()
         {
-            Items.ForEach(x => x.Selected = false);
+            foreach (var item in CollectionsMarshal.AsSpan(Items))
+            {
+                if (item.Selected)
+                    item.Selected = false;
+            }
         }
 
         public override async Task ForceUpdate()
@@ -1127,12 +1133,7 @@ namespace MudExtensions
             }
         }
 
-        //public async Task BeginValidatePublic()
-        //{
-        //    await BeginValidateAsync();
-        //}
-
-        protected internal bool? Add(MudComboBoxItem<T> item)
+        protected internal bool? AddItem(MudComboBoxItem<T> item)
         {
             if (item == null)
                 return false;
@@ -1171,6 +1172,7 @@ namespace MudExtensions
             StateHasChanged();
             await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
             await OnClearButtonClick.InvokeAsync(e);
+            await OpenMenu();
         }
 
         /// <summary>
@@ -1185,6 +1187,7 @@ namespace MudExtensions
             await BeginValidateAsync();
             StateHasChanged();
             await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
+
         }
 
         protected override void ResetValue()
@@ -1199,13 +1202,6 @@ namespace MudExtensions
         {
             _currentIcon = !string.IsNullOrWhiteSpace(AdornmentIcon) ? AdornmentIcon : _isOpen ? CloseIcon : OpenIcon;
         }
-
-        //public void CheckGenericTypeMatch(object select_item)
-        //{
-        //    var itemT = select_item.GetType().GenericTypeArguments[0];
-        //    if (itemT != typeof(T))
-        //        throw new GenericTypeMismatchException("MudSelectExtended", "MudSelectItemExtended", typeof(T), itemT);
-        //}
 
         protected override bool HasValue(T value)
         {
@@ -1281,20 +1277,6 @@ namespace MudExtensions
 
         #region Active (Hilight)
 
-        //protected int GetActiveItemIndex()
-        //{
-        //    if (_lastActivatedItem == null)
-        //    {
-        //        var a = Items.FindIndex(x => x.Active == true);
-        //        return a;
-        //    }
-        //    else
-        //    {
-        //        var a = Items.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
-        //        return a;
-        //    }
-        //}
-
         protected int GetActiveProperItemIndex()
         {
             var properItems = GetEnabledAndEligibleItems();
@@ -1314,25 +1296,17 @@ namespace MudExtensions
             return -1;
         }
 
-        //protected T GetActiveItemValue()
-        //{
-        //    if (_lastActivatedItem == null)
-        //    {
-        //        return Items.FirstOrDefault(x => x.Active == true).Value;
-        //    }
-        //    else
-        //    {
-        //        return _lastActivatedItem.Value;
-        //    }
-        //}
-
-        //protected internal void UpdateLastActivatedItem(T value)
-        //{
-        //    _lastActivatedItem = Items.FirstOrDefault(x => value == null ? x.Value == null : Comparer != null ? Comparer.Equals(value, x.Value) : value.Equals(x.Value));
-        //}
-
         protected void DeactiveAllItems()
         {
+            if (_lastActivatedItem is not null)
+            {
+                System.Diagnostics.Debug.WriteLine($"{nameof(DeactiveAllItems)}: skipped loop");
+                if (_lastActivatedItem.Active)
+                    _lastActivatedItem.Active = false;
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine($"{nameof(DeactiveAllItems)}: doing loop");
             foreach (var item in CollectionsMarshal.AsSpan(Items))
             {
                 if (item.Active)
@@ -1342,14 +1316,15 @@ namespace MudExtensions
 
         [Obsolete("Please use ActivateFirstItem() method")]
         public Task ActiveFirstItem(string startChar = null) => ActivateFirstItem(startChar);
-        public async Task ActivateFirstItem(string startsWith = null)
+        public async Task ActivateFirstItem(string firstLetter = null)
         {
             var item = Items.FirstOrDefault();
             if (item is null || item.Disabled)
                 return;
 
             DeactiveAllItems();
-            if (string.IsNullOrWhiteSpace(startsWith))
+
+            if (string.IsNullOrWhiteSpace(firstLetter))
             {
                 item = GetEnabledAndEligibleItems().FirstOrDefault();
                 if (item is not null)
@@ -1364,8 +1339,10 @@ namespace MudExtensions
             if (Editable)
                 return;
 
-            var foundItems = Items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? string.Empty).StartsWith(startsWith, StringComparison.OrdinalIgnoreCase)).ToList();
-            if (!foundItems.Any())
+
+            // Get a collection of items that start with "firstLetter".
+            var items = Items.Where(x => Converter.Set(x.Value).StartsWith(firstLetter, StringComparison.OrdinalIgnoreCase)).ToList();
+            if (!items.Any())
             {
                 if (_lastActivatedItem is not null)
                 {
@@ -1375,26 +1352,20 @@ namespace MudExtensions
                 return;
             }
 
-            item = foundItems.FirstOrDefault(x => x == _lastActivatedItem);
+            item = items.FirstOrDefault(x => x.Equals(_lastActivatedItem));
             if (item is null)
-            {
-                item = foundItems[0];
-                item.SetActive(true);
-                await ScrollToMiddleAsync(item);
-                _lastActivatedItem = item;
-                return;
-            }
-
-            if (item == foundItems.LastOrDefault())
-            {
-                item = foundItems[0];
-                item.SetActive(true);
-                await ScrollToMiddleAsync(item);
-                _lastActivatedItem = item;
-            }
+                item = items[0];
+            else if (item.Equals(items.LastOrDefault()))
+                item = items[0];
             else
             {
-                item = foundItems[foundItems.IndexOf(item) + 1];
+                var index = items.IndexOf(item) + 1;
+                if (index >= 0 && index <= items.Count - 1)
+                    item = items[index];
+            }
+
+            if (item is not null)
+            {
                 item.SetActive(true);
                 await ScrollToMiddleAsync(item);
                 _lastActivatedItem = item;
@@ -1405,25 +1376,27 @@ namespace MudExtensions
         public Task ActiveAdjacentItem(int changeCount) => ActivateAdjacentItem(changeCount);
         public async Task ActivateAdjacentItem(int changeCount)
         {
-            if (Items == null || Items.Count == 0)
+            if (!(Items.Count > 0))
                 return;
 
-            var properItems = GetEnabledAndEligibleItems();
-            int index = GetActiveProperItemIndex();
-            if (properItems.Count == 1 && index == 0)
-            {
-                properItems[0].SetActive(true);
-                _lastActivatedItem = properItems[0];
-            }
-            else if (index + changeCount >= properItems.Count || 0 > index + changeCount)
-            {
+            var items = GetEnabledAndEligibleItems();
+            if (Editable && items.Count == 0)
                 return;
-            }
 
             DeactiveAllItems();
-            properItems[index + changeCount].SetActive(true);
-            _lastActivatedItem = properItems[index + changeCount];
-            await ScrollToMiddleAsync(Items[index + changeCount]);
+            var index = GetActiveProperItemIndex() + changeCount;
+
+            if (items.Count == 1 || index >= items.Count - 1)
+                index = 0;
+            else if (index < 0)
+                index = items.Count - 1;
+
+            System.Diagnostics.Debug.WriteLine($"{nameof(ActivateAdjacentItem)}: index: {index} / items.Count: {items.Count}");
+
+            var item = items[index];
+            item.SetActive(true);
+            await ScrollToMiddleAsync(item);
+            _lastActivatedItem = item;
         }
 
         [Obsolete("Please use ActivateLastItem() method")]
@@ -1434,6 +1407,7 @@ namespace MudExtensions
                 return;
 
             DeactiveAllItems();
+
             var item = GetEnabledAndEligibleItems().LastOrDefault();
             if (item is not null)
             {

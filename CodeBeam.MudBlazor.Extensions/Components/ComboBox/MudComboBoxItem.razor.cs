@@ -19,7 +19,7 @@ namespace MudExtensions
             .AddClass("mud-combobox-item-disabled", Disabled)
             .AddClass("mud-combobox-item-bordered", MudComboBox?.Bordered == true && Active)
             .AddClass($"mud-combobox-item-bordered-{MudComboBox?.Color.ToDescriptionString()}", MudComboBox?.Bordered == true && Selected)
-            .AddClass("d-none", Eligible == false)
+            .AddClass("d-none", !Eligible)
             .AddClass(Class)
             .Build();
 
@@ -78,7 +78,7 @@ namespace MudExtensions
         public void SetActive(bool isActive)
         {
             Active = isActive;
-            StateHasChanged();
+            //StateHasChanged();
         }
 
         [Parameter]
@@ -116,7 +116,7 @@ namespace MudExtensions
 
         protected override void OnInitialized()
         {
-            MudComboBox?.Add(this);
+            MudComboBox?.AddItem(this);
         }
 
         //bool? _oldMultiselection;
