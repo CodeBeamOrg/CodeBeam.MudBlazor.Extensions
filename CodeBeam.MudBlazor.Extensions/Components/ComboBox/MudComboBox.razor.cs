@@ -1301,8 +1301,7 @@ namespace MudExtensions
             if (_lastActivatedItem is not null)
             {
                 System.Diagnostics.Debug.WriteLine($"{nameof(DeactiveAllItems)}: skipped loop");
-                if (_lastActivatedItem.Active)
-                    _lastActivatedItem.Active = false;
+                _lastActivatedItem.SetActive(false);
                 return;
             }
 
