@@ -49,7 +49,7 @@
             <MudText>Item Count: @_combobox?.Items.Count</MudText>
             <MudText>Value: @_value</MudText>
             <MudText>Text: @_text</MudText>
-            <MudText>Selected Values: @(string.Join(", ", _selectedValues ?? new List<string>()))</MudText>
+            <MudText>Selected Values (@(_selectedValues?.Count())): @(string.Join(", ", _selectedValues ?? new List<string>()))</MudText>
             <MudSelectExtended @bind-Value="_margin" ItemCollection="@(Enum.GetValues<Margin>())" Variant="Variant.Outlined" Label="Margin" Margin="Margin.Dense" Dense="true" />
             <MudSelectExtended @bind-Value="_dense" ItemCollection="@(Enum.GetValues<Dense>())" Variant="Variant.Outlined" Label="Dense" Margin="Margin.Dense" Dense="true" />
             <MudSelectExtended @bind-Value="_color" ItemCollection="@(Enum.GetValues<Color>())" Variant="Variant.Outlined" Label="Color" Margin="Margin.Dense" Dense="true" />
