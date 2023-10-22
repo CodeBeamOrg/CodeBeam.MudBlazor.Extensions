@@ -404,6 +404,13 @@ namespace MudExtensions
         public bool Clearable { get; set; }
 
         /// <summary>
+        /// If <c>true</c> will open the menu when the clear button is clicked.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListAppearance)]
+        public bool OpenMenuAfterClear { get; set; }
+
+        /// <summary>
         /// If true, shows a searchbox for filtering items. Only works with ItemCollection approach.
         /// </summary>
         [Parameter]
@@ -1171,7 +1178,9 @@ namespace MudExtensions
             StateHasChanged();
             await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
             await OnClearButtonClick.InvokeAsync(e);
-            await OpenMenu();
+
+            if (OpenMenuAfterClear)
+                await OpenMenu();
         }
 
         /// <summary>
