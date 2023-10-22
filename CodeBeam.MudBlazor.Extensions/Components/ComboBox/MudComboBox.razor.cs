@@ -1041,6 +1041,9 @@ namespace MudExtensions
             UpdateIcon();
             DeactiveAllItems();
 
+            if (MultiSelection && Editable)
+                _searchString = null;
+
             // Enable escape propagation: The ComboBox popover was closed, no underlying components are allowed to handle escape key.
             await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "none" });
 
