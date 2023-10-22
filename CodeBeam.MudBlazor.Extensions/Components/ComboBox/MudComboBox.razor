@@ -47,7 +47,7 @@
                                     }
                                     else
                                     {
-                                    foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboboxItem<T>>())
+                                    foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboBoxItem<T>>())
                                     {
                                     <MudChip Class="@ChipClass" Value="item.Value" Text="@(ToStringFunc != null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
                                     }

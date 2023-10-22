@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using MudBlazor.Charts;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
