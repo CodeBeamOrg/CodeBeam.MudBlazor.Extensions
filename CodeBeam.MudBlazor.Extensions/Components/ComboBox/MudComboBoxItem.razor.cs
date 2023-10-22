@@ -24,7 +24,7 @@ namespace MudExtensions
             .Build();
 
         protected string HighlighterClassname => new CssBuilder()
-            .AddClass("mud-combobox-highlighter", MudComboBox is not null && MudComboBox.Highlight && string.IsNullOrEmpty(MudComboBox.HighlightClass))
+            .AddClass("mud-combobox-highlighter", MudComboBox is not null && MudComboBox.Highlight && string.IsNullOrWhiteSpace(MudComboBox.HighlightClass))
             .AddClass(MudComboBox?.HighlightClass, MudComboBox is not null && MudComboBox.Highlight)
             .Build();
 
@@ -97,8 +97,8 @@ namespace MudExtensions
                 }
 
                 if (converter == null)
-                    return $"{(string.IsNullOrEmpty(Text) ? Value : Text)}";
-                return !string.IsNullOrEmpty(Text) ? Text : converter.Set(Value);
+                    return $"{(string.IsNullOrWhiteSpace(Text) ? Value : Text)}";
+                return !string.IsNullOrWhiteSpace(Text) ? Text : converter.Set(Value);
             }
         }
 
@@ -158,7 +158,7 @@ namespace MudExtensions
                 return true;
             }
 
-            if (string.IsNullOrEmpty(MudComboBox._searchString))
+            if (string.IsNullOrWhiteSpace(MudComboBox._searchString))
             {
                 return true;
             }
@@ -168,7 +168,7 @@ namespace MudExtensions
                 return MudComboBox.SearchFunc.Invoke(Value, Text, MudComboBox.GetSearchString());
             }
 
-            if (string.IsNullOrEmpty(Text) == false)
+            if (string.IsNullOrWhiteSpace(Text) == false)
             {
                 if (Text.Contains(MudComboBox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
                 {

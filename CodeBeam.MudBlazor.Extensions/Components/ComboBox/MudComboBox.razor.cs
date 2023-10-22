@@ -468,7 +468,7 @@ namespace MudExtensions
                 }
                 else
                 {
-                    if (Value is string && string.IsNullOrEmpty(Converter.Set(Value)))
+                    if (Value is string && string.IsNullOrWhiteSpace(Converter.Set(Value)))
                     {
                         SelectedValues = new HashSet<T>();
                     }
@@ -601,7 +601,7 @@ namespace MudExtensions
                         var item = Items.FirstOrDefault(x => x != null && (x.Value == null ? val == null : Comparer != null ? Comparer.Equals(x.Value, val) : x.Value.Equals(val)));
                         if (item != null)
                         {
-                            textList.Add(!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
+                            textList.Add(!string.IsNullOrWhiteSpace(item.Text) ? item.Text : Converter.Set(item.Value));
                         }
                     }
                 }
@@ -632,7 +632,7 @@ namespace MudExtensions
                 var item = Items.FirstOrDefault(x => Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(Value, x.Value) : Value.Equals(x.Value));
                 _dataVisualiserText = item is null
                     ? Converter.Set(Value)
-                    : (!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
+                    : (!string.IsNullOrWhiteSpace(item.Text) ? item.Text : Converter.Set(item.Value));
 
                 return Task.CompletedTask;
             }
@@ -934,16 +934,13 @@ namespace MudExtensions
                         // Restore the previous selected item, if any.
                         if (Value is not null)
                         {
-                            if (!Editable)
-                            {
-                                item = Items.FirstOrDefault(x => x.Value.Equals(Value));
-                                if (item is not null)
-                                    await ToggleOption(item, true);
+                            item = Items.FirstOrDefault(x => x.Value.Equals(Value));
+                            if (item is not null)
+                                await ToggleOption(item, true);
 
-                                // Remove non-matching search string.
-                                else
-                                    await Clear();
-                            }
+                            // Remove non-matching search string.
+                            else
+                                await Clear();
                         }
 
                         // There was no previous selected item. Remove non-matching search string.
