@@ -1274,24 +1274,24 @@ namespace MudExtensions
 
         #region Active (Hilight)
 
-        protected int GetActiveProperItemIndex()
-        {
-            var properItems = GetEnabledAndEligibleItems();
-            if (properItems.Any())
-            {
-                if (_lastActivatedItem == null)
-                {
-                    var a = properItems.FindIndex(x => x.Active == true);
-                    return a;
-                }
-                else
-                {
-                    var a = properItems.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
-                    return a;
-                }
-            }
-            return -1;
-        }
+        //protected int GetActiveProperItemIndex()
+        //{
+        //    var properItems = GetEnabledAndEligibleItems();
+        //    if (properItems.Any())
+        //    {
+        //        if (_lastActivatedItem == null)
+        //        {
+        //            var a = properItems.FindIndex(x => x.Active == true);
+        //            return a;
+        //        }
+        //        else
+        //        {
+        //            var a = properItems.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
+        //            return a;
+        //        }
+        //    }
+        //    return -1;
+        //}
 
         protected void DeactiveAllItems()
         {
@@ -1375,17 +1375,37 @@ namespace MudExtensions
             if (!(Items.Count > 0))
                 return;
 
+            DeactiveAllItems();
+
             var items = GetEnabledAndEligibleItems();
             if (Editable && items.Count == 0)
                 return;
 
-            DeactiveAllItems();
-            var index = GetActiveProperItemIndex() + changeCount;
+            var indexUpperMax = items.Count - 1;
+            var index = items.IndexOf(_lastActivatedItem);
 
-            if (items.Count == 1 || index > items.Count - 1)
-                index = 0;
-            else if (index < 0)
-                index = items.Count - 1;
+            if (changeCount < 0)
+            {
+                // Going backward/up using Arrow Up/Page up keys.
+
+                if (index == 0)
+                    index = indexUpperMax;
+                else if (index + changeCount < 0)
+                    index = 0;
+                else
+                    index += changeCount;
+            }
+            else
+            {
+                // Going forward/down using Arrow Down/Page Down keys.
+
+                if (index == indexUpperMax)
+                    index = 0;
+                else if (index + changeCount > indexUpperMax)
+                    index = indexUpperMax;
+                else
+                    index += changeCount;
+            }
 
             System.Diagnostics.Debug.WriteLine($"{nameof(ActivateAdjacentItem)}: index: {index} / items.Count: {items.Count}");
 
