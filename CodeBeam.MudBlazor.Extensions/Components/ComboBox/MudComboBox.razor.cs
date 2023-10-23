@@ -1382,7 +1382,7 @@ namespace MudExtensions
             DeactiveAllItems();
             var index = GetActiveProperItemIndex() + changeCount;
 
-            if (items.Count == 1 || index >= items.Count - 1)
+            if (items.Count == 1 || index > items.Count - 1)
                 index = 0;
             else if (index < 0)
                 index = items.Count - 1;
