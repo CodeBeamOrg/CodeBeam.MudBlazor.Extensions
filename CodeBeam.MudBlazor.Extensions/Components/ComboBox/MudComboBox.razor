@@ -41,7 +41,8 @@
                                             {
                                                 foreach (var item in CollectionsMarshal.AsSpan(collection))
                                                 {
-                                                    <MudChip Class="@ChipClass" Value="@item.Value" Text="@(ToStringFunc is not null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrWhiteSpace(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
+                                                    <MudChip Class="@ChipClass" Value="@item.Value" Text="@(ToStringFunc is not null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrWhiteSpace(item.Text) ? Converter.Set(item.Value) : item.Text)"
+                                                             Color="@CheckBoxCheckedColor" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
                                                 }
                                             }
                                         }
@@ -129,7 +130,8 @@
                                         {
                                             <div class="pa-2">
                                                 <MudTextFieldExtended id="@($"{_elementId}-autocomplete")" @ref="@_searchbox" T="string" @bind-Value="@_searchString" Margin="Margin.Dense"
-                                                                      Variant="Variant.Outlined" Immediate="true" OnKeyDown="@SearchBoxHandleKeyDown" OnKeyUp="@SearchBoxHandleKeyUp" Clearable="@SearchBoxClearable">
+                                                                      Variant="Variant.Outlined" Immediate="true" OnKeyDown="@SearchBoxHandleKeyDown" OnKeyUp="@SearchBoxHandleKeyUp"
+                                                                      Clearable="@SearchBoxClearable">
                                                     <AdornmentEnd>
                                                         <MudIcon Icon="@Icons.Material.Filled.Search" Color="@Color" />
                                                     </AdornmentEnd>
@@ -140,8 +142,13 @@
                                         @if (SelectAll)
                                         {
                                             <div class="@($"mud-combobox-item mud-combobox-item-clickable mud-combobox-item-{Dense.ToDescriptionString()} mud-ripple d-flex")" @onclick="SelectAllItems" @onclick:stopPropagation="true">
-                                                <MudCheckBox Class="mx-4" @bind-Checked="@_allSelected" Color="@Color" @onclick="@SelectAllItems" Dense="true" />
-                                                <MudText Typo="GetTypo()">@SelectAllText</MudText>
+                                                <MudCheckBox Class="mx-4" Dense
+                                                             @bind-Checked="@_allSelected" @onclick="@SelectAllItems"
+                                                             Size="@CheckBoxSize"
+                                                             Color="@CheckBoxCheckedColor"
+                                                             UnCheckedColor="@CheckBoxUnCheckedColor" />
+
+                                                <MudText Typo="GetTypo()" Color="@TextColor">@SelectAllText</MudText>
                                             </div>
                                             <MudDivider />
                                         }

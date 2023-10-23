@@ -255,6 +255,38 @@ namespace MudExtensions
         public Color Color { get; set; } = Color.Primary;
 
         /// <summary>
+        /// The color of the text. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="Color.Default"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Color TextColor { get; set; } = Color.Default;
+
+        /// <summary>
+        /// The color of the checked checkbox. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="Color.Default"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Color CheckBoxCheckedColor { get; set; } = Color.Default;
+
+        /// <summary>
+        /// The color of the unchecked checkbox. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="Color.Default"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.Radio.Appearance)]
+        public Color CheckBoxUnCheckedColor { get; set; } = Color.Default;
+
+        /// <summary>
+        /// The size of the checkbox.
+        /// </summary>
+        /// <remarks>The default is <see cref="Size.Medium"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public Size CheckBoxSize { get; set; } = Size.Medium;
+
+        /// <summary>
         /// The input's visual.
         /// </summary>
         /// <remarks>The default is <see cref="ValuePresenter.Text"/></remarks>
@@ -1449,7 +1481,7 @@ namespace MudExtensions
 
         protected internal string GetSearchString() => _searchString;
 
-        protected Typo GetTypo() => Dense == Dense.Slim || Dense == Dense.Superslim ? Typo.body2 : Typo.body1;
+        protected internal Typo GetTypo() => Dense == Dense.Slim || Dense == Dense.Superslim ? Typo.body2 : Typo.body1;
 
         protected internal ValueTask ScrollToMiddleAsync(MudComboBoxItem<T> item) => item is not null ? ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId) : ValueTask.CompletedTask;
     }

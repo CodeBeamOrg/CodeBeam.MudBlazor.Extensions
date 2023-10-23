@@ -34,29 +34,7 @@ namespace MudExtensions
         /// The parent select component
         /// </summary>
         [CascadingParameter]
-        internal MudComboBox<T> MudComboBox { get; set; }
-
-        protected Typo GetTypo()
-        {
-            if (MudComboBox == null)
-            {
-                return Typo.body1;
-            }
-
-            if (MudComboBox.Dense == Dense.Slim || MudComboBox.Dense == Dense.Superslim)
-            {
-                return Typo.body2;
-            }
-
-            return Typo.body1;
-        }
-
-        ///// <summary>
-        ///// Functional items does not hold values. If a value set on Functional item, it ignores by the MudSelect. They cannot be subject of keyboard navigation and selection.
-        ///// </summary>
-        //[Parameter]
-        //[Category(CategoryTypes.List.Behavior)]
-        //public bool IsFunctional { get; set; }
+        MudComboBox<T> MudComboBox { get; set; }
 
         /// <summary>
         /// The text to display
@@ -71,6 +49,39 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public T Value { get; set; }
+
+        /// <summary>
+        /// The color of the text. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="MudComboBox.TextColor"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Color? TextColor { get; set; } = null;
+
+        /// <summary>
+        /// The color of the checked checkbox. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="MudComboBox.CheckBoxCheckedColor"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Color? CheckBoxCheckedColor { get; set; } = null;
+
+        /// <summary>
+        /// The color of the unchecked checkbox. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="MudComboBox.CheckBoxUnCheckedColor"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.Radio.Appearance)]
+        public Color? CheckBoxUnCheckedColor { get; set; } = null;
+
+        /// <summary>
+        /// The size of the checkbox.
+        /// </summary>
+        /// <remarks>The default is <see cref="MudComboBox.CheckBoxSize"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public Size? CheckBoxSize { get; set; } = null;
+
 
         protected internal bool Selected { get; set; }
         protected internal bool Active { get; set; }
