@@ -23,9 +23,9 @@ namespace MudExtensions
             .AddClass(Class)
             .Build();
 
-        protected string HighlighterClassname => new CssBuilder()
-            .AddClass("mud-combobox-highlighter", MudComboBox is not null && MudComboBox.Highlight && string.IsNullOrWhiteSpace(MudComboBox.HighlightClass))
-            .AddClass(MudComboBox?.HighlightClass, MudComboBox is not null && MudComboBox.Highlight)
+        protected string HighlighterClassname => MudComboBox is null ? null : new CssBuilder()
+            .AddClass("mud-combobox-highlighter", MudComboBox.Highlight && string.IsNullOrWhiteSpace(MudComboBox.HighlightClass))
+            .AddClass(MudComboBox?.HighlightClass, MudComboBox.Highlight)
             .Build();
 
         internal string ItemId { get; } = string.Concat("_", Guid.NewGuid().ToString().AsSpan(0, 8));
@@ -153,34 +153,27 @@ namespace MudExtensions
 
         protected bool IsEligible()
         {
-            if (MudComboBox == null || MudComboBox.Editable == false || MudComboBox.DisableFilter == true)
-            {
+            if (MudComboBox is null)
                 return true;
-            }
+
+            if (!MudComboBox.Editable || MudComboBox.DisableFilter)
+                return true;
 
             if (string.IsNullOrWhiteSpace(MudComboBox._searchString))
-            {
                 return true;
-            }
 
-            if (MudComboBox?.SearchFunc != null)
-            {
+            if (MudComboBox.SearchFunc is not null)
                 return MudComboBox.SearchFunc.Invoke(Value, Text, MudComboBox.GetSearchString());
-            }
 
-            if (string.IsNullOrWhiteSpace(Text) == false)
+            if (!string.IsNullOrWhiteSpace(Text))
             {
-                if (Text.Contains(MudComboBox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
-                {
+                if (Text.Contains(MudComboBox._searchString ?? string.Empty, StringComparison.OrdinalIgnoreCase))
                     return true;
-                }
             }
             else
             {
-                if (MudComboBox.Converter.Set(Value).Contains(MudComboBox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
-                {
+                if (MudComboBox.Converter.Set(Value).Contains(MudComboBox._searchString ?? string.Empty, StringComparison.OrdinalIgnoreCase))
                     return true;
-                }
             }
 
             return false;
@@ -188,23 +181,16 @@ namespace MudExtensions
 
         protected void SyncSelected()
         {
-            if (MudComboBox == null)
-            {
+            if (MudComboBox is null)
                 return;
-            }
 
-            if (MudComboBox.MultiSelection == true && MudComboBox.SelectedValues.Contains(Value))
-            {
+            if (MudComboBox.MultiSelection && MudComboBox.SelectedValues.Contains(Value))
                 Selected = true;
-            }
-            else if (MudComboBox.MultiSelection == false && ((MudComboBox.Value == null && Value == null) || MudComboBox.Value?.Equals(Value) == true))
-            {
+
+            else if (!MudComboBox.MultiSelection && ((MudComboBox.Value is null && Value is null) || MudComboBox.Value?.Equals(Value) == true))
                 Selected = true;
-            }
             else
-            {
                 Selected = false;
-            }
         }
 
         protected async Task HandleOnClick()
@@ -223,15 +209,6 @@ namespace MudExtensions
             //}
             await MudComboBox.FocusAsync();
             await OnClick.InvokeAsync();
-        }
-
-        protected bool GetDisabledStatus()
-        {
-            if (MudComboBox?.ItemDisabledFunc != null)
-            {
-                return MudComboBox.ItemDisabledFunc(Value);
-            }
-            return Disabled;
         }
 
         public void Dispose()

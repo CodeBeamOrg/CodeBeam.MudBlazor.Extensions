@@ -42,6 +42,8 @@ namespace MudExtensions
                 new KeyOptions { Key=" ", PreventDown = "key+none" }, //prevent scrolling page, toggle open/close
                 new KeyOptions { Key="ArrowUp", PreventDown = "key+none" }, // prevent scrolling page, instead hilight previous item
                 new KeyOptions { Key="ArrowDown", PreventDown = "key+none" }, // prevent scrolling page, instead hilight next item
+                new KeyOptions { Key="PageUp", PreventDown = "key+none" }, // prevent scrolling page, instead hilight previous item
+                new KeyOptions { Key="PageDown", PreventDown = "key+none" }, // prevent scrolling page, instead hilight next item
                 new KeyOptions { Key="Home", PreventDown = "key+none" },
                 new KeyOptions { Key="End", PreventDown = "key+none" },
                 new KeyOptions { Key="Escape" },
@@ -94,7 +96,7 @@ namespace MudExtensions
         [Parameter] public bool Editable { get; set; }
 
         /// <summary>
-        /// If true, all items are eligible regarding what user search in textfield. Default is false.
+        /// If true, all items are eligible regarding what user search in textfield.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
         [Parameter] public bool DisableFilter { get; set; }
@@ -782,7 +784,7 @@ namespace MudExtensions
 
         #region Events (Key, Focus)
 
-        protected internal async void HandleKeyDown(KeyboardEventArgs obj)
+        protected internal void HandleKeyDown(KeyboardEventArgs obj)
         {
             if (Disabled || ReadOnly)
                 return;
@@ -790,8 +792,8 @@ namespace MudExtensions
             // Select mode: Jump to item which starts with "key".
             if (!Editable && obj.Key.Length == 1 && obj.Key[0] != 32 && !(obj.CtrlKey || obj.ShiftKey || obj.AltKey || obj.MetaKey))
             {
-                await ActivateFirstItem(obj.Key);
-                await OnKeyDown.InvokeAsync(obj);
+                _ = ActivateFirstItem(obj.Key);
+                _ = OnKeyDown.InvokeAsync(obj);
                 return;
             }
 
@@ -800,52 +802,52 @@ namespace MudExtensions
                 case " ":
                     // Only open the ComboBox menu when search string is empty.
                     if (!Editable || _searchString is null || _searchString.Length == 0)
-                        await ToggleMenu();
+                        _ = ToggleMenu();
                     else
                         // For example: "new jersey"
                         _searchString += " ";
                     break;
 
                 case "Escape":
-                    await CloseMenu();
+                    _ = CloseMenu();
                     break;
 
                 case "Home":
                     if (!_isOpen)
-                        await OpenMenu();
-                    await ActivateFirstItem();
+                        _ = OpenMenu();
+                    _ = ActivateFirstItem();
                     break;
                 case "End":
                     if (!_isOpen)
-                        await OpenMenu();
-                    await ActivateLastItem();
+                        _ = OpenMenu();
+                    _ = ActivateLastItem();
                     break;
                 case "PageUp":
                     if (_isOpen)
-                        await ActivateAdjacentItem(-3);
+                        _ = ActivateAdjacentItem(-3);
                     break;
                 case "PageDown":
                     if (_isOpen)
-                        await ActivateAdjacentItem(3);
+                        _ = ActivateAdjacentItem(3);
                     break;
                 case "ArrowUp":
                     if (obj.AltKey)
-                        await CloseMenu();
+                        _ = CloseMenu();
                     else
                     {
                         if (!_isOpen)
-                            await OpenMenu();
-                        await ActivateAdjacentItem(-1);
+                            _ = OpenMenu();
+                        _ = ActivateAdjacentItem(-1);
                     }
                     break;
                 case "ArrowDown":
                     if (obj.AltKey)
-                        await OpenMenu();
+                        _ = OpenMenu();
                     else
                     {
                         if (!_isOpen)
-                            await OpenMenu();
-                        await ActivateAdjacentItem(1);
+                            _ = OpenMenu();
+                        _ = ActivateAdjacentItem(1);
                     }
                     break;
 
@@ -854,9 +856,9 @@ namespace MudExtensions
                     var doSelect = _lastActivatedItem is null || !_lastActivatedItem.Selected;
 
                     if (_isOpen)
-                        await ToggleOption(_lastActivatedItem, doSelect);
+                        _ = ToggleOption(_lastActivatedItem, doSelect);
                     else
-                        await OpenMenu();
+                        _ = OpenMenu();
 
                     if (MultiSelection)
                     {
@@ -867,8 +869,8 @@ namespace MudExtensions
 
                 case "Tab":
                     if (SelectValueOnTab && !MultiSelection)
-                        await ToggleOption(_lastActivatedItem, true);
-                    await CloseMenu();
+                        _ = ToggleOption(_lastActivatedItem, true);
+                    _ = CloseMenu();
                     break;
 
                 case "a":
@@ -876,12 +878,12 @@ namespace MudExtensions
                     if (obj.CtrlKey)
                     {
                         if (MultiSelection)
-                            await SelectAllItems();
+                            _ = SelectAllItems();
                     }
                     break;
             }
 
-            await OnKeyDown.InvokeAsync(obj);
+            _ = OnKeyDown.InvokeAsync(obj);
         }
 
         protected internal async Task SearchBoxHandleKeyDown(KeyboardEventArgs obj)
@@ -991,18 +993,12 @@ namespace MudExtensions
 
         #region PopoverState
 
-        public async Task ToggleMenu()
+        public Task ToggleMenu()
         {
             if (Disabled || ReadOnly)
-                return;
-            if (_isOpen)
-            {
-                await CloseMenu();
-            }
-            else
-            {
-                await OpenMenu();
-            }
+                return Task.CompletedTask;
+
+            return _isOpen ? CloseMenu() : OpenMenu();
         }
 
         public async Task OpenMenu()
@@ -1211,20 +1207,13 @@ namespace MudExtensions
             _currentIcon = !string.IsNullOrWhiteSpace(AdornmentIcon) ? AdornmentIcon : _isOpen ? CloseIcon : OpenIcon;
         }
 
-        protected override bool HasValue(T value)
-        {
-            if (MultiSelection)
-                return SelectedValues.Any();
-            else
-                return base.HasValue(value);
-        }
+        protected override bool HasValue(T value) => MultiSelection ? SelectedValues.Any() : base.HasValue(value);
 
         protected async Task ChipClosed(MudChip chip)
         {
-            if (chip == null || SelectedValues == null)
-            {
+            if (chip is null || SelectedValues is null)
                 return;
-            }
+
             //SelectedValues = SelectedValues.Where(x => Converter.Set(x)?.ToString() != chip.Value?.ToString());
             SelectedValues = SelectedValues.Where(x => x.Equals(chip.Value) == false);
             await SelectedValuesChanged.InvokeAsync(SelectedValues);

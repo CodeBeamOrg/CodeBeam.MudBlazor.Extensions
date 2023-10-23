@@ -1,5 +1,6 @@
 ﻿@namespace MudExtensions
 @using MudExtensions.Enums;
+@using System.Runtime.InteropServices;
 @typeparam T
 @inherits MudBaseInputExtended<T>
 
@@ -10,7 +11,7 @@
                              Error="@Error" ErrorText="@ErrorText" ErrorId="@ErrorId" Disabled="@Disabled" @onmousedown="@ToggleMenu" Required="@Required" ForId="@FieldId">
                 <InputContent>
                     @*DataVisualiserStyle="@($"min-height: 1.1876em;{(HasValue(Value) && Editable == true ? "padding-bottom: 0px" : null)}")"*@
-                    <MudInputExtended @ref="_inputReference" T="string" InputType="@(Editable && MultiSelection == false ? InputType.Text : InputType.Hidden)"
+                    <MudInputExtended @ref="_inputReference" T="string" InputType="@(Editable && !MultiSelection ? InputType.Text : InputType.Hidden)"
                                       Class="@InputClassname" Style="@InputStyle" Margin="@Margin" Placeholder="@Placeholder"
                                       Variant="@Variant" Immediate="true"
                                       TextUpdateSuppression="false"
@@ -27,18 +28,24 @@
 
                         <DataVisualiser>
                             <div style="flex-basis: content; flex-grow: 0">
-                                @if (HasValue(Value) == false && string.IsNullOrEmpty(Placeholder) == false)
+                                @if (!HasValue(Value) && !string.IsNullOrWhiteSpace(Placeholder))
                                 {
                                     <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
                                 }
                                 else if (InputPresenter == ValuePresenter.Chip)
                                 {
-                                    <MudChipSet Class="d-flex flex-wrap mud-width-full" AllClosable="ChipCloseable" OnClose="ChipClosed">
-                                        @foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboBoxItem<T>>())
-                                        {
-                                            <MudChip Class="@ChipClass" Value="item.Value" Text="@(ToStringFunc != null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
+                                    <MudChipSet Class="d-flex flex-wrap mud-width-full" AllClosable="@ChipCloseable" OnClose="@ChipClosed">
+                                        @{
+                                            var collection = Items.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true))?.ToList();
+                                            if (collection is not null)
+                                            {
+                                                foreach (var item in CollectionsMarshal.AsSpan(collection))
+                                                {
+                                                    <MudChip Class="@ChipClass" Value="@item.Value" Text="@(ToStringFunc is not null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrWhiteSpace(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
+                                                }
+                                            }
                                         }
-                                        @*@if (ItemCollection != null)
+                                        @*@if (ItemCollection is not null)
                                     {
                                     foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
                                     {
@@ -47,49 +54,51 @@
                                     }
                                     else
                                     {
-                                    foreach (var item in Items?.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboBoxItem<T>>())
+                                    foreach (var item in Items.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboBoxItem<T>>())
                                     {
-                                    <MudChip Class="@ChipClass" Value="item.Value" Text="@(ToStringFunc != null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
+                                    <MudChip Class="@ChipClass" Value="item.Value" Text="@(ToStringFunc is not null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrWhiteSpace(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
                                     }
                                     }*@
                                     </MudChipSet>
                                 }
-                                else if (InputPresenter == ValuePresenter.Text && (Editable == false || (MultiSelection == true && Editable == true)))
+                                else if (InputPresenter == ValuePresenter.Text && (!Editable || (MultiSelection && Editable)))
                                 {
                                     <div style="white-space: break-spaces">@_dataVisualiserText</div>
                                 }
                                 else if (InputPresenter == ValuePresenter.ItemContent)
                                 {
-                                    if (SelectedValues == null)
+                                    if (SelectedValues is null)
                                     {
                                         <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
 
                                     }
-                                    else if (ItemTemplate != null)
+                                    else if (ItemTemplate is not null)
                                     {
-                                        if (Value != null)
+                                        if (Value is not null)
                                         {
                                             @ItemTemplate(Items.FirstOrDefault(x => x.Value.Equals(Value)))
                                         }
-                                        else if (!string.IsNullOrEmpty(Placeholder))
+                                        else if (!string.IsNullOrWhiteSpace(Placeholder))
                                         {
                                             <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
                                         }
                                     }
-                                    else if (Items.FirstOrDefault(x => x.Value.Equals(Value))?.ChildContent != null)
+                                    else if (Items.FirstOrDefault(x => x.Value.Equals(Value))?.ChildContent is not null)
                                     {
                                         if (MultiSelection)
                                         {
-                                            @foreach (var item in Items.Where(x => SelectedValues.Contains(x.Value)))
+                                            foreach (var item in CollectionsMarshal.AsSpan(Items))
                                             {
-                                                <MudRender>@item.ChildContent</MudRender>
+                                                if (SelectedValues.Contains(item.Value))
+                                                {
+                                                    <MudRender>@item.ChildContent</MudRender>
+                                                }
                                             }
                                         }
                                         else
                                         {
                                             <MudRender>@Items.FirstOrDefault(x => x.Value.Equals(Value))?.ChildContent</MudRender>
                                         }
-
                                     }
                                     else
                                     {
@@ -100,7 +109,7 @@
                         </DataVisualiser>
                         <ChildContent>
                             <div class="@TemplateClass">
-                                @if (HasValue(Value) == false && string.IsNullOrEmpty(Placeholder) == false)
+                                @if (!HasValue(Value) && !string.IsNullOrWhiteSpace(Placeholder))
                                 {
                                     <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
                                 }
@@ -140,7 +149,7 @@
                                 }
 
                                 @ChildContent
-                                @if (NoItemsContent != null && !HasEligibleItems())
+                                @if (NoItemsContent is not null && !HasEligibleItems())
                                 {
                                     <div class="pa-2">
                                         @NoItemsContent
