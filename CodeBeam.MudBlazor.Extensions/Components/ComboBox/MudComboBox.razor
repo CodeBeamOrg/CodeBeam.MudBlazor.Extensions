@@ -42,7 +42,7 @@
                                                 foreach (var item in CollectionsMarshal.AsSpan(collection))
                                                 {
                                                     <MudChip Class="@ChipClass" Value="@item.Value" Text="@(ToStringFunc is not null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrWhiteSpace(item.Text) ? Converter.Set(item.Value) : item.Text)"
-                                                             Color="@CheckBoxCheckedColor" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
+                                                             Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
                                                 }
                                             }
                                         }
