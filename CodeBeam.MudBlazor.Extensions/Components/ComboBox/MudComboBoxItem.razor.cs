@@ -206,18 +206,8 @@ namespace MudExtensions
 
         protected async Task HandleOnClick()
         {
-            //Selected = !Selected;
             await MudComboBox.ToggleOption(this, !Selected);
-            //await MudComboBox?.SelectOption(Value);
             await InvokeAsync(StateHasChanged);
-            //if (MudComboBox.MultiSelection == false)
-            //{
-            //    await MudComboBox?.CloseMenu();
-            //}
-            //else
-            //{
-            //    await MudComboBox.FocusAsync();
-            //}
             await MudComboBox.FocusAsync();
             await OnClick.InvokeAsync();
         }

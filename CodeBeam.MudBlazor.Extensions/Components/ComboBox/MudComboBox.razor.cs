@@ -265,18 +265,18 @@ namespace MudExtensions
         /// <summary>
         /// The color of the checked checkbox. It supports the theme colors.
         /// </summary>
-        /// <remarks>The default is <see cref="Color.Primary"/></remarks>
+        /// <remarks>The default is <see cref="MudCheckBox.Color"/></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public Color CheckBoxCheckedColor { get; set; } = Color.Primary;
+        public Color? CheckBoxCheckedColor { get; set; } = null;
 
         /// <summary>
         /// The color of the unchecked checkbox. It supports the theme colors.
         /// </summary>
-        /// <remarks>The default is <see cref="Color.Default"/></remarks>
+        /// <remarks>The default is <see cref="MudCheckBox.Color"/></remarks>
         [Parameter]
         [Category(CategoryTypes.Radio.Appearance)]
-        public Color CheckBoxUnCheckedColor { get; set; } = Color.Default;
+        public Color? CheckBoxUnCheckedColor { get; set; } = null;
 
         /// <summary>
         /// The size of the checkbox.
@@ -1484,5 +1484,8 @@ namespace MudExtensions
         protected internal Typo GetTypo() => Dense == Dense.Slim || Dense == Dense.Superslim ? Typo.body2 : Typo.body1;
 
         protected internal ValueTask ScrollToMiddleAsync(MudComboBoxItem<T> item) => item is not null ? ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId) : ValueTask.CompletedTask;
+
+        protected internal Color EffectiveCheckBoxCheckedColor => CheckBoxCheckedColor ?? Color;
+        protected internal Color EffectiveCheckBoxUnCheckedColor => CheckBoxUnCheckedColor ?? Color;
     }
 }

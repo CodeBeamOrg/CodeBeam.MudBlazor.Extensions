@@ -145,8 +145,8 @@
                                                 <MudCheckBox Class="mx-4" Dense
                                                              @bind-Checked="@_allSelected" @onclick="@SelectAllItems"
                                                              Size="@CheckBoxSize"
-                                                             Color="@CheckBoxCheckedColor"
-                                                             UnCheckedColor="@CheckBoxUnCheckedColor" />
+                                                             Color="@EffectiveCheckBoxCheckedColor"
+                                                             UnCheckedColor="@EffectiveCheckBoxUnCheckedColor" />
 
                                                 <MudText Typo="GetTypo()" Color="@TextColor">@SelectAllText</MudText>
                                             </div>

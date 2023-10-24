@@ -12,8 +12,8 @@
             <MudCheckBox Class="me-4" Dense
                          @bind-Checked="@Selected" @onclick="@HandleOnClick"
                          Size="@(CheckBoxSize ?? MudComboBox.CheckBoxSize)"
-                         Color="@(CheckBoxCheckedColor ?? MudComboBox.CheckBoxCheckedColor)"
-                         UnCheckedColor="@(CheckBoxUnCheckedColor ?? MudComboBox.CheckBoxUnCheckedColor)"
+                         Color="@(CheckBoxCheckedColor ?? MudComboBox.EffectiveCheckBoxCheckedColor)"
+                          UnCheckedColor="@(CheckBoxUnCheckedColor ?? MudComboBox.EffectiveCheckBoxUnCheckedColor)"
                          Disabled="@Disabled" />
         }
 
