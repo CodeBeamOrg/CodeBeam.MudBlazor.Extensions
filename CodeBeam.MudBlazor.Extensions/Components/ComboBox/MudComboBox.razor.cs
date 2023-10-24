@@ -265,10 +265,10 @@ namespace MudExtensions
         /// <summary>
         /// The color of the checked checkbox. It supports the theme colors.
         /// </summary>
-        /// <remarks>The default is <see cref="Color.Default"/></remarks>
+        /// <remarks>The default is <see cref="Color.Primary"/></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public Color CheckBoxCheckedColor { get; set; } = Color.Default;
+        public Color CheckBoxCheckedColor { get; set; } = Color.Primary;
 
         /// <summary>
         /// The color of the unchecked checkbox. It supports the theme colors.
