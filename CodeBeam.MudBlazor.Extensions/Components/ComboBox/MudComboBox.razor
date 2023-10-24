@@ -144,6 +144,7 @@
                                             <div class="@($"mud-combobox-item mud-combobox-item-clickable mud-combobox-item-{Dense.ToDescriptionString()} mud-ripple d-flex")" @onclick="SelectAllItems" @onclick:stopPropagation="true">
                                                 <MudCheckBox Class="mx-4" Dense
                                                              @bind-Checked="@_allSelected" @onclick="@SelectAllItems"
+                                                             IndeterminateIcon="@IndeterminateIcon"
                                                              Size="@CheckBoxSize"
                                                              Color="@EffectiveCheckBoxCheckedColor"
                                                              UnCheckedColor="@EffectiveCheckBoxUnCheckedColor" />
