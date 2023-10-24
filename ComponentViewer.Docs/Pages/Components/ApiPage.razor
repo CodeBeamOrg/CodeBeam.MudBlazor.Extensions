@@ -119,7 +119,7 @@
         </MudTable>
     </ExampleCard>
 
-    <ExampleCard Title="Api - MudCombobox" HasExpansionPanel="true">
+    <ExampleCard Title="Api - MudComboBox" HasExpansionPanel="true">
         <MudTable Items="@(typeof(MudComboBox<string>).GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
             <HeaderContent>
                 <MudTh>Name</MudTh>

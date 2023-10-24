@@ -9,10 +9,15 @@
 
         @if (MudComboBox.MultiSelection && MudComboBox.ShowCheckbox)
         {
-            <MudCheckBox Class="me-4" Color="@MudComboBox.Color" Disabled="@Disabled" @bind-Checked="@Selected" @onclick="@HandleOnClick" Dense="true" />
+            <MudCheckBox Class="me-4" Dense
+                         @bind-Checked="@Selected" @onclick="@HandleOnClick"
+                         Size="@(CheckBoxSize ?? MudComboBox.CheckBoxSize)"
+                         Color="@(CheckBoxCheckedColor ?? MudComboBox.EffectiveCheckBoxCheckedColor)"
+                         UnCheckedColor="@(CheckBoxUnCheckedColor ?? MudComboBox.EffectiveCheckBoxUnCheckedColor)"
+                         Disabled="@Disabled" />
         }
 
-        <MudText Typo="GetTypo()">
+        <MudText Typo="MudComboBox.GetTypo()" Color="@(TextColor ?? MudComboBox.TextColor)">
             @if (ChildContent != null && MudComboBox.ItemPresenter == ValuePresenter.ItemContent)
             {
                 @ChildContent
