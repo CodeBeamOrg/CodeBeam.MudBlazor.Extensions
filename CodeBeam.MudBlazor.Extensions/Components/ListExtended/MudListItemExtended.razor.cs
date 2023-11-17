@@ -24,10 +24,10 @@ namespace MudExtensions
           .AddClass("mud-list-item-dense-extended", Dense == true || MudListExtended?.Dense == true)
           .AddClass("mud-list-item-gutters-extended", !DisableGutters && !(MudListExtended?.DisableGutters == true))
           .AddClass("mud-list-item-clickable-extended", MudListExtended?.Clickable)
-          .AddClass("mud-ripple", MudListExtended?.Clickable == true && !DisableRipple && !Disabled && !IsFunctional)
-          .AddClass($"mud-selected-item mud-{MudListExtended?.Color.ToDescriptionString()}-text mud-{MudListExtended?.Color.ToDescriptionString()}-hover", _selected && !Disabled && NestedList == null && !MudListExtended.DisableSelectedItemStyle)
-          .AddClass("mud-list-item-hilight-extended", _active && !Disabled && NestedList == null && !IsFunctional)
-          .AddClass("mud-list-item-disabled-extended", Disabled)
+          .AddClass("mud-ripple", MudListExtended?.Clickable == true && !DisableRipple && !GetDisabledStatus() && !IsFunctional)
+          .AddClass($"mud-selected-item mud-{MudListExtended?.Color.ToDescriptionString()}-text mud-{MudListExtended?.Color.ToDescriptionString()}-hover", _selected && !GetDisabledStatus() && NestedList == null && !MudListExtended.DisableSelectedItemStyle)
+          .AddClass("mud-list-item-hilight-extended", _active && !GetDisabledStatus() && NestedList == null && !IsFunctional)
+          .AddClass("mud-list-item-disabled-extended", GetDisabledStatus())
           .AddClass("mud-list-item-nested-background-extended", MudListExtended != null && MudListExtended.SecondaryBackgroundForNestedItemHeader && NestedList != null)
           .AddClass("mud-list-item-functional", IsFunctional)
           .AddClass(Class)
@@ -409,6 +409,15 @@ namespace MudExtensions
                 _textTypo = Typo.body1;
             }
             StateHasChanged();
+        }
+
+        protected internal bool GetDisabledStatus()
+        {
+            if (MudListExtended?.ItemDisabledFunc != null)
+            {
+                return MudListExtended.ItemDisabledFunc(Value);
+            }
+            return Disabled;
         }
 
         #endregion

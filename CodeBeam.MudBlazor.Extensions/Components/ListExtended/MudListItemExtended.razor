@@ -6,7 +6,7 @@
 
 <div tabindex="0" @attributes="UserAttributes" id="@ItemId" class="@Classname" @onclick="@(((MudListExtended?.Clickable == true || NestedList != null) && IsFunctional == false) ? OnClickHandler : OnlyOnClick)" @onclick:stopPropagation="@OnClickStopPropagation" style="@Style">
 
-    @if (MudListExtended?.ItemDisabledTemplate != null && Disabled == true)
+    @if (MudListExtended?.ItemDisabledTemplate != null && GetDisabledStatus() == true)
     {
         @MudListExtended.ItemDisabledTemplate(this)
     }
@@ -26,15 +26,15 @@
             <div class="@MultiSelectClassName">
                 @if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.CheckBox : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.CheckBox)
                 {
-                    <MudCheckBox Color="@MudListExtended.Color" Disabled="@Disabled" @bind-Checked="_selected" @onclick="OnClickHandler" Dense="true" />
+                    <MudCheckBox Color="@MudListExtended.Color" Disabled="@GetDisabledStatus()" @bind-Checked="_selected" @onclick="OnClickHandler" Dense="true" />
                 }
                 else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.Switch : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.Switch)
                 {
-                    <MudSwitch Color="@MudListExtended.Color" Disabled="@Disabled" @bind-Checked="_selected" @onclick="OnClickHandler" OnClickStopPropagation="true" />
+                    <MudSwitch Color="@MudListExtended.Color" Disabled="@GetDisabledStatus()" @bind-Checked="_selected" @onclick="OnClickHandler" OnClickStopPropagation="true" />
                 }
                 else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.SwitchM3 : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.SwitchM3)
                 {
-                    <MudSwitchM3 Class="mr-4" Color="@MudListExtended.Color" Disabled="@Disabled" @bind-Checked="_selected" @onclick="OnClickHandler" OnClickStopPropagation="true" />
+                    <MudSwitchM3 Class="mr-4" Color="@MudListExtended.Color" Disabled="@GetDisabledStatus()" @bind-Checked="_selected" @onclick="OnClickHandler" OnClickStopPropagation="true" />
                 }
             </div>
         }
@@ -73,15 +73,15 @@
             <div class="@MultiSelectClassName">
                 @if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.CheckBox : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.CheckBox)
                 {
-                    <MudCheckBox Color="@MudListExtended.Color" Disabled="@Disabled" @bind-Checked="_selected" @onclick="OnClickHandler" Dense="true" />
+                    <MudCheckBox Color="@MudListExtended.Color" Disabled="@GetDisabledStatus()" @bind-Checked="_selected" @onclick="OnClickHandler" Dense="true" />
                 }
                 else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.Switch : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.Switch)
                 {
-                    <MudSwitch Color="@MudListExtended.Color" Disabled="@Disabled" @bind-Checked="_selected" @onclick="OnClickHandler" OnClickStopPropagation="true" />
+                    <MudSwitch Color="@MudListExtended.Color" Disabled="@GetDisabledStatus()" @bind-Checked="_selected" @onclick="OnClickHandler" OnClickStopPropagation="true" />
                 }
                 else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.SwitchM3 : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.SwitchM3)
                 {
-                    <MudSwitchM3 Color="@MudListExtended.Color" Disabled="@Disabled" @bind-Checked="_selected" @onclick="OnClickHandler" OnClickStopPropagation="true" />
+                    <MudSwitchM3 Color="@MudListExtended.Color" Disabled="@GetDisabledStatus()" @bind-Checked="_selected" @onclick="OnClickHandler" OnClickStopPropagation="true" />
                 }
             </div>
         }
@@ -99,7 +99,7 @@
 {
     <CascadingValue Value="this" IsFixed="true">
         <MudCollapse Expanded="@Expanded" ExpandedChanged="@ExpandedChanged">
-            <MudListExtended T="T" Clickable="MudListExtended?.Clickable ?? false" Color="MudListExtended?.Color ?? Color.Primary" MultiSelection="MudListExtended?.MultiSelection ?? false" MultiSelectionComponent="MudListExtended?.MultiSelectionComponent ?? MultiSelectionComponent.CheckBox" MultiSelectionAlign="MudListExtended?.MultiSelectionAlign ?? Align.Start" DisablePadding="true" Class="mud-nested-list" Disabled="@Disabled" Dense="@((Dense ?? MudListExtended?.Dense) ?? false)">
+            <MudListExtended T="T" Clickable="MudListExtended?.Clickable ?? false" Color="MudListExtended?.Color ?? Color.Primary" MultiSelection="MudListExtended?.MultiSelection ?? false" MultiSelectionComponent="MudListExtended?.MultiSelectionComponent ?? MultiSelectionComponent.CheckBox" MultiSelectionAlign="MudListExtended?.MultiSelectionAlign ?? Align.Start" DisablePadding="true" Class="mud-nested-list" Disabled="@GetDisabledStatus()" Dense="@((Dense ?? MudListExtended?.Dense) ?? false)">
                 <ChildContent>
                     @NestedList
                 </ChildContent>

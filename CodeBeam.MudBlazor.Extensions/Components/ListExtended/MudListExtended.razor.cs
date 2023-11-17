@@ -86,6 +86,13 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public RenderFragment SelectAllTemplate { get; set; }
 
+        /// <summary>
+        /// Function to be invoked when checking whether an item should be disabled or not. Works both with renderfragment and ItemCollection approach.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListBehavior)]
+        public Func<T, bool> ItemDisabledFunc { get; set; }
+
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public DefaultConverter<T> Converter { get; set; } = new DefaultConverter<T>();
@@ -1228,7 +1235,7 @@ namespace MudExtensions
         public async Task ActiveFirstItem(string startChar = null)
         {
             var items = CollectAllMudListItems(true);
-            if (items == null || items.Count == 0 || items[0].Disabled)
+            if (items == null || items.Count == 0 || items[0].GetDisabledStatus())
             {
                 return;
             }
@@ -1311,7 +1318,7 @@ namespace MudExtensions
             {
                 return;
             }
-            if (items[index + changeCount].Disabled)
+            if (items[index + changeCount].GetDisabledStatus())
             {
                 // Recursive
                 await ActiveAdjacentItem(changeCount > 0 ? changeCount + 1 : changeCount - 1);
@@ -1364,7 +1371,7 @@ namespace MudExtensions
             DeactiveAllItems(items);
             for (int i = 0; i < items.Count; i++)
             {
-                if (!items[properLastIndex - i].Disabled)
+                if (!items[properLastIndex - i].GetDisabledStatus())
                 {
                     properLastIndex -= i;
                     break;
