@@ -39,6 +39,10 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Clearable { get; set; } = false;
 
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool DisablePaste { get; set; }
+
         /// <summary>
         /// If true, adornment button accepts tab stop. Default is false.
         /// </summary>

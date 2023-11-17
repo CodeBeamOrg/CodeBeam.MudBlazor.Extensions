@@ -322,6 +322,10 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool KeyDownPreventDefault { get; set; }
 
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool DisablePaste { get; set; }
+
 
         /// <summary>
         /// Fired on the KeyPress event.

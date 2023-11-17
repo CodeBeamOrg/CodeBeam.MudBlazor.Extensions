@@ -56,30 +56,62 @@
             }
 
             <div class="mud-input" style="flex-basis: 20px; flex-grow: 1">
-                <input class="@InputClassname"
-                   @ref="ElementReference"
-                   @attributes="UserAttributes"
-                       type="@InputTypeString"
-                       value="@_internalText"
-                   @oninput="OnInputHandler"
-                   @onchange="OnChangeHandler"
-                       placeholder="@Placeholder"
-                       disabled=@Disabled
-                       readonly="@ReadOnly"
-                   @onblur="@OnBlurredAsync"
-                       inputmode="@InputMode.ToString()"
-                       pattern="@Pattern"
-                   @onkeydown="@InvokeKeyDown"
-                   @onkeypress="@InvokeKeyPress"
-                   @onkeyup="@InvokeKeyUp"
-                       maxlength="@MaxLength"
-                   @onkeydown:preventDefault="KeyDownPreventDefault"
-                   @onkeypress:preventDefault="@KeyPressPreventDefault"
-                   @onkeyup:preventDefault="@KeyUpPreventDefault"
-                   @onmousewheel="@OnMouseWheel"
-                   @onwheel="@OnMouseWheel"
-                       aria-invalid="@Error.ToString().ToLower()"
-                       aria-describedby="@ErrorId" />
+                @if (DisablePaste)
+                {
+                    <input class="@InputClassname"
+                           @ref="ElementReference"
+                           @attributes="UserAttributes"
+                           type="@InputTypeString"
+                           value="@_internalText"
+                           @oninput="OnInputHandler"
+                           @onchange="OnChangeHandler"
+                           placeholder="@Placeholder"
+                           disabled=@Disabled
+                           readonly="@ReadOnly"
+                           @onblur="@OnBlurredAsync"
+                           inputmode="@InputMode.ToString()"
+                           pattern="@Pattern"
+                           @onkeydown="@InvokeKeyDown"
+                           @onkeypress="@InvokeKeyPress"
+                           @onkeyup="@InvokeKeyUp"
+                           maxlength="@MaxLength"
+                           @onkeydown:preventDefault="KeyDownPreventDefault"
+                           @onkeypress:preventDefault="@KeyPressPreventDefault"
+                           @onkeyup:preventDefault="@KeyUpPreventDefault"
+                           onpaste="return false"
+                           @onmousewheel="@OnMouseWheel"
+                           @onwheel="@OnMouseWheel"
+                           aria-invalid="@Error.ToString().ToLower()"
+                           aria-describedby="@ErrorId" />
+                }
+                else
+                {
+                    <input class="@InputClassname"
+                           @ref="ElementReference"
+                           @attributes="UserAttributes"
+                           type="@InputTypeString"
+                           value="@_internalText"
+                           @oninput="OnInputHandler"
+                           @onchange="OnChangeHandler"
+                           placeholder="@Placeholder"
+                           disabled=@Disabled
+                           readonly="@ReadOnly"
+                           @onblur="@OnBlurredAsync"
+                           inputmode="@InputMode.ToString()"
+                           pattern="@Pattern"
+                           @onkeydown="@InvokeKeyDown"
+                           @onkeypress="@InvokeKeyPress"
+                           @onkeyup="@InvokeKeyUp"
+                           maxlength="@MaxLength"
+                           @onkeydown:preventDefault="KeyDownPreventDefault"
+                           @onkeypress:preventDefault="@KeyPressPreventDefault"
+                           @onkeyup:preventDefault="@KeyUpPreventDefault"
+                           @onmousewheel="@OnMouseWheel"
+                           @onwheel="@OnMouseWheel"
+                           aria-invalid="@Error.ToString().ToLower()"
+                           aria-describedby="@ErrorId" />
+                }
+                
             </div>
 
         @*Note: double mouse wheel handlers needed for Firefox because it doesn't know onmousewheel*@
