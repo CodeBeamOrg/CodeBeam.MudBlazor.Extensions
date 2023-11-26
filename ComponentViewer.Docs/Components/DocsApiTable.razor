@@ -1,0 +1,47 @@
+﻿@namespace ComponentViewer.Docs.Components
+@using System.Text.RegularExpressions
+
+<MudText Class="my-2" Color="Color.Secondary" Typo="Typo.h6">Parameters</MudText>
+<MudTable Items="@(RelatedType.GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Type</MudTh>
+        <MudTh>Default</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Type">@context.PropertyType.Name</MudTd>
+            <MudTd DataLabel="Default">
+                @if (true)
+            {
+                object instance = Activator.CreateInstance(RelatedType);
+                <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+            }
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+
+<MudText Class="my-2" Color="Color.Secondary" Typo="Typo.h6">Methods</MudText>
+<MudTable Items="@(RelatedType.GetMethods().Where(x => x.Name != "SetParametersAsync" && Regex.IsMatch(x.Name[0].ToString(), "[A-Z]")).OrderBy(x => x.Name).ToList())">
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Type</MudTh>
+        <MudTh>Default</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Type">@context.ReturnType.Name</MudTd>
+            <MudTd DataLabel="Default">
+                @if (true)
+            {
+                @* MudStepper instance = new(); *@
+                @*<MudText Typo="Typo.body2">@(context(instance)?.ToString() ?? "null")</MudText>*@
+            }
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code{
+    [Parameter]
+    public Type RelatedType { get; set; }
+}
