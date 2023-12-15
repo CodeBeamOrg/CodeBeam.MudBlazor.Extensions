@@ -8,7 +8,7 @@
         <MudStepper @ref="_stepper" Class="mud-width-full" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant"
                     DisableAnimation="_disableAnimation" DisablePreviousButton="_disablePreviousButton" DisableNextButton="_disableNextButton" 
                     DisableSkipButton="_disableSkipButton" DisableStepResultIndicator="_disableStepResultIndicator" HeaderBadgeView="_headerBadgeView" 
-                    HeaderTextView="_headerTextView" PreventStepChangeAsync="new Func<StepChangeDirection, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
+                    HeaderTextView="_headerTextView" PreventStepChangeAsync="new Func<StepChangeDirection, int, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
                     MobileView="_mobileView" IconActionButtons="_iconActionButtons" Loading="_loading" HeaderSize="_headerSize" HeaderIcon="false">
             <StaticContent>
                 @if (_showStaticContent)
@@ -147,7 +147,7 @@
     bool _vertical = false;
     Size _headerSize = Size.Medium;
 
-    private async Task<bool> CheckChange(StepChangeDirection direction)
+    private async Task<bool> CheckChange(StepChangeDirection direction, int targetIndex)
     {
         if (_checkValidationBeforeComplete == true)
         {
