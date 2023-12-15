@@ -1,8 +1,8 @@
 ### v 6.7.0
 MudStepper's PreventStepChangeAsync func's parameters changed. (A new int target index added)
-Before:
+#### Before:
 public Func<StepChangeDirection, Task<bool>> PreventStepChangeAsync
-After:
+#### After:
 public Func<StepChangeDirection, int, Task<bool>> PreventStepChangeAsync
 
 ### v 6.4.0
