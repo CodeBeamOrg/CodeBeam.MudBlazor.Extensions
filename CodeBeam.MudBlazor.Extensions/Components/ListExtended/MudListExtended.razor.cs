@@ -1,13 +1,11 @@
-﻿using System.Data;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using MudExtensions.Services;
-using static MudBlazor.CategoryTypes;
-using static MudBlazor.Colors;
+using System.Data;
 
 namespace MudExtensions
 {
@@ -198,6 +196,11 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public string SearchBoxPlaceholder { get; set; }
+
+        /// <summary>
+        /// Fired when the search value changes.
+        /// </summary>
+        [Parameter] public EventCallback<string> OnSearchStringChange { get; set; }
 
         /// <summary>
         /// Allows virtualization. Only work if ItemCollection parameter is not null.
@@ -927,6 +930,12 @@ namespace MudExtensions
             {
                 UpdateSelectedStyles();
             }
+        }
+
+        protected async Task SearchChanged(string searchString)
+        {
+            _searchString = searchString;
+            await OnSearchStringChange.InvokeAsync(searchString);
         }
 
         #endregion
