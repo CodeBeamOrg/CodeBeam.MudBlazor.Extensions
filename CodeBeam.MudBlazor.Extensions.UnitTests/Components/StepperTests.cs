@@ -22,12 +22,14 @@ namespace MudExtensions.UnitTests.Components
         {
             // Arrange
             var lastStepChangeDirection = StepChangeDirection.None;
+            int _targetIndex = 0;
             var stepper = Context.RenderComponent<MudStepper>(
                 ComponentParameterFactory.Parameter(
                     nameof(MudStepper.PreventStepChangeAsync),
-                    new Func<StepChangeDirection, Task<bool>>((direction) =>
+                    new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         lastStepChangeDirection = direction;
+                        _targetIndex = targetIndex;
                         return Task.FromResult(false);
                     })
                 )
@@ -48,12 +50,14 @@ namespace MudExtensions.UnitTests.Components
         {
             // Arrange
             var lastStepChangeDirection = StepChangeDirection.None;
+            int _targetIndex = 0;
             var stepper = Context.RenderComponent<MudStepper>(
                 ComponentParameterFactory.Parameter(
                     nameof(MudStepper.PreventStepChangeAsync),
-                    new Func<StepChangeDirection, Task<bool>>((direction) =>
+                    new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         lastStepChangeDirection = direction;
+                        _targetIndex = targetIndex;
                         return Task.FromResult(false);
                     })
                 )
@@ -74,12 +78,14 @@ namespace MudExtensions.UnitTests.Components
         {
             // Arrange
             var lastStepChangeDirection = StepChangeDirection.None;
+            int _targetIndex = 0;
             var stepper = Context.RenderComponent<MudStepper>(
                 ComponentParameterFactory.Parameter(
                     nameof(MudStepper.PreventStepChangeAsync),
-                    new Func<StepChangeDirection, Task<bool>>((direction) =>
+                    new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         lastStepChangeDirection = direction;
+                        _targetIndex = targetIndex;
                         return Task.FromResult(false);
                     })
                 )
@@ -104,12 +110,14 @@ namespace MudExtensions.UnitTests.Components
         {
             // Arrange
             var lastStepChangeDirection = StepChangeDirection.None;
+            int _targetIndex = 0;
             var stepper = Context.RenderComponent<MudStepper>(
                 ComponentParameterFactory.Parameter(
                     nameof(MudStepper.PreventStepChangeAsync),
-                    new Func<StepChangeDirection, Task<bool>>((direction) =>
+                    new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         lastStepChangeDirection = direction;
+                        _targetIndex = targetIndex;
                         return Task.FromResult(false);
                     })
                 )
@@ -137,7 +145,7 @@ namespace MudExtensions.UnitTests.Components
             var stepper = Context.RenderComponent<MudStepper>(
                 ComponentParameterFactory.Parameter(
                     nameof(MudStepper.PreventStepChangeAsync),
-                    new Func<StepChangeDirection, Task<bool>>((direction) =>
+                    new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         lastStepChangeDirection = direction;
                         return Task.FromResult(false);
@@ -164,7 +172,7 @@ namespace MudExtensions.UnitTests.Components
             var stepper = Context.RenderComponent<MudStepper>(
                 ComponentParameterFactory.Parameter(
                     nameof(MudStepper.PreventStepChangeAsync),
-                    new Func<StepChangeDirection, Task<bool>>((direction) =>
+                    new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         preventStepChangeWasInvoked = true;
                         return Task.FromResult(false);
@@ -194,7 +202,7 @@ namespace MudExtensions.UnitTests.Components
             var stepper = Context.RenderComponent<MudStepper>(
                 ComponentParameterFactory.Parameter(
                     nameof(MudStepper.PreventStepChangeAsync),
-                    new Func<StepChangeDirection, Task<bool>>((direction) =>
+                    new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         preventStepChangeWasInvoked = true;
                         return Task.FromResult(false);
@@ -254,7 +262,7 @@ namespace MudExtensions.UnitTests.Components
             var stepper = Context.RenderComponent<MudStepper>(
                 ComponentParameterFactory.Parameter(
                     nameof(MudStepper.PreventStepChangeAsync),
-                    new Func<StepChangeDirection, Task<bool>>((direction) =>
+                    new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         preventStepChangeWasInvoked = true;
                         return Task.FromResult(false);
