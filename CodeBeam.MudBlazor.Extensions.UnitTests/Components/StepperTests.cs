@@ -232,7 +232,7 @@ namespace MudExtensions.UnitTests.Components
             var stepper = Context.RenderComponent<MudStepper>(
                 ComponentParameterFactory.Parameter(
                     nameof(MudStepper.PreventStepChangeAsync),
-                    new Func<StepChangeDirection, Task<bool>>((direction) =>
+                    new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         preventStepChangeWasInvoked = true;
                         return Task.FromResult(false);
