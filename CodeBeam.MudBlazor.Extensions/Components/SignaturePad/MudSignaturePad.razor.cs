@@ -96,8 +96,7 @@ public partial class MudSignaturePad : IAsyncDisposable
 
     async Task ClearPad()
     {
-        Value = Array.Empty<byte>();
-        await ValueChanged.InvokeAsync(Value);
+        await ValueChanged.InvokeAsync(Array.Empty<byte>());
         await JsRuntime.InvokeVoidAsync("mudSignaturePad.clearPad", _reference);
     }
 
