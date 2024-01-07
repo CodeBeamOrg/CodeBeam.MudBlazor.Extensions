@@ -70,7 +70,7 @@ public partial class MudSignaturePad : IAsyncDisposable
     [Parameter] public bool ShowLineJoinStyle { get; set; } = true;
     [Parameter] public bool ShowLineCapStyle { get; set; } = true;
     [Parameter] public bool Dense { get; set; }
-    [Parameter] public Variant Variant  { get; set; }
+    [Parameter] public Variant Variant { get; set; }
     [Parameter] public Color Color { get; set; }
     [Parameter] public RenderFragment ToolbarContent { get; set; }
 
@@ -96,6 +96,7 @@ public partial class MudSignaturePad : IAsyncDisposable
 
     async Task ClearPad()
     {
+        await ValueChanged.InvokeAsync(Array.Empty<byte>());
         await JsRuntime.InvokeVoidAsync("mudSignaturePad.clearPad", _reference);
     }
 
