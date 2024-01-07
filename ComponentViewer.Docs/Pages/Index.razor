@@ -2,6 +2,7 @@
 @namespace ComponentViewer.Docs.Pages
 @using MudExtensions.Enums
 @using ComponentViewer.Docs.Shared
+@using System.Runtime.Versioning
 
 @inject IScrollManager ScrollManager
 
@@ -127,6 +128,14 @@
 
         </MudGrid>
     }
+
+    <MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
+        <MudToolBar DisableGutters="true" Dense="true">
+            <MudText Typo="Typo.body1"><b>Copyright © 2022-@DateTime.Now.Year CodeBeam.</b> @Version</MudText>
+            <MudSpacer />
+                <MudText Typo="Typo.body1">Running on <b>.NET</b> @Environment.Version.ToString()</MudText>
+            </MudToolBar>
+        </MudContainer>
 </MudContainer>
 
 <style>
@@ -205,6 +214,15 @@
         }
 
         return true;
+    }
+
+    private string Version
+    {
+        get
+        {
+            var v = typeof(MudAnimate).Assembly.GetName().Version;
+            return $"v {v.Major}.{v.Minor}.{v.Build}";
+        }
     }
 
     List<Tuple<string, string>> _extendedComponents = new()
