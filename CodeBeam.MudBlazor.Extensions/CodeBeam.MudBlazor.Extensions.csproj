@@ -18,6 +18,12 @@
 		<RootNamespace>MudExtensions</RootNamespace>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<IsTrimmable>true</IsTrimmable>
+		<TrimMode>link</TrimMode>
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
@@ -72,23 +78,10 @@
 	
 	<ItemGroup>
 		<None Include="bundleconfig.json" />
-		<None Include="..\..\..\..\Desktop\MudBuilder\Mud_Secondary.png">
+		<None Include="Mud_Secondary.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Update="Components\Splitter\MudSplitter.razor">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="Mud_Secondary.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
 	</ItemGroup>
 
 </Project>
