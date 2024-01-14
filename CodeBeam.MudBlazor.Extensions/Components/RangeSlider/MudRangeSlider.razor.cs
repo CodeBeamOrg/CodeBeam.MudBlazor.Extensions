@@ -344,7 +344,7 @@ namespace MudExtensions
 
             if (Range)
             {
-                value = (Convert.ToDouble(UpperValue) - Convert.ToDouble(Value));
+                value = (Convert.ToDouble(UpperValue) + min - Convert.ToDouble(Value));
             }
 
             var result = 100.0 * (value - min) / (max - min);
