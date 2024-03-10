@@ -706,7 +706,7 @@ namespace MudExtensions
                     //EnableLogging = true,
                     TargetClass = "mud-list-item-extended",
                     Keys = {
-                        new KeyOptions { Key=" ", PreventDown = "key+none" }, //prevent scrolling page, toggle open/close
+                        //new KeyOptions { Key=" ", PreventDown = "key+none" }, //prevent scrolling page, toggle open/close
                         new KeyOptions { Key="ArrowUp", PreventDown = "key+none" }, // prevent scrolling page, instead hilight previous item
                         new KeyOptions { Key="ArrowDown", PreventDown = "key+none" }, // prevent scrolling page, instead hilight next item
                         new KeyOptions { Key="Home", PreventDown = "key+none" },
@@ -819,7 +819,9 @@ namespace MudExtensions
             switch (obj.Key)
             {
                 case " ":
-                    _searchString = _searchString + " ";
+                    await SearchChanged(_searchString + " ");
+                    //_searchString = _searchString + " ";
+                    //await OnSearchStringChange.InvokeAsync(_searchString);
                     await _searchField.BlurAsync();
                     await _searchField.FocusAsync();
                     StateHasChanged();
