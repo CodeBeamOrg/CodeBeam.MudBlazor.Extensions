@@ -45,6 +45,20 @@ namespace MudExtensions
         }
 
         /// <summary>
+        /// Custom text for ValueLabel
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.Slider.Validation)]
+        public string? LabelText { get; set; }
+
+        /// <summary>
+        /// Custom text for upper ValueLabel
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.Slider.Validation)]
+        public string? UpperLabelText { get; set; }
+
+        /// <summary>
         /// The minimum allowed value of the slider. Should not be equal to max.
         /// </summary>
         [Parameter]
