@@ -34,13 +34,13 @@
             <input class="mud-slider-input" aria-valuenow="@UpperValue" aria-valuemin="@_min" aria-valuemax="@_max" role="slider" @attributes="UserAttributes" type="range" min="@_min" max="@_max" step="@_step" disabled="@(Disabled || _userInvalidatedRange || (Range && DisableMax))"
             @bind-value="@UpperText" @bind-value:event="@((Immediate ? "oninput" : "onchange"))" />
 
-            @SliderValueLabel(upperLeft, UpperValue?.ToString())
+            @SliderValueLabel(upperLeft, string.IsNullOrEmpty(UpperLabelText) ? UpperValue?.ToString() : UpperLabelText)
         }
 
         <input class="mud-slider-input" aria-valuenow="@Value" aria-valuemin="@_min" aria-valuemax="@_max" role="slider" @attributes="UserAttributes" type="range" min="@_min" max="@_max" step="@_step" disabled="@(Disabled || _userInvalidatedRange || (Range && DisableMin))"
         @bind-value="@Text" @bind-value:event="@((Immediate ? "oninput" : "onchange"))" />
 
-        @SliderValueLabel(left, Value?.ToString())
+        @SliderValueLabel(left, string.IsNullOrEmpty(LabelText) ? Value?.ToString() : LabelText)
 
 
     </div>

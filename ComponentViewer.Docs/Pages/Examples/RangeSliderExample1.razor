@@ -5,20 +5,22 @@
 <MudGrid>
     <MudItem xs="12" sm="8">
         <MudRangeSlider @bind-Value="@_value" @bind-UpperValue="@_upperValue" Size="Size.Large" Variant="Variant.Filled" ValueLabel="_valueLabel" Range="_range" TickMarks="_tickmarks"
-                        Min="_min" Max="_max" Step="_step" Display="_display" MinDistance="_minDistance" DisableMin="_disableMin" DisableMax="_disableMax">@_label</MudRangeSlider>
+                        Min="_min" Max="_max" Step="_step" Display="_display" MinDistance="_minDistance" DisableMin="_disableMin" DisableMax="_disableMax" LabelText="@_labelText" UpperLabelText="@($"{_upperLabelText} {_upperValue}")">@_label</MudRangeSlider>
    </MudItem>
 
     <MudItem xs="12" sm="4">
         <MudStack>
             <MudTextField @bind-Value="_label" Label="Label" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudTextField @bind-Value="_labelText" Label="Label Text" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudTextField @bind-Value="_upperLabelText" Label="Upper Label Text" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudNumericField @bind-Value="_value" Label="Lower Value" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudNumericField @bind-Value="_upperValue" Label="Upper Value" Variant="Variant.Outlined" Margin="Margin.Dense" />
-            <MudSwitchM3 @bind-Checked="_valueLabel" Label="ValueLabel" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="_range" Label="Range" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="_tickmarks" Label="Tickmarks" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="_disableMin" Label="DisableMin" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="_disableMax" Label="DisableMax" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="_display" Label="Display" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="_valueLabel" Label="ValueLabel" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="_range" Label="Range" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="_tickmarks" Label="Tickmarks" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="_disableMin" Label="DisableMin" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="_disableMax" Label="DisableMax" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="_display" Label="Display" Color="Color.Secondary" />
             <MudNumericField @bind-Value="_min" Label="Min" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudNumericField @bind-Value="_max" Label="Max" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudNumericField @bind-Value="_step" Label="Step" Variant="Variant.Outlined" Margin="Margin.Dense" />
@@ -42,6 +44,8 @@
     int _max = 100;
     int _step = 1;
     int _minDistance = 2;
+    string _labelText;
+    string _upperLabelText;
 
     void ClearValues()
     {
