@@ -1196,6 +1196,9 @@ namespace MudExtensions
         /// </summary>
         protected async Task ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
+            if (Disabled || ReadOnly)
+                return;
+
             await UpdateComboBoxValueAsync(default);
             _searchString = null;
             await SetTextAsync(default, false);
@@ -1216,6 +1219,9 @@ namespace MudExtensions
         /// </summary>
         public async Task Clear()
         {
+            if (Disabled || ReadOnly)
+                return;
+
             await SetValueAsync(default, false);
             _searchString = null;
             await SetTextAsync(default, false);
