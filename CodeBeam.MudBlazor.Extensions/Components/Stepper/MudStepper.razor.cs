@@ -258,8 +258,11 @@ namespace MudExtensions
         [Parameter]
         public Func<StepChangeDirection, bool> PreventStepChange { get; set; }
 
+        /// <summary>
+        /// Runs a task to prevent step change. Has change direction (backwards or forwards) and target index and returns a bool value.
+        /// </summary>
         [Parameter]
-        public Func<StepChangeDirection, Task<bool>> PreventStepChangeAsync { get; set; }
+        public Func<StepChangeDirection, int, Task<bool>> PreventStepChangeAsync { get; set; }
 
         List<MudStep> _steps = new();
         List<MudStep> _allSteps = new();
@@ -318,7 +321,7 @@ namespace MudExtensions
 
             if (skipPreventProcess == false && PreventStepChangeAsync != null)
             {
-                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection, ActiveIndex + count);
                 if (result == true)
                 {
                     return;
@@ -377,7 +380,7 @@ namespace MudExtensions
 
             if (skipPreventProcess == false && PreventStepChangeAsync != null)
             {
-                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                var result = await PreventStepChangeAsync.Invoke(stepChangeDirection, index);
                 if (result == true)
                 {
                     return;
@@ -416,7 +419,7 @@ namespace MudExtensions
 
                 if (PreventStepChangeAsync != null)
                 {
-                    var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                    var result = await PreventStepChangeAsync.Invoke(stepChangeDirection, index + 1);
                     if (result == true)
                     {
                         return;
@@ -448,7 +451,7 @@ namespace MudExtensions
 
                 if (PreventStepChangeAsync != null)
                 {
-                    var result = await PreventStepChangeAsync.Invoke(stepChangeDirection);
+                    var result = await PreventStepChangeAsync.Invoke(stepChangeDirection, index + 1);
                     if (result == true)
                     {
                         return;

@@ -6,11 +6,19 @@
         <MudComboBox @bind-Value="@_value" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" Label="Gryffindor" MultiSelection="true" Editable="_editable"
                      SelectAll="_selectAll" ShowCheckbox="_showCheckbox" Bordered="_bordered" Dense="_dense"
                      autocomplete="new-password" Color="_color" Clearable="_clearable">
-            @foreach (var item in characters)
-            {
-                <MudComboBoxItem Value="@item" Text="@item"></MudComboBoxItem>
-            }
+            <ChildContent>
+                @foreach (var item in characters)
+                {
+                    <MudComboBoxItem Value="@item" Text="@item"></MudComboBoxItem>
+                }
+            </ChildContent>
 
+            <PopoverEndContent>
+                <div class="d-flex gap-4 pa-4">
+                    <MudIconButton Icon="@Icons.Material.Filled.Add" Variant="Variant.Outlined" Color="_color" OnClick="AddItem" />
+                    <MudTextFieldExtended @bind-Value="_toBeAddedValue" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                </div>
+            </PopoverEndContent>
         </MudComboBox>
     </MudItem>
 
@@ -29,7 +37,7 @@
 
 @code {
     string _value;
-    IEnumerable<string> _selectedValues = new HashSet<string>() { "Harry Potter", "Ron Weasley" };
+    IEnumerable<string> _selectedValues;
     Dense _dense = Dense.Standard;
     Color _color = Color.Primary;
     bool _selectAll;
@@ -37,9 +45,20 @@
     bool _showCheckbox = true;
     bool _editable;
     bool _clearable;
+    string _toBeAddedValue;
 
-    private string[] characters =
+    private List<string> characters = new()
     {
         "Harry Potter", "Ron Weasley", "Hermione Granger", "Seamus Finnigan", "Oliver Wood"
     };
+
+    private void AddItem()
+    {
+        if (string.IsNullOrEmpty(_toBeAddedValue))
+        {
+            return;
+        }
+        characters.Add(_toBeAddedValue);
+        _toBeAddedValue = null;
+    }
 }

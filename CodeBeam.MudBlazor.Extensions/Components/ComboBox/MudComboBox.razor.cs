@@ -6,8 +6,7 @@ using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using MudExtensions.Extensions;
 using MudExtensions.Services;
-using System.Text.RegularExpressions;
-using static MudBlazor.CategoryTypes;
+using System.Runtime.InteropServices;
 
 namespace MudExtensions
 {
@@ -26,11 +25,37 @@ namespace MudExtensions
         [Inject] IScrollManagerExtended ScrollManagerExtended { get; set; }
         [Inject] IScrollManager ScrollManager { get; set; }
 
-        internal string _searchString;
-        private string multiSelectionText;
-        private IKeyInterceptor _keyInterceptor;
+        protected internal void SetSearchString(T value)
+        {
+            _searchString = Converter.Set(value);
+        }
 
-        public List<MudComboBoxItem<T>> Items = new();
+        internal string _searchString { get; set; }
+        private readonly string multiSelectionText;
+        private IKeyInterceptor _keyInterceptor;
+        static readonly KeyInterceptorOptions _keyInterceptorOptions = new()
+        {
+            //EnableLogging = true,
+            TargetClass = "mud-input-control",
+            Keys =
+            {
+                new KeyOptions { Key=" ", PreventDown = "key+none" }, //prevent scrolling page, toggle open/close
+                new KeyOptions { Key="ArrowUp", PreventDown = "key+none" }, // prevent scrolling page, instead hilight previous item
+                new KeyOptions { Key="ArrowDown", PreventDown = "key+none" }, // prevent scrolling page, instead hilight next item
+                new KeyOptions { Key="PageUp", PreventDown = "key+none" }, // prevent scrolling page, instead hilight previous item
+                new KeyOptions { Key="PageDown", PreventDown = "key+none" }, // prevent scrolling page, instead hilight next item
+                new KeyOptions { Key="Home", PreventDown = "key+none" },
+                new KeyOptions { Key="End", PreventDown = "key+none" },
+                new KeyOptions { Key="Escape" },
+                new KeyOptions { Key="Enter", PreventDown = "key+none" },
+                new KeyOptions { Key="NumpadEnter", PreventDown = "key+none" },
+                new KeyOptions { Key="a", PreventDown = "key+ctrl" }, // select all items instead of all page text
+                new KeyOptions { Key="A", PreventDown = "key+ctrl" }, // select all items instead of all page text
+                new KeyOptions { Key="/./", SubscribeDown = true, SubscribeUp = true }, // for our users
+            }
+        };
+
+        public List<MudComboBoxItem<T>> Items { get; set; } = new();
         internal MudComboBoxItem<T> _lastActivatedItem;
         protected internal List<MudComboBoxItem<T>> EligibleItems { get; set; } = new();
         private MudInputExtended<string> _inputReference;
@@ -58,11 +83,11 @@ namespace MudExtensions
             new StyleBuilder()
             .AddStyle("height: auto")
             .AddStyle("min-height: 1.1876em")
-            .AddStyle("display", "inline", Value != null || SelectedValues.Count() != 0)
+            .AddStyle("display", "inline", Value != null || SelectedValues.Any())
             .Build();
 
-        private string _elementId = "combobox_" + Guid.NewGuid().ToString().Substring(0, 8);
-        private string _popoverId = "comboboxpopover_" + Guid.NewGuid().ToString().Substring(0, 8);
+        private readonly string _elementId = string.Concat("combobox_", Guid.NewGuid().ToString().AsSpan(0, 8));
+        private readonly string _popoverId = string.Concat("comboboxpopover_", Guid.NewGuid().ToString().AsSpan(0, 8));
 
         /// <summary>
         /// If true, combobox goes to autocomplete mode.
@@ -71,10 +96,10 @@ namespace MudExtensions
         [Parameter] public bool Editable { get; set; }
 
         /// <summary>
-        /// If true, all items are eligible regarding what user search in textfield. Default is false.
+        /// If true, all items are eligible regarding what user search in textfield.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
-        [Parameter] public bool DisableFilter { get; set; } = false;
+        [Parameter] public bool DisableFilter { get; set; }
 
         /// <summary>
         /// If true, searched text has highlight.
@@ -200,6 +225,7 @@ namespace MudExtensions
         /// <summary>
         /// If true, compact vertical padding will be applied to all Select items.
         /// </summary>
+        /// <remarks>The default is <see cref="Dense.Standard"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public Dense Dense { get; set; } = Dense.Standard;
@@ -207,6 +233,7 @@ namespace MudExtensions
         /// <summary>
         /// The Open Select Icon
         /// </summary>
+        /// <remarks>The default is <see cref="Icons.Material.Filled.ArrowDropDown"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public string OpenIcon { get; set; } = Icons.Material.Filled.ArrowDropDown;
@@ -214,6 +241,7 @@ namespace MudExtensions
         /// <summary>
         /// The Close Select Icon
         /// </summary>
+        /// <remarks>The default is <see cref="Icons.Material.Filled.ArrowDropUp"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public string CloseIcon { get; set; } = Icons.Material.Filled.ArrowDropUp;
@@ -221,13 +249,47 @@ namespace MudExtensions
         /// <summary>
         /// Dropdown color of select. Supports theme colors.
         /// </summary>
+        /// <remarks>The default is <see cref="Color.Primary"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public Color Color { get; set; } = Color.Primary;
 
         /// <summary>
+        /// The color of the text. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="Color.Default"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Color TextColor { get; set; } = Color.Default;
+
+        /// <summary>
+        /// The color of the checked checkbox. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="MudCheckBox.Color"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Color? CheckBoxCheckedColor { get; set; } = null;
+
+        /// <summary>
+        /// The color of the unchecked checkbox. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="MudCheckBox.Color"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.Radio.Appearance)]
+        public Color? CheckBoxUnCheckedColor { get; set; } = null;
+
+        /// <summary>
+        /// The size of the checkbox.
+        /// </summary>
+        /// <remarks>The default is <see cref="Size.Medium"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public Size CheckBoxSize { get; set; } = Size.Medium;
+
+        /// <summary>
         /// The input's visual.
         /// </summary>
+        /// <remarks>The default is <see cref="ValuePresenter.Text"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public ValuePresenter InputPresenter { get; set; } = ValuePresenter.Text;
@@ -235,13 +297,15 @@ namespace MudExtensions
         /// <summary>
         /// The items' visual in popover.
         /// </summary>
+        /// <remarks>The default is <see cref="ValuePresenter.Text"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public ValuePresenter ItemPresenter { get; set; } = ValuePresenter.Text;
 
         /// <summary>
-        /// If true, shows checkbox when multiselection is true. Default is true.
+        /// If true, shows checkbox when multiselection is true.
         /// </summary>
+        /// <remarks>The default is <c>true</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public bool ShowCheckbox { get; set; } = true;
@@ -256,6 +320,7 @@ namespace MudExtensions
         /// <summary>
         /// Sets position of the Select All checkbox
         /// </summary>
+        /// <remarks>The default is <see cref="SelectAllPosition.BeforeSearchBox"/></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
         public SelectAllPosition SelectAllPosition { get; set; } = SelectAllPosition.BeforeSearchBox;
@@ -263,6 +328,7 @@ namespace MudExtensions
         /// <summary>
         /// Define the text of the Select All option.
         /// </summary>
+        /// <remarks>The default is <c>Select All</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public string SelectAllText { get; set; } = "Select All";
@@ -306,10 +372,12 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Behavior)]
         public string ChipClass { get; set; }
 
+        /// <remarks>The default is <see cref="Variant.Filled"/></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public Variant ChipVariant { get; set; } = Variant.Filled;
 
+        /// <remarks>The default is <see cref="Size.Small"/></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public Size ChipSize { get; set; } = Size.Small;
@@ -317,13 +385,15 @@ namespace MudExtensions
         /// <summary>
         /// Parameter to define the delimited string separator.
         /// </summary>
+        /// <remarks>The default is <c>, </c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public string Delimiter { get; set; } = ", ";
 
         /// <summary>
-        /// If true popover width will be the same as the select component.
+        /// If true popover width will be the same as the combobox component.
         /// </summary>
+        /// <remarks>The default is <c>true</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool RelativeWidth { get; set; } = true;
@@ -331,13 +401,15 @@ namespace MudExtensions
         /// <summary>
         /// Sets the maxheight of the popover.
         /// </summary>
+        /// <remarks>The default is <c>300</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public int MaxHeight { get; set; } = 300;
 
         /// <summary>
-        /// Set the anchor origin point to determen where the popover will open from.
+        /// Set the anchor origin point to determine where the popover will open from.
         /// </summary>
+        /// <remarks>The default is <see cref="Origin.BottomCenter"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public Origin AnchorOrigin { get; set; } = Origin.BottomCenter;
@@ -345,6 +417,7 @@ namespace MudExtensions
         /// <summary>
         /// Sets the transform origin point for the popover.
         /// </summary>
+        /// <remarks>The default is <see cref="Origin.TopCenter"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public Origin TransformOrigin { get; set; } = Origin.TopCenter;
@@ -352,6 +425,7 @@ namespace MudExtensions
         /// <summary>
         /// If false, combobox allows value from out of bound.
         /// </summary>
+        /// <remarks>The default is <c>true</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Strict { get; set; } = true;
@@ -364,6 +438,13 @@ namespace MudExtensions
         public bool Clearable { get; set; }
 
         /// <summary>
+        /// If <c>true</c> will open the menu when the clear button is clicked.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListAppearance)]
+        public bool OpenMenuAfterClear { get; set; }
+
+        /// <summary>
         /// If true, shows a searchbox for filtering items. Only works with ItemCollection approach.
         /// </summary>
         [Parameter]
@@ -373,6 +454,7 @@ namespace MudExtensions
         /// <summary>
         /// If true, the search-box will be focused when the dropdown is opened.
         /// </summary>
+        /// <remarks>The default is <c>true</c></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public bool SearchBoxAutoFocus { get; set; } = true;
@@ -387,9 +469,10 @@ namespace MudExtensions
         /// <summary>
         /// If true, prevent scrolling while dropdown is open.
         /// </summary>
+        /// <remarks>The default is <c>true</c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public bool LockScroll { get; set; } = false;
+        public bool LockScroll { get; set; } = true;
 
         /// <summary>
         /// Button click event for clear button. Called after text and value has been cleared.
@@ -399,27 +482,17 @@ namespace MudExtensions
         /// <summary>
         /// Custom indeterminate icon.
         /// </summary>
+        /// <remarks>The default is <see cref="Icons.Material.Filled.IndeterminateCheckBox"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public string IndeterminateIcon { get; set; } = Icons.Material.Filled.IndeterminateCheckBox;
 
-        private bool _multiSelection = false;
         /// <summary>
         /// If true, multiple values can be selected via checkboxes which are automatically shown in the dropdown
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public bool MultiSelection
-        {
-            get => _multiSelection;
-            set
-            {
-                if (value != _multiSelection)
-                {
-                    _multiSelection = value;
-                }
-            }
-        }
+        public bool MultiSelection { get; set; }
 
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
@@ -435,7 +508,7 @@ namespace MudExtensions
                 }
                 else
                 {
-                    if (Value is string && string.IsNullOrEmpty(Converter.Set(Value)))
+                    if (Value is string && string.IsNullOrWhiteSpace(Converter.Set(Value)))
                     {
                         SelectedValues = new HashSet<T>();
                     }
@@ -443,11 +516,11 @@ namespace MudExtensions
                     {
                         SelectedValues = new HashSet<T>() { Value };
                     }
-                    
+
                 }
                 await SelectedValuesChanged.InvokeAsync(_selectedValues);
             }
-            else 
+            else
             {
                 await SetValueAsync(SelectedValues.LastOrDefault(), false);
                 _searchString = Converter.Set(SelectedValues.LastOrDefault());
@@ -510,8 +583,7 @@ namespace MudExtensions
         {
             get
             {
-                if (_selectedValues == null)
-                    _selectedValues = new HashSet<T>(_comparer);
+                _selectedValues ??= new HashSet<T>(_comparer);
                 return _selectedValues;
             }
             set
@@ -543,7 +615,7 @@ namespace MudExtensions
 
         protected Task UpdateDataVisualiserTextAsync()
         {
-            List<string> textList = new List<string>();
+            var textList = new List<string>();
             if (Items != null && Items.Any())
             {
                 if (false) // ItemCollection != null
@@ -569,7 +641,7 @@ namespace MudExtensions
                         var item = Items.FirstOrDefault(x => x != null && (x.Value == null ? val == null : Comparer != null ? Comparer.Equals(x.Value, val) : x.Value.Equals(val)));
                         if (item != null)
                         {
-                            textList.Add(!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
+                            textList.Add(!string.IsNullOrWhiteSpace(item.Text) ? item.Text : Converter.Set(item.Value));
                         }
                     }
                 }
@@ -581,7 +653,7 @@ namespace MudExtensions
             {
                 if (MultiSelectionTextFunc != null)
                 {
-                    if (SelectedValues.Count() == 0)
+                    if (!SelectedValues.Any())
                     {
                         _dataVisualiserText = null;
                         return Task.CompletedTask;
@@ -598,12 +670,10 @@ namespace MudExtensions
             else
             {
                 var item = Items.FirstOrDefault(x => Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(Value, x.Value) : Value.Equals(x.Value));
-                if (item == null)
-                {
-                    _dataVisualiserText = Converter.Set(Value);
-                    return Task.CompletedTask;
-                }
-                _dataVisualiserText = (!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
+                _dataVisualiserText = item is null
+                    ? Converter.Set(Value)
+                    : (!string.IsNullOrWhiteSpace(item.Text) ? item.Text : Converter.Set(item.Value));
+
                 return Task.CompletedTask;
             }
         }
@@ -643,7 +713,7 @@ namespace MudExtensions
                 // TODO: Check this line again
                 SetValueAsync(SelectedValues.FirstOrDefault()).AndForget();
             }
-            
+
         }
 
         bool _oldShowCheckbox = true;
@@ -685,7 +755,8 @@ namespace MudExtensions
                 else
                 {
                     DeselectAllItems();
-                    Items.FirstOrDefault(x => x.Value.Equals(Value)).Selected = true;
+                    if (Value is not null)
+                        Items.FirstOrDefault(x => x.Value.Equals(Value)).Selected = true;
                 }
             }
             if ((Value == null && _oldValue != null) || (Value != null && Value.Equals(_oldValue) == false))
@@ -711,24 +782,7 @@ namespace MudExtensions
             if (firstRender)
             {
                 _keyInterceptor = KeyInterceptorFactory.Create();
-                await _keyInterceptor.Connect(_elementId, new KeyInterceptorOptions()
-                {
-                    //EnableLogging = true,
-                    TargetClass = "mud-input-control",
-                    Keys = {
-                        new KeyOptions { Key=" ", PreventDown = "key+none" }, //prevent scrolling page, toggle open/close
-                        new KeyOptions { Key="ArrowUp", PreventDown = "key+none" }, // prevent scrolling page, instead hilight previous item
-                        new KeyOptions { Key="ArrowDown", PreventDown = "key+none" }, // prevent scrolling page, instead hilight next item
-                        new KeyOptions { Key="Home", PreventDown = "key+none" },
-                        new KeyOptions { Key="End", PreventDown = "key+none" },
-                        new KeyOptions { Key="Escape" },
-                        new KeyOptions { Key="Enter", PreventDown = "key+none" },
-                        new KeyOptions { Key="NumpadEnter", PreventDown = "key+none" },
-                        new KeyOptions { Key="a", PreventDown = "key+ctrl" }, // select all items instead of all page text
-                        new KeyOptions { Key="A", PreventDown = "key+ctrl" }, // select all items instead of all page text
-                        new KeyOptions { Key="/./", SubscribeDown = true, SubscribeUp = true }, // for our users
-                    },
-                });
+                await _keyInterceptor.Connect(_elementId, _keyInterceptorOptions);
                 _keyInterceptor.KeyDown += HandleKeyDown;
                 _keyInterceptor.KeyUp += HandleKeyUp;
                 await UpdateDataVisualiserTextAsync();
@@ -749,8 +803,11 @@ namespace MudExtensions
                 {
                     _keyInterceptor.KeyDown -= HandleKeyDown;
                     _keyInterceptor.KeyUp -= HandleKeyUp;
+                    _keyInterceptor.Dispose();
+                    _keyInterceptor = null;
                 }
-                _keyInterceptor?.Dispose();
+
+                Items.Clear();
             }
         }
 
@@ -759,136 +816,134 @@ namespace MudExtensions
 
         #region Events (Key, Focus)
 
-        protected internal async void HandleKeyDown(KeyboardEventArgs obj)
+        protected internal void HandleKeyDown(KeyboardEventArgs obj)
         {
             if (Disabled || ReadOnly)
                 return;
 
-            var key = obj.Key.ToLowerInvariant();
-            if (Editable == false && key.Length == 1 && key != " " && !(obj.CtrlKey || obj.ShiftKey || obj.AltKey || obj.MetaKey))
+            // Select mode: Jump to item which starts with "key".
+            if (!Editable && obj.Key.Length == 1 && obj.Key[0] != 32 && !(obj.CtrlKey || obj.ShiftKey || obj.AltKey || obj.MetaKey))
             {
-                await ActiveFirstItem(key);
+                _ = ActivateFirstItem(obj.Key);
+                _ = OnKeyDown.InvokeAsync(obj);
                 return;
             }
 
             switch (obj.Key)
             {
-                case "Tab":
-                    if (MultiSelection == false && SelectValueOnTab)
-                    {
-                        await ToggleOption(_lastActivatedItem, true);
-                    }
-                    await CloseMenu();
+                case " ":
+                    // Only open the ComboBox menu when search string is empty.
+                    if (!Editable || _searchString is null || _searchString.Length == 0)
+                        _ = ToggleMenu();
+                    else
+                        // For example: "new jersey"
+                        _searchString += " ";
                     break;
+
+                case "Escape":
+                    _ = CloseMenu();
+                    break;
+
+                case "Home":
+                    if (!_isOpen)
+                        _ = OpenMenu();
+                    _ = ActivateFirstItem();
+                    break;
+                case "End":
+                    if (!_isOpen)
+                        _ = OpenMenu();
+                    _ = ActivateLastItem();
+                    break;
+                case "PageUp":
+                    if (_isOpen)
+                        _ = ActivateAdjacentItem(-3);
+                    break;
+                case "PageDown":
+                    if (_isOpen)
+                        _ = ActivateAdjacentItem(3);
+                    break;
+                case "ArrowUp":
+                    if (obj.AltKey)
+                        _ = CloseMenu();
+                    else
+                    {
+                        if (!_isOpen)
+                            _ = OpenMenu();
+                        _ = ActivateAdjacentItem(-1);
+                    }
+                    break;
+                case "ArrowDown":
+                    if (obj.AltKey)
+                        _ = OpenMenu();
+                    else
+                    {
+                        if (!_isOpen)
+                            _ = OpenMenu();
+                        _ = ActivateAdjacentItem(1);
+                    }
+                    break;
+
+                case "Enter":
+                case "NumpadEnter":
+                    var doSelect = _lastActivatedItem is null || !_lastActivatedItem.Selected;
+
+                    if (_isOpen)
+                        _ = ToggleOption(_lastActivatedItem, doSelect);
+                    else
+                        _ = OpenMenu();
+
+                    if (MultiSelection)
+                    {
+                        if (_isOpen && !doSelect)
+                            _lastActivatedItem.SetActive(true);
+                    }
+                    break;
+
+                case "Tab":
+                    if (SelectValueOnTab && !MultiSelection)
+                        _ = ToggleOption(_lastActivatedItem, true);
+                    _ = CloseMenu();
+                    break;
+
                 case "a":
                 case "A":
                     if (obj.CtrlKey)
                     {
                         if (MultiSelection)
-                        {
-                            await SelectAllItems();
-                        }
+                            _ = SelectAllItems();
                     }
                     break;
-                case "Home":
-                    await ActiveFirstItem();
-                    break;
-                case "End":
-                    await ActiveLastItem();
-                    break;
-                case "ArrowUp":
-                    if (obj.AltKey)
-                    {
-                        await CloseMenu();
-                    }
-                    else if (!_isOpen)
-                    {
-                        await OpenMenu();
-                    }
-                    else
-                    {
-                        await ActiveAdjacentItem(-1);
-                    }
-                    break;
-                case "ArrowDown":
-                    if (obj.AltKey)
-                    {
-                        await OpenMenu();
-                    }
-                    else if (!_isOpen)
-                    {
-                        await OpenMenu();
-                    }
-                    else
-                    {
-                        await ActiveAdjacentItem(1);
-                    }
-                    break;
-                case " ":
-                    await ToggleMenu();
-                    break;
-                case "Escape":
-                    await CloseMenu();
-                    break;
-                case "Enter":
-                case "NumpadEnter":
-                    if (MultiSelection == false)
-                    {
-                        if (_isOpen == false)
-                        {
-                            await OpenMenu();
-                        }
-                        else
-                        {
-                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem?.Selected ?? true);
-                        }
-                        break;
-                    }
-                    else
-                    {
-                        if (_isOpen == false)
-                        {
-                            await OpenMenu();
-                            break;
-                        }
-                        else
-                        {
-                            await ToggleOption(_lastActivatedItem, !_lastActivatedItem?.Selected ?? true);
-                            //await _inputReference.SetText(Text);
-                            if (_lastActivatedItem?.Selected == false)
-                            {
-                                _lastActivatedItem?.SetActive(true);
-                            }
-                            break;
-                        }
-                    }
             }
-            await OnKeyDown.InvokeAsync(obj);
+
+            _ = OnKeyDown.InvokeAsync(obj);
         }
 
         protected internal async Task SearchBoxHandleKeyDown(KeyboardEventArgs obj)
         {
-            if (Disabled)
+            if (Disabled || ReadOnly)
                 return;
+
             switch (obj.Key)
             {
-                case "ArrowUp":
-                case "ArrowDown":
+                case "Escape":
                 case "Home":
                 case "End":
-                    HandleKeyDown(obj);
-                    break;
+                case "PageUp":
+                case "PageDown":
+                case "ArrowUp":
+                case "ArrowDown":
                 case "Enter":
                 case "NumpadEnter":
                     HandleKeyDown(obj);
-                    break;
+                    return;
+
                 case "Tab":
-                    await ActiveFirstItem();
+                    await ActivateFirstItem();
                     await FocusAsync();
-                    StateHasChanged();
                     break;
             }
-            
+
+            await OnKeyDown.InvokeAsync(obj);
         }
 
         protected internal void SearchBoxHandleKeyUp(KeyboardEventArgs obj)
@@ -904,33 +959,43 @@ namespace MudExtensions
 
         protected internal async Task HandleOnBlur(FocusEventArgs obj)
         {
-
-            if (Strict == false)
+            if (!MultiSelection)
             {
-                await UpdateComboBoxValueAsync(Converter.Get(_searchString), updateText: true, updateSearchString: true);
-            }
-            else
-            {
-                if (Items.Select(x => x.Value).Contains(Converter.Get(_searchString)) == false)
+                if (Strict)
                 {
-                    if (Items.Select(x => x.Value).Contains(Value))
-                    {
-                        await ToggleOption(Items.FirstOrDefault(x => x.Value.Equals(Value)), true);
-                    }
+                    // Check if the user-provided search string is an exact (case-insensitive) match against an item in the collection.
+                    var item = Items.FirstOrDefault(x => Converter.Set(x.Value).Equals(_searchString, StringComparison.OrdinalIgnoreCase));
+                    if (item is not null)
+                        await ToggleOption(item, true);
+
+                    // No item equals the user-provided search string.
                     else
                     {
-                        await Clear();
-                    }
-                        
-                    _searchString = Text;
-                }
-            }
+                        // Restore the previous selected item, if any.
+                        if (Value is not null)
+                        {
+                            item = Items.FirstOrDefault(x => x.Value.Equals(Value));
+                            if (item is not null)
+                                await ToggleOption(item, true);
 
+                            // Remove non-matching search string.
+                            else
+                                await Clear();
+                        }
+
+                        // There was no previous selected item. Remove non-matching search string.
+                        else
+                            await Clear();
+                    }
+                }
+                else
+                    await UpdateComboBoxValueAsync(Converter.Get(_searchString), updateText: true, updateSearchString: true);
+            }
 
             await OnBlurredAsync(obj);
         }
 
-        protected void HandleInternalValueChanged(string val)
+        protected internal void HandleInternalValueChanged(string val)
         {
             _searchString = val;
         }
@@ -960,53 +1025,47 @@ namespace MudExtensions
 
         #region PopoverState
 
-        public async Task ToggleMenu()
+        public Task ToggleMenu()
         {
             if (Disabled || ReadOnly)
-                return;
-            if (_isOpen)
-            {
-                await CloseMenu();
-            }
-            else
-            {
-                await OpenMenu();
+                return Task.CompletedTask;
 
-            }
-
+            return _isOpen ? CloseMenu() : OpenMenu();
         }
 
         public async Task OpenMenu()
         {
             if (Disabled || ReadOnly)
                 return;
+
             _isOpen = true;
             UpdateIcon();
-            StateHasChanged();
-            if (Editable)
-            {
-                if (MultiSelection == true && SearchBoxAutoFocus == true)
-                {
-                    await Task.Delay(1);
-                    await _searchbox.SelectAsync();
-                }
-                else
-                {
-                    await _inputReference.SelectAsync();
-                }
-            }
+
+            // Disable escape propagation: if ComboBox menu is open, only the ComboBox popover should close and underlying components should not handle escape key.
             await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "Key+none" });
 
-            if (MultiSelection)
-            {
-                _lastActivatedItem = Items.LastOrDefault(x => x.Value.Equals(SelectedValues.LastOrDefault()));
-            }
-            else
-            {
-                _lastActivatedItem = Items.FirstOrDefault(x => x.Value.Equals(Value));
-            }
             _allSelected = GetAllSelectedState();
-            await ScrollToMiddleAsync(_lastActivatedItem);
+
+            _lastActivatedItem = Items.FirstOrDefault(x => x.Value.Equals(MultiSelection ? SelectedValues.LastOrDefault() : Value));
+            if (_lastActivatedItem is not null)
+                await ScrollToMiddleAsync(_lastActivatedItem);
+            else
+                await ActivateFirstItem();
+
+            if (Editable)
+            {
+                if (MultiSelection)
+                {
+                    if (SearchBoxAutoFocus)
+                    {
+                        await Task.Delay(1);
+                        await _searchbox.SelectAsync();
+                    }
+                }
+                else
+                    await _inputReference.SelectAsync();
+            }
+
             await OnOpen.InvokeAsync();
         }
 
@@ -1015,8 +1074,11 @@ namespace MudExtensions
             _isOpen = false;
             UpdateIcon();
             DeactiveAllItems();
-            StateHasChanged();
 
+            if (MultiSelection && Editable)
+                _searchString = null;
+
+            // Enable escape propagation: The ComboBox popover was closed, no underlying components are allowed to handle escape key.
             await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "none" });
 
             await OnClose.InvokeAsync();
@@ -1040,7 +1102,7 @@ namespace MudExtensions
                 {
                     if (ToggleSelection)
                     {
-                        await UpdateComboBoxValueAsync(default(T), updateText: true, updateSearchString: true);
+                        await UpdateComboBoxValueAsync(default, updateText: true, updateSearchString: true);
                         item.Selected = false;
                     }
                 }
@@ -1065,7 +1127,7 @@ namespace MudExtensions
                     SelectedValues = SelectedValues.Append(item.Value);
                     await SelectedValuesChanged.InvokeAsync(_selectedValues);
                     _allSelected = GetAllSelectedState();
-                    
+
                     //await Task.Delay(1);
                 }
                 item.Selected = true;
@@ -1085,7 +1147,11 @@ namespace MudExtensions
 
         protected void DeselectAllItems()
         {
-            Items.ForEach(x => x.Selected = false);
+            foreach (var item in CollectionsMarshal.AsSpan(Items))
+            {
+                if (item.Selected)
+                    item.Selected = false;
+            }
         }
 
         public override async Task ForceUpdate()
@@ -1101,17 +1167,12 @@ namespace MudExtensions
             }
         }
 
-        public async Task BeginValidatePublic()
-        {
-            await BeginValidateAsync();
-        }
-
-        protected internal bool? Add(MudComboBoxItem<T> item)
+        protected internal bool? AddItem(MudComboBoxItem<T> item)
         {
             if (item == null)
                 return false;
             bool? result = null;
-            if (Items?.Select(x => x.Value).Contains(item.Value) == false)
+            if (Items.Select(x => x.Value).Contains(item.Value) == false)
             {
                 Items.Add(item);
                 if (MultiSelection == true && SelectedValues.Contains(item.Value))
@@ -1123,14 +1184,7 @@ namespace MudExtensions
             return result;
         }
 
-        protected internal void Remove(MudComboBoxItem<T> item)
-        {
-            if (Items == null)
-            {
-                return;
-            }
-            Items.Remove(item);
-        }
+        protected internal void RemoveItem(MudComboBoxItem<T> item) => Items.Remove(item);
 
         #endregion
 
@@ -1140,17 +1194,21 @@ namespace MudExtensions
         /// <summary>
         /// Extra handler for clearing selection.
         /// </summary>
-        protected async ValueTask ClearButtonClickHandlerAsync(MouseEventArgs e)
+        protected async Task ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
-            await UpdateComboBoxValueAsync(default(T));
+            await UpdateComboBoxValueAsync(default);
             _searchString = null;
             await SetTextAsync(default, false);
             _selectedValues.Clear();
             DeselectAllItems();
             await BeginValidateAsync();
+            await ForceUpdateItems();
             StateHasChanged();
             await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
             await OnClearButtonClick.InvokeAsync(e);
+
+            if (OpenMenuAfterClear)
+                await OpenMenu();
         }
 
         /// <summary>
@@ -1165,6 +1223,7 @@ namespace MudExtensions
             await BeginValidateAsync();
             StateHasChanged();
             await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
+
         }
 
         protected override void ResetValue()
@@ -1180,27 +1239,13 @@ namespace MudExtensions
             _currentIcon = !string.IsNullOrWhiteSpace(AdornmentIcon) ? AdornmentIcon : _isOpen ? CloseIcon : OpenIcon;
         }
 
-        //public void CheckGenericTypeMatch(object select_item)
-        //{
-        //    var itemT = select_item.GetType().GenericTypeArguments[0];
-        //    if (itemT != typeof(T))
-        //        throw new GenericTypeMismatchException("MudSelectExtended", "MudSelectItemExtended", typeof(T), itemT);
-        //}
-
-        protected override bool HasValue(T value)
-        {
-            if (MultiSelection)
-                return SelectedValues?.Count() > 0;
-            else
-                return base.HasValue(value);
-        }
+        protected override bool HasValue(T value) => MultiSelection ? SelectedValues.Any() : base.HasValue(value);
 
         protected async Task ChipClosed(MudChip chip)
         {
-            if (chip == null || SelectedValues == null)
-            {
+            if (chip is null || SelectedValues is null)
                 return;
-            }
+
             //SelectedValues = SelectedValues.Where(x => Converter.Set(x)?.ToString() != chip.Value?.ToString());
             SelectedValues = SelectedValues.Where(x => x.Equals(chip.Value) == false);
             await SelectedValuesChanged.InvokeAsync(SelectedValues);
@@ -1212,7 +1257,7 @@ namespace MudExtensions
             if (_allSelected == null || _allSelected == false)
             {
                 SelectedValues = new List<T>();
-                foreach (var item in Items.Where(x => x.Eligible == true))
+                foreach (var item in Items.Where(x => x.Eligible))
                 {
                     item.Selected = true;
                     SelectedValues = SelectedValues.Append(item.Value);
@@ -1223,7 +1268,7 @@ namespace MudExtensions
             }
             else
             {
-                foreach (var item in Items)
+                foreach (var item in Items.Where(x => x.Selected))
                 {
                     item.Selected = false;
                 }
@@ -1235,218 +1280,212 @@ namespace MudExtensions
 
         protected bool? GetAllSelectedState()
         {
-            if (MultiSelection == true && SelectedValues.Count() == Items.Count)
+            if (MultiSelection)
             {
-                return true;
-            }
+                var count = SelectedValues.Count();
+                if (count == 0)
+                    return false;
 
-            if (MultiSelection == true && SelectedValues.Count() == 0)
-            {
-                return false;
-            }
+                if (count == Items.Count)
+                    return true;
 
+            }
             return null;
         }
 
-        protected void ForceRenderItems()
+        protected internal void ForceRenderItems()
         {
             Items.ForEach((x) => x.ForceRender());
             StateHasChanged();
         }
 
-        protected async Task ForceUpdateItems()
+        protected internal async Task ForceUpdateItems()
         {
             Items.ForEach(async (x) => await x.ForceUpdate());
         }
 
         #region Active (Hilight)
 
-        protected int GetActiveItemIndex()
-        {
-            if (_lastActivatedItem == null)
-            {
-                var a = Items.FindIndex(x => x.Active == true);
-                return a;
-            }
-            else
-            {
-                var a = Items.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
-                return a;
-            }
-        }
-
-        protected int GetActiveProperItemIndex()
-        {
-            var properItems = GetEligibleAndNonDisabledItems();
-            if (_lastActivatedItem == null)
-            {
-                var a = properItems.FindIndex(x => x.Active == true);
-                return a;
-            }
-            else
-            {
-                var a = properItems.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
-                return a;
-            }
-        }
-
-        protected T GetActiveItemValue()
-        {
-            if (_lastActivatedItem == null)
-            {
-                return Items.FirstOrDefault(x => x.Active == true).Value;
-            }
-            else
-            {
-                return _lastActivatedItem.Value;
-            }
-        }
-
-        protected internal void UpdateLastActivatedItem(T value)
-        {
-            _lastActivatedItem = Items.FirstOrDefault(x => value == null ? x.Value == null : Comparer != null ? Comparer.Equals(value, x.Value) : value.Equals(x.Value));
-        }
+        //protected int GetActiveProperItemIndex()
+        //{
+        //    var properItems = GetEnabledAndEligibleItems();
+        //    if (properItems.Any())
+        //    {
+        //        if (_lastActivatedItem == null)
+        //        {
+        //            var a = properItems.FindIndex(x => x.Active == true);
+        //            return a;
+        //        }
+        //        else
+        //        {
+        //            var a = properItems.FindIndex(x => _lastActivatedItem.Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(_lastActivatedItem.Value, x.Value) : _lastActivatedItem.Value.Equals(x.Value));
+        //            return a;
+        //        }
+        //    }
+        //    return -1;
+        //}
 
         protected void DeactiveAllItems()
         {
-            foreach (var item in Items)
+            if (_lastActivatedItem is not null)
             {
-                item.SetActive(false);
+                System.Diagnostics.Debug.WriteLine($"{nameof(DeactiveAllItems)}: skipped loop");
+                _lastActivatedItem.SetActive(false);
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine($"{nameof(DeactiveAllItems)}: doing loop");
+            foreach (var item in CollectionsMarshal.AsSpan(Items))
+            {
+                if (item.Active)
+                    item.SetActive(false);
             }
         }
 
-#pragma warning disable BL0005
-        public async Task ActiveFirstItem(string startChar = null)
+        [Obsolete("Please use ActivateFirstItem() method")]
+        public Task ActiveFirstItem(string startChar = null) => ActivateFirstItem(startChar);
+        public async Task ActivateFirstItem(string firstLetter = null)
         {
-            if (Items == null || Items.Count == 0 || Items[0].Disabled)
-            {
+            var item = Items.FirstOrDefault();
+            if (item is null || item.Disabled)
                 return;
-            }
+
             DeactiveAllItems();
-            var properItems = GetEligibleAndNonDisabledItems();
-            if (string.IsNullOrWhiteSpace(startChar))
-            {
-                properItems[0].SetActive(true);
-                _lastActivatedItem = properItems[0];
-                await ScrollToMiddleAsync(Items[0]);
-                return;
-            }
 
-            if (Editable == true)
+            if (string.IsNullOrWhiteSpace(firstLetter))
             {
-                return;
-            }
-
-            // find first item that starts with the letter
-            var possibleItems = Items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? "").StartsWith(startChar, StringComparison.CurrentCultureIgnoreCase)).ToList();
-            if (possibleItems == null || !possibleItems.Any())
-            {
-                if (_lastActivatedItem == null)
+                item = GetEnabledAndEligibleItems().FirstOrDefault();
+                if (item is not null)
                 {
-                    return;
+                    item.SetActive(true);
+                    await ScrollToMiddleAsync(item);
                 }
-                _lastActivatedItem.SetActive(true);
-                await ScrollToMiddleAsync(_lastActivatedItem);
+                _lastActivatedItem = item;
                 return;
             }
 
-            var theItem = possibleItems.FirstOrDefault(x => x == _lastActivatedItem);
-            if (theItem == null)
+            if (Editable)
+                return;
+
+
+            // Get a collection of items that start with "firstLetter".
+            var items = Items.Where(x => Converter.Set(x.Value).StartsWith(firstLetter, StringComparison.OrdinalIgnoreCase)).ToList();
+            if (!items.Any())
             {
-                possibleItems[0].SetActive(true);
-                _lastActivatedItem = possibleItems[0];
-                await ScrollToMiddleAsync(possibleItems[0]);
+                if (_lastActivatedItem is not null)
+                {
+                    _lastActivatedItem.SetActive(true);
+                    await ScrollToMiddleAsync(_lastActivatedItem);
+                }
                 return;
             }
 
-            if (theItem == possibleItems.LastOrDefault())
+            item = items.FirstOrDefault(x => x.Equals(_lastActivatedItem));
+            if (item is null)
+                item = items[0];
+            else if (item.Equals(items.LastOrDefault()))
+                item = items[0];
+            else
             {
-                possibleItems[0].SetActive(true);
-                _lastActivatedItem = possibleItems[0];
-                await ScrollToMiddleAsync(possibleItems[0]);
+                var index = items.IndexOf(item) + 1;
+                if (index >= 0 && index <= items.Count - 1)
+                    item = items[index];
+            }
+
+            if (item is not null)
+            {
+                item.SetActive(true);
+                await ScrollToMiddleAsync(item);
+                _lastActivatedItem = item;
+            }
+        }
+
+        [Obsolete("Please use ActivateAdjacentItem() method")]
+        public Task ActiveAdjacentItem(int changeCount) => ActivateAdjacentItem(changeCount);
+        public async Task ActivateAdjacentItem(int changeCount)
+        {
+            if (!(Items.Count > 0))
+                return;
+
+            DeactiveAllItems();
+
+            var items = GetEnabledAndEligibleItems();
+            if (Editable && items.Count == 0)
+                return;
+
+            var indexUpperMax = items.Count - 1;
+            var index = items.IndexOf(_lastActivatedItem);
+
+            if (changeCount < 0)
+            {
+                // Going backward/up using Arrow Up/Page up keys.
+
+                if (index == 0)
+                    index = indexUpperMax;
+                else if (index + changeCount < 0)
+                    index = 0;
+                else
+                    index += changeCount;
             }
             else
             {
-                var item = possibleItems[possibleItems.IndexOf(theItem) + 1];
+                // Going forward/down using Arrow Down/Page Down keys.
+
+                if (index == indexUpperMax)
+                    index = 0;
+                else if (index + changeCount > indexUpperMax)
+                    index = indexUpperMax;
+                else
+                    index += changeCount;
+            }
+
+            System.Diagnostics.Debug.WriteLine($"{nameof(ActivateAdjacentItem)}: index: {index} / items.Count: {items.Count}");
+
+            var item = items[index];
+            item.SetActive(true);
+            await ScrollToMiddleAsync(item);
+            _lastActivatedItem = item;
+        }
+
+        [Obsolete("Please use ActivateLastItem() method")]
+        public Task ActiveLastItem() => ActivateLastItem();
+        public async Task ActivateLastItem()
+        {
+            if (!(Items.Count > 0))
+                return;
+
+            DeactiveAllItems();
+
+            var item = GetEnabledAndEligibleItems().LastOrDefault();
+            if (item is not null)
+            {
                 item.SetActive(true);
-                _lastActivatedItem = item;
                 await ScrollToMiddleAsync(item);
             }
+            _lastActivatedItem = item;
         }
-
-        public async Task ActiveAdjacentItem(int changeCount)
-        {
-            if (Items == null || Items.Count == 0)
-            {
-                return;
-            }
-
-            var properItems = GetEligibleAndNonDisabledItems();
-            int index = GetActiveProperItemIndex();
-            if (index + changeCount >= properItems.Count || 0 > index + changeCount)
-            {
-                return;
-            }
-            
-            DeactiveAllItems();
-            properItems[index + changeCount].SetActive(true);
-            _lastActivatedItem = properItems[index + changeCount];
-
-            await ScrollToMiddleAsync(Items[index + changeCount]);
-        }
-
-        public async Task ActiveLastItem()
-        {
-            if (Items == null || Items.Count == 0)
-            {
-                return;
-            }
-            DeactiveAllItems();
-            var properItems = GetEligibleAndNonDisabledItems();
-            properItems.Last().SetActive(true);
-            _lastActivatedItem = properItems.Last();
-
-            await ScrollToMiddleAsync(_lastActivatedItem);
-        }
-#pragma warning restore BL0005
 
         #endregion
 
-        protected List<MudComboBoxItem<T>> GetEligibleAndNonDisabledItems()
-        {
-            if (Items == null)
-            {
-                return new();
-            }
-            return Items.Where(x => x.Eligible == true && x.Disabled == false).ToList();
-        }
+        protected internal List<MudComboBoxItem<T>> GetEnabledAndEligibleItems() => Items.Where(x => !x.Disabled && x.Eligible).ToList();
 
         protected bool HasEligibleItems()
         {
-            return Items.Any(x => x.Eligible == true);
+            foreach (var item in CollectionsMarshal.AsSpan(Items))
+            {
+                if (item.Eligible)
+                    return true;
+            }
+            return false;
         }
 
         protected internal string GetSearchString() => _searchString;
 
-        protected Typo GetTypo()
-        {
-            if (Dense == Dense.Slim || Dense == Dense.Superslim)
-            {
-                return Typo.body2;
-            }
+        protected internal Typo GetTypo() => Dense == Dense.Slim || Dense == Dense.Superslim ? Typo.body2 : Typo.body1;
 
-            return Typo.body1;
-        }
+        protected internal ValueTask ScrollToMiddleAsync(MudComboBoxItem<T> item) => item is not null ? ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId) : ValueTask.CompletedTask;
 
-        protected internal ValueTask ScrollToMiddleAsync(MudComboBoxItem<T> item)
-        {
-            if (item == null)
-            {
-                return ValueTask.CompletedTask;
-            }
-            ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId);
-            return ValueTask.CompletedTask;
-        }
-
+        protected internal Color EffectiveCheckBoxCheckedColor => CheckBoxCheckedColor ?? Color;
+        protected internal Color EffectiveCheckBoxUnCheckedColor => CheckBoxUnCheckedColor ?? Color;
     }
 }

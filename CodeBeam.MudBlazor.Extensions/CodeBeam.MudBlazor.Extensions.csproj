@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>6.5.9</Version>
+		<Version>6.9.1</Version>
 		<Title>CodeBeam.MudBlazor.Extensions</Title>
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
@@ -18,6 +18,12 @@
 		<RootNamespace>MudExtensions</RootNamespace>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<IsTrimmable>true</IsTrimmable>
+		<TrimMode>link</TrimMode>
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
@@ -25,18 +31,23 @@
 	<ItemGroup>
 		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
 		<PackageReference Include="CsvHelper" Version="30.0.1" />
-		<PackageReference Include="MudBlazor" Version="6.2.1" />
+		<PackageReference Include="MudBlazor" Version="6.12.0" />
 		<PackageReference Include="ZXing.Net" Version="0.16.9" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-		<PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.*" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
-		<PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.1.*" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.1.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.*" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.*" />
 	</ItemGroup>
 
 	<!--Uncomment it on development and debug to compile scss and generate min.css on rebuild-->
@@ -67,29 +78,10 @@
 	
 	<ItemGroup>
 		<None Include="bundleconfig.json" />
-		<None Include="..\..\..\..\Desktop\MudBuilder\Mud_Secondary.png">
+		<None Include="Mud_Secondary.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<!--<None Include="wwwroot\MudExtensions.js" />-->
-		<!--<None Include="Components\ListExtended\MudListExtended.razor" />
-		<None Include="Components\ListExtended\MudListItemExtended.razor" />
-		<None Include="Components\ListExtended\MudListSubheaderExtended.razor" />
-		<None Include="Components\SwitchM3\MudSwitchM3.razor" />
-		<None Include="wwwroot\MudExtensions.js" />-->
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Update="Components\Splitter\MudSplitter.razor">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="Mud_Secondary.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
 	</ItemGroup>
 
 </Project>

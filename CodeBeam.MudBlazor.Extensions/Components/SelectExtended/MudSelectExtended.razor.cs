@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudBlazor.Utilities.Exceptions;
 using MudExtensions.Enums;
-using MudExtensions.Extensions;
-using static MudBlazor.CategoryTypes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MudExtensions
 {
@@ -379,6 +373,13 @@ namespace MudExtensions
         public Adornment SearchBoxAdornment { get; set; } = Adornment.End;
 
         /// <summary>
+        /// Fired when the search value changes.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public EventCallback<string> OnSearchStringChange { get; set; }
+
+        /// <summary>
         /// If true, prevent scrolling while dropdown is open.
         /// </summary>
         [Parameter]
@@ -612,7 +613,7 @@ namespace MudExtensions
         {
             // For MultiSelection of non-string T's we don't update the Value!!!
             //if (typeof(T) == typeof(string) || !MultiSelection)
-                base.UpdateValuePropertyAsync(updateText).AndForget();
+            base.UpdateValuePropertyAsync(updateText).AndForget();
             return Task.CompletedTask;
         }
 
@@ -971,7 +972,7 @@ namespace MudExtensions
 
             //await SelectedValuesChanged.InvokeAsync(SelectedValues);
             //if (MultiSelection && typeof(T) == typeof(string))
-                //await SetValueAsync((T)(object)Text, updateText: false);
+            //await SetValueAsync((T)(object)Text, updateText: false);
             await InvokeAsync(StateHasChanged);
         }
 
@@ -1136,7 +1137,7 @@ namespace MudExtensions
                 return;
             }
             //SelectedValues = SelectedValues.Where(x => Converter.Set(x)?.ToString() != chip.Value?.ToString());
-            SelectedValues = SelectedValues.Where(x =>  x.Equals(chip.Value) == false);
+            SelectedValues = SelectedValues.Where(x => x.Equals(chip.Value) == false);
             await SelectedValuesChanged.InvokeAsync(SelectedValues);
         }
     }

@@ -39,6 +39,10 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Clearable { get; set; } = false;
 
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public bool DisablePaste { get; set; }
+
         /// <summary>
         /// If true, adornment button accepts tab stop. Default is false.
         /// </summary>
@@ -50,6 +54,11 @@ namespace MudExtensions
         /// Button click event for clear button. Called after text and value has been cleared.
         /// </summary>
         [Parameter] public EventCallback<MouseEventArgs> OnClearButtonClick { get; set; }
+
+        /// <summary>
+        /// RenderFragment for start adornment.
+        /// </summary>
+        [Parameter] public RenderFragment AdornmentStart { get; set; }
 
         /// <summary>
         /// RenderFragment for end adornment.

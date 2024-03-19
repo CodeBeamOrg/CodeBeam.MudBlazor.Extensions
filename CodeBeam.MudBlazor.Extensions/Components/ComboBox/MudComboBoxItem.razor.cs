@@ -19,44 +19,22 @@ namespace MudExtensions
             .AddClass("mud-combobox-item-disabled", Disabled)
             .AddClass("mud-combobox-item-bordered", MudComboBox?.Bordered == true && Active)
             .AddClass($"mud-combobox-item-bordered-{MudComboBox?.Color.ToDescriptionString()}", MudComboBox?.Bordered == true && Selected)
-            .AddClass("d-none", Eligible == false)
+            .AddClass("d-none", !Eligible)
             .AddClass(Class)
             .Build();
 
-        protected string HighlighterClassname => new CssBuilder()
-            .AddClass("mud-combobox-highlighter", string.IsNullOrEmpty(MudComboBox?.HighlightClass))
-            .AddClass(MudComboBox?.HighlightClass)
+        protected string HighlighterClassname => MudComboBox is null ? null : new CssBuilder()
+            .AddClass("mud-combobox-highlighter", MudComboBox.Highlight && string.IsNullOrWhiteSpace(MudComboBox.HighlightClass))
+            .AddClass(MudComboBox?.HighlightClass, MudComboBox.Highlight)
             .Build();
 
-        internal string ItemId { get; } = "_" + Guid.NewGuid().ToString().Substring(0, 8);
+        internal string ItemId { get; } = string.Concat("_", Guid.NewGuid().ToString().AsSpan(0, 8));
 
         /// <summary>
         /// The parent select component
         /// </summary>
         [CascadingParameter]
-        internal MudComboBox<T> MudComboBox { get; set; }
-
-        protected Typo GetTypo()
-        {
-            if (MudComboBox == null)
-            {
-                return Typo.body1;
-            }
-
-            if (MudComboBox.Dense == Dense.Slim || MudComboBox.Dense == Dense.Superslim)
-            {
-                return Typo.body2;
-            }
-
-            return Typo.body1;
-        }
-
-        /// <summary>
-        /// Functional items does not hold values. If a value set on Functional item, it ignores by the MudSelect. They cannot be subject of keyboard navigation and selection.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.List.Behavior)]
-        public bool IsFunctional { get; set; }
+        MudComboBox<T> MudComboBox { get; set; }
 
         /// <summary>
         /// The text to display
@@ -72,13 +50,46 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public T Value { get; set; }
 
+        /// <summary>
+        /// The color of the text. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="MudComboBox.TextColor"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Color? TextColor { get; set; } = null;
+
+        /// <summary>
+        /// The color of the checked checkbox. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="MudComboBox.CheckBoxCheckedColor"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public Color? CheckBoxCheckedColor { get; set; } = null;
+
+        /// <summary>
+        /// The color of the unchecked checkbox. It supports the theme colors.
+        /// </summary>
+        /// <remarks>The default is <see cref="MudComboBox.CheckBoxUnCheckedColor"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.Radio.Appearance)]
+        public Color? CheckBoxUnCheckedColor { get; set; } = null;
+
+        /// <summary>
+        /// The size of the checkbox.
+        /// </summary>
+        /// <remarks>The default is <see cref="MudComboBox.CheckBoxSize"/></remarks>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public Size? CheckBoxSize { get; set; } = null;
+
+
         protected internal bool Selected { get; set; }
         protected internal bool Active { get; set; }
 
         public void SetActive(bool isActive)
         {
             Active = isActive;
-            StateHasChanged();
+            //StateHasChanged();
         }
 
         [Parameter]
@@ -95,10 +106,10 @@ namespace MudExtensions
                         return Value.ToString();
                     return converter.Set(Value);
                 }
-                
+
                 if (converter == null)
-                    return $"{(string.IsNullOrEmpty(Text) ? Value : Text)}";
-                return !string.IsNullOrEmpty(Text) ? Text : converter.Set(Value);
+                    return $"{(string.IsNullOrWhiteSpace(Text) ? Value : Text)}";
+                return !string.IsNullOrWhiteSpace(Text) ? Text : converter.Set(Value);
             }
         }
 
@@ -116,14 +127,14 @@ namespace MudExtensions
 
         protected override void OnInitialized()
         {
-            MudComboBox?.Add(this);
+            MudComboBox?.AddItem(this);
         }
 
-        bool? _oldMultiselection;
-        bool? _oldSelected;
+        //bool? _oldMultiselection;
+        //bool? _oldSelected;
         bool _selectedChanged = false;
-        bool? _oldEligible = true;
-        bool _eligibleChanged = false;
+        //bool? _oldEligible = true;
+        //bool _eligibleChanged = false;
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
@@ -153,34 +164,27 @@ namespace MudExtensions
 
         protected bool IsEligible()
         {
-            if (MudComboBox == null || MudComboBox.Editable == false || MudComboBox.DisableFilter == true)
-            {
+            if (MudComboBox is null)
                 return true;
-            }
 
-            if (string.IsNullOrEmpty(MudComboBox._searchString))
-            {
+            if (!MudComboBox.Editable || MudComboBox.DisableFilter)
                 return true;
-            }
 
-            if (MudComboBox?.SearchFunc != null)
-            {
+            if (string.IsNullOrWhiteSpace(MudComboBox._searchString))
+                return true;
+
+            if (MudComboBox.SearchFunc is not null)
                 return MudComboBox.SearchFunc.Invoke(Value, Text, MudComboBox.GetSearchString());
-            }
 
-            if (string.IsNullOrEmpty(Text) == false)
+            if (!string.IsNullOrWhiteSpace(Text))
             {
-                if (Text.Contains(MudComboBox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
-                {
+                if (Text.Contains(MudComboBox._searchString ?? string.Empty, StringComparison.OrdinalIgnoreCase))
                     return true;
-                }
             }
             else
             {
-                if (MudComboBox.Converter.Set(Value).Contains(MudComboBox._searchString ?? string.Empty, StringComparison.CurrentCultureIgnoreCase))
-                {
+                if (MudComboBox.Converter.Set(Value).Contains(MudComboBox._searchString ?? string.Empty, StringComparison.OrdinalIgnoreCase))
                     return true;
-                }
             }
 
             return false;
@@ -188,59 +192,33 @@ namespace MudExtensions
 
         protected void SyncSelected()
         {
-            if (MudComboBox == null)
-            {
+            if (MudComboBox is null)
                 return;
-            }
 
-            if (MudComboBox.MultiSelection == true && MudComboBox.SelectedValues.Contains(Value)) 
-            {
+            if (MudComboBox.MultiSelection && MudComboBox.SelectedValues.Contains(Value))
                 Selected = true;
-            }
-            else if (MudComboBox.MultiSelection == false && ((MudComboBox.Value == null && Value == null) || MudComboBox.Value?.Equals(Value) == true))
-            {
+
+            else if (!MudComboBox.MultiSelection && ((MudComboBox.Value is null && Value is null) || MudComboBox.Value?.Equals(Value) == true))
                 Selected = true;
-            }
             else
-            {
                 Selected = false;
-            }
         }
 
         protected async Task HandleOnClick()
         {
-            //Selected = !Selected;
             await MudComboBox.ToggleOption(this, !Selected);
-            //await MudComboBox?.SelectOption(Value);
             await InvokeAsync(StateHasChanged);
-            //if (MudComboBox.MultiSelection == false)
-            //{
-            //    await MudComboBox?.CloseMenu();
-            //}
-            //else
-            //{
-            //    await MudComboBox.FocusAsync();
-            //}
             await MudComboBox.FocusAsync();
             await OnClick.InvokeAsync();
-        }
-
-        protected bool GetDisabledStatus()
-        {
-            if (MudComboBox?.ItemDisabledFunc != null)
-            {
-                return MudComboBox.ItemDisabledFunc(Value);
-            }
-            return Disabled;
         }
 
         public void Dispose()
         {
             try
             {
-                MudComboBox?.Remove(this);
+                MudComboBox?.RemoveItem(this);
             }
-            catch (Exception) { }
+            catch { }
         }
     }
 }

@@ -2,6 +2,7 @@
 @namespace ComponentViewer.Docs.Pages
 @using MudExtensions.Enums
 @using ComponentViewer.Docs.Shared
+@using System.Runtime.Versioning
 
 @inject IScrollManager ScrollManager
 
@@ -127,6 +128,14 @@
 
         </MudGrid>
     }
+
+    <MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
+        <MudToolBar DisableGutters="true" Dense="true">
+            <MudText Typo="Typo.body1"><b>Copyright © 2022-@DateTime.Now.Year CodeBeam.</b> @Version</MudText>
+            <MudSpacer />
+                <MudText Typo="Typo.body1">Running on <b>.NET</b> @Environment.Version.ToString()</MudText>
+            </MudToolBar>
+        </MudContainer>
 </MudContainer>
 
 <style>
@@ -207,6 +216,15 @@
         return true;
     }
 
+    private string Version
+    {
+        get
+        {
+            var v = typeof(MudAnimate).Assembly.GetName().Version;
+            return $"v {v.Major}.{v.Minor}.{v.Build}";
+        }
+    }
+
     List<Tuple<string, string>> _extendedComponents = new()
     {
         new("MudListExtended", "The extended MudList component."),
@@ -221,7 +239,7 @@
         new("MudChipField", "A textfield with returns chips with defined delimiter."),
         new("MudCodeInput", "A group of textfields that each one can contain a char."),
         new("MudColorProvider", "An extension for primary, secondary and tertiary colors to support Material 3."),
-        new("MudCombobox", "Unites MudSelect and MudAutocomplete features."),
+        new("MudComboBox", "Unites MudSelect and MudAutocomplete features."),
         new("MudCssManager", "Get and set component's css property."),
         new("MudCsvMapper", "A .csv file uploader that matches the .csv file headers to supplied / expected headers."),
         new("MudDateWheelPicker", "A date time picker with MudWheels."),
@@ -234,7 +252,8 @@
         new("MudPopup", "A mobile friendly popup content for several situations."),
         new("MudRangeSlider", "A slider with range capabilities, set upper and lower values."),
         new("MudScrollbar", "Handle all or selected scrollbar styles with a Mud component."),
-        new("MudSpeedDial", "An expandable fab component."),
+        new("MudSignaturePad", "A signature pad."),
+        new("MudSpeedDial", "Stacked buttons in a menu content."),
         new("MudSplitter", "A resizeable content splitter."),
         new("MudStepper", "A wizard-like steps to control the flow with rich options."),
         new("MudSwitchM3", "Material 3 switch component that has all MudBlazor features."),
@@ -243,5 +262,6 @@
         new("MudTransferList", "A component that has 2 lists that transfer items to another."),
         new("MudWatch", "A performance optimized watch to show current time or show stopwatch or countdown."),
         new("MudWheel", "Smoothly changes values in a wheel within defined ItemCollection.")
+        
     };
 }

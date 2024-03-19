@@ -162,11 +162,13 @@ $mud-palette-colors: primary, secondary, tertiary, info, success, warning, error
 
 .mud-combobox-item-bordered {
     border-left: 4px solid var(--mud-palette-lines-default);
+    padding-inline-start: 12px;
 }
 
 @each $color in $mud-palette-colors {
     .mud-combobox-item-bordered-#{$color} {
         border-left: 4px solid var(--mud-palette-#{$color});
+        padding-inline-start: 12px;
     }
 }
 
