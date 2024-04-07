@@ -9,7 +9,8 @@
                     DisableAnimation="_disableAnimation" DisablePreviousButton="_disablePreviousButton" DisableNextButton="_disableNextButton" 
                     DisableSkipButton="_disableSkipButton" DisableStepResultIndicator="_disableStepResultIndicator" HeaderBadgeView="_headerBadgeView" 
                     HeaderTextView="_headerTextView" PreventStepChangeAsync="new Func<StepChangeDirection, int, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
-                    MobileView="_mobileView" IconActionButtons="_iconActionButtons" Loading="_loading" HeaderSize="_headerSize" HeaderIcon="false">
+                    MobileView="_mobileView" IconActionButtons="_iconActionButtons" Loading="_loading" HeaderSize="_headerSize" HeaderIcon="false"
+                    StepperActionsJustify="_stepperActionsJustify">
             <StaticContent>
                 @if (_showStaticContent)
                 {
@@ -69,7 +70,7 @@
                 {
                     <MudButton Color="Color.Secondary" Variant="_variant" OnClick="@(() => Snackbar.Add("Custom cancel button clicked.", Severity.Info))">Cancel</MudButton>
                 }
-                <MudSpacer />
+                @* <MudSpacer /> *@
             </ActionContent>
         </MudStepper>
     </MudItem>
@@ -77,20 +78,20 @@
     <MudItem xs="12" sm="4" Style="box-shadow: rgba(240, 46, 170, 0.4) -3px 3px;">
         <MudStack Spacing="4">
             <MudNumericField @bind-Value="_activeIndex" Label="Change ActiveIndex" @bind-Value:after="(() => _stepper.SetActiveStepByIndex(_activeIndex))" Variant="Variant.Outlined" Margin="Margin.Dense" />
-            <MudCheckBox @bind-Checked="_vertical" Color="Color.Secondary" Label="Vertical" Dense="true" />
-            <MudCheckBox @bind-Checked="_linear" Color="Color.Secondary" Label="Linear" Dense="true" />
-            <MudCheckBox @bind-Checked="_disableAnimation" Color="Color.Secondary" Label="Disable Animation" Dense="true" />
-            <MudCheckBox @bind-Checked="_disablePreviousButton" Color="Color.Secondary" Label="Disable Previous Step Action Button" Dense="true" />
-            <MudCheckBox @bind-Checked="_disableNextButton" Color="Color.Secondary" Label="Disable Next Step Action Button" Dense="true" />
-            <MudCheckBox @bind-Checked="_disableSkipButton" Color="Color.Secondary" Label="Disable Skip Step Action Button" Dense="true" />
-            <MudCheckBox @bind-Checked="_disableStepResultIndicator" Color="Color.Secondary" Label="Disable Step Result Indicator" Dense="true" />
-            <MudSwitchM3 @bind-Checked="_mobileView" Color="Color.Secondary" Label="Mobile View" />
-            <MudSwitchM3 @bind-Checked="_iconActionButtons" Color="Color.Secondary" Label="IconActionButtons" />
-            <MudSwitchM3 @bind-Checked="_addResultStep" Color="Color.Secondary" Label="Has Result Step" />
-            <MudSwitchM3 @bind-Checked="_checkValidationBeforeComplete" Color="Color.Secondary" Label="Check Validation Before Complete Step" />
-            <MudSwitchM3 @bind-Checked="_customLocalization" Color="Color.Secondary" Label="Custom Localization (German)" />
-            <MudSwitchM3 @bind-Checked="_showStaticContent" Color="Color.Secondary" Label="Show Some Static Content" />
-            <MudSwitchM3 @bind-Checked="_showCustomButton" Color="Color.Secondary" Label="Show Custom Button" />
+            <MudCheckBox @bind-Value="_vertical" Color="Color.Secondary" Label="Vertical" Dense="true" />
+            <MudCheckBox @bind-Value="_linear" Color="Color.Secondary" Label="Linear" Dense="true" />
+            <MudCheckBox @bind-Value="_disableAnimation" Color="Color.Secondary" Label="Disable Animation" Dense="true" />
+            <MudCheckBox @bind-Value="_disablePreviousButton" Color="Color.Secondary" Label="Disable Previous Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Value="_disableNextButton" Color="Color.Secondary" Label="Disable Next Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Value="_disableSkipButton" Color="Color.Secondary" Label="Disable Skip Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Value="_disableStepResultIndicator" Color="Color.Secondary" Label="Disable Step Result Indicator" Dense="true" />
+            <MudSwitchM3 @bind-Value="_mobileView" Color="Color.Secondary" Label="Mobile View" />
+            <MudSwitchM3 @bind-Value="_iconActionButtons" Color="Color.Secondary" Label="IconActionButtons" />
+            <MudSwitchM3 @bind-Value="_addResultStep" Color="Color.Secondary" Label="Has Result Step" />
+            <MudSwitchM3 @bind-Value="_checkValidationBeforeComplete" Color="Color.Secondary" Label="Check Validation Before Complete Step" />
+            <MudSwitchM3 @bind-Value="_customLocalization" Color="Color.Secondary" Label="Custom Localization (German)" />
+            <MudSwitchM3 @bind-Value="_showStaticContent" Color="Color.Secondary" Label="Show Some Static Content" />
+            <MudSwitchM3 @bind-Value="_showCustomButton" Color="Color.Secondary" Label="Show Custom Button" />
             <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant" Margin="Margin.Dense" Dense="true">
                 @foreach (Variant item in Enum.GetValues<Variant>())
                 {
@@ -111,6 +112,12 @@
             </MudSelect>
             <MudSelect @bind-Value="_headerBadgeView" Variant="Variant.Outlined" Label="Header Badge View" Margin="Margin.Dense" Dense="true">
                 @foreach (HeaderBadgeView item in Enum.GetValues<HeaderBadgeView>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="_stepperActionsJustify" Variant="Variant.Outlined" Label="Action Buttons Justify" Margin="Margin.Dense" Dense="true">
+                @foreach (StepperActionsJustify item in Enum.GetValues<StepperActionsJustify>())
                 {
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
@@ -146,6 +153,7 @@
     bool _showCustomButton = false;
     bool _vertical = false;
     Size _headerSize = Size.Medium;
+    StepperActionsJustify _stepperActionsJustify = StepperActionsJustify.SpaceBetween;
 
     private async Task<bool> CheckChange(StepChangeDirection direction, int targetIndex)
     {

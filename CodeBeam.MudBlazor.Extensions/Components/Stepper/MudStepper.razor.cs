@@ -23,6 +23,10 @@ namespace MudExtensions
             .AddClass(ContentClass)
             .Build();
 
+        protected string ActionClassname => new CssBuilder("d-flex gap-4")
+            .AddClass(ActionClass)
+            .Build();
+
         protected string AvatarStylename => new StyleBuilder()
             .AddStyle("z-index: 20")
             .AddStyle("background-color", "var(--mud-palette-background)", Variant == Variant.Outlined)
@@ -126,6 +130,18 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public string ContentStyle { get; set; }
+
+        /// <summary>
+        /// Provides CSS classes for the step actions.
+        /// </summary>
+        [Parameter]
+        public string ActionClass { get; set; }
+
+        /// <summary>
+        /// Determines how action buttons justified.
+        /// </summary>
+        [Parameter]
+        public StepperActionsJustify StepperActionsJustify { get; set; }
 
         /// <summary>
         /// If true, the header can not be clickable and users can step one by one.
@@ -289,9 +305,15 @@ namespace MudExtensions
             if (!step.IsResultStep)
             {
                 Steps.Add(step);
+                ReorderSteps();
             }
 
             StateHasChanged();
+        }
+
+        public void ReorderSteps()
+        {
+            Steps = Steps.OrderBy(x => x.Order).ToList();
         }
 
         internal void RemoveStep(MudStep step)
@@ -510,6 +532,16 @@ namespace MudExtensions
         {
             Steps.ForEach(x => x.SetStatus(StepStatus.Continued));
             ActiveIndex = 0;
+        }
+
+        public void SetStepStatus(int index, StepStatus status)
+        {
+            Steps[index].SetStatus(status);
+        }
+
+        public void ForceRender()
+        {
+            StateHasChanged();
         }
 
     }

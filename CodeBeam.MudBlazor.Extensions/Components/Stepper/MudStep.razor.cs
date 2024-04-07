@@ -2,11 +2,6 @@
 using MudBlazor;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MudExtensions.Extensions;
 using Microsoft.AspNetCore.Components.Rendering;
 
@@ -28,6 +23,21 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public string Title { get; set; }
+
+        private int _order;
+        /// <summary>
+        /// The order of the step.
+        /// </summary>
+        [Parameter]
+        public int Order 
+        {
+            get => _order; 
+            set
+            {
+                _order = value;
+                MudStepper?.ReorderSteps();
+            }
+        }
 
 
         public bool IsActive
