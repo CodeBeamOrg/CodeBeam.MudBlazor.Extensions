@@ -4,8 +4,13 @@ namespace MudExtensions
 {
     public partial class MudColorProvider : MudComponentBase
     {
-
-        public string GetRGBString(string hex, int percentage = 40)
+        /// <summary>
+        /// Get CSS property value as RGB format.
+        /// </summary>
+        /// <param name="hex"></param>
+        /// <param name="percentage"></param>
+        /// <returns></returns>
+        public string? GetRGBString(string? hex, int percentage = 40)
         {
             if (string.IsNullOrEmpty(hex) || hex.Length < 6)
             {
@@ -24,11 +29,23 @@ namespace MudExtensions
             return $"rgb({HexToRgb(r, percentage)}, {HexToRgb(g, percentage)}, {HexToRgb(b, percentage)})";
         }
 
-        protected int HexToRgb(string s, int percentage = 40)
+        /// <summary>
+        /// Converts HEX value to RGB format.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="percentage"></param>
+        /// <returns></returns>
+        protected int HexToRgb(string? s, int percentage = 40)
         {
-            return ConvertRGBTone(SingleHexValue(s[0].ToString()) * 16 + SingleHexValue(s[1].ToString()), percentage);
+            return ConvertRGBTone(SingleHexValue(s?[0].ToString() ?? "0") * 16 + SingleHexValue(s?[1].ToString() ?? "0"), percentage);
         }
 
+        /// <summary>
+        /// Implements RGB tone algorithm.
+        /// </summary>
+        /// <param name="val"></param>
+        /// <param name="percentage"></param>
+        /// <returns></returns>
         protected int ConvertRGBTone(int val, double percentage)
         {
             if (percentage == 40)
@@ -47,6 +64,11 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// Hex value to int calculator.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         protected int SingleHexValue(string s)
         {
             switch (s)

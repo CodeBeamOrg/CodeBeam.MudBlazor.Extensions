@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using ZXing;
-using ZXing.Common;
 
 namespace MudExtensions
 {
@@ -9,6 +8,9 @@ namespace MudExtensions
     {
         private static readonly Writer Encoder = new MultiFormatWriter();
 
+        /// <summary>
+        /// Determines which barcode format will shown. Default is QR Code.
+        /// </summary>
         [Parameter]
         public BarcodeFormat BarcodeFormat { get; set; } = BarcodeFormat.QR_CODE;
 
@@ -18,11 +20,23 @@ namespace MudExtensions
         [Parameter]
         public bool Clickable { get; set; }
 
+        /// <summary>
+        /// The error content.
+        /// </summary>
         [Parameter]
-        public string ErrorText { get; set; }
+        public string? ErrorText { get; set; }
 
+        /// <summary>
+        /// The width value as integer.
+        /// </summary>
         [Parameter]
         public int Width { get; set; } = 200;
+
+        /// <summary>
+        /// The height value as integer.
+        /// </summary>
+        [Parameter]
+        public int Height { get; set; } = 200;
 
         /// <summary>
         /// Increase the stroke width if readers can not read the barcode easily.
@@ -30,25 +44,41 @@ namespace MudExtensions
         [Parameter]
         public double StrokeWidth { get; set; }
 
+        /// <summary>
+        /// Determines how user go to href content. Default is open in a new tab.
+        /// </summary>
         [Parameter]
-        public int Height { get; set; } = 200;
+        public string? Target { get; set; } = "_blank";
 
+        /// <summary>
+        /// The value of the barcode format.
+        /// </summary>
         [Parameter]
-        public string Target { get; set; } = "_blank";
+        public string? Value { get; set; }
 
+        /// <summary>
+        /// The color of the barcode as string. Accepts all kinds of CSS property values. (ex. #123456) Default is "black".
+        /// </summary>
         [Parameter]
-        public string Value { get; set; }
+        public string? Color { get; set; } = "black";
 
+        /// <summary>
+        /// The background color of the barcode as string. Accepts all kinds of CSS property values. (ex. #123456) Default is "white".
+        /// </summary>
         [Parameter]
-        public string Color { get; set; } = "black";
+        public string? BackgroundColor { get; set; } = "white";
 
-        [Parameter]
-        public string BackgroundColor { get; set; } = "white";
-
+        /// <summary>
+        /// Fires when value changed.
+        /// </summary>
         [Parameter]
         public EventCallback<string> ValueChanged { get; set; }
 
-        protected BarcodeResult GetCode()
+        /// <summary>
+        /// Barcode process that returns BarcodeResult. Returns null if value is also null or empty.
+        /// </summary>
+        /// <returns></returns>
+        protected BarcodeResult? GetCode()
         {
             if (string.IsNullOrEmpty(Value))
             {

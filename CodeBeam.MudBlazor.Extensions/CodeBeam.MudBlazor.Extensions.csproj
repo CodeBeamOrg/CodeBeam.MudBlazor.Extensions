@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
-		<Nullable>disable</Nullable>
+		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Version>6.9.2</Version>
@@ -22,6 +22,7 @@
 		<IsTrimmable>true</IsTrimmable>
 		<TrimMode>link</TrimMode>
 		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

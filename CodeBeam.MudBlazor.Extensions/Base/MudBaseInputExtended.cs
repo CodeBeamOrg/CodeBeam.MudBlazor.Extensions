@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
@@ -8,16 +6,30 @@ using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// The extended base input fundamentals.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class MudBaseInputExtended<T> : MudFormComponent<T, string>
     {
         private bool _isDirty;
 
         protected MudBaseInputExtended() : base(new DefaultConverter<T>()) { }
 
+        [CascadingParameter(Name = "ParentDisabled")] private bool ParentDisabled { get; set; }
+        [CascadingParameter(Name = "ParentReadOnly")] private bool ParentReadOnly { get; set; }
+
+        /// <summary>
+        /// Disable input component if true. Default is false.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Disabled { get; set; }
-        [CascadingParameter(Name = "ParentDisabled")] private bool ParentDisabled { get; set; }
+
+        /// <summary>
+        /// Get the input component is disabled or not.
+        /// </summary>
+        /// <returns></returns>
         protected bool GetDisabledState() => Disabled || ParentDisabled;
 
         /// <summary>
@@ -26,7 +38,11 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool ReadOnly { get; set; }
-        [CascadingParameter(Name = "ParentReadOnly")] private bool ParentReadOnly { get; set; }
+
+        /// <summary>
+        /// Get the input component is readonly or not.
+        /// </summary>
+        /// <returns></returns>
         protected bool GetReadOnlyState() => ReadOnly || ParentReadOnly;
 
         /// <summary>
@@ -107,6 +123,9 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool OnlyValidateIfDirty { get; set; } = false;
 
+        /// <summary>
+        /// If true shrinks label directly.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool ForceShrink { get; set; }
@@ -225,6 +244,9 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Validation)]
         public virtual string Pattern { get; set; }
 
+        /// <summary>
+        /// CSS style of the child content.
+        /// </summary>
         [Parameter]
         public string ChildContentStyle { get; set; }
 
@@ -264,15 +286,29 @@ namespace MudExtensions
         }
 
         /// <summary>
-        /// Focuses the element
+        /// Focus to the element.
         /// </summary>
         /// <returns>The ValueTask</returns>
         public virtual ValueTask FocusAsync() { return new ValueTask(); }
 
+        /// <summary>
+        /// Blur from the element.
+        /// </summary>
+        /// <returns></returns>
         public virtual ValueTask BlurAsync() { return new ValueTask(); }
 
+        /// <summary>
+        /// Focus and select all text.
+        /// </summary>
+        /// <returns></returns>
         public virtual ValueTask SelectAsync() { return new ValueTask(); }
 
+        /// <summary>
+        /// Focus and select partial text with given positions.
+        /// </summary>
+        /// <param name="pos1"></param>
+        /// <param name="pos2"></param>
+        /// <returns></returns>
         public virtual ValueTask SelectRangeAsync(int pos1, int pos2) { return new ValueTask(); }
 
         /// <summary>
@@ -322,6 +358,9 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool KeyDownPreventDefault { get; set; }
 
+        /// <summary>
+        /// If true disables paste to input component. Default is false.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool DisablePaste { get; set; }
@@ -449,6 +488,10 @@ namespace MudExtensions
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -462,6 +505,11 @@ namespace MudExtensions
                 Label = For.GetLabelString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="forceTextUpdate"></param>
+        /// <returns></returns>
         public virtual async Task ForceRender(bool forceTextUpdate)
         {
             _forceTextUpdate = true;
@@ -473,6 +521,11 @@ namespace MudExtensions
 
         protected virtual bool SkipUpdateProcessOnSetParameters { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             await base.SetParametersAsync(parameters);
@@ -506,6 +559,11 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstRender"></param>
+        /// <returns></returns>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             //Only focus automatically after the first render cycle!
@@ -515,6 +573,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnParametersSet()
         {
             if (SubscribeToParentFormExtended)
@@ -525,7 +586,7 @@ namespace MudExtensions
         {
             SetTextAsync(null, updateValue: true).AndForget();
             _isDirty = false;
-            base.ResetValue();
+            base.ResetValueAsync();
         }
 
         [CascadingParameter(Name = "SubscribeToParentFormExtended")]

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Utilities;
@@ -11,14 +8,23 @@ namespace MudExtensions
 {
     public partial class MudCodeInput<T> : MudFormComponent<T, string>
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public MudCodeInput() : base(new DefaultConverter<T>()) { }
 
-        protected string Classname =>
+        /// <summary>
+        /// Protected classes.
+        /// </summary>
+        protected string? Classname =>
            new CssBuilder($"d-flex gap-{Spacing}")
            .AddClass(Class)
            .Build();
 
-        protected string InputClassname =>
+        /// <summary>
+        /// Protected classes.
+        /// </summary>
+        protected string? InputClassname =>
             new CssBuilder("justify-text-center")
                 .AddClass("mud-code", Variant != Variant.Text)
                 .AddClass(ClassInput)
@@ -39,11 +45,12 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public InputType InputType { get; set; } = InputType.Text;
+        
+        private T _theValue;
 
         /// <summary>
         /// The value of the input.
         /// </summary>
-        private T _theValue;
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public T Value
@@ -101,22 +108,39 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public int Spacing { get; set; } = 2;
 
+        /// <summary>
+        /// If true disables the component. Default is false.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Disabled { get; set; }
 
+        /// <summary>
+        /// If true removes all interactivity of the component. Default is false.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool ReadOnly { get; set; }
 
+        /// <summary>
+        /// Variant of the component.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public Variant Variant { get; set; } = Variant.Text;
 
+        /// <summary>
+        /// Margin of the component that determines component size.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public Margin Margin { get; set; }
 
+        /// <summary>
+        /// Protected keydown event.
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         protected async Task HandleKeyDown(KeyboardEventArgs arg)
         {
             if (Disabled || ReadOnly)
@@ -148,6 +172,10 @@ namespace MudExtensions
             _lastFocusedIndex = count;
         }
 
+        /// <summary>
+        /// Focuses next input box.
+        /// </summary>
+        /// <returns></returns>
         public async Task FocusNext()
         {
             if (_lastFocusedIndex >= Count - 1)
@@ -159,6 +187,10 @@ namespace MudExtensions
             await _elementReferences[_lastFocusedIndex + 1].FocusAsync();
         }
 
+        /// <summary>
+        /// Focuses previous input box.
+        /// </summary>
+        /// <returns></returns>
         public async Task FocusPrevious()
         {
             if (_lastFocusedIndex == 0)
@@ -170,6 +202,9 @@ namespace MudExtensions
             await _elementReferences[_lastFocusedIndex - 1].FocusAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -185,6 +220,10 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// Set value for the input boxes.
+        /// </summary>
+        /// <returns></returns>
         public async Task SetValue()
         {
             string result =  "";
