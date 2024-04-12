@@ -25,15 +25,15 @@
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSwitchM3 @bind-Checked="@_disabled" Label="Disabled" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Checked="@_readonly" Label="ReadOnly" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Value="@_disabled" Label="Disabled" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Value="@_readonly" Label="ReadOnly" Color="Color.Primary" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code{
-    MudCodeInput<string> _textFieldGroup;
-    string _value;
+    MudCodeInput<string>? _textFieldGroup;
+    string? _value;
     int _count = 4;
     int _spacing = 2;
     Variant _variant = Variant.Outlined;

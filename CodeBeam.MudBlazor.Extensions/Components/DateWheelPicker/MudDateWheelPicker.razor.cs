@@ -9,11 +9,17 @@ namespace MudExtensions
 {
     public partial class MudDateWheelPicker : MudBaseInput<DateTime?>
     {
-        protected string Classname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname =>
            new CssBuilder("mud-input-input-control")
            .AddClass(Class)
            .Build();
         DateTime dt;
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnInitialized()
         {
             Converter = new MudBlazor.Converter<DateTime?, string>()
@@ -23,18 +29,27 @@ namespace MudExtensions
             };
         }
 
-        public MudInput<string> InputReference { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public MudInput<string?> InputReference { get; private set; }
 
         [CascadingParameter(Name = "Standalone")]
         internal bool StandaloneEx { get; set; } = true;
 
+        /// <summary>
+        /// CSS classes for popover content.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string PopoverClass { get; set; }
+        public string? PopoverClass { get; set; }
 
+        /// <summary>
+        /// CSS styles for popover content.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string PopoverStyle { get; set; }
+        public string? PopoverStyle { get; set; }
 
         /// <summary>
         /// The date format that determines the text and wheel order. Default is Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.
@@ -163,35 +178,56 @@ namespace MudExtensions
         public DateView DateView { get; set; } = DateView.Date;
 
         int _day = 1;
+        /// <summary>
+        /// Displayed number range as days.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public List<int> Days { get; set; } = Enumerable.Range(1, 31).ToList();
 
         int _month = 1;
+        /// <summary>
+        /// Displayed number range as months.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public List<int> Months { get; set; } = Enumerable.Range(1, 12).ToList();
 
         int _year = DateTime.Today.Year;
+        /// <summary>
+        /// Displayed number range as years.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public List<int> Years { get; set; } = Enumerable.Range(1, 9999).ToList();
 
         int _hour = 0;
+        /// <summary>
+        /// Displayed number range as hours.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public List<int> Hours { get; set; } = Enumerable.Range(0, 24).ToList();
 
         int _minute = 0;
+        /// <summary>
+        /// Displayed number range as minutes.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public List<int> Minutes { get; set; } = Enumerable.Range(0, 60).ToList();
 
         int _second = 0;
+        /// <summary>
+        /// Displayed number range as seconds.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public List<int> Seconds { get; set; } = Enumerable.Range(0, 60).ToList();
 
+        /// <summary>
+        /// Max height of popover content. Default is 300.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public int MaxHeight { get; set; } = 300;
@@ -199,6 +235,9 @@ namespace MudExtensions
         internal bool _isOpen;
         internal string _currentIcon { get; set; } = Icons.Material.Filled.CalendarMonth;
 
+        /// <summary>
+        /// Sets the anchor origin point for the popover.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public Origin AnchorOrigin { get; set; } = Origin.TopCenter;
@@ -222,6 +261,11 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<MouseEventArgs> OnClearButtonClick { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="updateText"></param>
+        /// <returns></returns>
         protected async Task UpdateValueAsync(bool updateText = true)
         {
             var _backUpValue = Value;
@@ -235,6 +279,10 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// Toggles the menu.
+        /// </summary>
+        /// <returns></returns>
         public async Task ToggleMenu()
         {
             if (Disabled || ReadOnly)
@@ -245,6 +293,10 @@ namespace MudExtensions
                 await OpenMenu();
         }
 
+        /// <summary>
+        /// Opens the menu.
+        /// </summary>
+        /// <returns></returns>
         public async Task OpenMenu()
         {
             if (Disabled || ReadOnly)
@@ -259,6 +311,11 @@ namespace MudExtensions
             StateHasChanged();
         }
 
+        /// <summary>
+        /// Closes the menu.
+        /// </summary>
+        /// <param name="submit"></param>
+        /// <returns></returns>
         public async Task CloseMenu(bool submit)
         {
             _isOpen = false;
@@ -268,17 +325,29 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected async Task HandleOnBlur()
         {
             await SetTextAsync(InputReference.Text, true);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected async Task HandleAdornmentClick()
         {
             await OpenMenu();
             await OnAdornmentClick.InvokeAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dateView"></param>
         protected void ExpandDateView(DateView dateView = DateView.Date)
         {
             if (DateView == DateView.Both)
@@ -291,6 +360,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void ToggleDateView()
         {
             if (DateView == DateView.Date)
@@ -331,6 +403,9 @@ namespace MudExtensions
             RefreshDays();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void SetWheelValues()
         {
             if (Value == null)
@@ -347,32 +422,57 @@ namespace MudExtensions
             RefreshDays();
         }
 
+        /// <summary>
+        /// Focuses the component.
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask FocusAsync()
         {
             return InputReference.FocusAsync();
         }
 
+        /// <summary>
+        /// Blur from the component.
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask BlurAsync()
         {
             return InputReference.BlurAsync();
         }
 
+        /// <summary>
+        /// Focus and select all text.
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask SelectAsync()
         {
             return InputReference.SelectAsync();
         }
 
+        /// <summary>
+        /// Focus and select partial text show with positions.
+        /// </summary>
+        /// <param name="pos1"></param>
+        /// <param name="pos2"></param>
+        /// <returns></returns>
         public override ValueTask SelectRangeAsync(int pos1, int pos2)
         {
             return InputReference.SelectRangeAsync(pos1, pos2);
         }
 
-        protected override void ResetValue()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected override async Task ResetValueAsync()
         {
-            InputReference.Reset();
-            base.ResetValue();
+            await InputReference.ResetAsync();
+            await base.ResetValueAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected bool HasSeconds()
         {
             if (DateFormat.Contains("s"))
@@ -382,6 +482,11 @@ namespace MudExtensions
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
         protected string NumberToString(int val)
         {
             return $"{val:00}";
@@ -397,6 +502,10 @@ namespace MudExtensions
             await InputReference.SetText(null);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected async Task HandleClearButtonClick()
         {
             await Clear();

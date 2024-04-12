@@ -55,12 +55,12 @@
 
 @code {
     [Parameter]
-    public string Color { get; set; }
+    public string? Color { get; set; }
 
-    protected string CapitalizedColor { get; set; }
+    protected string? CapitalizedColor { get; set; }
 
-    protected string CircleStyle;
-    protected string ArrowStyle;
+    protected string? CircleStyle;
+    protected string? ArrowStyle;
 
 
     public override async Task SetParametersAsync(ParameterView parameters)
@@ -68,6 +68,6 @@
         await base.SetParametersAsync(parameters);
         CircleStyle = $"background-color: var(--mud-{Color}-40);";
         ArrowStyle = $"--arrow-color: var(--mud-{Color}-40);background-color: var(--mud-{Color}-40);";
-        CapitalizedColor = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Color);
+        CapitalizedColor = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Color ?? "");
     }
 }

@@ -65,15 +65,15 @@
             <MudCheckBox @bind-Value="_linear" Color="Color.Secondary" Label="Linear" Dense="true" />
             <MudSwitchM3 @bind-Value="_mobileView" Color="Color.Secondary" Label="Mobile View" />
             <MudSwitchM3 @bind-Value="_addResultStep" Color="Color.Secondary" Label="Has Result Step" />
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="(() => _stepper.Reset())">Reset</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="(() => _stepper?.Reset())">Reset</MudButton>
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code {
-    MudStepper _stepper;
-    MudForm _form;
-    MudForm _form2;
+    MudStepper? _stepper;
+    MudForm _form = new();
+    MudForm _form2 = new();
     bool _checkValidationBeforeComplete = false;
     bool _linear;
     bool _mobileView;
@@ -93,7 +93,7 @@
             {
                 return false;
             }
-            if (_stepper.GetActiveIndex() == 0)
+            if (_stepper?.GetActiveIndex() == 0)
             {
                 _loading = true;
                 StateHasChanged();
@@ -103,7 +103,7 @@
                 StateHasChanged();
                 return !_form.IsValid;
             }
-            else if (_stepper.GetActiveIndex() == 2)
+            else if (_stepper?.GetActiveIndex() == 2)
             {
                 _loading = true;
                 StateHasChanged();

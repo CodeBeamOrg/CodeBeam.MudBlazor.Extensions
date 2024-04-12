@@ -18,8 +18,8 @@
     </MudItem>
 
     <MudItem xs="12" sm="4">
-        <MudCheckBox @ref="_checkboxAlign" T="bool" CheckedChanged="AlignChanged" Color="Color.Primary" Label="Align End" />
-        <MudCheckBox @bind-Checked="_disableSelectedItemStyle" Color="Color.Primary" Label="Disable Selected Item Style" />
+        <MudCheckBox @ref="_checkboxAlign" T="bool" ValueChanged="AlignChanged" Color="Color.Primary" Label="Align End" />
+        <MudCheckBox @bind-Value="_disableSelectedItemStyle" Color="Color.Primary" Label="Disable Selected Item Style" />
         <MudSelect T="MultiSelectionComponent" @bind-Value="_listSelectionComponent" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Variant="Variant.Outlined">
             @foreach (MultiSelectionComponent comp in Enum.GetValues(typeof(MultiSelectionComponent)))
             {
@@ -32,11 +32,11 @@
 @code {
     Align _listAlign = Align.Start;
     MultiSelectionComponent _listSelectionComponent = MultiSelectionComponent.CheckBox;
-    MudCheckBox<bool> _checkboxAlign;
+    MudCheckBox<bool>? _checkboxAlign;
     bool _disableSelectedItemStyle = false;
     private void AlignChanged()
     {
-        if (_checkboxAlign.Checked == false)
+        if (_checkboxAlign?.Value == false)
         {
             _listAlign = Align.Start;
         }

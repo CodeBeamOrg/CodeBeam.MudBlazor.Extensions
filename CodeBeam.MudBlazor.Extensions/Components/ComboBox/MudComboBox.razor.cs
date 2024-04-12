@@ -10,10 +10,17 @@ using System.Runtime.InteropServices;
 
 namespace MudExtensions
 {
-    public partial class MudComboBox<T> : MudBaseInputExtended<T>
+    /// <summary>
+    /// Component that has select and autocomplete features.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public partial class MudComboBox<T> : MudBaseInputExtended<T?>
     {
         #region Constructor, Injected Services, Parameters, Fields
 
+        /// <summary>
+        /// Constructor for ComboBox
+        /// </summary>
         public MudComboBox()
         {
             Adornment = Adornment.End;
@@ -25,14 +32,18 @@ namespace MudExtensions
         [Inject] IScrollManagerExtended ScrollManagerExtended { get; set; }
         [Inject] IScrollManager ScrollManager { get; set; }
 
+        /// <summary>
+        /// Protected search string converter.
+        /// </summary>
+        /// <param name="value"></param>
         protected internal void SetSearchString(T value)
         {
             _searchString = Converter.Set(value);
         }
 
-        internal string _searchString { get; set; }
-        private readonly string multiSelectionText;
-        private IKeyInterceptor _keyInterceptor;
+        internal string? _searchString { get; set; }
+        private readonly string? multiSelectionText;
+        private IKeyInterceptor? _keyInterceptor;
         static readonly KeyInterceptorOptions _keyInterceptorOptions = new()
         {
             //EnableLogging = true,
@@ -55,35 +66,58 @@ namespace MudExtensions
             }
         };
 
+        /// <summary>
+        /// Item list of ComboBox.
+        /// </summary>
         public List<MudComboBoxItem<T>> Items { get; set; } = new();
-        internal MudComboBoxItem<T> _lastActivatedItem;
-        protected internal List<MudComboBoxItem<T>> EligibleItems { get; set; } = new();
-        private MudInputExtended<string> _inputReference;
-        private MudTextFieldExtended<string> _searchbox;
-        internal bool _isOpen;
-        protected internal string _currentIcon { get; set; }
+        internal MudComboBoxItem<T>? _lastActivatedItem;
 
-        protected string Classname =>
+        /// <summary>
+        /// Eligible items of ComboBox.
+        /// </summary>
+        protected internal List<MudComboBoxItem<T>> EligibleItems { get; set; } = new();
+        private MudInputExtended<string?> _inputReference;
+        private MudTextFieldExtended<string?> _searchbox;
+        internal bool _isOpen;
+
+        /// <summary>
+        /// Icon string.
+        /// </summary>
+        protected internal string? _currentIcon { get; set; }
+
+        /// <summary>
+        /// Main CSS classes.
+        /// </summary>
+        protected string? Classname =>
             new CssBuilder("mud-select-extended")
             .AddClass(Class)
             .Build();
 
+        /// <summary>
+        /// Input CSS classes.
+        /// </summary>
         protected string InputClassname =>
             new CssBuilder("mud-select-input-extended")
             .AddClass(InputClass)
             .Build();
 
+        /// <summary>
+        /// CSS classes for popover content.
+        /// </summary>
         protected string PopoverClassname =>
             new CssBuilder()
             .AddClass("d-none", _isOpen == false)
             .AddClass(PopoverClass)
             .Build();
 
+        /// <summary>
+        /// CSS styles for mock input.
+        /// </summary>
         protected string MockInputStylename =>
             new StyleBuilder()
             .AddStyle("height: auto")
             .AddStyle("min-height: 1.1876em")
-            .AddStyle("display", "inline", Value != null || SelectedValues.Any())
+            .AddStyle("display", "inline", Value != null || SelectedValues?.Any() == true)
             .Build();
 
         private readonly string _elementId = string.Concat("combobox_", Guid.NewGuid().ToString().AsSpan(0, 8));
@@ -111,7 +145,7 @@ namespace MudExtensions
         /// Overrides the highlight class.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
-        [Parameter] public string HighlightClass { get; set; }
+        [Parameter] public string? HighlightClass { get; set; }
 
         /// <summary>
         /// If true, selected or active items in popover has border.
@@ -120,16 +154,16 @@ namespace MudExtensions
         [Parameter] public bool Bordered { get; set; }
 
         /// <summary>
-        /// User class names for the input, separated by space
+        /// User class names for the input, separated by space.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
-        [Parameter] public string InputClass { get; set; }
+        [Parameter] public string? InputClass { get; set; }
 
         /// <summary>
-        /// User style names for the input, separated by space
+        /// User style names for the input, separated by space.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
-        [Parameter] public string InputStyle { get; set; }
+        [Parameter] public string? InputStyle { get; set; }
 
         /// <summary>
         /// Fired when dropdown opens.
@@ -144,20 +178,29 @@ namespace MudExtensions
         [Parameter] public EventCallback OnClose { get; set; }
 
         /// <summary>
-        /// Add the MudSelectItems here
+        /// Add the MudComboBoxItems here.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public RenderFragment ChildContent { get; set; }
 
+        /// <summary>
+        /// Content that placed on top in popover.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public RenderFragment PopoverStartContent { get; set; }
 
+        /// <summary>
+        /// Content that placed on bottom in popover.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public RenderFragment PopoverEndContent { get; set; }
 
+        /// <summary>
+        /// Content that shown when no items found.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public RenderFragment NoItemsContent { get; set; }
@@ -195,7 +238,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public string TemplateClass { get; set; }
+        public string? TemplateClass { get; set; }
 
         /// <summary>
         /// If true the active (hilighted) item select on tab key. Designed for only single selection. Default is false.
@@ -209,7 +252,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string PopoverClass { get; set; }
+        public string? PopoverClass { get; set; }
 
         /// <summary>
         /// User class names for the popover, separated by space
@@ -218,9 +261,12 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public bool DisablePopoverPadding { get; set; }
 
+        /// <summary>
+        /// The text that shown on empty searchbox.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public string SearchBoxPlaceholder { get; set; }
+        public string? SearchBoxPlaceholder { get; set; }
 
         /// <summary>
         /// If true, compact vertical padding will be applied to all Select items.
@@ -236,7 +282,7 @@ namespace MudExtensions
         /// <remarks>The default is <see cref="Icons.Material.Filled.ArrowDropDown"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string OpenIcon { get; set; } = Icons.Material.Filled.ArrowDropDown;
+        public string? OpenIcon { get; set; } = Icons.Material.Filled.ArrowDropDown;
 
         /// <summary>
         /// The Close Select Icon
@@ -244,7 +290,7 @@ namespace MudExtensions
         /// <remarks>The default is <see cref="Icons.Material.Filled.ArrowDropUp"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string CloseIcon { get; set; } = Icons.Material.Filled.ArrowDropUp;
+        public string? CloseIcon { get; set; } = Icons.Material.Filled.ArrowDropUp;
 
         /// <summary>
         /// Dropdown color of select. Supports theme colors.
@@ -265,7 +311,6 @@ namespace MudExtensions
         /// <summary>
         /// The color of the checked checkbox. It supports the theme colors.
         /// </summary>
-        /// <remarks>The default is <see cref="MudCheckBox.Color"/></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public Color? CheckBoxCheckedColor { get; set; } = null;
@@ -273,7 +318,6 @@ namespace MudExtensions
         /// <summary>
         /// The color of the unchecked checkbox. It supports the theme colors.
         /// </summary>
-        /// <remarks>The default is <see cref="MudCheckBox.Color"/></remarks>
         [Parameter]
         [Category(CategoryTypes.Radio.Appearance)]
         public Color? CheckBoxUnCheckedColor { get; set; } = null;
@@ -345,18 +389,12 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T, string, string, bool> SearchFunc { get; set; }
+        public Func<T?, string?, string?, bool> SearchFunc { get; set; }
 
-        /// <summary>
-        /// If not null, select items will automatically created regard to the collection.
-        /// </summary>
         //[Parameter]
         //[Category(CategoryTypes.FormComponent.Behavior)]
         //public ICollection<T> ItemCollection { get; set; } = null;
 
-        /// <summary>
-        /// Allows virtualization. Only work is ItemCollection parameter is not null.
-        /// </summary>
         //[Parameter]
         //[Category(CategoryTypes.List.Behavior)]
         //public bool Virtualize { get; set; }
@@ -368,9 +406,12 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Behavior)]
         public bool ChipCloseable { get; set; }
 
+        /// <summary>
+        /// CSS classes for chips.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public string ChipClass { get; set; }
+        public string? ChipClass { get; set; }
 
         /// <remarks>The default is <see cref="Variant.Filled"/></remarks>
         [Parameter]
@@ -494,27 +535,35 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public bool MultiSelection { get; set; }
 
+        /// <summary>
+        /// If true, clicking on selected item can unselect the item.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public bool ToggleSelection { get; set; }
 
+        /// <summary>
+        /// Protected selectedvalues sync.
+        /// </summary>
+        /// <param name="singleToMultiselection"></param>
+        /// <returns></returns>
         protected async Task SyncMultiselectionValues(bool singleToMultiselection)
         {
             if (singleToMultiselection == true)
             {
                 if (Value == null)
                 {
-                    SelectedValues = new HashSet<T>();
+                    SelectedValues = new HashSet<T?>();
                 }
                 else
                 {
                     if (Value is string && string.IsNullOrWhiteSpace(Converter.Set(Value)))
                     {
-                        SelectedValues = new HashSet<T>();
+                        SelectedValues = new HashSet<T?>();
                     }
                     else
                     {
-                        SelectedValues = new HashSet<T>() { Value };
+                        SelectedValues = new HashSet<T?>() { Value };
                     }
 
                 }
@@ -527,13 +576,13 @@ namespace MudExtensions
             }
         }
 
-        private IEqualityComparer<T> _comparer;
+        private IEqualityComparer<T?> _comparer;
         /// <summary>
         /// The Comparer to use for comparing selected values internally.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public IEqualityComparer<T> Comparer
+        public IEqualityComparer<T?> Comparer
         {
             get => _comparer;
             set
@@ -542,18 +591,18 @@ namespace MudExtensions
                     return;
                 _comparer = value;
                 // Apply comparer and refresh selected values
-                _selectedValues = new HashSet<T>(_selectedValues, _comparer);
+                _selectedValues = new HashSet<T?>(_selectedValues, _comparer);
                 SelectedValues = _selectedValues;
             }
         }
 
-        private Func<T, string> _toStringFunc = x => x?.ToString();
+        private Func<T?, string?> _toStringFunc = x => x?.ToString();
         /// <summary>
         /// Defines how values are displayed in the drop-down list
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T, string> ToStringFunc
+        public Func<T?, string?> ToStringFunc
         {
             get => _toStringFunc;
             set
@@ -561,7 +610,7 @@ namespace MudExtensions
                 if (_toStringFunc == value)
                     return;
                 _toStringFunc = value;
-                Converter = new Converter<T>
+                Converter = new Converter<T?>
                 {
                     SetFunc = _toStringFunc ?? (x => x?.ToString()),
                 };
@@ -573,17 +622,17 @@ namespace MudExtensions
 
         #region Values, Texts & Items
 
-        private HashSet<T> _selectedValues;
+        private HashSet<T?>? _selectedValues;
         /// <summary>
         /// Set of selected values. If MultiSelection is false it will only ever contain a single value. This property is two-way bindable.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Data)]
-        public IEnumerable<T> SelectedValues
+        public IEnumerable<T?>? SelectedValues
         {
             get
             {
-                _selectedValues ??= new HashSet<T>(_comparer);
+                _selectedValues ??= new HashSet<T?>(_comparer);
                 return _selectedValues;
             }
             set
@@ -597,12 +646,12 @@ namespace MudExtensions
                 {
                     return;
                 }
-                if (SelectedValues.Count() == set.Count() && _selectedValues.All(x => set.Contains(x, _comparer)))
+                if (SelectedValues?.Count() == set.Count() && _selectedValues?.All(x => set.Contains(x, _comparer)) == true)
                     return;
 
-                _selectedValues = new HashSet<T>(set, _comparer);
+                _selectedValues = new HashSet<T?>(set, _comparer);
 
-                SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer)).AndForget();
+                SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer)).AndForget();
                 ForceUpdateItems().AndForgetExt();
                 //Console.WriteLine("SelectedValues setter ended");
             }
@@ -611,11 +660,15 @@ namespace MudExtensions
         /// <summary>
         /// Fires when SelectedValues changes.
         /// </summary>
-        [Parameter] public EventCallback<IEnumerable<T>> SelectedValuesChanged { get; set; }
+        [Parameter] public EventCallback<IEnumerable<T?>?> SelectedValuesChanged { get; set; }
 
+        /// <summary>
+        /// Protected method.
+        /// </summary>
+        /// <returns></returns>
         protected Task UpdateDataVisualiserTextAsync()
         {
-            var textList = new List<string>();
+            var textList = new List<string?>();
             if (Items != null && Items.Any())
             {
                 if (false) // ItemCollection != null
@@ -678,7 +731,15 @@ namespace MudExtensions
             }
         }
 
-        protected async Task UpdateComboBoxValueAsync(T value, bool updateText = true, bool updateSearchString = false, bool force = false)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="updateText"></param>
+        /// <param name="updateSearchString"></param>
+        /// <param name="force"></param>
+        /// <returns></returns>
+        protected async Task UpdateComboBoxValueAsync(T? value, bool updateText = true, bool updateSearchString = false, bool force = false)
         {
             await SetValueAsync(value, updateText, force);
             if (updateSearchString)
@@ -688,9 +749,16 @@ namespace MudExtensions
             }
         }
 
-        protected internal string _dataVisualiserText;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected internal string? _dataVisualiserText;
 
-        protected internal string GetPresenterText()
+        /// <summary>
+        /// Gets DataVisualiserText.
+        /// </summary>
+        /// <returns></returns>
+        protected internal string? GetPresenterText()
         {
             return _dataVisualiserText;
         }
@@ -700,6 +768,9 @@ namespace MudExtensions
 
         #region Lifecycle Methods
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -719,6 +790,9 @@ namespace MudExtensions
         bool _oldShowCheckbox = true;
         bool _oldBordered;
         Dense _oldDense = Dense.Standard;
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
@@ -735,8 +809,12 @@ namespace MudExtensions
         }
 
         bool _firstRendered = false;
-        T _oldValue;
+        T? _oldValue;
         bool _oldMultiselection = false;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
@@ -776,6 +854,11 @@ namespace MudExtensions
             _oldValue = Value;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstRender"></param>
+        /// <returns></returns>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
 
@@ -793,6 +876,10 @@ namespace MudExtensions
             await base.OnAfterRenderAsync(firstRender);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -816,6 +903,10 @@ namespace MudExtensions
 
         #region Events (Key, Focus)
 
+        /// <summary>
+        /// Protected keydown event.
+        /// </summary>
+        /// <param name="obj"></param>
         protected internal void HandleKeyDown(KeyboardEventArgs obj)
         {
             if (Disabled || ReadOnly)
@@ -895,7 +986,7 @@ namespace MudExtensions
                     if (MultiSelection)
                     {
                         if (_isOpen && !doSelect)
-                            _lastActivatedItem.SetActive(true);
+                            _lastActivatedItem?.SetActive(true);
                     }
                     break;
 
@@ -918,6 +1009,11 @@ namespace MudExtensions
             _ = OnKeyDown.InvokeAsync(obj);
         }
 
+        /// <summary>
+        /// Protected searchbox keydown event.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         protected internal async Task SearchBoxHandleKeyDown(KeyboardEventArgs obj)
         {
             if (Disabled || ReadOnly)
@@ -946,17 +1042,30 @@ namespace MudExtensions
             await OnKeyDown.InvokeAsync(obj);
         }
 
+        /// <summary>
+        /// Protected searchbox keyup event.
+        /// </summary>
+        /// <param name="obj"></param>
         protected internal void SearchBoxHandleKeyUp(KeyboardEventArgs obj)
         {
             ForceRenderItems();
         }
 
+        /// <summary>
+        /// Protected keyup event.
+        /// </summary>
+        /// <param name="obj"></param>
         protected internal async void HandleKeyUp(KeyboardEventArgs obj)
         {
             ForceRenderItems();
             await OnKeyUp.InvokeAsync(obj);
         }
 
+        /// <summary>
+        /// Protected blur event.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         protected internal async Task HandleOnBlur(FocusEventArgs obj)
         {
             if (!MultiSelection)
@@ -974,7 +1083,7 @@ namespace MudExtensions
                         // Restore the previous selected item, if any.
                         if (Value is not null)
                         {
-                            item = Items.FirstOrDefault(x => x.Value.Equals(Value));
+                            item = Items.FirstOrDefault(x => x?.Value?.Equals(Value) == true);
                             if (item is not null)
                                 await ToggleOption(item, true);
 
@@ -995,26 +1104,48 @@ namespace MudExtensions
             await OnBlurredAsync(obj);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="val"></param>
         protected internal void HandleInternalValueChanged(string val)
         {
             _searchString = val;
         }
 
+        /// <summary>
+        /// Focuses the component.
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask FocusAsync()
         {
             return _inputReference.FocusAsync();
         }
 
+        /// <summary>
+        /// Blur from the component.
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask BlurAsync()
         {
             return _inputReference.BlurAsync();
         }
 
+        /// <summary>
+        /// Focus and select all text.
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask SelectAsync()
         {
             return _inputReference.SelectAsync();
         }
 
+        /// <summary>
+        /// Focus and select partial text regard of given positions.
+        /// </summary>
+        /// <param name="pos1"></param>
+        /// <param name="pos2"></param>
+        /// <returns></returns>
         public override ValueTask SelectRangeAsync(int pos1, int pos2)
         {
             return _inputReference.SelectRangeAsync(pos1, pos2);
@@ -1025,6 +1156,10 @@ namespace MudExtensions
 
         #region PopoverState
 
+        /// <summary>
+        /// Toggles the menu.
+        /// </summary>
+        /// <returns></returns>
         public Task ToggleMenu()
         {
             if (Disabled || ReadOnly)
@@ -1033,6 +1168,10 @@ namespace MudExtensions
             return _isOpen ? CloseMenu() : OpenMenu();
         }
 
+        /// <summary>
+        /// Opens menu.
+        /// </summary>
+        /// <returns></returns>
         public async Task OpenMenu()
         {
             if (Disabled || ReadOnly)
@@ -1069,6 +1208,10 @@ namespace MudExtensions
             await OnOpen.InvokeAsync();
         }
 
+        /// <summary>
+        /// Closes menu.
+        /// </summary>
+        /// <returns></returns>
         public async Task CloseMenu()
         {
             _isOpen = false;
@@ -1089,7 +1232,13 @@ namespace MudExtensions
 
         #region Item Registration & Selection
 
-        protected internal async Task ToggleOption(MudComboBoxItem<T> item, bool selected)
+        /// <summary>
+        /// Select or unselect the ComboBoxItem.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="selected"></param>
+        /// <returns></returns>
+        protected internal async Task ToggleOption(MudComboBoxItem<T>? item, bool selected)
         {
             if (item == null)
             {
@@ -1106,7 +1255,7 @@ namespace MudExtensions
                         item.Selected = false;
                     }
                 }
-                else if (MultiSelection == true && SelectedValues.Contains(item.Value))
+                else if (MultiSelection == true && SelectedValues?.Contains(item.Value) == true)
                 {
                     SelectedValues = SelectedValues.Where(x => x.Equals(item.Value) == false);
                     await SetValueAsync(SelectedValues.LastOrDefault(), false);
@@ -1121,10 +1270,10 @@ namespace MudExtensions
                     DeselectAllItems();
                     await UpdateComboBoxValueAsync(item.Value, updateText: true, updateSearchString: true);
                 }
-                else if (SelectedValues.Contains(item.Value) == false)
+                else if (SelectedValues?.Contains(item.Value) != true)
                 {
                     await SetValueAsync(item.Value, false);
-                    SelectedValues = SelectedValues.Append(item.Value);
+                    SelectedValues = SelectedValues?.Append(item.Value);
                     await SelectedValuesChanged.InvokeAsync(_selectedValues);
                     _allSelected = GetAllSelectedState();
 
@@ -1145,6 +1294,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void DeselectAllItems()
         {
             foreach (var item in CollectionsMarshal.AsSpan(Items))
@@ -1154,6 +1306,10 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override async Task ForceUpdate()
         {
             await base.ForceUpdate();
@@ -1167,6 +1323,11 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         protected internal bool? AddItem(MudComboBoxItem<T> item)
         {
             if (item == null)
@@ -1175,7 +1336,7 @@ namespace MudExtensions
             if (Items.Select(x => x.Value).Contains(item.Value) == false)
             {
                 Items.Add(item);
-                if (MultiSelection == true && SelectedValues.Contains(item.Value))
+                if (MultiSelection == true && SelectedValues?.Contains(item.Value) == true)
                 {
                     item.Selected = true;
                 }
@@ -1184,6 +1345,10 @@ namespace MudExtensions
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
         protected internal void RemoveItem(MudComboBoxItem<T> item) => Items.Remove(item);
 
         #endregion
@@ -1199,7 +1364,7 @@ namespace MudExtensions
             await UpdateComboBoxValueAsync(default);
             _searchString = null;
             await SetTextAsync(default, false);
-            _selectedValues.Clear();
+            _selectedValues?.Clear();
             DeselectAllItems();
             await BeginValidateAsync();
             await ForceUpdateItems();
@@ -1219,13 +1384,16 @@ namespace MudExtensions
             await SetValueAsync(default, false);
             _searchString = null;
             await SetTextAsync(default, false);
-            _selectedValues.Clear();
+            _selectedValues?.Clear();
             await BeginValidateAsync();
             StateHasChanged();
-            await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
+            await SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer));
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void ResetValue()
         {
             base.ResetValue();
@@ -1234,13 +1402,26 @@ namespace MudExtensions
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void UpdateIcon()
         {
             _currentIcon = !string.IsNullOrWhiteSpace(AdornmentIcon) ? AdornmentIcon : _isOpen ? CloseIcon : OpenIcon;
         }
 
-        protected override bool HasValue(T value) => MultiSelection ? SelectedValues.Any() : base.HasValue(value);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected override bool HasValue(T? value) => MultiSelection ? SelectedValues?.Any() == true : base.HasValue(value);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chip"></param>
+        /// <returns></returns>
         protected async Task ChipClosed(MudChip chip)
         {
             if (chip is null || SelectedValues is null)
@@ -1252,6 +1433,10 @@ namespace MudExtensions
         }
 
         private bool? _allSelected;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected async Task SelectAllItems()
         {
             if (_allSelected == null || _allSelected == false)
@@ -1278,11 +1463,15 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected bool? GetAllSelectedState()
         {
             if (MultiSelection)
             {
-                var count = SelectedValues.Count();
+                var count = SelectedValues?.Count();
                 if (count == 0)
                     return false;
 
@@ -1293,12 +1482,19 @@ namespace MudExtensions
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected internal void ForceRenderItems()
         {
             Items.ForEach((x) => x.ForceRender());
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected internal async Task ForceUpdateItems()
         {
             Items.ForEach(async (x) => await x.ForceUpdate());
@@ -1325,6 +1521,9 @@ namespace MudExtensions
         //    return -1;
         //}
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void DeactiveAllItems()
         {
             if (_lastActivatedItem is not null)
@@ -1342,9 +1541,12 @@ namespace MudExtensions
             }
         }
 
-        [Obsolete("Please use ActivateFirstItem() method")]
-        public Task ActiveFirstItem(string startChar = null) => ActivateFirstItem(startChar);
-        public async Task ActivateFirstItem(string firstLetter = null)
+        /// <summary>
+        /// Highlights the first item.
+        /// </summary>
+        /// <param name="firstLetter"></param>
+        /// <returns></returns>
+        public async Task ActivateFirstItem(string? firstLetter = null)
         {
             var item = Items.FirstOrDefault();
             if (item is null || item.Disabled)
@@ -1369,7 +1571,7 @@ namespace MudExtensions
 
 
             // Get a collection of items that start with "firstLetter".
-            var items = Items.Where(x => Converter.Set(x.Value).StartsWith(firstLetter, StringComparison.OrdinalIgnoreCase)).ToList();
+            var items = Items.Where(x => Converter?.Set(x.Value)?.StartsWith(firstLetter, StringComparison.OrdinalIgnoreCase) == true).ToList();
             if (!items.Any())
             {
                 if (_lastActivatedItem is not null)
@@ -1400,8 +1602,11 @@ namespace MudExtensions
             }
         }
 
-        [Obsolete("Please use ActivateAdjacentItem() method")]
-        public Task ActiveAdjacentItem(int changeCount) => ActivateAdjacentItem(changeCount);
+        /// <summary>
+        /// Highlight previous or next items.
+        /// </summary>
+        /// <param name="changeCount"></param>
+        /// <returns></returns>
         public async Task ActivateAdjacentItem(int changeCount)
         {
             if (!(Items.Count > 0))
@@ -1414,7 +1619,7 @@ namespace MudExtensions
                 return;
 
             var indexUpperMax = items.Count - 1;
-            var index = items.IndexOf(_lastActivatedItem);
+            var index = items.IndexOf(_lastActivatedItem ?? new());
 
             if (changeCount < 0)
             {
@@ -1447,8 +1652,10 @@ namespace MudExtensions
             _lastActivatedItem = item;
         }
 
-        [Obsolete("Please use ActivateLastItem() method")]
-        public Task ActiveLastItem() => ActivateLastItem();
+        /// <summary>
+        /// Highlights the last item.
+        /// </summary>
+        /// <returns></returns>
         public async Task ActivateLastItem()
         {
             if (!(Items.Count > 0))
@@ -1467,8 +1674,16 @@ namespace MudExtensions
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected internal List<MudComboBoxItem<T>> GetEnabledAndEligibleItems() => Items.Where(x => !x.Disabled && x.Eligible).ToList();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected bool HasEligibleItems()
         {
             foreach (var item in CollectionsMarshal.AsSpan(Items))
@@ -1479,13 +1694,33 @@ namespace MudExtensions
             return false;
         }
 
-        protected internal string GetSearchString() => _searchString;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected internal string? GetSearchString() => _searchString;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected internal Typo GetTypo() => Dense == Dense.Slim || Dense == Dense.Superslim ? Typo.body2 : Typo.body1;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         protected internal ValueTask ScrollToMiddleAsync(MudComboBoxItem<T> item) => item is not null ? ScrollManagerExtended.ScrollToMiddleAsync(_popoverId, item.ItemId) : ValueTask.CompletedTask;
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected internal Color EffectiveCheckBoxCheckedColor => CheckBoxCheckedColor ?? Color;
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected internal Color EffectiveCheckBoxUnCheckedColor => CheckBoxUnCheckedColor ?? Color;
     }
 }

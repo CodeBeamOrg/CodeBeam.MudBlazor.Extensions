@@ -14,7 +14,7 @@
 
     <MudItem xs="12" sm="4">
         <MudStack>
-            <MudSwitch @bind-Checked="_loading" Color="Color.Primary">Loading</MudSwitch>
+            <MudSwitch @bind-Value="_loading" Color="Color.Primary">Loading</MudSwitch>
             <MudSelect @bind-Value="_loaderType" Variant="Variant.Outlined" Label="Loader Type">
                 <MudSelectItem Value="LoaderType.Circular">Circular</MudSelectItem>
                 <MudSelectItem Value="LoaderType.Linear">Linear</MudSelectItem>
@@ -31,10 +31,10 @@
 @code {
     bool _loading = true;
     string _text = "Some text.";
-    string _classText;
-    string _styleText;
-    string _classLoader;
-    string _styleLoader;
+    string? _classText;
+    string? _styleText;
+    string? _classLoader;
+    string? _styleLoader;
     LoaderType _loaderType = LoaderType.Circular;
 
     private void ShowSnackbar()

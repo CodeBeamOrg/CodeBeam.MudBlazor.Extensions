@@ -33,7 +33,7 @@
                             <MudFab HtmlTag="Button"
                                     Color="Color.Secondary"
                                     Label="@LocalizedStrings.ChooseFile"
-                                    Icon="@Icons.Material.Outlined.CloudDownload" Size="Size.Large"/>@LocalizedStrings.OrDragAndDrop
+                                    StartIcon="@Icons.Material.Outlined.CloudDownload" Size="Size.Large"/>@LocalizedStrings.OrDragAndDrop
                         </h3>
                     </MudPaper>
                     <MudPaper Elevation="0" class="d-flex justify-center align-content-center mud-transparent m2">
@@ -71,7 +71,7 @@
                     var required = item.Required;
                     var matched = item.MatchedFieldCount > 0;
                     bool confirmed = _defaultValueHeaders.ContainsKey(item.Name) && _defaultValueHeaders[item.Name].Confirmed;
-                    string warning;
+                    string? warning;
                     if (item.AllowDefaultValue)
                     {
                         warning = "This field is required. You must either provide a default value or map a field from the imported csv.";
@@ -124,8 +124,8 @@
                         <EditForm Model="@_model" OnSubmit="OnSubmit">
                             <MudIconButton Style="padding-left: 8px;" Icon="@Icons.Material.Outlined.ArrowBackIosNew" Color="Color.Secondary" OnClick="@(() => _addSectionOpen = false)"></MudIconButton>
                             <MudTextField @bind-Value="_model.Name" Label="Expected Header" Required="true" For="@(() => _model.Name)"></MudTextField>
-                            <MudSwitch Color="Color.Primary" T="bool" @bind-Checked="_model.Required">Required</MudSwitch>
-                            <MudSwitch Color="Color.Primary" T="bool" @bind-Checked="_model.AllowDefaultValue">Allow Default Value</MudSwitch>
+                            <MudSwitch Color="Color.Primary" T="bool" @bind-Value="_model.Required">Required</MudSwitch>
+                            <MudSwitch Color="Color.Primary" T="bool" @bind-Value="_model.AllowDefaultValue">Allow Default Value</MudSwitch>
                             <MudButton ButtonType="ButtonType.Submit" Size="Size.Small" Color="Color.Primary" FullWidth="true">Add Header</MudButton>
                         </EditForm>
                     </MudPaper>
@@ -145,7 +145,7 @@
     </MudDropContainer>
     @if (ShowIncludeUnmappedData)
     {
-        <MudSwitch @bind-Checked="_includeUnmappedData" Color="Color.Info">Include unmapped data</MudSwitch>
+        <MudSwitch @bind-Value="_includeUnmappedData" Color="Color.Info">Include unmapped data</MudSwitch>
     }
     @if (!_importedComplete)
     {

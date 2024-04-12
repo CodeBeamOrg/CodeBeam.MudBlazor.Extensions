@@ -98,6 +98,9 @@ namespace MudExtensions
         [Parameter]
         public string Icon { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -105,11 +108,18 @@ namespace MudExtensions
             MudStepper.AddStep(this);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="status"></param>
         protected internal void SetStatus(StepStatus status)
         {
             Status = status;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             try

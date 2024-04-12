@@ -2,7 +2,7 @@
 @using System.Text.RegularExpressions
 
 <MudText Class="my-2" Color="Color.Secondary" Typo="Typo.h6">Parameters</MudText>
-<MudTable Items="@(RelatedType.GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
+<MudTable Items="@(RelatedType?.GetProperties().Where(x => x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())">
     <HeaderContent>
         <MudTh>Name</MudTh>
         <MudTh>Type</MudTh>
@@ -14,7 +14,7 @@
             <MudTd DataLabel="Default">
                 @if (true)
             {
-                object instance = Activator.CreateInstance(RelatedType);
+                object? instance = Activator.CreateInstance(RelatedType);
                 <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
             }
         </MudTd>
@@ -22,7 +22,7 @@
 </MudTable>
 
 <MudText Class="my-2" Color="Color.Secondary" Typo="Typo.h6">Methods</MudText>
-<MudTable Items="@(RelatedType.GetMethods().Where(x => x.Name != "SetParametersAsync" && Regex.IsMatch(x.Name[0].ToString(), "[A-Z]")).OrderBy(x => x.Name).ToList())">
+<MudTable Items="@(RelatedType?.GetMethods().Where(x => x.Name != "SetParametersAsync" && Regex.IsMatch(x.Name[0].ToString(), "[A-Z]")).OrderBy(x => x.Name).ToList())">
     <HeaderContent>
         <MudTh>Name</MudTh>
         <MudTh>Type</MudTh>
@@ -43,5 +43,5 @@
 
 @code{
     [Parameter]
-    public Type RelatedType { get; set; }
+    public Type? RelatedType { get; set; }
 }

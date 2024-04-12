@@ -14,9 +14,9 @@
 
     <MudItem xs="12" sm="4">
         <MudStack>
-            <MudSwitch @bind-Checked="_loading" Color="Color.Primary">Loading</MudSwitch>
-            <MudCheckBox @bind-Checked="_overlap" Label="Overlap" Color="Color.Primary" />
-            <MudCheckBox @bind-Checked="_darken" Label="Darken" Color="Color.Primary" />
+            <MudSwitch @bind-Value="_loading" Color="Color.Primary">Loading</MudSwitch>
+            <MudCheckBox @bind-Value="_overlap" Label="Overlap" Color="Color.Primary" />
+            <MudCheckBox @bind-Value="_darken" Label="Darken" Color="Color.Primary" />
             <MudSelect @bind-Value="_loaderType" Variant="Variant.Outlined" Label="Loader Type">
                 <MudSelectItem Value="LoaderType.Circular">Circular</MudSelectItem>
                 <MudSelectItem Value="LoaderType.Linear">Linear</MudSelectItem>
@@ -30,7 +30,7 @@
     bool _loading = true;
     bool _overlap;
     bool _darken;
-    string _text;
+    string? _text;
     LoaderType _loaderType = LoaderType.Circular;
 
     private void ShowSnackbar()

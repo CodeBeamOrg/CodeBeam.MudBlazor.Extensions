@@ -64,7 +64,7 @@
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
             <MudTextFieldExtended @bind-Value="_id" Label="To" Immediate="true" autocomplete="new-password" Variant="Variant.Outlined" />
-            <MudSwitchM3 @bind-Checked="_returnWhenNotFound" Label="Return When Not Found" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="_returnWhenNotFound" Label="Return When Not Found" Color="Color.Secondary" />
             <MudTextFieldExtended @bind-Value="_ownClass" Label="Own Class" Immediate="true" Variant="Variant.Outlined" />
             <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="@(async() => { _id = null; await _teleport.Reset(); })">Reset</MudButton>
         </MudStack>
@@ -72,10 +72,10 @@
 </MudGrid>
 
 @code{
-    MudTeleport _teleport;
-    string _id;
+    MudTeleport _teleport = new();
+    string? _id;
     bool _returnWhenNotFound = false;
-    string _ownClass;
+    string? _ownClass;
 
     private void Teleport()
     {

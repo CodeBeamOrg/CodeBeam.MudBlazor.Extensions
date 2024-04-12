@@ -54,13 +54,13 @@
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
-            <MudCheckBox @bind-Checked="_hide" Label="Hide" Color="Color.Primary" />
+            <MudCheckBox @bind-Value="_hide" Label="Hide" Color="Color.Primary" />
 
             <MudField Label="Selector Id" Variant="Variant.Outlined">
-                <MudRadioGroup T="string" @bind-SelectedOption="@_selectedOption">
-                    <MudRadio Option="@("")" Color="Color.Primary" Dense="true">All</MudRadio>
-                    <MudRadio Option="@(".id1")" Color="Color.Primary" Dense="true">Only First</MudRadio>
-                    <MudRadio Option="@(".id2")" Color="Color.Primary" Dense="true">Only Last</MudRadio>
+                <MudRadioGroup T="string" @bind-Value="@_selectedOption">
+                    <MudRadio Value="@("")" Color="Color.Primary" Dense="true">All</MudRadio>
+                    <MudRadio Value="@(".id1")" Color="Color.Primary" Dense="true">Only First</MudRadio>
+                    <MudRadio Value="@(".id2")" Color="Color.Primary" Dense="true">Only Last</MudRadio>
                 </MudRadioGroup>
             </MudField>
 
@@ -69,21 +69,21 @@
             <MudNumericField @bind-Value="@_borderRadius" Variant="Variant.Outlined" Label="Border Radius" Margin="Margin.Dense" />
 
             <MudField Label="Thumb Color" Variant="Variant.Outlined">
-                <MudRadioGroup @bind-SelectedOption="@_color">
-                    <MudRadio Option="@("primary")" Color="Color.Secondary" Dense="true">Primary</MudRadio>
-                    <MudRadio Option="@("secondary")" Color="Color.Secondary" Dense="true">Secondary</MudRadio>
-                    <MudRadio Option="@("tertiary")" Color="Color.Secondary" Dense="true">Tertiary</MudRadio>
-                    <MudRadio Option="@("transparent")" Color="Color.Secondary" Dense="true">Transparent</MudRadio>
+                <MudRadioGroup @bind-Value="@_color">
+                    <MudRadio Value="@("primary")" Color="Color.Secondary" Dense="true">Primary</MudRadio>
+                    <MudRadio Value="@("secondary")" Color="Color.Secondary" Dense="true">Secondary</MudRadio>
+                    <MudRadio Value="@("tertiary")" Color="Color.Secondary" Dense="true">Tertiary</MudRadio>
+                    <MudRadio Value="@("transparent")" Color="Color.Secondary" Dense="true">Transparent</MudRadio>
                 </MudRadioGroup>
             </MudField>
 
             <MudColorPicker @bind-Value="_pickerColor" Label="Custom Thumb Color" ColorPickerView="ColorPickerView.Grid" Variant="Variant.Outlined" Margin="Margin.Dense" />
 
             <MudField Label="Track Color" Variant="Variant.Outlined">
-                <MudRadioGroup @bind-SelectedOption="@_trackColor">
-                    <MudRadio Option="@("primary")" Color="Color.Secondary" Dense="true">Primary</MudRadio>
-                    <MudRadio Option="@("secondary")" Color="Color.Secondary" Dense="true">Secondary</MudRadio>
-                    <MudRadio Option="@("tertiary")" Color="Color.Secondary" Dense="true">Tertiary</MudRadio>
+                <MudRadioGroup @bind-Value="@_trackColor">
+                    <MudRadio Value="@("primary")" Color="Color.Secondary" Dense="true">Primary</MudRadio>
+                    <MudRadio Value="@("secondary")" Color="Color.Secondary" Dense="true">Secondary</MudRadio>
+                    <MudRadio Value="@("tertiary")" Color="Color.Secondary" Dense="true">Tertiary</MudRadio>
                 </MudRadioGroup>
             </MudField>
 
@@ -100,10 +100,10 @@
     int? _hoverWidth;
     int _borderRadius = 0;
     string _color = "primary";
-    MudColor _pickerColor;
-    string _trackColor = "default";
-    MudColor _pickerTrackColor;
-    MudColor _hoverColor;
-    MudColor _containerHoverColor;
+    MudColor? _pickerColor;
+    string? _trackColor = "default";
+    MudColor? _pickerTrackColor;
+    MudColor? _hoverColor;
+    MudColor? _containerHoverColor;
     bool _hide;
 }

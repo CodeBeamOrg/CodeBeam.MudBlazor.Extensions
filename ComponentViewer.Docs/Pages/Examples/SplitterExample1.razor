@@ -27,10 +27,10 @@
                    <MudSelectItem Value="col">@col.ToDescriptionString()</MudSelectItem>
             }
             </MudSelect>
-            <MudSwitchM3 @bind-Checked="_borderedEnabled" Color="Color.Primary" Label="Enable splitter-border" />
-            <MudSwitchM3 @bind-Checked="_sliderEnabled" Color="Color.Primary" Label="Enable splitter-bar" />
-            <MudSwitchM3 @bind-Checked="_marginEnabled" Color="Color.Primary" Label="Enable margin" />
-            <MudSwitchM3 @bind-Checked="@_doubleClickEnabled" Color="Color.Primary" Label="Enable double-click" />
+            <MudSwitchM3 @bind-Value="_borderedEnabled" Color="Color.Primary" Label="Enable splitter-border" />
+            <MudSwitchM3 @bind-Value="_sliderEnabled" Color="Color.Primary" Label="Enable splitter-bar" />
+            <MudSwitchM3 @bind-Value="_marginEnabled" Color="Color.Primary" Label="Enable margin" />
+            <MudSwitchM3 @bind-Value="@_doubleClickEnabled" Color="Color.Primary" Label="Enable double-click" />
             <MudDivider />
             <MudNumericField @bind-Value="_sensitivity" Variant="Variant.Outlined" Min="0.01" Max="10" Step="0.1" Label="Sensitivity" />
             <MudNumericField @bind-Value="@_percentage" Variant="Variant.Outlined" Label="Dimension percentage" />
@@ -39,7 +39,7 @@
 </MudGrid>
 
 @code {
-   MudSplitter _splitter;
+   MudSplitter? _splitter;
    Color _color;
    string _height = "400px";
    double _sensitivity = 0.1d;

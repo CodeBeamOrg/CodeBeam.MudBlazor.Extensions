@@ -24,10 +24,10 @@
     </MudItem>
 
     <MudItem xs="12" sm="4">
-        <MudCheckBox @bind-Checked="_multiSelection" Label="MultiSelection" Color="Color.Primary" />
-        <MudCheckBox @bind-Checked="_sticky" Label="Sticky" Color="Color.Primary" />
-        <MudCheckBox @bind-Checked="_nested" Label="Nested" Color="Color.Primary" />
-        <MudCheckBox @bind-Checked="_initiallyExpanded" Label="Initially Expanded" Color="Color.Primary" />
+        <MudCheckBox @bind-Value="_multiSelection" Label="MultiSelection" Color="Color.Primary" />
+        <MudCheckBox @bind-Value="_sticky" Label="Sticky" Color="Color.Primary" />
+        <MudCheckBox @bind-Value="_nested" Label="Nested" Color="Color.Primary" />
+        <MudCheckBox @bind-Value="_initiallyExpanded" Label="Initially Expanded" Color="Color.Primary" />
         <MudDivider />
         <MudText Class="ma-4">Selected Value: @_selectedValue</MudText>
         <MudText Class="ma-4">Selected Values: @(_selectedValues == null ? null : string.Join(", ", _selectedValues))</MudText>
@@ -39,6 +39,6 @@
     bool _sticky = true;
     bool _nested = false;
     bool _initiallyExpanded = false;
-    string _selectedValue;
-    IEnumerable<string> _selectedValues;
+    string? _selectedValue;
+    IEnumerable<string>? _selectedValues;
 }

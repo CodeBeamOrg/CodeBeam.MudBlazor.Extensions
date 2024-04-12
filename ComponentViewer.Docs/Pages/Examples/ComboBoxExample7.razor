@@ -37,20 +37,20 @@
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
             <MudSelectExtended @bind-Value="_color" ItemCollection="@(Enum.GetValues<Color>())" Variant="Variant.Outlined" Label="Color" Margin="Margin.Dense" Dense="true" />
-            <MudSwitchM3 @bind-Checked="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_strict" Label="Strict" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_clearable" Label="Clearable" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_customHighlightClass" Label="Custom Highlight" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_disableFilter" Label="Disable Filter" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_strict" Label="Strict" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_clearable" Label="Clearable" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_customHighlightClass" Label="Custom Highlight" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_disableFilter" Label="Disable Filter" Color="Color.Secondary" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code {
-    MudComboBox<string> _combobox;
-    string _value;
-    string _text;
-    IEnumerable<string> _selectedValues;
+    MudComboBox<string>? _combobox;
+    string? _value;
+    string? _text;
+    IEnumerable<string>? _selectedValues;
     Variant _variant = Variant.Outlined;
     Color _color = Color.Primary;
     bool _multiselection;

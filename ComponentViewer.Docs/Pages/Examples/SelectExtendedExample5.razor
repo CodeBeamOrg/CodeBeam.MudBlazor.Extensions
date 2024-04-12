@@ -1,7 +1,7 @@
 ﻿
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.SelectedOption == 1 ? new Func<List<int?>, string>(GetMultiSelectionText) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" T="int?" @bind-Value="intValue" @bind-SelectedValues="intValues" Label="Complex Type" AnchorOrigin="Origin.BottomCenter"
+        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.Value == 1 ? new Func<List<int?>, string?>(GetMultiSelectionText) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" T="int?" @bind-Value="intValue" @bind-SelectedValues="intValues" Label="Complex Type" AnchorOrigin="Origin.BottomCenter"
                            ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" NoWrap="_nowrap">
             @foreach (var item in complexes)
             {
@@ -9,7 +9,7 @@
             }
         </MudSelectExtended>
 
-        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.SelectedOption == 1 ? new Func<List<string>, string>(GetMultiSelectionText2) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="stringValue" @bind-SelectedValues="stringValues" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter"
+        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.Value == 1 ? new Func<List<string>, string?>(GetMultiSelectionText2) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="stringValue" @bind-SelectedValues="stringValues" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter"
                            ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" NoWrap="_nowrap">
             @foreach (var state in states)
             {
@@ -17,7 +17,7 @@
             }
         </MudSelectExtended>
 
-        <MudSelectExtended ItemCollection="states" MultiSelectionTextFunc="@(_radioGroup?.SelectedOption == 1 ? new Func<List<string>, string>(GetMultiSelectionText2) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="stringValue" @bind-SelectedValues="stringValues" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter"
+        <MudSelectExtended ItemCollection="states" MultiSelectionTextFunc="@(_radioGroup?.Value == 1 ? new Func<List<string>, string?>(GetMultiSelectionText2) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="stringValue" @bind-SelectedValues="stringValues" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter"
                            ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" NoWrap="_nowrap">
         </MudSelectExtended>
 
@@ -36,10 +36,10 @@
     </MudItem>
 
     <MudItem xs="12" sm="4">
-        <MudRadioGroup @ref="_radioGroup" T="int" SelectedOptionChanged="GroupOptionChanged">
-            <MudRadio Option="0" Color="Color.Primary">Standard Text</MudRadio>
-            <MudRadio Option="1" Color="Color.Primary">Customized Text</MudRadio>
-            <MudRadio Option="2" Color="Color.Primary">Chip</MudRadio>
+        <MudRadioGroup @ref="_radioGroup" T="int" ValueChanged="GroupOptionChanged">
+            <MudRadio Value="0" Color="Color.Primary">Standard Text</MudRadio>
+            <MudRadio Value="1" Color="Color.Primary">Customized Text</MudRadio>
+            <MudRadio Value="2" Color="Color.Primary">Chip</MudRadio>
         </MudRadioGroup>
         <MudGrid Class="mt-3 px-4">
             <MudItem xs="6">
@@ -55,15 +55,15 @@
                     <MudText Typo="Typo.subtitle2">}</MudText>
                 </MudItem>
             </MudGrid>
-            <MudSwitchM3 @bind-Checked="_chipCloseable" Label="Chip Closeable" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Checked="_nowrap" Label="Nowrap" Color="Color.Primary" />
+        <MudSwitchM3 @bind-Value="_chipCloseable" Label="Chip Closeable" Color="Color.Primary" />
+        <MudSwitchM3 @bind-Value="_nowrap" Label="Nowrap" Color="Color.Primary" />
             <MudSelectExtended Class="mt-4" ItemCollection="@(Enum.GetValues<Variant>())" @bind-Value="_chipVariant" Label="Chip Variant" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudSelectExtended Class="mt-4" ItemCollection="@(Enum.GetValues<Size>())" @bind-Value="_chipSize" Label="Chip Size" Variant="Variant.Outlined" Margin="Margin.Dense" />
         </MudItem>
     </MudGrid>
 
     @code {
-    MudRadioGroup<int> _radioGroup;
+    MudRadioGroup<int>? _radioGroup;
     ValuePresenter _valuePresenter = ValuePresenter.Text;
     string stringValue { get; set; } = "Nothing selected";
     IEnumerable<string> stringValues { get; set; } = new HashSet<string>() { "Alaska", "California" };
@@ -77,7 +77,7 @@
     public class Complex
     {
         public int? Value { get; set; }
-        public string Text { get; set; }
+        public string? Text { get; set; }
     }
 
     private Complex[] complexes =
@@ -108,19 +108,19 @@
         "Washington", "West Virginia", "Wisconsin", "Wyoming",
     };
 
-    private string GetMultiSelectionText(List<int?> selectedValues)
+    private string? GetMultiSelectionText(List<int?> selectedValues)
     {
         return $"{selectedValues?.Count} value{(selectedValues?.Count > 1 ? "s have" : " has")} been selected";
     }
 
-    private string GetMultiSelectionText2(List<string> selectedValues)
+    private string? GetMultiSelectionText2(List<string> selectedValues)
     {
         return $"{selectedValues.Count} state{(selectedValues.Count > 1 ? "s have" : " has")} been selected";
     }
 
     private void GroupOptionChanged()
     {
-        if (_radioGroup.SelectedOption == 2)
+        if (_radioGroup?.Value == 2)
         {
             _valuePresenter = ValuePresenter.Chip;
         }
@@ -133,7 +133,7 @@
     public record TestValue(int Number, string Value);
 
     List<TestValue>? TestValues { get; set; }
-    IEnumerable<TestValue> SelectedTsSearchBoxItems { get; set; }
+    IEnumerable<TestValue>? SelectedTsSearchBoxItems { get; set; }
 
     protected override void OnInitialized()
     {

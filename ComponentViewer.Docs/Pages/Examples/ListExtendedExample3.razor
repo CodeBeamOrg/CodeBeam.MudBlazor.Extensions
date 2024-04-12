@@ -26,13 +26,13 @@
     </MudItem>
 
     <MudItem xs="12" sm="4">
-        <MudCheckBox @bind-Checked="_clickable" Color="Color.Primary" Label="Clickable" />
-        <MudCheckBox @bind-Checked="_multiSelection" Color="Color.Primary" Label="MultiSelection" />
-        <MudCheckBox @bind-Checked="_selectAll" Color="Color.Primary" Label="Select All" />
+        <MudCheckBox @bind-Value="_clickable" Color="Color.Primary" Label="Clickable" />
+        <MudCheckBox @bind-Value="_multiSelection" Color="Color.Primary" Label="MultiSelection" />
+        <MudCheckBox @bind-Value="_selectAll" Color="Color.Primary" Label="Select All" />
         <MudDivider />
         <MudTextField @bind-Value="_selectedValue" Clearable="true" />
         <MudSelect T="int?" @bind-SelectedValues="_selectedValues" MultiSelection="true" Variant="Variant.Filled" Label="Selected Values">
-            @foreach (var item in _list.GetItems())
+            @foreach (var item in _list?.GetItems() ?? new())
             {
                 <MudSelectItem Value="item.Value">@item.Text</MudSelectItem>
             }
@@ -41,7 +41,7 @@
         <MudButton OnClick="@(() => _selectedValues = new HashSet<int?>() { 2, 4 })">Select 2 and 4</MudButton>
         <MudButton OnClick="@(() => _selectedItem = _thirdItem)">Select 3rd Item</MudButton>
         <MudButton OnClick="@(() => _selectedItems = new HashSet<MudListItemExtended<int?>>() { _thirdItem, _fifthItem })">Select 3rd and 5th Items</MudButton>
-        <MudButton OnClick="@(() => _list.Clear())">Clear</MudButton>
+        <MudButton OnClick="@(() => _list?.Clear())">Clear</MudButton>
         <MudText Class="mt-2">Results:</MudText>
         <MudText Class="ma-4">Selected Value: @_selectedValue</MudText>
         <MudText Class="ma-4">Selected Values: @string.Join(", ", _selectedValues ?? new List<int?>())</MudText>
@@ -55,11 +55,11 @@
     bool _multiSelection = false;
     bool _selectAll = false;
 
-    MudListExtended<int?> _list;
+    MudListExtended<int?>? _list;
     int? _selectedValue = 1;
     IEnumerable<int?> _selectedValues = new List<int?>();
-    MudListItemExtended<int?> _selectedItem;
-    MudListItemExtended<int?> _thirdItem;
-    MudListItemExtended<int?> _fifthItem;
+    MudListItemExtended<int?>? _selectedItem;
+    MudListItemExtended<int?> _thirdItem = new();
+    MudListItemExtended<int?> _fifthItem = new();
     IEnumerable<MudListItemExtended<int?>> _selectedItems = new List<MudListItemExtended<int?>>();
 }

@@ -24,7 +24,7 @@
         <MudStack>
             <MudText>Selected State: @_selectedState</MudText>
             <MudNumericField @bind-Value="_maxItems" Label="Max Items" Min="0" Max="16" HelperText="Between 0 - 16" HelperTextOnFocus="true" />
-            <MudSwitchM3 @bind-Checked="_searchBox" Color="Color.Primary" Label="SearchBox" />
+            <MudSwitchM3 @bind-Value="_searchBox" Color="Color.Primary" Label="SearchBox" />
         </MudStack>
     </MudItem>
 </MudGrid>
@@ -33,7 +33,7 @@
 {
     int _maxItems = 8;
     bool _searchBox = false;
-    string _selectedState;
+    string? _selectedState;
     ICollection<ComplexTypes> _complexTypeCollection = new List<ComplexTypes>()
     {
         new ComplexTypes() { Name = "John", SurName = "Star" },
@@ -87,7 +87,7 @@
 
     public class ComplexTypes
     {
-        public string Name { get; set; }
-        public string SurName { get; set; }
+        public string? Name { get; set; }
+        public string? SurName { get; set; }
     }
 }

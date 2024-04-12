@@ -6,14 +6,14 @@
                     ShowToolboxCloseButton="_showToolboxCloseButton" ShowToolboxNavigationButtons="_showToolboxNavigationButtons"
                     MaxWidth="_maxWidth" StyleSelectedImage="@ImageStyle" EnableAnimation="_enableAnimation">
             <ToolboxTopContent>
-                <MudText Class="white-text pa-4">Image @(_gallery.GetSelectedImageIndex() + 1) - Description</MudText>
+                <MudText Class="white-text pa-4">Image @(_gallery?.GetSelectedImageIndex() + 1) - Description</MudText>
             </ToolboxTopContent>
             <ToolboxBottomContent>
                 <MudIconButton Class="white-text" Icon="@Icons.Material.Outlined.Edit" />
                 <MudIconButton Class="white-text" Icon="@Icons.Material.Outlined.RotateRight" OnClick="ArrangeRotateValue" />
                 @if (_showToolboxCloseButton == false)
                 {
-                    <MudIconButton Class="white-text" Icon="@Icons.Material.Outlined.Close" OnClick="@(() => _gallery.ChangeMenu(false))" />
+                    <MudIconButton Class="white-text" Icon="@Icons.Material.Outlined.Close" OnClick="@(() => _gallery?.ChangeMenu(false))" />
                 }
             </ToolboxBottomContent>
         </MudGallery>
@@ -22,10 +22,10 @@
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
             <MudNumericField @bind-Value="_itemPerLine" Label="Item Per Line" />
-            <MudSwitch @bind-Checked="_enableBackdropClick" Color="Color.Primary" Label="Enable Backdrop Click" />
-            <MudSwitch @bind-Checked="_showToolboxCloseButton" Color="Color.Primary" Label="Toolbox Close Button" />
-            <MudSwitch @bind-Checked="_showToolboxNavigationButtons" Color="Color.Primary" Label="Toolbox Navigation Buttons" />
-            <MudSwitch @bind-Checked="_enableAnimation" Color="Color.Primary" Label="Animation" />
+            <MudSwitch @bind-Value="_enableBackdropClick" Color="Color.Primary" Label="Enable Backdrop Click" />
+            <MudSwitch @bind-Value="_showToolboxCloseButton" Color="Color.Primary" Label="Toolbox Close Button" />
+            <MudSwitch @bind-Value="_showToolboxNavigationButtons" Color="Color.Primary" Label="Toolbox Navigation Buttons" />
+            <MudSwitch @bind-Value="_enableAnimation" Color="Color.Primary" Label="Animation" />
             <MudSelect @bind-Value="_maxWidth" Variant="Variant.Outlined" Label="MaxWidth" Margin="Margin.Dense" Dense="true">
                 @foreach (MaxWidth item in Enum.GetValues<MaxWidth>())
                 {
@@ -37,7 +37,7 @@
 </MudGrid>
 
 @code{
-    MudGallery _gallery;
+    MudGallery? _gallery;
     int _itemPerLine = 3;
     bool _enableBackdropClick = true;
     bool _showToolboxCloseButton = true;

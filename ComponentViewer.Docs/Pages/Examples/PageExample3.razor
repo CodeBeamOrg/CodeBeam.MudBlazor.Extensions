@@ -25,8 +25,8 @@
 
 
     <MudItem xs="12" sm="5">
-        <MudCheckBox @bind-Checked="_showAppbar" Color="Color.Primary" Label="Show Appbar" />
-        <MudCheckBox @bind-Checked="_appbarBottom" Color="Color.Primary" Label="Bottom Appbar" />
+        <MudCheckBox @bind-Value="_showAppbar" Color="Color.Primary" Label="Show Appbar" />
+        <MudCheckBox @bind-Value="_appbarBottom" Color="Color.Primary" Label="Bottom Appbar" />
         <MudTextField @bind-Value="_height" Label="Height" HelperText="Ex. 500px" Clearable="true" />
         <MudSelect @bind-Value="_fullScreen" Variant="Variant.Filled" Label="FullScreen">
             <MudSelectItem Value="FullScreen.None">None</MudSelectItem>
@@ -38,7 +38,7 @@
 
 @code {
     FullScreen _fullScreen = FullScreen.None;
-    string _height;
+    string? _height;
     bool _showAppbar = true;
     bool _appbarBottom = false;
 }

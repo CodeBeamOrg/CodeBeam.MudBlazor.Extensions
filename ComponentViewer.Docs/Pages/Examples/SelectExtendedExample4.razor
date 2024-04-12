@@ -1,7 +1,7 @@
 ﻿
 <MudGrid>
     <MudItem xs="12" sm="6">
-        <MudSelectExtended Label="Select Player" ToStringFunc="@(new Func<Tuple<string, string, bool>, string>(StringFunc))" Placeholder="Standard" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectExtended Label="Select Player" ToStringFunc="@(new Func<Tuple<string, string, bool>, string?>(StringFunc))" Placeholder="Standard" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
             @foreach (var item in _players)
             {
                 <MudSelectItemExtended Value="item">@(item.Item1 + " - Total Score: " + item.Item2)</MudSelectItemExtended>
@@ -57,7 +57,7 @@
         </MudItem>
 
         <MudItem xs="12" sm="6">
-            <MudSelectExtended Label="Select Player" ToStringFunc="@(new Func<Tuple<string, string, bool>, string>(StringFunc))" Placeholder="Disabled Template" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+            <MudSelectExtended Label="Select Player" ToStringFunc="@(new Func<Tuple<string, string, bool>, string?>(StringFunc))" Placeholder="Disabled Template" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
                 <ChildContent>
                 @foreach (var item in _players)
                 {
@@ -85,7 +85,7 @@
        new Tuple<string, string, bool>("Michael Jordan", "32.292", true),
     };
 
-    private string StringFunc(Tuple<string, string, bool> tuple)
+    private string? StringFunc(Tuple<string, string, bool> tuple)
     {
         if (tuple == null)
         {

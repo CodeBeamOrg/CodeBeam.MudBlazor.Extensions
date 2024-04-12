@@ -123,15 +123,15 @@
                 }
             </MudSelect>
             <MudSelectExtended @bind-Value="_headerSize" ItemCollection="@(Enum.GetValues<Size>())" Variant="Variant.Outlined" Label="Header Size" Margin="Margin.Dense" Dense="true" />
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => _stepper.Reset())">Reset</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => _stepper?.Reset())">Reset</MudButton>
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code {
-    MudStepper _stepper;
-    MudForm _form;
-    MudForm _form2;
+    MudStepper? _stepper;
+    MudForm? _form;
+    MudForm? _form2;
     bool _checkValidationBeforeComplete = false;
     bool _linear;
     bool _mobileView;
@@ -164,7 +164,7 @@
             {
                 return false;
             }
-            if (_stepper.GetActiveIndex() == 0)
+            if (_stepper?.GetActiveIndex() == 0)
             {
                 _loading = true;
                 StateHasChanged();
@@ -174,7 +174,7 @@
                 StateHasChanged();
                 return !_form.IsValid;
             }
-            else if (_stepper.GetActiveIndex() == 2)
+            else if (_stepper?.GetActiveIndex() == 2)
             {
                 _loading = true;
                 StateHasChanged();

@@ -4,6 +4,9 @@ using System.ComponentModel;
 
 namespace MudExtensions.Utilities
 {
+    /// <summary>
+    /// Manage CSS properties with C#.
+    /// </summary>
     public class MudCssManager
     {
         private IJSRuntime JSRuntime;
@@ -13,7 +16,14 @@ namespace MudExtensions.Utilities
             JSRuntime = jsRuntime;
         }
 
-        public async Task SetCss(string className, CssProp cssProp, string value)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="className"></param>
+        /// <param name="cssProp"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public async Task SetCss(string? className, CssProp cssProp, string? value)
         {
             if (className == null)
             {
@@ -28,7 +38,14 @@ namespace MudExtensions.Utilities
             await JSRuntime.InvokeVoidAsync("setcss", parameters);
         }
 
-        public async Task SetCss(string className, string cssPropName, string value)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="className"></param>
+        /// <param name="cssPropName"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public async Task SetCss(string? className, string? cssPropName, string? value)
         {
             if (className == null)
             {
@@ -43,7 +60,13 @@ namespace MudExtensions.Utilities
             await JSRuntime.InvokeVoidAsync("setcss", parameters);
         }
 
-        public async Task<string> GetCss(string className, CssProp cssProp)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="className"></param>
+        /// <param name="cssProp"></param>
+        /// <returns></returns>
+        public async Task<string?> GetCss(string? className, CssProp cssProp)
         {
             if (className == null)
             {
@@ -55,11 +78,17 @@ namespace MudExtensions.Utilities
             }
 
             object[] parameters = new object[] { className, cssProp.ToDescriptionString() };
-            var result = await JSRuntime.InvokeAsync<string>("getcss", parameters);
+            var result = await JSRuntime.InvokeAsync<string?>("getcss", parameters);
             return result;
         }
 
-        public async Task<string> GetCss(string className, string cssPropName)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="className"></param>
+        /// <param name="cssPropName"></param>
+        /// <returns></returns>
+        public async Task<string?> GetCss(string? className, string? cssPropName)
         {
             if (className == null)
             {
@@ -71,11 +100,15 @@ namespace MudExtensions.Utilities
             }
 
             object[] parameters = new object[] { className, cssPropName };
-            var result = await JSRuntime.InvokeAsync<string>("getcss", parameters);
+            var result = await JSRuntime.InvokeAsync<string?>("getcss", parameters);
             return result;
         }
     }
 
+#pragma warning disable CS1591
+    /// <summary>
+    /// 
+    /// </summary>
     public enum CssProp
     {
         [Description("align-content")]

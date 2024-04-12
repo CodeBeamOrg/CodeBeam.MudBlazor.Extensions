@@ -142,8 +142,8 @@
     </MudItem>
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
-            <MudSwitchM3 @bind-Checked="_showAllTones" Label="Show All Tones" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Checked="_darkMode" Label="Dark Mode" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Value="_showAllTones" Label="Show All Tones" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Value="_darkMode" Label="Dark Mode" Color="Color.Primary" />
             <MudColorPicker @bind-Value="_primaryColor" Variant="Variant.Outlined" Label="Primary Color" />
             <MudColorPicker @bind-Value="_secondaryColor" Variant="Variant.Outlined" Label="Secondary Color" />
             <MudColorPicker @bind-Value="_tertiaryColor" Variant="Variant.Outlined" Label="Tertiary Color" />

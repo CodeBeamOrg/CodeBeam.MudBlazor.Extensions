@@ -39,7 +39,7 @@
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
-            <MudSwitch @bind-Checked="_always" Color="Color.Primary" Label="Always" />
+            <MudSwitch @bind-Value="_always" Color="Color.Primary" Label="Always" />
             <MudColorPicker @bind-Value="_baseColor" Label="Base Color" ColorPickerView="ColorPickerView.Grid" Clearable="true" />
             <MudColorPicker @bind-Value="_textColor" Label="Text Color" ColorPickerView="ColorPickerView.Grid" Clearable="true" />
             <MudColorPicker @bind-Value="_labelColor" Label="Label Color" ColorPickerView="ColorPickerView.Grid" Clearable="true" />
@@ -51,12 +51,12 @@
 </MudGrid>
 
 @code {
-    MudColor _baseColor;
-    MudColor _textColor;
-    MudColor _labelColor;
-    MudColor _borderColor;
+    MudColor? _baseColor;
+    MudColor? _textColor;
+    MudColor? _labelColor;
+    MudColor? _borderColor;
     bool _always;
-    string _labelStyle;
+    string? _labelStyle;
 
     private void Reset()
     {

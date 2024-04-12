@@ -43,19 +43,19 @@
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSwitchM3 @bind-Checked="@_wrapChips" Label="WrapChips" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Checked="@_disabled" Label="Disabled" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Checked="@_readonly" Label="ReadOnly" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Checked="@_disableRadius" Label="Disable Border Radius" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Checked="@_closeable" Label="Closeable" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Value="@_wrapChips" Label="WrapChips" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Value="@_disabled" Label="Disabled" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Value="@_readonly" Label="ReadOnly" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Value="@_disableRadius" Label="Disable Border Radius" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Value="@_closeable" Label="Closeable" Color="Color.Primary" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code{
     char _delimiter = ' ';
-    string _value;
-    List<string> _values;
+    string? _value;
+    List<string>? _values;
     int _maxChips = 0;
     int _chipsMaxWidth = 80;
     Color _color = Color.Default;

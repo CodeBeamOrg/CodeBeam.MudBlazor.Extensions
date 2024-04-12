@@ -11,30 +11,48 @@ namespace MudExtensions
 {
     public partial class MudInputExtended<T> : MudBaseInputExtended<T>
     {
-        [Inject] IJSRuntime JSRuntime { get; set; }
+        [Inject] IJSRuntime? JSRuntime { get; set; }
 
-        protected string Classname => MudInputCssHelperExtended.GetClassname(this,
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname => MudInputCssHelperExtended.GetClassname(this,
             () => HasNativeHtmlPlaceholder() || ForceShrink == true || !string.IsNullOrEmpty(Text) || AdornmentStart != null || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(Converter.Set(Value)));
 
-        protected string InputClassname => MudInputCssHelperExtended.GetInputClassname(this);
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? InputClassname => MudInputCssHelperExtended.GetInputClassname(this);
 
-        protected string AdornmentClassname => MudInputCssHelperExtended.GetAdornmentClassname(this);
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? AdornmentClassname => MudInputCssHelperExtended.GetAdornmentClassname(this);
 
-        protected string AdornmentStartClassname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? AdornmentStartClassname =>
             new CssBuilder("mud-input-adornment mud-input-adornment-start-extended")
                 .AddClass($"mud-input-{Variant.ToDescriptionString()}-extended")
                 .AddClass($"mud-text", !string.IsNullOrEmpty(AdornmentText))
                 .AddClass($"mud-input-root-filled-shrink", Variant == Variant.Filled)
                 .Build();
 
-        protected string AdornmentEndClassname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? AdornmentEndClassname =>
             new CssBuilder("mud-input-adornment mud-input-adornment-end-extended")
                 .AddClass($"mud-input-{Variant.ToDescriptionString()}-extended")
                 .AddClass($"mud-text", !string.IsNullOrEmpty(AdornmentText))
                 .AddClass($"mud-input-root-filled-shrink", Variant == Variant.Filled)
                 .Build();
 
-        protected string ClearButtonClassname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? ClearButtonClassname =>
                     new CssBuilder()
                     .AddClass("me-n1", Adornment == Adornment.End && !HideSpinButtons)
                     .AddClass("mud-icon-button-edge-end", Adornment == Adornment.End && HideSpinButtons)
@@ -42,12 +60,20 @@ namespace MudExtensions
                     .AddClass("mud-icon-button-edge-margin-end", Adornment != Adornment.End && HideSpinButtons)
                     .Build();
 
-        protected string ChildContentClassname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? ChildContentClassname =>
                     new CssBuilder()
                     .AddClass("d-inline", InputType == InputType.Hidden && ChildContent != null && ShowVisualiser == false)
                     .AddClass("d-none", !(InputType == InputType.Hidden && ChildContent != null && ShowVisualiser == false))
                     .Build();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstRender"></param>
+        /// <returns></returns>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
@@ -55,14 +81,24 @@ namespace MudExtensions
             {
                 if (AutoSize)
                 {
-                    await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+                    if (JSRuntime != null)
+                    {
+                        await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+                    }
                     StateHasChanged();
                 }
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter] public bool ShowVisualiser { get; set; }
-        [Parameter] public string DataVisualiserStyle { get; set; }
+
+        /// <summary>
+        /// CSS styles for data visualiser container.
+        /// </summary>
+        [Parameter] public string? DataVisualiserStyle { get; set; }
 
         /// <summary>
         /// Type of the input element. It should be a valid HTML5 input type.
@@ -71,8 +107,16 @@ namespace MudExtensions
 
         internal override InputType GetInputType() => InputType;
 
-        protected string InputTypeString => InputType.ToDescriptionString();
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? InputTypeString => InputType.ToDescriptionString();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         protected Task OnInputHandler(ChangeEventArgs args)
         {
             if (!Immediate)
@@ -81,11 +125,19 @@ namespace MudExtensions
             OnInput.InvokeAsync();
             if (AutoSize)
             {
-                JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+                if (JSRuntime != null)
+                {
+                    JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+                }
             }
             return SetTextAsync(args?.Value as string);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         protected async Task OnChangeHandler(ChangeEventArgs args)
         {
             _internalText = args?.Value as string;
@@ -95,16 +147,26 @@ namespace MudExtensions
                 await SetTextAsync(args?.Value as string);
                 if (AutoSize)
                 {
-                    await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+                    if (JSRuntime != null)
+                    {
+                        await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+                    }
                 }
                 
                 await OnChange.InvokeAsync();
             }
         }
 
+        /// <summary>
+        /// Forces input height to fit the text content.
+        /// </summary>
+        /// <returns></returns>
         public virtual async Task ForceAutoSize()
         {
-            await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+            if (JSRuntime != null)
+            {
+                await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+            }
         }
 
         /// <summary>
@@ -137,11 +199,18 @@ namespace MudExtensions
         /// <summary>
         /// ChildContent of the MudInput will only be displayed if InputType.Hidden and if its not null.
         /// </summary>
-        [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public RenderFragment? ChildContent { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ElementReference ElementReference { get; private set; }
         private ElementReference _elementReference1;
 
+        /// <summary>
+        /// Focuses component.
+        /// </summary>
+        /// <returns></returns>
         public override async ValueTask FocusAsync()
         {
             try
@@ -157,16 +226,30 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// Blur from component.
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask BlurAsync()
         {
             return ElementReference.MudBlurAsync();
         }
 
+        /// <summary>
+        /// Focus and select all text.
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask SelectAsync()
         {
             return ElementReference.MudSelectAsync();
         }
 
+        /// <summary>
+        /// Focus and select partial text described with positions.
+        /// </summary>
+        /// <param name="pos1"></param>
+        /// <param name="pos2"></param>
+        /// <returns></returns>
         public override ValueTask SelectRangeAsync(int pos1, int pos2)
         {
             return ElementReference.MudSelectRangeAsync(pos1, pos2);
@@ -185,17 +268,23 @@ namespace MudExtensions
         [Parameter] public EventCallback OnDecrement { get; set; }
 
         /// <summary>
-        /// Hides the spin buttons for <see cref="MudNumericField{T}"/>
+        /// Hides the spin buttons.
         /// </summary>
         [Parameter] public bool HideSpinButtons { get; set; } = true;
 
-        [Parameter] public RenderFragment DataVisualiser { get; set; }
+        /// <summary>
+        /// DavaVisualiser content.
+        /// </summary>
+        [Parameter] public RenderFragment? DataVisualiser { get; set; }
 
         /// <summary>
         /// Show clear button.
         /// </summary>
         [Parameter] public bool Clearable { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter] public bool ForceClearable { get; set; }
 
         /// <summary>
@@ -227,15 +316,20 @@ namespace MudExtensions
 
         private bool _showClearable;
 
-        private void UpdateClearable(object value)
+        private void UpdateClearable(object? value)
         {
-            var showClearable = HasValue((T)value);
+            var showClearable = HasValue((T?)value);
             if (Clearable != showClearable)
                 Clearable = showClearable;
         }
 
         private bool GetClearable() => Clearable && ((Value is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (Value is not string && Value is not null));
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="updateValue"></param>
+        /// <returns></returns>
         protected override async Task UpdateTextPropertyAsync(bool updateValue)
         {
             await base.UpdateTextPropertyAsync(updateValue);
@@ -243,6 +337,11 @@ namespace MudExtensions
                 UpdateClearable(Text);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="updateText"></param>
+        /// <returns></returns>
         protected override async Task UpdateValuePropertyAsync(bool updateText)
         {
             await base.UpdateValuePropertyAsync(updateText);
@@ -250,6 +349,11 @@ namespace MudExtensions
                 UpdateClearable(Value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
         protected virtual async Task ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
             await SetTextAsync(string.Empty, updateValue: true);
@@ -257,8 +361,13 @@ namespace MudExtensions
             await OnClearButtonClick.InvokeAsync(e);
         }
 
-        private string _internalText;
+        private string? _internalText;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public override async Task SetParametersAsync(ParameterView parameters)
         {
             await base.SetParametersAsync(parameters);
@@ -283,7 +392,7 @@ namespace MudExtensions
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public Task SetText(string text)
+        public Task SetText(string? text)
         {
             _internalText = text;
             return SetTextAsync(text);

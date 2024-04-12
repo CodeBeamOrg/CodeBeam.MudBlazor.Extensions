@@ -14,7 +14,7 @@
     <MudStack>
         <MudNumericField @bind-Value="_pageColumn" Label="Page Column" Min="2" Max="12" />
         <MudNumericField @bind-Value="_pageRow" Label="Page Row" Min="2" Max="12" />
-        <MudCheckBox @bind-Checked="_allowMouseEvents" Label="Allow Mouse Events" Color="Color.Primary" />
+        <MudCheckBox @bind-Value="_allowMouseEvents" Label="Allow Mouse Events" Color="Color.Primary" />
         <MudText Typo="Typo.subtitle2">If true, left click increases the column and right click increases the row.</MudText>
     </MudStack>
     <MudStack>

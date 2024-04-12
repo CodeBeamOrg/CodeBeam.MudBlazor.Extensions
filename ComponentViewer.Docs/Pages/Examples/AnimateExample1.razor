@@ -39,9 +39,9 @@
             <MudNumericField @bind-Value="_duration" Variant="Variant.Outlined" Label="Duration" Step="(double)0.1" Min="(double)0.1" Max="(double)10" Margin="Margin.Dense" />
             <MudNumericField T="double" @bind-Value="_delay" Variant="Variant.Outlined" Label="Delay" Step="(double)0.1" Min="(double)0" Max="(double)10" Margin="Margin.Dense" />
             <MudNumericField @bind-Value="_iterationCount" Variant="Variant.Outlined" Label="Iteration Count" Step="1" Min="0" Max="10" Margin="Margin.Dense" />
-            <MudCheckBox @bind-Checked="_hover" Label="Hover" Color="Color.Primary" Dense="true" />
-            <MudCheckBox @bind-Checked="_infinite" Label="Infinite" Color="Color.Primary" Dense="true" />
-            <MudCheckBox @bind-Checked="_paused" Label="Pause" Color="Color.Primary" Dense="true" />
+            <MudCheckBox @bind-Value="_hover" Label="Hover" Color="Color.Primary" Dense="true" />
+            <MudCheckBox @bind-Value="_infinite" Label="Infinite" Color="Color.Primary" Dense="true" />
+            <MudCheckBox @bind-Value="_paused" Label="Pause" Color="Color.Primary" Dense="true" />
             <MudSelect @bind-Value="_animationTiming" Variant="Variant.Outlined" Label="Timing" Margin="Margin.Dense" Dense="true">
                 @foreach (AnimationTiming item in Enum.GetValues(typeof(AnimationTiming)))
                 {

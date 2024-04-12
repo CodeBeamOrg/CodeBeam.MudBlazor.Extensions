@@ -9,10 +9,10 @@
     </MudItem>
 
     <MudItem xs="12" sm="4">
-        <MudRadioGroup T="SelectAllPosition" @bind-SelectedOption="_selectAllPosition">
-            <MudRadio Option="SelectAllPosition.BeforeSearchBox" Color="Color.Primary">Before Search (Default)</MudRadio>
-            <MudRadio Option="SelectAllPosition.NextToSearchBox" Color="Color.Primary">Start of the searchbox in the same line</MudRadio>
-            <MudRadio Option="SelectAllPosition.AfterSearchBox" Color="Color.Primary">After Search</MudRadio>
+        <MudRadioGroup T="SelectAllPosition" @bind-Value="_selectAllPosition">
+            <MudRadio Value="SelectAllPosition.BeforeSearchBox" Color="Color.Primary">Before Search (Default)</MudRadio>
+            <MudRadio Value="SelectAllPosition.NextToSearchBox" Color="Color.Primary">Start of the searchbox in the same line</MudRadio>
+            <MudRadio Value="SelectAllPosition.AfterSearchBox" Color="Color.Primary">After Search</MudRadio>
         </MudRadioGroup>
         <MudGrid Class="mt-3 px-4">
             <MudItem xs="6">
@@ -55,7 +55,7 @@
         "Washington", "West Virginia", "Wisconsin", "Wyoming",
     };
 
-    private string GetMultiSelectionText(List<string> selectedValues)
+    private string? GetMultiSelectionText(List<string> selectedValues)
     {
         if (!selectedValues.Any())
         {

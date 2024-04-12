@@ -10,7 +10,7 @@
         @if (MudComboBox.MultiSelection && MudComboBox.ShowCheckbox)
         {
             <MudCheckBox Class="me-4" Dense
-                         @bind-Checked="@Selected" @onclick="@HandleOnClick"
+                         @bind-Value="@Selected" @onclick="@HandleOnClick"
                          Size="@(CheckBoxSize ?? MudComboBox.CheckBoxSize)"
                          Color="@(CheckBoxCheckedColor ?? MudComboBox.EffectiveCheckBoxCheckedColor)"
                          UnCheckedColor="@(CheckBoxUnCheckedColor ?? MudComboBox.EffectiveCheckBoxUnCheckedColor)"

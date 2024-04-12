@@ -112,7 +112,7 @@
 <MudSnackbarProvider />
 
 @code {
-    MudFontPicker _fontPicker;
+    MudFontPicker _fontPicker = new();
     string font = "Roboto";
     internal bool IsDarkMode = false;
     bool _open = false;
@@ -180,7 +180,7 @@
             get
             {
                 var v = typeof(MudAnimate).Assembly.GetName().Version;
-                return $"v {v.Major}.{v.Minor}.{v.Build}";
+                return $"v {v?.Major}.{v?.Minor}.{v?.Build}";
             }
         }
 }

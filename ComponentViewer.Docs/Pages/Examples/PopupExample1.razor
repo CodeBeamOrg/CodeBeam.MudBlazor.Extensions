@@ -39,9 +39,9 @@ else
                 <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="SetGdprContent">GDPR Content</MudButton>
                 <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="SetSubscribeContent">Subscribe Content</MudButton>
             </MudStack>
-            <MudRadioGroup @bind-SelectedOption="_icon">
-                <MudRadio Option="@Icons.Custom.Brands.MudBlazor"><MudIcon Icon="@Icons.Custom.Brands.MudBlazor" /></MudRadio>
-                <MudRadio Option="@Icons.Material.Filled.Info"><MudIcon Icon="@Icons.Material.Filled.Info" /></MudRadio>
+            <MudRadioGroup @bind-Value="_icon">
+                <MudRadio Value="@Icons.Custom.Brands.MudBlazor"><MudIcon Icon="@Icons.Custom.Brands.MudBlazor" /></MudRadio>
+                <MudRadio Value="@Icons.Material.Filled.Info"><MudIcon Icon="@Icons.Material.Filled.Info" /></MudRadio>
             </MudRadioGroup>
             <MudTextField @bind-Value="_popupText" Label="Text" />
             <MudTextField @bind-Value="_linkText" Label="Link Text" />
@@ -57,14 +57,14 @@ else
                 }
             </MudSelect>
             <MudNumericField @bind-Value="_padding" Min="0" Max="300" Variant="Variant.Outlined" Label="Padding" />
-            <MudSwitch @bind-Checked="_enableAnimation" Color="Color.Primary" Label="Enable Animation" />
+            <MudSwitch @bind-Value="_enableAnimation" Color="Color.Primary" Label="Enable Animation" />
             <MudButton OnClick="@(() => _open = true)">Show Popup</MudButton>
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code {
-    MudPopup _popup;
+    MudPopup? _popup;
     PopupPosition _popupPosition;
     bool _open = true;
     int _padding;

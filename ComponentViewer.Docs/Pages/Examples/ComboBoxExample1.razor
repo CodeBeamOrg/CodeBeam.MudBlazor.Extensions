@@ -53,24 +53,24 @@
             <MudSelectExtended @bind-Value="_margin" ItemCollection="@(Enum.GetValues<Margin>())" Variant="Variant.Outlined" Label="Margin" Margin="Margin.Dense" Dense="true" />
             <MudSelectExtended @bind-Value="_dense" ItemCollection="@(Enum.GetValues<Dense>())" Variant="Variant.Outlined" Label="Dense" Margin="Margin.Dense" Dense="true" />
             <MudSelectExtended @bind-Value="_color" ItemCollection="@(Enum.GetValues<Color>())" Variant="Variant.Outlined" Label="Color" Margin="Margin.Dense" Dense="true" />
-            <MudSwitchM3 @bind-Checked="@_disabled" Label="Disabled" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_readonly" Label="ReadOnly" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_editable" Label="Editable" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_selectValueOnTab" Label="SelectValueOnTab" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_placeholder" Label="Placeholder" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_clearable" Label="Clearable" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_helperText" Label="HelperText" Color="Color.Secondary" />
-            <MudSwitchM3 @bind-Checked="@_helperTextOnFocus" Label="HelperTextOnFocus" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_disabled" Label="Disabled" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_readonly" Label="ReadOnly" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_editable" Label="Editable" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_selectValueOnTab" Label="SelectValueOnTab" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_placeholder" Label="Placeholder" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_clearable" Label="Clearable" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_helperText" Label="HelperText" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_helperTextOnFocus" Label="HelperTextOnFocus" Color="Color.Secondary" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
     @code{
-    MudComboBox<string> _combobox;
-    string _value;
-    string _text;
-    IEnumerable<string> _selectedValues;
+    MudComboBox<string?>? _combobox;
+    string? _value;
+    string? _text;
+    IEnumerable<string>? _selectedValues;
     Variant _variant = Variant.Outlined;
     Margin _margin;
     Dense _dense = Dense.Standard;

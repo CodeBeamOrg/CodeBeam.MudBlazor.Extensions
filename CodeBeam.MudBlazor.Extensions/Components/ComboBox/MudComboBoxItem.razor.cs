@@ -8,7 +8,10 @@ namespace MudExtensions
 {
     public partial class MudComboBoxItem<T> : MudBaseSelectItem, IDisposable
     {
-        protected string Classname => new CssBuilder("mud-combobox-item")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname => new CssBuilder("mud-combobox-item")
             .AddClass($"mud-combobox-item-{MudComboBox?.Dense.ToDescriptionString()}")
             .AddClass("mud-ripple", !DisableRipple && !Disabled)
             .AddClass("mud-combobox-item-gutters")
@@ -23,9 +26,12 @@ namespace MudExtensions
             .AddClass(Class)
             .Build();
 
-        protected string HighlighterClassname => MudComboBox is null ? null : new CssBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? HighlighterClassname => MudComboBox is null ? null : new CssBuilder()
             .AddClass("mud-combobox-highlighter", MudComboBox.Highlight && string.IsNullOrWhiteSpace(MudComboBox.HighlightClass))
-            .AddClass(MudComboBox?.HighlightClass, MudComboBox.Highlight)
+            .AddClass(MudComboBox?.HighlightClass, MudComboBox?.Highlight)
             .Build();
 
         internal string ItemId { get; } = string.Concat("_", Guid.NewGuid().ToString().AsSpan(0, 8));
@@ -41,19 +47,18 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         /// <summary>
         /// A user-defined option that can be selected
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public T Value { get; set; }
+        public T? Value { get; set; }
 
         /// <summary>
         /// The color of the text. It supports the theme colors.
         /// </summary>
-        /// <remarks>The default is <see cref="MudComboBox.TextColor"/></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public Color? TextColor { get; set; } = null;
@@ -61,7 +66,6 @@ namespace MudExtensions
         /// <summary>
         /// The color of the checked checkbox. It supports the theme colors.
         /// </summary>
-        /// <remarks>The default is <see cref="MudComboBox.CheckBoxCheckedColor"/></remarks>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public Color? CheckBoxCheckedColor { get; set; } = null;
@@ -69,7 +73,6 @@ namespace MudExtensions
         /// <summary>
         /// The color of the unchecked checkbox. It supports the theme colors.
         /// </summary>
-        /// <remarks>The default is <see cref="MudComboBox.CheckBoxUnCheckedColor"/></remarks>
         [Parameter]
         [Category(CategoryTypes.Radio.Appearance)]
         public Color? CheckBoxUnCheckedColor { get; set; } = null;
@@ -77,25 +80,39 @@ namespace MudExtensions
         /// <summary>
         /// The size of the checkbox.
         /// </summary>
-        /// <remarks>The default is <see cref="MudComboBox.CheckBoxSize"/></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public Size? CheckBoxSize { get; set; } = null;
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         protected internal bool Selected { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         protected internal bool Active { get; set; }
 
+        /// <summary>
+        /// Change the item's active status.
+        /// </summary>
+        /// <param name="isActive"></param>
         public void SetActive(bool isActive)
         {
             Active = isActive;
             //StateHasChanged();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public bool Eligible { get; set; } = true;
 
-        protected string DisplayString
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? DisplayString
         {
             get
             {
@@ -103,7 +120,7 @@ namespace MudExtensions
                 if (MudComboBox?.ItemPresenter == ValuePresenter.None)
                 {
                     if (converter == null)
-                        return Value.ToString();
+                        return Value?.ToString();
                     return converter.Set(Value);
                 }
 
@@ -113,18 +130,28 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void ForceRender()
         {
             CheckEligible();
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task ForceUpdate()
         {
             SyncSelected();
             await InvokeAsync(StateHasChanged);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnInitialized()
         {
             MudComboBox?.AddItem(this);
@@ -135,6 +162,9 @@ namespace MudExtensions
         bool _selectedChanged = false;
         //bool? _oldEligible = true;
         //bool _eligibleChanged = false;
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
@@ -147,6 +177,11 @@ namespace MudExtensions
             CheckEligible();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstRender"></param>
+        /// <returns></returns>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
@@ -157,11 +192,18 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected internal void CheckEligible()
         {
             Eligible = IsEligible();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected bool IsEligible()
         {
             if (MudComboBox is null)
@@ -183,27 +225,34 @@ namespace MudExtensions
             }
             else
             {
-                if (MudComboBox.Converter.Set(Value).Contains(MudComboBox._searchString ?? string.Empty, StringComparison.OrdinalIgnoreCase))
+                if (MudComboBox?.Converter?.Set(Value)?.Contains(MudComboBox._searchString ?? string.Empty, StringComparison.OrdinalIgnoreCase) == true)
                     return true;
             }
 
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void SyncSelected()
         {
             if (MudComboBox is null)
                 return;
 
-            if (MudComboBox.MultiSelection && MudComboBox.SelectedValues.Contains(Value))
+            if (MudComboBox.MultiSelection && MudComboBox?.SelectedValues?.Contains(Value) == true)
                 Selected = true;
 
-            else if (!MudComboBox.MultiSelection && ((MudComboBox.Value is null && Value is null) || MudComboBox.Value?.Equals(Value) == true))
+            else if (MudComboBox?.MultiSelection == false && ((MudComboBox.Value is null && Value is null) || MudComboBox.Value?.Equals(Value) == true))
                 Selected = true;
             else
                 Selected = false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected async Task HandleOnClick()
         {
             await MudComboBox.ToggleOption(this, !Selected);
@@ -212,6 +261,9 @@ namespace MudExtensions
             await OnClick.InvokeAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             try

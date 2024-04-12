@@ -190,9 +190,9 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => combobox.Instance.Value.Should().Be("1"));
             //Check user on blur implementation works
             var @switch = comp.FindComponent<MudSwitch<bool>>();
-            @switch.Instance.Checked = true;
+            @switch.Instance.Value = true;
             await comp.InvokeAsync(() => combobox.Instance.HandleOnBlur(new FocusEventArgs()));
-            comp.WaitForAssertion(() => @switch.Instance.Checked.Should().Be(false));
+            comp.WaitForAssertion(() => @switch.Instance.Value.Should().Be(false));
         }
 
         [Test]
@@ -304,7 +304,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => combobox.Instance.GetPresenterText().Should().Be("2, 1, 3"));
             items[0].Click();
             comp.WaitForAssertion(() => combobox.Instance.GetPresenterText().Should().Be("2, 3"));
-            combobox.Instance.SelectedValues.Count().Should().Be(2);
+            combobox.Instance.SelectedValues?.Count().Should().Be(2);
             combobox.Instance.SelectedValues.Should().Contain("2");
             combobox.Instance.SelectedValues.Should().Contain("3");
             //Console.WriteLine(comp.Markup);

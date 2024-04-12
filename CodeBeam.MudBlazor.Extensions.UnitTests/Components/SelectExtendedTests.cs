@@ -200,9 +200,9 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => select.Instance.Value.Should().Be("1"));
             //Check user on blur implementation works
             var @switch = comp.FindComponent<MudSwitch<bool>>();
-            @switch.Instance.Checked = true;
+            @switch.Instance.Value = true;
             await comp.InvokeAsync(() => select.Instance.OnLostFocus(new FocusEventArgs()));
-            comp.WaitForAssertion(() => @switch.Instance.Checked.Should().Be(false));
+            comp.WaitForAssertion(() => @switch.Instance.Value.Should().Be(false));
         }
 
         /// <summary>
@@ -391,7 +391,7 @@ namespace MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<SelectTest1>();
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
-            string text = null;
+            string? text = null;
             select.SetCallback(s => s.TextChanged, x => text = x);
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
@@ -433,8 +433,8 @@ namespace MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<SelectTest1>();
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
-            string text = null;
-            IEnumerable<string> selectedValues = null;
+            string? text = null;
+            IEnumerable<string>? selectedValues = null;
             var eventCounter = 0;
             var textChangedCount = 0;
             var selectedValuesChangedCount = 0;
@@ -494,8 +494,8 @@ namespace MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<SelectTest1>();
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
-            string text = null;
-            IEnumerable<string> selectedValues = null;
+            string? text = null;
+            IEnumerable<string>? selectedValues = null;
             var eventCounter = 0;
             var textChangedCount = 0;
             var selectedValuesChangedCount = 0;
@@ -577,7 +577,7 @@ namespace MudExtensions.UnitTests.Components
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
             var select = comp.FindComponent<MudSelectExtended<string>>();
-            IEnumerable<string> validatedValue = null;
+            IEnumerable<string>? validatedValue = null;
             select.SetParam(x => x.Validation, new Func<string, bool>(value =>
             {
                 validatedValue = select.Instance.SelectedValues;
@@ -619,7 +619,7 @@ namespace MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<MultiSelectTest2>();
             // select element needed for the test
             var select = comp.FindComponent<MudSelectExtended<string>>();
-            IEnumerable<string> validatedValue = null;
+            IEnumerable<string>? validatedValue = null;
             select.SetParam(x => x.Validation, (object)new Func<string, bool>(value =>
             {
                 validatedValue = select.Instance.SelectedValues; // NOTE: select does only update the value for T string
@@ -694,7 +694,7 @@ namespace MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<SelectTest1>();
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
-            string validatedValue = null;
+            string? validatedValue = null;
             select.SetParam(x => x.Validation, (object)new Func<string, bool>(value =>
             {
                 validatedValue = value; // NOTE: select does only update the value for T string

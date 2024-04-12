@@ -64,14 +64,14 @@
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
-            <MudSwitchM3 @bind-Checked="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_multiselection" Label="Multiselection" Color="Color.Secondary" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code {
-    string _value;
-    IEnumerable<string> _selectedValues;
+    string? _value;
+    IEnumerable<string>? _selectedValues;
     bool _multiselection;
 
     private List<string> characters = new()

@@ -217,7 +217,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Data)]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         /// <summary>
         /// When TextUpdateSuppression is true (which is default) the text can not be updated by bindings while the component is focused in BSS (not WASM).
@@ -264,7 +264,7 @@ namespace MudExtensions
         /// </summary>
         internal virtual InputType GetInputType() { return InputType.Text; }
 
-        protected virtual async Task SetTextAsync(string text, bool updateValue = true)
+        protected virtual async Task SetTextAsync(string? text, bool updateValue = true)
         {
             if (Text != text)
             {
@@ -412,15 +412,15 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Data)]
-        public T Value
+        public T? Value
         {
             get => _value;
             set => _value = value;
         }
 
-        protected virtual async Task SetValueAsync(T value, bool updateText = true, bool force = false)
+        protected virtual async Task SetValueAsync(T? value, bool updateText = true, bool force = false)
         {
-            if (!EqualityComparer<T>.Default.Equals(Value, value) || force == true)
+            if (!EqualityComparer<T?>.Default.Equals(Value, value) || force == true)
             {
                 _isDirty = true;
                 Value = value;

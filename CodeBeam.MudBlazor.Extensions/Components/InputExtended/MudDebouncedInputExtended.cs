@@ -5,9 +5,13 @@ using MudBlazor;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class MudDebouncedInputExtended<T> : MudBaseInputExtended<T>
     {
-        private System.Timers.Timer _timer;
+        private System.Timers.Timer? _timer;
         private double _debounceInterval;
 
         /// <summary>
@@ -39,6 +43,10 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<string> OnDebounceIntervalElapsed { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected Task OnChange()
         {
             if (DebounceInterval > 0 && _timer != null)
@@ -50,6 +58,11 @@ namespace MudExtensions
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="updateText"></param>
+        /// <returns></returns>
         protected override Task UpdateValuePropertyAsync(bool updateText)
         {
             // This method is called when Value property needs to be refreshed from the current Text property, so typically because Text property has changed.
@@ -70,6 +83,9 @@ namespace MudExtensions
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
@@ -90,7 +106,7 @@ namespace MudExtensions
             _timer.Interval = DebounceInterval;
         }
 
-        private void OnTimerTick(object sender, ElapsedEventArgs e)
+        private void OnTimerTick(object? sender, ElapsedEventArgs e)
         {
             InvokeAsync(OnTimerTickGuiThread).AndForget();
         }
@@ -114,6 +130,10 @@ namespace MudExtensions
                 OnTimerTickGuiThread().AndForget();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);

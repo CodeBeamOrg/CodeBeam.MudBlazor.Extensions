@@ -28,14 +28,14 @@
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
-            <MudSwitchM3 @bind-Checked="@_editable" Label="Editable" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_editable" Label="Editable" Color="Color.Secondary" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code{
-    string _value;
-    string _text;
-    IEnumerable<string> _selectedValues;
+    string? _value;
+    string? _text;
+    IEnumerable<string>? _selectedValues;
     bool _editable;
 }

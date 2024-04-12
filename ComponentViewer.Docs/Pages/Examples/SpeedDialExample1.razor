@@ -2,9 +2,9 @@
     <MudItem xs="12" sm="8">
         <div Class="relative pa-4 d-flex align-center justify-center" Style="height: 500px; background-color: var(--mud-palette-background-grey)">
             <MudSpeedDial Origin="_origin" Padding="_padding" OpenOnHover="_openOnHover" OpenOnClick="_openOnClick" IconOnOpen="@_openIcon" Color="Color.Primary" OnMainButtonClick="@(() => ButtonClick("Main button clicked."))">
-                <MudFab Size="Size.Small" IconSize="Size.Small" Icon="@Icons.Custom.Brands.MudBlazor" OnClick="@(() => ButtonClick("First button clicked."))" />
-                <MudFab Size="Size.Small" IconSize="Size.Small" Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Secondary" OnClick="@(() => ButtonClick("Second button clicked."))" />
-                <MudFab Size="Size.Small" IconSize="Size.Small" Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Tertiary" OnClick="@(() => ButtonClick("Third button clicked."))" />
+                <MudFab Size="Size.Small" IconSize="Size.Small" StartIcon="@Icons.Custom.Brands.MudBlazor" OnClick="@(() => ButtonClick("First button clicked."))" />
+                <MudFab Size="Size.Small" IconSize="Size.Small" StartIcon="@Icons.Custom.Brands.MudBlazor" Color="Color.Secondary" OnClick="@(() => ButtonClick("Second button clicked."))" />
+                <MudFab Size="Size.Small" IconSize="Size.Small" StartIcon="@Icons.Custom.Brands.MudBlazor" Color="Color.Tertiary" OnClick="@(() => ButtonClick("Third button clicked."))" />
             </MudSpeedDial>
             @if (_show)
             {
@@ -27,20 +27,20 @@
                 <MudSelectItem Value="Origin.BottomCenter">Bottom - Center</MudSelectItem>
             </MudSelect>
             <MudNumericField @bind-Value="_padding" Variant="Variant.Outlined" Label="Padding" />
-            <MudCheckBox @bind-Checked="_openOnHover" Color="Color.Primary" Label="Open On Hover" />
-            <MudCheckBox @bind-Checked="_openOnClick" Color="Color.Primary" Label="Open On Click" />
-            <MudSwitch @ref="_switch" T="bool" Checked="_differentIconOnOpen" CheckedChanged="@(() => IconChanged())" Color="Color.Primary" Label="Different Icon When Open" />
+            <MudCheckBox @bind-Value="_openOnHover" Color="Color.Primary" Label="Open On Hover" />
+            <MudCheckBox @bind-Value="_openOnClick" Color="Color.Primary" Label="Open On Click" />
+            <MudSwitchM3 @ref="_switch" T="bool" Value="_differentIconOnOpen" ValueChanged="@(() => IconChanged(_switch?.Value))" Color="Color.Primary" Label="Different Icon When Open" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code {
-    MudSwitch<bool> _switch;
+    MudSwitchM3<bool>? _switch;
     Origin _origin = Origin.TopRight;
     int _padding = 0;
     bool _show;
     int _progressValue;
-    string _text;
+    string? _text;
     int _key;
     bool _openOnHover = true;
     bool _openOnClick = true;
@@ -64,9 +64,9 @@
         _show = false;
     }
 
-    private void IconChanged()
+    private void IconChanged(bool? value)
     {
-        _differentIconOnOpen = _switch.Checked;
+        _differentIconOnOpen = value ?? false;
         if (_differentIconOnOpen == true)
         {
             _openIcon = Icons.Material.Filled.Close;

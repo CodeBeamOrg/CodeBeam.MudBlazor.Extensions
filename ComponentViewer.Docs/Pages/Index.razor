@@ -182,12 +182,12 @@
 
 @code {
     [CascadingParameter]
-    MainLayout MainLayout { get; set; }
+    MainLayout? MainLayout { get; set; }
 
-    MudAnimate _animate;
+    MudAnimate _animate = new();
 
     bool _hover = false;
-    string _searchString;
+    string? _searchString;
 
     private string GetSloganText()
     {
@@ -221,7 +221,7 @@
         get
         {
             var v = typeof(MudAnimate).Assembly.GetName().Version;
-            return $"v {v.Major}.{v.Minor}.{v.Build}";
+            return $"v {v?.Major}.{v?.Minor}.{v?.Build}";
         }
     }
 

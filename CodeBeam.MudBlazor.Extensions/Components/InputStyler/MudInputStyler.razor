@@ -7,11 +7,11 @@
 @code{
 
     /// <summary>
-    /// Supports id and class selection. Use "#idName" for id selectors (ex. <Component id="idName" />) or ".idName" for class selectors (ex. <Component Class="idName" />). Leave it null or empty to effect all scrollbars.
+    /// Supports id and class selection. Use "#idName" for id selectors (ex. <Component id="idName" />) or ".idName" for class selectors (ex. <Component Class="idName" />). Leave it null or empty to effect all.
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Behavior)]
-    public string Selector { get; set; }
+    public string? Selector { get; set; }
 
     /// <summary>
     /// If true, selected colors applies even the input does not have focus. Default is false.
@@ -25,42 +25,42 @@
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Appearance)]
-    public string BaseColor { get; set; }
+    public string? BaseColor { get; set; }
 
     /// <summary>
     /// The text color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Appearance)]
-    public string TextColor { get; set; }
+    public string? TextColor { get; set; }
 
     /// <summary>
     /// The label style. Add !important if style doesn't applied.
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Appearance)]
-    public string LabelStyle { get; set; }
+    public string? LabelStyle { get; set; }
 
     /// <summary>
     /// The label text color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Appearance)]
-    public string LabelColor { get; set; }
+    public string? LabelColor { get; set; }
 
     /// <summary>
     /// The label background color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Appearance)]
-    public string LabelBackgroundColor { get; set; }
+    public string? LabelBackgroundColor { get; set; }
 
     /// <summary>
     /// The border color. Supports hex values "#ffffff", valid keywords "blue" and CSS variables "var(--mud-palette-primary)"
     /// </summary>
     [Parameter]
     [Category(CategoryTypes.Item.Appearance)]
-    public string BorderColor { get; set; }
+    public string? BorderColor { get; set; }
 
 }
 

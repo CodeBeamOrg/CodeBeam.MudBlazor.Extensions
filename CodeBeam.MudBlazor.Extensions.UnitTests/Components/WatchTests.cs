@@ -1,9 +1,5 @@
 ﻿using Bunit;
-using MudExtensions.UnitTests.Components;
-using ComponentViewer.Docs.Pages.Components;
 using FluentAssertions;
-using MudBlazor;
-using MudExtensions;
 using MudExtensions.UnitTests.TestComponents;
 
 namespace MudExtensions.UnitTests.Components
