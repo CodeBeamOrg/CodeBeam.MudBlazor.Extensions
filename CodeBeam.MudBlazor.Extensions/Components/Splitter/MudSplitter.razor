@@ -2,7 +2,8 @@
 @inherits MudComponentBase
 
 <div class="@Classname" style="@Style">
-    <MudSlider @ref="_slider" Value="@Dimension" ValueChanged="@UpdateDimension" ondblclick="@OnDoubleClick()"
+    @* Don't make OnDoubleClick to method, causes infinite loop *@
+    <MudSlider @ref="_slider" @bind-Value="@Dimension" @bind-Value:after="@(() => UpdateDimension(_slider.Value))" ondblclick="@OnDoubleClick"
                T="double" Min="0" Max="100" Step="@Sensitivity" Disabled="@(!EnableSlide)"
                Class="@SliderClassname" Style="overflow: hidden; z-index: 6" />
 

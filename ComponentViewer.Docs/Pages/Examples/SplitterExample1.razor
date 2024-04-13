@@ -39,19 +39,23 @@
 </MudGrid>
 
 @code {
-   MudSplitter? _splitter;
-   Color _color;
-   string _height = "400px";
-   double _sensitivity = 0.1d;
-   double _percentage = 50;
-   bool _sliderEnabled = true;
-   bool _marginEnabled = true;
-   bool _borderedEnabled = true;
-   bool _doubleClickEnabled = true;
+    MudSplitter? _splitter;
+    Color _color;
+    string _height = "400px";
+    double _sensitivity = 0.1d;
+    double _percentage = 50;
+    bool _sliderEnabled = true;
+    bool _marginEnabled = true;
+    bool _borderedEnabled = true;
+    bool _doubleClickEnabled = true;
 
-   void OnDoubleClicked()
-   {
-      if (_doubleClickEnabled)
-         _percentage = 50;
+    private Task OnDoubleClicked()
+    {
+        if (_doubleClickEnabled)
+        {
+            _percentage = 50;
+        }
+        
+        return Task.CompletedTask;
    }
 }

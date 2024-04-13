@@ -142,7 +142,7 @@ namespace MudExtensions
         public EventCallback<double> DimensionChanged { get; set; }
 
         /// <summary>
-        /// 
+        /// Fires when double click.
         /// </summary>
         [Parameter]
         public EventCallback OnDoubleClicked { get; set; }
@@ -159,7 +159,7 @@ namespace MudExtensions
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        protected Task UpdateDimension(double percentage)
+        protected async Task UpdateDimension(double percentage)
         {
             Dimension = percentage;
 
@@ -169,17 +169,19 @@ namespace MudExtensions
                 Dimension = 100;
 
             if (DimensionChanged.HasDelegate)
-                _ = DimensionChanged.InvokeAsync(percentage);
+            {
+                await DimensionChanged.InvokeAsync(percentage);
+            }
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
         
-        Task OnDoubleClick()
+        private async Task OnDoubleClick()
         {
             if (OnDoubleClicked.HasDelegate)
-                _ = OnDoubleClicked.InvokeAsync();
+                await OnDoubleClicked.InvokeAsync();
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
     }
 }

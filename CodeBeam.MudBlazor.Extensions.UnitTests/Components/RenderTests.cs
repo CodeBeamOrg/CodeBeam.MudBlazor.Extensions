@@ -35,6 +35,13 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
+        public void SplitterPageRenderTest()
+        {
+            var comp = Context.RenderComponent<SplitterPage>();
+            comp.Markup.Should().NotBeNullOrEmpty();
+        }
+
+        [Test]
         public void StepperPageRenderTest()
         {
             var comp = Context.RenderComponent<StepperPage>();
