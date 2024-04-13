@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
-using MudExtensions.Enums;
 
 namespace MudExtensions
 {
@@ -623,7 +622,7 @@ namespace MudExtensions
         /// <returns></returns>
         public bool IsAllStepsCompleted()
         {
-            return !Steps.Any(x => x.Status == Enums.StepStatus.Continued);
+            return !Steps.Any(x => x.Status == StepStatus.Continued);
         }
 
         /// <summary>

@@ -2,7 +2,6 @@
 using FluentAssertions;
 using MudBlazor;
 using MudExtensions;
-using MudExtensions.Enums;
 using MudExtensions.UnitTests.TestComponents;
 
 namespace MudExtensions.UnitTests.Components

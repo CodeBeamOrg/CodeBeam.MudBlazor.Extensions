@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
-using MudExtensions.Enums;
 using MudExtensions.Services;
 using System.Data;
 

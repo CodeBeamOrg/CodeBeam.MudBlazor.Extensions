@@ -1,10 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using MudBlazor.Utilities;
-using MudExtensions.Enums;
 using MudExtensions.Extensions;
 
 namespace MudExtensions

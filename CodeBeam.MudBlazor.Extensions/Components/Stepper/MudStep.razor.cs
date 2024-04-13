@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
-using MudExtensions.Enums;
 using MudExtensions.Extensions;
-using Microsoft.AspNetCore.Components.Rendering;
 
 namespace MudExtensions
 {

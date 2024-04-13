@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace MudExtensions.Enums
+namespace MudExtensions
 {
+#pragma warning disable CS1591
     public enum HeaderTextView
     {
         [Description("none")]

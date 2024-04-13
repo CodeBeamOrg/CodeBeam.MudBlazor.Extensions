@@ -2,7 +2,6 @@
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
-using MudExtensions.Enums;
 
 namespace MudExtensions
 {

@@ -1,6 +1,5 @@
 ﻿@namespace MudExtensions
 @inherits MudComponentBase
-@using MudExtensions.Enums
 
 <CascadingValue Value="this" IsFixed="true">
     <div class="@Classname" style="@Style">
@@ -43,6 +42,6 @@
 
 @if (EnableAnimation == true)
 {
-    <MudAnimate @ref="_animate" Selector="@($".mud-gallery-ani-{_animateGuid.ToString()}")" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.3" />
+    <MudAnimate @ref="_animate" Selector="@($".mud-gallery-ani-{_animateGuid.ToString()}")" AnimationType="AnimationType.Fade" Value="1" Duration="0.3" />
 }
 

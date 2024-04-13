@@ -1,6 +1,5 @@
 ﻿@namespace MudExtensions
 @inherits MudComponentBase
-@using MudExtensions.Enums
 
 <CascadingValue Value="this" IsFixed="true">
     <MudStack Row="@Vertical" Class="@Class" Style="@Style">
@@ -31,7 +30,7 @@
                             }
                             else
                             {
-                                @if (step.Status == MudExtensions.Enums.StepStatus.Completed)
+                                @if (step.Status == StepStatus.Completed)
                                 {
                                     <MudBadge BadgeClass="mud-stepper-badge" Overlap="true" Bordered="true" Color="@Color" Icon="@Icons.Material.Filled.Done">
                                         <MudAvatar Style="@AvatarStylename" Color="@Color" Variant="@Variant" Size="@HeaderSize">
@@ -190,6 +189,6 @@
 
 @if (DisableAnimation == false)
 {
-    <MudAnimate @ref="_animate" Selector="@($".mud-stepper-ani-{_animateGuid.ToString()}")" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.5" />
+    <MudAnimate @ref="_animate" Selector="@($".mud-stepper-ani-{_animateGuid.ToString()}")" AnimationType="AnimationType.Fade" Value="1" Duration="0.5" />
 }
 

@@ -4,7 +4,6 @@ using MudBlazor;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudBlazor.Utilities.Exceptions;
-using MudExtensions.Enums;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MudExtensions

@@ -10,7 +10,7 @@
     }
     else
     {
-        <MudFab Color="@Color" OnClick="MainButtonClick" Icon="@GetIcon()" Size="@Size" />
+        <MudFab Color="@Color" OnClick="MainButtonClick" StartIcon="@GetIcon()" Size="@Size" />
     }
     <MudPopover class="@("d-flex align-center justify-center " + @PopoverClass)" @onmouseenter="PopoverMouseEnter" @onmouseleave="PopoverMouseLeave" Open="@Open" Paper="false" AnchorOrigin="_anchorOrigin" TransformOrigin="_transformOrigin" RelativeWidth="true">
         <MudStack Class="@StackClassname" Row="_row" @onclick="HandlePopoverClick">
@@ -18,5 +18,5 @@
         </MudStack>
     </MudPopover>
     
-    <MudAnimate Selector="@($".speedDial-{_animationGuid}")" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.7" />
+    <MudAnimate Selector="@($".speedDial-{_animationGuid}")" AnimationType="AnimationType.Fade" Value="1" Duration="0.7" />
 </div>

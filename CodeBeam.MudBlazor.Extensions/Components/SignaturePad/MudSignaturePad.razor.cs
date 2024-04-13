@@ -35,7 +35,7 @@ namespace MudExtensions
             .AddClass(ToolbarClass)
             .Build();
 
-        private DotNetObjectReference<MudSignaturePad> _dotnetObjectRef;
+        private DotNetObjectReference<MudSignaturePad>? _dotnetObjectRef;
         ElementReference _reference;
         bool _isErasing = true;
         int _lineWidth = 3;

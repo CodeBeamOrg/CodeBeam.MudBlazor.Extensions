@@ -1,6 +1,5 @@
 ﻿@namespace MudExtensions
 @inherits MudComponentBase
-@using MudExtensions.Enums
 
 @if (Open)
 {
@@ -35,5 +34,5 @@
 
 @if (EnableAnimation == true)
 {
-    <MudAnimate Selector="@($".popup-{_animationGuid}")" AnimationType="Enums.AnimationType.Fade" Value="1" Duration="0.5" />
+    <MudAnimate Selector="@($".popup-{_animationGuid}")" AnimationType="AnimationType.Fade" Value="1" Duration="0.5" />
 }
