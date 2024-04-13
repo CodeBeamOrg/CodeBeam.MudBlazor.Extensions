@@ -110,8 +110,8 @@ namespace MudExtensions
         /// <returns></returns>
         protected async Task HandleKeyDown(KeyboardEventArgs args)
         {
-            
-            if (args.Key == Delimiter.ToString() && _internalValue != null)
+            var result = args.Code == "Space" ? " " : args.Key;
+            if (result == Delimiter.ToString() && _internalValue != null)
             {
                 await SetChips();
                 StateHasChanged();

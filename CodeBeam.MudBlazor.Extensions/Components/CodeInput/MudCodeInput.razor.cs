@@ -37,7 +37,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string ClassInput { get; set; }
+        public string? ClassInput { get; set; }
 
         /// <summary>
         /// Type of the input element. It should be a valid HTML5 input type.
@@ -46,14 +46,14 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public InputType InputType { get; set; } = InputType.Text;
         
-        private T _theValue;
+        private T? _theValue;
 
         /// <summary>
         /// The value of the input.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public T Value
+        public T? Value
         {
             get => _theValue;
             set
@@ -72,7 +72,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public EventCallback<T> ValueChanged { get; set; }
+        public EventCallback<T?> ValueChanged { get; set; }
 
         private int _count;
         /// <summary>
@@ -167,6 +167,10 @@ namespace MudExtensions
         }
 
         private int _lastFocusedIndex = 0;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="count"></param>
         protected void CheckFocus(int count)
         {
             _lastFocusedIndex = count;
@@ -242,17 +246,22 @@ namespace MudExtensions
             await ValueChanged.InvokeAsync(Value);
         }
 
-        public async Task SetValueFromOutside(T value)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public async Task SetValueFromOutside(T? value)
         {
-            string val = Converter.Set(value);
-            if (Count < val.Length)
+            string? val = Converter.Set(value);
+            if (Count < val?.Length)
             {
                 val = val.Substring(0, Count);
             }
             Value = Converter.Get(val);
             for (int i = 0; i < Count; i++)
             {
-                if (i < val.Length)
+                if (i < val?.Length)
                 {
                     await _elementReferences[i].SetText(val[i].ToString());
                 }
