@@ -8,16 +8,26 @@ using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// Mud input component with enhanced password features.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class MudPasswordField<T> : MudDebouncedInput<T>
     {
-        protected string Classname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname =>
            new CssBuilder("mud-input-input-control")
            .AddClass(Class)
            .Build();
 
-        public MudInputExtended<string> InputReference { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public MudInputExtended<string?> InputReference { get; private set; } = new();
         InputType _passwordInput = InputType.Password;
-        string _passwordIcon = Icons.Material.Filled.VisibilityOff;
+        string? _passwordIcon = Icons.Material.Filled.VisibilityOff;
         bool _passwordMode = true;
 
         [CascadingParameter(Name = "Standalone")]
@@ -39,6 +49,9 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Clearable { get; set; } = false;
 
+        /// <summary>
+        /// If true disable paste to the component.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool DisablePaste { get; set; }
@@ -58,37 +71,59 @@ namespace MudExtensions
         /// <summary>
         /// RenderFragment for start adornment.
         /// </summary>
-        [Parameter] public RenderFragment AdornmentStart { get; set; }
+        [Parameter] public RenderFragment? AdornmentStart { get; set; }
 
         /// <summary>
         /// RenderFragment for end adornment.
         /// </summary>
-        [Parameter] public RenderFragment CustomAdornment { get; set; }
+        [Parameter] public RenderFragment? CustomAdornment { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask FocusAsync()
         {
             return InputReference.FocusAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask BlurAsync()
         {
             return InputReference.BlurAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask SelectAsync()
         {
             return InputReference.SelectAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pos1"></param>
+        /// <param name="pos2"></param>
+        /// <returns></returns>
         public override ValueTask SelectRangeAsync(int pos1, int pos2)
         {
             return InputReference.SelectRangeAsync(pos1, pos2);
         }
 
-        protected override void ResetValue()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected override async Task ResetValueAsync()
         {
-            InputReference.Reset();
-            base.ResetValue();
+            await InputReference.ResetAsync();
+            await base.ResetValueAsync();
         }
 
         /// <summary>
@@ -116,6 +151,9 @@ namespace MudExtensions
             await SetTextAsync(s);
         }
 
+        /// <summary>
+        /// If true, masks text with password mode.
+        /// </summary>
         [Parameter]
         public bool PasswordMode
         {
@@ -142,9 +180,16 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// Fires when password mode changed.
+        /// </summary>
         [Parameter]
         public EventCallback<bool> PasswordModeChanged { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected async Task AdornmentClick()
         {
             PasswordMode = !PasswordMode;

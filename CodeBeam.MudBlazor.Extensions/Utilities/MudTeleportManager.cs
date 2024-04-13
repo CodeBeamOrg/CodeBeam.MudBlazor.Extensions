@@ -3,16 +3,29 @@ using Microsoft.JSInterop;
 
 namespace MudExtensions.Utilities
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MudTeleportManager
     {
         private IJSRuntime JSRuntime;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jsRuntime"></param>
         public MudTeleportManager(IJSRuntime jsRuntime)
         {
             JSRuntime = jsRuntime;
         }
 
-        public async Task<string> Teleport(ElementReference reference, string toTeleport)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reference"></param>
+        /// <param name="toTeleport"></param>
+        /// <returns></returns>
+        public async Task<string?> Teleport(ElementReference reference, string? toTeleport)
         {
             if (string.IsNullOrEmpty(toTeleport))
             {
@@ -26,6 +39,11 @@ namespace MudExtensions.Utilities
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reference"></param>
+        /// <returns></returns>
         public async Task RemoveFromDom(ElementReference reference)
         {
             await JSRuntime.InvokeVoidAsync("mudTeleport.removeFromDOM", reference);

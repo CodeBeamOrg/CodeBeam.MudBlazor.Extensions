@@ -1,7 +1,11 @@
 ﻿namespace MudExtensions.Utilities
 {
+	/// <summary>
+	/// Localized strings for MudStepper
+	/// </summary>
 	public class StepperLocalizedStrings
 	{
+#pragma warning disable CS1591
 		public string Previous { get; set; } = "Previous";
 		public string Next { get; set; } = "Next";
 		public string Finish { get; set; } = "Finish";

@@ -1,22 +1,22 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using MudExtensions.Enums;
 using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// Popup content to show useful infos like GDPR.
+    /// </summary>
     public partial class MudPopup : MudComponentBase
     {
         Guid _animationGuid = Guid.NewGuid();
 
-        protected string Classname => new CssBuilder("mud-popup")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname => new CssBuilder("mud-popup")
             .AddClass($"fixed mud-width-full gap-4 pa-4 popup-{_animationGuid}")
             .AddClass("mud-popup-center", PopupPosition == PopupPosition.Center)
             .AddClass("d-flex", (_breakpoint != Breakpoint.Xs && PopupPosition != PopupPosition.Center))
@@ -25,7 +25,10 @@ namespace MudExtensions
             .AddClass(Class)
             .Build();
 
-        protected string Stylename => new StyleBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Stylename => new StyleBuilder()
             .AddStyle("bottom", $"{Padding}px", PopupPosition == PopupPosition.Bottom)
             .AddStyle("top", $"{Padding}px", PopupPosition == PopupPosition.Top)
             .AddStyle("left", $"{Padding}px", PopupPosition == PopupPosition.Bottom || PopupPosition == PopupPosition.Top)
@@ -33,6 +36,9 @@ namespace MudExtensions
             .AddStyle(Style)
             .Build();
 
+        /// <summary>
+        /// Placement of Popup. Default is bottom.
+        /// </summary>
         [Parameter]
         public PopupPosition PopupPosition { get; set; } = PopupPosition.Bottom;
 
@@ -78,13 +84,13 @@ namespace MudExtensions
         /// The icon at the start of the popup. Can be overridden with ChildContent.
         /// </summary>
         [Parameter]
-        public string Icon { get; set; }
+        public string? Icon { get; set; }
 
         /// <summary>
         /// The text coming after the icon of the popup. Can be overridden with ChildContent.
         /// </summary>
         [Parameter]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         /// <summary>
         /// Icon and text color.
@@ -96,24 +102,31 @@ namespace MudExtensions
         /// Custom content for override everything.
         /// </summary>
         [Parameter]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
         /// The action button section. If this renderfragment null, a close icon button will be appear.
         /// </summary>
         [Parameter]
-        public RenderFragment ActionContent { get; set; }
+        public RenderFragment? ActionContent { get; set; }
 
         /// <summary>
         /// The MudLink content continues after the text.
         /// </summary>
         [Parameter]
-        public RenderFragment LinkContent { get; set; }
+        public RenderFragment? LinkContent { get; set; }
 
+        /// <summary>
+        /// Fires when popup visible changed.
+        /// </summary>
         [Parameter]
         public EventCallback<bool> OpenChanged { get; set; }
 
         Breakpoint _breakpoint;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="breakpoint"></param>
         protected void GetBreakpoint(Breakpoint breakpoint)
         {
             _breakpoint = breakpoint;

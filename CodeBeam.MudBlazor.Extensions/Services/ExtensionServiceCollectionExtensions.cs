@@ -6,6 +6,9 @@ using MudExtensions.Utilities;
 
 namespace MudExtensions.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ExcludeFromCodeCoverage]
     public static class ExtensionServiceCollectionExtensions
     {
@@ -29,6 +32,11 @@ namespace MudExtensions.Services
             return services;
         }
 
+        /// <summary>
+        /// Adds TeleportManager as a transient instance.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddMudTeleportManager(this IServiceCollection services)
         {
             services.TryAddTransient<MudTeleportManager>();
@@ -41,7 +49,7 @@ namespace MudExtensions.Services
         /// <param name="services">IServiceCollection</param>
         /// <param name="configuration">Defines options for all MudBlazor services.</param>
         /// <returns>Continues the IServiceCollection chain.</returns>
-        public static IServiceCollection AddMudExtensions(this IServiceCollection services, MudServicesConfiguration configuration = null)
+        public static IServiceCollection AddMudExtensions(this IServiceCollection services, MudServicesConfiguration? configuration = null)
         {
             configuration ??= new MudServicesConfiguration();
             return services

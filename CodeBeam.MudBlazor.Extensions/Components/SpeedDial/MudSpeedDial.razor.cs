@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MudExtensions
 {
@@ -14,12 +8,18 @@ namespace MudExtensions
     {
         Guid _animationGuid = Guid.NewGuid();
 
-        protected string StackClassname => new CssBuilder("ma-2")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? StackClassname => new CssBuilder("ma-2")
             .AddClass($"speedDial-{_animationGuid}")
             .AddClass("flex-column-reverse", Origin == Origin.BottomCenter || Origin == Origin.BottomRight || Origin == Origin.BottomLeft)
             .Build();
 
-        protected string Stylename => new StyleBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Stylename => new StyleBuilder()
             .AddStyle("bottom", $"{Padding}px", Origin == Origin.BottomCenter || Origin == Origin.BottomRight || Origin == Origin.BottomLeft)
             .AddStyle("top", $"{Padding}px", Origin == Origin.TopCenter || Origin == Origin.TopRight || Origin == Origin.TopLeft)
             .AddStyle("right", $"{Padding}px", !(Origin == Origin.BottomLeft || Origin == Origin.CenterLeft || Origin == Origin.TopLeft))
@@ -29,46 +29,88 @@ namespace MudExtensions
             .AddStyle(Style)
             .Build();
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string PopoverClass { get; set; }
+        public string? PopoverClass { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public bool Open { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public bool OpenOnHover { get; set; } = true;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public bool OpenOnClick { get; set; } = true;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public bool CloseWhenClick { get; set; } = false;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public int Padding { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public EventCallback OnMainButtonClick { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string Icon { get; set; } = Icons.Material.Filled.Add;
+        public string? Icon { get; set; } = Icons.Material.Filled.Add;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string IconOnOpen { get; set; }
+        public string? IconOnOpen { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public Size Size { get; set; } = Size.Large;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public Color Color { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public RenderFragment ActivatorContent { get; set; }
+        public RenderFragment? ActivatorContent { get; set; }
 
         Origin _origin = Origin.BottomRight;
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public Origin Origin
         {
@@ -81,7 +123,11 @@ namespace MudExtensions
             }
         }
 
-        protected string GetIcon()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected string? GetIcon()
         {
             if (Open && !string.IsNullOrEmpty(IconOnOpen))
             {
@@ -90,27 +136,44 @@ namespace MudExtensions
             return Icon;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="open"></param>
         protected void ChangeMenu(bool open)
         {
             Open = open;
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void ToggleMenu()
         {
             ChangeMenu(!Open);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void OpenMenu()
         {
             ChangeMenu(true);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void CloseMenu()
         {
             ChangeMenu(false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected async Task MainButtonClick()
         {
             if (OpenOnClick)
@@ -122,6 +185,9 @@ namespace MudExtensions
 
         bool _rootMouseEnter;
         bool _popoverMouseEnter;
+        /// <summary>
+        /// 
+        /// </summary>
         protected void RootMouseEnter()
         {
             if (!OpenOnHover)
@@ -133,6 +199,9 @@ namespace MudExtensions
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void PopoverMouseEnter()
         {
             if (!OpenOnHover)
@@ -142,6 +211,10 @@ namespace MudExtensions
             _popoverMouseEnter = true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected async Task PopoverMouseLeave()
         {
             if (!OpenOnHover)
@@ -152,6 +225,10 @@ namespace MudExtensions
             await WaitToClose();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected async Task WaitToClose()
         {
             if (!OpenOnHover)
@@ -166,6 +243,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void HandlePopoverClick()
         {
             if (CloseWhenClick)
@@ -177,6 +257,9 @@ namespace MudExtensions
         bool _row = false;
         Origin _anchorOrigin = Origin.TopCenter;
         Origin _transformOrigin = Origin.BottomCenter;
+        /// <summary>
+        /// 
+        /// </summary>
         protected void UpdateOrigin()
         {
             if (Origin == Origin.BottomRight || Origin == Origin.BottomCenter || Origin == Origin.BottomLeft)

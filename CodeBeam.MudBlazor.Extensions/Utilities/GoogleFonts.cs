@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace MudExtensions.Utilities
 {
+    /// <summary>
+    /// Class for Google Font names.
+    /// </summary>
     public static class GoogleFonts
     {
+        /// <summary>
+        /// Google latin font list.
+        /// </summary>
         public static List<string> FontListLatin = new List<string>()
         {       
             "ABeeZee",

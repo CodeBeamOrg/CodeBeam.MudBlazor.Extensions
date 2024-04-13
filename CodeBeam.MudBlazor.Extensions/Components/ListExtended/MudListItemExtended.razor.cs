@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor.Extensions;
@@ -14,12 +13,24 @@ namespace MudExtensions
 
         #region Parameters, Fields, Injected Services
 
-        [Inject] protected NavigationManager UriHelper { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject] protected NavigationManager? NavigationManager { get; set; }
 
-        [CascadingParameter] protected MudListExtended<T> MudListExtended { get; set; }
-        [CascadingParameter] protected internal MudListItemExtended<T> ParentListItem { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [CascadingParameter] protected MudListExtended<T?>? MudListExtended { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [CascadingParameter] protected internal MudListItemExtended<T?>? ParentListItem { get; set; }
 
-        protected string Classname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname =>
         new CssBuilder("mud-list-item-extended")
           .AddClass("mud-list-item-dense-extended", Dense == true || MudListExtended?.Dense == true)
           .AddClass("mud-list-item-gutters-extended", !DisableGutters && !(MudListExtended?.DisableGutters == true))
@@ -33,13 +44,19 @@ namespace MudExtensions
           .AddClass(Class)
         .Build();
 
-        protected string MultiSelectClassName =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? MultiSelectClassName =>
         new CssBuilder()
             .AddClass("mud-list-item-multiselect-extended")
             .AddClass("mud-list-item-multiselect-checkbox-extended", MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.CheckBox || OverrideMultiSelectionComponent == MultiSelectionComponent.CheckBox)
             .Build();
 
-        protected internal string ItemId { get; } = "listitem_" + Guid.NewGuid().ToString().Substring(0, 8);
+        /// <summary>
+        /// 
+        /// </summary>
+        protected internal string? ItemId { get; } = "listitem_" + Guid.NewGuid().ToString().Substring(0, 8);
 
         /// <summary>
         /// Functional items does not hold values. If a value set on Functional item, it ignores by the MudList. They can not count on Items list (they count on AllItems), cannot be subject of keyboard navigation and selection.
@@ -53,39 +70,42 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         /// <summary>
         /// The secondary text to display
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public string SecondaryText { get; set; }
+        public string? SecondaryText { get; set; }
 
+        /// <summary>
+        /// Value of the item.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Selecting)]
-        public T Value { get; set; }
+        public T? Value { get; set; }
 
         /// <summary>
         /// Avatar to use if set.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
 
         /// <summary>
         /// Avatar CSS Class to apply if Avatar is set.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
-        public string AvatarClass { get; set; }
+        public string? AvatarClass { get; set; }
 
         /// <summary>
         /// Link to a URL when clicked.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.ClickAction)]
-        public string Href { get; set; }
+        public string? Href { get; set; }
 
         /// <summary>
         /// If true, force browser to redirect outside component router-space.
@@ -133,7 +153,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public string Icon { get; set; }
+        public string? Icon { get; set; }
 
         /// <summary>
         /// The color of the icon.
@@ -230,14 +250,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
         /// Add child list items here to create a nested list.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public RenderFragment NestedList { get; set; }
+        public RenderFragment? NestedList { get; set; }
 
         /// <summary>
         /// List click event.
@@ -282,6 +302,9 @@ namespace MudExtensions
 
         #region Lifecycle Methods (& Dispose)
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnInitialized()
         {
             _expanded = InitiallyExpanded;
@@ -293,6 +316,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             try
@@ -326,6 +352,12 @@ namespace MudExtensions
             get => _active;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="selected"></param>
+        /// <param name="forceRender"></param>
+        /// <param name="returnIfDisabled"></param>
         public void SetSelected(bool selected, bool forceRender = true, bool returnIfDisabled = false)
         {
             if (returnIfDisabled == true && Disabled)
@@ -359,11 +391,18 @@ namespace MudExtensions
 
         #region Other (ClickHandler etc.)
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void ForceRender()
         {
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ev"></param>
         protected void OnClickHandler(MouseEventArgs ev)
         {
             if (Disabled)
@@ -383,7 +422,7 @@ namespace MudExtensions
             {
                 MudListExtended?.SetSelectedValue(this);
                 OnClick.InvokeAsync(ev).AndForget();
-                UriHelper.NavigateTo(Href, ForceLoad);
+                NavigationManager?.NavigateTo(Href, ForceLoad);
             }
             else if (MudListExtended?.Clickable == true || MudListExtended?.MultiSelection == true)
             {
@@ -392,12 +431,19 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ev"></param>
         protected void OnlyOnClick(MouseEventArgs ev)
         {
             OnClick.InvokeAsync(ev).AndForget();
         }
 
         private Typo _textTypo;
+        /// <summary>
+        /// 
+        /// </summary>
         protected void OnListParametersChanged()
         {
             if ((Dense ?? MudListExtended?.Dense) ?? false)
@@ -411,6 +457,10 @@ namespace MudExtensions
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected internal bool GetDisabledStatus()
         {
             if (MudListExtended?.ItemDisabledFunc != null)

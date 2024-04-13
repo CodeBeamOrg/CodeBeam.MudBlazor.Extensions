@@ -4,9 +4,16 @@ using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class MudListSubheaderExtended<T> : MudComponentBase
     {
-        protected string Classname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname =>
         new CssBuilder("mud-list-subheader-extended")
             .AddClass("mud-list-subheader-gutters-extended", !DisableGutters)
             .AddClass("mud-list-subheader-inset-extended", Inset)
@@ -16,14 +23,17 @@ namespace MudExtensions
             .AddClass(Class)
         .Build();
 
-        [CascadingParameter] protected MudListExtended<T> MudListExtended { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [CascadingParameter] protected MudListExtended<T?>? MudListExtended { get; set; }
 
         /// <summary>
         /// The child render fragment.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
         /// Disables the left and right spaces.
@@ -32,6 +42,9 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Appearance)]
         public bool DisableGutters { get; set; }
 
+        /// <summary>
+        /// If true subheader has more padding. Default is false.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
         public bool Inset { get; set; }

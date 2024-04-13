@@ -7,8 +7,19 @@ using System.Threading.Tasks;
 
 namespace MudExtensions.Utilities
 {
+    /// <summary>
+    /// Generates CSS animation keyframes for MudAnimate.
+    /// </summary>
     public class KeyframeBuilder
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ticks"></param>
+        /// <param name="values"></param>
+        /// <param name="property"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
         public static string Build(int ticks, List<string> values, string property, string defaultValue = "")
         {
             StringBuilder sb = new ();
@@ -20,6 +31,14 @@ namespace MudExtensions.Utilities
             return sb.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ticks"></param>
+        /// <param name="values"></param>
+        /// <param name="property"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
         public static string Build(int ticks, List<Tuple<string, string>> values, string property, string defaultValue = "")
         {
             StringBuilder sb = new();

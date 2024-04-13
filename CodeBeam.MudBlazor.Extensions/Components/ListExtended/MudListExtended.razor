@@ -30,7 +30,7 @@
                     <div @onkeydown:stopPropagation class="mud-list-item-extended">
                         @if (MultiSelection && SelectAll && SelectAllPosition == SelectAllPosition.NextToSearchBox && ParentList == null)
                         {
-                            <MudCheckBox CheckedIcon="@SelectAllCheckBoxIcon" Color="@Color" @bind-Checked="_allSelected" @onclick="() => SelectAllItems(_allSelected)" Dense="true" />
+                            <MudCheckBox CheckedIcon="@SelectAllCheckBoxIcon" Color="@Color" @bind-Value="_allSelected" @onclick="() => SelectAllItems(_allSelected)" Dense="true" />
                         }
                         <MudTextField T="string" @ref="_searchField" ValueChanged="SearchChanged" Class="@ClassSearchBox" Placeholder="@SearchBoxPlaceholder" OnKeyDown="SearchBoxHandleKeyDown" OnKeyUp="@(() => UpdateSelectedStyles())" OnClearButtonClick="@(() => UpdateSelectedStyles())" Immediate="true" Variant="SearchBoxVariant" Margin="Margin.Dense"
                             Adornment="SearchBoxAdornment" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color" AutoFocus="@SearchBoxAutoFocus" Clearable="@SearchBoxClearable" />
@@ -45,11 +45,11 @@
             <MudVirtualize IsEnabled="@Virtualize" Items="GetSearchedItems()" Context="item" OverscanCount="@OverscanCount">
                 @if (MudSelectExtended != null)
                 {
-                    <MudSelectItemExtended Value="@item" Text="@(ToStringFunc == null ? item.ToString() : ToStringFunc(item))" />
+                    <MudSelectItemExtended Value="@item" Text="@(ToStringFunc == null ? item?.ToString() : ToStringFunc(item))" />
                 }
                 else
                 {
-                    <MudListItemExtended Value="@item" @ondblclick="@(() => OnDoubleClickHandler(new MouseEventArgs(), item))" Text="@(ToStringFunc == null ? item.ToString() : ToStringFunc(item))" />
+                    <MudListItemExtended Value="@item" @ondblclick="@(() => OnDoubleClickHandler(new MouseEventArgs(), item))" Text="@(ToStringFunc == null ? item?.ToString() : ToStringFunc(item))" />
                 }
             </MudVirtualize>
         }

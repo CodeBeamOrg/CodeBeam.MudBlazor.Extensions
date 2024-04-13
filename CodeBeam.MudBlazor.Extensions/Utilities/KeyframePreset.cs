@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace MudExtensions.Utilities
 {
+    /// <summary>
+    /// Built-in keyframe values.
+    /// </summary>
     public static class KeyframePreset
     {
+#pragma warning disable CS1591
         // When making presets use "-val-" keyword to change it to real values with KeyframeBuilder.
         public static string Blur { get; set; } = "-webkit-filter: blur(-val-px); filter: blur(-val-px);";
         public static string Fade { get; set; } = "opacity: -val-;";

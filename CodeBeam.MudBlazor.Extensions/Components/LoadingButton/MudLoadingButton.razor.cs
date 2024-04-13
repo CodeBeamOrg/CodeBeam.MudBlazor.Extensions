@@ -9,6 +9,9 @@ using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class MudLoadingButton : MudBaseButton
     {
 
@@ -38,10 +41,16 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<bool> LoadingChanged { get; set; }
 
+        /// <summary>
+        /// Color of circular loading content.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public Color LoadingCircularColor { get; set; } = Color.Default;
 
+        /// <summary>
+        /// Placement of the loading adornment. Default is start.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public Adornment LoadingAdornment { get; set; } = Adornment.Start;
@@ -51,21 +60,21 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Button.Behavior)]
-        public string StartIcon { get; set; }
+        public string? StartIcon { get; set; }
 
         /// <summary>
         /// Icon placed before the text if set. Only works for IconButton variant. For button variant use Start and EndIcon.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Button.Behavior)]
-        public string Icon { get; set; }
+        public string? Icon { get; set; }
 
         /// <summary>
         /// Icon placed after the text if set.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Button.Behavior)]
-        public string EndIcon { get; set; }
+        public string? EndIcon { get; set; }
 
         /// <summary>
         /// The color of the icon. It supports the theme colors.
@@ -79,7 +88,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Button.Appearance)]
-        public string IconClass { get; set; }
+        public string? IconClass { get; set; }
 
         /// <summary>
         /// The color of the component. It supports the theme colors.
@@ -95,6 +104,9 @@ namespace MudExtensions
         [Category(CategoryTypes.Button.Appearance)]
         public Size Size { get; set; } = Size.Medium;
 
+        /// <summary>
+        /// Variant of button.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.Button.Appearance)]
         public ButtonVariant ButtonVariant { get; set; } = ButtonVariant.Button;
@@ -104,7 +116,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Button.Behavior)]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         /// <summary>
         /// The variant to use.
@@ -125,14 +137,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public RenderFragment LoadingContent { get; set; }
+        public RenderFragment? LoadingContent { get; set; }
 
         /// <summary>
         /// The child content.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
         /// The size of the icon.
@@ -146,7 +158,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Button.Behavior)]
-        public string Label { get; set; }
+        public string? Label { get; set; }
 
         /// <summary>
         /// If not null, LoadingButton goes for loading state for determined miliseconds.
@@ -155,6 +167,11 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Appearance)]
         public int? AutoDelay { get; set; } = 300;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         protected async Task ButtonClick(MouseEventArgs args)
         {
             

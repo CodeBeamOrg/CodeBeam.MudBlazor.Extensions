@@ -93,10 +93,10 @@ namespace MudExtensions
         public int Number { get; set; }
 
         [Parameter]
-        public RenderFragment<MudStep> Template { get; set; }
+        public RenderFragment<MudStep>? Template { get; set; }
 
         [Parameter]
-        public string Icon { get; set; }
+        public string? Icon { get; set; }
 
         /// <summary>
         /// 

@@ -5,10 +5,16 @@ using System.Globalization;
 
 namespace MudExtensions
 {
-#nullable enable
+    /// <summary>
+    /// Mud slider with range abilities.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class MudRangeSlider<T> : MudComponentBase
     {
-        protected string Classname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname =>
             new CssBuilder("mud-slider")
                 .AddClass($"mud-slider-{Size.ToDescriptionString()}")
                 .AddClass($"mud-slider-{Color.ToDescriptionString()}")
@@ -16,14 +22,14 @@ namespace MudExtensions
                 .AddClass(Class)
                 .Build();
 
-        protected string? _value;
-        protected string? _min = "0";
-        protected string? _max = "100";
-        protected string? _step = "1";
-        protected string? _minDistance = "1";
+        private string? _value;
+        private string? _min = "0";
+        private string? _max = "100";
+        private string? _step = "1";
+        private string? _minDistance = "1";
 
-        protected bool _range = false;
-        protected string? _upperValue;
+        private bool _range = false;
+        private string? _upperValue;
 
 
         /// <summary>
@@ -136,13 +142,26 @@ namespace MudExtensions
         [Category(CategoryTypes.Slider.Behavior)]
         public RenderFragment? ChildContent { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.Slider.Behavior)]
-        public Converter<T> Converter { get; set; } = new DefaultConverter<T>() { Culture = CultureInfo.InvariantCulture };
+        public Converter<T?> Converter { get; set; } = new DefaultConverter<T?>() { Culture = CultureInfo.InvariantCulture };
 
-        [Parameter] public EventCallback<T> ValueChanged { get; set; }
-        [Parameter] public EventCallback<T> UpperValueChanged { get; set; }
+        /// <summary>
+        /// Fires when value changed.
+        /// </summary>
+        [Parameter] public EventCallback<T?> ValueChanged { get; set; }
 
+        /// <summary>
+        /// Fires when upper value changed.
+        /// </summary>
+        [Parameter] public EventCallback<T?> UpperValueChanged { get; set; }
+
+        /// <summary>
+        /// Value of the component.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.Slider.Data)]
         public T? Value
@@ -167,6 +186,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// If range set, holds the higher value.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.Slider.Data)]
         public T? UpperValue
@@ -198,8 +220,10 @@ namespace MudExtensions
         [Category(CategoryTypes.Slider.Appearance)]
         public Color Color { get; set; } = Color.Primary;
 
-
-        protected string DisplayText
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? DisplayText
         {
             get
             {
@@ -224,6 +248,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected string? Text
         {
             get => _value;
@@ -244,6 +271,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected string? UpperText
         {
             get => _upperValue;
@@ -322,6 +352,9 @@ namespace MudExtensions
         public bool ValueLabel { get; set; }
 
         private int _tickMarkCount = 0;
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnParametersSet()
         {
             if (TickMarks)

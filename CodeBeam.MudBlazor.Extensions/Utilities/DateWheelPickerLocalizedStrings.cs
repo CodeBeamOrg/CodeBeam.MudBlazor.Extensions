@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace MudExtensions.Utilities
 {
+    /// <summary>
+    /// Localized strings for DateWheelPicker.
+    /// </summary>
     public class DateWheelPickerLocalizedStrings
     {
+#pragma warning disable CS1591
         public string Day { get; set; } = "Day";
         public string Month { get; set; } = "Month";
         public string Year { get; set; } = "Year";

@@ -1,8 +1,10 @@
-﻿namespace MudExtensions;
-
-public enum LineCapTypes
+﻿namespace MudExtensions
 {
-    Round,
-    Butt,
-    Square,
+#pragma warning disable CS1591
+    public enum LineCapTypes
+    {
+        Round,
+        Butt,
+        Square,
+    }
 }

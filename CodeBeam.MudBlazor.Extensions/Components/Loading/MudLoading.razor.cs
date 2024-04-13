@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
@@ -9,10 +6,15 @@ using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// Loading component that covers a loading content with a parameter.
+    /// </summary>
     public partial class MudLoading : MudComponentBase
     {
-
-        protected string TextClassname => new CssBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? TextClassname => new CssBuilder()
             .AddClass("mt-4")
             .AddClass(ClassText)
             .Build();
@@ -55,35 +57,35 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         /// <summary>
         /// CSS classes for the text, seperated by space.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string ClassText { get; set; }
+        public string? ClassText { get; set; }
 
         /// <summary>
         /// CSS classes for the progress component, seperated by space.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string ClassLoader { get; set; }
+        public string? ClassLoader { get; set; }
 
         /// <summary>
         /// CSS style for the text.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string StyleText { get; set; }
+        public string? StyleText { get; set; }
         
         /// <summary>
         /// CSS style for the progress component.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string StyleLoader { get; set; }
+        public string? StyleLoader { get; set; }
 
         /// <summary>
         /// If true, show a darken background.
@@ -104,14 +106,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public RenderFragment LoaderContent { get; set; }
+        public RenderFragment? LoaderContent { get; set; }
 
         /// <summary>
         /// The child content.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
     }
 }

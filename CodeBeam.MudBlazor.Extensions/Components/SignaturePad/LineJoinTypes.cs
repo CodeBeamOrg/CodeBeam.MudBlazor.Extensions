@@ -1,8 +1,10 @@
-﻿namespace MudExtensions;
-
-public enum LineJoinTypes
+﻿namespace MudExtensions
 {
-    Round,
-    Bevel,
-    Miter
+#pragma warning disable CS1591
+    public enum LineJoinTypes
+    {
+        Round,
+        Bevel,
+        Miter
+    }
 }

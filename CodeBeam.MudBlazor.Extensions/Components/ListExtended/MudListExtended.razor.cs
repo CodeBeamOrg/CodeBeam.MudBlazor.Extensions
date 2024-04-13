@@ -9,38 +9,59 @@ using System.Data;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// The list component with extended features.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class MudListExtended<T> : MudComponentBase, IDisposable
     {
         #region Parameters, Fields, Injected Services
 
-        [Inject] IKeyInterceptorFactory KeyInterceptorFactory { get; set; }
-        [Inject] IScrollManagerExtended ScrollManagerExtended { get; set; }
+        [Inject] IKeyInterceptorFactory? KeyInterceptorFactory { get; set; }
+        [Inject] IScrollManagerExtended? ScrollManagerExtended { get; set; }
 
         // Fields used in more than one place (or protected and internal ones) are shown here.
         // Others are next to the relevant parameters. (Like _selectedValue)
         private string _elementId = "list_" + Guid.NewGuid().ToString().Substring(0, 8);
-        private List<MudListItemExtended<T>> _items = new();
-        private List<MudListExtended<T>> _childLists = new();
-        internal MudListItemExtended<T> _lastActivatedItem;
+        private List<MudListItemExtended<T?>> _items = new();
+        private List<MudListExtended<T?>> _childLists = new();
+        internal MudListItemExtended<T?>? _lastActivatedItem;
         internal bool? _allSelected = false;
-        private string _searchString;
+        private string? _searchString;
 
-        protected string Classname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname =>
         new CssBuilder("mud-list-extended")
            .AddClass("mud-list-padding-extended", !DisablePadding)
           .AddClass(Class)
         .Build();
 
-        protected string Stylename =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Stylename =>
         new StyleBuilder()
             .AddStyle("max-height", $"{MaxItems * (!Dense ? 48 : 36) + (DisablePadding ? 0 : 16)}px", MaxItems != null)
             .AddStyle("overflow-y", "auto", MaxItems != null)
             .AddStyle(Style)
             .Build();
 
-        [CascadingParameter] protected MudSelectExtended<T> MudSelectExtended { get; set; }
-        [CascadingParameter] protected MudAutocomplete<T> MudAutocomplete { get; set; }
-        [CascadingParameter] protected MudListExtended<T> ParentList { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [CascadingParameter] protected MudSelectExtended<T>? MudSelectExtended { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [CascadingParameter] protected MudAutocomplete<T>? MudAutocomplete { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [CascadingParameter] protected MudListExtended<T>? ParentList { get; set; }
 
         /// <summary>
         /// The color of the selected List Item.
@@ -54,51 +75,57 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
         /// Optional presentation template for items
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public RenderFragment<MudListItemExtended<T>> ItemTemplate { get; set; }
+        public RenderFragment<MudListItemExtended<T>>? ItemTemplate { get; set; }
 
         /// <summary>
         /// Optional presentation template for selected items
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public RenderFragment<MudListItemExtended<T>> ItemSelectedTemplate { get; set; }
+        public RenderFragment<MudListItemExtended<T>>? ItemSelectedTemplate { get; set; }
 
         /// <summary>
         /// Optional presentation template for disabled items
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public RenderFragment<MudListItemExtended<T>> ItemDisabledTemplate { get; set; }
+        public RenderFragment<MudListItemExtended<T>>? ItemDisabledTemplate { get; set; }
 
         /// <summary>
         /// Optional presentation template for select all item
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public RenderFragment SelectAllTemplate { get; set; }
+        public RenderFragment? SelectAllTemplate { get; set; }
 
         /// <summary>
         /// Function to be invoked when checking whether an item should be disabled or not. Works both with renderfragment and ItemCollection approach.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T, bool> ItemDisabledFunc { get; set; }
+        public Func<T?, bool>? ItemDisabledFunc { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public DefaultConverter<T> Converter { get; set; } = new DefaultConverter<T>();
+        public DefaultConverter<T?> Converter { get; set; } = new DefaultConverter<T?>();
 
-        private IEqualityComparer<T> _comparer;
+        private IEqualityComparer<T?> _comparer;
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public IEqualityComparer<T> Comparer
+        public IEqualityComparer<T?> Comparer
         {
             get => _comparer;
             set
@@ -111,18 +138,18 @@ namespace MudExtensions
                 {
                     return;
                 }
-                _selectedValues = new HashSet<T>(_selectedValues, _comparer);
+                _selectedValues = new HashSet<T?>(_selectedValues, _comparer);
                 SelectedValues = _selectedValues;
             }
         }
 
-        private Func<T, string> _toStringFunc = x => x?.ToString();
+        private Func<T?, string?> _toStringFunc = x => x?.ToString();
         /// <summary>
         /// Defines how values are displayed in the drop-down list
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T, string> ToStringFunc
+        public Func<T?, string?> ToStringFunc
         {
             get => _toStringFunc;
             set
@@ -130,7 +157,7 @@ namespace MudExtensions
                 if (_toStringFunc == value)
                     return;
                 _toStringFunc = value;
-                Converter = new DefaultConverter<T>
+                Converter = new DefaultConverter<T?>
                 {
                     SetFunc = _toStringFunc ?? (x => x?.ToString()),
                 };
@@ -142,14 +169,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public ICollection<T> ItemCollection { get; set; } = null;
+        public ICollection<T?>? ItemCollection { get; set; } = null;
 
         /// <summary>
         /// Custom search func for searchbox. If doesn't set, it search with "Contains" logic by default. Passed value and searchString values.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T, string, bool> SearchFunc { get; set; }
+        public Func<T?, string?, bool>? SearchFunc { get; set; }
 
         /// <summary>
         /// If true, shows a searchbox for filtering items. Only works with ItemCollection approach.
@@ -191,11 +218,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public string ClassSearchBox { get; set; }
+        public string? ClassSearchBox { get; set; }
 
+        /// <summary>
+        /// The text shown when searchbox is empty.
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public string SearchBoxPlaceholder { get; set; }
+        public string? SearchBoxPlaceholder { get; set; }
 
         /// <summary>
         /// Fired when the search value changes.
@@ -377,6 +407,11 @@ namespace MudExtensions
         // CentralCommander has a simple aim: Prevent racing conditions. It has two mechanism to do this:
         // (1) When this method is running, it doesn't allow to run a second one. That guarantees to different value parameters can not call this method at the same time.
         // (2) When this method runs once, prevents all value setters until OnAfterRender runs. That guarantees to have proper values.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="changedValueType"></param>
+        /// <param name="updateStyles"></param>
         protected void HandleCentralValueCommander(string changedValueType, bool updateStyles = true)
         {
             if (!_setParametersDone)
@@ -393,7 +428,7 @@ namespace MudExtensions
             {
                 if (!MultiSelection)
                 {
-                    SelectedValues = new HashSet<T>(_comparer) { SelectedValue };
+                    SelectedValues = new HashSet<T?>(_comparer) { SelectedValue };
                     UpdateSelectedItem();
                 }
             }
@@ -409,7 +444,7 @@ namespace MudExtensions
             {
                 if (!MultiSelection)
                 {
-                    SelectedItems = new HashSet<MudListItemExtended<T>>() { SelectedItem };
+                    SelectedItems = new HashSet<MudListItemExtended<T?>>() { SelectedItem };
                     UpdateSelectedValue();
                 }
             }
@@ -436,6 +471,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected internal void UpdateSelectedItem()
         {
             var items = CollectAllMudListItems(true);
@@ -451,6 +489,9 @@ namespace MudExtensions
             SelectedItems = SelectedValues == null ? null : items.Where(x => SelectedValues.Contains(x.Value, _comparer));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected internal void UpdateSelectedValue()
         {
             if (!MultiSelection && SelectedItem == null)
@@ -464,14 +505,14 @@ namespace MudExtensions
             SelectedValues = SelectedItems?.Select(x => x.Value).ToHashSet(_comparer);
         }
 
-        private T _selectedValue;
+        private T? _selectedValue;
         /// <summary>
         /// The current selected value.
         /// Note: Make the list Clickable or set MultiSelection true for item selection to work.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Selecting)]
-        public T SelectedValue
+        public T? SelectedValue
         {
             get => _selectedValue;
             set
@@ -499,13 +540,13 @@ namespace MudExtensions
             }
         }
 
-        private HashSet<T> _selectedValues;
+        private HashSet<T?>? _selectedValues;
         /// <summary>
         /// The current selected values. Holds single value (SelectedValue) if MultiSelection is false.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Selecting)]
-        public IEnumerable<T> SelectedValues
+        public IEnumerable<T?>? SelectedValues
         {
             get
             {
@@ -542,24 +583,24 @@ namespace MudExtensions
                 //    return;
                 //}
 
-                _selectedValues = value == null ? null : new HashSet<T>(value, _comparer);
+                _selectedValues = value == null ? null : new HashSet<T?>(value, _comparer);
                 if (!_setParametersDone)
                 {
                     return;
                 }
                 HandleCentralValueCommander(nameof(SelectedValues));
-                SelectedValuesChanged.InvokeAsync(SelectedValues == null ? null : new HashSet<T>(SelectedValues, _comparer)).AndForget();
+                SelectedValuesChanged.InvokeAsync(SelectedValues == null ? null : new HashSet<T?>(SelectedValues, _comparer)).AndForget();
             }
         }
 
-        private MudListItemExtended<T> _selectedItem;
+        private MudListItemExtended<T?>? _selectedItem;
         /// <summary>
         /// The current selected list item.
         /// Note: make the list Clickable or MultiSelection or both for item selection to work.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Selecting)]
-        public MudListItemExtended<T> SelectedItem
+        public MudListItemExtended<T?>? SelectedItem
         {
             get => _selectedItem;
             set
@@ -581,14 +622,14 @@ namespace MudExtensions
             }
         }
 
-        private HashSet<MudListItemExtended<T>> _selectedItems;
+        private HashSet<MudListItemExtended<T?>>? _selectedItems;
         /// <summary>
         /// The current selected listitems.
         /// Note: make the list Clickable for item selection to work.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Selecting)]
-        public IEnumerable<MudListItemExtended<T>> SelectedItems
+        public IEnumerable<MudListItemExtended<T?>>? SelectedItems
         {
             get => _selectedItems;
             set
@@ -619,27 +660,27 @@ namespace MudExtensions
         /// <summary>
         /// Called whenever the selection changed. Can also be called even MultiSelection is true.
         /// </summary>
-        [Parameter] public EventCallback<T> SelectedValueChanged { get; set; }
+        [Parameter] public EventCallback<T?> SelectedValueChanged { get; set; }
 
         /// <summary>
         /// Called whenever selected values changes. Can also be called even MultiSelection is false.
         /// </summary>
-        [Parameter] public EventCallback<IEnumerable<T>> SelectedValuesChanged { get; set; }
+        [Parameter] public EventCallback<IEnumerable<T?>> SelectedValuesChanged { get; set; }
 
         /// <summary>
         /// Called whenever the selected item changed. Can also be called even MultiSelection is true.
         /// </summary>
-        [Parameter] public EventCallback<MudListItemExtended<T>> SelectedItemChanged { get; set; }
+        [Parameter] public EventCallback<MudListItemExtended<T?>> SelectedItemChanged { get; set; }
 
         /// <summary>
         /// Called whenever the selected items changed. Can also be called even MultiSelection is false.
         /// </summary>
-        [Parameter] public EventCallback<IEnumerable<MudListItemExtended<T>>> SelectedItemsChanged { get; set; }
+        [Parameter] public EventCallback<IEnumerable<MudListItemExtended<T?>>> SelectedItemsChanged { get; set; }
 
         /// <summary>
         /// Get all MudListItems in the list.
         /// </summary>
-        public List<MudListItemExtended<T>> GetAllItems()
+        public List<MudListItemExtended<T?>> GetAllItems()
         {
             return CollectAllMudListItems();
         }
@@ -647,7 +688,7 @@ namespace MudExtensions
         /// <summary>
         /// Get all items that holds value.
         /// </summary>
-        public List<MudListItemExtended<T>> GetItems()
+        public List<MudListItemExtended<T?>> GetItems()
         {
             return CollectAllMudListItems(true);
         }
@@ -658,6 +699,12 @@ namespace MudExtensions
         #region Lifecycle Methods, Dispose & Register
 
         bool _setParametersDone = false;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public override Task SetParametersAsync(ParameterView parameters)
         {
             if (_centralCommanderIsProcessing)
@@ -676,6 +723,9 @@ namespace MudExtensions
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnInitialized()
         {
             if (ParentList != null)
@@ -684,22 +734,31 @@ namespace MudExtensions
             }
         }
 
-        internal event Action ParametersChanged;
+        internal event Action? ParametersChanged;
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
             ParametersChanged?.Invoke();
         }
 
-        private IKeyInterceptor _keyInterceptor;
+        private IKeyInterceptor? _keyInterceptor;
         private bool _firstRendered = false;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstRender"></param>
+        /// <returns></returns>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
             if (firstRender)
             {
                 _firstRendered = false;
-                _keyInterceptor = KeyInterceptorFactory.Create();
+                _keyInterceptor = KeyInterceptorFactory?.Create();
 
                 await _keyInterceptor.Connect(_elementId, new KeyInterceptorOptions()
                 {
@@ -769,14 +828,25 @@ namespace MudExtensions
             _centralCommanderResultRendered = true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             ParametersChanged = null;
             ParentList?.Unregister(this);
         }
 
-        protected internal void Register(MudListItemExtended<T> item)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        protected internal void Register(MudListItemExtended<T?>? item)
         {
+            if (item == null)
+            {
+                return;
+            }
             _items.Add(item);
             if (SelectedValue != null && object.Equals(item.Value, SelectedValue))
             {
@@ -792,17 +862,33 @@ namespace MudExtensions
             }
         }
 
-        protected internal void Unregister(MudListItemExtended<T> item)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        protected internal void Unregister(MudListItemExtended<T?>? item)
         {
+            if (item == null)
+            {
+                return;
+            }
             _items.Remove(item);
         }
 
-        protected internal void Register(MudListExtended<T> child)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="child"></param>
+        protected internal void Register(MudListExtended<T?> child)
         {
             _childLists.Add(child);
         }
 
-        protected internal void Unregister(MudListExtended<T> child)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="child"></param>
+        protected internal void Unregister(MudListExtended<T?> child)
         {
             _childLists.Remove(child);
         }
@@ -812,6 +898,11 @@ namespace MudExtensions
 
         #region Events (Key, Focus)
 
+        /// <summary>
+        /// Searchbox keydown event.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         protected internal async Task SearchBoxHandleKeyDown(KeyboardEventArgs obj)
         {
             if (Disabled || (!Clickable && !MultiSelection))
@@ -854,7 +945,12 @@ namespace MudExtensions
             }
         }
 
-        MudTextField<string> _searchField;
+        MudTextField<string?> _searchField = new();
+        /// <summary>
+        /// Keydown event.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         protected internal async Task HandleKeyDown(KeyboardEventArgs obj)
         {
             if (Disabled || (!Clickable && !MultiSelection))
@@ -920,12 +1016,19 @@ namespace MudExtensions
             await OnKeyDown.InvokeAsync(obj);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected async Task HandleOnFocusOut()
         {
             DeactiveAllItems();
             await OnFocusOut.InvokeAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void HandleOnScroll()
         {
             if (Virtualize == true)
@@ -934,6 +1037,11 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <returns></returns>
         protected async Task SearchChanged(string searchString)
         {
             _searchString = searchString;
@@ -945,7 +1053,12 @@ namespace MudExtensions
 
         #region Select
 
-        protected internal void SetSelectedValue(T value, bool force = false)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="force"></param>
+        protected internal void SetSelectedValue(T? value, bool force = false)
         {
             if ((!Clickable && !MultiSelection) && !force)
                 return;
@@ -963,19 +1076,24 @@ namespace MudExtensions
             }
             else
             {
-                if (SelectedValues.Contains(value, _comparer))
+                if (SelectedValues?.Contains(value, _comparer) == true)
                 {
                     SelectedValues = SelectedValues?.Where(x => Comparer != null ? !Comparer.Equals(x, value) : !x.Equals(value)).ToHashSet(_comparer);
                 }
                 else
                 {
-                    SelectedValues = SelectedValues.Append(value).ToHashSet(_comparer);
+                    SelectedValues = SelectedValues?.Append(value).ToHashSet(_comparer);
                 }
             }
             UpdateLastActivatedItem(value);
         }
 
-        protected internal void SetSelectedValue(MudListItemExtended<T> item, bool force = false)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="force"></param>
+        protected internal void SetSelectedValue(MudListItemExtended<T?>? item, bool force = false)
         {
             if (item == null)
             {
@@ -1006,7 +1124,7 @@ namespace MudExtensions
                 {
                     if (SelectedValues == null)
                     {
-                        SelectedValues = new HashSet<T>(_comparer) { item.Value };
+                        SelectedValues = new HashSet<T?>(_comparer) { item.Value };
                     }
                     else
                     {
@@ -1019,6 +1137,11 @@ namespace MudExtensions
             _lastActivatedItem = item;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deselectFirst"></param>
+        /// <param name="update"></param>
         protected internal void UpdateSelectedStyles(bool deselectFirst = true, bool update = true)
         {
             var items = CollectAllMudListItems(true);
@@ -1047,6 +1170,10 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected bool IsSelectable()
         {
             if (Clickable || MultiSelection)
@@ -1057,15 +1184,24 @@ namespace MudExtensions
             return false;
         }
 
-        protected void DeselectAllItems(List<MudListItemExtended<T>> items)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="items"></param>
+        protected void DeselectAllItems(List<MudListItemExtended<T?>> items)
         {
             foreach (var listItem in items)
                 listItem?.SetSelected(false);
         }
 
-        protected List<MudListItemExtended<T>> CollectAllMudListItems(bool exceptNestedAndExceptional = false)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exceptNestedAndExceptional"></param>
+        /// <returns></returns>
+        protected List<MudListItemExtended<T?>> CollectAllMudListItems(bool exceptNestedAndExceptional = false)
         {
-            var items = new List<MudListItemExtended<T>>();
+            var items = new List<MudListItemExtended<T?>>();
 
             if (ParentList != null)
             {
@@ -1095,6 +1231,9 @@ namespace MudExtensions
 
         #region SelectAll
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected internal void UpdateSelectAllState()
         {
             if (MultiSelection)
@@ -1119,7 +1258,10 @@ namespace MudExtensions
             }
         }
 
-        protected string SelectAllCheckBoxIcon
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? SelectAllCheckBoxIcon
         {
             get
             {
@@ -1132,22 +1274,26 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string CheckedIcon { get; set; } = Icons.Material.Filled.CheckBox;
+        public string? CheckedIcon { get; set; } = Icons.Material.Filled.CheckBox;
 
         /// <summary>
         /// Custom unchecked icon.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string UncheckedIcon { get; set; } = Icons.Material.Filled.CheckBoxOutlineBlank;
+        public string? UncheckedIcon { get; set; } = Icons.Material.Filled.CheckBoxOutlineBlank;
 
         /// <summary>
         /// Custom indeterminate icon.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public string IndeterminateIcon { get; set; } = Icons.Material.Filled.IndeterminateCheckBox;
+        public string? IndeterminateIcon { get; set; } = Icons.Material.Filled.IndeterminateCheckBox;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deselect"></param>
         protected void SelectAllItems(bool? deselect = false)
         {
             var items = CollectAllMudListItems(true);
@@ -1177,7 +1323,7 @@ namespace MudExtensions
             var selectedItems = items.Where(x => x.IsSelected).Select(y => y.Value).ToHashSet(_comparer);
             if (ItemCollection != null)
             {
-                SelectedValues = deselect == true ? Enumerable.Empty<T>() : selectedItems;
+                SelectedValues = deselect == true ? Enumerable.Empty<T?>() : selectedItems;
             }
             else
             {
@@ -1186,7 +1332,7 @@ namespace MudExtensions
 
             if (MudSelectExtended != null)
             {
-                MudSelectExtended.BeginValidatePublic();
+                MudSelectExtended?.BeginValidatePublic();
             }
         }
 
@@ -1195,6 +1341,10 @@ namespace MudExtensions
 
         #region Active (Hilight)
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected int GetActiveItemIndex()
         {
             var items = CollectAllMudListItems(true);
@@ -1210,12 +1360,21 @@ namespace MudExtensions
             }
         }
 
-        protected T GetActiveItemValue()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected T? GetActiveItemValue()
         {
             var items = CollectAllMudListItems(true);
             if (_lastActivatedItem == null)
             {
-                return items.FirstOrDefault(x => x.IsActive).Value;
+                var selectedItem = items.FirstOrDefault(x => x.IsActive);
+                if (selectedItem == null)
+                {
+                    return default(T);
+                }
+                return selectedItem.Value;
             }
             else
             {
@@ -1223,13 +1382,21 @@ namespace MudExtensions
             }
         }
 
-        protected internal void UpdateLastActivatedItem(T value)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        protected internal void UpdateLastActivatedItem(T? value)
         {
             var items = CollectAllMudListItems(true);
             _lastActivatedItem = items.FirstOrDefault(x => value == null ? x.Value == null : Comparer != null ? Comparer.Equals(value, x.Value) : value.Equals(x.Value));
         }
 
-        protected void DeactiveAllItems(List<MudListItemExtended<T>> items = null)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="items"></param>
+        protected void DeactiveAllItems(List<MudListItemExtended<T?>>? items = null)
         {
             if (items == null)
             {
@@ -1243,7 +1410,12 @@ namespace MudExtensions
         }
 
 #pragma warning disable BL0005
-        public async Task ActiveFirstItem(string startChar = null)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startChar"></param>
+        /// <returns></returns>
+        public async Task ActiveFirstItem(string? startChar = null)
         {
             var items = CollectAllMudListItems(true);
             if (items == null || items.Count == 0 || items[0].GetDisabledStatus())
@@ -1317,6 +1489,11 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="changeCount"></param>
+        /// <returns></returns>
         public async Task ActiveAdjacentItem(int changeCount)
         {
             var items = CollectAllMudListItems(true);
@@ -1347,6 +1524,10 @@ namespace MudExtensions
             await ScrollToMiddleAsync(items[index + changeCount]);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task ActivePreviousItem()
         {
             var items = CollectAllMudListItems(true);
@@ -1371,6 +1552,10 @@ namespace MudExtensions
             await ScrollToMiddleAsync(items[index - 1]);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task ActiveLastItem()
         {
             var items = CollectAllMudListItems(true);
@@ -1425,10 +1610,25 @@ namespace MudExtensions
             UpdateSelectAllState();
         }
 
-        protected internal ValueTask ScrollToMiddleAsync(MudListItemExtended<T> item)
-            => ScrollManagerExtended.ScrollToMiddleAsync(_elementId, item.ItemId);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected internal ValueTask ScrollToMiddleAsync(MudListItemExtended<T?>? item)
+        {
+            if (item == null || ScrollManagerExtended == null)
+            {
+                return ValueTask.CompletedTask;
+            }
+            return ScrollManagerExtended.ScrollToMiddleAsync(_elementId, item.ItemId);
+        }
 
-        protected ICollection<T> GetSearchedItems()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected ICollection<T?>? GetSearchedItems()
         {
             if (!SearchBox || ItemCollection == null || _searchString == null)
             {
@@ -1440,9 +1640,13 @@ namespace MudExtensions
                 return ItemCollection.Where(x => SearchFunc.Invoke(x, _searchString)).ToList();
             }
 
-            return ItemCollection.Where(x => Converter.Set(x).Contains(_searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            return ItemCollection.Where(x => Converter?.Set(x)?.Contains(_searchString, StringComparison.InvariantCultureIgnoreCase) == true).ToList();
         }
 
+        /// <summary>
+        /// Refresh all styles.
+        /// </summary>
+        /// <returns></returns>
         public async Task ForceUpdate()
         {
             //if (!MultiSelection)
@@ -1457,24 +1661,42 @@ namespace MudExtensions
             UpdateSelectedStyles();
         }
 
+        /// <summary>
+        /// Refresh all items.
+        /// </summary>
         public void ForceUpdateItems()
         {
-            List<MudListItemExtended<T>> items = GetAllItems();
+            List<MudListItemExtended<T?>> items = GetAllItems();
             SelectedItem = items.FirstOrDefault(x => x.Value != null && x.Value.Equals(SelectedValue));
-            SelectedItems = items.Where((x => x.Value != null && SelectedValues.Contains(x.Value)));
+            SelectedItems = items.Where((x => x.Value != null && SelectedValues?.Contains(x.Value) == true));
         }
 
-        protected async Task OnDoubleClickHandler(MouseEventArgs args, T itemValue)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <param name="itemValue"></param>
+        /// <returns></returns>
+        protected async Task OnDoubleClickHandler(MouseEventArgs args, T? itemValue)
         {
-            await OnDoubleClick.InvokeAsync(new ListItemClickEventArgs<T>() { MouseEventArgs = args, ItemValue = itemValue });
+            await OnDoubleClick.InvokeAsync(new ListItemClickEventArgs<T?>() { MouseEventArgs = args, ItemValue = itemValue });
         }
 
         #endregion
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class ListItemClickEventArgs<T>
     {
-        public MouseEventArgs MouseEventArgs { get; set; }
-        public T ItemValue { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public MouseEventArgs? MouseEventArgs { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public T? ItemValue { get; set; }
     }
 }
