@@ -6,6 +6,9 @@ using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// Stepper component with extended features.
+    /// </summary>
     public partial class MudStepper : MudComponentBase
     {
         MudAnimate _animate = new();
@@ -309,10 +312,6 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<int> ActiveStepChanged { get; set; }
 
-        [Obsolete("Use PreventStepChangeAsync instead.")]
-        [Parameter]
-        public Func<StepChangeDirection, bool> PreventStepChange { get; set; }
-
         /// <summary>
         /// Runs a task to prevent step change. Has change direction (backwards or forwards) and target index and returns a bool value.
         /// </summary>
@@ -394,11 +393,6 @@ namespace MudExtensions
                         StepChangeDirection.Backward
             );
 
-            if (!skipPreventProcess && PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
-            {
-                return;
-            }
-
             if (skipPreventProcess == false && PreventStepChangeAsync != null)
             {
                 var result = await PreventStepChangeAsync.Invoke(stepChangeDirection, ActiveIndex + count);
@@ -460,11 +454,6 @@ namespace MudExtensions
                         StepChangeDirection.Backward
             );
 
-            if (!skipPreventProcess && PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
-            {
-                return;
-            }
-
             if (skipPreventProcess == false && PreventStepChangeAsync != null)
             {
                 var result = await PreventStepChangeAsync.Invoke(stepChangeDirection, index);
@@ -505,11 +494,6 @@ namespace MudExtensions
             if (isActiveStep)
             {
                 var stepChangeDirection = (moveToNextStep ? StepChangeDirection.Forward : StepChangeDirection.None);
-                if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
-                {
-                    return;
-                }
-
                 if (PreventStepChangeAsync != null)
                 {
                     var result = await PreventStepChangeAsync.Invoke(stepChangeDirection, index + 1);
@@ -543,11 +527,6 @@ namespace MudExtensions
             if (isActiveStep)
             {
                 var stepChangeDirection = (moveToNextStep ? StepChangeDirection.Forward : StepChangeDirection.None);
-                if (PreventStepChange != null && PreventStepChange.Invoke(stepChangeDirection))
-                {
-                    return;
-                }
-
                 if (PreventStepChangeAsync != null)
                 {
                     var result = await PreventStepChangeAsync.Invoke(stepChangeDirection, index + 1);

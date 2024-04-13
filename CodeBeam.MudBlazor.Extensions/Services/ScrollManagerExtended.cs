@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using MudBlazor;
 using MudBlazor.Extensions;
 
 namespace MudExtensions.Services
@@ -22,13 +23,7 @@ namespace MudExtensions.Services
     /// </summary>
     public class ScrollManagerExtended : IScrollManagerExtended
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        [Obsolete]
-        public string? Selector { get; set; }
         private readonly IJSRuntime _jSRuntime;
-
         /// <summary>
         /// 
         /// </summary>
@@ -36,8 +31,57 @@ namespace MudExtensions.Services
         public ScrollManagerExtended(IJSRuntime jSRuntime)
         {
             _jSRuntime = jSRuntime;
-
         }
+
+        /// <summary>
+        /// Scrolls to the coordinates of the element.
+        /// </summary>
+        /// <param name="id">id of element</param>
+        /// <param name="left">x coordinate</param>
+        /// <param name="top">y coordinate</param>
+        /// <param name="behavior">smooth or auto</param>
+        /// <returns></returns>
+        public ValueTask ScrollToAsync(string id, int left, int top, ScrollBehavior behavior) =>
+            _jSRuntime.InvokeVoidAsync("mudScrollManager.scrollTo", id, left, top, behavior.ToDescriptionString());
+
+        /// <summary>
+        /// Scrolls the first instance of the selector into view.
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <param name="behavior"></param>
+        /// <returns></returns>
+        public ValueTask ScrollIntoViewAsync(string selector, ScrollBehavior behavior) =>
+            _jSRuntime.InvokeVoidAsync("mudScrollManager.scrollIntoView", selector, behavior.ToDescriptionString());
+
+        /// <summary>
+        /// Scrolls to the top of the element.
+        /// </summary>
+        /// <param name="id">id of element</param>
+        /// <param name="scrollBehavior">smooth or auto</param>
+        /// <returns></returns>
+        public ValueTask ScrollToTopAsync(string id, ScrollBehavior scrollBehavior = ScrollBehavior.Auto) =>
+            ScrollToAsync(id, 0, 0, scrollBehavior);
+
+        /// <summary>
+        /// Scroll to the bottom of the element (or if not found to the bottom of the page).
+        /// </summary>
+        /// <param name="id">id of element of null to scroll to page bottom</param>
+        /// <param name="behavior">smooth or auto</param>
+        /// <returns></returns>
+        public ValueTask ScrollToBottomAsync(string id, ScrollBehavior behavior) =>
+            _jSRuntime.InvokeVoidAsync("mudScrollManager.scrollToBottom", id, behavior.ToDescriptionString());
+
+        public ValueTask ScrollToYearAsync(string elementId) =>
+            _jSRuntime.InvokeVoidAsync("mudScrollManager.scrollToYear", elementId);
+
+        public ValueTask ScrollToListItemAsync(string elementId) =>
+            _jSRuntime.InvokeVoidAsync("mudScrollManager.scrollToListItem", elementId);
+
+        public ValueTask LockScrollAsync(string selector = "body", string cssClass = "scroll-locked") =>
+            _jSRuntime.InvokeVoidAsync("mudScrollManager.lockScroll", selector, cssClass);
+
+        public ValueTask UnlockScrollAsync(string selector = "body", string cssClass = "scroll-locked") =>
+            _jSRuntime.InvokeVoidAsyncIgnoreErrors("mudScrollManager.unlockScroll", selector, cssClass);
 
         /// <summary>
         /// Scroll to an url fragment
@@ -47,59 +91,6 @@ namespace MudExtensions.Services
         /// <returns></returns>
         public ValueTask ScrollToFragmentAsync(string id, ScrollBehavior behavior) =>
             _jSRuntime.InvokeVoidAsync("mudScrollManager.scrollToFragment", id, behavior.ToDescriptionString());
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="behavior"></param>
-        /// <returns></returns>
-        [Obsolete]
-        public async Task ScrollToFragment(string id, ScrollBehavior behavior) =>
-            await ScrollToFragmentAsync(id, behavior);
-
-        /// <summary>
-        /// Scrolls to the coordinates of the element
-        /// </summary>
-        /// <param name="id">id of element</param>
-        /// <param name="left">x coordinate</param>
-        /// <param name="top">y coordinate</param>
-        /// <param name="behavior">smooth or auto</param>
-        /// <returns></returns>
-        public ValueTask ScrollToAsync(string? id, int left, int top, ScrollBehavior behavior) =>
-            _jSRuntime.InvokeVoidAsync("mudScrollManager.scrollTo", id, left, top, behavior.ToDescriptionString());
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="top"></param>
-        /// <param name="behavior"></param>
-        /// <returns></returns>
-        [Obsolete]
-        public async Task ScrollTo(int left, int top, ScrollBehavior behavior) =>
-            await ScrollToAsync(Selector, left, top, behavior);
-
-        /// <summary>
-        /// Scrolls to the top of the element
-        /// </summary>
-        /// <param name="id">id of element</param>
-        /// <param name="scrollBehavior">smooth or auto</param>
-        /// <returns></returns>
-        public ValueTask ScrollToTopAsync(string id, ScrollBehavior scrollBehavior = ScrollBehavior.Auto) =>
-            ScrollToAsync(id, 0, 0, scrollBehavior);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="scrollBehavior"></param>
-        /// <returns></returns>
-        public async Task ScrollToTop(ScrollBehavior scrollBehavior = ScrollBehavior.Auto)
-        {
-#pragma warning disable CS0612 // Type or member is obsolete
-            await ScrollToAsync(Selector, 0, 0, scrollBehavior);
-#pragma warning restore CS0612 // Type or member is obsolete
-        }
 
         /// <summary>
         /// 

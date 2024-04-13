@@ -224,20 +224,6 @@ namespace MudExtensions
         }
 
         /// <summary>
-        /// Command parameter.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.List.ClickAction)]
-        public object CommandParameter { get; set; }
-
-        /// <summary>
-        /// Command executed when the user clicks on an element.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.List.ClickAction)]
-        public ICommand Command { get; set; }
-
-        /// <summary>
         /// Prevent default behavior when click on MudSelectItem. Default behavior is selecting the item and style adjustments.
         /// </summary>
         [Parameter]

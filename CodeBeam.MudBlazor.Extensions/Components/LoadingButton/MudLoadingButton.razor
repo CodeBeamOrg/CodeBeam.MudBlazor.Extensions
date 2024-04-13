@@ -6,7 +6,7 @@
     <MudButton Disabled="@(Disabled ? true : Loading ? true : false)"
            Size="@Size" Class="@Class" Style="@Style" UserAttributes="@UserAttributes" Variant="@Variant" Color="@Color" OnClick="@ButtonClick"
            Href="@Href" Target="@Target" ButtonType="@ButtonType" DisableElevation="@DisableElevation" DisableRipple="@DisableRipple"
-           StartIcon="@StartIcon" EndIcon="@EndIcon" Command="@Command" CommandParameter="@CommandParameter" FullWidth="@FullWidth" HtmlTag="@HtmlTag"
+           StartIcon="@StartIcon" EndIcon="@EndIcon" FullWidth="@FullWidth" HtmlTag="@HtmlTag"
            IconClass="@IconClass" IconColor="@IconColor" Tag="@Tag">
         @if (Loading)
         {
@@ -40,7 +40,7 @@ else if (ButtonVariant == ButtonVariant.IconButton)
     <MudIconButton Disabled="@(Disabled ? true : Loading ? true : false)"
                Size="@Size" Class="@Class" Style="@Style" UserAttributes="@UserAttributes" Variant="@Variant" Color="@Color" OnClick="@ButtonClick"
                Href="@Href" Target="@Target" ButtonType="@ButtonType" DisableElevation="@DisableElevation" DisableRipple="@DisableRipple"
-               Icon="@(Loading ? null : Icon)" Command="@Command" CommandParameter="@CommandParameter" HtmlTag="@HtmlTag" Title="@Title">
+               Icon="@(Loading ? null : Icon)" HtmlTag="@HtmlTag" Title="@Title">
         @if (Loading)
         {
             <div class="d-flex align-center">
@@ -68,8 +68,8 @@ else if (ButtonVariant == ButtonVariant.Fab)
         <MudFab Disabled="@(Disabled ? true : Loading ? true : false)"
         Size="@Size" Class="@Class" Style="@Style" UserAttributes="@UserAttributes" Color="@Color" OnClick="@ButtonClick"
         Href="@Href" Target="@Target" ButtonType="@ButtonType" DisableElevation="@DisableElevation" DisableRipple="@DisableRipple"
-        Icon="@Icon" StartIcon="@StartIcon" EndIcon="@EndIcon" IconColor="@IconColor" IconSize="@IconSize" Label="@Label"
-        Command="@Command" CommandParameter="@CommandParameter" HtmlTag="@HtmlTag" Title="@Title" />
+        StartIcon="@StartIcon" EndIcon="@EndIcon" IconColor="@IconColor" IconSize="@IconSize" Label="@Label"
+        HtmlTag="@HtmlTag" Title="@Title" />
     }
     else
     {

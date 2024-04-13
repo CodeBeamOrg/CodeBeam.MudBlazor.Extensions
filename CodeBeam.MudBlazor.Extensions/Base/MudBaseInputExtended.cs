@@ -13,7 +13,11 @@ namespace MudExtensions
     public abstract class MudBaseInputExtended<T> : MudFormComponent<T, string>
     {
         private bool _isDirty;
+        private bool _validated;
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected MudBaseInputExtended() : base(new DefaultConverter<T>()) { }
 
         [CascadingParameter(Name = "ParentDisabled")] private bool ParentDisabled { get; set; }
@@ -72,7 +76,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string HelperText { get; set; }
+        public string? HelperText { get; set; }
 
         /// <summary>
         /// If true, the helper text will only be visible on focus.
@@ -86,14 +90,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string AdornmentIcon { get; set; }
+        public string? AdornmentIcon { get; set; }
 
         /// <summary>
         /// Text that will be used if Adornment is set to Start or End, the Text overrides Icon.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string AdornmentText { get; set; }
+        public string? AdornmentText { get; set; }
 
         /// <summary>
         /// The Adornment if used. By default, it is set to None.
@@ -107,14 +111,21 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public RenderFragment AdornmentStart { get; set; }
+        public RenderFragment? AdornmentStart { get; set; }
 
         /// <summary>
         /// The Adornment if used. By default, it is set to None.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public RenderFragment AdornmentEnd { get; set; }
+        public RenderFragment? AdornmentEnd { get; set; }
+
+        /// <summary>
+        /// The aria-label of the adornment.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public string? AdornmentAriaLabel { get; set; } = string.Empty;
 
         /// <summary>
         /// The validation is only triggered if the user has changed the input value at least once. By default, it is false
@@ -128,7 +139,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public bool ForceShrink { get; set; }
+        public bool ShrinkLabel { get; set; }
 
         /// <summary>
         /// The color of the adornment if used. It supports the theme colors.
@@ -136,13 +147,6 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public Color AdornmentColor { get; set; } = Color.Default;
-
-        /// <summary>
-        /// The aria-label of the adornment.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.Appearance)]
-        public string AdornmentAriaLabel { get; set; } = string.Empty;
 
         /// <summary>
         /// The Icon Size.
@@ -175,7 +179,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string Placeholder { get; set; }
+        public string? Placeholder { get; set; }
 
         /// <summary>
         /// If set, will display the counter, value 0 will display current count but no stop count.
@@ -196,7 +200,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string Label { get; set; }
+        public string? Label { get; set; }
 
         /// <summary>
         /// If true the input will focus automatically.
@@ -242,13 +246,13 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Validation)]
-        public virtual string Pattern { get; set; }
+        public virtual string? Pattern { get; set; }
 
         /// <summary>
         /// CSS style of the child content.
         /// </summary>
         [Parameter]
-        public string ChildContentStyle { get; set; }
+        public string? ChildContentStyle { get; set; }
 
         /// <summary>
         /// Sync the value, values and text, calls validation manually. Useful to call after user changes value or text programmatically.
@@ -264,11 +268,18 @@ namespace MudExtensions
         /// </summary>
         internal virtual InputType GetInputType() { return InputType.Text; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="updateValue"></param>
+        /// <returns></returns>
         protected virtual async Task SetTextAsync(string? text, bool updateValue = true)
         {
             if (Text != text)
             {
                 Text = text;
+                _validated = false;
                 if (!string.IsNullOrWhiteSpace(Text))
                     Touched = true;
                 if (updateValue)
@@ -314,7 +325,7 @@ namespace MudExtensions
         /// <summary>
         /// Fired when the text value changes.
         /// </summary>
-        [Parameter] public EventCallback<string> TextChanged { get; set; }
+        [Parameter] public EventCallback<string?> TextChanged { get; set; }
 
         /// <summary>
         /// Fired when the element loses focus.
@@ -327,16 +338,32 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<ChangeEventArgs> OnInternalInputChanged { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected bool _isFocused;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         protected internal virtual async Task OnBlurredAsync(FocusEventArgs obj)
         {
+            if (ReadOnly)
+            {
+                return;
+            }
+
             _isFocused = false;
 
             if (!OnlyValidateIfDirty || _isDirty)
             {
                 Touched = true;
-                await BeginValidationAfterAsync(OnBlur.InvokeAsync(obj));
+                if (_validated)
+                    await OnBlur.InvokeAsync(obj);
+                else
+                    await BeginValidationAfterAsync(OnBlur.InvokeAsync(obj));
             }
         }
 
@@ -345,7 +372,12 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
-        protected virtual async Task InvokeKeyDown(KeyboardEventArgs obj)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        protected virtual async Task InvokeKeyDownAsync(KeyboardEventArgs obj)
         {
             _isFocused = true;
             await OnKeyDown.InvokeAsync(obj);
@@ -365,30 +397,17 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool DisablePaste { get; set; }
 
-
-        /// <summary>
-        /// Fired on the KeyPress event.
-        /// </summary>
-        [Parameter] public EventCallback<KeyboardEventArgs> OnKeyPress { get; set; }
-
-        protected virtual async Task InvokeKeyPress(KeyboardEventArgs obj)
-        {
-            await OnKeyPress.InvokeAsync(obj);
-        }
-
-        /// <summary>
-        /// Prevent the default action for the KeyPress event.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.Behavior)]
-        public bool KeyPressPreventDefault { get; set; }
-
         /// <summary>
         /// Fired on the KeyUp event.
         /// </summary>
         [Parameter] public EventCallback<KeyboardEventArgs> OnKeyUp { get; set; }
 
-        protected virtual async Task InvokeKeyUp(KeyboardEventArgs obj)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        protected virtual async Task InvokeKeyUpAsync(KeyboardEventArgs obj)
         {
             _isFocused = true;
             await OnKeyUp.InvokeAsync(obj);
@@ -418,11 +437,19 @@ namespace MudExtensions
             set => _value = value;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="updateText"></param>
+        /// <param name="force"></param>
+        /// <returns></returns>
         protected virtual async Task SetValueAsync(T? value, bool updateText = true, bool force = false)
         {
             if (!EqualityComparer<T?>.Default.Equals(Value, value) || force == true)
             {
                 _isDirty = true;
+                _validated = false;
                 Value = value;
                 await ValueChanged.InvokeAsync(Value);
                 if (updateText)
@@ -440,6 +467,11 @@ namespace MudExtensions
             return SetValueAsync(Converter.Get(Text), updateText);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         protected override bool SetConverter(MudBlazor.Converter<T, string> value)
         {
             var changed = base.SetConverter(value);
@@ -449,6 +481,11 @@ namespace MudExtensions
             return changed;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         protected override bool SetCulture(CultureInfo value)
         {
             var changed = base.SetCulture(value);
@@ -463,13 +500,18 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string Format
+        public string? Format
         {
             get => ((Converter<T>)Converter).Format;
             set => SetFormat(value);
         }
 
-        protected virtual bool SetFormat(string value)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected virtual bool SetFormat(string? value)
         {
             var changed = Format != value;
             if (changed)
@@ -480,12 +522,17 @@ namespace MudExtensions
             return changed;
         }
 
-        protected override Task ValidateValue()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected override async Task ValidateValue()
         {
             if (SubscribeToParentFormExtended)
-                return base.ValidateValue();
-
-            return Task.CompletedTask;
+            {
+                _validated = true;
+                await base.ValidateValue();
+            }
         }
 
         /// <summary>
@@ -516,9 +563,13 @@ namespace MudExtensions
             await UpdateTextPropertyAsync(false);
             StateHasChanged();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         protected bool _forceTextUpdate;
-
+        /// <summary>
+        /// 
+        /// </summary>
         protected virtual bool SkipUpdateProcessOnSetParameters { get; set; }
 
         /// <summary>
@@ -582,11 +633,16 @@ namespace MudExtensions
                 base.OnParametersSet();
         }
 
-        protected override void ResetValue()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected override async Task ResetValueAsync()
         {
-            SetTextAsync(null, updateValue: true).AndForget();
+            await SetTextAsync(null, updateValue: true);
             _isDirty = false;
-            base.ResetValueAsync();
+            _validated = false;
+            await base.ResetValueAsync();
         }
 
         [CascadingParameter(Name = "SubscribeToParentFormExtended")]

@@ -19,7 +19,7 @@
                                       DisableUnderLine="@DisableUnderLine"
                                       Disabled="@Disabled" ReadOnly="@ReadOnly" Error="@Error" ErrorId="@ErrorId"
                                       Clearable="@Clearable" ForceClearable="@(Clearable && HasValue(Value))" OnClearButtonClick="@ClearButtonClickHandlerAsync"
-                                      @attributes="UserAttributes" OnBlur="@HandleOnBlur" ForceShrink="@(HasValue(Value) || _isOpen || ForceShrink)">
+                                      @attributes="UserAttributes" OnBlur="@HandleOnBlur" ShrinkLabel="@(HasValue(Value) || _isOpen || ShrinkLabel)">
 
                         <AdornmentEnd>
                             <MudIcon Icon="@_currentIcon" Color="@AdornmentColor" Size="@IconSize" @onclick="OnAdornmentClick" />

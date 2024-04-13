@@ -65,36 +65,22 @@ namespace MudExtensions
         public bool Bordered { get; set; }
 
         /// <summary>
-        /// The two contents' (sections) styles, seperated by space.
-        /// </summary>
-        [Obsolete("StyleContent is deprecated, please use property ContentStyle, StartContentStyle or EndContentStyle to set the style.")]
-        [Parameter]
-        public string? StyleContent { get; set; }
-
-        /// <summary>
         /// The style to apply to both content sections, seperated by space.
         /// </summary>
         [Parameter]
         public string? ContentStyle { get; set; }
 
         /// <summary>
-        /// The style of the <see cref="StartContent"/>, seperated by space. Overrules <see cref=" StyleContent"/>
+        /// The style of the <see cref="StartContent"/>, seperated by space.
         /// </summary>
         [Parameter]
         public string? StartContentStyle { get; set; }
 
         /// <summary>
-        /// The style of the <see cref="EndContent"/>, seperated by space. Overrules <see cref=" StyleContent"/>
+        /// The style of the <see cref="EndContent"/>, seperated by space.
         /// </summary>
         [Parameter]
         public string? EndContentStyle { get; set; }
-
-        /// <summary>
-        /// The splitter bar's styles, seperated by space. The style string should end with: "!important;"
-        /// </summary>
-        [Obsolete("StyleBar is deprecated, please use property BarStyle to set the bar's style.")]
-        [Parameter]
-        public string? StyleBar { get; set; } = "width:2px !important;";
 
         /// <summary>
         /// The splitter bar's styles, seperated by space. The style string should end with: "!important;"
@@ -162,10 +148,10 @@ namespace MudExtensions
         public EventCallback OnDoubleClicked { get; set; }
 
 
-        string? EffectiveStartStyle { get { return !string.IsNullOrWhiteSpace(StartContentStyle) ? StartContentStyle : !string.IsNullOrWhiteSpace(ContentStyle) ? ContentStyle : StyleContent; } }
-        string? EffectiveEndStyle { get { return !string.IsNullOrWhiteSpace(EndContentStyle) ? EndContentStyle : !string.IsNullOrWhiteSpace(ContentStyle) ? ContentStyle : StyleContent; } }
+        string? EffectiveStartStyle { get { return !string.IsNullOrWhiteSpace(StartContentStyle) ? StartContentStyle : ContentStyle; }}
+        string? EffectiveEndStyle { get { return !string.IsNullOrWhiteSpace(EndContentStyle) ? EndContentStyle : ContentStyle; } }
         string? EffectiveHeight { get { return !string.IsNullOrWhiteSpace(Height) ? $"height:{Height} !important;" : null; } }
-        string? EffectiveBarStyle { get { return !string.IsNullOrWhiteSpace(BarStyle) ? BarStyle : StyleBar; } }
+        string? EffectiveBarStyle { get => BarStyle; }
         string? EffectiveColor { get { return $"background-color:var(--mud-palette-{(Color == Color.Default ? "action-default" : Color.ToDescriptionString())}) !important;"; } }
 
         /// <summary>

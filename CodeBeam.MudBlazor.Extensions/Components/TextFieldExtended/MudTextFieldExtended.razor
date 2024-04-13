@@ -42,10 +42,9 @@
                                       Immediate="@Immediate"
                                       Margin="@Margin"
                                       OnBlur="@OnBlurredAsync"
-                                      OnKeyDown="@InvokeKeyDown"
+                                      OnKeyDown="@InvokeKeyDownAsync"
                                       OnInternalInputChanged="OnChange"
-                                      OnKeyPress="@InvokeKeyPress"
-                                      OnKeyUp="@InvokeKeyUp"
+                                      OnKeyUp="@InvokeKeyUpAsync"
                                       KeyDownPreventDefault="KeyDownPreventDefault"
                                       KeyPressPreventDefault="KeyPressPreventDefault"
                                       KeyUpPreventDefault="KeyUpPreventDefault"
@@ -53,15 +52,21 @@
                                       Clearable="@Clearable"
                                       OnClearButtonClick="@OnClearButtonClick"
                                       Pattern="@Pattern"
-                                      AdornmentStart="@AdornmentStart"
-                                      AdornmentEnd="@AdornmentEnd"
                                       AutoSize="AutoSize"
-                                      ForceShrink="@ForceShrink"
+                                      ShrinkLabel="@ShrinkLabel"
                                       ShowVisualiser="@(DataVisualiser != null && ShowVisualiser)"
                                       DataVisualiserStyle="@(DataVisualiser != null ? "min-height: 1.1876em" : null)">
                                     <DataVisualiser>
                                         @DataVisualiser
                                     </DataVisualiser>
+
+                                    <AdornmentStart>
+                                        @AdornmentStart
+                                    </AdornmentStart>
+
+                        <AdornmentEnd>
+                            @AdornmentEnd
+                        </AdornmentEnd>
 
                                   </MudInputExtended>
                     }
@@ -89,7 +94,8 @@
                              Clearable="@Clearable"
                              OnClearButtonClick="@OnClearButtonClick"
                              AdornmentStart="@AdornmentStart"
-                             AdornmentEnd="@AdornmentEnd" />
+                             AdornmentEnd="@AdornmentEnd">
+                         </MudMask>
                     }
                 </CascadingValue>
             </InputContent>

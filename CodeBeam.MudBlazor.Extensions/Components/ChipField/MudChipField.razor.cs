@@ -65,7 +65,7 @@ namespace MudExtensions
         /// CSS styles of the chips.
         /// </summary>
         [Parameter]
-        public string StyleChip { get; set; }
+        public string? StyleChip { get; set; }
 
         /// <summary>
         /// Color of the chips.
@@ -137,6 +137,10 @@ namespace MudExtensions
             await OnKeyUp.InvokeAsync(args);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected async Task SetChips()
         {
             if (Values == null)
