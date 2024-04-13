@@ -27,9 +27,9 @@
 @code
 {
     [Parameter] public Color Color { get; set; } = Color.Primary;
-    MudListExtended<int?> _list;
+    MudListExtended<int?> _list = new();
     public static string __description__ = "Sparkling Water should be selected initially.";
-    MudListItemExtended<int?> selectedItem;
+    MudListItemExtended<int?>? selectedItem;
     int? selectedValue = 1;
 
     public void SetSelectedValue(int? value)

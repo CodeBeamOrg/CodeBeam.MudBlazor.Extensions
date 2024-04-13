@@ -9,20 +9,25 @@ namespace MudExtensions
 {
     public partial class MudStep : MudComponentBase, IDisposable
     {
-
-        protected string Classname => new CssBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname => new CssBuilder()
             .AddClass("d-none", ((MudStepper.ActiveIndex < MudStepper.Steps.Count && MudStepper.Steps[MudStepper.ActiveIndex] != this) || (MudStepper.ShowResultStep() && !IsResultStep)) || (IsResultStep && !MudStepper.ShowResultStep()))
             .AddClass(Class)
             .Build();
 
+        /// <summary>
+        /// 
+        /// </summary>
         [CascadingParameter]
-        public MudStepper MudStepper { get; set; }
+        public MudStepper MudStepper { get; set; } = new();
 
         /// <summary>
         /// Step text to show on header.
         /// </summary>
         [Parameter]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         private int _order;
         /// <summary>
@@ -39,7 +44,9 @@ namespace MudExtensions
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsActive
         {
             get
@@ -80,8 +87,11 @@ namespace MudExtensions
         [Parameter]
         public bool IsResultStep { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
         /// Fires when step status changed.
@@ -89,12 +99,21 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<StepStatus> StatusChanged { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public int Number { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public RenderFragment<MudStep>? Template { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public string? Icon { get; set; }
 

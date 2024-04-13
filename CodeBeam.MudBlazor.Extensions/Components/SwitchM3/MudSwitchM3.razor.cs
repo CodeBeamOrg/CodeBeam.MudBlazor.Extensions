@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Extensions;
@@ -10,9 +7,16 @@ using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// Switch component with M3 specifications.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class MudSwitchM3<T> : MudBooleanInput<T>
     {
-        protected string Classname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname =>
         new CssBuilder("mud-switch-m3")
             .AddClass($"mud-disabled", Disabled)
             .AddClass($"mud-readonly", ReadOnly)
@@ -20,12 +24,18 @@ namespace MudExtensions
             .AddClass(Class)
         .Build();
 
-        protected string SwitchSpanClassname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? SwitchSpanClassname =>
             new CssBuilder("mud-switch-span-m3 mud-flip-x-rtl")
                 .AddClass("mud-switch-child-content-m3", ChildContent != null || !string.IsNullOrEmpty(Label))
                 .Build();
 
-        protected string SwitchClassname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? SwitchClassname =>
         new CssBuilder("mud-button-root mud-icon-button mud-switch-base-m3")
             .AddClass($"mud-ripple mud-ripple-switch", !DisableRipple && !ReadOnly && !Disabled)
             .AddClass($"mud-{Color.ToDescriptionString()}-text hover:mud-{Color.ToDescriptionString()}-hover", BoolValue == true)
@@ -36,20 +46,26 @@ namespace MudExtensions
             .AddClass("mud-switch-base-dense-m3", !string.IsNullOrEmpty(ThumbOffIcon))
         .Build();
 
-        protected string TrackClassname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? TrackClassname =>
         new CssBuilder("mud-switch-track-m3")
             .AddClass($"mud-{Color.ToDescriptionString()}", BoolValue == true)
             .AddClass($"mud-switch-track-{Color.ToDescriptionString()}-m3")
             .Build();
 
-        protected string IconStylename =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? IconStylename =>
             new StyleBuilder()
                 .AddStyle("width: 16px; height: 16px;")
                 .AddStyle("color", "var(--mud-palette-background)", !string.IsNullOrEmpty(ThumbOffIcon))
                 .Build();
 
-        private IKeyInterceptor _keyInterceptor;
-        [Inject] private IKeyInterceptorFactory KeyInterceptorFactory { get; set; }
+        private IKeyInterceptor? _keyInterceptor;
+        [Inject] private IKeyInterceptorFactory? KeyInterceptorFactory { get; set; }
 
         /// <summary>
         /// The color of the component. It supports the theme colors.
@@ -63,7 +79,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string Label { get; set; }
+        public string? Label { get; set; }
 
         /// <summary>
         /// The position of the text/label.
@@ -77,14 +93,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string ThumbIcon { get; set; }
+        public string? ThumbIcon { get; set; }
 
         /// <summary>
         /// Shows an icon on Switch's thumb (off state).
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string ThumbOffIcon { get; set; }
+        public string? ThumbOffIcon { get; set; }
 
         /// <summary>
         /// If true, disables ripple effect.
@@ -93,6 +109,10 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Appearance)]
         public bool DisableRipple { get; set; }
 
+        /// <summary>
+        /// Keydown event.
+        /// </summary>
+        /// <param name="obj"></param>
         protected internal void HandleKeyDown(KeyboardEventArgs obj)
         {
             if (Disabled || ReadOnly)
@@ -123,6 +143,9 @@ namespace MudExtensions
 
         private string _elementId = "switchm3_" + Guid.NewGuid().ToString().Substring(0, 8);
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -131,11 +154,16 @@ namespace MudExtensions
                 Label = For.GetLabelString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstRender"></param>
+        /// <returns></returns>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
-                _keyInterceptor = KeyInterceptorFactory.Create();
+                _keyInterceptor = KeyInterceptorFactory?.Create();
 
                 await _keyInterceptor.Connect(_elementId, new KeyInterceptorOptions()
                 {
@@ -153,6 +181,10 @@ namespace MudExtensions
             await base.OnAfterRenderAsync(firstRender);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);

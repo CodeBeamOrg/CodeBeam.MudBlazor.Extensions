@@ -6,10 +6,15 @@ using MudExtensions.Enums;
 
 namespace MudExtensions
 {
-#nullable enable
+    /// <summary>
+    /// MudText component with M3 specification.
+    /// </summary>
     public partial class MudTextM3 : MudComponentBase
     {
-        protected string ClassName => new CssBuilder("mud-typographym3")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? ClassName => new CssBuilder("mud-typographym3")
             .AddClass($"mud-typographym3-{Typo.ToDescriptionString()}-{Size.ToDescriptionString()}") // .mud-typographym3-#{$style}-#{$size}
             .AddClass($"mud-{Color.ToDescriptionString()}-text", Color != Color.Default && Color != Color.Inherit)
             .AddClass("mud-typography-gutterbottom", GutterBottom)
@@ -18,7 +23,10 @@ namespace MudExtensions
             .AddClass(Class)
             .Build();
 
-        protected string StyleString => new StyleBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? StyleString => new StyleBuilder()
             .AddStyle(Style)
             .Build();
 
@@ -32,6 +40,9 @@ namespace MudExtensions
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [CascadingParameter(Name = "RightToLeft")]
         public bool RightToLeft { get; set; }
 

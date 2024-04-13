@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
 using MudExtensions;
@@ -18,16 +15,19 @@ namespace MudExtensions
             .AddClass(Class)
             .Build();
 
-        private IMudSelectExtended _parent;
-        internal MudSelectExtended<T> MudSelectExtended => (MudSelectExtended<T>)IMudSelectExtended;
-        public MudListItemExtended<T> ListItem { get; set; }
+        private IMudSelectExtended? _parent;
+        internal MudSelectExtended<T?>? MudSelectExtended => (MudSelectExtended<T?>?)IMudSelectExtended;
+        /// <summary>
+        /// 
+        /// </summary>
+        public MudListItemExtended<T> ListItem { get; set; } = new();
         internal string ItemId { get; } = "selectItem_"+Guid.NewGuid().ToString().Substring(0,8);
 
         /// <summary>
         /// The parent select component
         /// </summary>
         [CascadingParameter]
-        internal IMudSelectExtended IMudSelectExtended
+        internal IMudSelectExtended? IMudSelectExtended
         {
             get => _parent;
             set
@@ -63,17 +63,17 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
-        private IMudShadowSelectExtended _shadowParent;
+        private IMudShadowSelectExtended? _shadowParent;
         [CascadingParameter]
-        internal IMudShadowSelectExtended IMudShadowSelectExtended
+        internal IMudShadowSelectExtended? IMudShadowSelectExtended
         {
             get => _shadowParent;
             set
             {
                 _shadowParent = value;
-                ((MudSelectExtended<T>)_shadowParent)?.RegisterShadowItem(this);
+                ((MudSelectExtended<T?>?)_shadowParent)?.RegisterShadowItem(this);
             }
         }
 
@@ -84,7 +84,7 @@ namespace MudExtensions
         [CascadingParameter(Name = "HideContent")]
         internal bool HideContent { get; set; }
 
-        private void OnUpdateSelectionStateFromOutside(IEnumerable<T> selection)
+        private void OnUpdateSelectionStateFromOutside(IEnumerable<T?>? selection)
         {
             if (selection == null)
                 return;
@@ -99,7 +99,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public T Value { get; set; }
+        public T? Value { get; set; }
 
         /// <summary>
         /// Mirrors the MultiSelection status of the parent select
@@ -126,7 +126,10 @@ namespace MudExtensions
             }
         }
 
-        protected string DisplayString
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? DisplayString
         {
             get
             {
@@ -137,6 +140,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void HandleOnClick()
         {
             // Selection works on list. We arrange only popover state and some minor arrangements on click.
@@ -153,6 +159,10 @@ namespace MudExtensions
             OnClick.InvokeAsync().AndForgetExt();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected bool GetDisabledStatus()
         {
             if (MudSelectExtended?.ItemDisabledFunc != null)
@@ -162,12 +172,15 @@ namespace MudExtensions
             return Disabled;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             try
             {
                 MudSelectExtended?.Remove(this);
-                ((MudSelectExtended<T>)_shadowParent)?.UnregisterShadowItem(this);
+                ((MudSelectExtended<T?>?)_shadowParent)?.UnregisterShadowItem(this);
             }
             catch (Exception) { }
         }

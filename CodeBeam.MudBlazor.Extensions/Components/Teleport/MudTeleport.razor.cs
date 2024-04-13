@@ -6,13 +6,17 @@ using MudExtensions.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// Teleport content to different containers.
+    /// </summary>
     public partial class MudTeleport : MudComponentBase
     {
-        [Inject] MudTeleportManager MudTeleportManager { get; set; }
-
         private string _generatedClass = "teleport" + Guid.NewGuid().ToString().Substring(0, 8);
 
-        protected string Classname => new CssBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname => new CssBuilder()
             .AddClass(_generatedClass)
             .AddClass(Class)
             .Build();
@@ -20,25 +24,31 @@ namespace MudExtensions
         /// <summary>
         /// The class name that shows the parent which the teleport content will teleport.
         /// </summary>
-        [Parameter] public string To { get; set; }
+        [Parameter] public string? To { get; set; }
 
         /// <summary>
         /// The class name that used to return teleport content to the container.
         /// </summary>
-        [Parameter] public string OwnClass { get; set; }
+        [Parameter] public string? OwnClass { get; set; }
 
         /// <summary>
         /// If true teleported content returns the container, otherwise the content remains the last teleported place. Default is false.
         /// </summary>
         [Parameter] public bool ReturnWhenNotFound { get; set; }
 
-        [Parameter] public RenderFragment ChildContent { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [Parameter] public RenderFragment? ChildContent { get; set; }
 
         private ElementReference _ref;
 
-        private string _to;
+        private string? _to;
         private bool _mustUpdate = true;
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnParametersSet()
         {
             // if `To` or `Disabled` has changed we must update the teleport
@@ -53,6 +63,11 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstRender"></param>
+        /// <returns></returns>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (_mustUpdate)
@@ -62,6 +77,10 @@ namespace MudExtensions
             await base.OnAfterRenderAsync(firstRender);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task Update()
         {
             var result = await MudTeleportManager.Teleport(_ref, To);
@@ -71,6 +90,10 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task Reset()
         {
             To = null;
@@ -78,6 +101,10 @@ namespace MudExtensions
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async ValueTask DisposeAsync()
         {
             try

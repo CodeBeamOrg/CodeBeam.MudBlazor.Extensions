@@ -9,30 +9,46 @@ namespace MudExtensions
 {
     public partial class MudStepper : MudComponentBase
     {
-        MudAnimate _animate;
+        MudAnimate _animate = new();
         Guid _animateGuid = Guid.NewGuid();
 
-        protected string HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-3")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-3")
             .AddClass("mud-ripple", !DisableRipple && !Linear)
             .AddClass("cursor-pointer mud-stepper-header-non-linear", !Linear)
             .AddClass("flex-column", !Vertical)
             .AddClass("flex-row", Vertical)
             .Build();
 
-        protected string ContentClassname => new CssBuilder($"mud-stepper-ani-{_animateGuid.ToString()}")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? ContentClassname => new CssBuilder($"mud-stepper-ani-{_animateGuid.ToString()}")
             .AddClass(ContentClass)
             .Build();
 
-        protected string ActionClassname => new CssBuilder("d-flex gap-4")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? ActionClassname => new CssBuilder("d-flex gap-4")
             .AddClass(ActionClass)
             .Build();
 
-        protected string AvatarStylename => new StyleBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? AvatarStylename => new StyleBuilder()
             .AddStyle("z-index: 20")
             .AddStyle("background-color", "var(--mud-palette-background)", Variant == Variant.Outlined)
             .Build();
 
-        protected string GetMobileStyle()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected string? GetMobileStyle()
         {
             if(Vertical)
             {
@@ -43,7 +59,12 @@ namespace MudExtensions
                 return "grid-row:1;margin-top:22px;";
             }
         }
-        protected string GetStepperStyle()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected string? GetStepperStyle()
         {
             var count = Steps.Count * 2;
             if (Vertical)
@@ -56,7 +77,11 @@ namespace MudExtensions
             }
         }
 
-        protected string GetStepperSubStyle()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected string? GetStepperSubStyle()
         {
             if (Vertical)
             {
@@ -68,7 +93,11 @@ namespace MudExtensions
             }
         }
 
-        protected string GetStepPercent()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected string? GetStepPercent()
         {
             var dPercent = (100.0 / Steps.Count).ToInvariantString();
             if (Vertical)
@@ -81,7 +110,11 @@ namespace MudExtensions
             }
         }
 
-        protected string GetStepClass()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected string? GetStepClass()
         {
             if (Vertical)
             {
@@ -93,7 +126,11 @@ namespace MudExtensions
             }
         }
 
-        protected string GetProgressLinearStyle()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected string? GetProgressLinearStyle()
         {
             var end = Steps.Count * 2;
             if (Vertical)
@@ -123,19 +160,19 @@ namespace MudExtensions
         /// Provides CSS classes for the step content.
         /// </summary>
         [Parameter]
-        public string ContentClass { get; set; }
+        public string? ContentClass { get; set; }
 
         /// <summary>
         /// Provides CSS styles for the step content.
         /// </summary>
         [Parameter]
-        public string ContentStyle { get; set; }
+        public string? ContentStyle { get; set; }
 
         /// <summary>
         /// Provides CSS classes for the step actions.
         /// </summary>
         [Parameter]
-        public string ActionClass { get; set; }
+        public string? ActionClass { get; set; }
 
         /// <summary>
         /// Determines how action buttons justified.
@@ -201,7 +238,7 @@ namespace MudExtensions
         /// A static content that always show with all steps.
         /// </summary>
         [Parameter]
-        public RenderFragment StaticContent { get; set; }
+        public RenderFragment? StaticContent { get; set; }
 
         /// <summary>
         /// If true, action buttons have icons instead of text to gain more space.
@@ -255,7 +292,7 @@ namespace MudExtensions
         /// The child content where MudSteps should be inside.
         /// </summary>
         [Parameter]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
         /// Custom content to be shown between the "previous" and "next" action buttons.
@@ -265,8 +302,11 @@ namespace MudExtensions
         /// to ensure that the built-in action buttons are aligned correctly.
         /// </remarks>
         [Parameter]
-        public RenderFragment ActionContent { get; set; }
+        public RenderFragment? ActionContent { get; set; }
 
+        /// <summary>
+        /// Fires when active step changed.
+        /// </summary>
         [Parameter]
         public EventCallback<int> ActiveStepChanged { get; set; }
 
@@ -278,10 +318,13 @@ namespace MudExtensions
         /// Runs a task to prevent step change. Has change direction (backwards or forwards) and target index and returns a bool value.
         /// </summary>
         [Parameter]
-        public Func<StepChangeDirection, int, Task<bool>> PreventStepChangeAsync { get; set; }
+        public Func<StepChangeDirection, int, Task<bool>>? PreventStepChangeAsync { get; set; }
 
         List<MudStep> _steps = new();
         List<MudStep> _allSteps = new();
+        /// <summary>
+        /// 
+        /// </summary>
         public List<MudStep> Steps
         {
             get => _steps;
@@ -311,6 +354,9 @@ namespace MudExtensions
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void ReorderSteps()
         {
             Steps = Steps.OrderBy(x => x.Order).ToList();
@@ -323,11 +369,24 @@ namespace MudExtensions
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="step"></param>
+        /// <param name="skipPreventProcess"></param>
+        /// <returns></returns>
         protected internal async Task SetActiveIndex(MudStep step, bool skipPreventProcess = false)
         {
             await SetActiveStepByIndex(Steps.IndexOf(step), skipPreventProcess: skipPreventProcess);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="firstCompleted"></param>
+        /// <param name="skipPreventProcess"></param>
+        /// <returns></returns>
         public async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)
         {
             var stepChangeDirection = (
@@ -387,6 +446,13 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="firstCompleted"></param>
+        /// <param name="skipPreventProcess"></param>
+        /// <returns></returns>
         public async Task SetActiveStepByIndex(int index, bool firstCompleted = false, bool skipPreventProcess = false)
         {
             var stepChangeDirection = (
@@ -428,6 +494,12 @@ namespace MudExtensions
             await ActiveStepChanged.InvokeAsync(ActiveIndex);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="moveToNextStep"></param>
+        /// <returns></returns>
         public async Task CompleteStep(int index, bool moveToNextStep = true)
         {
             var isActiveStep = (index == ActiveIndex);
@@ -460,6 +532,12 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="moveToNextStep"></param>
+        /// <returns></returns>
         public async Task SkipStep(int index, bool moveToNextStep = true)
         {
             var isActiveStep = (index == ActiveIndex);
@@ -488,21 +566,38 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="step"></param>
+        /// <returns></returns>
         protected bool IsStepActive(MudStep step)
         {
             return Steps.IndexOf(step) == ActiveIndex;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected int CompletedStepCount()
         {
             return Steps.Count(x => x.Status != StepStatus.Continued);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected string GetNextButtonString()
         {
             return ActiveIndex >= Steps.Count - 1 ? LocalizedStrings.Finish : LocalizedStrings.Next;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected internal bool ShowResultStep()
         {
             if (IsAllStepsCompleted() && ActiveIndex == Steps.Count)
@@ -513,32 +608,55 @@ namespace MudExtensions
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected internal bool HasResultStep()
         {
             return _allSteps.Any(x => x.IsResultStep);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public bool IsAllStepsCompleted()
         {
             return !Steps.Any(x => x.Status == Enums.StepStatus.Continued);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public int GetActiveIndex()
         {
             return ActiveIndex;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Reset()
         {
             Steps.ForEach(x => x.SetStatus(StepStatus.Continued));
             ActiveIndex = 0;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="status"></param>
         public void SetStepStatus(int index, StepStatus status)
         {
             Steps[index].SetStatus(status);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void ForceRender()
         {
             StateHasChanged();

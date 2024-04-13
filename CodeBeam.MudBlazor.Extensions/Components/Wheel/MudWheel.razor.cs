@@ -3,55 +3,77 @@ using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class MudWheel<T> : MudBaseInput<T>
     {
 
         [Inject] public IScrollManager ScrollManager { get; set; }
 
-        protected string Classname => new CssBuilder("mud-width-full")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname => new CssBuilder("mud-width-full")
             .AddClass(Class)
             .Build();
 
-        protected string InnerClassname => new CssBuilder("mud-wheel d-flex flex-column align-center justify-center relative")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? InnerClassname => new CssBuilder("mud-wheel d-flex flex-column align-center justify-center relative")
             .AddClass("mud-disabled", Disabled)
             .AddClass(InnerClass)
             .Build();
 
-        protected string MiddleItemClassname => new CssBuilder("middle-item d-flex align-center justify-center mud-width-full")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? MiddleItemClassname => new CssBuilder("middle-item d-flex align-center justify-center mud-width-full")
             .AddClass("mud-disabled", Disabled)
             .Build();
 
-        protected string OuterItemClassname(int index) => new CssBuilder($"mud-wheel-item mud-wheel-ani-{_animateGuid}")
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        protected string? OuterItemClassname(int index) => new CssBuilder($"mud-wheel-item mud-wheel-ani-{_animateGuid}")
             .AddClass("wheel-item-closest", Math.Abs(ItemCollection.IndexOf(Value) - index) == 1)
             .AddClass("my-1", !Dense)
             .AddClass("mud-disabled", Disabled)
             .Build();
 
-        protected string BorderClassname => new CssBuilder("mud-wheel-border mud-wheel-item mud-width-full")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? BorderClassname => new CssBuilder("mud-wheel-border mud-wheel-item mud-width-full")
             .AddClass($"mud-wheel-border-{Color.ToDescriptionString()}")
             .AddClass($"wheel-border-gradient-{Color.ToDescriptionString()}", SmoothBorders)
             .AddClass("my-1", !Dense)
             .Build();
 
-        protected string EmptyItemClassname => new CssBuilder("mud-wheel-ani-{_animateGuid} mud-wheel-item wheel-item-empty")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? EmptyItemClassname => new CssBuilder("mud-wheel-ani-{_animateGuid} mud-wheel-item wheel-item-empty")
             .AddClass("my-1", !Dense)
             .AddClass("wheel-item-empty-dense", Dense)
             .Build();
 
-        MudAnimate _animate;
+        MudAnimate _animate = new();
         Guid _animateGuid = Guid.NewGuid();
         int _animateValue = 52;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public List<T> ItemCollection { get; set; }
+        public List<T?>? ItemCollection { get; set; }
 
         /// <summary>
         /// Determines how many items will show before and after the middle one.
@@ -65,12 +87,21 @@ namespace MudExtensions
         [Parameter]
         public int Sensitivity { get; set; } = 40;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string InnerClass { get; set; }
+        public string? InnerClass { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public bool Dense { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public bool SmoothBorders { get; set; }
 
@@ -80,13 +111,13 @@ namespace MudExtensions
         [Parameter]
         public Color Color { get; set; }
 
-        private Func<T, string> _toStringFunc = x => x?.ToString();
+        private Func<T?, string?>? _toStringFunc = x => x?.ToString();
         /// <summary>
         /// Defines how values are displayed in the drop-down list
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T, string> ToStringFunc
+        public Func<T?, string?>? ToStringFunc
         {
             get => _toStringFunc;
             set
@@ -101,7 +132,11 @@ namespace MudExtensions
             }
         }
 
-        protected string GetStylename()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected string? GetStylename()
         {
             return new StyleBuilder()
             .AddStyle("height", $"{(WheelLevel * (Dense ? 24 : 40) * 2) + (Dense ? 32 : 46)}px")
@@ -109,9 +144,18 @@ namespace MudExtensions
             .Build();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         protected async Task HandleOnWheel(WheelEventArgs args)
         {
             if (Disabled || ReadOnly)
+            {
+                return;
+            }
+            if (ItemCollection == null)
             {
                 return;
             }
@@ -132,20 +176,30 @@ namespace MudExtensions
             await _animate.Refresh();
             if (args.DeltaY < 0 && index != 0)
             {
-                T val = ItemCollection[index - 1];
+                T? val = ItemCollection[index - 1];
                 await SetValueAsync(val);
             }
             else if (0 < args.DeltaY && index != ItemCollection.Count - 1)
             {
-                T val = ItemCollection[index + 1];
+                T? val = ItemCollection[index + 1];
                 await SetValueAsync(val);
             }
             await Task.Delay(300);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         protected async Task HandleOnSwipe(SwipeEventArgs args)
         {
             if (Disabled || ReadOnly)
+            {
+                return;
+            }
+
+            if (ItemCollection == null)
             {
                 return;
             }
@@ -174,7 +228,7 @@ namespace MudExtensions
                     {
                         break;
                     }
-                    T val = ItemCollection[index - 1];
+                    T? val = ItemCollection[index - 1];
                     index--;
                     await SetValueAsync(val);
                     StateHasChanged();
@@ -185,7 +239,7 @@ namespace MudExtensions
                     {
                         break;
                     }
-                    T val = ItemCollection[index + 1];
+                    T? val = ItemCollection[index + 1];
                     index++;
                     await SetValueAsync(val);
                     StateHasChanged();
@@ -193,6 +247,11 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="changeCount"></param>
+        /// <returns></returns>
         public async Task ChangeWheel(int changeCount)
         {
             if (Disabled || ReadOnly)
@@ -213,12 +272,25 @@ namespace MudExtensions
             await SetValueAsync(val);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task RefreshAnimate()
         {
             await _animate.Refresh();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected int GetIndex() => ItemCollection.IndexOf(Value) == -1 ? 0 : ItemCollection.IndexOf(Value);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected int GetAnimateValue() => Dense ? 24 : 42;
     }
 }

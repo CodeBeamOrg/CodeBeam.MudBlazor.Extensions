@@ -7,25 +7,37 @@ namespace MudExtensions
 {
     public partial class MudTransferList<T> : MudComponentBase
     {
-        MudListExtended<T> _startList;
-        MudListExtended<T> _endList;
+        MudListExtended<T> _startList = new();
+        MudListExtended<T> _endList = new();
 
-        protected string StartClassname => new CssBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? StartClassname => new CssBuilder()
             .AddClass(ClassListCommon)
             .AddClass(ClassStartList)
             .Build();
 
-        protected string EndClassname => new CssBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? EndClassname => new CssBuilder()
             .AddClass(ClassListCommon)
             .AddClass(ClassEndList)
             .Build();
 
-        protected string StartStylename => new StyleBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? StartStylename => new StyleBuilder()
             .AddStyle(StyleListCommon)
             .AddStyle(StyleStartList)
             .Build();
 
-        protected string EndStylename => new StyleBuilder()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? EndStylename => new StyleBuilder()
             .AddStyle(StyleListCommon)
             .AddStyle(StyleEndList)
             .Build();
@@ -34,29 +46,29 @@ namespace MudExtensions
         /// The start list's collection.
         /// </summary>
         [Parameter]
-        public ICollection<T> StartCollection { get; set; }
+        public ICollection<T?>? StartCollection { get; set; }
 
         /// <summary>
         /// Fires when start collection changed.
         /// </summary>
         [Parameter]
-        public EventCallback<ICollection<T>> StartCollectionChanged { get; set; }
+        public EventCallback<ICollection<T?>?> StartCollectionChanged { get; set; }
 
         /// <summary>
         /// The end list's collection.
         /// </summary>
         [Parameter]
-        public ICollection<T> EndCollection { get; set; }
+        public ICollection<T?>? EndCollection { get; set; }
 
         /// <summary>
         /// Fires when end collection changed.
         /// </summary>
         [Parameter]
-        public EventCallback<ICollection<T>> EndCollectionChanged { get; set; }
+        public EventCallback<ICollection<T?>?> EndCollectionChanged { get; set; }
 
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T, string> ToStringFunc { get; set; }
+        public Func<T?, string?>? ToStringFunc { get; set; }
 
         /// <summary>
         /// Fires before transfer process start. Useful to backup items or prevent transfer.
@@ -68,35 +80,59 @@ namespace MudExtensions
         /// Fires when start collection changed. Takes a "StartToEnd" direction bool parameter.
         /// </summary>
         [Parameter]
-        public Func<bool, bool> PreventTransfer { get; set; }
+        public Func<bool, bool>? PreventTransfer { get; set; }
 
         /// <summary>
         /// Fires when start collection changed. Takes a "StartToEnd" direction bool parameter.
         /// </summary>
         [Parameter]
-        public Func<ICollection<T>, ICollection<T>> OrderFunc { get; set; }
+        public Func<ICollection<T?>, ICollection<T?>>? OrderFunc { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public RenderFragment StartTitleContent { get; set; }
+        public RenderFragment? StartTitleContent { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public RenderFragment EndTitleContent { get; set; }
+        public RenderFragment? EndTitleContent { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string StartTitle { get; set; }
+        public string? StartTitle { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string EndTitle { get; set; }
+        public string? EndTitle { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public bool Vertical { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public bool Disabled { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public bool SearchBoxStart { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public bool SearchBoxEnd { get; set; }
 
@@ -112,6 +148,9 @@ namespace MudExtensions
         [Parameter]
         public bool MultiSelection { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public MultiSelectionComponent MultiSelectionComponent { get; set; } = MultiSelectionComponent.CheckBox;
 
@@ -133,36 +172,71 @@ namespace MudExtensions
         [Parameter]
         public Variant ButtonVariant { get; set; } = Variant.Text;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string SelectAllText { get; set; } = "Select All";
+        public string? SelectAllText { get; set; } = "Select All";
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public int Spacing { get; set; } = 4;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public int ButtonSpacing { get; set; } = 1;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public int? MaxItems { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string ClassStartList { get; set; }
+        public string? ClassStartList { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string ClassEndList { get; set; }
+        public string? ClassEndList { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string ClassListCommon { get; set; }
+        public string? ClassListCommon { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string StyleStartList { get; set; }
+        public string? StyleStartList { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string StyleEndList { get; set; }
+        public string? StyleEndList { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public string StyleListCommon { get; set; }
+        public string? StyleListCommon { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startToEnd"></param>
+        /// <returns></returns>
         protected internal async Task Transfer(bool startToEnd = true)
         {
             await OnTransferStart.InvokeAsync();
@@ -174,8 +248,8 @@ namespace MudExtensions
             {
                 if (MultiSelection == false && _startList.SelectedValue != null)
                 {
-                    EndCollection.Add(_startList.SelectedValue);
-                    StartCollection.Remove(_startList.SelectedValue);
+                    EndCollection?.Add(_startList.SelectedValue);
+                    StartCollection?.Remove(_startList.SelectedValue);
                     OrderItems();
                     await EndCollectionChanged.InvokeAsync(EndCollection);
                     await StartCollectionChanged.InvokeAsync(StartCollection);
@@ -193,8 +267,8 @@ namespace MudExtensions
                         {
                             continue;
                         }
-                        EndCollection.Add(item);
-                        StartCollection.Remove(item);
+                        EndCollection?.Add(item);
+                        StartCollection?.Remove(item);
                         transferredValues.Add(item);
                     }
                     _endList.SelectedValues = transferredValues;
@@ -210,8 +284,8 @@ namespace MudExtensions
             {
                 if (MultiSelection == false && _endList.SelectedValue != null)
                 {
-                    StartCollection.Add(_endList.SelectedValue);
-                    EndCollection.Remove(_endList.SelectedValue);
+                    StartCollection?.Add(_endList.SelectedValue);
+                    EndCollection?.Remove(_endList.SelectedValue);
                     _startList.SelectedValue = _endList.SelectedValue;
                     _endList.Clear();
                     OrderItems();
@@ -231,8 +305,8 @@ namespace MudExtensions
                         {
                             continue;
                         }
-                        StartCollection.Add(item);
-                        EndCollection.Remove(item);
+                        StartCollection?.Add(item);
+                        EndCollection?.Remove(item);
                         transferredValues.Add(item);
                     }
                     _startList.SelectedValues = transferredValues;
@@ -246,6 +320,11 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startToEnd"></param>
+        /// <returns></returns>
         protected internal async Task TransferAll(bool startToEnd = true)
         {
             await OnTransferStart.InvokeAsync();
@@ -279,7 +358,7 @@ namespace MudExtensions
             }
         }
 
-        public ICollection<T> GetStartListSelectedValues()
+        public ICollection<T?>? GetStartListSelectedValues()
         {
             if (_startList == null)
             {
@@ -292,11 +371,15 @@ namespace MudExtensions
             }
             else
             {
-                return new List<T>() { _startList.SelectedValue };
+                return new List<T?>() { _startList.SelectedValue };
             }
         }
 
-        public ICollection<T> GetEndListSelectedValues()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<T?>? GetEndListSelectedValues()
         {
             if (_endList == null)
             {
@@ -309,10 +392,13 @@ namespace MudExtensions
             }
             else
             {
-                return new List<T>() { _endList.SelectedValue };
+                return new List<T?>() { _endList.SelectedValue };
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void OrderItems()
         {
             if (OrderFunc == null)

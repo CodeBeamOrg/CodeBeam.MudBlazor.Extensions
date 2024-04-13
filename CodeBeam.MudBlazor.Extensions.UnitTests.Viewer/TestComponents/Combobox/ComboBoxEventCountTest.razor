@@ -17,10 +17,10 @@
     public int ItemChangeCount { get; set; }
     public int ItemsChangeCount { get; set; }
 
-    MudComboBox<string> _combobox;
-    MudComboBoxItem<string> FirstItem { get; set; }
-    MudComboBoxItem<string> SecondItem { get; set; }
-    MudComboBoxItem<string> ThirdItem { get; set; }
+    MudComboBox<string> _combobox = new();
+    MudComboBoxItem<string> FirstItem { get; set; } = new();
+    MudComboBoxItem<string> SecondItem { get; set; } = new();
+    MudComboBoxItem<string> ThirdItem { get; set; } = new();
 
     //public void SetSelectedItem()
     //{

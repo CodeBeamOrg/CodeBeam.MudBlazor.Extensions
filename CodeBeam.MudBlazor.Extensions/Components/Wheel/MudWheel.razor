@@ -40,7 +40,7 @@
             for (int i = 1; i < WheelLevel + 2; i++)
             {
                 int a = i;
-                if (index + a < ItemCollection.Count)
+                if (index + a < ItemCollection?.Count)
                 {
                     <div class="@OuterItemClassname(index + a)" @onclick="@(async() => await ChangeWheel(a))">
                         <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index + a]) : Converter.Set(ItemCollection[index + a]))</MudText>

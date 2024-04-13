@@ -17,7 +17,7 @@
             <SelectAllTemplate>
                 @if (SelectAllType == SelectAllType.SelectAllItem)
                 {
-                    <MudListItemExtended T="T" IsFunctional="true" Text="@SelectAllText" SecondaryText="@($"{(_startList == null ? 0 : _startList.SelectedValues == null ? 0 : _startList.SelectedValues.Count())} / {StartCollection.Count}")" OnClickStopPropagation="false" />
+                    <MudListItemExtended T="T" IsFunctional="true" Text="@SelectAllText" SecondaryText="@($"{(_startList == null ? 0 : _startList.SelectedValues == null ? 0 : _startList.SelectedValues.Count())} / {StartCollection?.Count}")" OnClickStopPropagation="false" />
                 }
             </SelectAllTemplate>
         </MudListExtended>

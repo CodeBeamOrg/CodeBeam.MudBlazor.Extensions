@@ -1,31 +1,36 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using MudExtensions.Utilities;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
 using MudExtensions.Enums;
 using MudExtensions.Extensions;
-using static MudBlazor.CategoryTypes;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class MudWatch : MudComponentBase
     {
-
-        protected string Classname => new CssBuilder("d-flex mud-width-full align-end justify-center")
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname => new CssBuilder("d-flex mud-width-full align-end justify-center")
             .AddClass(Class)
             .Build();
 
-        MudWheel<int> _wheelDay;
-        MudWheel<int> _wheelHour;
-        MudWheel<int> _wheelMinute;
-        MudWheel<int> _wheelSecond;
+        MudWheel<int> _wheelDay = new();
+        MudWheel<int> _wheelHour = new();
+        MudWheel<int> _wheelMinute = new();
+        MudWheel<int> _wheelSecond = new();
 
         System.Timers.Timer _timer = new();
         Stopwatch _stopwatch = new();
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnInitialized()
         {
             _timer.Elapsed += Elapse;
@@ -52,6 +57,9 @@ namespace MudExtensions
         TimeSpan _initialValue = new();
 
         TimeSpan _value;
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         public TimeSpan Value 
         {
@@ -69,6 +77,9 @@ namespace MudExtensions
         }
 
         TimeSpan _interval = TimeSpan.FromSeconds(1);
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public TimeSpan Interval 
@@ -86,6 +97,9 @@ namespace MudExtensions
         }
 
         WatchMode _watchMode = WatchMode.Watch;
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public WatchMode Mode 
@@ -102,6 +116,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public TimeSpan CountdownTime { get; set; } = TimeSpan.FromSeconds(10);
@@ -227,6 +244,11 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public EventCallback<LapRecord> LapRecordsChanged { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public async void Elapse(object sender, System.Timers.ElapsedEventArgs args)
         {
             int oldHour = ((int)Value.TotalHours);
@@ -281,6 +303,10 @@ namespace MudExtensions
             await InvokeAsync(StateHasChanged);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task Stop()
         {
             _timer.Stop();
@@ -301,6 +327,10 @@ namespace MudExtensions
             await InvokeAsync(StateHasChanged);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task Reset()
         {
             if (Mode == WatchMode.Watch)
@@ -324,6 +354,9 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Start()
         {
             _timer.Interval = Interval.TotalMilliseconds;
@@ -331,6 +364,9 @@ namespace MudExtensions
             _stopwatch.Start();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public async void Lap()
         {
             if (LapRecords == null)
@@ -345,6 +381,11 @@ namespace MudExtensions
             await LapRecordsChanged.InvokeAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <returns></returns>
         protected async Task SetWatchMode(WatchMode mode)
         {
             if (mode == WatchMode.Watch)
@@ -378,6 +419,9 @@ namespace MudExtensions
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected void SetInternalValues()
         {
             _day = Value.Days;
@@ -387,6 +431,10 @@ namespace MudExtensions
             _milliSecond = Value.Milliseconds;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected string GetWatchText()
         {
             List<string> ls = new();
@@ -413,7 +461,12 @@ namespace MudExtensions
             return string.Join(" " + Delimiter + " ", ls);
         }
 
-        protected string NumberToString(int val)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        protected string? NumberToString(int val)
         {
             if (val < 10)
             {

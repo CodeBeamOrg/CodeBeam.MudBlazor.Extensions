@@ -7,7 +7,7 @@
         <div style="@GetStepperStyle()">
             <div style=@GetStepperSubStyle()>
                 @{
-                    MudStep currentStep = null;
+                    MudStep? currentStep = null;
                 }
                 @foreach (MudStep step in _steps)
                 {
@@ -69,7 +69,7 @@
             </div>
             @if (MobileView == true)
             {
-                <MudText Style="@GetMobileStyle()" Typo="Typo.body2" Color="@Color">@(_steps?.IndexOf(currentStep) + 1) / @(_steps?.Count)</MudText>
+                <MudText Style="@GetMobileStyle()" Typo="Typo.body2" Color="@Color">@(_steps?.IndexOf(currentStep ?? new()) + 1) / @(_steps?.Count)</MudText>
             }
             <MudProgressLinear Vertical="@Vertical" Color="@Color" Value="@ProgressValue" Min="0" Max="100" Style="@GetProgressLinearStyle()" />
 

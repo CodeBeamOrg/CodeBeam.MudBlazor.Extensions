@@ -2,9 +2,9 @@
 
 <MudGrid>
     <MudItem xs="12" sm="4">
-        <MudCheckBox @bind-Checked="_clickable" Color="Color.Primary" Label="Clickable" />
+        <MudCheckBox @bind-Value="_clickable" Color="Color.Primary" Label="Clickable" />
         @*<MudCheckBox @bind-Checked="_multiSelection" Color="Color.Primary" Label="MultiSelection" />*@
-        <MudCheckBox @bind-Checked="_selectAll" Color="Color.Primary" Label="Select All" />
+        <MudCheckBox @bind-Value="_selectAll" Color="Color.Primary" Label="Select All" />
         <MudDivider />
         <MudTextField @bind-Value="_selectedValue" Clearable="true" />
 
@@ -48,11 +48,11 @@
     bool _clickable = true;
     bool _selectAll = false;
 
-    MudListExtended<int?> _list;
+    MudListExtended<int?> _list = new();
     int? _selectedValue = 1;
     IEnumerable<int?> _selectedValues = new List<int?>();
-    MudListItemExtended<int?> _selectedItem;
-    MudListItemExtended<int?> _thirdItem;
-    MudListItemExtended<int?> _fifthItem;
+    MudListItemExtended<int?>? _selectedItem;
+    MudListItemExtended<int?> _thirdItem = new();
+    MudListItemExtended<int?> _fifthItem = new();
     IEnumerable<MudListItemExtended<int?>> _selectedItems = new List<MudListItemExtended<int?>>();
 }

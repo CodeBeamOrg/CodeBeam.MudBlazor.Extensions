@@ -1,6 +1,6 @@
 ﻿namespace MudExtensions.Components.TypographyM3
 {
-#nullable enable
+#pragma warning disable CS1591
     public class TypographyM3
     {
         public DisplayLarge DisplayLarge { get; set; } = new();

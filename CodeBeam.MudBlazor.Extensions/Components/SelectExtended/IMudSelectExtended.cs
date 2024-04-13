@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
+﻿
 namespace MudExtensions
 {
     internal interface IMudSelectExtended

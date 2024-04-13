@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
@@ -22,14 +17,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public T Value { get; set; }
+        public T? Value { get; set; }
 
         /// <summary>
         /// A user-defined option that can be selected
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         /// <summary>
         /// A user-defined option that can be selected
@@ -53,7 +48,7 @@ namespace MudExtensions
         public bool Sticky { get; set; }
 
         [CascadingParameter]
-        internal MudListExtended<T> MudListExtended { get; set; }
+        internal MudListExtended<T?>? MudListExtended { get; set; }
 
         /// <summary>
         /// Select items with HideContent==true are only there to register their RenderFragment with the select but
@@ -70,6 +65,11 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstRender"></param>
+        /// <returns></returns>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);

@@ -9,22 +9,35 @@ namespace MudExtensions
 {
     public partial class MudTextFieldExtended<T> : MudDebouncedInputExtended<T>
     {
-        protected string Classname =>
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? Classname =>
            new CssBuilder("mud-input-input-control")
            .AddClass(Class)
            .Build();
 
+        /// <summary>
+        /// 
+        /// </summary>
         [CascadingParameter]
         public bool SubscribeToParentForm2 { get; set; }
 
-        public MudInputExtended<string> InputReference { get; private set; }
-        private MudMask _maskReference;
+        /// <summary>
+        /// 
+        /// </summary>
+        public MudInputExtended<string> InputReference { get; private set; } = new();
+        private MudMask _maskReference = new();
 
         /// <summary>
         /// If true, automatically resize the height regard to the text. Needs Lines parameter to set more than 1.
         /// </summary>
         [Parameter] public bool AutoSize { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task ForceAutoSize()
         {
             await InputReference.ForceAutoSize();
@@ -33,7 +46,7 @@ namespace MudExtensions
         /// <summary>
         /// The render fragment for child content.
         /// </summary>
-        [Parameter] public RenderFragment DataVisualiser { get; set; }
+        [Parameter] public RenderFragment? DataVisualiser { get; set; }
 
         /// <summary>
         /// Type of the input element. It should be a valid HTML5 input type.
@@ -53,6 +66,9 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Clearable { get; set; } = false;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool ShowVisualiser { get; set; }
@@ -62,6 +78,10 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<MouseEventArgs> OnClearButtonClick { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask FocusAsync()
         {
             if (_mask == null)
@@ -70,6 +90,10 @@ namespace MudExtensions
                 return _maskReference.FocusAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask BlurAsync()
         {
             if (_mask == null)
@@ -78,6 +102,10 @@ namespace MudExtensions
                 return _maskReference.BlurAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask SelectAsync()
         {
             if (_mask == null)
@@ -86,6 +114,12 @@ namespace MudExtensions
                 return _maskReference.SelectAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pos1"></param>
+        /// <param name="pos2"></param>
+        /// <returns></returns>
         public override ValueTask SelectRangeAsync(int pos1, int pos2)
         {
             if (_mask == null)
@@ -94,13 +128,16 @@ namespace MudExtensions
                 return _maskReference.SelectRangeAsync(pos1, pos2);
         }
 
-        protected override void ResetValue()
+        /// <summary>
+        /// 
+        /// </summary>
+        protected override async Task ResetValueAsync()
         {
             if (_mask == null)
-                InputReference.Reset();
+                await InputReference.ResetAsync();
             else
-                _maskReference.Reset();
-            base.ResetValue();
+                await _maskReference.ResetAsync();
+            await base.ResetValueAsync();
         }
 
         /// <summary>
@@ -133,7 +170,7 @@ namespace MudExtensions
         }
 
 
-        private IMask _mask = null;
+        private IMask? _mask = null;
 
         /// <summary>
         /// Provide a masking object. Built-in masks are PatternMask, MultiMask, RegexMask and BlockMask
@@ -141,7 +178,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.General.Data)]
-        public IMask Mask
+        public IMask? Mask
         {
             get => _maskReference?.Mask ?? _mask; // this might look strange, but it is absolutely necessary due to how MudMask works.
             set
@@ -150,19 +187,32 @@ namespace MudExtensions
             }
         }
 
-        protected override Task SetValueAsync(T value, bool updateText = true, bool force = false)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="updateText"></param>
+        /// <param name="force"></param>
+        /// <returns></returns>
+        protected override Task SetValueAsync(T? value, bool updateText = true, bool force = false)
         {
             if (_mask != null)
             {
                 var textValue = Converter.Set(value);
                 _mask.SetText(textValue);
-                textValue=Mask.GetCleanText();
+                textValue = Mask?.GetCleanText();
                 value = Converter.Get(textValue);
             }
             return base.SetValueAsync(value, updateText, force);
         }
 
-        protected override Task SetTextAsync(string text, bool updateValue = true)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="updateValue"></param>
+        /// <returns></returns>
+        protected override Task SetTextAsync(string? text, bool updateValue = true)
         {
             if (_mask != null)
             {
@@ -176,7 +226,6 @@ namespace MudExtensions
         {
             await SetTextAsync(s);
         }
-
 
     }
 }
