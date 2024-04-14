@@ -1,5 +1,5 @@
-﻿using MudExtensions.Docs.Pages.Components;
-using FluentAssertions;
+﻿using FluentAssertions;
+using MudExtensions.Docs.Pages;
 
 namespace MudExtensions.UnitTests.Components
 {
@@ -17,6 +17,13 @@ namespace MudExtensions.UnitTests.Components
         public void AnimatePageRenderTest()
         {
             var comp = Context.RenderComponent<AnimatePage>();
+            comp.Markup.Should().NotBeNullOrEmpty();
+        }
+
+        [Test]
+        public void ComboBoxPageRenderTest()
+        {
+            var comp = Context.RenderComponent<ComboBoxPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 
