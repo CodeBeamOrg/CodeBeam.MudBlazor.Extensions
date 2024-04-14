@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bunit;
-using MudExtensions.UnitTests.Components;
-using MudExtensions.Docs.Pages.Components;
-using MudExtensions.Docs.Pages.Examples;
+﻿using MudExtensions.Docs.Examples;
 using FluentAssertions;
-using MudBlazor;
-using MudExtensions;
 
 namespace MudExtensions.UnitTests.Components
 {
