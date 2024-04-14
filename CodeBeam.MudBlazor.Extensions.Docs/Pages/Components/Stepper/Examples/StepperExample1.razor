@@ -1,0 +1,223 @@
+﻿@namespace MudExtensions.Docs.Examples
+@inject ISnackbar Snackbar
+@using MudBlazor.Extensions
+@using MudExtensions.Utilities
+
+<MudGrid Class="cursor-default">
+    <MudItem xs="12" sm="8" Class="d-flex align-center">
+        <MudStepper @ref="_stepper" Class="mud-width-full" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant"
+                    DisableAnimation="_disableAnimation" DisablePreviousButton="_disablePreviousButton" DisableNextButton="_disableNextButton" 
+                    DisableSkipButton="_disableSkipButton" DisableStepResultIndicator="_disableStepResultIndicator" HeaderBadgeView="_headerBadgeView" 
+                    HeaderTextView="_headerTextView" PreventStepChangeAsync="new Func<StepChangeDirection, int, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
+                    MobileView="_mobileView" IconActionButtons="_iconActionButtons" Loading="_loading" HeaderSize="_headerSize" HeaderIcon="false"
+                    StepperActionsJustify="_stepperActionsJustify">
+            <StaticContent>
+                @if (_showStaticContent)
+                {
+                    <MudStack Row="true" AlignItems="AlignItems.Center">
+                        <MudAvatar Color="_color">ST</MudAvatar>
+                        <MudText>This is a static content which shows with each step.</MudText>
+                    </MudStack>
+                }
+            </StaticContent>
+            <ChildContent>
+                <MudStep Icon="@Icons.Material.Filled.Approval" Title="Customer Info" StatusChanged="StatusChanged">    
+                    <ChildContent>
+                        <MudForm @ref="_form">
+                            <MudStack>
+                                <MudTextField T="string" Label="Name" Variant="_variant" Required="true" />
+                                <MudTextField T="string" Label="Last Name" Variant="_variant" />
+                                <MudTextField T="string" Label="Adress" Variant="_variant" />
+                            </MudStack>
+                        </MudForm>
+                    </ChildContent>
+                </MudStep>
+                <MudStep Title="Booking Spec." Icon="@Icons.Material.Filled.MoreVert" Optional="true">
+                    <ChildContent>
+                        <MudCheckBox T="bool" Label="Early Check-in" Color="_color" />
+                        <MudCheckBox T="bool" Label="Late Check-out" Color="_color" />
+                        <MudCheckBox T="bool" Label="Twin Bed" Color="_color" />
+                    </ChildContent>
+                </MudStep>
+                <MudStep Icon="@Icons.Material.Filled.Money" Title="Payment">
+                    <ChildContent>
+                        <MudForm @ref="_form2">
+                            <MudStack>
+                                <MudTextField T="string" Label="Card Number" Variant="_variant" Required="true" />
+                                <MudStack Row="true">
+                                    <MudTextField T="string" Label="Expire Date" Variant="_variant" Required="true" />
+                                    <MudTextField T="string" Label="CVC" Variant="_variant" Required="true" />
+                                </MudStack>
+                            </MudStack>
+                        </MudForm>
+                    </ChildContent>
+                </MudStep>
+
+                @if (_addResultStep)
+                {
+                    <MudStep Icon="@Icons.Material.Filled.Alarm" Title="Result Step" IsResultStep="true">
+                        <ChildContent>
+                            <div class="d-flex flex-column align-center justify-center" style="height: 200px">
+                                <MudIconButton Icon="@Icons.Material.Filled.DoneAll" Size="Size.Large" Variant="Variant.Filled" Color="Color.Success" />
+                                <MudText>Your reservation successfully completed.</MudText>
+                            </div>
+                        </ChildContent>
+                    </MudStep>
+                }
+            </ChildContent>
+            <ActionContent>
+                @if (!_stepper.IsAllStepsCompleted() && _showCustomButton)
+                {
+                    <MudButton Color="Color.Secondary" Variant="_variant" OnClick="@(() => Snackbar.Add("Custom cancel button clicked.", Severity.Info))">Cancel</MudButton>
+                }
+                @* <MudSpacer /> *@
+            </ActionContent>
+        </MudStepper>
+    </MudItem>
+
+    <MudItem xs="12" sm="4" Style="box-shadow: rgba(240, 46, 170, 0.4) -3px 3px;">
+        <MudStack Spacing="4">
+            <MudNumericField @bind-Value="_activeIndex" Label="Change ActiveIndex" @bind-Value:after="(() => _stepper.SetActiveStepByIndex(_activeIndex))" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudCheckBox @bind-Value="_vertical" Color="Color.Secondary" Label="Vertical" Dense="true" />
+            <MudCheckBox @bind-Value="_linear" Color="Color.Secondary" Label="Linear" Dense="true" />
+            <MudCheckBox @bind-Value="_disableAnimation" Color="Color.Secondary" Label="Disable Animation" Dense="true" />
+            <MudCheckBox @bind-Value="_disablePreviousButton" Color="Color.Secondary" Label="Disable Previous Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Value="_disableNextButton" Color="Color.Secondary" Label="Disable Next Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Value="_disableSkipButton" Color="Color.Secondary" Label="Disable Skip Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Value="_disableStepResultIndicator" Color="Color.Secondary" Label="Disable Step Result Indicator" Dense="true" />
+            <MudSwitchM3 @bind-Value="_mobileView" Color="Color.Secondary" Label="Mobile View" />
+            <MudSwitchM3 @bind-Value="_iconActionButtons" Color="Color.Secondary" Label="IconActionButtons" />
+            <MudSwitchM3 @bind-Value="_addResultStep" Color="Color.Secondary" Label="Has Result Step" />
+            <MudSwitchM3 @bind-Value="_checkValidationBeforeComplete" Color="Color.Secondary" Label="Check Validation Before Complete Step" />
+            <MudSwitchM3 @bind-Value="_customLocalization" Color="Color.Secondary" Label="Custom Localization (German)" />
+            <MudSwitchM3 @bind-Value="_showStaticContent" Color="Color.Secondary" Label="Show Some Static Content" />
+            <MudSwitchM3 @bind-Value="_showCustomButton" Color="Color.Secondary" Label="Show Custom Button" />
+            <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant" Margin="Margin.Dense" Dense="true">
+                @foreach (Variant item in Enum.GetValues<Variant>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color" Margin="Margin.Dense" Dense="true">
+                @foreach (Color item in Enum.GetValues<Color>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="_headerTextView" Variant="Variant.Outlined" Label="Header Text View" Margin="Margin.Dense" Dense="true">
+                @foreach (HeaderTextView item in Enum.GetValues<HeaderTextView>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="_headerBadgeView" Variant="Variant.Outlined" Label="Header Badge View" Margin="Margin.Dense" Dense="true">
+                @foreach (HeaderBadgeView item in Enum.GetValues<HeaderBadgeView>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="_stepperActionsJustify" Variant="Variant.Outlined" Label="Action Buttons Justify" Margin="Margin.Dense" Dense="true">
+                @foreach (StepperActionsJustify item in Enum.GetValues<StepperActionsJustify>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelectExtended @bind-Value="_headerSize" ItemCollection="@(Enum.GetValues<Size>())" Variant="Variant.Outlined" Label="Header Size" Margin="Margin.Dense" Dense="true" />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => _stepper?.Reset())">Reset</MudButton>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    MudStepper? _stepper;
+    MudForm? _form;
+    MudForm? _form2;
+    bool _checkValidationBeforeComplete = false;
+    bool _linear;
+    bool _mobileView;
+    bool _iconActionButtons;
+    Variant _variant = Variant.Filled;
+    HeaderBadgeView _headerBadgeView = HeaderBadgeView.All;
+    HeaderTextView _headerTextView = HeaderTextView.All;
+    bool _disableAnimation = false;
+    bool _disablePreviousButton = false;
+    bool _disableNextButton = false;
+    bool _disableSkipButton = false;
+    bool _disableStepResultIndicator = false;
+    bool _addResultStep = true;
+    bool _customLocalization = false;
+    Color _color = Color.Primary;
+    int _activeIndex = 0;
+    bool _loading;
+    bool _showStaticContent = false;
+    bool _showCustomButton = false;
+    bool _vertical = false;
+    Size _headerSize = Size.Medium;
+    StepperActionsJustify _stepperActionsJustify = StepperActionsJustify.SpaceBetween;
+
+    private async Task<bool> CheckChange(StepChangeDirection direction, int targetIndex)
+    {
+        if (_checkValidationBeforeComplete == true)
+        {
+            // Always allow stepping backwards, even if forms are invalid
+            if (direction == StepChangeDirection.Backward)
+            {
+                return false;
+            }
+            if (_stepper?.GetActiveIndex() == 0)
+            {
+                _loading = true;
+                StateHasChanged();
+                await Task.Delay(1000);
+                await _form.Validate();
+                _loading = false;
+                StateHasChanged();
+                return !_form.IsValid;
+            }
+            else if (_stepper?.GetActiveIndex() == 2)
+            {
+                _loading = true;
+                StateHasChanged();
+                await Task.Delay(1000);
+                await _form2.Validate();
+                _loading = false;
+                StateHasChanged();
+                return !_form2.IsValid;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void StatusChanged(StepStatus status)
+    {
+        Snackbar.Add($"First step {status.ToDescriptionString()}.", Severity.Info);
+    }
+
+    private StepperLocalizedStrings GetLocalizedStrings()
+    {
+        if (_customLocalization == false)
+        {
+            return new StepperLocalizedStrings();
+        }
+        else
+        {
+            return new StepperLocalizedStrings()
+            {
+                Completed = "Abgeschlossen",
+                Finish = "Fertig",
+                Next = "Nächste",
+                Optional = "Optional",
+                Previous = "Früher",
+                Skip = "überspringen",
+                Skipped = "übersprungen",
+            };
+        }
+    }
+}

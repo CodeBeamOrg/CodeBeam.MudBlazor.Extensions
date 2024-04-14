@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <RootNamespace>MudExtensions.Docs.Server</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
+    <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions.Docs\CodeBeam.MudBlazor.Extensions.Docs.csproj" />
+  </ItemGroup>
+
+</Project>

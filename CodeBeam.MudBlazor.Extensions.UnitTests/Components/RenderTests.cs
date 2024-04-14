@@ -1,4 +1,4 @@
-﻿using ComponentViewer.Docs.Pages.Components;
+﻿using MudExtensions.Docs.Pages.Components;
 using FluentAssertions;
 
 namespace MudExtensions.UnitTests.Components

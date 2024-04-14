@@ -1,0 +1,146 @@
+﻿@namespace MudExtensions.Docs.Examples
+
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.Value == 1 ? new Func<List<int?>, string?>(GetMultiSelectionText) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" T="int?" @bind-Value="intValue" @bind-SelectedValues="intValues" Label="Complex Type" AnchorOrigin="Origin.BottomCenter"
+                           ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" NoWrap="_nowrap">
+            @foreach (var item in complexes)
+            {
+                <MudSelectItemExtended T="int?" Value="@item.Value" Text="@item.Text" />
+            }
+        </MudSelectExtended>
+
+        <MudSelectExtended MultiSelectionTextFunc="@(_radioGroup?.Value == 1 ? new Func<List<string>, string?>(GetMultiSelectionText2) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="stringValue" @bind-SelectedValues="stringValues" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter"
+                           ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" NoWrap="_nowrap">
+            @foreach (var state in states)
+            {
+                <MudSelectItemExtended T="string" Value="@state" Text="@state" />
+            }
+        </MudSelectExtended>
+
+        <MudSelectExtended ItemCollection="states" MultiSelectionTextFunc="@(_radioGroup?.Value == 1 ? new Func<List<string>, string?>(GetMultiSelectionText2) : null)" MultiSelection="true" ValuePresenter="_valuePresenter" @bind-Value="stringValue" @bind-SelectedValues="stringValues" T="string" Label="US States" AnchorOrigin="Origin.BottomCenter"
+                           ChipCloseable="_chipCloseable" ChipSize="_chipSize" ChipVariant="_chipVariant" NoWrap="_nowrap">
+        </MudSelectExtended>
+
+        <MudSelectExtended T="TestValue"
+                           ItemCollection="TestValues"
+                           @bind-SelectedValues="SelectedTsSearchBoxItems"
+                           Label="Test Values"
+                           ToStringFunc="@(v => v?.Value)"
+                           Variant="Variant.Text"
+                           ValuePresenter="_valuePresenter"
+                           Virtualize="true"
+                           ChipCloseable="true"
+                           ChipVariant="MudBlazor.Variant.Filled"
+                           ChipSize="MudBlazor.Size.Small"
+                           MultiSelection="true" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudRadioGroup @ref="_radioGroup" T="int" ValueChanged="GroupOptionChanged">
+            <MudRadio Value="0" Color="Color.Primary">Standard Text</MudRadio>
+            <MudRadio Value="1" Color="Color.Primary">Customized Text</MudRadio>
+            <MudRadio Value="2" Color="Color.Primary">Chip</MudRadio>
+        </MudRadioGroup>
+        <MudGrid Class="mt-3 px-4">
+            <MudItem xs="6">
+                <MudText Typo="Typo.subtitle2">Value:</MudText>
+                <MudText Typo="Typo.subtitle2">"</MudText>
+                <MudText Typo="Typo.body2" Class="pl-4">@stringValue</MudText>
+                <MudText Typo="Typo.subtitle2">"</MudText>
+            </MudItem>
+            <MudItem xs="6">
+                <MudText Typo="Typo.subtitle2">SelectedValues: HashSet&lt;string&gt;</MudText>
+                <MudText Typo="Typo.subtitle2">{</MudText>
+                <MudText Typo="Typo.body2" Class="pl-4">@(string.Join(", ", stringValues.Select(x => $"\"{x}\"")))</MudText>
+                    <MudText Typo="Typo.subtitle2">}</MudText>
+                </MudItem>
+            </MudGrid>
+        <MudSwitchM3 @bind-Value="_chipCloseable" Label="Chip Closeable" Color="Color.Primary" />
+        <MudSwitchM3 @bind-Value="_nowrap" Label="Nowrap" Color="Color.Primary" />
+            <MudSelectExtended Class="mt-4" ItemCollection="@(Enum.GetValues<Variant>())" @bind-Value="_chipVariant" Label="Chip Variant" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudSelectExtended Class="mt-4" ItemCollection="@(Enum.GetValues<Size>())" @bind-Value="_chipSize" Label="Chip Size" Variant="Variant.Outlined" Margin="Margin.Dense" />
+        </MudItem>
+    </MudGrid>
+
+    @code {
+    MudRadioGroup<int>? _radioGroup;
+    ValuePresenter _valuePresenter = ValuePresenter.Text;
+    string stringValue { get; set; } = "Nothing selected";
+    IEnumerable<string> stringValues { get; set; } = new HashSet<string>() { "Alaska", "California" };
+    int? intValue;
+    IEnumerable<int?> intValues { get; set; } = new HashSet<int?>() { 2, 3 };
+    bool _chipCloseable = false;
+    Variant _chipVariant = Variant.Filled;
+    Size _chipSize = Size.Small;
+    bool _nowrap;
+
+    public class Complex
+    {
+        public int? Value { get; set; }
+        public string? Text { get; set; }
+    }
+
+    private Complex[] complexes =
+    {
+        new Complex() { Value = null, Text = "Null" },
+        new Complex() { Value = 1, Text = "A"},
+        new Complex() { Value = 2, Text = "B"},
+        new Complex() { Value = 3, Text = "C"},
+        new Complex() { Value = 4, Text = "D"},
+        new Complex() { Value = 5, Text = "E"},
+    };
+
+    private string[] states =
+    {
+        "Alabama", "Alaska", "American Samoa", "Arizona",
+        "Arkansas", "California", "Colorado", "Connecticut",
+        "Delaware", "District of Columbia", "Federated States of Micronesia",
+        "Florida", "Georgia", "Guam", "Hawaii", "Idaho",
+        "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+        "Louisiana", "Maine", "Marshall Islands", "Maryland",
+        "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+        "Missouri", "Montana", "Nebraska", "Nevada",
+        "New Hampshire", "New Jersey", "New Mexico", "New York",
+        "North Carolina", "North Dakota", "Northern Mariana Islands", "Ohio",
+        "Oklahoma", "Oregon", "Palau", "Pennsylvania", "Puerto Rico",
+        "Rhode Island", "South Carolina", "South Dakota", "Tennessee",
+        "Texas", "Utah", "Vermont", "Virgin Island", "Virginia",
+        "Washington", "West Virginia", "Wisconsin", "Wyoming",
+    };
+
+    private string? GetMultiSelectionText(List<int?> selectedValues)
+    {
+        return $"{selectedValues?.Count} value{(selectedValues?.Count > 1 ? "s have" : " has")} been selected";
+    }
+
+    private string? GetMultiSelectionText2(List<string> selectedValues)
+    {
+        return $"{selectedValues.Count} state{(selectedValues.Count > 1 ? "s have" : " has")} been selected";
+    }
+
+    private void GroupOptionChanged()
+    {
+        if (_radioGroup?.Value == 2)
+        {
+            _valuePresenter = ValuePresenter.Chip;
+        }
+        else
+        {
+            _valuePresenter = ValuePresenter.Text;
+        }
+    }
+
+    public record TestValue(int Number, string Value);
+
+    List<TestValue>? TestValues { get; set; }
+    IEnumerable<TestValue>? SelectedTsSearchBoxItems { get; set; }
+
+    protected override void OnInitialized()
+    {
+        TestValues = Enumerable.Range(0, 1000)
+            .Select(n => new TestValue(n, $"Value-{n.ToString("0000")}"))
+            .ToList();
+        base.OnInitialized();
+    }
+}

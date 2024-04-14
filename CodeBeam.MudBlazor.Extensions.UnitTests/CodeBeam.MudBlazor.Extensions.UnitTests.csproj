@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
+	  <RootNamespace>MudExtensions.UnitTests</RootNamespace>
     <!--<IsPackable>false</IsPackable>-->
   </PropertyGroup>
 
@@ -28,7 +28,7 @@
 
   <ItemGroup>
 	  <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
-	  <ProjectReference Include="..\ComponentViewer.Docs\ComponentViewer.Docs.csproj" />
+	  <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions.Docs\CodeBeam.MudBlazor.Extensions.Docs.csproj" />
 	  <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions.UnitTests.Viewer\CodeBeam.MudBlazor.Extensions.UnitTests.Viewer.csproj" />
   </ItemGroup>
 

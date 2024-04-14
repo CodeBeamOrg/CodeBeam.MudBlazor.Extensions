@@ -1,0 +1,20 @@
+﻿@inject NavigationManager NavigationManager
+@namespace MudExtensions.Docs.Components
+
+<CascadingValue Value="this" IsFixed="true">
+    <MudContainer Class="py-6 px-0">
+        <div class="py-6 d-flex gap-4">
+            <MudIconButton Class="ms-2 ms-sm-0" Icon="@Icons.Material.Filled.ArrowBack" Variant="Variant.Outlined" Color="Color.Secondary" OnClick="@(() => NavigationManager.NavigateTo("/"))" />
+            <MudText Typo="Typo.h4" Color="Color.Secondary">@Title</MudText>
+        </div>
+        @ChildContent
+    </MudContainer>
+</CascadingValue>
+
+@code{
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

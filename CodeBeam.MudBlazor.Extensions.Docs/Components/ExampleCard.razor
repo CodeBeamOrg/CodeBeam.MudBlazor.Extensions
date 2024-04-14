@@ -1,0 +1,113 @@
+﻿@namespace MudExtensions.Docs.Components
+
+@if (HasExpansionPanel)
+{
+    <MudExpansionPanel Text="@Title">
+        <MudCard Class="component-card mx-sm-2 my-8 pa-sm-2" Style="cursor: default" Elevation="4">
+            <MudCardHeader>
+                <div>
+                    <MudText Class="example-card-text" Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
+                    <MudText Class="example-card-text" Typo="Typo.body2" Color="Color.Inherit">@Description</MudText>
+                </div>
+            </MudCardHeader>
+            <MudCardContent>
+                <div class="pa-2" style="background: var(--mud-palette-background)">
+                    @ChildContent
+                </div>
+            </MudCardContent>
+        </MudCard>
+    </MudExpansionPanel>
+}
+else
+{
+    <MudCard Class="component-card mx-sm-2 my-8 pa-sm-2" Style="cursor: default" Elevation="4">
+        <MudCardHeader>
+            <div>
+                <MudText Class="example-card-text" Typo="Typo.h6" Color="Color.Inherit">@Title</MudText>
+                <MudText Class="example-card-text" Typo="Typo.body2" Color="Color.Inherit">@Description</MudText>
+                <MudDivider />
+            </div>
+        </MudCardHeader>
+        <MudCardContent>
+            <div class="pa-2" style="background: var(--mud-palette-background);">
+                @ChildContent
+                @if (ShowCodeSection)
+                {
+                    <MudDivider Class="mud-width-full mt-8" />
+                    <MudExpansionPanel Text="Code">
+                        <div style="overflow-x: scroll">
+                            @foreach (string line in _lines)
+                            {
+                                if (string.IsNullOrEmpty(line) || line == "/r")
+                                {
+                                    <br />
+                                }
+                                <pre style="color: var(--mud-palette-text); font-weight: 500; font-size: 14px;">@line</pre>
+                            }
+                        </div>
+                    </MudExpansionPanel>
+                }
+            </div>
+        </MudCardContent>
+    </MudCard>
+}
+
+@code {
+    [Parameter]
+    public string? ComponentName { get; set; }
+
+    [Parameter]
+    public string? ExampleName { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? Description { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public bool HasExpansionPanel { get; set; }
+
+    [Parameter]
+    public bool ShowCodeSection { get; set; } = true;
+
+    List<string> _lines = new();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        var ass = System.Reflection.Assembly.GetExecutingAssembly();
+        var names = ass.GetManifestResourceNames();
+
+        string path = $@"MudExtensions.Docs.Pages.Components.{ComponentName}.Examples.{ExampleName}.razor";
+        var resourceStream = ass.GetManifestResourceStream(path);
+        if (resourceStream != null)
+        {
+            using var reader = new StreamReader(resourceStream);
+
+            while (true)
+            {
+                var line = reader.ReadLine();
+                if (line?.StartsWith("@namespace") == true)
+                {
+                    continue;
+                }
+                else if (line != null)
+                    _lines.Add(line);
+                else
+                    break;
+            }
+        }
+    }
+}
+
+<style>
+    .example-card-text {
+        color: var(--mud-palette-secondary);
+        transition: color 1s;
+    }
+</style>

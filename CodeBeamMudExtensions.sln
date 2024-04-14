@@ -5,12 +5,6 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudBlazor.Extensions", "CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj", "{542668A8-79D0-4697-9861-87EC5266EA65}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentViewer", "ComponentViewer\ComponentViewer.csproj", "{F1B30028-B255-4668-81E8-C7D25ECD33A1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentViewer.Wasm", "ComponentViewer.Wasm\ComponentViewer.Wasm.csproj", "{924E72FF-1B0D-4465-9805-AB7B9D114113}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentViewer.Docs", "ComponentViewer.Docs\ComponentViewer.Docs.csproj", "{D4DCAB94-89CB-414A-A153-B32830C42682}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudBlazor.Extensions.UnitTests", "CodeBeam.MudBlazor.Extensions.UnitTests\CodeBeam.MudBlazor.Extensions.UnitTests.csproj", "{75F2BF6B-9046-4E68-BA97-ED1CA2C1D572}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudBlazor.Extensions.UnitTests.Viewer", "CodeBeam.MudBlazor.Extensions.UnitTests.Viewer\CodeBeam.MudBlazor.Extensions.UnitTests.Viewer.csproj", "{590CCBEC-3D84-42C8-A925-C0CD2135268C}"
@@ -19,6 +13,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudBlazor.Extensions.Docs", "CodeBeam.MudBlazor.Extensions.Docs\CodeBeam.MudBlazor.Extensions.Docs.csproj", "{808988C0-67E6-47F9-A32B-5177C99BDBBB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudBlazor.Extensions.Docs.Server", "CodeBeam.MudBlazor.Extensions.Docs.Server\CodeBeam.MudBlazor.Extensions.Docs.Server.csproj", "{72BFC7DC-6A68-4424-9612-F46A8DBCCCD9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudBlazor.Extensions.Docs.Wasm", "CodeBeam.MudBlazor.Extensions.Docs.Wasm\CodeBeam.MudBlazor.Extensions.Docs.Wasm.csproj", "{2186BDE4-C478-4150-B131-61B519092B97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,18 +30,6 @@ Global
 		{542668A8-79D0-4697-9861-87EC5266EA65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{542668A8-79D0-4697-9861-87EC5266EA65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{542668A8-79D0-4697-9861-87EC5266EA65}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1B30028-B255-4668-81E8-C7D25ECD33A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1B30028-B255-4668-81E8-C7D25ECD33A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1B30028-B255-4668-81E8-C7D25ECD33A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1B30028-B255-4668-81E8-C7D25ECD33A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{924E72FF-1B0D-4465-9805-AB7B9D114113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{924E72FF-1B0D-4465-9805-AB7B9D114113}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{924E72FF-1B0D-4465-9805-AB7B9D114113}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{924E72FF-1B0D-4465-9805-AB7B9D114113}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4DCAB94-89CB-414A-A153-B32830C42682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4DCAB94-89CB-414A-A153-B32830C42682}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4DCAB94-89CB-414A-A153-B32830C42682}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4DCAB94-89CB-414A-A153-B32830C42682}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75F2BF6B-9046-4E68-BA97-ED1CA2C1D572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{75F2BF6B-9046-4E68-BA97-ED1CA2C1D572}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75F2BF6B-9046-4E68-BA97-ED1CA2C1D572}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -50,6 +38,18 @@ Global
 		{590CCBEC-3D84-42C8-A925-C0CD2135268C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{590CCBEC-3D84-42C8-A925-C0CD2135268C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{590CCBEC-3D84-42C8-A925-C0CD2135268C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{808988C0-67E6-47F9-A32B-5177C99BDBBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{808988C0-67E6-47F9-A32B-5177C99BDBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{808988C0-67E6-47F9-A32B-5177C99BDBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{808988C0-67E6-47F9-A32B-5177C99BDBBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72BFC7DC-6A68-4424-9612-F46A8DBCCCD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72BFC7DC-6A68-4424-9612-F46A8DBCCCD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72BFC7DC-6A68-4424-9612-F46A8DBCCCD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72BFC7DC-6A68-4424-9612-F46A8DBCCCD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2186BDE4-C478-4150-B131-61B519092B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2186BDE4-C478-4150-B131-61B519092B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2186BDE4-C478-4150-B131-61B519092B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2186BDE4-C478-4150-B131-61B519092B97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

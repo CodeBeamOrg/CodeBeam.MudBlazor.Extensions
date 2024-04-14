@@ -1,0 +1,56 @@
+﻿@namespace MudExtensions.Docs.Examples
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex gap-4">
+        <MudSelectExtended MultiSelection="@_multiselection" ItemCollection="_states" SearchBox="true" SearchBoxAutoFocus="@_searchBoxAutoFocus" T="string" Label="Standard Search" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" HelperText="Search with 'Contains' logic" SearchBoxClearable="_searchBoxClearable" />
+        <MudSelectExtended MultiSelection="@_multiselection" ItemCollection="_states" SearchBox="true" SearchBoxAutoFocus="@_searchBoxAutoFocus" SearchFunc="@(new Func<string, string, bool>(SearchItems))" T="string" Label="Custom Search Func" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" SearchBoxPlaceholder="Some Placeholder" HelperText="Search with 'StartsWith' logic" SearchBoxClearable="_searchBoxClearable" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack>
+            <MudSwitchM3 @bind-Value="_multiselection" Color="Color.Primary" Label="MultiSelection" />
+            <MudSwitchM3 @bind-Value="_searchBoxAutoFocus" Color="Color.Primary" Label="AutoFocus (SearchBox)" />
+            <MudSwitchM3 @bind-Value="_searchBoxClearable" Color="Color.Primary" Label="Clearable (SearchBox)" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    bool _multiselection;
+    bool _searchBoxAutoFocus;
+    bool _searchBoxClearable;
+
+    private string[] _states =
+    {
+        "Alabama", "Alaska", "American Samoa", "Arizona",
+        "Arkansas", "California", "Colorado", "Connecticut",
+        "Delaware", "District of Columbia", "Federated States of Micronesia",
+        "Florida", "Georgia", "Guam", "Hawaii", "Idaho",
+        "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+        "Louisiana", "Maine", "Marshall Islands", "Maryland",
+        "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+        "Missouri", "Montana", "Nebraska", "Nevada",
+        "New Hampshire", "New Jersey", "New Mexico", "New York",
+        "North Carolina", "North Dakota", "Northern Mariana Islands", "Ohio",
+        "Oklahoma", "Oregon", "Palau", "Pennsylvania", "Puerto Rico",
+        "Rhode Island", "South Carolina", "South Dakota", "Tennessee",
+        "Texas", "Utah", "Vermont", "Virgin Island", "Virginia",
+        "Washington", "West Virginia", "Wisconsin", "Wyoming",
+    };
+
+    private bool SearchItems(string value, string searchString)
+    {
+        if (searchString == "")
+        {
+            return true;
+        }
+
+        if (value.StartsWith(searchString, StringComparison.CurrentCultureIgnoreCase))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+}
