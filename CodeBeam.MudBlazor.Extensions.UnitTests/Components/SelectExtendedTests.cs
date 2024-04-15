@@ -240,7 +240,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => select.Instance.Text.Should().Be("2, 1, 3"));
             items[0].Click();
             comp.WaitForAssertion(() => select.Instance.Text.Should().Be("2, 3"));
-            select.Instance.SelectedValues.Count().Should().Be(2);
+            select.Instance.SelectedValues?.Count().Should().Be(2);
             select.Instance.SelectedValues.Should().Contain("2");
             select.Instance.SelectedValues.Should().Contain("3");
             //Console.WriteLine(comp.Markup);
@@ -250,9 +250,9 @@ namespace MudExtensions.UnitTests.Components
                 "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z";
             // check that the correct items are checked
             comp.WaitForAssertion(() =>
-                comp.FindAll("div.mud-list-item-extended path")[1].Attributes["d"].Value.Should().Be(@unchecked));
-            comp.FindAll("div.mud-list-item-extended path")[3].Attributes["d"].Value.Should().Be(@checked);
-            comp.FindAll("div.mud-list-item-extended path")[5].Attributes["d"].Value.Should().Be(@checked);
+                comp.FindAll("div.mud-list-item-extended path")[1]?.Attributes["d"]?.Value.Should().Be(@unchecked));
+            comp.FindAll("div.mud-list-item-extended path")[3]?.Attributes["d"]?.Value.Should().Be(@checked);
+            comp.FindAll("div.mud-list-item-extended path")[5]?.Attributes["d"]?.Value.Should().Be(@checked);
             // now check how setting the SelectedValues makes items checked or unchecked
             // Note: If popover is open, selecting values programmatically doesn't work for now.
             await comp.InvokeAsync(() => select.Instance.CloseMenu());
@@ -261,10 +261,10 @@ namespace MudExtensions.UnitTests.Components
                 select.Instance.SelectedValues = new HashSet<string>() { "1", "2" };
             });
             await comp.InvokeAsync(() => input.Click());
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended path")[1].Attributes["d"].Value.Should().Be(@checked));
-            comp.FindAll("div.mud-list-item-extended path")[3].Attributes["d"].Value.Should().Be(@checked);
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended path")[1]?.Attributes["d"]?.Value.Should().Be(@checked));
+            comp.FindAll("div.mud-list-item-extended path")[3]?.Attributes["d"]?.Value.Should().Be(@checked);
             select.Instance.SelectedValues.Should().NotContain("3");
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended path")[5].Attributes["d"].Value.Should().Be(@unchecked));
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended path")[5]?.Attributes["d"]?.Value.Should().Be(@unchecked));
             //Console.WriteLine(comp.Markup);
             //});
         }
@@ -434,7 +434,7 @@ namespace MudExtensions.UnitTests.Components
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
             string? text = null;
-            IEnumerable<string>? selectedValues = null;
+            IEnumerable<string?>? selectedValues = null;
             var eventCounter = 0;
             var textChangedCount = 0;
             var selectedValuesChangedCount = 0;
@@ -468,7 +468,7 @@ namespace MudExtensions.UnitTests.Components
             text.Should().Be("2");
             selectedValuesChangedCount.Should().Be(1);
             textChangedCount.Should().Be(0);
-            string.Join(",", selectedValues).Should().Be("2");
+            string.Join(",", selectedValues ?? new List<string>()).Should().Be("2");
 
             input.Click();
             comp.WaitForAssertion(()=>comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
@@ -478,7 +478,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => select.Instance.Value.Should().Be("1"));
             select.Instance.Text.Should().Be("1");
             text.Should().Be("1");
-            string.Join(",", selectedValues).Should().Be("1");
+            string.Join(",", selectedValues ?? new List<string>()).Should().Be("1");
             comp.WaitForAssertion(() => selectedValuesChangedCount.Should().Be(3));
             comp.WaitForAssertion(() => textChangedCount.Should().Be(2));
         }
@@ -495,7 +495,7 @@ namespace MudExtensions.UnitTests.Components
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
             string? text = null;
-            IEnumerable<string>? selectedValues = null;
+            IEnumerable<string?>? selectedValues = null;
             var eventCounter = 0;
             var textChangedCount = 0;
             var selectedValuesChangedCount = 0;
@@ -522,7 +522,7 @@ namespace MudExtensions.UnitTests.Components
             text.Should().Be("2");
             selectedValuesChangedCount.Should().Be(1);
             textChangedCount.Should().Be(0);
-            string.Join(",", selectedValues).Should().Be("2");
+            string.Join(",", selectedValues ?? new List<string>()).Should().Be("2");
             // click another list item
             comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
             items = comp.FindAll("div.mud-list-item-extended").ToArray();
@@ -530,7 +530,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2", "1" }));
             select.Instance.Text.Should().Be("2, 1");
             text.Should().Be("2, 1");
-            string.Join(",", selectedValues).Should().Be("2,1");
+            string.Join(",", selectedValues ?? new List<string>()).Should().Be("2,1");
             selectedValuesChangedCount.Should().Be(3);
             textChangedCount.Should().Be(2);
         }
@@ -577,7 +577,7 @@ namespace MudExtensions.UnitTests.Components
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
             var select = comp.FindComponent<MudSelectExtended<string>>();
-            IEnumerable<string>? validatedValue = null;
+            IEnumerable<string?>? validatedValue = null;
             select.SetParam(x => x.Validation, new Func<string, bool>(value =>
             {
                 validatedValue = select.Instance.SelectedValues;
@@ -619,7 +619,7 @@ namespace MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<MultiSelectTest2>();
             // select element needed for the test
             var select = comp.FindComponent<MudSelectExtended<string>>();
-            IEnumerable<string>? validatedValue = null;
+            IEnumerable<string?>? validatedValue = null;
             select.SetParam(x => x.Validation, (object)new Func<string, bool>(value =>
             {
                 validatedValue = select.Instance.SelectedValues; // NOTE: select does only update the value for T string
@@ -909,7 +909,7 @@ namespace MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<SelectTest1>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
-            var select = comp.FindComponent<MudSelectExtended<string>>();
+            var select = comp.FindComponent<MudSelectExtended<string?>>();
             var input = comp.Find("div.mud-input-control");
 
             comp.Find("div.mud-popover").ClassList.Should().Contain("select-popover-class");
@@ -931,7 +931,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(1));
             comp.FindAll("div.mud-list-item-extended")[1].ToMarkup().Should().Contain("mud-selected-item");
             await comp.InvokeAsync(() => select.Instance.CloseMenu());
-            select.SetParam(nameof(MudSelectExtended<string>.Value), null);
+            select.SetParam(nameof(MudSelectExtended<string?>.Value), null);
             await comp.InvokeAsync(() => select.Instance.OpenMenu());
             // no option should be hilited
             comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(0));
@@ -1256,10 +1256,10 @@ namespace MudExtensions.UnitTests.Components
             const string @checked =
                 "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z";
             var icons = comp.FindAll("div.mud-list-item-extended path").ToArray();
-            icons[1].Attributes["d"].Value.Should().Be(@unchecked);
-            icons[3].Attributes["d"].Value.Should().Be(@checked);
-            icons[5].Attributes["d"].Value.Should().Be(@checked);
-            icons[7].Attributes["d"].Value.Should().Be(@unchecked);
+            icons[1]?.Attributes["d"]?.Value.Should().Be(@unchecked);
+            icons[3]?.Attributes["d"]?.Value.Should().Be(@checked);
+            icons[5]?.Attributes["d"]?.Value.Should().Be(@checked);
+            icons[7]?.Attributes["d"]?.Value.Should().Be(@unchecked);
         }
 
         [Test]
@@ -1324,13 +1324,13 @@ namespace MudExtensions.UnitTests.Components
         {
             var comp = Context.RenderComponent<MultiSelectTest5>();
             var select = comp.FindComponent<MudSelectExtended<string>>().Instance;
-            select.SelectedValues.Count().Should().Be(2);
+            select.SelectedValues?.Count().Should().Be(2);
             select.Text.Should().Be("Programista, test");
             await comp.InvokeAsync(() =>
             {
                 select.SelectedValues = new List<string> { "test" };
             });
-            select.SelectedValues.Count().Should().Be(1);
+            select.SelectedValues?.Count().Should().Be(1);
             select.Text.Should().Be("test");
         }
     }

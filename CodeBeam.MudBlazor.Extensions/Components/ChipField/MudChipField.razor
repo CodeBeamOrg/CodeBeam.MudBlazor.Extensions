@@ -49,7 +49,7 @@
             @for (int i = 0; i < (MaxChips == 0 ? Values?.Count ?? 0 : (MaxChips < (Values?.Count ?? 0) ? MaxChips : Values?.Count ?? 0)); i++)
             {
                 int a = i;
-                <MudChip Class="@ClassChip" Style="@StyleChip" DisableRipple="true" Text="@Values[a]" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
+                <MudChip Class="@ClassChip" Style="@StyleChip" DisableRipple="true" Text="@(Values != null ? Values[a] : string.Empty)" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
             }
         </MudChipSet>
         @if (Values != null && MaxChips != 0 && MaxChips < Values.Count)

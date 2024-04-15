@@ -4,6 +4,9 @@ using MudExtensions.Utilities;
 
 namespace MudExtensions
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class MudFontPicker : MudAutocomplete<string>
 	{
 		/// <summary>

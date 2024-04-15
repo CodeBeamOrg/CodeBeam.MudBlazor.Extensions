@@ -6,6 +6,10 @@ using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class MudCodeInput<T> : MudFormComponent<T, string>
     {
         /// <summary>

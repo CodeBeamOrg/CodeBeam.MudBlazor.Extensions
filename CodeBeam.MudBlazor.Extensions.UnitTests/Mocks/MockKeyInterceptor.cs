@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using MudBlazor.Services;
+﻿using MudBlazor.Services;
 
 namespace MudExtensions.UnitTests.Mocks
 {
@@ -9,7 +6,7 @@ namespace MudExtensions.UnitTests.Mocks
 #pragma warning disable CS0067
     public class MockKeyInterceptorServiceFactory : IKeyInterceptorFactory
     {
-        private readonly MockKeyInterceptorService _interceptorService;
+        private readonly MockKeyInterceptorService? _interceptorService;
 
         public MockKeyInterceptorServiceFactory(MockKeyInterceptorService interceptorService)
         {
@@ -46,7 +43,7 @@ namespace MudExtensions.UnitTests.Mocks
             return Task.CompletedTask;
         }
 
-        public event KeyboardEvent KeyDown;
-        public event KeyboardEvent KeyUp;
+        public event KeyboardEvent? KeyDown;
+        public event KeyboardEvent? KeyUp;
     }
 }

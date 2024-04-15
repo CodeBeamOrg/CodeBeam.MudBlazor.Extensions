@@ -1,7 +1,11 @@
 ﻿@namespace MudExtensions
 @using System.Runtime.InteropServices;
+@using MudBlazor.Services
+@using MudExtensions.Services
 @typeparam T
 @inherits MudBaseInputExtended<T>
+@inject IKeyInterceptorFactory KeyInterceptorFactory
+@inject IScrollManagerExtended ScrollManagerExtended
 
 <CascadingValue Name="Standalone" Value="false" IsFixed="true">
     <CascadingValue Value="@this" IsFixed="true">
@@ -14,7 +18,7 @@
                                       Class="@InputClassname" Style="@InputStyle" Margin="@Margin" Placeholder="@Placeholder"
                                       Variant="@Variant" Immediate="true"
                                       TextUpdateSuppression="false"
-                                      ShowVisualiser="@((MultiSelection && SelectedValues.Any()) || !Editable)" DataVisualiserStyle="min-height: 1.1876em"
+                                      ShowVisualiser="@((MultiSelection && SelectedValues?.Any() == true) || !Editable)" DataVisualiserStyle="min-height: 1.1876em"
                                       @bind-Value="@_searchString"
                                       DisableUnderLine="@DisableUnderLine"
                                       Disabled="@Disabled" ReadOnly="@ReadOnly" Error="@Error" ErrorId="@ErrorId"
@@ -35,7 +39,7 @@
                                 {
                                     <MudChipSet Class="d-flex flex-wrap mud-width-full" AllClosable="@ChipCloseable" OnClose="@ChipClosed">
                                         @{
-                                            var collection = Items.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true))?.ToList();
+                                            var collection = Items.Where(x => (MultiSelection ? SelectedValues?.Contains(x.Value) == true : Value?.Equals(x.Value) == true))?.ToList();
                                             if (collection is not null)
                                             {
                                                 foreach (var item in CollectionsMarshal.AsSpan(collection))
@@ -76,14 +80,14 @@
                                     {
                                         if (Value is not null)
                                         {
-                                            @ItemTemplate(Items.FirstOrDefault(x => x.Value.Equals(Value)))
+                                            @ItemTemplate(Items.FirstOrDefault(x => x.Value?.Equals(Value) == true) ?? new MudComboBoxItem<T>())
                                         }
                                         else if (!string.IsNullOrWhiteSpace(Placeholder))
                                         {
                                             <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
                                         }
                                     }
-                                    else if (Items.FirstOrDefault(x => x.Value.Equals(Value))?.ChildContent is not null)
+                                    else if (Items.FirstOrDefault(x => x?.Value?.Equals(Value) == true)?.ChildContent is not null)
                                     {
                                         if (MultiSelection)
                                         {
@@ -97,7 +101,7 @@
                                         }
                                         else
                                         {
-                                            <MudRender>@Items.FirstOrDefault(x => x.Value.Equals(Value))?.ChildContent</MudRender>
+                                            <MudRender>@Items.FirstOrDefault(x => x.Value?.Equals(Value) == true)?.ChildContent</MudRender>
                                         }
                                     }
                                     else

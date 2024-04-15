@@ -70,7 +70,7 @@
                 {
                     var required = item.Required;
                     var matched = item.MatchedFieldCount > 0;
-                    bool confirmed = _defaultValueHeaders.ContainsKey(item.Name) && _defaultValueHeaders[item.Name].Confirmed;
+                    bool confirmed = _defaultValueHeaders?.ContainsKey(item.Name ?? string.Empty) == true && _defaultValueHeaders[item.Name ?? string.Empty].Confirmed;
                     string? warning;
                     if (item.AllowDefaultValue)
                     {
@@ -109,8 +109,8 @@
                             }
                             @if (!matched && item.CreatingDefaultValue)
                             {
-                                <MudTextField Disabled="_defaultValueHeaders[item.Name].Confirmed" @bind-Value="_defaultValueHeaders[item.Name].DefaultValue" Required="@item.Required" RequiredError="@_requiredDefaultValueMessage" Style="margin-top: 10px" Label="@("Default Value" )" Variant="Variant.Text"></MudTextField>
-                                <MudButton OnClick="@(() => SubmitDefaultValue(item.Name))" ButtonType="ButtonType.Submit">@(_defaultValueHeaders[item.Name].Confirmed ? "Edit" : "Confirm")</MudButton>
+                                <MudTextField Disabled="@(_defaultValueHeaders?[item.Name ?? string.Empty]?.Confirmed ?? false)" @bind-Value="_defaultValueHeaders[item.Name ?? string.Empty].DefaultValue" Required="@item.Required" RequiredError="@_requiredDefaultValueMessage" Style="margin-top: 10px" Label="@("Default Value" )" Variant="Variant.Text"></MudTextField>
+                                <MudButton OnClick="@(() => SubmitDefaultValue(item.Name))" ButtonType="ButtonType.Submit">@(_defaultValueHeaders[item.Name ?? string.Empty].Confirmed ? "Edit" : "Confirm")</MudButton>
                             }
 
                         </MudDropZone>

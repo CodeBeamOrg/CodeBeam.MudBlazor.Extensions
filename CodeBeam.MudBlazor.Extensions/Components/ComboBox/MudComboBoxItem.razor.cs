@@ -5,6 +5,10 @@ using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class MudComboBoxItem<T> : MudBaseSelectItem, IDisposable
     {
         /// <summary>

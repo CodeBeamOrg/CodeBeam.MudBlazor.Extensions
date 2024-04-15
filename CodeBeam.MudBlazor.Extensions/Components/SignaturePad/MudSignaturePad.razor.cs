@@ -9,7 +9,7 @@ namespace MudExtensions
     /// <summary>
     /// Signature pad component.
     /// </summary>
-    public partial class MudSignaturePad : IAsyncDisposable
+    public partial class MudSignaturePad : ComponentBase, IAsyncDisposable
     {
         /// <summary>
         /// 
@@ -23,7 +23,6 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string CanvasContainerClassname => new CssBuilder()
-            //.AddClass($"border-solid border-2 mud-border-{Color.ToDescriptionString()}")
             .AddClass(CanvasContainerClass)
             .Build();
 
@@ -36,13 +35,13 @@ namespace MudExtensions
             .Build();
 
         private DotNetObjectReference<MudSignaturePad>? _dotnetObjectRef;
-        ElementReference _reference;
+        ElementReference _reference = new();
         bool _isErasing = true;
         int _lineWidth = 3;
-        private byte[] _value = Array.Empty<byte>();
+        //private byte[] _value = Array.Empty<byte>();
         readonly string _id = Guid.NewGuid().ToString();
-        string DrawEraseChipText => _isErasing ? LocalizedStrings.Eraser : LocalizedStrings.Pen;
-        string DrawEraseChipIcon => _isErasing ? Icons.Material.Filled.Edit : Icons.Material.Filled.EditOff;
+        string? DrawEraseChipText => _isErasing ? LocalizedStrings.Eraser : LocalizedStrings.Pen;
+        string? DrawEraseChipIcon => _isErasing ? Icons.Material.Filled.Edit : Icons.Material.Filled.EditOff;
 
         private object JsOptionsStruct => new
         {
@@ -56,16 +55,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         [Parameter]
-        public byte[] Value
-        {
-            get => _value;
-            set
-            {
-                if (value == _value) return;
-
-                _value = value;
-            }
-        }
+        public byte[] Value { get; set; } = Array.Empty<byte>();
 
         /// <summary>
         /// Fires when value changed.

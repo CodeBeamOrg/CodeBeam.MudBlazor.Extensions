@@ -14,13 +14,13 @@
         <MudSelectExtended ItemCollection="_players" ValuePresenter="ValuePresenter.ItemContent" Placeholder="Template & ItemContent" Label="Select Player" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
             <ItemTemplate>
                 <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
-                    <MudText><b>@context.Value.Item1</b></MudText>
+                    <MudText><b>@context.Value?.Item1</b></MudText>
                     <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
                         <MudStack Row="true">
                             <MudIcon Icon="@Icons.Material.Outlined.Person" />
-                            <MudText>@(context.Value.Item3 == true ? "Retired" : "Active")</MudText>
+                            <MudText>@(context.Value?.Item3 == true ? "Retired" : "Active")</MudText>
                             </MudStack>
-                            <MudChip Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value.Item2</MudChip>
+                            <MudChip Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value?.Item2</MudChip>
                         </MudStack>
                     </MudStack>
                 </ItemTemplate>
@@ -31,26 +31,26 @@
             <MudSelectExtended ItemCollection="_players" DisableSelectedBackground="true" ValuePresenter="ValuePresenter.Chip" MultiSelection="true" Placeholder="Both Templates & MultiSelection" Label="Select Player" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
                 <ItemTemplate>
                     <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
-                        <MudText><b>@context.Value.Item1</b></MudText>
+                        <MudText><b>@context.Value?.Item1</b></MudText>
                         <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
                             <MudStack Row="true">
                                 <MudIcon Icon="@Icons.Material.Outlined.Person" />
-                                <MudText>@(context.Value.Item3 == true ? "Retired" : "Active")</MudText>
+                                <MudText>@(context.Value?.Item3 == true ? "Retired" : "Active")</MudText>
                             </MudStack>
-                            <MudChip Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value.Item2</MudChip>
+                            <MudChip Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value?.Item2</MudChip>
                         </MudStack>
                     </MudStack>
                 </ItemTemplate>
 
                 <ItemSelectedTemplate>
                     <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                        <MudText><b>@context.Value.Item1</b></MudText>
+                        <MudText><b>@context.Value?.Item1</b></MudText>
                         <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
                             <MudStack Row="true">
                                 <MudIcon Icon="@Icons.Material.Outlined.Person" />
                                 @*<MudText>@(context.Value.Item3 == true ? "Retired" : "Active")</MudText>*@
                             </MudStack>
-                            <MudChip Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value.Item2</MudChip>
+                            <MudChip Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value?.Item2</MudChip>
                         </MudStack>
                     </MudStack>
                 </ItemSelectedTemplate>
@@ -68,7 +68,7 @@
 
             <ItemDisabledTemplate>
                 <MudStack Row="true">
-                    <MudText>@context.Value.Item1</MudText>
+                    <MudText>@context.Value?.Item1</MudText>
                     <MudText>Player is unavailable</MudText>
                 </MudStack>
             </ItemDisabledTemplate>

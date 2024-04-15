@@ -7,8 +7,6 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Extensions;
-using MudExtensions;
-using NUnit.Framework;
 
 namespace MudExtensions.UnitTests.Components
 {
@@ -118,17 +116,17 @@ namespace MudExtensions.UnitTests.Components
             comp.FindAll("div.mud-selected-item").Count.Should().Be(0); //nested lists generate 1 selected item tag
             // click water
             comp.FindAll("div.mud-list-item-extended")[0].Click();
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Sparkling Water"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Sparkling Water"));
             comp.FindAll("div.mud-selected-item").Count.Should().Be(1);
             comp.FindComponents<MudListItemExtended<int>>()[0].Markup.Should().Contain("mud-selected-item");
             // click Pu'er, a heavily fermented Chinese tea that tastes like an old leather glove
             comp.FindAll("div.mud-list-item-extended")[4].Click();
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Pu'er"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Pu'er"));
             comp.FindAll("div.mud-selected-item").Count.Should().Be(1);
             comp.FindComponents<MudListItemExtended<int>>()[4].Markup.Should().Contain("mud-selected-item");
             // click Cafe Latte
             comp.FindAll("div.mud-list-item-extended")[8].Click();
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Cafe Latte"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Cafe Latte"));
             comp.FindAll("div.mud-selected-item").Count.Should().Be(1);
             comp.FindComponents<MudListItemExtended<int>>()[8].Markup.Should().Contain("mud-selected-item");
         }
@@ -145,19 +143,19 @@ namespace MudExtensions.UnitTests.Components
             comp.FindAll("div.mud-selected-item").Count.Should().Be(0); //nested lists generate 1 selected item tag
             // click water
             comp.FindAll("div.mud-list-item-extended")[0].Click();
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Sparkling Water"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Sparkling Water"));
             comp.FindAll("div.mud-selected-item").Count.Should().Be(1);
             comp.FindComponents<MudListItemExtended<int>>()[0].Markup.Should().Contain("mud-selected-item");
             list.MultiSelection = true;
             // click Pu'er, a heavily fermented Chinese tea that tastes like an old leather glove
             comp.FindAll("div.mud-list-item-extended")[4].Click();
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Pu'er"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Pu'er"));
             comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(2));
             comp.WaitForAssertion(() => comp.FindComponents<MudListItemExtended<int>>()[0].Markup.Should().Contain("mud-selected-item"));
             comp.WaitForAssertion(() => comp.FindComponents<MudListItemExtended<int>>()[4].Markup.Should().Contain("mud-selected-item"));
             // click Cafe Latte
             comp.FindAll("div.mud-list-item-extended")[8].Click();
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Cafe Latte"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Cafe Latte"));
             comp.FindAll("div.mud-selected-item").Count.Should().Be(3);
             comp.FindComponents<MudListItemExtended<int>>()[0].Markup.Should().Contain("mud-selected-item");
             comp.FindComponents<MudListItemExtended<int>>()[4].Markup.Should().Contain("mud-selected-item");
@@ -186,8 +184,8 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => comp.FindComponents<MudListItemExtended<int?>>()[0].Markup.Should().Contain("mud-selected-item"));
             comp.WaitForAssertion(() => list.SelectedValue.Should().Be(1));
             comp.WaitForAssertion(() => list.SelectedValues.Should().Contain(1));
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Sparkling Water"));
-            comp.WaitForAssertion(() => list.SelectedItems.First().Text.Should().Be("Sparkling Water"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Sparkling Water"));
+            comp.WaitForAssertion(() => list.SelectedItems?.First().Text.Should().Be("Sparkling Water"));
             // we have seven choices, 1 is active because of the initial value of SelectedValue
             comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().Be(9)); // 7 choices, 2 groups
             comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(1));
@@ -195,25 +193,25 @@ namespace MudExtensions.UnitTests.Components
             await comp.InvokeAsync(() => comp.Instance.SetSelectedValue(4));
             //await comp.InvokeAsync(() => list.HandleCentralValueCommander("SelectedValue"));
             comp.WaitForAssertion(() => list.SelectedValue.Should().Be(4));
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Pu'er"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Pu'er"));
             comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(1));
             comp.WaitForAssertion(() => comp.FindComponents<MudListItemExtended<int?>>()[4].Markup.Should().Contain("mud-selected-item"));
             // set Cafe Latte via changing SelectedValue
             await comp.InvokeAsync(() => comp.Instance.SetSelectedValue(7));
             //await comp.InvokeAsync(() => list.HandleCentralValueCommander("SelectedValue"));
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Cafe Latte"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Cafe Latte"));
             comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(1));
             comp.WaitForAssertion(() => comp.FindComponents<MudListItemExtended<int?>>()[8].Markup.Should().Contain("mud-selected-item"));
             // set water
             await comp.InvokeAsync(() => comp.Instance.SetSelectedValue(1));
             //await comp.InvokeAsync(() => list.HandleCentralValueCommander("SelectedValue"));
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Sparkling Water"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Sparkling Water"));
             comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(1));
             comp.WaitForAssertion(() => comp.FindComponents<MudListItemExtended<int?>>()[0].Markup.Should().Contain("mud-selected-item"));
             // set nothing
             await comp.InvokeAsync(() => comp.Instance.SetSelectedValue(null));
             //await comp.InvokeAsync(() => list.HandleCentralValueCommander("SelectedValue"));
-            comp.WaitForAssertion(() => list.SelectedItem.Should().Be(null));
+            comp.WaitForAssertion(() => list.SelectedItem?.Should().Be(null));
             comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(0));
         }
 
@@ -224,35 +222,35 @@ namespace MudExtensions.UnitTests.Components
             var list = comp.FindComponent<MudListExtended<int?>>().Instance;
 
             comp.WaitForAssertion(() => list.SelectedValue.Should().Be(1));
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Sparkling Water (1)"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Sparkling Water (1)"));
 
             comp.FindAll("button.mud-button-root")[1].Click();
             comp.WaitForAssertion(() => list.SelectedValue.Should().Be(2));
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Still Water (2)"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Still Water (2)"));
 
             comp.FindAll("button.mud-button-root")[3].Click();
             comp.WaitForAssertion(() => list.SelectedValue.Should().Be(3));
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Earl Grey (3)"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Earl Grey (3)"));
 
             // Changing multiselection should not affect value or item
             await comp.InvokeAsync(() => list.MultiSelection = true);
             comp.WaitForAssertion(() => list.SelectedValue.Should().Be(3));
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Earl Grey (3)"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Earl Grey (3)"));
 
             comp.FindAll("button.mud-button-root")[2].Click();
             comp.WaitForAssertion(() => list.SelectedValues.Should().ContainInOrder(new int?[] { 2, 4 }));
-            comp.WaitForAssertion(() => string.Join(", ", list.SelectedItems.Select(x => x.Text)).Should().Be("Still Water (2), Matcha (4)"));
+            comp.WaitForAssertion(() => string.Join(", ", list.SelectedItems?.Select(x => x.Text) ?? new List<string>()).Should().Be("Still Water (2), Matcha (4)"));
 
             comp.FindAll("button.mud-button-root")[4].Click();
             comp.WaitForAssertion(() => list.SelectedValues.Should().ContainInOrder(new int?[] { 3, 5 }));
-            comp.WaitForAssertion(() => string.Join(", ", list.SelectedItems.Select(x => x.Text)).Should().Be("Earl Grey (3), Pu'er (5)"));
+            comp.WaitForAssertion(() => string.Join(", ", list.SelectedItems?.Select(x => x.Text) ?? new List<string>()).Should().Be("Earl Grey (3), Pu'er (5)"));
 
             // Changing multiselection now should select only one value
             await comp.InvokeAsync(() => list.MultiSelection = false);
             comp.WaitForAssertion(() => list.SelectedValue.Should().Be(3));
-            comp.WaitForAssertion(() => list.SelectedItem.Text.Should().Be("Earl Grey (3)"));
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Earl Grey (3)"));
             comp.WaitForAssertion(() => list.SelectedValues.Should().ContainSingle());
-            comp.WaitForAssertion(() => string.Join(", ", list.SelectedItems.Select(x => x.Text)).Should().Be("Earl Grey (3)"));
+            comp.WaitForAssertion(() => string.Join(", ", list.SelectedItems?.Select(x => x.Text) ?? new List<string>()).Should().Be("Earl Grey (3)"));
         }
 
         [Test]
@@ -335,7 +333,7 @@ namespace MudExtensions.UnitTests.Components
         {
             var comp = Context.RenderComponent<ListExperimentalSelectionInitialValueTest>(x => x.Add(c => c.Color, color));
             var list = comp.FindComponent<MudListExtended<int?>>().Instance;
-            list.SelectedItem.Text.Should().Be("Sparkling Water");
+            list.SelectedItem?.Text.Should().Be("Sparkling Water");
 
             var listItemClasses = comp.Find(".mud-selected-item");
             listItemClasses.ClassList.Should().ContainInOrder(new[] { $"mud-{color.ToDescriptionString()}-text", $"mud-{color.ToDescriptionString()}-hover" });

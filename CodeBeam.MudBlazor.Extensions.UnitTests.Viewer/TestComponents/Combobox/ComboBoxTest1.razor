@@ -8,11 +8,11 @@
     <MudComboBoxItem Value="@("4")" Disabled="true"/>
 </MudComboBox>
 
-<MudSwitch @bind-Checked="@_focused" />
+<MudSwitch @bind-Value="@_focused" />
 
 @code {
 
-	string value = null;
+	string? value = null;
 	bool _focused = false;
 
 	private void Focused()

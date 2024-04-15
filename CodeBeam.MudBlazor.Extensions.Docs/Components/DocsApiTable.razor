@@ -14,7 +14,7 @@
             <MudTd DataLabel="Default">
                 @if (true)
             {
-                object? instance = Activator.CreateInstance(RelatedType);
+                object? instance = Activator.CreateInstance(RelatedType ?? typeof(string));
                 <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
             }
         </MudTd>

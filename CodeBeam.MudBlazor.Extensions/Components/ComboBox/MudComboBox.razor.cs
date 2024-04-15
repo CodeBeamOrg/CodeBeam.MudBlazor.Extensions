@@ -4,7 +4,6 @@ using MudBlazor;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudExtensions.Extensions;
-using MudExtensions.Services;
 using System.Runtime.InteropServices;
 
 namespace MudExtensions
@@ -26,10 +25,6 @@ namespace MudExtensions
             IconSize = Size.Medium;
             //base.SkipUpdateProcessOnSetParameters = true;
         }
-
-        [Inject] IKeyInterceptorFactory KeyInterceptorFactory { get; set; }
-        [Inject] IScrollManagerExtended ScrollManagerExtended { get; set; }
-        [Inject] IScrollManager ScrollManager { get; set; }
 
         /// <summary>
         /// Protected search string converter.
@@ -75,8 +70,8 @@ namespace MudExtensions
         /// Eligible items of ComboBox.
         /// </summary>
         protected internal List<MudComboBoxItem<T>> EligibleItems { get; set; } = new();
-        private MudInputExtended<string?> _inputReference;
-        private MudTextFieldExtended<string?> _searchbox;
+        private MudInputExtended<string?> _inputReference = new();
+        private MudTextFieldExtended<string?> _searchbox = new();
         internal bool _isOpen;
 
         /// <summary>
@@ -181,56 +176,56 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
         /// Content that placed on top in popover.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public RenderFragment PopoverStartContent { get; set; }
+        public RenderFragment? PopoverStartContent { get; set; }
 
         /// <summary>
         /// Content that placed on bottom in popover.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public RenderFragment PopoverEndContent { get; set; }
+        public RenderFragment? PopoverEndContent { get; set; }
 
         /// <summary>
         /// Content that shown when no items found.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public RenderFragment NoItemsContent { get; set; }
+        public RenderFragment? NoItemsContent { get; set; }
 
         /// <summary>
         /// Optional presentation template for items
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public RenderFragment<MudComboBoxItem<T>> ItemTemplate { get; set; }
+        public RenderFragment<MudComboBoxItem<T>>? ItemTemplate { get; set; }
 
         /// <summary>
         /// Optional presentation template for selected items
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public RenderFragment<MudComboBoxItem<T>> ItemSelectedTemplate { get; set; }
+        public RenderFragment<MudComboBoxItem<T>>? ItemSelectedTemplate { get; set; }
 
         /// <summary>
         /// Optional presentation template for disabled items
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public RenderFragment<MudComboBoxItem<T>> ItemDisabledTemplate { get; set; }
+        public RenderFragment<MudComboBoxItem<T>>? ItemDisabledTemplate { get; set; }
 
         /// <summary>
         /// Function to be invoked when checking whether an item should be disabled or not. Works both with renderfragment and ItemCollection approach.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T, bool> ItemDisabledFunc { get; set; }
+        public Func<T?, bool>? ItemDisabledFunc { get; set; }
 
         /// <summary>
         /// Classname for item template or chips.
@@ -381,14 +376,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public Func<List<T>, string> MultiSelectionTextFunc { get; set; }
+        public Func<List<T?>, string>? MultiSelectionTextFunc { get; set; }
 
         /// <summary>
         /// Custom search func for searchbox. If doesn't set, it search with "Contains" logic by default. Passed value and searchString values.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T?, string?, string?, bool> SearchFunc { get; set; }
+        public Func<T?, string?, string?, bool>? SearchFunc { get; set; }
 
         //[Parameter]
         //[Category(CategoryTypes.FormComponent.Behavior)]
@@ -428,7 +423,7 @@ namespace MudExtensions
         /// <remarks>The default is <c>, </c></remarks>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string Delimiter { get; set; } = ", ";
+        public string? Delimiter { get; set; } = ", ";
 
         /// <summary>
         /// If true popover width will be the same as the combobox component.
@@ -575,13 +570,13 @@ namespace MudExtensions
             }
         }
 
-        private IEqualityComparer<T?> _comparer;
+        private IEqualityComparer<T?>? _comparer;
         /// <summary>
         /// The Comparer to use for comparing selected values internally.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public IEqualityComparer<T?> Comparer
+        public IEqualityComparer<T?>? Comparer
         {
             get => _comparer;
             set
@@ -595,13 +590,13 @@ namespace MudExtensions
             }
         }
 
-        private Func<T?, string?> _toStringFunc = x => x?.ToString();
+        private Func<T?, string?>? _toStringFunc = x => x?.ToString();
         /// <summary>
         /// Defines how values are displayed in the drop-down list
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T?, string?> ToStringFunc
+        public Func<T?, string?>? ToStringFunc
         {
             get => _toStringFunc;
             set
@@ -627,7 +622,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Data)]
-        public IEnumerable<T?>? SelectedValues
+        public IEnumerable<T?> SelectedValues
         {
             get
             {
@@ -721,7 +716,7 @@ namespace MudExtensions
             }
             else
             {
-                var item = Items.FirstOrDefault(x => Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(Value, x.Value) : Value.Equals(x.Value));
+                var item = Items?.FirstOrDefault(x => Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(Value, x.Value) : Value.Equals(x.Value));
                 _dataVisualiserText = item is null
                     ? Converter.Set(Value)
                     : (!string.IsNullOrWhiteSpace(item.Text) ? item.Text : Converter.Set(item.Value));
@@ -776,7 +771,7 @@ namespace MudExtensions
             UpdateIcon();
             if (!MultiSelection && Value != null)
             {
-                _selectedValues = new HashSet<T>(_comparer) { Value };
+                _selectedValues = new HashSet<T?>(_comparer) { Value };
             }
             else if (MultiSelection && SelectedValues != null)
             {
@@ -833,7 +828,7 @@ namespace MudExtensions
                 {
                     DeselectAllItems();
                     if (Value is not null)
-                        Items.FirstOrDefault(x => x.Value.Equals(Value)).Selected = true;
+                        Items.FirstOrDefault(x => x.Value?.Equals(Value) == true).Selected = true;
                 }
             }
             if ((Value == null && _oldValue != null) || (Value != null && Value.Equals(_oldValue) == false))
@@ -1072,7 +1067,7 @@ namespace MudExtensions
                 if (Strict)
                 {
                     // Check if the user-provided search string is an exact (case-insensitive) match against an item in the collection.
-                    var item = Items.FirstOrDefault(x => Converter.Set(x.Value).Equals(_searchString, StringComparison.OrdinalIgnoreCase));
+                    var item = Items.FirstOrDefault(x => Converter.Set(x.Value)?.Equals(_searchString, StringComparison.OrdinalIgnoreCase) == true);
                     if (item is not null)
                         await ToggleOption(item, true);
 
@@ -1180,11 +1175,14 @@ namespace MudExtensions
             UpdateIcon();
 
             // Disable escape propagation: if ComboBox menu is open, only the ComboBox popover should close and underlying components should not handle escape key.
-            await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "Key+none" });
+            if (_keyInterceptor != null)
+            {
+                await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "Key+none" });
+            }
 
             _allSelected = GetAllSelectedState();
 
-            _lastActivatedItem = Items.FirstOrDefault(x => x.Value.Equals(MultiSelection ? SelectedValues.LastOrDefault() : Value));
+            _lastActivatedItem = Items.FirstOrDefault(x => x.Value?.Equals(MultiSelection ? SelectedValues.LastOrDefault() : Value) == true);
             if (_lastActivatedItem is not null)
                 await ScrollToMiddleAsync(_lastActivatedItem);
             else
@@ -1221,7 +1219,10 @@ namespace MudExtensions
                 _searchString = null;
 
             // Enable escape propagation: The ComboBox popover was closed, no underlying components are allowed to handle escape key.
-            await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "none" });
+            if (_keyInterceptor != null)
+            {
+                await _keyInterceptor.UpdateKey(new() { Key = "Escape", StopDown = "none" });
+            }
 
             await OnClose.InvokeAsync();
         }
@@ -1272,7 +1273,7 @@ namespace MudExtensions
                 else if (SelectedValues?.Contains(item.Value) != true)
                 {
                     await SetValueAsync(item.Value, false);
-                    SelectedValues = SelectedValues?.Append(item.Value);
+                    SelectedValues = SelectedValues.Append(item.Value);
                     await SelectedValuesChanged.InvokeAsync(_selectedValues);
                     _allSelected = GetAllSelectedState();
 
@@ -1314,11 +1315,11 @@ namespace MudExtensions
             await base.ForceUpdate();
             if (!MultiSelection)
             {
-                SelectedValues = new HashSet<T>(_comparer) { Value };
+                SelectedValues = new HashSet<T?>(_comparer) { Value };
             }
             else
             {
-                await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
+                await SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer));
             }
         }
 
@@ -1368,7 +1369,7 @@ namespace MudExtensions
             await BeginValidateAsync();
             await ForceUpdateItems();
             StateHasChanged();
-            await SelectedValuesChanged.InvokeAsync(new HashSet<T>(SelectedValues, _comparer));
+            await SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer));
             await OnClearButtonClick.InvokeAsync(e);
 
             if (OpenMenuAfterClear)
@@ -1393,10 +1394,10 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        protected override void ResetValue()
+        protected override async Task ResetValueAsync()
         {
-            base.ResetValue();
-            SelectedValues = null;
+            await base.ResetValueAsync();
+            SelectedValues = new HashSet<T?>(_comparer);
         }
 
         #endregion
@@ -1427,7 +1428,7 @@ namespace MudExtensions
                 return;
 
             //SelectedValues = SelectedValues.Where(x => Converter.Set(x)?.ToString() != chip.Value?.ToString());
-            SelectedValues = SelectedValues.Where(x => x.Equals(chip.Value) == false);
+            SelectedValues = SelectedValues.Where(x => x?.Equals(chip.Value) == false);
             await SelectedValuesChanged.InvokeAsync(SelectedValues);
         }
 
@@ -1456,7 +1457,7 @@ namespace MudExtensions
                 {
                     item.Selected = false;
                 }
-                SelectedValues = null;
+                SelectedValues = new HashSet<T?>(_comparer);
                 await SelectedValuesChanged.InvokeAsync(SelectedValues);
                 _allSelected = false;
             }

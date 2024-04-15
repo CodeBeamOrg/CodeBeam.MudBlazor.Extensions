@@ -71,15 +71,37 @@ namespace MudExtensions.Services
         public ValueTask ScrollToBottomAsync(string id, ScrollBehavior behavior) =>
             _jSRuntime.InvokeVoidAsync("mudScrollManager.scrollToBottom", id, behavior.ToDescriptionString());
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="elementId"></param>
+        /// <returns></returns>
         public ValueTask ScrollToYearAsync(string elementId) =>
             _jSRuntime.InvokeVoidAsync("mudScrollManager.scrollToYear", elementId);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="elementId"></param>
+        /// <returns></returns>
         public ValueTask ScrollToListItemAsync(string elementId) =>
             _jSRuntime.InvokeVoidAsync("mudScrollManager.scrollToListItem", elementId);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <param name="cssClass"></param>
+        /// <returns></returns>
         public ValueTask LockScrollAsync(string selector = "body", string cssClass = "scroll-locked") =>
             _jSRuntime.InvokeVoidAsync("mudScrollManager.lockScroll", selector, cssClass);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <param name="cssClass"></param>
+        /// <returns></returns>
         public ValueTask UnlockScrollAsync(string selector = "body", string cssClass = "scroll-locked") =>
             _jSRuntime.InvokeVoidAsyncIgnoreErrors("mudScrollManager.unlockScroll", selector, cssClass);
 
@@ -108,6 +130,7 @@ namespace MudExtensions.Services
     /// </summary>
     public enum ScrollBehavior
     {
+#pragma warning disable CS1591
         Smooth,
         Auto
     }

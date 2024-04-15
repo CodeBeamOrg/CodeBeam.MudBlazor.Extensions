@@ -202,12 +202,12 @@
 
     private bool NothingFound()
     {
-        if (_extendedComponents.Select(x => x.Item1).ToList().Any(x => x.Contains(_searchString, StringComparison.CurrentCultureIgnoreCase)))
+        if (_extendedComponents.Select(x => x.Item1).ToList().Any(x => x.Contains(_searchString ?? "", StringComparison.CurrentCultureIgnoreCase)))
         {
             return false;
         }
 
-        if (_uniqueComponents.Select(x => x.Item1).ToList().Any(x => x.Contains(_searchString, StringComparison.CurrentCultureIgnoreCase)))
+        if (_uniqueComponents.Select(x => x.Item1).ToList().Any(x => x.Contains(_searchString ?? "", StringComparison.CurrentCultureIgnoreCase)))
         {
             return false;
         }

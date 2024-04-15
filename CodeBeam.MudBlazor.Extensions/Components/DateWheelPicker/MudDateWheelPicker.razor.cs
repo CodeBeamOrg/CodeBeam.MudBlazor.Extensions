@@ -6,6 +6,9 @@ using MudExtensions.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class MudDateWheelPicker : MudBaseInput<DateTime?>
     {
         /// <summary>

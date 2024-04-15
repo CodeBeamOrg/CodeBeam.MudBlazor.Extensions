@@ -530,8 +530,16 @@ namespace MudExtensions
         {
             if (SubscribeToParentFormExtended)
             {
-                _validated = true;
-                await base.ValidateValue();
+                try
+                {
+                    _validated = true;
+                    await base.ValidateValue();
+                }
+                catch
+                {
+
+                }
+                
             }
         }
 

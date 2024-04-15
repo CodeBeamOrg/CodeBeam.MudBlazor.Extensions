@@ -18,20 +18,20 @@
     
 	public static string __description__ = "Multi-Select Required Should Recognize Values";
 
-    string value=null;
+    string? value = null;
 
     public class TestClass
     {
-        public string Name { get; set; }
-        public string NameTranslated { get; set; }
-        public override string ToString() => Name;
+        public string? Name { get; set; }
+        public string? NameTranslated { get; set; }
+        public override string? ToString() => Name;
     }
 
 
     public List<TestClass> Roles {get; set; } = new();
     public IEnumerable<TestClass> SelectedRoles = new List<TestClass>();
 
-    Func<TestClass, string> converter = p => p?.NameTranslated;
+    Func<TestClass, string?> converter = p => p?.NameTranslated;
     
 	protected override void OnInitialized()
     {

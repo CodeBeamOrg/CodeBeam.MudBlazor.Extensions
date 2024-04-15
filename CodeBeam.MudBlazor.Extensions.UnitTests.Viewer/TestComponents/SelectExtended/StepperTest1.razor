@@ -70,18 +70,18 @@
     <MudItem xs="12" sm="4" Style="box-shadow: rgba(240, 46, 170, 0.4) -3px 3px;">
         <MudStack Spacing="4">
             <MudNumericField @bind-Value="_activeIndex" Label="Change ActiveIndex" @bind-Value:after="(() => _stepper.SetActiveStepByIndex(_activeIndex))" Margin="Margin.Dense" />
-            <MudCheckBox @bind-Checked="_linear" Color="Color.Primary" Label="Linear" Dense="true" />
-            <MudCheckBox @bind-Checked="_disableAnimation" Color="Color.Primary" Label="Disable Animation" Dense="true" />
-            <MudCheckBox @bind-Checked="_disablePreviousButton" Color="Color.Primary" Label="Disable Previous Step Action Button" Dense="true" />
-            <MudCheckBox @bind-Checked="_disableNextButton" Color="Color.Primary" Label="Disable Next Step Action Button" Dense="true" />
-            <MudCheckBox @bind-Checked="_disableSkipButton" Color="Color.Primary" Label="Disable Skip Step Action Button" Dense="true" />
-            <MudCheckBox @bind-Checked="_disableStepResultIndicator" Color="Color.Primary" Label="Disable Step Result Indicator" Dense="true" />
-            <MudSwitchM3 @bind-Checked="_mobileView" Color="Color.Primary" Label="Mobile View" />
-            <MudSwitchM3 @bind-Checked="_iconActionButtons" Color="Color.Primary" Label="IconActionButtons" />
-            <MudSwitchM3 @bind-Checked="_addResultStep" Color="Color.Primary" Label="Has Result Step" />
-            <MudSwitchM3 @bind-Checked="_checkValidationBeforeComplete" Color="Color.Primary" Label="Check Validation Before Complete Step" />
-            <MudSwitchM3 @bind-Checked="_customLocalization" Color="Color.Primary" Label="Custom Localization (German)" />
-            <MudSwitchM3 @bind-Checked="_showStaticContent" Color="Color.Primary" Label="Show Some Static Content" />
+            <MudCheckBox @bind-Value="_linear" Color="Color.Primary" Label="Linear" Dense="true" />
+            <MudCheckBox @bind-Value="_disableAnimation" Color="Color.Primary" Label="Disable Animation" Dense="true" />
+            <MudCheckBox @bind-Value="_disablePreviousButton" Color="Color.Primary" Label="Disable Previous Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Value="_disableNextButton" Color="Color.Primary" Label="Disable Next Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Value="_disableSkipButton" Color="Color.Primary" Label="Disable Skip Step Action Button" Dense="true" />
+            <MudCheckBox @bind-Value="_disableStepResultIndicator" Color="Color.Primary" Label="Disable Step Result Indicator" Dense="true" />
+            <MudSwitchM3 @bind-Value="_mobileView" Color="Color.Primary" Label="Mobile View" />
+            <MudSwitchM3 @bind-Value="_iconActionButtons" Color="Color.Primary" Label="IconActionButtons" />
+            <MudSwitchM3 @bind-Value="_addResultStep" Color="Color.Primary" Label="Has Result Step" />
+            <MudSwitchM3 @bind-Value="_checkValidationBeforeComplete" Color="Color.Primary" Label="Check Validation Before Complete Step" />
+            <MudSwitchM3 @bind-Value="_customLocalization" Color="Color.Primary" Label="Custom Localization (German)" />
+            <MudSwitchM3 @bind-Value="_showStaticContent" Color="Color.Primary" Label="Show Some Static Content" />
             <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant">
                 @foreach (Variant item in Enum.GetValues<Variant>())
                 {
@@ -100,9 +100,9 @@
 </MudGrid>
 
 @code {
-    MudStepper _stepper;
-    MudForm _form;
-    MudForm _form2;
+    MudStepper _stepper = new();
+    MudForm _form = new();
+    MudForm _form2 = new();
     bool _checkValidationBeforeComplete = false;
     bool _linear;
     bool _mobileView;

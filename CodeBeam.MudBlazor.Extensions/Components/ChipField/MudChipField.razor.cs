@@ -143,11 +143,16 @@ namespace MudExtensions
         /// <returns></returns>
         protected async Task SetChips()
         {
+            if (_internalValue == null)
+            {
+                return;
+            }
+
             if (Values == null)
             {
                 Values = new();
             }
-            Values.Add(Converter.Set(_internalValue));
+            Values.Add(Converter.Set(_internalValue) ?? "");
             await ValuesChanged.InvokeAsync(Values);
             if (RuntimeLocation.IsServerSide)
             {

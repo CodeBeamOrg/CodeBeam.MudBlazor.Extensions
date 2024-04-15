@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Moq;
 using MudBlazor;
@@ -19,7 +16,7 @@ namespace MudExtensions.UnitTests.Mocks
 
         public bool ThrowOnDuplicateProvider => false;
 
-        public event EventHandler FragmentsChanged;
+        public event EventHandler? FragmentsChanged;
 
         public Task InitializeIfNeeded() => Task.FromResult(true);
 

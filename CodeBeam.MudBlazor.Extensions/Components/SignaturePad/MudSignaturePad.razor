@@ -8,7 +8,7 @@
 
 <MudPaper Elevation="@Elevation" Class="@OuterClass">
     <div class="@ToolbarClassname" style="@ToolbarStyle">
-        <MudIconButton Variant="@Variant" Icon="@DrawEraseChipIcon" Color="@Color" OnClick="async () => await IsEditToggled()" Size="@(Dense ? Size.Small : Size.Medium)" />
+        <MudIconButton Variant="@Variant" Icon="@DrawEraseChipIcon" Color="@Color" OnClick="@(async () => await IsEditToggled())" Size="@(Dense ? Size.Small : Size.Medium)" />
         @if (ShowClear)
         {
             <MudIconButton OnClick="ClearPad" Variant="@Variant" Color="@Color" Icon="@Icons.Material.Filled.Clear" Size="@(Dense ? Size.Small : Size.Medium)" />

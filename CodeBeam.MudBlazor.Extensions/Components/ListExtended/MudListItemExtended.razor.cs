@@ -7,6 +7,10 @@ using MudBlazor;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class MudListItemExtended<T> : MudComponentBase, IDisposable
     {
 
@@ -35,7 +39,7 @@ namespace MudExtensions
           .AddClass("mud-list-item-gutters-extended", !DisableGutters && !(MudListExtended?.DisableGutters == true))
           .AddClass("mud-list-item-clickable-extended", MudListExtended?.Clickable)
           .AddClass("mud-ripple", MudListExtended?.Clickable == true && !DisableRipple && !GetDisabledStatus() && !IsFunctional)
-          .AddClass($"mud-selected-item mud-{MudListExtended?.Color.ToDescriptionString()}-text mud-{MudListExtended?.Color.ToDescriptionString()}-hover", _selected && !GetDisabledStatus() && NestedList == null && !MudListExtended.DisableSelectedItemStyle)
+          .AddClass($"mud-selected-item mud-{MudListExtended?.Color.ToDescriptionString()}-text mud-{MudListExtended?.Color.ToDescriptionString()}-hover", _selected && !GetDisabledStatus() && NestedList == null && MudListExtended?.DisableSelectedItemStyle == false)
           .AddClass("mud-list-item-hilight-extended", _active && !GetDisabledStatus() && NestedList == null && !IsFunctional)
           .AddClass("mud-list-item-disabled-extended", GetDisabledStatus())
           .AddClass("mud-list-item-nested-background-extended", MudListExtended != null && MudListExtended.SecondaryBackgroundForNestedItemHeader && NestedList != null)

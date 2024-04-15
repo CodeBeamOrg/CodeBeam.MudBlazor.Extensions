@@ -17,10 +17,10 @@
     public int ItemChangeCount { get; set; }
     public int ItemsChangeCount { get; set; }
 
-    MudSelectExtended<string> _select;
-    MudSelectItemExtended<string> FirstItem { get; set; }
-    MudSelectItemExtended<string> SecondItem { get; set; }
-    MudSelectItemExtended<string> ThirdItem { get; set; }
+    MudSelectExtended<string> _select = new();
+    MudSelectItemExtended<string> FirstItem { get; set; } = new();
+    MudSelectItemExtended<string> SecondItem { get; set; } = new();
+    MudSelectItemExtended<string> ThirdItem { get; set; } = new();
 
     //public void SetSelectedItem()
     //{

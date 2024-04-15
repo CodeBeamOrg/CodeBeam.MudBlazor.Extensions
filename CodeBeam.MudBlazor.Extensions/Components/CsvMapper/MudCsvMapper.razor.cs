@@ -111,13 +111,16 @@ namespace MudExtensions
         /// </summary>
         /// <param name="name"></param>
         /// <param name="mappedField"></param>
-        public MudCsvHeader(string name, string mappedField = "File")
+        public MudCsvHeader(string? name, string? mappedField = "File")
         {
-            Name = name;
-            MappedField = mappedField;
+            Name = name ?? "";
+            MappedField = mappedField ?? "File";
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class MudCsvMapper : MudComponentBase
     {
         /// <summary>
@@ -199,20 +202,20 @@ namespace MudExtensions
         private readonly string _expectedHeaderDropZoneWidth = "width: 180px;";
         private List<string> FileNames = new ();
         private List<MudCsvHeader> MudCsvHeaders = new();
-        private List<IDictionary<string,object>> CsvContent;
+        private List<IDictionary<string, object?>>? CsvContent;
         private bool _includeUnmappedData;
         private bool _importedComplete;
 
         private MudExpectedHeader _model { get; set; } = new();
         private bool _addSectionOpen;
-        private Dictionary<string, ConfirmedDefaultValue> _defaultValueHeaders { get; set; }
+        private Dictionary<string, ConfirmedDefaultValue>? _defaultValueHeaders { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         protected override void OnInitialized()
         {
-            _defaultValueHeaders = ExpectedHeaders.Where(x =>x.AllowDefaultValue).ToDictionary(key => key.Name, val => new ConfirmedDefaultValue()
+            _defaultValueHeaders = ExpectedHeaders.Where(x => x.AllowDefaultValue).ToDictionary(key => key.Name ?? "", val => new ConfirmedDefaultValue()
             {
                 Confirmed = false,
                 DefaultValue = ""
@@ -268,7 +271,7 @@ namespace MudExtensions
             };
             
             using var csv = new CsvReader(reader, config);
-            CsvContent = csv.GetRecords<dynamic>().Select(x => (IDictionary<string, object>)x).ToList();
+            CsvContent = csv.GetRecords<dynamic>().Select(x => (IDictionary<string, object?>)x).ToList();
         }
         private void MatchCsvHeadersWithExpectedHeaders()
         {
@@ -310,7 +313,7 @@ namespace MudExtensions
             await using (var writer = new StringWriter())
             await using (var csv = new CsvWriter(writer, config))
             {
-                var dynamicContent = CsvContent.Cast<dynamic>();
+                var dynamicContent = CsvContent?.Cast<dynamic>();
                 await csv.WriteRecordsAsync(dynamicContent);
 
                 var str = writer.ToString();
@@ -326,7 +329,7 @@ namespace MudExtensions
             {
                 if (map.MappedField == "File") continue;
                 var normalizedMappedField = Normalize(map.MappedField);
-                foreach (var row in CsvContent)
+                foreach (var row in CsvContent ?? new List<IDictionary<string, object?>>())
                 {
                     var temp = row[map.Name];
                     row.Remove(map.Name);
@@ -337,9 +340,9 @@ namespace MudExtensions
         }
         private void AddDefaultValues()
         {
-            foreach (var record in CsvContent)
+            foreach (var record in CsvContent ?? new List<IDictionary<string, object?>>())
             {
-                foreach (var header in _defaultValueHeaders.Where(header => header.Value.Confirmed))
+                foreach (var header in _defaultValueHeaders?.Where(header => header.Value.Confirmed) ?? new Dictionary<string, ConfirmedDefaultValue>())
                 {
                     var normalizedDefaultHeader = Normalize(header.Key);
                     if (record.Keys.Contains(header.Key))
@@ -351,7 +354,7 @@ namespace MudExtensions
         private void RemoveUnmappedData()
         {
             var unMappedHeaders = MudCsvHeaders.Where(x => x.MappedField == "File").Select(x => x.Name);
-            foreach (var record in CsvContent)
+            foreach (var record in CsvContent ?? new List<IDictionary<string, object?>>())
             {
                 foreach (var unMappedHeader in unMappedHeaders)
                 {
@@ -368,7 +371,10 @@ namespace MudExtensions
         private void OnDrop(MudItemDropInfo<MudCsvHeader> mudCSVField)
         {
             string? oldMappedField = mudCSVField.Item?.MappedField;
-            mudCSVField.Item.MappedField = mudCSVField.DropzoneIdentifier;
+            if (mudCSVField.Item != null)
+            {
+                mudCSVField.Item.MappedField = mudCSVField.DropzoneIdentifier;
+            }
             DecrementOldMatchedFieldCount(oldMappedField);
             IncrementNewMatchedFieldCount(mudCSVField.DropzoneIdentifier);
             IsValid();
@@ -395,8 +401,8 @@ namespace MudExtensions
             foreach (MudExpectedHeader requiredHeader in ExpectedHeaders.Where(i => i.Required))
             {
                 if (MudCsvHeaders.Any(i => i.MappedField == requiredHeader.Name)) continue;
-                if (_defaultValueHeaders.Any(x =>
-                        x.Key == requiredHeader.Name && x.Value.Confirmed))
+                if (_defaultValueHeaders?.Any(x =>
+                        x.Key == requiredHeader.Name && x.Value.Confirmed) == true)
                 {
                     continue;
                 }
@@ -423,6 +429,10 @@ namespace MudExtensions
         }
         private void SubmitDefaultValue(string? name)
         {
+            if (_defaultValueHeaders == null)
+            {
+                return;
+            }
             if (!string.IsNullOrWhiteSpace(_defaultValueHeaders[name ?? ""].DefaultValue))
             {
                 _defaultValueHeaders[name ?? ""].Confirmed = !_defaultValueHeaders[name ?? ""].Confirmed;
@@ -435,7 +445,7 @@ namespace MudExtensions
             ExpectedHeaders.Add(_model);
             if (_model.AllowDefaultValue)
             {
-                _defaultValueHeaders.Add(_model.Name, new ConfirmedDefaultValue()
+                _defaultValueHeaders?.Add(_model.Name, new ConfirmedDefaultValue()
                 {
                     Confirmed = false,
                     DefaultValue = ""

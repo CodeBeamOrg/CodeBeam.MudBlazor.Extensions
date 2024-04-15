@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using MudBlazor;
+﻿using MudBlazor;
 using MudExtensions.Services;
 using ScrollBehavior = MudBlazor.ScrollBehavior;
 
@@ -21,9 +19,9 @@ namespace MudExtensions.UnitTests.Mocks
     /// </summary>
     public class MockScrollListener : IScrollListener
     {
-        public string Selector { get; set; }
+        public string? Selector { get; set; }
 
-        public event EventHandler<ScrollEventArgs> OnScroll;
+        public event EventHandler<ScrollEventArgs>? OnScroll;
 
         public MockScrollListener()
         {
@@ -42,7 +40,7 @@ namespace MudExtensions.UnitTests.Mocks
     /// </summary>
     public class MockScrollManager : IScrollManager
     {
-        public string Selector { get; set; }
+        public string? Selector { get; set; }
 
         public ValueTask LockScrollAsync(string elementId, string cssClass) => ValueTask.CompletedTask;
 
@@ -71,7 +69,7 @@ namespace MudExtensions.UnitTests.Mocks
 
     public class MockScrollManagerExtended : IScrollManagerExtended
     {
-        public string Selector { get; set; }
+        public string? Selector { get; set; }
 
         public ValueTask LockScrollAsync(string elementId, string cssClass) => ValueTask.CompletedTask;
 

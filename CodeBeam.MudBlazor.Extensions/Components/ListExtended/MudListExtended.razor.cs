@@ -118,13 +118,13 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Behavior)]
         public DefaultConverter<T?> Converter { get; set; } = new DefaultConverter<T?>();
 
-        private IEqualityComparer<T?> _comparer;
+        private IEqualityComparer<T?>? _comparer;
         /// <summary>
         /// 
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public IEqualityComparer<T?> Comparer
+        public IEqualityComparer<T?>? Comparer
         {
             get => _comparer;
             set
@@ -394,7 +394,7 @@ namespace MudExtensions
         /// <summary>
         /// Fired on the OnDoubleClick event.
         /// </summary>
-        [Parameter] public EventCallback<ListItemClickEventArgs<T>> OnDoubleClick { get; set; }
+        [Parameter] public EventCallback<ListItemClickEventArgs<T?>> OnDoubleClick { get; set; }
 
         #endregion
 
@@ -484,7 +484,7 @@ namespace MudExtensions
                 return;
             }
 
-            SelectedItem = items.FirstOrDefault(x => SelectedValue == null ? x.Value == null : Comparer != null ? Comparer.Equals(x.Value, SelectedValue) : x.Value.Equals(SelectedValue));
+            SelectedItem = items.FirstOrDefault(x => SelectedValue == null ? x.Value == null : Comparer != null ? Comparer.Equals(x.Value, SelectedValue) : x.Value?.Equals(SelectedValue) == true);
             SelectedItems = SelectedValues == null ? null : items.Where(x => SelectedValues.Contains(x.Value, _comparer));
         }
 
@@ -1041,7 +1041,7 @@ namespace MudExtensions
         /// </summary>
         /// <param name="searchString"></param>
         /// <returns></returns>
-        protected async Task SearchChanged(string searchString)
+        protected async Task SearchChanged(string? searchString)
         {
             _searchString = searchString;
             await OnSearchStringChange.InvokeAsync(searchString);
@@ -1620,7 +1620,7 @@ namespace MudExtensions
             {
                 return ValueTask.CompletedTask;
             }
-            return ScrollManagerExtended.ScrollToMiddleAsync(_elementId, item.ItemId);
+            return ScrollManagerExtended.ScrollToMiddleAsync(_elementId, item.ItemId ?? string.Empty);
         }
 
         /// <summary>
@@ -1676,7 +1676,7 @@ namespace MudExtensions
         /// <param name="args"></param>
         /// <param name="itemValue"></param>
         /// <returns></returns>
-        protected async Task OnDoubleClickHandler(MouseEventArgs args, T? itemValue)
+        protected async Task OnDoubleClickHandler(MouseEventArgs? args, T? itemValue)
         {
             await OnDoubleClick.InvokeAsync(new ListItemClickEventArgs<T?>() { MouseEventArgs = args, ItemValue = itemValue });
         }

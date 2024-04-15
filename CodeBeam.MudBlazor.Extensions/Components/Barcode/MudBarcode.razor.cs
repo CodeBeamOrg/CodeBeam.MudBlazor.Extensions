@@ -4,6 +4,9 @@ using ZXing;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class MudBarcode : MudComponentBase
     {
         private static readonly Writer Encoder = new MultiFormatWriter();

@@ -2,6 +2,9 @@
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class MudColorProvider : MudComponentBase
     {
         /// <summary>

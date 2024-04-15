@@ -1,9 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using MudBlazor.Interop;
 using MudBlazor.Services;
 
@@ -11,7 +6,7 @@ namespace MudExtensions.UnitTests.Mocks
 {
     public class MockResizeObserverFactory : IResizeObserverFactory
     {
-        private MockResizeObserver _observer;
+        private MockResizeObserver? _observer;
 
         public MockResizeObserverFactory()
         {
@@ -33,7 +28,7 @@ namespace MudExtensions.UnitTests.Mocks
 
         public bool IsVertical { get; set; } = false;
 
-        public event SizeChanged OnResized;
+        public event SizeChanged? OnResized;
 
         public void UpdateTotalPanelSize(double newSize)
         {
@@ -74,7 +69,7 @@ namespace MudExtensions.UnitTests.Mocks
         public double PanelSize { get; set; } = 250;
         public double PanelTotalSize { get; set; } = 3000;
 
-        public async Task<BoundingClientRect> Observe(ElementReference element) => (await Observe(new[] { element })).FirstOrDefault();
+        public async Task<BoundingClientRect?> Observe(ElementReference element) => (await Observe(new[] { element })).FirstOrDefault();
 
         private Boolean _firstBatchProcessed = false;
 
@@ -113,7 +108,7 @@ namespace MudExtensions.UnitTests.Mocks
             return ValueTask.CompletedTask;
         }
 
-        public BoundingClientRect GetSizeInfo(ElementReference reference)
+        public BoundingClientRect? GetSizeInfo(ElementReference reference)
         {
             if (!_cachedValues.ContainsKey(reference))
             {

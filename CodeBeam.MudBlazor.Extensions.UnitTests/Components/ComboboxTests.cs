@@ -30,10 +30,10 @@ namespace MudExtensions.UnitTests.Components
                 x.Add(c => c.SelectedValue, "1");
                 x.Add(c => c.MultiSelection, multiSelection);
             });
-            var combobox = comp.FindComponent<MudComboBox<string>>();
+            var combobox = comp.FindComponent<MudComboBox<string?>>();
 
             combobox.Instance.Value.Should().Be("1");
-            combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
+            combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string?>() { "1" });
             combobox.Instance.Text.Should().Be("1");
         }
 
@@ -314,9 +314,9 @@ namespace MudExtensions.UnitTests.Components
                 "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z";
             // check that the correct items are checked
             comp.WaitForAssertion(() =>
-                comp.FindAll("div.mud-combobox-item path")[1].Attributes["d"].Value.Should().Be(@unchecked));
-            comp.FindAll("div.mud-combobox-item path")[3].Attributes["d"].Value.Should().Be(@checked);
-            comp.FindAll("div.mud-combobox-item path")[5].Attributes["d"].Value.Should().Be(@checked);
+                comp.FindAll("div.mud-combobox-item path")[1]?.Attributes["d"]?.Value.Should().Be(@unchecked));
+            comp.FindAll("div.mud-combobox-item path")[3]?.Attributes["d"]?.Value.Should().Be(@checked);
+            comp.FindAll("div.mud-combobox-item path")[5]?.Attributes["d"]?.Value.Should().Be(@checked);
             // now check how setting the SelectedValues makes items checked or unchecked
             // Note: If popover is open, selecting values programmatically doesn't work for now.
             await comp.InvokeAsync(() => combobox.Instance.CloseMenu());
@@ -325,10 +325,10 @@ namespace MudExtensions.UnitTests.Components
                 combobox.Instance.SelectedValues = new HashSet<string>() { "1", "2" };
             });
             await comp.InvokeAsync(() => input.MouseDown());
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item path")[1].Attributes["d"].Value.Should().Be(@checked));
-            comp.FindAll("div.mud-combobox-item path")[3].Attributes["d"].Value.Should().Be(@checked);
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item path")[1]?.Attributes["d"]?.Value.Should().Be(@checked));
+            comp.FindAll("div.mud-combobox-item path")[3]?.Attributes["d"]?.Value.Should().Be(@checked);
             combobox.Instance.SelectedValues.Should().NotContain("3");
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item path")[5].Attributes["d"].Value.Should().Be(@unchecked));
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item path")[5]?.Attributes["d"]?.Value.Should().Be(@unchecked));
             //Console.WriteLine(comp.Markup);
         }
 

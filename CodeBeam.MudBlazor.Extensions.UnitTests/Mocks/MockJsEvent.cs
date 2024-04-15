@@ -13,7 +13,7 @@ namespace MudExtensions.UnitTests.Mocks
 #pragma warning disable CS0067
     public class MockJsEventFactory : IJsEventFactory
     {
-        private readonly MockJsEvent _jsEvent;
+        private readonly MockJsEvent? _jsEvent;
 
         public MockJsEventFactory(MockJsEvent jsEvent)
         {
@@ -45,9 +45,9 @@ namespace MudExtensions.UnitTests.Mocks
             return Task.CompletedTask;
         }
 
-        public event Action<int> CaretPositionChanged;
-        public event Action<string> Paste;
-        public event Action Copy;
-        public event Action<int, int> Select;
+        public event Action<int>? CaretPositionChanged;
+        public event Action<string>? Paste;
+        public event Action? Copy;
+        public event Action<int, int>? Select;
     }
 }

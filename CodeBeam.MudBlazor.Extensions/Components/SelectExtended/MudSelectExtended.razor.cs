@@ -4,7 +4,6 @@ using MudBlazor;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudBlazor.Utilities.Exceptions;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MudExtensions
 {
@@ -44,18 +43,18 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        protected Dictionary<T?, MudSelectItemExtended<T?>> _valueLookup = new();
+        protected Dictionary<T, MudSelectItemExtended<T?>> _valueLookup = new();
         /// <summary>
         /// 
         /// </summary>
-        protected Dictionary<T?, MudSelectItemExtended<T?>> _shadowLookup = new();
-        private MudInputExtended<string> _elementReference;
+        protected Dictionary<T, MudSelectItemExtended<T?>> _shadowLookup = new();
+        private MudInputExtended<string> _elementReference = new();
         internal bool _isOpen;
         /// <summary>
         /// 
         /// </summary>
         protected internal string? _currentIcon { get; set; }
-        internal event Action<ICollection<T?>> SelectionChangedFromOutside;
+        internal event Action<ICollection<T?>>? SelectionChangedFromOutside;
 
         /// <summary>
         /// 
@@ -134,7 +133,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T?, bool> ItemDisabledFunc { get; set; }
+        public Func<T?, bool>? ItemDisabledFunc { get; set; }
 
         /// <summary>
         /// Classname for item template or chips.
@@ -460,13 +459,13 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Behavior)]
         public MultiSelectionComponent MultiSelectionComponent { get; set; } = MultiSelectionComponent.CheckBox;
 
-        private IEqualityComparer<T?> _comparer;
+        private IEqualityComparer<T?>? _comparer;
         /// <summary>
         /// The Comparer to use for comparing selected values internally.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public IEqualityComparer<T?> Comparer
+        public IEqualityComparer<T?>? Comparer
         {
             get => _comparer;
             set
@@ -533,7 +532,7 @@ namespace MudExtensions
                 {
                     return;
                 }
-                if (SelectedValues.Count() == set.Count() && _selectedValues.All(x => set.Contains(x, _comparer)))
+                if (SelectedValues?.Count() == set.Count() && _selectedValues?.All(x => set.Contains(x, _comparer)) == true)
                     return;
 
                 if (_selectedValuesSetterStarted)
@@ -1289,7 +1288,7 @@ namespace MudExtensions
                 return;
             }
             //SelectedValues = SelectedValues.Where(x => Converter.Set(x)?.ToString() != chip.Value?.ToString());
-            SelectedValues = SelectedValues.Where(x => x.Equals(chip.Value) == false);
+            SelectedValues = SelectedValues.Where(x => x?.Equals(chip.Value) == false);
             await SelectedValuesChanged.InvokeAsync(SelectedValues);
         }
     }
