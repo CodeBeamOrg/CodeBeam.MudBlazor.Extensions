@@ -16,7 +16,7 @@ namespace MudExtensions
         /// </summary>
         protected string? Classname => new CssBuilder("mud-combobox-item")
             .AddClass($"mud-combobox-item-{MudComboBox?.Dense.ToDescriptionString()}")
-            .AddClass("mud-ripple", !DisableRipple && !Disabled)
+            .AddClass("mud-ripple", Ripple && !Disabled)
             .AddClass("mud-combobox-item-gutters")
             .AddClass("mud-combobox-item-clickable")
             .AddClass("mud-combobox-item-hilight", Active && !Disabled)

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
-using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class MudStep : MudComponentBase, IDisposable
     {
         /// <summary>
@@ -69,7 +71,7 @@ namespace MudExtensions
                     return;
                 }
                 _status = value;
-                StatusChanged.InvokeAsync(_status).AndForgetExt();
+                StatusChanged.InvokeAsync(_status).AndForget();
             }
         }
 

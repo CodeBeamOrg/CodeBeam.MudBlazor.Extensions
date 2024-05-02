@@ -41,7 +41,7 @@
                     <MudDivider />
                 }
             }
-            <MudVirtualize IsEnabled="@Virtualize" Items="GetSearchedItems()" Context="item" OverscanCount="@OverscanCount">
+            <MudVirtualize Enabled="@Virtualize" Items="GetSearchedItems()" Context="item" OverscanCount="@OverscanCount">
                 @if (MudSelectExtended != null)
                 {
                     <MudSelectItemExtended Value="@item" Text="@(ToStringFunc == null ? item?.ToString() : ToStringFunc(item))" />

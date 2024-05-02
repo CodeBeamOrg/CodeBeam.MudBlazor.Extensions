@@ -32,7 +32,7 @@
 	<ItemGroup>
 		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
 		<PackageReference Include="CsvHelper" Version="31.0.3" />
-		<PackageReference Include="MudBlazor" Version="6.12.0" />
+		<PackageReference Include="MudBlazor" Version="7.0.0-preview.1" />
 		<PackageReference Include="ZXing.Net" Version="0.16.9" />
 	</ItemGroup>
 
@@ -46,8 +46,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.*" />
 	</ItemGroup>
 
-	<!--Uncomment it on development and debug to compile scss and generate min.css on rebuild-->
-	<!--This sections causes to fail auto deployment to CloudFlare-->
+	<!--Uncomment it on development and debug to compile scss and generate min.css on rebuild
+	This sections causes to fail auto deployment to CloudFlare-->
 	<!--<Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
 		<Exec Command="dotnet tool restore" StandardOutputImportance="high" />
 	</Target>-->

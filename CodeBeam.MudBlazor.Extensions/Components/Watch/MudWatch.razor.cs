@@ -3,7 +3,6 @@ using MudExtensions.Utilities;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
-using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -44,7 +43,7 @@ namespace MudExtensions
 
             if (Mode == WatchMode.Watch)
             {
-                SetWatchMode(Mode).AndForgetExt();
+                SetWatchMode(Mode).AndForget();
                 Start();
             }
             if (Mode == WatchMode.StopWatch)
@@ -70,7 +69,7 @@ namespace MudExtensions
                     return;
                 }
                 _value = value;
-                InvokeAsync(() => ValueChanged.InvokeAsync(_value)).AndForgetExt();
+                InvokeAsync(() => ValueChanged.InvokeAsync(_value)).AndForget();
                 SetInternalValues();
             }
         }
@@ -111,7 +110,7 @@ namespace MudExtensions
                     return;
                 }
                 _watchMode = value;
-                SetWatchMode(_watchMode).AndForgetExt();
+                SetWatchMode(_watchMode).AndForget();
             }
         }
 

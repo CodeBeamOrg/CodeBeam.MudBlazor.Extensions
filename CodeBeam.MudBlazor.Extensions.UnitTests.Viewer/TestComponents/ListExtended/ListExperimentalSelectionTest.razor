@@ -3,7 +3,7 @@
 <MudListExtended T="int" Clickable="true" @bind-SelectedItem="selectedItem">
     <MudListSubheaderExtended T="int">
         Your drink:
-        <MudChip Color="Color.Secondary">
+        <MudChip T="string" Color="Color.Secondary">
             @(selectedItem?.Text ?? "You are dry")
         </MudChip>
     </MudListSubheaderExtended>

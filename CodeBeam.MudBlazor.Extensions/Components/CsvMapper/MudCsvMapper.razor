@@ -39,7 +39,7 @@
                     <MudPaper Elevation="0" class="d-flex justify-center align-content-center mud-transparent m2">
                         @if (FileNames.Count > 0)
                         {
-                            <MudChip Color="Color.Dark" Text="@FileNames.LastOrDefault()"/>
+                            <MudChip T="string" Color="Color.Dark" Text="@FileNames.LastOrDefault()"/>
                         }
                     </MudPaper>
                 </MudPaper>

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Utilities;
-using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -67,7 +66,7 @@ namespace MudExtensions
                     return;
                 }
                 _theValue = value;
-                SetValueFromOutside(_theValue).AndForgetExt();
+                SetValueFromOutside(_theValue).AndForget();
             }
         }
 

@@ -15,11 +15,11 @@ namespace MudExtensions
         /// </summary>
         protected string? Classname =>
         new CssBuilder("mud-list-subheader-extended")
-            .AddClass("mud-list-subheader-gutters-extended", !DisableGutters)
+            .AddClass("mud-list-subheader-gutters-extended", Gutters)
             .AddClass("mud-list-subheader-inset-extended", Inset)
             .AddClass("mud-list-subheader-secondary-background-extended", SecondaryBackground)
             .AddClass("mud-list-subheader-sticky-extended", Sticky)
-            .AddClass("mud-list-subheader-sticky-dense-extended", Sticky && (MudListExtended != null && MudListExtended.DisablePadding))
+            .AddClass("mud-list-subheader-sticky-dense-extended", Sticky && (MudListExtended != null && MudListExtended.Padding == false))
             .AddClass(Class)
         .Build();
 
@@ -40,7 +40,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
-        public bool DisableGutters { get; set; }
+        public bool Gutters { get; set; } = true;
 
         /// <summary>
         /// If true subheader has more padding. Default is false.

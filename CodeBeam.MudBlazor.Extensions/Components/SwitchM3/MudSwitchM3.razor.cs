@@ -37,7 +37,7 @@ namespace MudExtensions
         /// </summary>
         protected string? SwitchClassname =>
         new CssBuilder("mud-button-root mud-icon-button mud-switch-base-m3")
-            .AddClass($"mud-ripple mud-ripple-switch", !DisableRipple && !ReadOnly && !Disabled)
+            .AddClass($"mud-ripple mud-ripple-switch", Ripple && !ReadOnly && !Disabled)
             .AddClass($"mud-{Color.ToDescriptionString()}-text hover:mud-{Color.ToDescriptionString()}-hover", BoolValue == true)
             //.AddClass($"mud-{UnCheckedColor.ToDescriptionString()}-text hover:mud-{UnCheckedColor.ToDescriptionString()}-hover", BoolValue == false)
             .AddClass($"mud-switch-disabled", Disabled)
@@ -107,7 +107,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public bool DisableRipple { get; set; }
+        public bool Ripple { get; set; } = true;
 
         /// <summary>
         /// Keydown event.

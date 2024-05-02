@@ -1281,7 +1281,7 @@ namespace MudExtensions
         /// </summary>
         /// <param name="chip"></param>
         /// <returns></returns>
-        protected async Task ChipClosed(MudChip? chip)
+        protected async Task ChipClosed(MudChip<T>? chip)
         {
             if (chip == null || SelectedValues == null)
             {

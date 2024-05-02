@@ -83,14 +83,14 @@ namespace MudExtensions
 			StateHasChanged();
 		}
 
-		private async Task<IEnumerable<String>?> SearchFonts(string? searchText)
+		private async Task<IEnumerable<string>?> SearchFonts(string? searchText, CancellationToken cancellationToken)
 		{
 			if (FontCollection == null)
 			{
 				return null;
 			}
 			await Task.Delay(1);
-			if (String.IsNullOrEmpty(searchText)) return FontCollection;
+			if (string.IsNullOrEmpty(searchText)) return FontCollection;
 			return FontCollection.Where(c => c.ToLowerInvariant().Trim().StartsWith(searchText.ToLower().Trim())).ToList();
 		}
 	}

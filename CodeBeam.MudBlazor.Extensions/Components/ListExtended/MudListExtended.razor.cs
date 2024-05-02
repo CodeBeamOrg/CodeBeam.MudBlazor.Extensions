@@ -33,7 +33,7 @@ namespace MudExtensions
         /// </summary>
         protected string? Classname =>
         new CssBuilder("mud-list-extended")
-           .AddClass("mud-list-padding-extended", !DisablePadding)
+           .AddClass("mud-list-padding-extended", Padding)
           .AddClass(Class)
         .Build();
 
@@ -42,7 +42,7 @@ namespace MudExtensions
         /// </summary>
         protected string? Stylename =>
         new StyleBuilder()
-            .AddStyle("max-height", $"{MaxItems * (!Dense ? 48 : 36) + (DisablePadding ? 0 : 16)}px", MaxItems != null)
+            .AddStyle("max-height", $"{MaxItems * (!Dense ? 48 : 36) + (Padding == false ? 0 : 16)}px", MaxItems != null)
             .AddStyle("overflow-y", "auto", MaxItems != null)
             .AddStyle(Style)
             .Build();
@@ -323,7 +323,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
-        public bool DisablePadding { get; set; }
+        public bool Padding { get; set; } = true;
 
         /// <summary>
         /// If true, selected items doesn't have a selected background color.
@@ -344,7 +344,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
-        public bool DisableGutters { get; set; }
+        public bool Gutters { get; set; } = true;
 
         /// <summary>
         /// If true, will disable the list item if it has onclick.

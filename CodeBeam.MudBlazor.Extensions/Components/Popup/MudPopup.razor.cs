@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
-using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -56,7 +55,7 @@ namespace MudExtensions
                     return;
                 }
                 _open = value;
-                OpenChanged.InvokeAsync(_open).AndForgetExt();
+                OpenChanged.InvokeAsync(_open).AndForget();
             }
         }
 

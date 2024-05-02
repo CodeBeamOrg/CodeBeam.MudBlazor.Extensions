@@ -129,7 +129,7 @@
     }
 
     <MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
-        <MudToolBar DisableGutters="true" Dense="true">
+        <MudToolBar Gutters="false" Dense="true">
             <MudText Typo="Typo.body1"><b>Copyright © 2022-@DateTime.Now.Year CodeBeam.</b> @Version</MudText>
             <MudSpacer />
                 <MudText Typo="Typo.body1">Running on <b>.NET</b> @Environment.Version.ToString()</MudText>
@@ -168,7 +168,7 @@
 
     .top-container {
         min-height: 100vh;
-        background-color: var(--mud-palette-background-grey);
+        background-color: var(--mud-palette-background-gray);
         overflow: hidden;
     }
 

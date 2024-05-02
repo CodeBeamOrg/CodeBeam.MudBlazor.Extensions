@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Services;
 using MudBlazor.Utilities;
-using MudExtensions.Extensions;
 using System.Runtime.InteropServices;
 
 namespace MudExtensions
@@ -646,7 +645,7 @@ namespace MudExtensions
                 _selectedValues = new HashSet<T?>(set, _comparer);
 
                 SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer)).AndForget();
-                ForceUpdateItems().AndForgetExt();
+                ForceUpdateItems().AndForget();
                 //Console.WriteLine("SelectedValues setter ended");
             }
         }
@@ -1422,7 +1421,7 @@ namespace MudExtensions
         /// </summary>
         /// <param name="chip"></param>
         /// <returns></returns>
-        protected async Task ChipClosed(MudChip chip)
+        protected async Task ChipClosed(MudChip<T> chip)
         {
             if (chip is null || SelectedValues is null)
                 return;

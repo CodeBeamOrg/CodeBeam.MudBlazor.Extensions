@@ -2,7 +2,6 @@
 using MudBlazor;
 using MudBlazor.Utilities;
 using MudExtensions;
-using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -146,17 +145,17 @@ namespace MudExtensions
         protected void HandleOnClick()
         {
             // Selection works on list. We arrange only popover state and some minor arrangements on click.
-            MudSelectExtended?.SelectOption(Value).AndForgetExt();
+            MudSelectExtended?.SelectOption(Value).AndForget();
             InvokeAsync(StateHasChanged);
             if (!MultiSelection)
             {
-                MudSelectExtended?.CloseMenu().AndForgetExt();
+                MudSelectExtended?.CloseMenu().AndForget();
             }
             else
             {
-                MudSelectExtended?.FocusAsync().AndForgetExt();
+                MudSelectExtended?.FocusAsync().AndForget();
             }
-            OnClick.InvokeAsync().AndForgetExt();
+            OnClick.InvokeAsync().AndForget();
         }
 
         /// <summary>

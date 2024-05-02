@@ -3,7 +3,7 @@
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex align-center justify-center">
         <MudPaper Width="300px">
-            <MudListExtended T="string" Clickable="true" MultiSelection="true" Style="max-height:400px; overflow-y: auto;" DisablePadding="_disablePadding">
+            <MudListExtended T="string" Clickable="true" MultiSelection="true" Style="max-height:400px; overflow-y: auto;" Padding="_padding">
                 <MudListSubheaderExtended T="string" Sticky="_sticky" SecondaryBackground="_secondaryBackground">England</MudListSubheaderExtended>
                 @foreach (string club in _englishClubs)
                 {
@@ -34,14 +34,14 @@
     <MudItem xs="12" sm="4">
         <MudCheckBox @bind-Value="_sticky" Color="Color.Primary" Label="Sticky SubHeader" />
         <MudCheckBox @bind-Value="_secondaryBackground" Color="Color.Primary" Label="Secondary Background" />
-        <MudCheckBox @bind-Value="_disablePadding" Color="Color.Primary" Label="Disable Padding" />
+        <MudCheckBox @bind-Value="_padding" Color="Color.Primary" Label="Padding" />
     </MudItem>
 </MudGrid>
 
 @code {
     bool _sticky = true;
     bool _secondaryBackground = true;
-    bool _disablePadding = true;
+    bool _padding = false;
 
     string[] _englishClubs = { "Arsenal", "Manchester City", "Liverpool", "Manchester United", "Chelsea" };
     string[] _germanClubs = { "Bayern Munich", "Borussia Dortmund", "Schalke 04", "Bayern Leverkusen", "Stuttgart" };

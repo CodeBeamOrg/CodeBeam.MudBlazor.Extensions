@@ -21,7 +21,7 @@
                 {
                     <MudPopover Class="pa-4" Open="_open" AnchorOrigin="Origin.TopLeft" TransformOrigin="Origin.BottomRight" Style="width: 320px; height: 400px">
                         <MudStack Justify="Justify.SpaceBetween">
-                            <MudSwitchM3 @bind-Checked="_showFontPicker" Color="Color.Secondary" Label="Font Picker"/>
+                            <MudSwitchM3 @bind-Value="_showFontPicker" Color="Color.Secondary" Label="Font Picker"/>
                             <MudSlider T="int" Value="_borderRadius" ValueChanged="BorderRadiusChanged" Min="0" Max="50" Color="Color.Secondary" ValueLabel="true" />
                             <MudText Class="mt-n2" Typo="Typo.subtitle2">Border Radius</MudText>
                             <MudButton Class="mud-width-full" OnClick="@ToggleOpen">Close</MudButton>

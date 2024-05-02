@@ -65,11 +65,11 @@ namespace MudExtensions
         public bool Immediate { get; set; }
 
         /// <summary>
-        /// If true, the input will not have an underline.
+        /// If false, the input will not have an underline.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public bool DisableUnderLine { get; set; }
+        public bool UnderLine { get; set; } = true;
 
         /// <summary>
         /// The HelperText will be displayed below the text field.

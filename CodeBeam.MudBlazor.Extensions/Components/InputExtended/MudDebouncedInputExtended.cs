@@ -24,7 +24,7 @@ namespace MudExtensions
             get => _debounceInterval;
             set
             {
-                if (NumericConverter<double>.AreEqual(_debounceInterval, value))
+                if (DoubleEpsilonEqualityComparer.Default.Equals(_debounceInterval, value))
                     return;
                 _debounceInterval = value;
                 if (_debounceInterval == 0)

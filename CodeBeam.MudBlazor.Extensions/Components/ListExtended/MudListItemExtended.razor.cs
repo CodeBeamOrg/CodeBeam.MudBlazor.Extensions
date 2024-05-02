@@ -36,9 +36,9 @@ namespace MudExtensions
         protected string? Classname =>
         new CssBuilder("mud-list-item-extended")
           .AddClass("mud-list-item-dense-extended", Dense == true || MudListExtended?.Dense == true)
-          .AddClass("mud-list-item-gutters-extended", !DisableGutters && !(MudListExtended?.DisableGutters == true))
+          .AddClass("mud-list-item-gutters-extended", Gutters && (MudListExtended?.Gutters == true))
           .AddClass("mud-list-item-clickable-extended", MudListExtended?.Clickable)
-          .AddClass("mud-ripple", MudListExtended?.Clickable == true && !DisableRipple && !GetDisabledStatus() && !IsFunctional)
+          .AddClass("mud-ripple", MudListExtended?.Clickable == true && Ripple && !GetDisabledStatus() && !IsFunctional)
           .AddClass($"mud-selected-item mud-{MudListExtended?.Color.ToDescriptionString()}-text mud-{MudListExtended?.Color.ToDescriptionString()}-hover", _selected && !GetDisabledStatus() && NestedList == null && MudListExtended?.DisableSelectedItemStyle == false)
           .AddClass("mud-list-item-hilight-extended", _active && !GetDisabledStatus() && NestedList == null && !IsFunctional)
           .AddClass("mud-list-item-disabled-extended", GetDisabledStatus())
@@ -135,14 +135,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
-        public bool DisableGutters { get; set; }
+        public bool Gutters { get; set; } = true;
 
         /// <summary>
         /// If true, disables ripple effect.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
-        public bool DisableRipple { get; set; }
+        public bool Ripple { get; set; } = true;
 
         /// <summary>
         /// Overrided component for multiselection. Keep it null to have default one that MudList has.

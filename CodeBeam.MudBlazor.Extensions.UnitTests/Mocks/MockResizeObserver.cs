@@ -6,7 +6,7 @@ namespace MudExtensions.UnitTests.Mocks
 {
     public class MockResizeObserverFactory : IResizeObserverFactory
     {
-        private MockResizeObserver? _observer;
+        private MockResizeObserver _observer;
 
         public MockResizeObserverFactory()
         {
@@ -22,19 +22,19 @@ namespace MudExtensions.UnitTests.Mocks
         public IResizeObserver Create() => Create(new ResizeObserverOptions());
     }
 
-    public class MockResizeObserver : IResizeObserver, IDisposable
+    public class MockResizeObserver : IResizeObserver
     {
         private Dictionary<ElementReference, BoundingClientRect> _cachedValues = new();
 
         public bool IsVertical { get; set; } = false;
 
-        public event SizeChanged? OnResized;
+        public event SizeChanged OnResized;
 
         public void UpdateTotalPanelSize(double newSize)
         {
             var entry = _cachedValues.Last();
 
-            if (!IsVertical)
+            if (IsVertical == false)
             {
                 entry.Value.Width = newSize;
             }
@@ -52,7 +52,7 @@ namespace MudExtensions.UnitTests.Mocks
         {
             var entry = _cachedValues.ElementAt(index);
 
-            if (!IsVertical)
+            if (IsVertical == false)
             {
                 entry.Value.Width = newSize;
             }
@@ -69,9 +69,9 @@ namespace MudExtensions.UnitTests.Mocks
         public double PanelSize { get; set; } = 250;
         public double PanelTotalSize { get; set; } = 3000;
 
-        public async Task<BoundingClientRect?> Observe(ElementReference element) => (await Observe(new[] { element })).FirstOrDefault();
+        public async Task<BoundingClientRect> Observe(ElementReference element) => (await Observe(new[] { element })).FirstOrDefault();
 
-        private Boolean _firstBatchProcessed = false;
+        private bool _firstBatchProcessed = false;
 
         public Task<IEnumerable<BoundingClientRect>> Observe(IEnumerable<ElementReference> elements)
         {
@@ -80,7 +80,7 @@ namespace MudExtensions.UnitTests.Mocks
             {
                 var size = PanelSize;
                 // last element is always TabsContentSize
-                if (item.Id == elements.Last().Id && !_firstBatchProcessed)
+                if (item.Id == elements.Last().Id && _firstBatchProcessed == false)
                 {
                     size = PanelTotalSize;
                 }
@@ -108,9 +108,9 @@ namespace MudExtensions.UnitTests.Mocks
             return ValueTask.CompletedTask;
         }
 
-        public BoundingClientRect? GetSizeInfo(ElementReference reference)
+        public BoundingClientRect GetSizeInfo(ElementReference reference)
         {
-            if (!_cachedValues.ContainsKey(reference))
+            if (_cachedValues.ContainsKey(reference) == false)
             {
                 return null;
             }

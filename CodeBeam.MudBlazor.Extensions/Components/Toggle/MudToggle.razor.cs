@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Utilities;
-using MudExtensions.Extensions;
 
 namespace MudExtensions
 {
@@ -49,7 +48,7 @@ namespace MudExtensions
                     return;
                 }
                 _toggled = value;
-                ToggledChanged.InvokeAsync().AndForgetExt();
+                ToggledChanged.InvokeAsync().AndForget();
             }
         }
 

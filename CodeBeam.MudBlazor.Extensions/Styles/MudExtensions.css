@@ -99,7 +99,7 @@
   padding-bottom: 16px; }
 
 .mud-combobox-subheader-secondary-background {
-  background-color: var(--mud-palette-background-grey); }
+  background-color: var(--mud-palette-background-gray); }
 
 .mud-combobox-subheader-gutters {
   padding-left: 16px;
@@ -118,7 +118,7 @@
     top: 0; }
 
 .mud-combobox-item-hilight {
-  background-color: var(--mud-palette-background-grey); }
+  background-color: var(--mud-palette-background-gray); }
 
 .mud-combobox-item-hilight {
   background-color: var(--mud-palette-lines-default) !important; }
@@ -160,7 +160,7 @@
   padding-inline-start: 12px; }
 
 .mud-combobox-item-nested-background {
-  background-color: var(--mud-palette-background-grey); }
+  background-color: var(--mud-palette-background-gray); }
 
 .mud-combobox-item-avatar {
   min-width: 56px;
@@ -546,7 +546,7 @@
   .mud-switch-base-m3:hover {
     background-color: var(--mud-palette-action-default-hover); }
   .mud-switch-base-m3.mud-switch-disabled {
-    color: var(--mud-palette-grey-default) !important; }
+    color: var(--mud-palette-gray-default) !important; }
     .mud-switch-base-m3.mud-switch-disabled + .mud-switch-track-m3 {
       opacity: 0.12 !important; }
     .mud-switch-base-m3.mud-switch-disabled:hover, .mud-switch-base-m3.mud-switch-disabled:focus-visible {
@@ -872,7 +872,7 @@
   padding-bottom: 16px; }
 
 .mud-list-subheader-secondary-background-extended {
-  background-color: var(--mud-palette-background-grey); }
+  background-color: var(--mud-palette-background-gray); }
 
 .mud-list-subheader-gutters-extended {
   padding-left: 16px;
@@ -891,13 +891,13 @@
     top: 0; }
 
 .mud-list-item-hilight-extended {
-  background-color: var(--mud-palette-background-grey); }
+  background-color: var(--mud-palette-background-gray); }
 
 .mud-list-item-hilight-selected {
   background-color: var(--mud-palette-lines-default) !important; }
 
 .mud-list-item-nested-background-extended {
-  background-color: var(--mud-palette-background-grey); }
+  background-color: var(--mud-palette-background-gray); }
 
 .mud-list-item-avatar-extended {
   min-width: 56px;

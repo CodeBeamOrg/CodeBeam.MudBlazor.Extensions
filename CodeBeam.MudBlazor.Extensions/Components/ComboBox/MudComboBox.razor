@@ -20,7 +20,7 @@
                                       TextUpdateSuppression="false"
                                       ShowVisualiser="@((MultiSelection && SelectedValues?.Any() == true) || !Editable)" DataVisualiserStyle="min-height: 1.1876em"
                                       @bind-Value="@_searchString"
-                                      DisableUnderLine="@DisableUnderLine"
+                                      UnderLine="@UnderLine"
                                       Disabled="@Disabled" ReadOnly="@ReadOnly" Error="@Error" ErrorId="@ErrorId"
                                       Clearable="@Clearable" ForceClearable="@(Clearable && HasValue(Value))" OnClearButtonClick="@ClearButtonClickHandlerAsync"
                                       @attributes="UserAttributes" OnBlur="@HandleOnBlur" ShrinkLabel="@(HasValue(Value) || _isOpen || ShrinkLabel)">
@@ -37,7 +37,7 @@
                                 }
                                 else if (InputPresenter == ValuePresenter.Chip)
                                 {
-                                    <MudChipSet Class="d-flex flex-wrap mud-width-full" AllClosable="@ChipCloseable" OnClose="@ChipClosed">
+                                    <MudChipSet T="T" Class="d-flex flex-wrap mud-width-full" AllClosable="@ChipCloseable" OnClose="@ChipClosed">
                                         @{
                                             var collection = Items.Where(x => (MultiSelection ? SelectedValues?.Contains(x.Value) == true : Value?.Equals(x.Value) == true))?.ToList();
                                             if (collection is not null)

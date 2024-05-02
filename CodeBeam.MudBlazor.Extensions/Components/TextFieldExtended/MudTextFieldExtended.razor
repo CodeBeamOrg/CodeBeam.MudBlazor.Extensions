@@ -33,7 +33,7 @@
                                       ValueChanged="(s) => SetTextAsync(s)"
                                       Placeholder="@Placeholder"
                                       Disabled=@Disabled
-                                      DisableUnderLine="@DisableUnderLine"
+                                      UnderLine="@UnderLine"
                                       ReadOnly="@ReadOnly"
                                       MaxLength="@MaxLength"
                                       IconSize="@IconSize"
@@ -46,7 +46,6 @@
                                       OnInternalInputChanged="OnChange"
                                       OnKeyUp="@InvokeKeyUpAsync"
                                       KeyDownPreventDefault="KeyDownPreventDefault"
-                                      KeyPressPreventDefault="KeyPressPreventDefault"
                                       KeyUpPreventDefault="KeyUpPreventDefault"
                                       HideSpinButtons="true"
                                       Clearable="@Clearable"
@@ -84,7 +83,7 @@
                              ValueChanged="OnMaskedValueChanged"
                              Placeholder="@Placeholder"
                              Disabled=@Disabled
-                             DisableUnderLine="@DisableUnderLine"
+                             UnderLine="@UnderLine"
                              ReadOnly="@ReadOnly"
                              MaxLength="@MaxLength"
                              IconSize="@IconSize"

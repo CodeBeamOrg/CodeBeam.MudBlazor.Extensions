@@ -174,13 +174,13 @@ namespace MudExtensions
         /// </summary>
         /// <param name="chip"></param>
         /// <returns></returns>
-        public async Task Closed(MudChip chip)
+        public async Task Closed(MudChip<T> chip)
         {
             if (Disabled || ReadOnly)
             {
                 return;
             }
-            Values?.Remove(chip.Text);
+            Values?.Remove(chip.Text ?? "");
             await ValuesChanged.InvokeAsync(Values);
             await _textFieldExtendedReference.FocusAsync();
         }

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MudBlazor;
+﻿using MudBlazor;
 
 namespace MudExtensions.UnitTests.Mocks
 {
     public class MockScrollSpyFactory : IScrollSpyFactory
     {
-        private readonly MockScrollSpy? _spy;
+        private readonly MockScrollSpy _spy;
 
         public MockScrollSpyFactory(MockScrollSpy spy)
         {
@@ -28,19 +25,20 @@ namespace MudExtensions.UnitTests.Mocks
     public class MockScrollSpy : IScrollSpy
     {
         public bool SpyingInitiated { get; private set; }
-        public string? SpyingClassSelector { get; private set; }
+        public string SpyingClassSelector { get; private set; }
 
         private List<string> _scrollHistory = new();
         public IReadOnlyList<string> ScrollHistory => _scrollHistory.AsReadOnly();
 
         public string CenteredSection { get; set; } = "my-item";
 
-        public event EventHandler<ScrollSectionCenteredEventArgs>? ScrollSectionSectionCentered;
+        public event EventHandler<ScrollSectionCenteredEventArgs> ScrollSectionSectionCentered;
 
         public ValueTask DisposeAsync() => ValueTask.CompletedTask;
         public Task ScrollToSection(string id)
         {
             _scrollHistory.Add(id);
+            FireScrollSectionSectionCenteredEvent(id);
             return Task.FromResult(true);
         }
 
@@ -51,10 +49,10 @@ namespace MudExtensions.UnitTests.Mocks
         }
 
         public Task ScrollToSection(Uri uri) => Task.FromResult(false);
-        public Task StartSpying(string elementsSelector)
+        public Task StartSpying(string containerSelector, string sectionClassSelector)
         {
             SpyingInitiated = true;
-            SpyingClassSelector = elementsSelector;
+            SpyingClassSelector = sectionClassSelector;
 
             return Task.FromResult(false);
         }

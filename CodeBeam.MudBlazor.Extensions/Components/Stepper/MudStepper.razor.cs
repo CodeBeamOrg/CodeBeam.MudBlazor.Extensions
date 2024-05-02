@@ -18,7 +18,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string? HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-3")
-            .AddClass("mud-ripple", !DisableRipple && !Linear)
+            .AddClass("mud-ripple", Ripple && !Linear)
             .AddClass("cursor-pointer mud-stepper-header-non-linear", !Linear)
             .AddClass("flex-column", !Vertical)
             .AddClass("flex-row", Vertical)
@@ -192,7 +192,7 @@ namespace MudExtensions
         /// If true, disables ripple effect when click on step headers.
         /// </summary>
         [Parameter]
-        public bool DisableRipple { get; set; }
+        public bool Ripple { get; set; } = true;
 
         /// <summary>
         /// If true, disables the default animation on step changing.

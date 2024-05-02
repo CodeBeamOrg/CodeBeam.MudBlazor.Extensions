@@ -20,7 +20,7 @@
                             <MudIcon Icon="@Icons.Material.Outlined.Person" />
                             <MudText>@(context.Value?.Item3 == true ? "Retired" : "Active")</MudText>
                             </MudStack>
-                            <MudChip Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value?.Item2</MudChip>
+                            <MudChip T="string" Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value?.Item2</MudChip>
                         </MudStack>
                     </MudStack>
                 </ItemTemplate>
@@ -37,7 +37,7 @@
                                 <MudIcon Icon="@Icons.Material.Outlined.Person" />
                                 <MudText>@(context.Value?.Item3 == true ? "Retired" : "Active")</MudText>
                             </MudStack>
-                            <MudChip Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value?.Item2</MudChip>
+                            <MudChip T="string" Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value?.Item2</MudChip>
                         </MudStack>
                     </MudStack>
                 </ItemTemplate>
@@ -50,7 +50,7 @@
                                 <MudIcon Icon="@Icons.Material.Outlined.Person" />
                                 @*<MudText>@(context.Value.Item3 == true ? "Retired" : "Active")</MudText>*@
                             </MudStack>
-                            <MudChip Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value?.Item2</MudChip>
+                            <MudChip T="string" Color="Color.Info" Variant="Variant.Outlined">Total Score: @context.Value?.Item2</MudChip>
                         </MudStack>
                     </MudStack>
                 </ItemSelectedTemplate>

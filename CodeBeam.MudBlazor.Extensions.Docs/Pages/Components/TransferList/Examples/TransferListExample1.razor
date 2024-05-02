@@ -4,7 +4,7 @@
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex flex-column align-center justify-center">
         <MudTransferList @ref="_transferList" T="string" @bind-StartCollection="_startCollection" @bind-EndCollection="_endCollection" Vertical="_vertical" Color="_color"
-            StyleListCommon="background-color: var(--mud-palette-background-grey); width: 200px" MultiSelection="_multiSelection" MaxItems="_maxItems" SelectAllType="_selectAllType"
+            StyleListCommon="background-color: var(--mud-palette-background-gray); width: 200px" MultiSelection="_multiSelection" MaxItems="_maxItems" SelectAllType="_selectAllType"
             PreventTransfer="@(new Func<bool, bool>(CheckTransfer))" OrderFunc="@(_orderOnTransfer == false ? null : new Func<ICollection<string>, ICollection<string>>(OrderMethod))" ButtonVariant="_buttonVariant"
             AllowDoubleClick="_allowDoubleClick" SearchBoxStart="_searchboxStart" SearchBoxEnd="_searchboxEnd"
             StartTitle="@_startTitle" EndTitle="@_endTitle" />

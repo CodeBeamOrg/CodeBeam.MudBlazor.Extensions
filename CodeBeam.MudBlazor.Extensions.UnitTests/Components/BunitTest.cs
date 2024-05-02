@@ -5,12 +5,8 @@
 using System;
 using System.Threading.Tasks;
 using Bunit;
-using MudExtensions.UnitTests.Mocks;
-using Microsoft.Extensions.DependencyInjection;
-using MudBlazor;
 using MudBlazor.Services;
 using MudExtensions.Services;
-using NUnit.Framework;
 
 namespace MudExtensions.UnitTests.Components
 {

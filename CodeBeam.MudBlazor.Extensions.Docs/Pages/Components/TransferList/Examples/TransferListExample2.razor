@@ -4,7 +4,7 @@
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex flex-column align-center justify-center">
         <MudTransferList @ref="_transferList" T="ComplexTypes" @bind-StartCollection="_startCollection" @bind-EndCollection="_endCollection" Color="Color.Primary"
-            StyleListCommon="background-color: var(--mud-palette-background-grey); width: 200px" AllowDoubleClick="true" ToStringFunc="@(e => e?.Name + " " + e?.SurName)" />
+            StyleListCommon="background-color: var(--mud-palette-background-gray); width: 200px" AllowDoubleClick="true" ToStringFunc="@(e => e?.Name + " " + e?.SurName)" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
