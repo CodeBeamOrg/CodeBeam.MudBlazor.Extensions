@@ -3,7 +3,7 @@
 
 <div class="@Classname" style="@Style">
     @* Don't make OnDoubleClick to method, causes infinite loop *@
-    <MudSlider @ref="_slider" @bind-Value="@Dimension" @bind-Value:after="@(() => UpdateDimension(_slider.Value))" ondblclick="@OnDoubleClick"
+    <MudSlider @ref="_slider" @bind-Value="@Dimension" @bind-Value:after="@(() => UpdateDimension(Dimension))" ondblclick="@OnDoubleClick"
                T="double" Min="0" Max="100" Step="@Sensitivity" Disabled="@(!EnableSlide)"
                Class="@SliderClassname" Style="overflow: hidden; z-index: 6" />
 
