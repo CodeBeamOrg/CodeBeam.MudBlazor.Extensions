@@ -109,10 +109,10 @@
     public async Task Refresh()
     {
         _show = false;
-        await Task.Delay(1);
+        await Task.Delay(10);
         await InvokeAsync(StateHasChanged);
         _show = true;
-        await Task.Delay(1);
+        await Task.Delay(10);
         await InvokeAsync(StateHasChanged);
     }
 
