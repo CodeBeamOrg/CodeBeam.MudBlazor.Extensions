@@ -12,7 +12,7 @@
                                       Class="@InputClassname" Style="@InputStyle" Margin="@Margin" Placeholder="@Placeholder"
                                       Variant="@Variant"
                                       TextUpdateSuppression="false"
-                                      Value="@(Strict && !IsValueInList ? null : Text)" UnderLine="@UnderLine"
+                                      Value="@(Strict && !IsValueInList ? null : Text)" Underline="@Underline"
                                       Disabled="@Disabled" ReadOnly="true" Error="@Error" ErrorId="@ErrorId"
                                       Clearable="@Clearable" OnClearButtonClick="(async (e) => await SelectClearButtonClickHandlerAsync(e))"
                                       @attributes="UserAttributes" OnBlur="@OnLostFocus" ShrinkLabel="@ShrinkLabel"

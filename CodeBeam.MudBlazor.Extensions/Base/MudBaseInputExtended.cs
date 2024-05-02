@@ -69,7 +69,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public bool UnderLine { get; set; } = true;
+        public bool Underline { get; set; } = true;
 
         /// <summary>
         /// The HelperText will be displayed below the text field.
