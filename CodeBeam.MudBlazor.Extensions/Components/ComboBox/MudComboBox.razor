@@ -15,7 +15,7 @@
                 <InputContent>
                     @*DataVisualiserStyle="@($"min-height: 1.1876em;{(HasValue(Value) && Editable == true ? "padding-bottom: 0px" : null)}")"*@
                     <MudInputExtended @ref="_inputReference" T="string" InputType="@(Editable && !MultiSelection ? InputType.Text : InputType.Hidden)"
-                                      Class="@InputClassname" Style="@InputStyle" Margin="@Margin" Placeholder="@Placeholder"
+                                      Class="@InputClassname" Style="@InputStyle" Margin="@Margin" Placeholder="@Placeholder" Label="@Label"
                                       Variant="@Variant" Immediate="true"
                                       TextUpdateSuppression="false"
                                       ShowVisualiser="@((MultiSelection && SelectedValues?.Any() == true) || !Editable)" DataVisualiserStyle="min-height: 1.1876em"
