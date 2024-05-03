@@ -51,7 +51,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void StepperPageRenderTest()
         {
-            var comp = Context.RenderComponent<StepperPage>();
+            var comp = Context.RenderComponent<StepperExtendedPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 

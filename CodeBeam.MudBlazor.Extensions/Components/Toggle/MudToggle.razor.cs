@@ -5,6 +5,9 @@ using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class MudToggle : MudComponentBase
     {
         /// <summary>

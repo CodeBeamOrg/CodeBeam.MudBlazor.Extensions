@@ -4,6 +4,10 @@ using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class MudTransferList<T> : MudComponentBase
     {
         MudListExtended<T> _startList = new();
@@ -65,6 +69,9 @@ namespace MudExtensions
         [Parameter]
         public EventCallback<ICollection<T?>?> EndCollectionChanged { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public Func<T?, string?>? ToStringFunc { get; set; }
@@ -357,6 +364,10 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ICollection<T?>? GetStartListSelectedValues()
         {
             if (_startList == null)
@@ -408,6 +419,11 @@ namespace MudExtensions
             EndCollection = OrderFunc.Invoke(EndCollection);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         protected async Task DoubleClick(ListItemClickEventArgs<T> args)
         {
             if (AllowDoubleClick == false)

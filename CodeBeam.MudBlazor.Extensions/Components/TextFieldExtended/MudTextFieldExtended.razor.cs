@@ -7,6 +7,10 @@ using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class MudTextFieldExtended<T> : MudDebouncedInputExtended<T>
     {
         /// <summary>

@@ -4,6 +4,9 @@ using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class MudSpeedDial : MudComponentBase
     {
         Guid _animationGuid = Guid.NewGuid();

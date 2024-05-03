@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using MudBlazor.Extensions;
 using System.ComponentModel;
 
 namespace MudExtensions.Utilities
@@ -11,6 +10,10 @@ namespace MudExtensions.Utilities
     {
         private IJSRuntime JSRuntime;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jsRuntime"></param>
         public MudCssManager(IJSRuntime jsRuntime)
         {
             JSRuntime = jsRuntime;
@@ -34,7 +37,7 @@ namespace MudExtensions.Utilities
                 className = "." + className;
             }
 
-            object[] parameters = new object[] { className, cssProp.ToDescriptionString(), value };
+            object?[] parameters = new object?[] { className, cssProp.ToDescriptionString(), value };
             await JSRuntime.InvokeVoidAsync("setcss", parameters);
         }
 
@@ -56,7 +59,7 @@ namespace MudExtensions.Utilities
                 className = "." + className;
             }
 
-            object[] parameters = new object[] { className, cssPropName, value };
+            object?[] parameters = new object?[] { className, cssPropName, value };
             await JSRuntime.InvokeVoidAsync("setcss", parameters);
         }
 
@@ -99,7 +102,7 @@ namespace MudExtensions.Utilities
                 className = "." + className;
             }
 
-            object[] parameters = new object[] { className, cssPropName };
+            object?[] parameters = new object?[] { className, cssPropName };
             var result = await JSRuntime.InvokeAsync<string?>("getcss", parameters);
             return result;
         }

@@ -12,7 +12,9 @@ namespace MudExtensions
     /// <typeparam name="T"></typeparam>
     public partial class MudWheel<T> : MudBaseInput<T>
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
         [Inject] public IScrollManager ScrollManager { get; set; }
 
         /// <summary>
