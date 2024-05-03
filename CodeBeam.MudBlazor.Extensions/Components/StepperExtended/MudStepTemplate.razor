@@ -15,7 +15,7 @@
         </MudBadge>
         <MudText>
 
-            @if (Step.MudStepper.GetActiveIndex() == @Step.MudStepper.Steps.IndexOf(@Step))
+            @if (Step.MudStepperExtended.GetActiveIndex() == @Step.MudStepperExtended.Steps.IndexOf(@Step))
             {
 
                 <MudText><b>@Step.Title</b></MudText>
@@ -33,7 +33,7 @@
         </MudAvatar>
         <MudText>
 
-            @if (Step.MudStepper.GetActiveIndex() == @Step.MudStepper.Steps.IndexOf(@Step))
+            @if (Step.MudStepperExtended.GetActiveIndex() == @Step.MudStepperExtended.Steps.IndexOf(@Step))
             {
                 <MudText><b>@Step.Title</b></MudText>
             }

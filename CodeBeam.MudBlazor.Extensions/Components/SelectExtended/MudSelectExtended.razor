@@ -13,7 +13,7 @@
                                       Variant="@Variant"
                                       TextUpdateSuppression="false"
                                       Value="@(Strict && !IsValueInList ? null : Text)" Underline="@Underline"
-                                      Disabled="@Disabled" ReadOnly="true" Error="@Error" ErrorId="@ErrorId"
+                                      Disabled="@GetDisabledState()" ReadOnly="true" Error="@Error" ErrorId="@ErrorId"
                                       Clearable="@Clearable" OnClearButtonClick="(async (e) => await SelectClearButtonClickHandlerAsync(e))"
                                       @attributes="UserAttributes" OnBlur="@OnLostFocus" ShrinkLabel="@ShrinkLabel"
                                       ShowVisualiser="true" DataVisualiserStyle="min-height: 1.1876em">
@@ -47,14 +47,14 @@
                                     <MudChipSet T="T" Class="d-flex flex-wrap mud-width-full" Style="row-gap: 4px" AllClosable="ChipCloseable" OnClose="ChipClosed">
                                         @if (ItemCollection != null)
                                         {
-                                            foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
+                                            foreach (var item in ItemCollection.Where(x => SelectedValues?.Contains(x) == true))
                                             {
                                                 <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
                                             }
                                         }
                                         else
                                         {
-                                            foreach (var item in Items?.Where(x => SelectedValues.Contains(x.Value)) ?? new List<MudSelectItemExtended<T>>())
+                                            foreach (var item in Items?.Where(x => SelectedValues?.Contains(x.Value) == true) ?? new List<MudSelectItemExtended<T>>())
                                             {
                                                 <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
                                             }

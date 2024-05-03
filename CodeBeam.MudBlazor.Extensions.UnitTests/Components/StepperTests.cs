@@ -12,7 +12,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void StepperRenderTest()
         {
-            var comp = Context.RenderComponent<MudStepper>();
+            var comp = Context.RenderComponent<MudStepperExtended>();
             comp.Instance.Steps.Count.Should().Be(0);
         }
 
@@ -22,9 +22,9 @@ namespace MudExtensions.UnitTests.Components
             // Arrange
             var lastStepChangeDirection = StepChangeDirection.None;
             int _targetIndex = 0;
-            var stepper = Context.RenderComponent<MudStepper>(
+            var stepper = Context.RenderComponent<MudStepperExtended>(
                 ComponentParameterFactory.Parameter(
-                    nameof(MudStepper.PreventStepChangeAsync),
+                    nameof(MudStepperExtended.PreventStepChangeAsync),
                     new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         lastStepChangeDirection = direction;
@@ -33,7 +33,7 @@ namespace MudExtensions.UnitTests.Components
                     })
                 )
             );
-            var step0 = Context.RenderComponent<MudStep>(
+            var step0 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
 
@@ -50,9 +50,9 @@ namespace MudExtensions.UnitTests.Components
             // Arrange
             var lastStepChangeDirection = StepChangeDirection.None;
             int _targetIndex = 0;
-            var stepper = Context.RenderComponent<MudStepper>(
+            var stepper = Context.RenderComponent<MudStepperExtended>(
                 ComponentParameterFactory.Parameter(
-                    nameof(MudStepper.PreventStepChangeAsync),
+                    nameof(MudStepperExtended.PreventStepChangeAsync),
                     new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         lastStepChangeDirection = direction;
@@ -61,7 +61,7 @@ namespace MudExtensions.UnitTests.Components
                     })
                 )
             );
-            var step0 = Context.RenderComponent<MudStep>(
+            var step0 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
 
@@ -78,9 +78,9 @@ namespace MudExtensions.UnitTests.Components
             // Arrange
             var lastStepChangeDirection = StepChangeDirection.None;
             int _targetIndex = 0;
-            var stepper = Context.RenderComponent<MudStepper>(
+            var stepper = Context.RenderComponent<MudStepperExtended>(
                 ComponentParameterFactory.Parameter(
-                    nameof(MudStepper.PreventStepChangeAsync),
+                    nameof(MudStepperExtended.PreventStepChangeAsync),
                     new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         lastStepChangeDirection = direction;
@@ -89,10 +89,10 @@ namespace MudExtensions.UnitTests.Components
                     })
                 )
             );
-            var step0 = Context.RenderComponent<MudStep>(
+            var step0 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
-            var step1 = Context.RenderComponent<MudStep>(
+            var step1 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
             await stepper.Instance.SetActiveIndex(step0.Instance);
@@ -110,9 +110,9 @@ namespace MudExtensions.UnitTests.Components
             // Arrange
             var lastStepChangeDirection = StepChangeDirection.None;
             int _targetIndex = 0;
-            var stepper = Context.RenderComponent<MudStepper>(
+            var stepper = Context.RenderComponent<MudStepperExtended>(
                 ComponentParameterFactory.Parameter(
-                    nameof(MudStepper.PreventStepChangeAsync),
+                    nameof(MudStepperExtended.PreventStepChangeAsync),
                     new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         lastStepChangeDirection = direction;
@@ -121,10 +121,10 @@ namespace MudExtensions.UnitTests.Components
                     })
                 )
             );
-            var step0 = Context.RenderComponent<MudStep>(
+            var step0 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
-            var step1 = Context.RenderComponent<MudStep>(
+            var step1 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
             await stepper.Instance.SetActiveIndex(step1.Instance);
@@ -141,9 +141,9 @@ namespace MudExtensions.UnitTests.Components
         {
             // Arrange
             var lastStepChangeDirection = StepChangeDirection.None;
-            var stepper = Context.RenderComponent<MudStepper>(
+            var stepper = Context.RenderComponent<MudStepperExtended>(
                 ComponentParameterFactory.Parameter(
-                    nameof(MudStepper.PreventStepChangeAsync),
+                    nameof(MudStepperExtended.PreventStepChangeAsync),
                     new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         lastStepChangeDirection = direction;
@@ -151,7 +151,7 @@ namespace MudExtensions.UnitTests.Components
                     })
                 )
             );
-            var step0 = Context.RenderComponent<MudStep>(
+            var step0 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
             await stepper.Instance.SetActiveIndex(step0.Instance);
@@ -168,9 +168,9 @@ namespace MudExtensions.UnitTests.Components
         {
             // Arrange
             var preventStepChangeWasInvoked = false;
-            var stepper = Context.RenderComponent<MudStepper>(
+            var stepper = Context.RenderComponent<MudStepperExtended>(
                 ComponentParameterFactory.Parameter(
-                    nameof(MudStepper.PreventStepChangeAsync),
+                    nameof(MudStepperExtended.PreventStepChangeAsync),
                     new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         preventStepChangeWasInvoked = true;
@@ -178,10 +178,10 @@ namespace MudExtensions.UnitTests.Components
                     })
                 )
             );
-            var step0 = Context.RenderComponent<MudStep>(
+            var step0 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
-            var step1 = Context.RenderComponent<MudStep>(
+            var step1 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
             await stepper.Instance.SetActiveIndex(step0.Instance);
@@ -198,9 +198,9 @@ namespace MudExtensions.UnitTests.Components
         {
             // Arrange
             var preventStepChangeWasInvoked = false;
-            var stepper = Context.RenderComponent<MudStepper>(
+            var stepper = Context.RenderComponent<MudStepperExtended>(
                 ComponentParameterFactory.Parameter(
-                    nameof(MudStepper.PreventStepChangeAsync),
+                    nameof(MudStepperExtended.PreventStepChangeAsync),
                     new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         preventStepChangeWasInvoked = true;
@@ -208,10 +208,10 @@ namespace MudExtensions.UnitTests.Components
                     })
                 )
             );
-            var step0 = Context.RenderComponent<MudStep>(
+            var step0 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
-            var step1 = Context.RenderComponent<MudStep>(
+            var step1 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
             await stepper.Instance.SetActiveIndex(step0.Instance);
@@ -228,9 +228,9 @@ namespace MudExtensions.UnitTests.Components
         {
             // Arrange
             var preventStepChangeWasInvoked = false;
-            var stepper = Context.RenderComponent<MudStepper>(
+            var stepper = Context.RenderComponent<MudStepperExtended>(
                 ComponentParameterFactory.Parameter(
-                    nameof(MudStepper.PreventStepChangeAsync),
+                    nameof(MudStepperExtended.PreventStepChangeAsync),
                     new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         preventStepChangeWasInvoked = true;
@@ -238,10 +238,10 @@ namespace MudExtensions.UnitTests.Components
                     })
                 )
             );
-            var step0 = Context.RenderComponent<MudStep>(
+            var step0 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
-            var step1 = Context.RenderComponent<MudStep>(
+            var step1 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
             await stepper.Instance.SetActiveIndex(step0.Instance, skipPreventProcess: true);
@@ -258,9 +258,9 @@ namespace MudExtensions.UnitTests.Components
         {
             // Arrange
             var preventStepChangeWasInvoked = false;
-            var stepper = Context.RenderComponent<MudStepper>(
+            var stepper = Context.RenderComponent<MudStepperExtended>(
                 ComponentParameterFactory.Parameter(
-                    nameof(MudStepper.PreventStepChangeAsync),
+                    nameof(MudStepperExtended.PreventStepChangeAsync),
                     new Func<StepChangeDirection, int, Task<bool>>((direction, targetIndex) =>
                     {
                         preventStepChangeWasInvoked = true;
@@ -268,10 +268,10 @@ namespace MudExtensions.UnitTests.Components
                     })
                 )
             );
-            var step0 = Context.RenderComponent<MudStep>(
+            var step0 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
-            var step1 = Context.RenderComponent<MudStep>(
+            var step1 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
             await stepper.Instance.SetActiveIndex(step0.Instance, true);
@@ -287,11 +287,11 @@ namespace MudExtensions.UnitTests.Components
         public async Task StepperActiveIndexIsNotChangedWhenCompletingNonActiveStepTest()
         {
             // Arrange
-            var stepper = Context.RenderComponent<MudStepper>();
-            var step0 = Context.RenderComponent<MudStep>(
+            var stepper = Context.RenderComponent<MudStepperExtended>();
+            var step0 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
-            var step1 = Context.RenderComponent<MudStep>(
+            var step1 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
             await stepper.Instance.SetActiveIndex(stepper.Instance.Steps.IndexOf(step0.Instance));
@@ -307,11 +307,11 @@ namespace MudExtensions.UnitTests.Components
         public async Task StepperActiveIndexIsNotChangedWhenSkippingNonActiveStepTest()
         {
             // Arrange
-            var stepper = Context.RenderComponent<MudStepper>();
-            var step0 = Context.RenderComponent<MudStep>(
+            var stepper = Context.RenderComponent<MudStepperExtended>();
+            var step0 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
-            var step1 = Context.RenderComponent<MudStep>(
+            var step1 = Context.RenderComponent<MudStepExtended>(
                 ComponentParameterFactory.CascadingValue(stepper.Instance)
             );
             await stepper.Instance.SetActiveIndex(stepper.Instance.Steps.IndexOf(step0.Instance));
@@ -328,7 +328,7 @@ namespace MudExtensions.UnitTests.Components
         {
             // Arrange
             var comp = Context.RenderComponent<StepperTest1>();
-            var stepper = comp.FindComponent<MudStepper>();
+            var stepper = comp.FindComponent<MudStepperExtended>();
             comp.Instance.CheckChangeCount.Should().Be(0);
 
             await comp.InvokeAsync(() => stepper.Instance.SetActiveIndex(1));

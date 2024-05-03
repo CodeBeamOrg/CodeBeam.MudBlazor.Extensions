@@ -6,7 +6,7 @@
 
 <MudGrid Class="cursor-default">
     <MudItem xs="12" sm="8">
-        <MudStepper @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant"
+        <MudStepperExtended @ref="_stepper" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant"
                     DisableAnimation="_disableAnimation" DisablePreviousButton="_disablePreviousButton" DisableNextButton="_disableNextButton"
                     DisableSkipButton="_disableSkipButton" DisableStepResultIndicator="_disableStepResultIndicator" HeaderTextView="_headerTextView"
                     PreventStepChangeAsync="new Func<StepChangeDirection, int, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
@@ -21,7 +21,7 @@
                 }
             </StaticContent>
             <ChildContent>
-                <MudStep Title="Customer Info" StatusChanged="StatusChanged">
+                <MudStepExtended Title="Customer Info" StatusChanged="StatusChanged">
                     <MudForm @ref="_form">
                         <MudStack>
                             <MudTextField T="string" Label="Name" Variant="_variant" Required="true" />
@@ -29,13 +29,13 @@
                             <MudTextField T="string" Label="Adress" Variant="_variant" />
                         </MudStack>
                     </MudForm>
-                </MudStep>
-                <MudStep Title="Booking Spec." Optional="true">
+                </MudStepExtended>
+                <MudStepExtended Title="Booking Spec." Optional="true">
                     <MudCheckBox T="bool" Label="Early Check-in" Color="_color" />
                     <MudCheckBox T="bool" Label="Late Check-out" Color="_color" />
                     <MudCheckBox T="bool" Label="Twin Bed" Color="_color" />
-                </MudStep>
-                <MudStep Title="Payment">
+                </MudStepExtended>
+                <MudStepExtended Title="Payment">
                     <MudForm @ref="_form2">
                         <MudStack>
                             <MudTextField T="string" Label="Card Number" Variant="_variant" Required="true" />
@@ -45,16 +45,16 @@
                             </MudStack>
                         </MudStack>
                     </MudForm>
-                </MudStep>
+                </MudStepExtended>
 
                 @if (_addResultStep)
                 {
-                    <MudStep Title="Result Step" IsResultStep="true">
+                    <MudStepExtended Title="Result Step" IsResultStep="true">
                         <div class="d-flex flex-column align-center justify-center" style="height: 200px">
                             <MudIconButton Icon="@Icons.Material.Filled.DoneAll" Size="Size.Large" Variant="Variant.Filled" Color="Color.Success" />
                             <MudText>Your reservation successfully completed.</MudText>
                         </div>
-                    </MudStep>
+                    </MudStepExtended>
                 }
             </ChildContent>
             <ActionContent>
@@ -64,7 +64,7 @@
                 }
                 <MudSpacer />
             </ActionContent>
-        </MudStepper>
+        </MudStepperExtended>
     </MudItem>
 
     <MudItem xs="12" sm="4" Style="box-shadow: rgba(240, 46, 170, 0.4) -3px 3px;">
@@ -100,7 +100,7 @@
 </MudGrid>
 
 @code {
-    MudStepper _stepper = new();
+    MudStepperExtended _stepper = new();
     MudForm _form = new();
     MudForm _form2 = new();
     bool _checkValidationBeforeComplete = false;

@@ -33,9 +33,9 @@
                                       Value="@Text"
                                       ValueChanged="(s) => SetTextAsync(s)"
                                       Placeholder="@Placeholder"
-                                      Disabled=@Disabled
+                                      Disabled="@GetDisabledState()"
                                       Underline="@Underline"
-                                      ReadOnly="@ReadOnly"
+                                      ReadOnly="@GetReadOnlyState()"
                                       MaxLength="@MaxLength"
                                       IconSize="@IconSize"
                                       Error="@Error"

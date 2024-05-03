@@ -6,9 +6,9 @@
         <div style="@GetStepperStyle()">
             <div style=@GetStepperSubStyle()>
                 @{
-                    MudStep? currentStep = null;
+                    MudStepExtended? currentStep = null;
                 }
-                @foreach (MudStep step in _steps)
+                @foreach (MudStepExtended step in _steps)
                 {
                     if (IsStepActive(step))
                     {
@@ -51,7 +51,7 @@
                                 @if (HeaderTextView == HeaderTextView.All || HeaderTextView == HeaderTextView.OnlyActiveText)
                                 {
                                     <MudText Align="Align.Center" Class="mt-n1">
-                                        @if (step.MudStepper.GetActiveIndex() == @step.MudStepper.Steps.IndexOf(@step))
+                                        @if (step.MudStepperExtended.GetActiveIndex() == @step.MudStepperExtended.Steps.IndexOf(@step))
                                         {
                                             <MudText Color="@(step.Status != StepStatus.Continued ? Color : Color.Inherit)"><b>@step.Title</b></MudText>
                                         }
@@ -82,7 +82,7 @@
             <div class="@ContentClassname" style="@ContentStyle">
                 @ChildContent
             </div>
-            @if (DisablePreviousButton == false || DisableNextButton == false || DisableSkipButton)
+            @if (ShowPreviousButton == true || ShowNextButton == true || ShowSkipButton == false)
             {
                 <div class="@ActionClassname">
 
@@ -99,7 +99,7 @@
                         }
                     }
 
-                    @if (!DisablePreviousButton && ActiveIndex != 0)
+                    @if (ShowPreviousButton && ActiveIndex != 0)
                     {
                         if (IconActionButtons || MobileView)
                         {
@@ -127,14 +127,14 @@
                     {
                         if ((ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued) || (ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
                         {
-                            if (!DisableStepResultIndicator && MobileView == false)
+                            if (ShowStepResultIndicator && MobileView == false)
                             {
                                 <MudButton Color="@Color" Variant="Variant.Text" Disabled="true">@(Steps[ActiveIndex].Status == StepStatus.Completed ? LocalizedStrings.Completed : LocalizedStrings.Skipped)</MudButton>
                             }
                         }
                         else if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Optional == true)
                         {
-                            if (!DisableSkipButton)
+                            if (ShowSkipButton)
                             {
                                 if (IconActionButtons || MobileView)
                                 {
@@ -151,7 +151,7 @@
                         }
                     }
 
-                    @if (showResultStep == false && !DisableNextButton && !(ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
+                    @if (showResultStep == false && ShowNextButton && !(ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
                     {
                         if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued)
                         {
@@ -187,7 +187,7 @@
     </MudStack>
 </CascadingValue>
 
-@if (DisableAnimation == false)
+@if (Animation == true)
 {
     <MudAnimate @ref="_animate" Selector="@($".mud-stepper-ani-{_animateGuid.ToString()}")" AnimationType="AnimationType.Fade" Value="1" Duration="0.5" />
 }

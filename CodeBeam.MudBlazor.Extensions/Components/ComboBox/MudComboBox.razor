@@ -21,7 +21,7 @@
                                       ShowVisualiser="@((MultiSelection && SelectedValues?.Any() == true) || !Editable)" DataVisualiserStyle="min-height: 1.1876em"
                                       @bind-Value="@_searchString"
                                       Underline="@Underline"
-                                      Disabled="@Disabled" ReadOnly="@ReadOnly" Error="@Error" ErrorId="@ErrorId"
+                                      Disabled="@GetDisabledState()" ReadOnly="@GetReadOnlyState()" Error="@Error" ErrorId="@ErrorId"
                                       Clearable="@Clearable" ForceClearable="@(Clearable && HasValue(Value))" OnClearButtonClick="@ClearButtonClickHandlerAsync"
                                       @attributes="UserAttributes" OnBlur="@HandleOnBlur" ShrinkLabel="@(HasValue(Value) || _isOpen || ShrinkLabel)">
 

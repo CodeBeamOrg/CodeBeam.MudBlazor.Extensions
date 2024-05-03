@@ -7,13 +7,13 @@ namespace MudExtensions
     /// <summary>
     /// 
     /// </summary>
-    public partial class MudStep : MudComponentBase, IDisposable
+    public partial class MudStepExtended : MudComponentBase, IDisposable
     {
         /// <summary>
         /// 
         /// </summary>
         protected string? Classname => new CssBuilder()
-            .AddClass("d-none", ((MudStepper.ActiveIndex < MudStepper.Steps.Count && MudStepper.Steps[MudStepper.ActiveIndex] != this) || (MudStepper.ShowResultStep() && !IsResultStep)) || (IsResultStep && !MudStepper.ShowResultStep()))
+            .AddClass("d-none", ((MudStepperExtended.ActiveIndex < MudStepperExtended.Steps.Count && MudStepperExtended.Steps[MudStepperExtended.ActiveIndex] != this) || (MudStepperExtended.ShowResultStep() && !IsResultStep)) || (IsResultStep && !MudStepperExtended.ShowResultStep()))
             .AddClass(Class)
             .Build();
 
@@ -21,7 +21,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         [CascadingParameter]
-        public MudStepper MudStepper { get; set; } = new();
+        public MudStepperExtended MudStepperExtended { get; set; } = new();
 
         /// <summary>
         /// Step text to show on header.
@@ -40,7 +40,7 @@ namespace MudExtensions
             set
             {
                 _order = value;
-                MudStepper?.ReorderSteps();
+                MudStepperExtended?.ReorderSteps();
             }
         }
 
@@ -51,7 +51,7 @@ namespace MudExtensions
         {
             get
             {
-                return MudStepper?.ActiveIndex == this.Number;
+                return MudStepperExtended?.ActiveIndex == this.Number;
             }
         }
 
@@ -109,7 +109,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         [Parameter]
-        public RenderFragment<MudStep>? Template { get; set; }
+        public RenderFragment<MudStepExtended>? Template { get; set; }
 
         /// <summary>
         /// 
@@ -124,7 +124,7 @@ namespace MudExtensions
         {
             base.OnInitialized();
 
-            MudStepper.AddStep(this);
+            MudStepperExtended.AddStep(this);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace MudExtensions
         {
             try
             {
-                MudStepper?.RemoveStep(this);
+                MudStepperExtended?.RemoveStep(this);
             }
             catch (Exception) { }
         }

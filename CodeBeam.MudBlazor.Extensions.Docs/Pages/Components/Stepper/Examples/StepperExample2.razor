@@ -5,11 +5,11 @@
 
 <MudGrid Class="cursor-default">
     <MudItem xs="12" sm="8" Class="d-flex align-center">
-        <MudStepper @ref="_stepper" Class="mud-width-full" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical"
+        <MudStepperExtended @ref="_stepper" Class="mud-width-full" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical"
                     PreventStepChangeAsync="new Func<StepChangeDirection, int, Task<bool>>(CheckChange)" Variant="Variant.Filled" Color="Color.Secondary"
                     MobileView="_mobileView" Loading="_loading" HeaderTextView="HeaderTextView.All">
             <ChildContent>
-                <MudStep Icon="@Icons.Material.Filled.Approval" Title="Customer Info" StatusChanged="StatusChanged" Order="_infoStepOrder">    
+                <MudStepExtended Icon="@Icons.Material.Filled.Approval" Title="Customer Info" StatusChanged="StatusChanged" Order="_infoStepOrder">    
                     <ChildContent>
                         <MudForm @ref="_form">
                             <MudStack>
@@ -19,15 +19,15 @@
                             </MudStack>
                         </MudForm>
                     </ChildContent>
-                </MudStep>
-                <MudStep Title="Booking Spec." Icon="@Icons.Material.Filled.MoreVert" Optional="true" Order="_optionsStepOrder">
+                </MudStepExtended>
+                <MudStepExtended Title="Booking Spec." Icon="@Icons.Material.Filled.MoreVert" Optional="true" Order="_optionsStepOrder">
                     <ChildContent>
                         <MudCheckBox T="bool" Label="Early Check-in" />
                         <MudCheckBox T="bool" Label="Late Check-out" />
                         <MudCheckBox T="bool" Label="Twin Bed" />
                     </ChildContent>
-                </MudStep>
-                <MudStep Icon="@Icons.Material.Filled.Money" Title="Payment" Order="_paymentStepOrder">
+                </MudStepExtended>
+                <MudStepExtended Icon="@Icons.Material.Filled.Money" Title="Payment" Order="_paymentStepOrder">
                     <ChildContent>
                         <MudForm @ref="_form2">
                             <MudStack>
@@ -39,21 +39,21 @@
                             </MudStack>
                         </MudForm>
                     </ChildContent>
-                </MudStep>
+                </MudStepExtended>
 
                 @if (_addResultStep)
                 {
-                    <MudStep Icon="@Icons.Material.Filled.Alarm" Title="Result Step" IsResultStep="true">
+                    <MudStepExtended Icon="@Icons.Material.Filled.Alarm" Title="Result Step" IsResultStep="true">
                         <ChildContent>
                             <div class="d-flex flex-column align-center justify-center" style="height: 200px">
                                 <MudIconButton Icon="@Icons.Material.Filled.DoneAll" Size="Size.Large" Variant="Variant.Filled" Color="Color.Success" />
                                 <MudText>Your reservation successfully completed.</MudText>
                             </div>
                         </ChildContent>
-                    </MudStep>
+                    </MudStepExtended>
                 }
             </ChildContent>
-        </MudStepper>
+        </MudStepperExtended>
     </MudItem>
 
     <MudItem xs="12" sm="4" Style="box-shadow: rgba(240, 46, 170, 0.4) -3px 3px;">
@@ -71,7 +71,7 @@
 </MudGrid>
 
 @code {
-    MudStepper? _stepper;
+    MudStepperExtended? _stepper = new();
     MudForm _form = new();
     MudForm _form2 = new();
     bool _checkValidationBeforeComplete = false;

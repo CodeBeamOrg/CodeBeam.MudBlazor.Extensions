@@ -9,7 +9,7 @@ namespace MudExtensions
     /// <summary>
     /// Stepper component with extended features.
     /// </summary>
-    public partial class MudStepper : MudComponentBase
+    public partial class MudStepperExtended : MudComponentBase
     {
         MudAnimate _animate = new();
         Guid _animateGuid = Guid.NewGuid();
@@ -198,31 +198,31 @@ namespace MudExtensions
         /// If true, disables the default animation on step changing.
         /// </summary>
         [Parameter]
-        public bool DisableAnimation { get; set; }
+        public bool Animation { get; set; } = true;
 
         /// <summary>
         /// If true, disables built-in "previous" step action button.
         /// </summary>
         [Parameter]
-        public bool DisablePreviousButton { get; set; }
+        public bool ShowPreviousButton { get; set; } = true;
 
         /// <summary>
         /// If true, disables built-in "next" step action button.
         /// </summary>
         [Parameter]
-        public bool DisableNextButton { get; set; }
+        public bool ShowNextButton { get; set; } = true;
 
         /// <summary>
         /// If true, disables built-in "skip" step action button.
         /// </summary>
         [Parameter]
-        public bool DisableSkipButton { get; set; }
+        public bool ShowSkipButton { get; set; } = true;
 
         /// <summary>
         /// If true, disables built-in "completed"/"skipped" step result indictors shown in the actions panel.
         /// </summary>
         [Parameter]
-        public bool DisableStepResultIndicator { get; set; }
+        public bool ShowStepResultIndicator { get; set; } = true;
 
         /// <summary>
         /// 
@@ -318,12 +318,12 @@ namespace MudExtensions
         [Parameter]
         public Func<StepChangeDirection, int, Task<bool>>? PreventStepChangeAsync { get; set; }
 
-        List<MudStep> _steps = new();
-        List<MudStep> _allSteps = new();
+        List<MudStepExtended> _steps = new();
+        List<MudStepExtended> _allSteps = new();
         /// <summary>
         /// 
         /// </summary>
-        public List<MudStep> Steps
+        public List<MudStepExtended> Steps
         {
             get => _steps;
             protected set
@@ -340,7 +340,7 @@ namespace MudExtensions
             }
         }
 
-        internal void AddStep(MudStep step)
+        internal void AddStep(MudStepExtended step)
         {
             _allSteps.Add(step);
             if (!step.IsResultStep)
@@ -360,7 +360,7 @@ namespace MudExtensions
             Steps = Steps.OrderBy(x => x.Order).ToList();
         }
 
-        internal void RemoveStep(MudStep step)
+        internal void RemoveStep(MudStepExtended step)
         {
             Steps.Remove(step);
             _allSteps.Remove(step);
@@ -373,7 +373,7 @@ namespace MudExtensions
         /// <param name="step"></param>
         /// <param name="skipPreventProcess"></param>
         /// <returns></returns>
-        protected internal async Task SetActiveIndex(MudStep step, bool skipPreventProcess = false)
+        protected internal async Task SetActiveIndex(MudStepExtended step, bool skipPreventProcess = false)
         {
             await SetActiveStepByIndex(Steps.IndexOf(step), skipPreventProcess: skipPreventProcess);
         }
@@ -549,7 +549,7 @@ namespace MudExtensions
         /// </summary>
         /// <param name="step"></param>
         /// <returns></returns>
-        protected bool IsStepActive(MudStep step)
+        protected bool IsStepActive(MudStepExtended step)
         {
             return Steps.IndexOf(step) == ActiveIndex;
         }

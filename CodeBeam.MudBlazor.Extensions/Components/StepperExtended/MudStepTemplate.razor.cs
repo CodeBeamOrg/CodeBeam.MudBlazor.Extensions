@@ -2,10 +2,20 @@
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class MudStepTemplate : ComponentBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
         [Parameter]
-        public MudStep? Step { get; set; }
+        public MudStepExtended? Step { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public MudStepTemplate()
             : base()
         {
