@@ -152,11 +152,18 @@ namespace MudExtensions
             set
             {
                 _activeIndex = value;
-                ProgressValue = _activeIndex * (100.0 / (Steps.Count - 1));
+                UpdateProgressValue();
             }
         }
 
         internal double ProgressValue;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected void UpdateProgressValue()
+        {
+            ProgressValue = _activeIndex * (100.0 / (Steps.Count - 1));
+        }
 
         /// <summary>
         /// Provides CSS classes for the step content.
@@ -349,6 +356,7 @@ namespace MudExtensions
                 ReorderSteps();
             }
 
+            UpdateProgressValue();
             StateHasChanged();
         }
 
@@ -364,6 +372,7 @@ namespace MudExtensions
         {
             Steps.Remove(step);
             _allSteps.Remove(step);
+            UpdateProgressValue();
             StateHasChanged();
         }
 
@@ -633,10 +642,11 @@ namespace MudExtensions
         }
 
         /// <summary>
-        /// 
+        /// Update all component and render again.
         /// </summary>
         public void ForceRender()
         {
+            UpdateProgressValue();
             StateHasChanged();
         }
 
