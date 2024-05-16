@@ -173,7 +173,7 @@ namespace MudExtensions
                     _passwordIcon = Icons.Material.Filled.Visibility;
                 }
 
-                PasswordModeChanged.InvokeAsync(value).AndForget();
+                PasswordModeChanged.InvokeAsync(value).CatchAndLog();
             }
         }
 

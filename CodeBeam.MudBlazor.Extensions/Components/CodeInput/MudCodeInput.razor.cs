@@ -66,7 +66,7 @@ namespace MudExtensions
                     return;
                 }
                 _theValue = value;
-                SetValueFromOutside(_theValue).AndForget();
+                SetValueFromOutside(_theValue).CatchAndLog();
             }
         }
 

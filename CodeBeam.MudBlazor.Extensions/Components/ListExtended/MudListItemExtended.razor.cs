@@ -399,7 +399,7 @@ namespace MudExtensions
 
             if (OnClickHandlerPreventDefault)
             {
-                OnClick.InvokeAsync(ev).AndForget();
+                OnClick.InvokeAsync(ev).CatchAndLog();
                 return;
             }
 
@@ -410,13 +410,13 @@ namespace MudExtensions
             else if (Href != null)
             {
                 MudListExtended?.SetSelectedValue(this);
-                OnClick.InvokeAsync(ev).AndForget();
+                OnClick.InvokeAsync(ev).CatchAndLog();
                 NavigationManager?.NavigateTo(Href, ForceLoad);
             }
             else if (MudListExtended?.Clickable == true || MudListExtended?.MultiSelection == true)
             {
                 MudListExtended?.SetSelectedValue(this);
-                OnClick.InvokeAsync(ev).AndForget();
+                OnClick.InvokeAsync(ev).CatchAndLog();
             }
         }
 
@@ -426,7 +426,7 @@ namespace MudExtensions
         /// <param name="ev"></param>
         protected void OnlyOnClick(MouseEventArgs ev)
         {
-            OnClick.InvokeAsync(ev).AndForget();
+            OnClick.InvokeAsync(ev).CatchAndLog();
         }
 
         private Typo _textTypo;

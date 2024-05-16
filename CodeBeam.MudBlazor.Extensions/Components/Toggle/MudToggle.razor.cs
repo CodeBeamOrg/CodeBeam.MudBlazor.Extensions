@@ -51,7 +51,7 @@ namespace MudExtensions
                     return;
                 }
                 _toggled = value;
-                ToggledChanged.InvokeAsync().AndForget();
+                ToggledChanged.InvokeAsync().CatchAndLog();
             }
         }
 

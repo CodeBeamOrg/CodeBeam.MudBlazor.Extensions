@@ -43,7 +43,7 @@ namespace MudExtensions
 
             if (Mode == WatchMode.Watch)
             {
-                SetWatchMode(Mode).AndForget();
+                SetWatchMode(Mode).CatchAndLog();
                 Start();
             }
             if (Mode == WatchMode.StopWatch)
@@ -69,7 +69,7 @@ namespace MudExtensions
                     return;
                 }
                 _value = value;
-                InvokeAsync(() => ValueChanged.InvokeAsync(_value)).AndForget();
+                InvokeAsync(() => ValueChanged.InvokeAsync(_value)).CatchAndLog();
                 SetInternalValues();
             }
         }
@@ -110,7 +110,7 @@ namespace MudExtensions
                     return;
                 }
                 _watchMode = value;
-                SetWatchMode(_watchMode).AndForget();
+                SetWatchMode(_watchMode).CatchAndLog();
             }
         }
 

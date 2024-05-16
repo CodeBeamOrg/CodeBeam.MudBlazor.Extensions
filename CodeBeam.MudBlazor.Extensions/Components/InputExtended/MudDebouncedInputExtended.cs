@@ -108,7 +108,7 @@ namespace MudExtensions
 
         private void OnTimerTick(object? sender, ElapsedEventArgs e)
         {
-            InvokeAsync(OnTimerTickGuiThread).AndForget();
+            InvokeAsync(OnTimerTickGuiThread).CatchAndLog();
         }
 
         private async Task OnTimerTickGuiThread()
@@ -127,7 +127,7 @@ namespace MudExtensions
             _timer.Dispose();
             _timer = null;
             if (wasEnabled && !suppressTick)
-                OnTimerTickGuiThread().AndForget();
+                OnTimerTickGuiThread().CatchAndLog();
         }
 
         /// <summary>

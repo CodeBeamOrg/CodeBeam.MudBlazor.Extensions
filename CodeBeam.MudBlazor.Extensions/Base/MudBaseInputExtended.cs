@@ -476,7 +476,7 @@ namespace MudExtensions
         {
             var changed = base.SetConverter(value);
             if (changed)
-                UpdateTextPropertyAsync(false).AndForget();      // refresh only Text property from current Value
+                UpdateTextPropertyAsync(false).CatchAndLog();      // refresh only Text property from current Value
 
             return changed;
         }
@@ -490,7 +490,7 @@ namespace MudExtensions
         {
             var changed = base.SetCulture(value);
             if (changed)
-                UpdateTextPropertyAsync(false).AndForget();      // refresh only Text property from current Value
+                UpdateTextPropertyAsync(false).CatchAndLog();      // refresh only Text property from current Value
 
             return changed;
         }
@@ -517,7 +517,7 @@ namespace MudExtensions
             if (changed)
             {
                 ((Converter<T>)Converter).Format = value;
-                UpdateTextPropertyAsync(false).AndForget();      // refresh only Text property from current Value
+                UpdateTextPropertyAsync(false).CatchAndLog();      // refresh only Text property from current Value
             }
             return changed;
         }

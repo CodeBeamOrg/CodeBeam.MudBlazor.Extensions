@@ -26,7 +26,7 @@ namespace MudExtensions
                     return;
                 }
                 _loading = value;
-                LoadingChanged.InvokeAsync(_loading).AndForget();
+                LoadingChanged.InvokeAsync(_loading).CatchAndLog();
             }
         }
 

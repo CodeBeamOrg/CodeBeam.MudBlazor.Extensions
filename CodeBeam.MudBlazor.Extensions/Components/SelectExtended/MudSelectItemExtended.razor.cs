@@ -145,17 +145,17 @@ namespace MudExtensions
         protected void HandleOnClick()
         {
             // Selection works on list. We arrange only popover state and some minor arrangements on click.
-            MudSelectExtended?.SelectOption(Value).AndForget();
+            MudSelectExtended?.SelectOption(Value).CatchAndLog();
             InvokeAsync(StateHasChanged);
             if (!MultiSelection)
             {
-                MudSelectExtended?.CloseMenu().AndForget();
+                MudSelectExtended?.CloseMenu().CatchAndLog();
             }
             else
             {
-                MudSelectExtended?.FocusAsync().AndForget();
+                MudSelectExtended?.FocusAsync().CatchAndLog();
             }
-            OnClick.InvokeAsync().AndForget();
+            OnClick.InvokeAsync().CatchAndLog();
         }
 
         /// <summary>

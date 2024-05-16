@@ -644,8 +644,8 @@ namespace MudExtensions
 
                 _selectedValues = new HashSet<T?>(set, _comparer);
 
-                SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer)).AndForget();
-                ForceUpdateItems().AndForget();
+                SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer)).CatchAndLog();
+                ForceUpdateItems().CatchAndLog();
                 //Console.WriteLine("SelectedValues setter ended");
             }
         }
@@ -775,7 +775,7 @@ namespace MudExtensions
             else if (MultiSelection && SelectedValues != null)
             {
                 // TODO: Check this line again
-                SetValueAsync(SelectedValues.FirstOrDefault()).AndForget();
+                SetValueAsync(SelectedValues.FirstOrDefault()).CatchAndLog();
             }
 
         }

@@ -535,7 +535,7 @@ namespace MudExtensions
 
                 _selectedValue = value;
                 HandleCentralValueCommander(nameof(SelectedValue));
-                SelectedValueChanged.InvokeAsync(_selectedValue).AndForget();
+                SelectedValueChanged.InvokeAsync(_selectedValue).CatchAndLog();
             }
         }
 
@@ -588,7 +588,7 @@ namespace MudExtensions
                     return;
                 }
                 HandleCentralValueCommander(nameof(SelectedValues));
-                SelectedValuesChanged.InvokeAsync(SelectedValues == null ? null : new HashSet<T?>(SelectedValues, _comparer)).AndForget();
+                SelectedValuesChanged.InvokeAsync(SelectedValues == null ? null : new HashSet<T?>(SelectedValues, _comparer)).CatchAndLog();
             }
         }
 
@@ -617,7 +617,7 @@ namespace MudExtensions
                     return;
                 }
                 HandleCentralValueCommander(nameof(SelectedItem));
-                SelectedItemChanged.InvokeAsync(_selectedItem).AndForget();
+                SelectedItemChanged.InvokeAsync(_selectedItem).CatchAndLog();
             }
         }
 
@@ -652,7 +652,7 @@ namespace MudExtensions
                     return;
                 }
                 HandleCentralValueCommander(nameof(SelectedItems));
-                SelectedItemsChanged.InvokeAsync(_selectedItems).AndForget();
+                SelectedItemsChanged.InvokeAsync(_selectedItems).CatchAndLog();
             }
         }
 
@@ -716,7 +716,7 @@ namespace MudExtensions
                 return Task.CompletedTask;
             }
 
-            base.SetParametersAsync(parameters).AndForget();
+            base.SetParametersAsync(parameters).CatchAndLog();
 
             _setParametersDone = true;
             return Task.CompletedTask;

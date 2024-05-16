@@ -71,7 +71,7 @@ namespace MudExtensions
                     return;
                 }
                 _status = value;
-                StatusChanged.InvokeAsync(_status).AndForget();
+                StatusChanged.InvokeAsync(_status).CatchAndLog();
             }
         }
 
