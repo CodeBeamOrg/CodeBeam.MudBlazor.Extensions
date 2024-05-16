@@ -12,7 +12,7 @@
             <MudText>Values:
                 @foreach (var item in _values ?? new List<string>())
                 {
-                    <MudText Inline="true"> @(" " + item + " ") </MudText>
+                    <MudText HtmlTag="span"> @(" " + item + " ") </MudText>
                 }
             </MudText>
             <MudTextField @bind-Value="@_delimiter" Immediate="true" Label="Delimiter" Variant="Variant.Outlined" Margin="Margin.Dense" />

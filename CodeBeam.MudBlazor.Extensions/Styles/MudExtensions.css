@@ -781,6 +781,9 @@
   letter-spacing: var(--mud-typographym3-label-small-tracking);
   font-weight: var(--mud-typographym3-label-small-weight); }
 
+.mud-typography-display-inline {
+  display: inline; }
+
 /*@import '../abstracts/variables';*/
 .mud-list-extended {
   margin: 0;

@@ -28,7 +28,7 @@
     }
     else
     {
-        <MudText Typo="@Typo" Color="@Color" Align="Align.Center">@GetWatchText() <MudText Inline="true" Typo="@TypoMillisecond">@($"{(ShowMillisecond ? _milliSecond.ToString("D3") : null)}")</MudText></MudText>
+        <MudText Typo="@Typo" Color="@Color" Align="Align.Center">@GetWatchText() <MudText HtmlTag="span" Inline="true" Typo="@TypoMillisecond">@($"{(ShowMillisecond ? _milliSecond.ToString("D3") : null)}")</MudText></MudText>
     }
 </div>
                
