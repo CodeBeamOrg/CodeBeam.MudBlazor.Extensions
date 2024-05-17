@@ -1,20 +1,52 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.State;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
     /// <summary>
-    /// 
+    /// Inputs which each input box can contain only one character.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public partial class MudCodeInput<T> : MudFormComponent<T, string>
     {
         /// <summary>
-        /// 
+        /// MudCodeInput constructor.
         /// </summary>
-        public MudCodeInput() : base(new DefaultConverter<T>()) { }
+        public MudCodeInput() : base(new DefaultConverter<T>())
+        {
+            using var registerScope = CreateRegisterScope();
+            _theValue = registerScope.RegisterParameter<T?>(nameof(Value))
+                .WithParameter(() => Value)
+                .WithEventCallback(() => ValueChanged)
+                .WithChangeHandler(OnValueChanged);
+            _count = registerScope.RegisterParameter<int>(nameof(Count))
+                .WithParameter(() => Count)
+                .WithChangeHandler(OnCountChanged);
+        }
+
+        private readonly ParameterState<T?> _theValue;
+        private readonly ParameterState<int> _count;
+
+        private async Task OnValueChanged()
+        {
+            await SetValueFromOutside(Value);
+        }
+
+        private void OnCountChanged()
+        {
+            if (Count < 0)
+            {
+                Count = 0;
+            }
+
+            if (12 < Count)
+            {
+                Count = 12;
+            }
+        }
 
         /// <summary>
         /// Protected classes.
@@ -30,7 +62,7 @@ namespace MudExtensions
         protected string? InputClassname =>
             new CssBuilder("justify-text-center")
                 .AddClass("mud-code", Variant != Variant.Text)
-                .AddClass(ClassInput)
+                .AddClass(InputClass)
                 .Build();
 
         private List<MudTextField<T>> _elementReferences = new();
@@ -40,7 +72,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string? ClassInput { get; set; }
+        public string? InputClass { get; set; }
 
         /// <summary>
         /// Type of the input element. It should be a valid HTML5 input type.
@@ -48,27 +80,13 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public InputType InputType { get; set; } = InputType.Text;
-        
-        private T? _theValue;
 
         /// <summary>
         /// The value of the input.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public T? Value
-        {
-            get => _theValue;
-            set
-            {
-                if (Converter.Set(_theValue) == Converter.Set(value))
-                {
-                    return;
-                }
-                _theValue = value;
-                SetValueFromOutside(_theValue).CatchAndLog();
-            }
-        }
+        public T? Value { get; set; }
 
         /// <summary>
         /// The event fires when value changed.
@@ -77,32 +95,12 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public EventCallback<T?> ValueChanged { get; set; }
 
-        private int _count;
         /// <summary>
         /// The number of text fields.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public int Count
-        {
-            get => _count;
-            set
-            {
-                if (value == _count || value < 0)
-                {
-                    return;
-                }
-
-                if (12 < value)
-                {
-                    _count = 12;
-                }
-                else
-                {
-                    _count = value;
-                }
-            }
-        }
+        public int Count { get; set; }
 
         /// <summary>
         /// Determines the spacing between each input.
@@ -245,12 +243,11 @@ namespace MudExtensions
                 result += val;
             }
 
-            Value = Converter.Get(result);
-            await ValueChanged.InvokeAsync(Value);
+            await _theValue.SetValueAsync(Converter.Get(result));
         }
 
         /// <summary>
-        /// 
+        /// Call this method to set value programmatically.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -261,7 +258,7 @@ namespace MudExtensions
             {
                 val = val.Substring(0, Count);
             }
-            Value = Converter.Get(val);
+            await _theValue.SetValueAsync(Converter.Get(val));
             for (int i = 0; i < Count; i++)
             {
                 if (i < val?.Length)
@@ -273,9 +270,6 @@ namespace MudExtensions
                     await _elementReferences[i].SetText(null);
                 }
             }
-
-            await ValueChanged.InvokeAsync(Value);
-            StateHasChanged();
         }
 
     }

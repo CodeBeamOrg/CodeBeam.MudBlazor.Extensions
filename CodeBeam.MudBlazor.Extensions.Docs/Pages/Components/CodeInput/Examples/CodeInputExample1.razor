@@ -7,9 +7,9 @@
     </MudItem>
 
     <MudItem xs="12" sm="4">
-        <MudStack Spacing="4">
+        <MudStack Spacing="2">
             <MudText>Value: @_value</MudText>
-            <MudTextField @bind-Value="@_value" Immediate="true" Label="Two Way Bind Controller" />
+            <MudTextField @bind-Value="@_value" Immediate="true" Label="Two Way Bind Controller" Variant="Variant.Outlined" />
             <MudNumericField @bind-Value="_count" Label="Count" Variant="Variant.Outlined" />
             <MudNumericField @bind-Value="_spacing" Label="Spacing" Variant="Variant.Outlined" />
             <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant">
@@ -24,8 +24,8 @@
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSwitchM3 @bind-Value="@_disabled" Label="Disabled" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Value="@_readonly" Label="ReadOnly" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Value="@_disabled" Label="Disabled" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_readonly" Label="ReadOnly" Color="Color.Secondary" />
         </MudStack>
     </MudItem>
 </MudGrid>
