@@ -32,19 +32,19 @@ namespace MudExtensions
 
         private async Task OnValueChanged()
         {
-            await SetValueFromOutside(Value);
+            await SetValueFromOutside(_theValue.Value);
         }
 
-        private void OnCountChanged()
+        private async Task OnCountChanged()
         {
-            if (Count < 0)
+            if (_count.Value < 0)
             {
-                Count = 0;
+                await _count.SetValueAsync(0);
             }
 
-            if (12 < Count)
+            if (12 < _count.Value)
             {
-                Count = 12;
+                await _count.SetValueAsync(12);
             }
         }
 
@@ -65,7 +65,7 @@ namespace MudExtensions
                 .AddClass(InputClass)
                 .Build();
 
-        private List<MudTextField<T>> _elementReferences = new();
+        private List<MudTextFieldExtended<T>> _elementReferences = new();
 
         /// <summary>
         /// The CSS classes for each input, seperated by space.
@@ -137,6 +137,11 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public Margin Margin { get; set; }
 
+        private async Task OnInputHandler()
+        {
+            await FocusNext();
+        }
+
         /// <summary>
         /// Protected keydown event.
         /// </summary>
@@ -160,7 +165,7 @@ namespace MudExtensions
                 return;
             }
 
-            if (arg.Key.Length == 1 || arg.Key == "ArrowRight")
+            if (arg.Key == "ArrowRight")
             {
                 await FocusNext();
             }
@@ -183,7 +188,7 @@ namespace MudExtensions
         /// <returns></returns>
         public async Task FocusNext()
         {
-            if (_lastFocusedIndex >= Count - 1)
+            if (_lastFocusedIndex >= _count.Value - 1)
             {
                 await _elementReferences[_lastFocusedIndex].BlurAsync();
                 await _elementReferences[_lastFocusedIndex].FocusAsync();
@@ -221,7 +226,7 @@ namespace MudExtensions
             _elementReferences.Clear();
             for (int i = 0; i < 12; i++)
             {
-                _elementReferences.Add(new MudTextField<T>());
+                _elementReferences.Add(new MudTextFieldExtended<T>());
             }
         }
 
@@ -232,7 +237,7 @@ namespace MudExtensions
         public async Task SetValue()
         {
             string result =  "";
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < _count.Value; i++)
             {
                 var val = _elementReferences[i].Value?.ToString();
                 if (val == null)
@@ -254,12 +259,12 @@ namespace MudExtensions
         public async Task SetValueFromOutside(T? value)
         {
             string? val = Converter.Set(value);
-            if (Count < val?.Length)
+            if (_count.Value < val?.Length)
             {
-                val = val.Substring(0, Count);
+                val = val.Substring(0, _count.Value);
             }
             await _theValue.SetValueAsync(Converter.Get(val));
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < _count.Value; i++)
             {
                 if (i < val?.Length)
                 {

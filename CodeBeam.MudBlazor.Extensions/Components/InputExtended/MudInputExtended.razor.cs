@@ -177,16 +177,6 @@ namespace MudExtensions
         [Parameter] public bool AutoSize { get; set; }
 
         /// <summary>
-        /// Fires on input.
-        /// </summary>
-        [Parameter] public EventCallback OnInput { get; set; }
-
-        /// <summary>
-        /// Fires on change.
-        /// </summary>
-        [Parameter] public EventCallback OnChange { get; set; }
-
-        /// <summary>
         /// Paste hook for descendants.
         /// </summary>
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously

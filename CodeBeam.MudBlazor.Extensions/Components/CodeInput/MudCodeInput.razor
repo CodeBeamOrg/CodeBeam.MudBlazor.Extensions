@@ -6,8 +6,8 @@
     @for (int i = 0; i < Count; i++)
     {
         int a = i;
-        <MudTextField @ref="_elementReferences[a]" T="T" Class="@InputClassname" Style="@(Margin == Margin.Dense ? "width: 32px" : "width: 42px")" MaxLength="1"
-            @onkeydown="HandleKeyDown" @onfocus="@(() => CheckFocus(a))" @onblur="SetValue"
+        <MudTextFieldExtended @ref="_elementReferences[a]" T="T" Class="@InputClassname" Style="@(Margin == Margin.Dense ? "width: 32px" : "width: 42px")" MaxLength="1"
+            @onkeydown="HandleKeyDown" @onfocus="@(() => CheckFocus(a))" @onblur="SetValue" OnInput="OnInputHandler"
             Variant="@Variant" Margin="@Margin" Disabled="Disabled" ReadOnly="ReadOnly" Immediate="true" InputType="InputType" />
     }
 </div>

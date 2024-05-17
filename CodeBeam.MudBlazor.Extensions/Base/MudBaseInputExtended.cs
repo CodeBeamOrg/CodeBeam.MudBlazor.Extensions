@@ -50,6 +50,16 @@ namespace MudExtensions
         protected bool GetReadOnlyState() => ReadOnly || ParentReadOnly;
 
         /// <summary>
+        /// Fires on input.
+        /// </summary>
+        [Parameter] public EventCallback OnInput { get; set; }
+
+        /// <summary>
+        /// Fires on change.
+        /// </summary>
+        [Parameter] public EventCallback OnChange { get; set; }
+
+        /// <summary>
         /// If true, the input will take up the full width of its container.
         /// </summary>
         [Parameter]
