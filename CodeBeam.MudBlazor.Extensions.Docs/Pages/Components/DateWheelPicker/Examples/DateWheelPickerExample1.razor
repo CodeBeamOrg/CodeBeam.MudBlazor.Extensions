@@ -16,10 +16,10 @@
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSwitch @bind-Value="_editable" Color="Color.Primary" Label="Editable" />
-            <MudSwitch @bind-Value="_showToolbar" Color="Color.Primary" Label="Show Toolbar" />
-            <MudSwitch @bind-Value="_showHeader" Color="Color.Primary" Label="Show Header" />
-            <MudSwitch @bind-Value="_submitOnClose" Color="Color.Primary" Label="Submit On Close" />
+            <MudSwitchM3 @bind-Value="_editable" Color="Color.Secondary" Label="Editable" />
+            <MudSwitchM3 @bind-Value="_showToolbar" Color="Color.Secondary" Label="Show Toolbar" />
+            <MudSwitchM3 @bind-Value="_showHeader" Color="Color.Secondary" Label="Show Header" />
+            <MudSwitchM3 @bind-Value="_submitOnClose" Color="Color.Secondary" Label="Submit On Close" />
             <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color">
                 @foreach (Color item in Enum.GetValues<Color>())
                 {
@@ -33,12 +33,12 @@
                 }
             </MudSelect>
             <div class="d-flex flex-wrap">
-                <MudCheckBox @bind-Value="_fixDay" Label="Fix Day" />
-                <MudCheckBox @bind-Value="_fixMonth" Label="Fix Month" />
-                <MudCheckBox @bind-Value="_fixYear" Label="Fix Year" />
-                <MudCheckBox @bind-Value="_fixHour" Label="Fix Hour" />
-                <MudCheckBox @bind-Value="_fixMinute" Label="Fix Minute" />
-                <MudCheckBox @bind-Value="_fixSecond" Label="Fix Second" />
+                <MudCheckBox @bind-Value="_fixDay" Label="Fix Day" Color="Color.Secondary" />
+                <MudCheckBox @bind-Value="_fixMonth" Label="Fix Month" Color="Color.Secondary" />
+                <MudCheckBox @bind-Value="_fixYear" Label="Fix Year" Color="Color.Secondary" />
+                <MudCheckBox @bind-Value="_fixHour" Label="Fix Hour" Color="Color.Secondary" />
+                <MudCheckBox @bind-Value="_fixMinute" Label="Fix Minute" Color="Color.Secondary" />
+                <MudCheckBox @bind-Value="_fixSecond" Label="Fix Second" Color="Color.Secondary" />
             </div>
             <MudTextField @bind-Value="_dateFormat" Variant="Variant.Outlined" Label="Date Format" />
             <MudButton OnClick="@(() => _date = DateTime.Now)">Set Today</MudButton>

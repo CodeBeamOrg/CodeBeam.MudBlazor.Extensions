@@ -34,7 +34,7 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        public MudInput<string?> InputReference { get; private set; }
+        public MudInput<string?> InputReference { get; private set; } = new();
 
         [CascadingParameter(Name = "Standalone")]
         internal bool StandaloneEx { get; set; } = true;
