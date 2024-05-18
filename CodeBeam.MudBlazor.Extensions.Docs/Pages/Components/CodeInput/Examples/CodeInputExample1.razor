@@ -2,8 +2,8 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center" Style="height: 500px">
-        <MudCodeInput @ref="_textFieldGroup" T="string" @bind-Value="@_value" Count="@_count" Spacing="_spacing" Variant="@_variant" Margin="_margin"
-            Disabled="@_disabled" ReadOnly="@_readonly" />
+        <MudCodeInput T="string" @bind-Value="@_value" Count="@_count" Spacing="_spacing" Variant="@_variant" Margin="_margin"
+                      Disabled="@_disabled" ReadOnly="@_readonly" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -30,8 +30,7 @@
     </MudItem>
 </MudGrid>
 
-@code{
-    MudCodeInput<string>? _textFieldGroup;
+@code {
     string? _value;
     int _count = 4;
     int _spacing = 2;

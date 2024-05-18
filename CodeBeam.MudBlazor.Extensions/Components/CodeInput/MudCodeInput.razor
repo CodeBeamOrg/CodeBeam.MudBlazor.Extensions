@@ -2,15 +2,19 @@
 @typeparam T
 @inherits MudFormComponent<T, string>
 
-<div class="@Classname" style="@Style">
-    @for (int i = 0; i < Count; i++)
-    {
-        int a = i;
-        <MudTextFieldExtended @ref="_elementReferences[a]" T="T" Class="@InputClassname" Style="@(Margin == Margin.Dense ? "width: 32px" : "width: 42px")" MaxLength="1"
-            @onkeydown="HandleKeyDown" @onfocus="@(() => CheckFocus(a))" @onblur="SetValue" OnInput="OnInputHandler"
-            Variant="@Variant" Margin="@Margin" Disabled="Disabled" ReadOnly="ReadOnly" Immediate="true" InputType="InputType" />
-    }
-</div>
+<MudInputControl Class="@Class" Style="@Style" Error="@Error" ErrorText="@ErrorText" Required="false">
+    <InputContent>
+        <div class="@Classname" style="@InnerStyle">
+            @for (int i = 0; i < Count; i++)
+            {
+                int a = i;
+                <MudTextFieldExtended @ref="_elementReferences[a]" T="T" Class="@InputClassname" Style="@(Margin == Margin.Dense ? "width: 32px" : "width: 42px")" MaxLength="1"
+                                      @onkeydown="HandleKeyDown" @onfocus="@(() => CheckFocus(a))" @onblur="SetValue" OnInput="OnInputHandler" Error="@Error"
+                                      Variant="@Variant" Margin="@Margin" Disabled="Disabled" ReadOnly="ReadOnly" Immediate="true" InputType="InputType" />
+            }
+        </div>
+    </InputContent>
+</MudInputControl>
 
 <style>
     .justify-text-center input {

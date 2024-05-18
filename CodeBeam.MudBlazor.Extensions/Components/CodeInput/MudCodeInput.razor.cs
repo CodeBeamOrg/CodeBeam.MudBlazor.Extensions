@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.Interfaces;
 using MudBlazor.State;
 using MudBlazor.Utilities;
 
@@ -53,7 +54,8 @@ namespace MudExtensions
         /// </summary>
         protected string? Classname =>
            new CssBuilder($"d-flex gap-{Spacing}")
-           .AddClass(Class)
+            .AddClass("mud-code-input-inner")
+           .AddClass(InnerClass)
            .Build();
 
         /// <summary>
@@ -73,6 +75,20 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public string? InputClass { get; set; }
+
+        /// <summary>
+        /// The CSS classes for input container div, seperated by space.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public string? InnerClass { get; set; }
+
+        /// <summary>
+        /// The CSS styles for input container div.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public string? InnerStyle { get; set; }
 
         /// <summary>
         /// Type of the input element. It should be a valid HTML5 input type.
@@ -137,8 +153,15 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public Margin Margin { get; set; }
 
+        bool _skipInputEvent = false;
+        bool _skipRefocus = false;
         private async Task OnInputHandler()
         {
+            if (_skipInputEvent)
+            {
+                _skipInputEvent = false;
+                return;
+            }
             await FocusNext();
         }
 
@@ -154,22 +177,32 @@ namespace MudExtensions
                 return;
             }
 
-            if (RuntimeLocation.IsClientSide)
+            if (arg.Key == "Backspace" || arg.Key == "ArrowLeft" || arg.Key == "Delete")
             {
-                await Task.Delay(10);
-            }
-            
-            if (arg.Key == "Backspace" || arg.Key == "ArrowLeft")
-            {
+                _skipInputEvent = true;
+                _skipRefocus = true;
+                if (arg.Key == "Delete")
+                {
+                    await _elementReferences[_lastFocusedIndex].Clear();
+                    _skipInputEvent = false;
+                }
+                if (RuntimeLocation.IsClientSide)
+                {
+                    await Task.Delay(10);
+                }
                 await FocusPrevious();
                 return;
             }
 
             if (arg.Key == "ArrowRight")
             {
+                if (RuntimeLocation.IsClientSide)
+                {
+                    await Task.Delay(10);
+                }
                 await FocusNext();
             }
-            
+
         }
 
         private int _lastFocusedIndex = 0;
@@ -177,9 +210,16 @@ namespace MudExtensions
         /// 
         /// </summary>
         /// <param name="count"></param>
-        protected void CheckFocus(int count)
+        protected async Task CheckFocus(int count)
         {
             _lastFocusedIndex = count;
+            if (_skipRefocus == true)
+            {
+                _skipRefocus = false;
+                return;
+            }
+            string str = Converter.Set(_theValue.Value) ?? string.Empty;
+            await _elementReferences[str.Length].FocusAsync();
         }
 
         /// <summary>
@@ -236,7 +276,7 @@ namespace MudExtensions
         /// <returns></returns>
         public async Task SetValue()
         {
-            string result =  "";
+            string result = "";
             for (int i = 0; i < _count.Value; i++)
             {
                 var val = _elementReferences[i].Value?.ToString();
