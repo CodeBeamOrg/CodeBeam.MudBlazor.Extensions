@@ -4,7 +4,8 @@
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center flex-wrap">
         <MudPaper Class="mud-width-full" Style="height: 300px; position: relative">
-            <MudLoading @bind-Loading="_loading" Overlap="@_overlap" LoaderType="_loaderType" Darken="_darken" Text="@_text" ClassText="@(_darken ? "white-text" : null)">
+            <MudLoading @bind-Loading="_loading" Overlap="@_overlap" LoaderType="_loaderType" Darken="_darken" 
+                        Text="@_text" TextClass="@(_darken ? "white-text" : null)" Color="_color">
                 <MudStack>
                     <MudText>This is a text inside a paper. Its the content.</MudText>
                     <MudButton OnClick="ShowSnackbar" Variant="Variant.Filled" Color="Color.Primary">A Button Can Not Be Clickable While Loading</MudButton>
@@ -15,13 +16,14 @@
 
     <MudItem xs="12" sm="4">
         <MudStack>
-            <MudSwitch @bind-Value="_loading" Color="Color.Primary">Loading</MudSwitch>
-            <MudCheckBox @bind-Value="_overlap" Label="Overlap" Color="Color.Primary" />
-            <MudCheckBox @bind-Value="_darken" Label="Darken" Color="Color.Primary" />
-            <MudSelect @bind-Value="_loaderType" Variant="Variant.Outlined" Label="Loader Type">
+            <MudSwitchM3 @bind-Value="_loading" Color="Color.Secondary">Loading</MudSwitchM3>
+            <MudCheckBox @bind-Value="_overlap" Label="Overlap" Color="Color.Secondary" />
+            <MudCheckBox @bind-Value="_darken" Label="Darken" Color="Color.Secondary" />
+            <MudSelect @bind-Value="_loaderType" Variant="Variant.Outlined" Label="Loader Type" AnchorOrigin="Origin.BottomCenter">
                 <MudSelectItem Value="LoaderType.Circular">Circular</MudSelectItem>
                 <MudSelectItem Value="LoaderType.Linear">Linear</MudSelectItem>
             </MudSelect>
+            <MudSelectExtended @bind-Value="_color" ItemCollection="@(Enum.GetValues<Color>())" Variant="Variant.Outlined" Label="Color" AnchorOrigin="Origin.BottomCenter" />
             <MudTextField @bind-Value="_text" Variant="Variant.Outlined" Label="Text" />
         </MudStack>
     </MudItem>
@@ -33,6 +35,7 @@
     bool _darken;
     string? _text;
     LoaderType _loaderType = LoaderType.Circular;
+    Color _color = Color.Primary;
 
     private void ShowSnackbar()
     {

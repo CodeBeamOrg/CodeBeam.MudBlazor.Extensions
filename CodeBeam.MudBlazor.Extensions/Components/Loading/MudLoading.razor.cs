@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.State;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -10,32 +11,32 @@ namespace MudExtensions
     public partial class MudLoading : MudComponentBase
     {
         /// <summary>
+        /// MudLoading constructor.
+        /// </summary>
+        public MudLoading()
+        {
+            using var registerScope = CreateRegisterScope();
+            _loading = registerScope.RegisterParameter<bool>(nameof(Loading))
+                .WithParameter(() => Loading)
+                .WithEventCallback(() => LoadingChanged);
+        }
+
+        private readonly ParameterState<bool> _loading;
+
+        /// <summary>
         /// 
         /// </summary>
         protected string? TextClassname => new CssBuilder()
             .AddClass("mt-4")
-            .AddClass(ClassText)
+            .AddClass(TextClass)
             .Build();
         
-        bool _loading = true;
         /// <summary>
         /// Two way binded loading state.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public bool Loading 
-        { 
-            get => _loading; 
-            set
-            {
-                if (_loading == value)
-                {
-                    return;
-                }
-                _loading = value;
-                LoadingChanged.InvokeAsync(_loading).CatchAndLog();
-            }
-        }
+        public bool Loading { get; set; }
 
         /// <summary>
         /// Fires when loading changed.
@@ -62,28 +63,28 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string? ClassText { get; set; }
+        public string? TextClass { get; set; }
 
         /// <summary>
         /// CSS classes for the progress component, seperated by space.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string? ClassLoader { get; set; }
+        public string? LoaderClass { get; set; }
 
         /// <summary>
         /// CSS style for the text.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string? StyleText { get; set; }
+        public string? TextStyle { get; set; }
         
         /// <summary>
         /// CSS style for the progress component.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public string? StyleLoader { get; set; }
+        public string? LoaderStyle { get; set; }
 
         /// <summary>
         /// If true, show a darken background.
@@ -91,6 +92,13 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public bool Darken { get; set; } = false;
+
+        /// <summary>
+        /// The color of loading indicator. Default is Color.Primary.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Appearance)]
+        public Color Color { get; set; } = Color.Primary;
 
         /// <summary>
         /// Set the indicator type. A middle placed circular or top placed linear progress.

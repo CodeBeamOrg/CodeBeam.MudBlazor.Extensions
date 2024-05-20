@@ -2,7 +2,7 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center flex-wrap">
-        <MudLoadingButton @bind-Loading="_loading2" LoadingAdornment="_adornment2" LoadingCircularColor="Color.Primary" OnClick="ButtonClick2" Variant="Variant.Filled" Color="Color.Primary">
+        <MudLoadingButton @bind-Loading="_loading" LoadingAdornment="_adornment" LoadingCircularColor="Color.Primary" OnClick="ButtonClick" Variant="Variant.Filled" Color="Color.Primary">
             <LoadingContent>
                 LOADING
             </LoadingContent>
@@ -12,31 +12,23 @@
             </ChildContent>
         </MudLoadingButton>
 
-        <MudLoadingButton ButtonVariant="ButtonVariant.IconButton" @bind-Loading="_loading2" Icon="@Icons.Custom.Brands.MudBlazor" LoadingAdornment="_adornment2" LoadingCircularColor="Color.Primary" OnClick="ButtonClick2" Variant="Variant.Filled" Color="Color.Primary">
+        <MudLoadingButton ButtonVariant="ButtonVariant.IconButton" @bind-Loading="_loading" Icon="@Icons.Custom.Brands.MudBlazor" LoadingAdornment="_adornment" LoadingCircularColor="Color.Primary" OnClick="ButtonClick" Variant="Variant.Filled" Color="Color.Primary">
             <LoadingContent>
                 LOADING
             </LoadingContent>
-
-            <ChildContent>
-                CLICK ME
-            </ChildContent>
         </MudLoadingButton>
 
-        <MudLoadingButton ButtonVariant="ButtonVariant.Fab" @bind-Loading="_loading2" StartIcon="@Icons.Custom.Brands.MudBlazor" LoadingAdornment="_adornment2" LoadingCircularColor="Color.Primary" OnClick="ButtonClick2" Variant="Variant.Filled" Color="Color.Primary">
+        <MudLoadingButton ButtonVariant="ButtonVariant.Fab" @bind-Loading="_loading" StartIcon="@Icons.Custom.Brands.MudBlazor" LoadingAdornment="_adornment" LoadingCircularColor="Color.Primary" OnClick="ButtonClick" Variant="Variant.Filled" Color="Color.Primary">
             <LoadingContent>
                 LOADING
             </LoadingContent>
-
-            <ChildContent>
-                CLICK ME
-            </ChildContent>
         </MudLoadingButton>
     </MudItem>
 
     <MudItem xs="12" sm="4">
         <MudStack>
-            <MudSwitch @bind-Value="_loading2" Color="Color.Primary">Loading</MudSwitch>
-            <MudSelect @bind-Value="_adornment2" Variant="Variant.Outlined" Label="Loading Adornment">
+            <MudSwitchM3 @bind-Value="_loading" Color="Color.Secondary">Loading</MudSwitchM3>
+            <MudSelect @bind-Value="_adornment" Variant="Variant.Outlined" Label="Loading Adornment" AnchorOrigin="Origin.BottomCenter">
                 <MudSelectItem Value="Adornment.Start">Start</MudSelectItem>
                 <MudSelectItem Value="Adornment.End">End</MudSelectItem>
             </MudSelect>
@@ -45,13 +37,13 @@
 </MudGrid>
 
 @code{
-    bool _loading2 = false;
-    Adornment _adornment2 = Adornment.Start;
+    bool _loading = false;
+    Adornment _adornment = Adornment.Start;
 
-    private async Task ButtonClick2()
+    private async Task ButtonClick()
     {
-        _loading2 = true;
+        _loading = true;
         await Task.Delay(2000);
-        _loading2 = false;
+        _loading = false;
     }
 }    

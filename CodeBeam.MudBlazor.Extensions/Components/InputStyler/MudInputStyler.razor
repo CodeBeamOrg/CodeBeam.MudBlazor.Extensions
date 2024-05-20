@@ -119,13 +119,8 @@
         }
         else
         {
-            <MudRender>@(Selector) .mud-input-underline:after {
-                @($"border-color: {BorderColor} !important;");
-            }</MudRender>
-
-            <MudRender>@(Selector) .mud-input-outlined:focus-within .mud-input-outlined-border {
-                @($"border-color: {BorderColor} !important;");
-            }</MudRender>
+            @($"{Selector} .mud-input-underline:after {{ border-color: {BorderColor} !important; }}")
+            @($"{Selector} .mud-input-outlined:focus-within .mud-input-outlined-border {{ border-color: {BorderColor} !important; }}")
         }
     }
 

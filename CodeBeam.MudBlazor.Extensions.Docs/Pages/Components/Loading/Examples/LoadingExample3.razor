@@ -4,10 +4,10 @@
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex gap-4 align-center flex-wrap">
         <MudPaper Class="mud-width-full" Style="height: 300px; position: relative">
-            <MudLoading @bind-Loading="_loading" LoaderType="_loaderType" Text="@_text" ClassText="@_classText" ClassLoader="@_classLoader" StyleText="@_styleText" StyleLoader="@_styleLoader">
-                <MudStack>
+            <MudLoading @bind-Loading="_loading" LoaderType="_loaderType" Text="@_text" TextClass="@_classText" LoaderClass="@_classLoader" TextStyle="@_styleText" LoaderStyle="@_styleLoader">
+                <MudStack Class="pa-4">
                     <MudText>This is a text inside a paper. Its the content.</MudText>
-                    <MudButton OnClick="ShowSnackbar" Variant="Variant.Filled" Color="Color.Primary">A Button Can Not Be Clickable While Loading</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary">A Button</MudButton>
                 </MudStack>
             </MudLoading>
         </MudPaper>
@@ -15,7 +15,7 @@
 
     <MudItem xs="12" sm="4">
         <MudStack>
-            <MudSwitch @bind-Value="_loading" Color="Color.Primary">Loading</MudSwitch>
+            <MudSwitchM3 @bind-Value="_loading" Color="Color.Secondary">Loading</MudSwitchM3>
             <MudSelect @bind-Value="_loaderType" Variant="Variant.Outlined" Label="Loader Type">
                 <MudSelectItem Value="LoaderType.Circular">Circular</MudSelectItem>
                 <MudSelectItem Value="LoaderType.Linear">Linear</MudSelectItem>
@@ -37,9 +37,4 @@
     string? _classLoader;
     string? _styleLoader;
     LoaderType _loaderType = LoaderType.Circular;
-
-    private void ShowSnackbar()
-    {
-        Snackbar.Add("Button clicked.", Severity.Info);
-    }
 }

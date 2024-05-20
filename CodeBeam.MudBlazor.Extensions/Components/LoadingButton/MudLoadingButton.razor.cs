@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.State;
 
 namespace MudExtensions
 {
@@ -10,25 +11,25 @@ namespace MudExtensions
     public partial class MudLoadingButton : MudBaseButton
     {
 
-        bool _loading = true;
+        /// <summary>
+        /// MudLoadingButton constructor.
+        /// </summary>
+        public MudLoadingButton()
+        {
+            using var registerScope = CreateRegisterScope();
+            _loading = registerScope.RegisterParameter<bool>(nameof(Loading))
+                .WithParameter(() => Loading)
+                .WithEventCallback(() => LoadingChanged);
+        }
+
+        private readonly ParameterState<bool> _loading;
+
         /// <summary>
         /// Two way binded loading state.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public bool Loading 
-        { 
-            get => _loading; 
-            set
-            {
-                if (_loading == value)
-                {
-                    return;
-                }
-                _loading = value;
-                LoadingChanged.InvokeAsync(_loading).CatchAndLog();
-            }
-        }
+        public bool Loading { get; set; }
 
         /// <summary>
         /// Fires when loading changed.
@@ -166,10 +167,10 @@ namespace MudExtensions
             if (AutoDelay != null)
             {
                 Task task = Task.Delay(AutoDelay.Value);
-                _loading = true;
+                await _loading.SetValueAsync(true);
                 await OnClickHandler(args);
                 await task;
-                _loading = false;
+                await _loading.SetValueAsync(false);
             }
             else
             {
