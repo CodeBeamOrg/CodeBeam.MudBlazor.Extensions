@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.State;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -12,6 +13,34 @@ namespace MudExtensions
     public partial class MudPasswordField<T> : MudDebouncedInput<T>
     {
         /// <summary>
+        /// MudPasswordField constructor.
+        /// </summary>
+        public MudPasswordField()
+        {
+            using var registerScope = CreateRegisterScope();
+            _passwordMode = registerScope.RegisterParameter<bool>(nameof(PasswordMode))
+                .WithParameter(() => PasswordMode)
+                .WithEventCallback(() => PasswordModeChanged)
+                .WithChangeHandler(OnPasswordChanged);
+        }
+
+        private void OnPasswordChanged()
+        {
+            if (_passwordMode.Value)
+            {
+                _passwordInput = InputType.Password;
+                _passwordIcon = Icons.Material.Filled.VisibilityOff;
+            }
+            else
+            {
+                _passwordInput = InputType.Text;
+                _passwordIcon = Icons.Material.Filled.Visibility;
+            }
+        }
+
+        private readonly ParameterState<bool> _passwordMode;
+
+        /// <summary>
         /// 
         /// </summary>
         protected string? Classname =>
@@ -22,10 +51,9 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        public MudInputExtended<string?> InputReference { get; private set; } = new();
+        public MudInputExtended<string?> InputReference { get; private set; } = null!;
         InputType _passwordInput = InputType.Password;
         string? _passwordIcon = Icons.Material.Filled.VisibilityOff;
-        bool _passwordMode = true;
 
         [CascadingParameter(Name = "Standalone")]
         internal bool StandaloneEx { get; set; } = true;
@@ -152,30 +180,7 @@ namespace MudExtensions
         /// If true, masks text with password mode.
         /// </summary>
         [Parameter]
-        public bool PasswordMode
-        {
-            get => _passwordMode;
-            set
-            {
-                if (_passwordMode == value)
-                {
-                    return;
-                }
-                _passwordMode = value;
-                if (_passwordMode)
-                {
-                    _passwordInput = InputType.Password;
-                    _passwordIcon = Icons.Material.Filled.VisibilityOff;
-                }
-                else
-                {
-                    _passwordInput = InputType.Text;
-                    _passwordIcon = Icons.Material.Filled.Visibility;
-                }
-
-                PasswordModeChanged.InvokeAsync(value).CatchAndLog();
-            }
-        }
+        public bool PasswordMode { get; set; } = true;
 
         /// <summary>
         /// Fires when password mode changed.
@@ -189,7 +194,7 @@ namespace MudExtensions
         /// <returns></returns>
         protected async Task AdornmentClick()
         {
-            PasswordMode = !PasswordMode;
+            await _passwordMode.SetValueAsync(!_passwordMode.Value);
             await OnAdornmentClick.InvokeAsync();
         }
 
