@@ -1,7 +1,7 @@
 ﻿@namespace MudExtensions
 @inherits MudComponentBase
 
-@if (Loading == true)
+@if (_loading.Value == true)
 {
     if (LoaderType == LoaderType.Circular)
     {
@@ -40,7 +40,7 @@
     }
 }
 
-@if (!Loading || Overlap)
+@if (!_loading.Value || Overlap)
 {
     @ChildContent
 }

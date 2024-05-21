@@ -3,12 +3,12 @@
 
 @if (ButtonVariant == ButtonVariant.Button)
 {
-    <MudButton Disabled="@(Disabled ? true : Loading ? true : false)"
+    <MudButton Disabled="@(Disabled ? true : _loading.Value ? true : false)"
            Size="@Size" Class="@Class" Style="@Style" UserAttributes="@UserAttributes" Variant="@Variant" Color="@Color" OnClick="@ButtonClick"
            Href="@Href" Target="@Target" ButtonType="@ButtonType" DropShadow="@DropShadow" Ripple="@Ripple"
            StartIcon="@StartIcon" EndIcon="@EndIcon" FullWidth="@FullWidth" HtmlTag="@HtmlTag"
            IconClass="@IconClass" IconColor="@IconColor" Tag="@Tag">
-        @if (Loading)
+        @if (_loading.Value)
         {
             if (LoadingAdornment == Adornment.Start)
             {
@@ -37,11 +37,11 @@
 }
 else if (ButtonVariant == ButtonVariant.IconButton)
 {
-    <MudIconButton Disabled="@(Disabled ? true : Loading ? true : false)"
+    <MudIconButton Disabled="@(Disabled ? true : _loading.Value ? true : false)"
                Size="@Size" Class="@Class" Style="@Style" UserAttributes="@UserAttributes" Variant="@Variant" Color="@Color" OnClick="@ButtonClick"
                Href="@Href" Target="@Target" ButtonType="@ButtonType" DropShadow="@DropShadow" Ripple="@Ripple"
-               Icon="@(Loading ? null : Icon)" HtmlTag="@HtmlTag" Title="@Title">
-        @if (Loading)
+               Icon="@(_loading.Value ? null : Icon)" HtmlTag="@HtmlTag" Title="@Title">
+        @if (_loading.Value)
         {
             <div class="d-flex align-center">
                 @if (LoadingAdornment == Adornment.Start)
@@ -63,9 +63,9 @@ else if (ButtonVariant == ButtonVariant.IconButton)
 }
 else if (ButtonVariant == ButtonVariant.Fab)
 {
-    @if (Loading == false)
+    @if (_loading.Value == false)
     {
-        <MudFab Disabled="@(Disabled ? true : Loading ? true : false)"
+        <MudFab Disabled="@(Disabled ? true : _loading.Value ? true : false)"
         Size="@Size" Class="@Class" Style="@Style" UserAttributes="@UserAttributes" Color="@Color" OnClick="@ButtonClick"
         Href="@Href" Target="@Target" ButtonType="@ButtonType" DropShadow="@DropShadow" Ripple="@Ripple"
         StartIcon="@StartIcon" EndIcon="@EndIcon" IconColor="@IconColor" IconSize="@IconSize" Label="@Label"
