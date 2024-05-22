@@ -42,6 +42,12 @@ namespace MudExtensions
         public int Height { get; set; } = 200;
 
         /// <summary>
+        /// Use this value on not square sized barcode formats like UPC_A and UPC_E.
+        /// </summary>
+        [Parameter]
+        public int ForceHeight { get; set; } = 1;
+
+        /// <summary>
         /// Increase the stroke width if readers can not read the barcode easily.
         /// </summary>
         [Parameter]
@@ -92,7 +98,7 @@ namespace MudExtensions
             {
                 var matrix = Encoder.encode(Value, BarcodeFormat, 0, 0);
 
-                var result = new BarcodeResult(matrix, 1, 1);
+                var result = new BarcodeResult(matrix, 1, ForceHeight);
                 ErrorText = null;
                 return result;
             }
