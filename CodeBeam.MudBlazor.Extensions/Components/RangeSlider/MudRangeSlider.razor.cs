@@ -2,6 +2,7 @@
 using MudBlazor;
 using MudBlazor.Utilities;
 using System.Globalization;
+using System.Numerics;
 
 namespace MudExtensions
 {
@@ -9,7 +10,7 @@ namespace MudExtensions
     /// Mud slider with range abilities.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class MudRangeSlider<T> : MudComponentBase
+    public partial class MudRangeSlider<T> : MudComponentBase where T : struct, INumber<T>
     {
         /// <summary>
         /// 
@@ -23,12 +24,11 @@ namespace MudExtensions
                 .Build();
 
         private string? _value;
-        private string? _min = "0";
-        private string? _max = "100";
-        private string? _step = "1";
-        private string? _minDistance = "1";
+        //private string? _min = "0";
+        //private string? _max = "100";
+        //private string? _step = "1";
+        //private string? _minDistance = "1";
 
-        private bool _range = false;
         private string? _upperValue;
 
 
@@ -44,11 +44,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Slider.Validation)]
-        public bool Range
-        {
-            get => _range;
-            set => _range = value;
-        }
+        public bool Range { get; set; } = true;
 
         /// <summary>
         /// Custom text for ValueLabel
@@ -69,11 +65,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Slider.Validation)]
-        public T? Min
-        {
-            get => Converter.Get(_min);
-            set => _min = Converter.Set(value);
-        }
+        public T? Min { get; set; } = T.Zero;
 
         /// <summary>
         /// The maximum allowed value of the slider. Should not be equal to min.
@@ -81,11 +73,7 @@ namespace MudExtensions
         /// 
         [Parameter]
         [Category(CategoryTypes.Slider.Validation)]
-        public T? Max
-        {
-            get => Converter.Get(_max);
-            set => _max = Converter.Set(value);
-        }
+        public T? Max { get; set; } = T.CreateTruncating(100);
 
         /// <summary>
         /// The minimum distance between the upper and lower values
@@ -93,11 +81,7 @@ namespace MudExtensions
         /// 
         [Parameter]
         [Category(CategoryTypes.Slider.Validation)]
-        public T? MinDistance
-        {
-            get => Converter.Get(_minDistance);
-            set => _minDistance = Converter.Set(value);
-        }
+        public T? MinDistance { get; set; } = T.One;
 
         /// <summary>
         /// How many steps the slider should take on each move.
@@ -105,11 +89,7 @@ namespace MudExtensions
         /// 
         [Parameter]
         [Category(CategoryTypes.Slider.Validation)]
-        public T? Step
-        {
-            get => Converter.Get(_step);
-            set => _step = Converter.Set(value);
-        }
+        public T? Step { get; set; } = T.One;
 
 		/// <summary>
 		/// If true, the slider will be disabled.
@@ -369,15 +349,15 @@ namespace MudExtensions
             if (Range)
             {
                 //if no Value was set or no Upper Value set, default to min and max
-                if (string.IsNullOrEmpty(_value) && !string.IsNullOrEmpty(_min))
+                if (string.IsNullOrEmpty(_value) && !string.IsNullOrEmpty(Converter.Set(Min)))
                 {
-                    _value = _min;
+                    _value = Converter.Set(Min);
                     ValueChanged.InvokeAsync(Value);
                 }
 
-                if (string.IsNullOrEmpty(_upperValue) && !string.IsNullOrEmpty(_max))
+                if (string.IsNullOrEmpty(_upperValue) && !string.IsNullOrEmpty(Converter.Set(Max)))
                 {
-                    _upperValue = _max;
+                    _upperValue = Converter.Set(Max);
                     UpperValueChanged.InvokeAsync(UpperValue);
                 }
             }

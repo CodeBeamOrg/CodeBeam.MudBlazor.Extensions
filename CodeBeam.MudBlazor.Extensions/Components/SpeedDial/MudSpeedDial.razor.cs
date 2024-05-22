@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.State;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -9,6 +10,19 @@ namespace MudExtensions
     /// </summary>
     public partial class MudSpeedDial : MudComponentBase
     {
+        /// <summary>
+        /// MudLoading constructor.
+        /// </summary>
+        public MudSpeedDial()
+        {
+            using var registerScope = CreateRegisterScope();
+            _origin = registerScope.RegisterParameter<Origin>(nameof(Origin))
+                .WithParameter(() => Origin)
+                .WithChangeHandler(UpdateOrigin);
+        }
+
+        private readonly ParameterState<Origin> _origin;
+
         Guid _animationGuid = Guid.NewGuid();
 
         /// <summary>
@@ -110,21 +124,11 @@ namespace MudExtensions
         [Parameter]
         public RenderFragment? ActivatorContent { get; set; }
 
-        Origin _origin = Origin.BottomRight;
         /// <summary>
         /// 
         /// </summary>
         [Parameter]
-        public Origin Origin
-        {
-            get => _origin;
-            set
-            {
-                if (_origin == value) return;
-                _origin = value;
-                UpdateOrigin();
-            }
-        }
+        public Origin Origin { get; set; } = Origin.BottomRight;
 
         /// <summary>
         /// 
