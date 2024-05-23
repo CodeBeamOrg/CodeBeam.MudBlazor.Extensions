@@ -16,6 +16,8 @@ namespace MudExtensions
 
         private readonly ParameterState<T> _value;
         private readonly ParameterState<T> _upperValue;
+        private readonly ParameterState<T?> _slideableMin;
+        private readonly ParameterState<T?> _slideableMax;
 
         /// <summary>
         /// 
@@ -31,21 +33,53 @@ namespace MudExtensions
                 .WithParameter(() => UpperValue)
                 .WithEventCallback(() => UpperValueChanged)
                 .WithChangeHandler(OnUpperValueParameterChanged);
+            _slideableMin = registerScope.RegisterParameter<T?>(nameof(SlideableMin))
+                .WithParameter(() => SlideableMin)
+                .WithChangeHandler(OnSlideableMinChanged);
+            _slideableMax = registerScope.RegisterParameter<T?>(nameof(SlideableMax))
+                .WithParameter(() => SlideableMax)
+                .WithChangeHandler(OnSlideableMaxChanged);
         }
 
-        private void OnValueParameterChanged()
+        private async Task OnValueParameterChanged()
         {
             if (Range && Convert.ToDecimal(_value.Value) + Convert.ToDecimal(MinDistance) >= Convert.ToDecimal(_upperValue.Value))
             {
-                _userInvalidatedRange = true;
+                await _value.SetValueAsync(_upperValue.Value - MinDistance);
+            }
+
+            if (_slideableMin.Value != null && _value.Value < _slideableMin.Value)
+            {
+                await _value.SetValueAsync((T)_slideableMin.Value);
             }
         }
 
-        private void OnUpperValueParameterChanged()
+        private async Task OnUpperValueParameterChanged()
         {
             if (Range && Convert.ToDecimal(_upperValue.Value) - Convert.ToDecimal(MinDistance) <= Convert.ToDecimal(_value.Value))
             {
-                _userInvalidatedRange = true;
+                await _upperValue.SetValueAsync(_value.Value + MinDistance);
+            }
+
+            if (_slideableMax.Value != null && _slideableMax.Value < _upperValue.Value)
+            {
+                await _upperValue.SetValueAsync((T)_slideableMax.Value);
+            }
+        }
+
+        private async Task OnSlideableMinChanged()
+        {
+            if (_slideableMin.Value != null && _value.Value <_slideableMin.Value)
+            {
+                await _value.SetValueAsync((T)_slideableMin.Value);
+            }
+        }
+
+        private async Task OnSlideableMaxChanged()
+        {
+            if (_slideableMax.Value != null && _slideableMax.Value < _upperValue.Value)
+            {
+                await _upperValue.SetValueAsync((T)_slideableMax.Value);
             }
         }
 
@@ -59,22 +93,6 @@ namespace MudExtensions
                 .AddClass("mud-slider-vertical", Vertical)
                 .AddClass(Class)
                 .Build();
-
-        //private string? _value;
-        //private string? _min = "0";
-        //private string? _max = "100";
-        //private string? _step = "1";
-        //private string? _minDistance = "1";
-
-        //private string? _upperValue;
-
-
-        /// <summary>
-        /// This will be set to true if the user sets the lower value to be greater than the upper value
-        /// or vice versa. It will detach the user from the slider and then the value will be reset
-        /// in the razor file.
-        /// </summary>
-        private bool _userInvalidatedRange;
 
         /// <summary>
         /// If this is a Range Slider
@@ -105,12 +123,25 @@ namespace MudExtensions
         public T Min { get; set; } = T.Zero;
 
         /// <summary>
+        /// The minimum value can slider thumb has.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.Slider.Validation)]
+        public T? SlideableMin { get; set; }
+
+        /// <summary>
         /// The maximum allowed value of the slider. Should not be equal to min.
         /// </summary>
-        /// 
         [Parameter]
         [Category(CategoryTypes.Slider.Validation)]
         public T Max { get; set; } = T.CreateTruncating(100);
+
+        /// <summary>
+        /// The minimum value can slider thumb has.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.Slider.Validation)]
+        public T? SlideableMax { get; set; }
 
         /// <summary>
         /// The minimum distance between the upper and lower values

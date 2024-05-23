@@ -31,13 +31,13 @@
 
         @if (Range)
         {
-            <input class="mud-slider-input" aria-valuenow="@_upperValue.Value" aria-valuemin="@(Converter.Set(Min))" aria-valuemax="@@(Converter.Set(Max))" role="slider" @attributes="UserAttributes" type="range" min="@(Converter.Set(Min))" max="@(Converter.Set(Max))" step="@(Converter.Set(Step))" disabled="@(Disabled || _userInvalidatedRange || (Range && DisableMax))"
+            <input class="mud-slider-input" aria-valuenow="@_upperValue.Value" aria-valuemin="@(Converter.Set(Min))" aria-valuemax="@@(Converter.Set(Max))" role="slider" @attributes="UserAttributes" type="range" min="@(Converter.Set(Min))" max="@(Converter.Set(Max))" step="@(Converter.Set(Step))" disabled="@(Disabled || (Range && DisableMax))"
                    @bind-value:get="@GetUpperValueText" @bind-value:set="@SetUpperValueTextAsync" @bind-value:event="@((Immediate ? "oninput" : "onchange"))" />
 
             @SliderValueLabel(upperLeft, string.IsNullOrEmpty(UpperLabelText) ? _upperValue.Value.ToString() : UpperLabelText)
         }
 
-        <input class="mud-slider-input" aria-valuenow="@_value.Value" aria-valuemin="@(Converter.Set(Min))" aria-valuemax="@(Converter.Set(Max))" role="slider" @attributes="UserAttributes" type="range" min="@(Converter.Set(Min))" max="@(Converter.Set(Max))" step="@(Converter.Set(Step))" disabled="@(Disabled || _userInvalidatedRange || (Range && DisableMin))"
+        <input class="mud-slider-input" aria-valuenow="@_value.Value" aria-valuemin="@(Converter.Set(Min))" aria-valuemax="@(Converter.Set(Max))" role="slider" @attributes="UserAttributes" type="range" min="@(Converter.Set(Min))" max="@(Converter.Set(Max))" step="@(Converter.Set(Step))" disabled="@(Disabled || (Range && DisableMin))"
                @bind-value:get="@GetValueText" @bind-value:set="@SetValueTextAsync" @bind-value:event="@((Immediate ? "oninput" : "onchange"))" />
 
         @SliderValueLabel(left, string.IsNullOrEmpty(LabelText) ? _value.Value.ToString() : LabelText)
@@ -50,11 +50,11 @@
     }
 </div>
 
-@if (_userInvalidatedRange)
+@* @if (_userInvalidatedRange)
 {
     _userInvalidatedRange = false;
     StateHasChanged();
-}
+} *@
 
 @code
 {
