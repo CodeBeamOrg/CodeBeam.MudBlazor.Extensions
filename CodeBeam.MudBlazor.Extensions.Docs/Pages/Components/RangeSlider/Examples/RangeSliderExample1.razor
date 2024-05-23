@@ -2,7 +2,7 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudRangeSlider T="int" @bind-Value="@_value" @bind-UpperValue="@_upperValue" Size="Size.Large" Variant="Variant.Filled" ValueLabel="_valueLabel" Range="_range" TickMarks="_tickmarks"
+        <MudRangeSlider @bind-Value="@_value" @bind-UpperValue="@_upperValue" Size="Size.Large" Variant="Variant.Filled" ValueLabel="_valueLabel" Range="_range" TickMarks="_tickmarks" Immediate="true"
                         Min="_min" Max="_max" Step="_step" Display="_display" MinDistance="_minDistance" DisableMin="_disableMin" DisableMax="_disableMax" LabelText="@_labelText" UpperLabelText="@($"{_upperLabelText} {_upperValue}")">@_label</MudRangeSlider>
    </MudItem>
 
@@ -29,8 +29,8 @@
 </MudGrid>
 
 @code {
-    private int? _value = 25;
-    private int? _upperValue = 75;
+    private int _value = 25;
+    private int _upperValue = 75;
     string _label = "Range";
     bool _valueLabel = true;
     bool _display = true;
@@ -47,7 +47,7 @@
 
     void ClearValues()
     {
-        _value = null;
-        _upperValue = null;
+        _value = 0;
+        _upperValue = 50;
     }
 }
