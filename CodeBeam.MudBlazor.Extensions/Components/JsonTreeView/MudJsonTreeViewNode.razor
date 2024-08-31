@@ -34,8 +34,18 @@
                     }
                     break;
                 case JsonValueKind.Number:
-                    var number = child.Value.AsValue().GetValue<int>();
-                    <MudTreeViewItem T="string" Text="@child.Key" Icon="@Icons.Material.Filled.Numbers" EndText="@number.ToString()"></MudTreeViewItem>
+                    JsonValue jsonVal = child.Value.AsValue();
+                    string endText = string.Empty;
+                    @* We try for int first, because an int can always be converted to double but not the other way around*@
+                    if (jsonVal.TryGetValue<int>(out int intVal))
+                    {
+                        endText = intVal.ToString();
+                    }
+                    else if (jsonVal.TryGetValue<double>(out double doubleVal))
+                    {
+                        endText = doubleVal.ToString();
+                    }
+                    <MudTreeViewItem T="string" Text="@child.Key" Icon="@Icons.Material.Filled.Numbers" EndText="@endText"></MudTreeViewItem>
                     break;
                 case JsonValueKind.True:
                     <MudTreeViewItem T="string" Text="@child.Key" Icon="@Icons.Material.Filled.CheckBox" EndText="true"></MudTreeViewItem>
