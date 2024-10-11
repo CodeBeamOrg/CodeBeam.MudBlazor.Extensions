@@ -41,7 +41,7 @@ namespace MudExtensions
         {
             //EnableLogging = true,
             TargetClass = "mud-input-control",
-            Keys =
+            Keys = new[]
             {
                 new KeyOptions { Key=" ", PreventDown = "key+none" }, //prevent scrolling page, toggle open/close
                 new KeyOptions { Key="ArrowUp", PreventDown = "key+none" }, // prevent scrolling page, instead hilight previous item

@@ -763,7 +763,8 @@ namespace MudExtensions
                 {
                     //EnableLogging = true,
                     TargetClass = "mud-list-item-extended",
-                    Keys = {
+                    Keys = new [] 
+                    {
                         //new KeyOptions { Key=" ", PreventDown = "key+none" }, //prevent scrolling page, toggle open/close
                         new KeyOptions { Key="ArrowUp", PreventDown = "key+none" }, // prevent scrolling page, instead hilight previous item
                         new KeyOptions { Key="ArrowDown", PreventDown = "key+none" }, // prevent scrolling page, instead hilight next item
@@ -775,7 +776,7 @@ namespace MudExtensions
                         new KeyOptions { Key="a", PreventDown = "key+ctrl" }, // select all items instead of all page text
                         new KeyOptions { Key="A", PreventDown = "key+ctrl" }, // select all items instead of all page text
                         new KeyOptions { Key="/./", SubscribeDown = true, SubscribeUp = true }, // for our users
-                    },
+                    }
                 });
 
                 if (MudSelectExtended == null && MudAutocomplete == null)
