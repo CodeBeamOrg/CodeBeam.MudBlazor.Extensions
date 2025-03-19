@@ -52,7 +52,13 @@ public partial class MudJsonTreeViewNode : ComponentBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error rendering JSON item: {ex.Message}");
+            builder.OpenComponent<MudAlert>(0);
+            builder.AddAttribute(1, "Severity", Severity.Warning);
+            builder.AddAttribute(2, "ChildContent", (RenderFragment)(builder2 =>
+            {
+                builder2.AddContent(3, $"Error rendering JSON item: {ex.Message}");
+            }));
+            builder.CloseComponent();
         }
     };
 
@@ -75,7 +81,10 @@ public partial class MudJsonTreeViewNode : ComponentBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error rendering JSON item: {ex.Message}");
+            builder.OpenComponent<MudAlert>(0);
+            builder.AddAttribute(2, "Severity", Severity.Warning);
+            builder.AddContent(1, $"Error rendering JSON item: {ex.Message}");
+            builder.CloseComponent();
         }
     };
 
