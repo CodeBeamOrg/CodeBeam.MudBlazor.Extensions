@@ -1,123 +1,17 @@
 ﻿@namespace MudExtensions
 @using System.Text.Json;
-@using System.Text.Json.Nodes
+@using System.Text.Json.Nodes;
 
 @if (Node is JsonObject)
 {
-    @* If sorting is enabled, sort by key *@
-    var nodes = Sorted ? Node.AsObject().OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value) : Node.AsObject().ToDictionary(x => x.Key, x => x.Value);
-    @* Go through each item *@
-    foreach (var child in nodes)
+    var node = Sorted ? Node.AsObject().OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value) : Node.AsObject().ToDictionary(x => x.Key, x => x.Value);
+
+    foreach (var item in node)
     {
-        if (child.Value is JsonValue)
-        {
-            @* Get the type of value in this node *@
-            var valueKind = child.Value.AsValue().GetValue<JsonElement>().ValueKind;
-            switch (valueKind)
-            {
-                case JsonValueKind.String:
-                    var str = child.Value.AsValue().GetValue<string>();
-                    @* Could be a date *@
-                    if (DateTime.TryParse(str, out DateTime date))
-                    {
-                        <MudTreeViewItem T="string" Text="@child.Key" Icon="@Icons.Material.Filled.DateRange" EndText="@date.ToString()"></MudTreeViewItem>
-                    }
-                    @* Could be a GUID *@
-                    else if (Guid.TryParse(str, out Guid guid))
-                    {
-                        <MudTreeViewItem T="string" Text="@child.Key" Icon="@Icons.Material.Filled.Key" EndText="@str.ToUpperInvariant()"></MudTreeViewItem>
-                    }
-                    @* Fall back to string *@
-                    else
-                    {
-                        <MudTreeViewItem T="string" Text="@child.Key" Icon="@Icons.Material.Filled.TextSnippet" EndText="@str"></MudTreeViewItem>
-                    }
-                    break;
-                case JsonValueKind.Number:
-                    JsonValue jsonVal = child.Value.AsValue();
-                    string endText = string.Empty;
-                    @* We try for int first, because an int can always be converted to double but not the other way around*@
-                    if (jsonVal.TryGetValue<int>(out int intVal))
-                    {
-                        endText = intVal.ToString();
-                    }
-                    else if (jsonVal.TryGetValue<double>(out double doubleVal))
-                    {
-                        endText = doubleVal.ToString();
-                    }
-                    <MudTreeViewItem T="string" Text="@child.Key" Icon="@Icons.Material.Filled.Numbers" EndText="@endText"></MudTreeViewItem>
-                    break;
-                case JsonValueKind.True:
-                    <MudTreeViewItem T="string" Text="@child.Key" Icon="@Icons.Material.Filled.CheckBox" EndText="true"></MudTreeViewItem>
-                    break;
-                case JsonValueKind.False:
-                    <MudTreeViewItem T="string" Text="@child.Key" Icon="@Icons.Material.Filled.CheckBoxOutlineBlank" EndText="false"></MudTreeViewItem>
-                    break;
-            }
-        }
-        else if (child.Value is JsonArray)
-        {
-            <MudTreeViewItem T="string" IconColor="Color.Primary" Icon="@Icons.Material.Filled.Folder" Text="@child.Key" EndTextClass="mud-primary-text" EndText="(Array)">
-                @* Iterate each array element *@
-                <MudJsonTreeViewNode Node="@child.Value" Sorted="@Sorted" />
-            </MudTreeViewItem>
-        }
-    }
-}
-else if (Node is JsonArray)
-{
-    var count = 0;
-    @* Iterate each array element *@
-    foreach (var child in Node.AsArray())
-    {
-        count++;
-        <MudTreeViewItem T="string" IconColor="Color.Primary" Icon="@Icons.Material.Filled.Folder" EndTextClass="mud-primary-text" EndText="@($"(Item {count})")">
-            <MudJsonTreeViewNode Node="@child" Sorted="@Sorted" />
-        </MudTreeViewItem>
+        @RenderJsonItem(item)
     }
 }
 else if (Node is JsonNode)
 {
-    var valueKind = Node.AsValue().GetValue<JsonElement>().ValueKind;
-    switch (valueKind)
-    {
-        case JsonValueKind.String:
-            var str = Node.AsValue().GetValue<string>();
-            @* Could be a date *@
-            if (DateTime.TryParse(str, out DateTime date))
-            {
-                <MudTreeViewItem T="string" Icon="@Icons.Material.Filled.DateRange" EndText="@date.ToString()"></MudTreeViewItem>
-            }
-            @* Could be a GUID *@
-            else if (Guid.TryParse(str, out Guid guid))
-            {
-                <MudTreeViewItem T="string" Icon="@Icons.Material.Filled.Key" EndText="@str.ToUpperInvariant()"></MudTreeViewItem>
-            }
-            @* Fall back to string *@
-            else
-            {
-                <MudTreeViewItem T="string" Icon="@Icons.Material.Filled.TextSnippet" EndText="@str"></MudTreeViewItem>
-            }
-            break;
-        case JsonValueKind.Number:
-            JsonValue jsonVal = Node.AsValue();
-            string endText = string.Empty;
-            @* We try for int first, because an int can always be converted to double but not the other way around*@
-            if (jsonVal.TryGetValue<int>(out int intVal))
-            {
-                endText = intVal.ToString();
-            }
-            else if (jsonVal.TryGetValue<double>(out double doubleVal))
-            {
-                endText = doubleVal.ToString();
-            }
-            <MudTreeViewItem T="string" Icon="@Icons.Material.Filled.Numbers" EndText="@endText"></MudTreeViewItem>
-            break;
-        case JsonValueKind.True:
-            <MudTreeViewItem T="string" Icon="@Icons.Material.Filled.CheckBox" EndText="true"></MudTreeViewItem>
-            break;
-        case JsonValueKind.False:
-            <MudTreeViewItem T="string" Icon="@Icons.Material.Filled.CheckBoxOutlineBlank" EndText="false"></MudTreeViewItem>
-            break;
-    }
+    @RenderJsonItem(Node)
 }
