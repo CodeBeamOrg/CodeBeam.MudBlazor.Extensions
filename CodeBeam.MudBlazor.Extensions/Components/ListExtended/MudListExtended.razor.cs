@@ -760,8 +760,6 @@ namespace MudExtensions
                 var options = new KeyInterceptorOptions(
                     "mud-list-item-extended",
                     [
-                        // prevent scrolling page, toggle open/close
-                        new(" ", preventDown: "key+none"),
                         // prevent scrolling page, instead highlight previous item
                         new("ArrowUp", preventDown: "key+none"),
                         // prevent scrolling page, instead highlight next item
@@ -913,8 +911,6 @@ namespace MudExtensions
             {
                 case " ":
                     await SearchChanged(_searchString + " ");
-                    //_searchString = _searchString + " ";
-                    //await OnSearchStringChange.InvokeAsync(_searchString);
                     await _searchField.BlurAsync();
                     await _searchField.FocusAsync();
                     StateHasChanged();
