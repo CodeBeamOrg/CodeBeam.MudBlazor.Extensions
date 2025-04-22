@@ -60,6 +60,13 @@ namespace MudExtensions
         [Parameter] public EventCallback OnChange { get; set; }
 
         /// <summary>
+        /// Set the text-align on the component.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.Text.Appearance)]
+        public Typo Typo { get; set; } = Typo.subtitle1;
+
+        /// <summary>
         /// If true, the input will take up the full width of its container.
         /// </summary>
         [Parameter]
