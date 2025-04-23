@@ -141,6 +141,24 @@ class MudSignaturePad {
         return this.canvas.toDataURL();
     }
 
+    addTouchOffsets(event) {
+        try {
+            if (event.touches === undefined) {
+                return event;
+            }
+            var touch = event.touches[0] || event.changedTouches[0];
+            var realTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+            event.offsetX = parseInt(touch.clientX - realTarget.getBoundingClientRect().x);
+            event.offsetY = parseInt(touch.clientY - realTarget.getBoundingClientRect().y);
+            if (event.offsetX > this.memCanvas.width || event.offsetX < 1 || event.offsetY > this.memCanvas.height || event.offsetY < 1) {
+                this.isMouseDown = false;
+            }
+        }
+        catch (e) {
+        }
+        return event;
+    }
+
     init() {
         this.setCanvasSize();
         this.setOptions(this.options);
@@ -209,6 +227,7 @@ class MudSignaturePad {
     }
 
     startDrawing(event) {
+        event = this.addTouchOffsets(event);
         this.isMouseDown = true;
         this.points.push({
             x: event.offsetX,
@@ -242,6 +261,7 @@ class MudSignaturePad {
     }
 
     drawLine(event) {
+        event = this.addTouchOffsets(event);
         if (this.isMouseDown) {
             if (this.isErasing === false) {
                 this.clear();
