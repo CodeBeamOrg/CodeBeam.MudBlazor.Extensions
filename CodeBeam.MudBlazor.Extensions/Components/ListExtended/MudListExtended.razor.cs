@@ -926,10 +926,10 @@ namespace MudExtensions
                         await _searchField.SelectAsync();
                     }
                     break;
-                case "ArrowUp":
-                case "ArrowDown":
-                    await HandleKeyDownAsync(obj);
-                    break;
+                //case "ArrowUp":
+                //case "ArrowDown":
+                //    await HandleKeyDownAsync(obj);
+                //    break;
                 case "Enter":
                 case "NumpadEnter":
                     await HandleKeyDownAsync(obj);
@@ -1451,7 +1451,7 @@ namespace MudExtensions
             {
                 items[0].SetActive(true);
                 _lastActivatedItem = items[0];
-                if (items[0].ParentListItem != null && !items[0].ParentListItem.Expanded)
+                if (items[0].ParentListItem != null && items[0].ParentListItem?.Expanded == false)
                 {
                     items[0].ParentListItem.Expanded = true;
                 }
@@ -1463,16 +1463,18 @@ namespace MudExtensions
             var possibleItems = items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? "").StartsWith(startChar, StringComparison.CurrentCultureIgnoreCase)).ToList();
             if (possibleItems == null || !possibleItems.Any())
             {
-                if (_lastActivatedItem == null)
-                {
-                    return;
-                }
-                _lastActivatedItem.SetActive(true);
-                if (_lastActivatedItem.ParentListItem != null && !_lastActivatedItem.ParentListItem.Expanded)
-                {
-                    _lastActivatedItem.ParentListItem.Expanded = true;
-                }
-                await ScrollToMiddleAsync(_lastActivatedItem);
+                DeactiveAllItems(items);
+                _lastActivatedItem = null;
+                //if (_lastActivatedItem == null)
+                //{
+                //    return;
+                //}
+                //_lastActivatedItem.SetActive(true);
+                //if (_lastActivatedItem.ParentListItem != null && !_lastActivatedItem.ParentListItem.Expanded)
+                //{
+                //    _lastActivatedItem.ParentListItem.Expanded = true;
+                //}
+                //await ScrollToMiddleAsync(_lastActivatedItem);
                 return;
             }
 
