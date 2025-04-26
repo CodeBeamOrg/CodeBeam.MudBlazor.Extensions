@@ -11,7 +11,7 @@
                           TextUpdateSuppression="false"
                           Value="@(Text)" Underline="@Underline"
                           Disabled="@Disabled" ReadOnly="!Editable" Error="@Error" ErrorId="@ErrorId"
-                          OnAdornmentClick="HandleAdornmentClick" AdornmentIcon="@_currentIcon" Adornment="Adornment.End"
+                          OnAdornmentClick="HandleAdornmentClick" AdornmentIcon="@InputAdornmentIcon" Adornment="@InputAdornment"
                           AdornmentColor="@AdornmentColor" IconSize="@IconSize" OnBlur="HandleOnBlur"
                           Clearable="@Clearable" OnClearButtonClick="HandleClearButtonClick"
                           @attributes="UserAttributes" />

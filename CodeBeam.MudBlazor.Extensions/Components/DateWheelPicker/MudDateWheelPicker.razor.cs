@@ -235,7 +235,20 @@ namespace MudExtensions
         public int MaxHeight { get; set; } = 300;
 
         internal bool _isOpen;
-        internal string _currentIcon { get; set; } = Icons.Material.Filled.CalendarMonth;
+
+        /// <summary>
+        /// The icon displayed as adornment in input.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListAppearance)]
+        public string? InputAdornmentIcon { get; set; } = Icons.Material.Filled.CalendarMonth;
+
+        /// <summary>
+        /// The adornment position in input.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.ListAppearance)]
+        public Adornment InputAdornment { get; set; } = Adornment.End;
 
         /// <summary>
         /// Sets the anchor origin point for the popover.
