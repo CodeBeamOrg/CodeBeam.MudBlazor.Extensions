@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Utilities;
 using ZXing;
 
 namespace MudExtensions
@@ -9,6 +10,15 @@ namespace MudExtensions
     /// </summary>
     public partial class MudBarcode : MudComponentBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? OuterStylename =>
+            new StyleBuilder()
+            .AddStyle("height", Height + "px")
+            .AddStyle("width", Width + "px")
+            .AddStyle(OuterStyle)
+            .Build();
         private static readonly Writer Encoder = new MultiFormatWriter();
 
         /// <summary>
@@ -16,6 +26,24 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public BarcodeFormat BarcodeFormat { get; set; } = BarcodeFormat.QR_CODE;
+
+        /// <summary>
+        /// The outer div classname.
+        /// </summary>
+        [Parameter]
+        public string? OuterClass { get; set; }
+
+        /// <summary>
+        /// The outer div classname.
+        /// </summary>
+        [Parameter]
+        public string? OuterStyle { get; set; }
+
+        /// <summary>
+        /// The image source shows when the value is null.
+        /// </summary>
+        [Parameter]
+        public string? EmptySrc { get; set; }
 
         /// <summary>
         /// If true, it goes to specified href when click.
@@ -82,6 +110,12 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public EventCallback<string> ValueChanged { get; set; }
+
+        /// <summary>
+        /// Shows a component inside the barcode.
+        /// </summary>
+        [Parameter]
+        public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
         /// Barcode process that returns BarcodeResult. Returns null if value is also null or empty.

@@ -1,0 +1,23 @@
+﻿@namespace MudExtensions.Docs.Examples
+@using ZXing;
+
+<MudGrid>
+    <MudItem xs="12" sm="6" lg="4" Class="d-flex flex-column justify-center gap-4">
+        <MudText>Icon Content</MudText>
+        <MudBarcode Value="https://mudblazor.com" Width="200" Height="200" BarcodeFormat="BarcodeFormat.QR_CODE" Clickable="true">
+            <ChildContent>
+                <MudIcon Style="background: white; border-radius: 4px" Color="Color.Primary" Icon="@Icons.Custom.Brands.MudBlazor" />
+            </ChildContent>
+        </MudBarcode>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" lg="4" Class="d-flex flex-column justify-center gap-4">
+        <MudText>Image Content</MudText>
+        <MudBarcode Value="https://dotnet.microsoft.com/en-us/" Width="200" Height="200" BarcodeFormat="BarcodeFormat.QR_CODE" Clickable="true">
+            <ChildContent>
+                <MudImage Src="https://www.yusufsezer.com.tr/dosyalar/2019/03/net.png" Height="24" Width="24" />
+            </ChildContent>
+        </MudBarcode>
+    </MudItem>
+
+</MudGrid>
