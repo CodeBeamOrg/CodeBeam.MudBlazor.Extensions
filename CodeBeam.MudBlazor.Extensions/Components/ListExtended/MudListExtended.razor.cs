@@ -1653,7 +1653,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         /// <returns></returns>
-        protected ICollection<T?>? GetSearchedItems()
+        protected internal ICollection<T?>? GetSearchedItems()
         {
             if (!SearchBox || ItemCollection == null || _searchString == null)
             {

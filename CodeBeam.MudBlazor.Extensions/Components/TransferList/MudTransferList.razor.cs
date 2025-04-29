@@ -340,24 +340,23 @@ namespace MudExtensions
             }
             if (startToEnd == true)
             {
-                foreach (var item in StartCollection)
+                
+                foreach (var item in _startList.GetSearchedItems() ?? [])
                 {
-                    EndCollection.Add(item);
+                    EndCollection?.Add(item);
+                    StartCollection?.Remove(item);
                 }
-                StartCollection.Clear();
-                _startList.Clear();
                 OrderItems();
                 await EndCollectionChanged.InvokeAsync(EndCollection);
                 await StartCollectionChanged.InvokeAsync(StartCollection);
             }
             else if (startToEnd == false)
             {
-                foreach (var item in EndCollection)
+                foreach (var item in _endList.GetSearchedItems() ?? [])
                 {
-                    StartCollection.Add(item);
+                    StartCollection?.Add(item);
+                    EndCollection?.Remove(item);
                 }
-                EndCollection.Clear();
-                _endList.Clear();
                 OrderItems();
                 await StartCollectionChanged.InvokeAsync(StartCollection);
                 await EndCollectionChanged.InvokeAsync(EndCollection);
