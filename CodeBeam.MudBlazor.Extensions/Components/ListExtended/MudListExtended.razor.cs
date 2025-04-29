@@ -948,7 +948,11 @@ namespace MudExtensions
                     break;
                 case "Tab":
                     await Task.Delay(10);
-                    await ActiveFirstItem();
+                    if (MudSelectExtended != null)
+                    {
+                        await MudSelectExtended.CloseMenu();
+                        await MudSelectExtended.FocusAsync();
+                    }
                     StateHasChanged();
                     break;
             }
