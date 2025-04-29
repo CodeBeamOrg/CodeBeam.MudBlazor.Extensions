@@ -340,8 +340,16 @@ namespace MudExtensions
             }
             if (startToEnd == true)
             {
-                
+                var transferredValues = new List<T>();
                 foreach (var item in _startList.GetSearchedItems() ?? [])
+                {
+                    if (item != null)
+                    {
+                        transferredValues.Add(item);
+                    }
+                }
+                
+                foreach (var item in transferredValues ?? [])
                 {
                     EndCollection?.Add(item);
                     StartCollection?.Remove(item);
@@ -352,7 +360,16 @@ namespace MudExtensions
             }
             else if (startToEnd == false)
             {
+                var transferredValues = new List<T>();
                 foreach (var item in _endList.GetSearchedItems() ?? [])
+                {
+                    if (item != null)
+                    {
+                        transferredValues.Add(item);
+                    }
+                }
+
+                foreach (var item in transferredValues ?? [])
                 {
                     StartCollection?.Add(item);
                     EndCollection?.Remove(item);
