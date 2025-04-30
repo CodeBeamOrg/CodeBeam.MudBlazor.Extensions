@@ -286,6 +286,8 @@
     grid-column-end: 11; }
   .mud-section.mud-section-col-end-12 {
     grid-column-end: 12; }
+  .mud-section.mud-section-col-end-13 {
+    grid-column-end: 13; }
   .mud-section.mud-section-row-start-1 {
     grid-row-start: 1; }
   .mud-section.mud-section-row-start-2 {
@@ -334,6 +336,8 @@
     grid-row-end: 11; }
   .mud-section.mud-section-row-end-12 {
     grid-row-end: 12; }
+  .mud-section.mud-section-row-end-13 {
+    grid-row-end: 13; }
 
 .mud-popup {
   z-index: 2000;

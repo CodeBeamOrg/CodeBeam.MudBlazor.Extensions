@@ -201,6 +201,10 @@
         grid-column-end: 12;
     }
 
+    &.mud-section-col-end-13 {
+        grid-column-end: 13;
+    }
+
     &.mud-section-row-start-1 {
         grid-row-start: 1;
     }
@@ -295,5 +299,9 @@
 
     &.mud-section-row-end-12 {
         grid-row-end: 12;
+    }
+
+    &.mud-section-row-end-13 {
+        grid-row-end: 13;
     }
 }
