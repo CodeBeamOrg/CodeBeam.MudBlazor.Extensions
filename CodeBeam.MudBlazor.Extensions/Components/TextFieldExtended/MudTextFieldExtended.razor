@@ -26,6 +26,7 @@
                                       @attributes="UserAttributes"
                                       Label="@Label"
                                       InputType="@InputType"
+                                      InputMode="@InputMode"
                                       Lines="@Lines"
                                       Style="@Style"
                                       Variant="@Variant"
@@ -76,27 +77,37 @@
                     {
                         <MudMask @ref="_maskReference"
                              @attributes="UserAttributes"
+                             Label="@Label"
                              Mask="@_mask"
                              InputType="@InputType"
+                             InputMode="@InputMode"
                              Lines="@Lines"
                              Style="@Style"
                              Variant="@Variant"
+                             Typo="Typo"
                              TextUpdateSuppression="@TextUpdateSuppression"
                              Value="@Text"
                              ValueChanged="OnMaskedValueChanged"
                              Placeholder="@Placeholder"
-                             Disabled=@Disabled
+                             Disabled=@GetDisabledState()
                              Underline="@Underline"
-                             ReadOnly="@ReadOnly"
+                             ReadOnly="@GetReadOnlyState()"
                              MaxLength="@MaxLength"
+                             Adornment="@Adornment"
+                             AdornmentText="@AdornmentText"
+                             AdornmentIcon="@AdornmentIcon"
+                             AdornmentColor="@AdornmentColor"
+                             AdornmentAriaLabel="@AdornmentAriaLabel"
                              IconSize="@IconSize"
+                             OnAdornmentClick="@OnAdornmentClick"
                              Error="@Error"
+                             ErrorId="@ErrorId"
+                             HelperText="@HelperText"
                              Immediate="@Immediate"
                              Margin="@Margin" OnBlur="@OnBlurredAsync"
-                             Clearable="@Clearable"
                              OnClearButtonClick="@OnClearButtonClick"
-                             Adornment="@Adornment">
-                         </MudMask>
+                             ShrinkLabel="@ShrinkLabel"
+                             Required="@Required" />
                     }
                 </CascadingValue>
             </InputContent>

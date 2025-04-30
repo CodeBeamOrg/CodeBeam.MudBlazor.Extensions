@@ -42,7 +42,8 @@
                       Variant="@Variant"
                       @bind-Value="@_internalValue"
                       TextChanged="@(async() => await TextChanged.InvokeAsync())"
-                      ShowVisualiser="@(Values?.Any() ?? false)">
+                      ShowVisualiser="@(Values?.Any() ?? false)"
+                      Mask="@Mask">
 
     <DataVisualiser>
         <MudChipSet T="T" Class="@ChipClassname" Style="@ChipStylename" AllClosable="@Closeable" OnClose="Closed">
