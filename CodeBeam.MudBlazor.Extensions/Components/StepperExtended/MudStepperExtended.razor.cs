@@ -413,7 +413,7 @@ namespace MudExtensions
 
 
             int backupActiveIndex = ActiveIndex;
-            if (_animate != null)
+            if (_animate != null && Animation == true)
             {
                 await _animate.Refresh();
             }
@@ -482,7 +482,7 @@ namespace MudExtensions
                 return;
             }
 
-            if (_animate != null)
+            if (_animate != null && Animation == true)
             {
                 await _animate.Refresh();
             }
