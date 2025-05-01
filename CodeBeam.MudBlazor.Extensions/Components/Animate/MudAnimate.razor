@@ -104,15 +104,22 @@
     [Category(CategoryTypes.Item.Appearance)]
     public string? KeyframeAdvanced { get; set; }
 
+    /// <summary>
+    /// The refresh delay in miliseconds. Higher value means stability between multiple refreshes.
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Item.Appearance)]
+    public int RefreshSensitivity { get; set; } = 10;
+
 
     bool _show = true;
     public async Task Refresh()
     {
         _show = false;
-        await Task.Delay(10);
+        await Task.Delay(RefreshSensitivity);
         await InvokeAsync(StateHasChanged);
         _show = true;
-        await Task.Delay(10);
+        await Task.Delay(RefreshSensitivity);
         await InvokeAsync(StateHasChanged);
     }
 
