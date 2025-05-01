@@ -11,7 +11,7 @@
     <CascadingValue Value="@this" IsFixed="true">
         <div class="mud-select-extended" id="@_elementId">
             <MudInputControl Label="@Label" Variant="@Variant" HelperText="@HelperText" HelperTextOnFocus="@HelperTextOnFocus" FullWidth="@FullWidth" Margin="@Margin" Class="@Classname" Style="@Style"
-                             Error="@Error" ErrorText="@ErrorText" ErrorId="@ErrorId" Disabled="@Disabled" @onmousedown="@ToggleMenu" Required="@Required" ForId="@FieldId">
+                             Error="@Error" ErrorText="@ErrorText" ErrorId="@ErrorId" Disabled="@Disabled" @onclick="@ToggleMenu" Required="@Required" ForId="@FieldId">
                 <InputContent>
                     @*DataVisualiserStyle="@($"min-height: 1.1876em;{(HasValue(Value) && Editable == true ? "padding-bottom: 0px" : null)}")"*@
                     <MudInputExtended @ref="_inputReference" T="string" InputType="@(Editable && !MultiSelection ? InputType.Text : InputType.Hidden)"
@@ -49,20 +49,6 @@
                                                 }
                                             }
                                         }
-                                        @*@if (ItemCollection is not null)
-                                    {
-                                    foreach (var item in ItemCollection.Where(x => SelectedValues.Contains(x)))
-                                    {
-                                    <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
-                                    }
-                                    }
-                                    else
-                                    {
-                                    foreach (var item in Items.Where(x => (MultiSelection ? SelectedValues.Contains(x.Value) : Value?.Equals(x.Value) == true)) ?? new List<MudComboBoxItem<T>>())
-                                    {
-                                    <MudChip Class="@ChipClass" Value="item.Value" Text="@(ToStringFunc is not null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrWhiteSpace(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
-                                    }
-                                    }*@
                                     </MudChipSet>
                                 }
                                 else if (InputPresenter == ValuePresenter.Text && (!Editable || (MultiSelection && Editable)))

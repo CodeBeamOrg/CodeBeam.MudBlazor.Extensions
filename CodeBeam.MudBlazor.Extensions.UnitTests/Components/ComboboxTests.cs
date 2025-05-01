@@ -171,7 +171,7 @@ namespace MudExtensions.UnitTests.Components
             combobox.Instance.Value.Should().BeNullOrEmpty();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
             // click and check if it has toggled the menu
-            input.MouseDown();
+            input.Click();
             menu.ClassList.Should().NotContain("d-none");
             // now click an item and see the value change
             comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().BeGreaterThan(0));
@@ -182,7 +182,7 @@ namespace MudExtensions.UnitTests.Components
             combobox.Instance.Value.Should().Be("2");
             // now we cheat and click the list without opening the menu ;)
 
-            input.MouseDown();
+            input.Click();
             comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().BeGreaterThan(0));
             items = comp.FindAll("div.mud-combobox-item").ToArray();
 
@@ -205,7 +205,7 @@ namespace MudExtensions.UnitTests.Components
             // No button when initialized
             comp.FindAll("button").Should().BeEmpty();
 
-            input.MouseDown();
+            input.Click();
             comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().BeGreaterThan(0));
             // Button shows after selecting item
             var items = comp.FindAll("div.mud-combobox-item").ToArray();
@@ -230,7 +230,7 @@ namespace MudExtensions.UnitTests.Components
             var menu = comp.Find("div.mud-popover");
             var input = combobox.Find("div.mud-input-control");
             // Open the menu
-            input.MouseDown();
+            input.Click();
             comp.WaitForAssertion(() => menu.ClassList.Should().Contain("mud-popover-open"));
 
             comp.FindAll("div.mud-combobox-item")[0].Click();
@@ -259,7 +259,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() =>
                 comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
             // click and check if it has toggled the menu
-            await comp.InvokeAsync(() => input.MouseDown());
+            await comp.InvokeAsync(() => input.Click());
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none"));
             // now click an item and see the value change
             comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().Be(4));
@@ -289,7 +289,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() =>
                 comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
             // click and check if it has toggled the menu
-            await comp.InvokeAsync(() => input.MouseDown());
+            await comp.InvokeAsync(() => input.Click());
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none"));
             // now click an item and see the value change
             comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().BeGreaterThan(0));
@@ -324,7 +324,7 @@ namespace MudExtensions.UnitTests.Components
             {
                 combobox.Instance.SelectedValues = new HashSet<string>() { "1", "2" };
             });
-            await comp.InvokeAsync(() => input.MouseDown());
+            await comp.InvokeAsync(() => input.Click());
             comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item path")[1]?.Attributes["d"]?.Value.Should().Be(@checked));
             comp.FindAll("div.mud-combobox-item path")[3]?.Attributes["d"]?.Value.Should().Be(@checked);
             combobox.Instance.SelectedValues.Should().NotContain("3");
