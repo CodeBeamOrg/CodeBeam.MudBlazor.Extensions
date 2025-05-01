@@ -15,6 +15,7 @@ namespace MudExtensions
         bool _visible = false;
         DialogOptions _dialogOptions = new() { NoHeader = true, FullWidth = true, MaxWidth = MaxWidth.Large, CloseOnEscapeKey = true };
         string? _selectedSrc;
+        int _selectedIndex = 0;
 
         /// <summary>
         /// 
@@ -104,6 +105,7 @@ namespace MudExtensions
         protected void ImageClick(string src)
         {
             _selectedSrc = src;
+            _selectedIndex = ImageSource.IndexOf(src);
             _visible = true;
             StateHasChanged();
         }
@@ -128,19 +130,29 @@ namespace MudExtensions
             {
                 return;
             }
-            int index = ImageSource.IndexOf(_selectedSrc);
-
-            if (ImageSource.Count <= index + count || index + count < 0)
-            {
-                return;
-            }
 
             if (EnableAnimation)
             {
                 await _animate.Refresh();
             }
-            _selectedSrc = ImageSource[index + count];
-            
+
+            if (ImageSource.Count <= _selectedIndex + count)
+            {
+                _selectedSrc = ImageSource[0];
+                _selectedIndex = 0;
+                return;
+            }
+
+            if (_selectedIndex + count < 0)
+            {
+                _selectedSrc = ImageSource[^1];
+                _selectedIndex = ImageSource.Count - 1;
+                return;
+            }
+
+            _selectedSrc = ImageSource[_selectedIndex + count];
+            _selectedIndex += count;
+
         }
 
         /// <summary>
@@ -149,7 +161,7 @@ namespace MudExtensions
         /// <returns></returns>
         public int GetSelectedImageIndex()
         {
-            return ImageSource.IndexOf(_selectedSrc ?? "");
+            return _selectedIndex;
         }
 
     }
