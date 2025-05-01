@@ -4,7 +4,8 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudSignaturePad Value="_value" ValueChanged="BytesChanged" Options="_options"
+        <MudSignaturePad @bind-Value="_value" @bind-Value:after="@(() =>BytesChanged(_value))"
+                         Options="_options"
                          ShowDownload="_showDownload"
                          ShowClear="_showClear"
                          ShowLineWidth="_showLineWidth"
