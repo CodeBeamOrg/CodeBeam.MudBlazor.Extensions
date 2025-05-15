@@ -120,7 +120,7 @@ namespace MudExtensions
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        protected async Task HandleKeyDown(KeyboardEventArgs args)
+        protected internal async Task HandleKeyDown(KeyboardEventArgs args)
         {
             var result = args.Key;
             if (result.Equals(Delimiter, StringComparison.InvariantCultureIgnoreCase) && _internalValue != null)

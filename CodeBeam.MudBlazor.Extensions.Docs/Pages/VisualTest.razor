@@ -1,17 +1,19 @@
 ﻿@page "/visualtest"
 
-<MudStack>
+<MudContainer Class="gap-4" MaxWidth="MaxWidth.Medium">
     <MudStack Row="true">
-        <MudSelect T="string" />
-        <MudSelectExtended T="string" />
-    </MudStack>
-    <MudStack Row="true">
-        <MudSelect T="string" Variant="Variant.Outlined" />
-        <MudSelectExtended T="string" Variant="Variant.Outlined" />
-    </MudStack>
-    <MudStack Row="true">
-        <MudSelect T="string" Variant="Variant.Filled" />
-        <MudSelectExtended T="string" Variant="Variant.Filled" />
+        <MudSelect T="Color" Margin="@(_margin ? Margin.Dense : Margin.Normal)" Dense="@_dense" Variant="@_variant" Label="Label" Clearable>
+            @foreach (var item in Enum.GetValues<Color>())
+            {
+                <MudSelectItem Value="@item">@item</MudSelectItem>
+            }
+        </MudSelect>
+        <MudSelectExtended T="Color" Margin="@(_margin ? Margin.Dense : Margin.Normal)" Dense="@_dense" Variant="@_variant" Label="Label" Clearable>
+            @foreach (var item in Enum.GetValues<Color>())
+            {
+                <MudSelectItemExtended Value="@item">@item</MudSelectItemExtended>
+            }
+        </MudSelectExtended>
     </MudStack>
 
     <MudStack Row="true">
@@ -26,5 +28,20 @@
         <MudTextField T="string" Variant="Variant.Filled" />
         <MudTextFieldExtended T="string" Variant="Variant.Filled" />
     </MudStack>
-</MudStack>
+    <MudStack>
+        <MudSwitchM3 @bind-Value="_dense" Label="Dense" />
+        <MudSwitchM3 @bind-Value="_margin" Label="Margin" />
+        <MudSelectExtended @bind-Value="_variant">
+            @foreach (var item in Enum.GetValues<Variant>())
+            {
+                <MudSelectItemExtended Value="@item">@item</MudSelectItemExtended>
+            }
+        </MudSelectExtended>
+    </MudStack>
+</MudContainer>
 
+@code {
+    private bool _dense;
+    private bool _margin;
+    private Variant _variant;
+}
