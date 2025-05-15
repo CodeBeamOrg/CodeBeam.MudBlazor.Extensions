@@ -15,11 +15,22 @@
                                       Value="@(Strict && !IsValueInList ? null : Text)" Underline="@Underline"
                                       Disabled="@GetDisabledState()" ReadOnly="true" Error="@Error" ErrorId="@ErrorId"
                                       Clearable="@Clearable" OnClearButtonClick="(async (e) => await SelectClearButtonClickHandlerAsync(e))"
-                                      @attributes="UserAttributes" OnBlur="@OnLostFocus" ShrinkLabel="@ShrinkLabel" Typo="@Typo"
+                                      @attributes="UserAttributes" OnBlur="@OnLostFocus" ShrinkLabel="@(AdornmentStart != null || ShrinkLabel)" Typo="@Typo"
                                       ShowVisualiser="true" DataVisualiserStyle="min-height: 1.1876em; padding-right: 0px;">
 
+                        <AdornmentStart>
+                            @AdornmentStart
+                        </AdornmentStart>
+
                         <AdornmentEnd>
-                            <MudIcon Icon="@_currentIcon" Color="@AdornmentColor" Size="@IconSize" @onclick="OnAdornmentClick" />
+                            @if (AdornmentEnd != null)
+                            {
+                                @AdornmentEnd
+                            }
+                            else
+                            {
+                                <MudIcon Icon="@_currentIcon" Color="@AdornmentColor" Size="@IconSize" @onclick="OnAdornmentClick" />
+                            }
                         </AdornmentEnd>
 
                         <DataVisualiser>
@@ -27,13 +38,13 @@
                                 @if (Strict && !IsValueInList)
                                 {
                                     //Show nothing
-                                    <MudText Typo="@Typo" Class="mud-text-secondary">@Placeholder</MudText>
+                                    <MudText Typo="@Typo" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
                                 }
                                 @if (ValuePresenter == ValuePresenter.Text)
                                 {
                                     if (string.IsNullOrEmpty(Text))
                                     {
-                                        <MudText Typo="@Typo" Class="mud-text-secondary">@Placeholder</MudText>
+                                        <MudText Typo="@Typo" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
                                     }
 
                                     <MudRender>@GetSelectTextPresenter()</MudRender>
@@ -42,7 +53,7 @@
                                 {
                                     if (SelectedValues == null || !SelectedValues.Any())
                                     {
-                                        <MudText Typo="@Typo" Class="mud-text-secondary">@Placeholder</MudText>
+                                        <MudText Typo="@Typo" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
                                     }
                                     <MudChipSet T="T" Class="d-flex flex-wrap mud-width-full" Style="row-gap: 4px" AllClosable="ChipCloseable" OnClose="ChipClosed">
                                         @if (ItemCollection != null)
@@ -65,7 +76,7 @@
                                 {
                                     if (SelectedListItem == null)
                                     {
-                                        <MudText Typo="@Typo" Class="mud-text-secondary">@Placeholder</MudText>
+                                        <MudText Typo="@Typo" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
 
                                     }
                                     else if (ItemTemplate != null)
@@ -76,7 +87,7 @@
                                         }
                                         else if (!string.IsNullOrEmpty(Placeholder))
                                         {
-                                            <MudText Typo="@Typo" Class="mud-text-secondary">@Placeholder</MudText>
+                                            <MudText Typo="@Typo" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
                                         }
                                     }
                                     else if (SelectedListItem.ChildContent != null)
@@ -87,7 +98,7 @@
                                     {
                                         @if (string.IsNullOrEmpty(Text))
                                         {
-                                            <MudText Typo="@Typo" Class="mud-text-secondary">@Placeholder</MudText>
+                                            <MudText Typo="@Typo" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
                                         }
 
                                         <MudRender>@GetSelectTextPresenter()</MudRender>

@@ -23,17 +23,28 @@
                                       Underline="@Underline"
                                       Disabled="@GetDisabledState()" ReadOnly="@GetReadOnlyState()" Error="@Error" ErrorId="@ErrorId"
                                       Clearable="@Clearable" ForceClearable="@(Clearable && HasValue(Value))" OnClearButtonClick="@ClearButtonClickHandlerAsync"
-                                      MaxLength="@MaxLength" @attributes="UserAttributes" OnBlur="@HandleOnBlur" ShrinkLabel="@(HasValue(Value) || _isOpen || ShrinkLabel)">
+                                      MaxLength="@MaxLength" @attributes="UserAttributes" OnBlur="@HandleOnBlur" ShrinkLabel="@(HasValue(Value) || AdornmentStart != null || _isOpen || ShrinkLabel)">
+
+                        <AdornmentStart>
+                            @AdornmentStart
+                        </AdornmentStart>
 
                         <AdornmentEnd>
-                            <MudIcon Icon="@_currentIcon" Color="@AdornmentColor" Size="@IconSize" @onclick="OnAdornmentClick" />
+                            @if (AdornmentEnd != null)
+                            {
+                                @AdornmentEnd
+                            }
+                            else
+                            {
+                                <MudIcon Icon="@_currentIcon" Color="@AdornmentColor" Size="@IconSize" @onclick="OnAdornmentClick" />
+                            }
                         </AdornmentEnd>
 
                         <DataVisualiser>
                             <div style="flex-basis: content; flex-grow: 0">
                                 @if (!HasValue(Value) && !string.IsNullOrWhiteSpace(Placeholder))
                                 {
-                                    <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
+                                    <MudText Typo="Typo.body1" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
                                 }
                                 else if (InputPresenter == ValuePresenter.Chip)
                                 {
@@ -59,7 +70,7 @@
                                 {
                                     if (SelectedValues is null)
                                     {
-                                        <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
+                                        <MudText Typo="Typo.body1" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
 
                                     }
                                     else if (ItemTemplate is not null)
@@ -70,7 +81,7 @@
                                         }
                                         else if (!string.IsNullOrWhiteSpace(Placeholder))
                                         {
-                                            <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
+                                            <MudText Typo="Typo.body1" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
                                         }
                                     }
                                     else if (Items.FirstOrDefault(x => x?.Value?.Equals(Value) == true)?.ChildContent is not null)
@@ -101,7 +112,7 @@
                             <div class="@TemplateClass">
                                 @if (!HasValue(Value) && !string.IsNullOrWhiteSpace(Placeholder))
                                 {
-                                    <MudText Typo="Typo.body1" Class="mud-text-secondary">@Placeholder</MudText>
+                                    <MudText Typo="Typo.body1" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
                                 }
                             </div>
                         </ChildContent>

@@ -55,23 +55,24 @@
                                       OnClearButtonClick="@OnClearButtonClick"
                                       Pattern="@Pattern"
                                       AutoSize="AutoSize"
-                                      ShrinkLabel="@ShrinkLabel"
+                                      ShrinkLabel="@(AdornmentStart!= null || ShrinkLabel)"
                                       Typo="@Typo"
                                       ShowVisualiser="@(DataVisualiser != null && ShowVisualiser)"
                                       DataVisualiserStyle="@(DataVisualiser != null ? "min-height: 1.1876em" : null)">
-                                    <DataVisualiser>
-                                        @DataVisualiser
-                                    </DataVisualiser>
 
-                                    <AdornmentStart>
-                                        @AdornmentStart
-                                    </AdornmentStart>
+                            <DataVisualiser>
+                                @DataVisualiser
+                            </DataVisualiser>
 
-                        <AdornmentEnd>
-                            @AdornmentEnd
-                        </AdornmentEnd>
+                            <AdornmentStart>
+                                @AdornmentStart
+                            </AdornmentStart>
 
-                                  </MudInputExtended>
+                            <AdornmentEnd>
+                                @AdornmentEnd
+                            </AdornmentEnd>
+
+                        </MudInputExtended>
                     }
                     else
                     {

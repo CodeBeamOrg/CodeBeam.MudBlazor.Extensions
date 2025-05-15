@@ -19,7 +19,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string? Classname => MudInputCssHelperExtended.GetClassname(this,
-            () => HasNativeHtmlPlaceholder() || ShrinkLabel == true || !string.IsNullOrEmpty(Text) || AdornmentStart != null || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(Converter.Set(Value)));
+            () => HasNativeHtmlPlaceholder() || ShrinkLabel == true || !string.IsNullOrEmpty(Text) || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(Converter.Set(Value)));
 
         /// <summary>
         /// 

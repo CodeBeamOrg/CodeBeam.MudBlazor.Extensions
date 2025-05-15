@@ -2,36 +2,38 @@
 
 <MudContainer Class="gap-4" MaxWidth="MaxWidth.Medium">
     <MudStack Row="true">
-        <MudSelect T="Color" Margin="@(_margin ? Margin.Dense : Margin.Normal)" Dense="@_dense" Variant="@_variant" Label="Label" Clearable>
-            @foreach (var item in Enum.GetValues<Color>())
+        <MudSelect T="string" Margin="@(_margin ? Margin.Dense : Margin.Normal)" Dense="@_dense" Variant="@_variant" Label="@(_label ? "Select" : null)" Placeholder="@(_placeholder ? "Placeholder" : null)" Clearable>
+            @foreach (var item in _states)
             {
                 <MudSelectItem Value="@item">@item</MudSelectItem>
             }
         </MudSelect>
-        <MudSelectExtended T="Color" Margin="@(_margin ? Margin.Dense : Margin.Normal)" Dense="@_dense" Variant="@_variant" Label="Label" Clearable>
-            @foreach (var item in Enum.GetValues<Color>())
+        <MudSelectExtended T="string" Margin="@(_margin ? Margin.Dense : Margin.Normal)" Dense="@_dense" Variant="@_variant" Label="@(_label ? "SelectExt" : null)" Placeholder="@(_placeholder ? "Placeholder" : null)" Clearable>
+            @foreach (var item in _states)
             {
                 <MudSelectItemExtended Value="@item">@item</MudSelectItemExtended>
             }
         </MudSelectExtended>
+
+        <MudComboBox T="string" Margin="@(_margin ? Margin.Dense : Margin.Normal)" Variant="@_variant" Label="@(_label ? "Combobox" : null)" Placeholder="@(_placeholder ? "Placeholder" : null)" Clearable>
+            @foreach (var item in _states)
+            {
+                <MudComboBoxItem Value="@item">@item</MudComboBoxItem>
+            }
+        </MudComboBox>
     </MudStack>
 
     <MudStack Row="true">
-        <MudTextField T="string" />
-        <MudTextFieldExtended T="string" />
+        <MudTextField T="string" Margin="@(_margin ? Margin.Dense : Margin.Normal)" Dense="@_dense" Variant="@_variant" Label="@(_label ? "Text Field" : null)" Placeholder="@(_placeholder ? "Placeholder" : null)" Clearable />
+        <MudTextFieldExtended T="string" Margin="@(_margin ? Margin.Dense : Margin.Normal)" Dense="@_dense" Variant="@_variant" Label="@(_label ? "Text Field Ext" : null)" Placeholder="@(_placeholder ? "Placeholder" : null)" Clearable />
     </MudStack>
-    <MudStack Row="true">
-        <MudTextField T="string" Variant="Variant.Outlined" />
-        <MudTextFieldExtended T="string" Variant="Variant.Outlined" />
-    </MudStack>
-    <MudStack Row="true">
-        <MudTextField T="string" Variant="Variant.Filled" />
-        <MudTextFieldExtended T="string" Variant="Variant.Filled" />
-    </MudStack>
+
     <MudStack>
         <MudSwitchM3 @bind-Value="_dense" Label="Dense" />
         <MudSwitchM3 @bind-Value="_margin" Label="Margin" />
-        <MudSelectExtended @bind-Value="_variant">
+        <MudSwitchM3 @bind-Value="_label" Label="Label" />
+        <MudSwitchM3 @bind-Value="_placeholder" Label="Placeholder" />
+        <MudSelectExtended @bind-Value="_variant" Label="Variant" Variant="Variant.Outlined" Margin="Margin.Dense">
             @foreach (var item in Enum.GetValues<Variant>())
             {
                 <MudSelectItemExtended Value="@item">@item</MudSelectItemExtended>
@@ -43,5 +45,25 @@
 @code {
     private bool _dense;
     private bool _margin;
+    private bool _label = true;
+    private bool _placeholder;
     private Variant _variant;
+
+    private string[] _states =
+    {
+        "Alabama", "Alaska", "American Samoa", "Arizona",
+        "Arkansas", "California", "Colorado", "Connecticut",
+        "Delaware", "District of Columbia", "Federated States of Micronesia",
+        "Florida", "Georgia", "Guam", "Hawaii", "Idaho",
+        "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+        "Louisiana", "Maine", "Marshall Islands", "Maryland",
+        "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+        "Missouri", "Montana", "Nebraska", "Nevada",
+        "New Hampshire", "New Jersey", "New Mexico", "New York",
+        "North Carolina", "North Dakota", "Northern Mariana Islands", "Ohio",
+        "Oklahoma", "Oregon", "Palau", "Pennsylvania", "Puerto Rico",
+        "Rhode Island", "South Carolina", "South Dakota", "Tennessee",
+        "Texas", "Utah", "Vermont", "Virgin Island", "Virginia",
+        "Washington", "West Virginia", "Wisconsin", "Wyoming",
+    };
 }

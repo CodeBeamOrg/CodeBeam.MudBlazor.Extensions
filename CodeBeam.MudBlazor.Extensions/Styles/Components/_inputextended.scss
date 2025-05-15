@@ -1,6 +1,10 @@
 ﻿/*@import '../abstracts/variables';*/
 $mud-palette-colors: primary, secondary, tertiary, info, success, warning, error, dark;
 
+.mud-placeholder-extended {
+    line-height: unset;
+}
+
 .mud-input-adornment-start-extended {
 
     &:not(.mud-input-text-extended) {

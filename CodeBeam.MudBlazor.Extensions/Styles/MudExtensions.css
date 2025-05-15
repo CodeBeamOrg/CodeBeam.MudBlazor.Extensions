@@ -975,6 +975,9 @@
   padding-bottom: 18px; }
 
 /*@import '../abstracts/variables';*/
+.mud-placeholder-extended {
+  line-height: unset; }
+
 .mud-input-adornment-start-extended:not(.mud-input-text-extended) {
   margin-inline-start: 12px; }
 
