@@ -23,8 +23,8 @@
 
 	<Target Name="CopyXmlDocToWwwRoot" AfterTargets="Build">
 		<Copy
-		  SourceFiles="$(SolutionDir)CodeBeam.MudBlazor.Extensions\bin\$(Configuration)\net8.0\CodeBeam.MudBlazor.Extensions.xml"
-		  DestinationFolder="$(ProjectDir)wwwroot"
+		  SourceFiles="..\CodeBeam.MudBlazor.Extensions\bin\$(Configuration)\net9.0\CodeBeam.MudBlazor.Extensions.xml"
+		  DestinationFolder="wwwroot"
 		  SkipUnchangedFiles="true" />
 	</Target>
 
