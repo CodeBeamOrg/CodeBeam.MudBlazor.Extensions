@@ -7,7 +7,6 @@ namespace MudExtensions.Docs.Services
     {
         private readonly Dictionary<string, string> _summaries;
 
-        // XML içeriği string olarak alır, parse edip member açıklamalarını hazırlar
         public SimpleXmlDocReader(string xmlContent)
         {
             var doc = XDocument.Parse(xmlContent);
@@ -20,50 +19,14 @@ namespace MudExtensions.Docs.Services
                 );
         }
 
-        // Summary'den gereksiz boşlukları ve satır sonlarını temizler
         private string CleanSummaryText(string? summary)
         {
             if (string.IsNullOrWhiteSpace(summary))
                 return "";
 
-            // Satır başı ve sonu boşlukları temizle, iç satır boşluklarını tek boşluk yap
             return string.Join(" ", summary.Trim().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()));
         }
 
-        // Reflection MemberInfo'dan XML dosyasındaki member name formatını oluşturur
-        //public static string GetMemberName(MemberInfo member)
-        //{
-        //    if (member == null) throw new ArgumentNullException(nameof(member));
-
-        //    string prefix = member.MemberType switch
-        //    {
-        //        MemberTypes.Constructor => "M",
-        //        MemberTypes.Method => "M",
-        //        MemberTypes.Property => "P",
-        //        MemberTypes.Event => "E",
-        //        MemberTypes.Field => "F",
-        //        _ => throw new ArgumentOutOfRangeException(nameof(member), $"Unsupported member type: {member.MemberType}")
-        //    };
-
-        //    var typeName = member.DeclaringType?.FullName ?? "";
-
-        //    if (member is MethodInfo method)
-        //    {
-        //        var parameters = method.GetParameters();
-        //        if (parameters.Length == 0)
-        //            return $"{prefix}:{typeName}.{member.Name}";
-
-        //        // Parametre tiplerini yaz (tam tip isimleri ile)
-        //        var paramTypeNames = parameters.Select(p => GetParameterTypeName(p.ParameterType));
-        //        return $"{prefix}:{typeName}.{member.Name}({string.Join(",", paramTypeNames)})";
-        //    }
-        //    else
-        //    {
-        //        return $"{prefix}:{typeName}.{member.Name}";
-        //    }
-        //}
-
-        // Parametre tipi için XML formatında isim oluşturur
         private static string GetParameterTypeName(Type type)
         {
             if (type.IsGenericType)
@@ -71,7 +34,7 @@ namespace MudExtensions.Docs.Services
                 var mainType = type.GetGenericTypeDefinition().FullName;
                 var genericArgs = type.GetGenericArguments().Select(GetParameterTypeName);
                 // Generic format: Namespace.Type`1[System.String]
-                // XML doc için: Namespace.Type{System.String}
+                // XML doc: Namespace.Type{System.String}
                 mainType = mainType?.Split('`')[0] ?? "";
                 return $"{mainType}{{{string.Join(",", genericArgs)}}}";
             }
@@ -85,14 +48,12 @@ namespace MudExtensions.Docs.Services
             return type.FullName ?? type.Name;
         }
 
-        // MemberInfo üzerinden özet (summary) alır
         public string? GetSummary(MemberInfo member)
         {
             var memberName = GetMemberName(member);
             return _summaries.TryGetValue(memberName, out var summary) ? summary : null;
         }
 
-        // Direkt memberName ile de özet çekilebilir
         public string? GetSummary(string memberName)
         {
             return _summaries.TryGetValue(memberName, out var var) ? var : null;

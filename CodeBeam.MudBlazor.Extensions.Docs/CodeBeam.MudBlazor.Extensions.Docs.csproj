@@ -13,7 +13,6 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LoxSmoke.DocXml" Version="3.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.*" />
     <PackageReference Include="MudBlazor" Version="8.0.0" />
   </ItemGroup>

@@ -28,12 +28,6 @@
 		  SkipUnchangedFiles="true" />
 	</Target>
 
-	<!--<ItemGroup>
-		<Content Include="wwwroot\CodeBeam.MudBlazor.Extensions.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>-->
-
   <ItemGroup>
     <Content Update="wwwroot\favicon.ico">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

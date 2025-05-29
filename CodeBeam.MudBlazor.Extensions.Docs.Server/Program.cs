@@ -12,10 +12,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
 builder.Services.AddMudExtensions();
 builder.Services.AddScoped<MudExtensionsDocsService>();
-builder.Services.AddHttpClient("DocsClient", client =>
-{
-    client.BaseAddress = new Uri("https://localhost:7010/"); // Server'ýn çalýþtýðý URL
-});
+builder.Services.AddScoped<HttpClient>();
 
 var app = builder.Build();
 
