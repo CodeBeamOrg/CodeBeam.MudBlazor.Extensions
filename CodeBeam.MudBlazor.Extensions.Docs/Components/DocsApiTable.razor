@@ -1,22 +1,29 @@
 ﻿@namespace MudExtensions.Docs.Components
 @using System.Text.RegularExpressions
+@using LoxSmoke.DocXml
+@using System.Reflection
+@inject HttpClient Http
 
 <MudText Class="my-2" Color="Color.Secondary" Typo="Typo.h6">Parameters</MudText>
-<MudTable Items="@(Type?.GetProperties().Where(x => x.PropertyType.Name.Contains("EventCallback") == false && x.Name != "FieldId" && x.Name != "UserAttributes").OrderBy(x => x.Name).ToList())" Elevation="0" Hover="true" Dense="true">
+<MudTable Items="@(SafeProperties)" Elevation="0" Hover="true" Dense="true">
     <HeaderContent>
         <MudTh>Name</MudTh>
         <MudTh>Type</MudTh>
         <MudTh>Default</MudTh>
+        <MudTh>Description</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="Type">@context.PropertyType.Name.Replace("`1", "")</MudTd>
-            <MudTd DataLabel="Default">
-                @if (true)
-            {
-                object? instance = Activator.CreateInstance(Type ?? typeof(string));
-                <MudText Typo="Typo.body2">@(context.GetValue(instance)?.ToString() ?? "null")</MudText>
+        <MudTd DataLabel="Type">@DocUtilities.GetFriendlyTypeName(context.PropertyType)</MudTd>
+        <MudTd DataLabel="Default">
+            @{
+                object? instance = TryCreateInstance(SafeComponentType);
+                string? value = instance != null ? context.GetValue(instance)?.ToString() : "null";
             }
+            <MudText Typo="Typo.body2">@value</MudText>
+        </MudTd>
+        <MudTd DataLabel="Description">
+            @(_docReader?.GetSummary(context) ?? "—")
         </MudTd>
     </RowTemplate>
     <NoRecordsContent>
@@ -25,14 +32,16 @@
 </MudTable>
 
 <MudText Class="mt-8 mb-2" Color="Color.Secondary" Typo="Typo.h6">Events</MudText>
-<MudTable Items="@(Type?.GetProperties().Where(x => x.PropertyType.Name.Contains("EventCallback")).OrderBy(x => x.Name).ToList())" Elevation="0" Hover="true" Dense="true">
+<MudTable Items="@(SafeEventProperties)" Elevation="0" Hover="true" Dense="true">
     <HeaderContent>
         <MudTh>Name</MudTh>
         <MudTh>Type</MudTh>
+        <MudTh>Description</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
-        <MudTd DataLabel="Type">@context.PropertyType.Name.Replace("`1", "")</MudTd>
+        <MudTd DataLabel="Type">@DocUtilities.GetFriendlyTypeName(context.PropertyType)</MudTd>
+        <MudTd DataLabel="Description">@(_docReader?.GetSummary(context) ?? "—")</MudTd>
     </RowTemplate>
     <NoRecordsContent>
         No specific items.
@@ -40,19 +49,22 @@
 </MudTable>
 
 <MudText Class="mt-8 mb-2" Color="Color.Secondary" Typo="Typo.h6">Methods</MudText>
-<MudTable Items="@(Type?.GetMethods().Where(x => _excludedMethods.Contains(x.Name) == false && Regex.IsMatch(x.Name[0].ToString(), "[A-Z]")).OrderBy(x => x.Name).ToList())" Elevation="0" Hover="true" Dense="true">
+<MudTable Items="@(SafeMethods)" Elevation="0" Hover="true" Dense="true">
     <HeaderContent>
         <MudTh>Name</MudTh>
-        <MudTh>Type</MudTh>
+        <MudTh>Return Type</MudTh>
+        <MudTh>Description</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
-        <MudTd DataLabel="Type">@context.ReturnType.Name.Replace("`1", "")</MudTd>
+        <MudTd DataLabel="Return Type">@DocUtilities.GetFriendlyTypeName(context.ReturnType)</MudTd>
+        <MudTd DataLabel="Description">@(_docReader?.GetSummary(context) ?? "—")</MudTd>
     </RowTemplate>
     <NoRecordsContent>
         No specific items.
     </NoRecordsContent>
 </MudTable>
+
 
 @if (Component?.RelatedComponents != null)
 {
@@ -64,13 +76,71 @@
     }
 }
 
-@code{
-    [Parameter]
-    public Type? Type { get; set; }
+@code {
+    [Parameter] public Type? Type { get; set; }
+    [Parameter] public MudExtensionComponentInfo? Component { get; set; }
 
-    [Parameter]
-    public MudExtensionComponentInfo? Component { get; set; }
+    private SimpleXmlDocReader? _docReader;
 
-    List<string> _excludedMethods = new()
-    { "SetParametersAsync", "Equals", "GetHashCode", "GetType", "ToString"};
+    private List<string> _excludedMethods = new()
+    {
+        "SetParametersAsync", "Equals", "GetHashCode", "GetType", "ToString"
+    };
+
+    private Type? SafeComponentType =>
+        (Type?.IsGenericTypeDefinition == true)
+            ? Type?.MakeGenericType(Type.GetGenericArguments().Select(_ => typeof(string)).ToArray())
+            : Type;
+
+    private IEnumerable<PropertyInfo> SafeProperties =>
+        SafeComponentType?.GetProperties()
+            .Where(x => !x.PropertyType.Name.Contains("EventCallback") &&
+                        x.Name != "FieldId" && x.Name != "UserAttributes")
+            .OrderBy(x => x.Name) ?? Enumerable.Empty<PropertyInfo>();
+
+    private IEnumerable<PropertyInfo> SafeEventProperties =>
+        SafeComponentType?.GetProperties()
+            .Where(x => x.PropertyType.Name.Contains("EventCallback"))
+            .OrderBy(x => x.Name) ?? Enumerable.Empty<PropertyInfo>();
+
+    private IEnumerable<MethodInfo> SafeMethods =>
+        SafeComponentType?.GetMethods()
+            .Where(x => !_excludedMethods.Contains(x.Name) &&
+                        Regex.IsMatch(x.Name[0].ToString(), "[A-Z]"))
+            .OrderBy(x => x.Name) ?? Enumerable.Empty<MethodInfo>();
+
+    private object? TryCreateInstance(Type? type)
+    {
+        try
+        {
+            return (type?.ContainsGenericParameters == false)
+                ? Activator.CreateInstance(type)
+                : null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        string? xmlContent = null;
+
+        if (OperatingSystem.IsBrowser())
+        {
+            xmlContent = await Http.GetStringAsync("CodeBeam.MudBlazor.Extensions.xml");
+        }
+        else
+        {
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, "CodeBeam.MudBlazor.Extensions.xml");
+            if (File.Exists(xmlPath))
+                xmlContent = await File.ReadAllTextAsync(xmlPath);
+        }
+
+        if (!string.IsNullOrEmpty(xmlContent))
+        {
+            _docReader = new SimpleXmlDocReader(xmlContent);
+        }
+    }
 }
