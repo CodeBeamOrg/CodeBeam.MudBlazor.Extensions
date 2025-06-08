@@ -68,6 +68,11 @@
             If false, the input will not have an underline.
             </summary>
         </member>
+        <member name="P:MudExtensions.MudBaseInputExtended`1.HasAdornmentStart">
+            <summary>
+            Gets or sets a value indicating whether the component has an adornment at the start.
+            </summary>
+        </member>
         <member name="P:MudExtensions.MudBaseInputExtended`1.HelperText">
             <summary>
             The HelperText will be displayed below the text field.

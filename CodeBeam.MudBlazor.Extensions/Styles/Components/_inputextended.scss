@@ -7,7 +7,7 @@ $mud-palette-colors: primary, secondary, tertiary, info, success, warning, error
 
 .mud-input-adornment-start-extended {
 
-    &:not(.mud-input-text-extended) {
+    &:not(.mud-input-text-extended):not(.mud-no-start-adornment) {
         margin-inline-start: 12px;
     }
 
@@ -21,4 +21,8 @@ $mud-palette-colors: primary, secondary, tertiary, info, success, warning, error
     &:not(.mud-input-text-extended) {
         margin-inline-end: 12px;
     }
+}
+
+.mud-no-start-adornment .mud-input-adornment-start-extended {
+    margin-inline-start: 0 !important;
 }

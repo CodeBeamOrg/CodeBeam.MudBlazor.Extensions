@@ -11,6 +11,7 @@
                     <MudInputExtended @ref="_elementReference" InputType="InputType.Hidden" Label="@Label"
                                       Class="@InputClassname" Style="@InputStyle" Margin="@Margin" Placeholder="@Placeholder"
                                       Variant="@Variant"
+                                      HasAdornmentStart="@((AdornmentStart != null))"
                                       TextUpdateSuppression="false"
                                       Value="@(Strict && !IsValueInList ? null : Text)" Underline="@Underline"
                                       Disabled="@GetDisabledState()" ReadOnly="true" Error="@Error" ErrorId="@ErrorId"
