@@ -998,3 +998,6 @@
 
 .mud-input-adornment-end-extended:not(.mud-input-text-extended) {
   margin-inline-end: 12px; }
+
+.mud-no-start-adornment .mud-input-adornment-start-extended {
+  margin-inline-start: 0 !important; }

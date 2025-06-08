@@ -22,3 +22,7 @@ $mud-palette-colors: primary, secondary, tertiary, info, success, warning, error
         margin-inline-end: 12px;
     }
 }
+
+.mud-no-start-adornment .mud-input-adornment-start-extended {
+    margin-inline-start: 0 !important;
+}

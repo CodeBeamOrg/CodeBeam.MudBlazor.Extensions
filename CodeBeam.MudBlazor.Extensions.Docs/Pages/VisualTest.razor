@@ -29,6 +29,21 @@
     </MudStack>
 
     <MudStack>
+        <MudSelectExtended @bind-Value="@_testValue" ItemCollection="@_states" Label="Adornment Test" Variant="Variant.Text" Clearable />
+        <MudSelectExtended @bind-Value="@_testValue" ItemCollection="@_states" Label="Adornment Test" Variant="Variant.Outlined" Clearable />
+        <MudSelectExtended @bind-Value="@_testValue" ItemCollection="@_states" Label="Adornment Test" Variant="Variant.Filled" Clearable />
+        <MudSelectExtended @bind-Value="@_testValue" ItemCollection="@_states" Label="Adornment Test" Variant="Variant.Text" Clearable>
+            <AdornmentStart>abc</AdornmentStart>
+        </MudSelectExtended>
+        <MudSelectExtended @bind-Value="@_testValue" ItemCollection="@_states" Label="Adornment Test" Variant="Variant.Outlined" Clearable>
+            <AdornmentStart>abc</AdornmentStart>
+        </MudSelectExtended>
+        <MudSelectExtended @bind-Value="@_testValue" ItemCollection="@_states" Label="Adornment Test" Variant="Variant.Filled" Clearable>
+            <AdornmentStart>abc</AdornmentStart>
+        </MudSelectExtended>
+    </MudStack>
+
+    <MudStack>
         <MudSwitchM3 @bind-Value="_dense" Label="Dense" />
         <MudSwitchM3 @bind-Value="_margin" Label="Margin" />
         <MudSwitchM3 @bind-Value="_label" Label="Label" />
@@ -48,6 +63,7 @@
     private bool _label = true;
     private bool _placeholder;
     private Variant _variant;
+    private string? _testValue;
 
     private string[] _states =
     {

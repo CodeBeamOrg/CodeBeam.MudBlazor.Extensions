@@ -38,7 +38,7 @@ namespace MudExtensions
                 .AddClass($"mud-input-root-{baseInput.Variant.ToDescriptionString()}")
                 //.AddClass($"mud-input-root-adorned-{baseInput.Adornment.ToDescriptionString()}", baseInput.Adornment != Adornment.None)
                 .AddClass($"mud-input-root-margin-{baseInput.Margin.ToDescriptionString()}", when: () => baseInput.Margin != Margin.None)
-                .AddClass("ms-4", baseInput.AdornmentStart != null && baseInput.Variant == Variant.Text)
+                .AddClass("ms-4", baseInput.HasAdornmentStart == true && baseInput.Variant == Variant.Text)
                 .AddClass(baseInput.Class)
                 .Build();
 

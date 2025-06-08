@@ -68,6 +68,7 @@ namespace MudExtensions
         /// </summary>
         protected string InputClassname =>
             new CssBuilder("mud-select-input-extended")
+            .AddClass("mud-no-start-adornment", AdornmentStart == null)
             .AddClass(InputClass)
             .Build();
 

@@ -89,6 +89,12 @@ namespace MudExtensions
         public bool Underline { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets a value indicating whether the component has an adornment at the start.
+        /// </summary>
+        [Parameter]
+        public bool HasAdornmentStart { get; set; }
+
+        /// <summary>
         /// The HelperText will be displayed below the text field.
         /// </summary>
         [Parameter]
