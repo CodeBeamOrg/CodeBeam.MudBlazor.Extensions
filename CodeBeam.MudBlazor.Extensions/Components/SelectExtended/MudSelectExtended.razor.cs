@@ -72,6 +72,14 @@ namespace MudExtensions
             .AddClass(InputClass)
             .Build();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string? InputChipClassname =>
+            new CssBuilder("mud-select-input-chip-extended")
+            .AddClass("mud-select-extended-nowrap mud-chip-scroll-container", NoWrap)
+            .Build();
+
         private string _elementId = "select_" + Guid.NewGuid().ToString().Substring(0, 8);
         private string _popoverId = "selectpopover_" + Guid.NewGuid().ToString().Substring(0, 8);
 

@@ -4232,6 +4232,11 @@
             
             </summary>
         </member>
+        <member name="P:MudExtensions.MudSelectExtended`1.InputChipClassname">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:MudExtensions.MudSelectExtended`1.InputClass">
             <summary>
             User class names for the input, separated by space

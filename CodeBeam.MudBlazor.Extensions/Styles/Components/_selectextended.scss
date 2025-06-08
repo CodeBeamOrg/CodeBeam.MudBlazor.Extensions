@@ -95,3 +95,20 @@
     border-bottom: 1px solid lightgrey;
     padding-bottom: 18px;
 }
+
+.mud-select-input-chip-extended {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    row-gap: 4px;
+
+    &.mud-select-extended-nowrap {
+        flex-wrap: nowrap;
+        overflow-x: hidden;
+    }
+
+    .mud-chip {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+}

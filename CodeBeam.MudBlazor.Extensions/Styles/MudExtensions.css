@@ -974,6 +974,18 @@
   border-bottom: 1px solid lightgrey;
   padding-bottom: 18px; }
 
+.mud-select-input-chip-extended {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  row-gap: 4px; }
+  .mud-select-input-chip-extended.mud-select-extended-nowrap {
+    flex-wrap: nowrap;
+    overflow-x: hidden; }
+  .mud-select-input-chip-extended .mud-chip {
+    flex: 0 0 auto;
+    white-space: nowrap; }
+
 /*@import '../abstracts/variables';*/
 .mud-placeholder-extended {
   line-height: unset; }

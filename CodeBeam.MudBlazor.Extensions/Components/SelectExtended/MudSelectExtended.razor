@@ -55,7 +55,7 @@
                                     {
                                         <MudText Typo="@Typo" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
                                     }
-                                    <MudChipSet T="T" Class="d-flex flex-wrap mud-width-full" Style="row-gap: 4px" AllClosable="ChipCloseable" OnClose="ChipClosed">
+                                    <MudChipSet T="T" Class="@InputChipClassname" AllClosable="ChipCloseable" OnClose="ChipClosed">
                                         @if (ItemCollection != null)
                                         {
                                             foreach (var item in ItemCollection.Where(x => SelectedValues?.Contains(x) == true))

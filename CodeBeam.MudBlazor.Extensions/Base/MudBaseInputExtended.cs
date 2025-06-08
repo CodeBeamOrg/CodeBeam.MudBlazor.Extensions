@@ -156,7 +156,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public bool ShrinkLabel { get; set; }
+        public bool ShrinkLabel { get; set; } = MudGlobal.InputDefaults.ShrinkLabel;
 
         /// <summary>
         /// The color of the adornment if used. It supports the theme colors.
@@ -182,14 +182,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public Variant Variant { get; set; } = Variant.Text;
+        public Variant Variant { get; set; } = MudGlobal.InputDefaults.Variant;
 
         /// <summary>
         ///  Will adjust vertical spacing.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public Margin Margin { get; set; } = Margin.None;
+        public Margin Margin { get; set; } = MudGlobal.InputDefaults.Margin;
 
         /// <summary>
         /// The short hint displayed in the input before the user enters a value.
