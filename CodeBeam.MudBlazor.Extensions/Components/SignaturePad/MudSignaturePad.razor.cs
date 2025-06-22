@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
+using MudBlazor.Services;
 using MudBlazor.Utilities;
 using MudExtensions.Utilities;
 
@@ -9,10 +10,10 @@ namespace MudExtensions
     /// <summary>
     /// Signature pad component.
     /// </summary>
-    public partial class MudSignaturePad : ComponentBase, IAsyncDisposable
+    public partial class MudSignaturePad : ComponentBase, IBrowserViewportObserver, IAsyncDisposable
     {
         /// <summary>
-        /// 
+        /// Constructor for MudSignaturePad.
         /// </summary>
         public MudSignaturePad()
         {
@@ -23,6 +24,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string CanvasContainerClassname => new CssBuilder()
+            .AddClass("mud-signature-pad-container")
             .AddClass(CanvasContainerClass)
             .Build();
 
@@ -67,7 +69,7 @@ namespace MudExtensions
         public SignaturePadLocalizedStrings LocalizedStrings { get; set; } = new();
 
         /// <summary>
-        /// 
+        /// Options for the signature pad.
         /// </summary>
         [Parameter]
         public SignaturePadOptions Options { get; set; } = new SignaturePadOptions();
@@ -79,13 +81,13 @@ namespace MudExtensions
         public string? ToolbarClass { get; set; }
 
         /// <summary>
-        /// 
+        /// Style for the toolbar.
         /// </summary>
         [Parameter]
         public string? ToolbarStyle { get; set; }
 
         /// <summary>
-        /// 
+        /// Outer class for the component.
         /// </summary>
         [Parameter]
         public string? OuterClass { get; set; }
@@ -107,16 +109,16 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public string? CanvasContainerStyle { get; set; } =
-            "height: 100%;width: 100%; box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;";
+            "height: 100%;width: 100%; display: block; box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;";
 
         /// <summary>
-        /// 
+        /// Shows the eraser toggle button.
         /// </summary>
         [Parameter]
         public bool ShowClear { get; set; } = true;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [Parameter]
         public bool ShowLineWidth { get; set; } = true;
@@ -128,7 +130,7 @@ namespace MudExtensions
         public bool ShowStrokeStyle { get; set; } = true;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [Parameter]
         public bool ShowDownload { get; set; } = true;
@@ -155,7 +157,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         [Parameter]
-        public Variant Variant { get; set; }
+        public Variant Variant { get; set; } = MudGlobal.InputDefaults.Variant;
 
         /// <summary>
         /// 
@@ -178,8 +180,9 @@ namespace MudExtensions
         {
             if (firstRender)
             {
-                await JsRuntime.InvokeVoidAsync("mudSignaturePad.addPad", _dotnetObjectRef, _reference,
-                    JsOptionsStruct);
+                await JsRuntime.InvokeVoidAsync("mudSignaturePad.addPad", _dotnetObjectRef, _reference, JsOptionsStruct);
+                await BrowserViewportService.SubscribeAsync(this, fireImmediately: true);
+
                 if (Value.Length > 0)
                 {
                     await PushImageUpdateToJsRuntime();
@@ -250,11 +253,13 @@ namespace MudExtensions
             try
             {
                 await JsRuntime.InvokeVoidAsync("mudSignaturePad.disposePad", _reference);
+                await BrowserViewportService.UnsubscribeAsync(this);
             }
             catch
             {
                 //ignore
             }
+            _dotnetObjectRef?.Dispose();
         }
 
         /// <summary>
@@ -276,5 +281,25 @@ namespace MudExtensions
 
             await ValueChanged.InvokeAsync(Value);
         }
+
+        Guid IBrowserViewportObserver.Id { get; } = Guid.NewGuid();
+
+        ResizeOptions IBrowserViewportObserver.ResizeOptions { get; } = new()
+        {
+            ReportRate = 200,
+            NotifyOnBreakpointOnly = false
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public async Task NotifyBrowserViewportChangeAsync(BrowserViewportEventArgs args)
+        {
+            await JsRuntime.InvokeVoidAsync("mudSignaturePad.setCanvasSize", _reference);
+        }
+
     }
+
 }

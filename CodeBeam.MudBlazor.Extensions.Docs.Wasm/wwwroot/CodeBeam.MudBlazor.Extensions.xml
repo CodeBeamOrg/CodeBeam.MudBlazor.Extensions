@@ -4911,7 +4911,7 @@
         </member>
         <member name="M:MudExtensions.MudSignaturePad.#ctor">
             <summary>
-            
+            Constructor for MudSignaturePad.
             </summary>
         </member>
         <member name="P:MudExtensions.MudSignaturePad.CanvasContainerClassname">
@@ -4941,7 +4941,7 @@
         </member>
         <member name="P:MudExtensions.MudSignaturePad.Options">
             <summary>
-            
+            Options for the signature pad.
             </summary>
         </member>
         <member name="P:MudExtensions.MudSignaturePad.ToolbarClass">
@@ -4951,12 +4951,12 @@
         </member>
         <member name="P:MudExtensions.MudSignaturePad.ToolbarStyle">
             <summary>
-            
+            Style for the toolbar.
             </summary>
         </member>
         <member name="P:MudExtensions.MudSignaturePad.OuterClass">
             <summary>
-            
+            Outer class for the component.
             </summary>
         </member>
         <member name="P:MudExtensions.MudSignaturePad.Elevation">
@@ -4976,13 +4976,13 @@
         </member>
         <member name="P:MudExtensions.MudSignaturePad.ShowClear">
             <summary>
-            
+            Shows the eraser toggle button.
             </summary>
         </member>
         <member name="P:MudExtensions.MudSignaturePad.ShowLineWidth">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="P:MudExtensions.MudSignaturePad.ShowStrokeStyle">
             <summary>
@@ -4990,9 +4990,9 @@
             </summary>
         </member>
         <member name="P:MudExtensions.MudSignaturePad.ShowDownload">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="P:MudExtensions.MudSignaturePad.ShowLineJoinStyle">
             <summary>
@@ -5041,6 +5041,13 @@
             <summary>
             
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudSignaturePad.NotifyBrowserViewportChangeAsync(MudBlazor.BrowserViewportEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
             <returns></returns>
         </member>
         <member name="T:MudExtensions.SignaturePadOptions">

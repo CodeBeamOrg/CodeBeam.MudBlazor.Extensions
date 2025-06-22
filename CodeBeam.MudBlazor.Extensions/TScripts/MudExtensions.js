@@ -58,63 +58,53 @@ class MudSignaturePadManager {
 
     togglePadEraser(canvasRef) {
         const pad = this.getPad(canvasRef);
-        if (pad) {
-            pad.toggleEraser();
-        }
+        if (pad) pad.toggleEraser();
     }
 
     disposePad(canvasRef) {
         const pad = this.getPad(canvasRef);
-        if (pad) {
-            pad.dispose();
-        }
+        if (pad) pad.dispose();
     }
 
     clearPad(canvasRef) {
         const pad = this.getPad(canvasRef);
-        if (pad) {
-            pad.clear(true);
-        }
+        if (pad) pad.clear(true);
     }
 
     downloadPadImage(canvasRef) {
         const pad = this.getPad(canvasRef);
-        if (pad) {
-            pad.download();
-        }
+        if (pad) pad.download();
     }
 
     getBase64(canvasRef) {
         const pad = this.getPad(canvasRef);
-        if (pad) {
-            return pad.getBase64();
-        }
+        if (pad) return pad.getBase64();
     }
 
     updatePadOptions(canvasRef, options) {
         const pad = this.getPad(canvasRef);
-        if (pad) {
-            pad.setOptions(options);
-        }
+        if (pad) pad.setOptions(options);
     }
 
     updatePadImage(canvasRef, base64Src) {
         const pad = this.getPad(canvasRef);
         if (pad) {
-            if (base64Src.startsWith("data:image/png;base64,")) {
-                pad.updateImage(base64Src);
-                return;
+            if (!base64Src.startsWith("data:image/png;base64,")) {
+                base64Src = `data:image/png;base64,${base64Src}`;
             }
-            pad.updateImage(`data:image/png;base64,${base64Src}`);
+            pad.updateImage(base64Src);
+        }
+    }
+
+    setCanvasSize(canvasRef) {
+        const pad = this.getPad(canvasRef);
+        if (pad) {
+            pad.updateCanvasSize();
         }
     }
 
     getPad(canvasRef) {
-        const padIndex = this.pads.findIndex(x => x.canvas.id === canvasRef.id);
-        if (padIndex >= 0) {
-            return this.pads[padIndex];
-        }
-        return null;
+        return this.pads.find(x => x.canvas.id === canvasRef.id) || null;
     }
 }
 
@@ -127,6 +117,10 @@ class MudSignaturePad {
         this.memCanvas = document.createElement('canvas');
         this.points = [];
         this.dotnetRef = dotnetRef;
+        this.onPointerDown = this.handlePointerDown.bind(this);
+        this.onPointerMove = this.handlePointerMove.bind(this);
+        this.onPointerUp = this.handlePointerUp.bind(this);
+        this.onPointerLeave = this.stopDrawing.bind(this);
     }
 
     get ctx() {
@@ -137,173 +131,192 @@ class MudSignaturePad {
         return this.memCanvas.getContext('2d');
     }
 
-    getBase64() {
-        return this.canvas.toDataURL();
-    }
-
-    addTouchOffsets(event) {
-        try {
-            if (event.touches === undefined) {
-                return event;
-            }
-            var touch = event.touches[0] || event.changedTouches[0];
-            var realTarget = document.elementFromPoint(touch.clientX, touch.clientY);
-            event.offsetX = parseInt(touch.clientX - realTarget.getBoundingClientRect().x);
-            event.offsetY = parseInt(touch.clientY - realTarget.getBoundingClientRect().y);
-            if (event.offsetX > this.memCanvas.width || event.offsetX < 1 || event.offsetY > this.memCanvas.height || event.offsetY < 1) {
-                this.isMouseDown = false;
-            }
-        }
-        catch (e) {
-        }
-        return event;
-    }
-
     init() {
         this.setCanvasSize();
         this.setOptions(this.options);
-        this.canvas.addEventListener('mousedown', (e) => this.startDrawing(e));
-        this.canvas.addEventListener('mousemove', (e) => this.drawLine(e));
-        this.canvas.addEventListener('mouseup', () => this.stopDrawing());
-        this.canvas.addEventListener('mouseout', () => this.stopDrawing());
-        this.canvas.addEventListener("touchstart", (e) => this.startDrawing(e));
-        this.canvas.addEventListener("touchend", () => this.stopDrawing());
-        this.canvas.addEventListener("touchmove", (e) => this.drawLine(e));
+
+        this.canvas.addEventListener("pointerdown", this.onPointerDown, { passive: false });
+        this.canvas.addEventListener("pointermove", this.onPointerMove, { passive: false });
+        this.canvas.addEventListener("pointerup", this.onPointerUp, { passive: false });
+        this.canvas.addEventListener("pointerleave", this.onPointerLeave);
+
+        this.canvas.style.touchAction = 'none';
         this.setPencilCursor();
-    };
+    }
 
-    download() {
-        const link = document.createElement('a');
-        link.download = 'signature.png';
-        link.href = this.canvas.toDataURL();
-        link.click();
-        link.remove();
-    };
-
-    updateImage(base64) {
-        this.clear(true);
-        const image = new Image();
-        const ctx = this.ctx;
-        const memCtx = this.memCtx;
-        image.onload = function () {
-            ctx.drawImage(image, 0, 0);
-            memCtx.drawImage(image, 0, 0);
-            image.remove();
-        };
-        image.src = base64;
+    dispose() {
+        this.canvas.removeEventListener("pointerdown", this.onPointerDown);
+        this.canvas.removeEventListener("pointermove", this.onPointerMove);
+        this.canvas.removeEventListener("pointerup", this.onPointerUp);
+        this.canvas.removeEventListener("pointerleave", this.onPointerLeave);
     }
 
     setCanvasSize() {
         const parent = this.canvas.parentElement;
+        if (!parent) return;
         const parentRect = parent.getBoundingClientRect();
         this.canvas.width = parentRect.width;
         this.canvas.height = parentRect.height;
-        this.memCanvas.height = parentRect.height;
         this.memCanvas.width = parentRect.width;
+        this.memCanvas.height = parentRect.height;
     }
 
-    dispose() {
-        this.canvas.removeEventListener('mousedown');
-        this.canvas.removeEventListener('mousemove');
-        this.canvas.removeEventListener('mouseup');
-        this.canvas.removeEventListener('mouseout');
-        this.canvas.removeEventListener("touchstart");
-        this.canvas.removeEventListener("touchend");
-        this.canvas.removeEventListener("touchmove");
+    updateCanvasSize() {
+        const parent = this.canvas.parentElement;
+        if (!parent) return;
+
+        const parentRect = parent.getBoundingClientRect();
+        const newWidth = parentRect.width;
+        const newHeight = parentRect.height;
+
+        // 1. Mevcut çizimi geçici bir canvas'a taşı
+        const oldCanvas = document.createElement('canvas');
+        oldCanvas.width = this.canvas.width;
+        oldCanvas.height = this.canvas.height;
+        const oldCtx = oldCanvas.getContext('2d');
+        oldCtx.drawImage(this.canvas, 0, 0);
+
+        // 2. Canvas boyutunu güncelle
+        this.canvas.width = newWidth;
+        this.canvas.height = newHeight;
+        this.memCanvas.width = newWidth;
+        this.memCanvas.height = newHeight;
+
+        // 3. Eski çizimi geri aktar
+        this.ctx.drawImage(oldCanvas, 0, 0);
+        this.memCtx.drawImage(oldCanvas, 0, 0);
+    }
+
+
+    getBase64() {
+        return this.canvas.toDataURL();
+    }
+
+    updateImage(base64) {
+        this.clear(true);
+        const image = new Image();
+        image.onload = () => {
+            this.ctx.drawImage(image, 0, 0);
+            this.memCtx.drawImage(image, 0, 0);
+        };
+        image.src = base64;
+    }
+
+    download() {
+        const link = document.createElement('a');
+        link.download = 'signature.png';
+        link.href = this.getBase64();
+        link.click();
+        link.remove();
     }
 
     clear(both) {
-        if (both === true) {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        if (both) {
             this.memCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    setOptions(options) {
+        this.options = options;
+
+        const applyOptions = (ctx) => {
+            ctx.lineWidth = options.lineWidth;
+            ctx.lineJoin = options.lineJoin;
+            ctx.lineCap = options.lineCap;
+            ctx.strokeStyle = options.strokeStyle;
+        };
+
+        applyOptions(this.ctx);
+        applyOptions(this.memCtx);
+    }
+
+
+    toggleEraser() {
+        this.isErasing = !this.isErasing;
+        this.isErasing ? this.setEraserCursor() : this.setPencilCursor();
+    }
+
+    setPencilCursor() {
+        this.canvas.style.cursor = "url('_content/CodeBeam.MudBlazor.Extensions/pencil.cur'), auto";
+    }
+
+    setEraserCursor() {
+        this.canvas.style.cursor = "url('_content/CodeBeam.MudBlazor.Extensions/eraser.cur'), auto";
+    }
+
+    handlePointerDown(e) {
+        e.preventDefault();
+        this.isMouseDown = true;
+        const { offsetX, offsetY } = e;
+        this.points = [{ x: offsetX, y: offsetY }];
+    }
+
+    handlePointerMove(e) {
+        if (!this.isMouseDown) return;
+        e.preventDefault();
+
+        const { offsetX, offsetY } = e;
+        if (!this.isErasing) {
+            this.clear();
+            this.ctx.drawImage(this.memCanvas, 0, 0);
+            this.points.push({ x: offsetX, y: offsetY });
+            this.drawPoints(this.ctx, this.points);
+        } else {
+            this.ctx.clearRect(offsetX - 10, offsetY - 10, 23, 23);
+        }
+    }
+
+    handlePointerUp(e) {
+        e.preventDefault();
+        this.stopDrawing();
     }
 
     stopDrawing() {
+        if (!this.isMouseDown) return;
         this.isMouseDown = false;
         this.memCtx.clearRect(0, 0, this.memCanvas.width, this.memCanvas.height);
         this.memCtx.drawImage(this.canvas, 0, 0);
         this.points = [];
     }
 
-    startDrawing(event) {
-        event = this.addTouchOffsets(event);
-        this.isMouseDown = true;
-        this.points.push({
-            x: event.offsetX,
-            y: event.offsetY
-        });
-    }
-
-    setOptions(options) {
-        this.ctx.lineWidth = options.lineWidth;
-        this.ctx.lineJoin = options.lineJoin;
-        this.ctx.lineCap = options.lineCap;
-        this.ctx.strokeStyle = options.strokeStyle;
-        this.options = options;
-    }
-
-    toggleEraser() {
-        this.isErasing = !this.isErasing;
-        if (this.isErasing) {
-            this.setEraserCursor();
-            return;
-        }
-        this.setPencilCursor();
-    }
-
-    setPencilCursor() {
-        this.canvas.setAttribute('style', 'cursor:url(\'_content/CodeBeam.MudBlazor.Extensions/pencil.cur\'), auto;');
-    }
-
-    setEraserCursor() {
-        this.canvas.setAttribute('style', 'cursor:url(\'_content/CodeBeam.MudBlazor.Extensions/eraser.cur\'), auto;');
-    }
-
-    drawLine(event) {
-        event = this.addTouchOffsets(event);
-        if (this.isMouseDown) {
-            if (this.isErasing === false) {
-                this.clear();
-                this.ctx.drawImage(this.memCanvas, 0, 0);
-                this.points.push({
-                    x: event.offsetX,
-                    y: event.offsetY
-                });
-                this.drawPoints(this.ctx, this.points);
-            } else {
-                this.ctx.clearRect(event.offsetX, event.offsetY, 23, 23);
-            }
-        }
-    }
-
     drawPoints(ctx, points) {
-        if (points.length < 6) return;
+        if (points.length < 2) return;
+
         if (points.length < 6) {
-            const b = points[0];
+            const p = points[0];
             ctx.beginPath();
-            ctx.arc(b.x, b.y, ctx.lineWidth / 2, 0, Math.PI * 2, !0);
-            ctx.closePath();
+            ctx.lineWidth = this.options.lineWidth;
+            ctx.strokeStyle = this.options.strokeStyle;
+            ctx.arc(p.x, p.y, ctx.lineWidth / 2, 0, Math.PI * 2, true);
             ctx.fill();
+            ctx.closePath();
             this.pushUpdateToBlazorComponent();
             return;
         }
+
         ctx.beginPath();
         ctx.moveTo(points[0].x, points[0].y);
-        let lastPoint;
+
         for (let i = 1; i < points.length - 2; i++) {
-            const c = (points[i].x + points[i + 1].x) / 2,
-                d = (points[i].y + points[i + 1].y) / 2;
+            const c = (points[i].x + points[i + 1].x) / 2;
+            const d = (points[i].y + points[i + 1].y) / 2;
             ctx.quadraticCurveTo(points[i].x, points[i].y, c, d);
-            lastPoint = i;
         }
-        ctx.quadraticCurveTo(points[lastPoint].x, points[lastPoint].y, points[lastPoint + 1].x, points[lastPoint + 1].y);
-        ctx.stroke()
+
+        ctx.quadraticCurveTo(
+            points[points.length - 2].x,
+            points[points.length - 2].y,
+            points[points.length - 1].x,
+            points[points.length - 1].y
+        );
+
+        ctx.stroke();
         this.pushUpdateToBlazorComponent();
     }
 
     pushUpdateToBlazorComponent() {
-        this.dotnetRef.invokeMethodAsync('SignatureDataChangedAsync');
+        this.dotnetRef.invokeMethodAsync("SignatureDataChangedAsync");
     }
 }
 

@@ -384,6 +384,9 @@
 .mud-range-display {
   text-align: center; }
 
+.mud-signature-pad-container {
+  touch-action: none; }
+
 .mud-splitter {
   display: grid;
   position: relative;
