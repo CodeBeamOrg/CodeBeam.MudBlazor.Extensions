@@ -3,7 +3,7 @@
 @typeparam T
 
 <MudStack Class="@Class" Style="@Style" Row="!Vertical" Spacing="Spacing">
-    <div>
+    <div class="mud-transfer-list-container">
         @if (StartTitleContent != null)
         {
             @StartTitleContent
@@ -34,7 +34,7 @@
             <MudIconButton Icon="@(Vertical ? Icons.Material.Filled.KeyboardDoubleArrowUp : Icons.Material.Filled.KeyboardDoubleArrowLeft)" Disabled="Disabled" Color="@Color" Variant="@ButtonVariant" OnClick="@(() => TransferAll(false))" />
         }
     </div>
-    <div>
+    <div class="mud-transfer-list-container">
         @if (EndTitleContent != null)
         {
             @EndTitleContent

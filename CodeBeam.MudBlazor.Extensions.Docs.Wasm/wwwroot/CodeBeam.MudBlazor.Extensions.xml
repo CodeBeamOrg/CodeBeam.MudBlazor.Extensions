@@ -6140,8 +6140,18 @@
         </member>
         <member name="P:MudExtensions.MudTransferList`1.Vertical">
             <summary>
-            
+            If true, the transfer list will be displayed vertically. Useful for narrow spaces or mobile devices.
             </summary>
+        </member>
+        <member name="P:MudExtensions.MudTransferList`1.Padding">
+            <summary>
+            If true, adds top and bottom padding to the lists. Default is false.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudTransferList`1.Dense">
+             <summary>
+            
+             </summary>
         </member>
         <member name="P:MudExtensions.MudTransferList`1.Disabled">
             <summary>

@@ -16,7 +16,7 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        protected string? StartClassname => new CssBuilder()
+        protected string? StartClassname => new CssBuilder("mud-transfer-list-common")
             .AddClass(ClassListCommon)
             .AddClass(ClassStartList)
             .Build();
@@ -24,7 +24,7 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        protected string? EndClassname => new CssBuilder()
+        protected string? EndClassname => new CssBuilder("mud-transfer-list-common")
             .AddClass(ClassListCommon)
             .AddClass(ClassEndList)
             .Build();
@@ -369,7 +369,7 @@ namespace MudExtensions
                 OrderItems();
                 await EndCollectionChanged.InvokeAsync(EndCollection);
                 await StartCollectionChanged.InvokeAsync(StartCollection);
-                _startList.SelectedValues = null;
+                _startList.Clear();
             }
             else if (startToEnd == false)
             {
@@ -390,7 +390,7 @@ namespace MudExtensions
                 OrderItems();
                 await StartCollectionChanged.InvokeAsync(StartCollection);
                 await EndCollectionChanged.InvokeAsync(EndCollection);
-                _endList.SelectedValues = null;
+                _endList.Clear();
             }
         }
 

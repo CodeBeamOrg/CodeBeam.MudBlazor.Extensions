@@ -791,6 +791,15 @@
 .mud-typography-display-inline {
   display: inline; }
 
+.mud-transfer-list-common {
+  height: fill-available;
+  height: -webkit-fill-available; }
+
+.mud-transfer-list-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%; }
+
 /*@import '../abstracts/variables';*/
 .mud-list-extended {
   margin: 0;
