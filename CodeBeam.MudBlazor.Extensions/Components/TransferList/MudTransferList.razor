@@ -12,7 +12,7 @@
         {
             <MudListItemExtended T="string"><MudText>@StartTitle</MudText></MudListItemExtended>
         }
-        <MudListExtended @ref="_startList" Class="@StartClassname" Style="@StartStylename" SearchBox="SearchBoxStart" OnDoubleClick="DoubleClick" T="T" ItemCollection="@StartCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color" ToStringFunc="ToStringFunc">
+        <MudListExtended @ref="_startList" Padding="@Padding" Class="@StartClassname" Style="@StartStylename" SearchBox="SearchBoxStart" OnDoubleClick="DoubleClick" T="T" ItemCollection="@StartCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color" ToStringFunc="ToStringFunc" Dense="@Dense">
             <SelectAllTemplate>
                 @if (SelectAllType == SelectAllType.SelectAllItem)
                 {
@@ -43,7 +43,7 @@
         {
             <MudListItemExtended T="string"><MudText>@EndTitle</MudText></MudListItemExtended>
         }
-        <MudListExtended @ref="_endList" Class="@EndClassname" Style="@EndStylename" SearchBox="SearchBoxEnd" OnDoubleClick="DoubleClick" T="T" ItemCollection="@EndCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color" ToStringFunc="ToStringFunc">
+        <MudListExtended @ref="_endList" Padding="@Padding" Class="@EndClassname" Style="@EndStylename" SearchBox="SearchBoxEnd" OnDoubleClick="DoubleClick" T="T" ItemCollection="@EndCollection" Disabled="Disabled" Clickable="true" MultiSelection="@MultiSelection" SelectAll="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MaxItems="@MaxItems" Color="@Color" ToStringFunc="ToStringFunc" Dense="@Dense">
             <SelectAllTemplate>
                 @if (SelectAllType == SelectAllType.SelectAllItem)
                 {
