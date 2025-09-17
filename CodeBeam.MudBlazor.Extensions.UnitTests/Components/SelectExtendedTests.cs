@@ -471,7 +471,7 @@ namespace MudExtensions.UnitTests.Components
             string.Join(",", selectedValues ?? new List<string>()).Should().Be("2");
 
             input.Click();
-            comp.WaitForAssertion(()=>comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
             items = comp.FindAll("div.mud-list-item-extended").ToArray();
 
             items[0].Click();
@@ -713,7 +713,7 @@ namespace MudExtensions.UnitTests.Components
 
             comp.FindAll("div.mud-list-item-extended")[1].Click();
             // menu should be closed now
-            comp.WaitForAssertion(() => menu.ClassList.Should().NotContain("mud-popover-open"));
+            comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
             comp.WaitForAssertion(() => select.Instance.Value.Should().Be("2"));
             select.Instance.Text.Should().Be("2");
             validatedValue.Should().Be("2");
@@ -1332,6 +1332,36 @@ namespace MudExtensions.UnitTests.Components
             });
             select.SelectedValues?.Count().Should().Be(1);
             select.Text.Should().Be("test");
+        }
+
+        [Test]
+        public void Select_Should_NotOpen_WhenDisabled()
+        {
+            var comp = Context.RenderComponent<SelectTest1>(parameters =>
+            {
+                parameters.Add(p => p.Disabled, true);
+            });
+            var select = comp.FindComponent<MudSelectExtended<string>>();
+            var input = comp.Find("div.mud-input-control");
+
+            // Try to open the select
+            input.Click();
+            // The menu should not open
+            comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open");
+        }
+
+        [Test]
+        public void Select_Should_NotOpen_WhenParentDisabled()
+        {
+            // Use a test component that wraps the select in a disabled parent
+            var comp = Context.RenderComponent<DisabledParentSelectTest>();
+            var select = comp.FindComponent<MudSelectExtended<string>>();
+            var input = comp.Find("div.mud-input-control");
+
+            // Try to open the select
+            input.Click();
+            // The menu should not open
+            comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open");
         }
     }
 }

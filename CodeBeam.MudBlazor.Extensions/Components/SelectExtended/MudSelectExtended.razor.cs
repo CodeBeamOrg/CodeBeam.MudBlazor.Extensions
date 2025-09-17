@@ -850,7 +850,7 @@ namespace MudExtensions
         /// <param name="obj"></param>
         protected internal async Task HandleKeyDownAsync(KeyboardEventArgs obj)
         {
-            if (Disabled || ReadOnly)
+            if (GetDisabledState() || GetReadOnlyState())
                 return;
 
             if (_list != null && _isOpen)
@@ -997,7 +997,7 @@ namespace MudExtensions
         /// <returns></returns>
         public async Task ToggleMenu()
         {
-            if (Disabled || ReadOnly)
+            if (GetDisabledState() || GetReadOnlyState())
                 return;
             if (_isOpen)
                 await CloseMenu();
@@ -1011,7 +1011,7 @@ namespace MudExtensions
         /// <returns></returns>
         public async Task OpenMenu()
         {
-            if (Disabled || ReadOnly)
+            if (GetDisabledState() || GetReadOnlyState())
                 return;
             _isOpen = true;
             UpdateIcon();
