@@ -1490,7 +1490,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MudExtensions.MudComboBox`1.ForceRenderItems">
+        <member name="M:MudExtensions.MudComboBox`1.ForceRenderItems(System.Threading.CancellationToken)">
             <summary>
             
             </summary>
@@ -1667,10 +1667,11 @@
             
             </summary>
         </member>
-        <member name="M:MudExtensions.MudComboBoxItem`1.ForceRender">
+        <member name="M:MudExtensions.MudComboBoxItem`1.ForceRender(System.Threading.CancellationToken)">
             <summary>
             
             </summary>
+            <param name="token"></param>
         </member>
         <member name="M:MudExtensions.MudComboBoxItem`1.ForceUpdate">
             <summary>
@@ -1695,12 +1696,13 @@
             <param name="firstRender"></param>
             <returns></returns>
         </member>
-        <member name="M:MudExtensions.MudComboBoxItem`1.CheckEligible">
+        <member name="M:MudExtensions.MudComboBoxItem`1.CheckEligible(System.Threading.CancellationToken)">
             <summary>
             
             </summary>
+            <param name="token"></param>
         </member>
-        <member name="M:MudExtensions.MudComboBoxItem`1.IsEligible">
+        <member name="M:MudExtensions.MudComboBoxItem`1.IsEligible(System.Threading.CancellationToken)">
             <summary>
             
             </summary>

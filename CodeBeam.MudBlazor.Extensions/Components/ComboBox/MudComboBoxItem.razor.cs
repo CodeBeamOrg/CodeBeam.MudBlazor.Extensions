@@ -167,9 +167,10 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        public void ForceRender()
+        /// <param name="token"></param>
+        public async Task ForceRender(CancellationToken token = default)
         {
-            CheckEligible();
+            await CheckEligible(token).ConfigureAwait(false);
             StateHasChanged();
         }
 
@@ -229,16 +230,18 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        protected internal void CheckEligible()
+        /// <param name="token"></param>
+        protected internal async Task CheckEligible(CancellationToken token = default)
         {
-            Eligible = IsEligible();
+            Eligible = await IsEligible(token)
+                .ConfigureAwait(false);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        protected bool IsEligible()
+        protected async Task<bool> IsEligible(CancellationToken token =default)
         {
             if (MudComboBox is null)
                 return true;
@@ -250,7 +253,8 @@ namespace MudExtensions
                 return true;
 
             if (MudComboBox.SearchFunc is not null)
-                return MudComboBox.SearchFunc.Invoke(Value, Text, MudComboBox.GetSearchString());
+                return await MudComboBox.SearchFunc.Invoke(Value, Text, MudComboBox.GetSearchString(), token)
+                    .ConfigureAwait(false);
 
             if (!string.IsNullOrWhiteSpace(Text))
             {

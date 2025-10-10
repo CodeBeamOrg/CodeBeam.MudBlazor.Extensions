@@ -353,7 +353,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T?, string?, string?, bool>? SearchFunc { get; set; }
+        public Func<T?, string?, string?, CancellationToken, Task<bool>>? SearchFunc { get; set; }
 
         //[Parameter]
         //[Category(CategoryTypes.FormComponent.Behavior)]
@@ -760,12 +760,6 @@ namespace MudExtensions
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            if (_oldShowCheckbox != ShowCheckbox ||
-                _oldBordered != Bordered ||
-                _oldDense != Dense)
-            {
-                ForceRenderItems();
-            }
             _oldShowCheckbox = ShowCheckbox;
             _oldBordered = Bordered;
             _oldDense = Dense;
@@ -789,7 +783,7 @@ namespace MudExtensions
                 {
                     await SyncMultiselectionValues(MultiSelection);
                 }
-                ForceRenderItems();
+                await ForceRenderItems();
                 if (MultiSelection == true)
                 {
                     _searchString = null;
@@ -1461,9 +1455,13 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        protected internal void ForceRenderItems()
+        protected internal async Task ForceRenderItems(CancellationToken token = default)
         {
-            Items.ForEach((x) => x.ForceRender());
+            foreach (var item in Items)
+            {
+                await item.ForceRender(token).ConfigureAwait(false);
+            }
+            
             StateHasChanged();
         }
 

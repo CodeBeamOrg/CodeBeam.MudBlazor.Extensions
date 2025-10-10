@@ -10,7 +10,7 @@
             <MudComboBoxItem Value="@("Buzz")" Text="Buzz">Buzz</MudComboBoxItem>
         </MudComboBox>
          <MudComboBox @bind-Value="@_value" @bind-Text="@_text" @bind-SelectedValues="@_selectedValues" Variant="Variant.Filled" ToggleSelection="true" Clearable
-                     Label="Custom (StartsWith)" Editable="true" SearchFunc="@(new Func<string?, string?, string?, bool>(SearchStartWith))" autocomplete="new-password">
+                     Label="Custom (StartsWith)" Editable="true" SearchFunc="@(new Func<string?, string?, string?, CancellationToken, Task<bool>>(SearchStartWith))" autocomplete="new-password">
             <MudComboBoxItem Value="@("Foo")" Text="Foo">Foo</MudComboBoxItem>
             <MudComboBoxItem Value="@("Bar")" Text="Bar">Bar</MudComboBoxItem>
             <MudComboBoxItem Value="@("Fizz")" Text="Fizz">Fizz</MudComboBoxItem>
@@ -24,12 +24,12 @@
     string? _text;
     IEnumerable<string>? _selectedValues;
 
-    private bool SearchStartWith(string? value, string? text, string? searchString)
+    private Task<bool> SearchStartWith(string? value, string? text, string? searchString, CancellationToken cancellationToken = default)
     {
         if (value?.StartsWith(searchString ?? "", StringComparison.OrdinalIgnoreCase) == true)
         {
-            return true;
+            return Task.FromResult(true);
         }
-        return false;
+        return Task.FromResult(false);
     }
 }
