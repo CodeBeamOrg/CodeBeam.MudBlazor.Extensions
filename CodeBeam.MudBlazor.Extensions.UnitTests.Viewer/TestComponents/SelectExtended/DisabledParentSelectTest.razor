@@ -1,0 +1,13 @@
+@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudForm Disabled="true">
+    <MudSelectExtended T="string" @bind-Value="value" PopoverClass="select-popover-class">
+        <MudSelectItemExtended Value="@("1")" />
+        <MudSelectItemExtended Value="@("2")" />
+    </MudSelectExtended>
+</MudForm>
+
+@code {
+    string? value = null;
+}
