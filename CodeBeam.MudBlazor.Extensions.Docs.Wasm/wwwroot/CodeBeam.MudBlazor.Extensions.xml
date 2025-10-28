@@ -1915,6 +1915,16 @@
             The minimum swipe delta to change wheel value on touch devices. Default is 30.
             </summary>
         </member>
+        <member name="P:MudExtensions.MudDateWheelPicker.MinDate">
+            <summary>
+            The minimum selectable date.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudDateWheelPicker.MaxDate">
+            <summary>
+            The maximum selectable date.
+            </summary>
+        </member>
         <member name="P:MudExtensions.MudDateWheelPicker.FixYear">
             <summary>
             If true, the year wheel is disabled.
