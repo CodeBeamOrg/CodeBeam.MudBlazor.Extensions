@@ -74,6 +74,20 @@ namespace MudExtensions
         public int Sensitivity { get; set; } = 30;
 
         /// <summary>
+        /// The minimum selectable date.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public DateTime? MinDate { get; set; }
+
+        /// <summary>
+        /// The maximum selectable date.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public DateTime? MaxDate { get; set; }
+
+        /// <summary>
         /// If true, the year wheel is disabled.
         /// </summary>
         [Parameter]
@@ -392,29 +406,77 @@ namespace MudExtensions
 
         private void RefreshDays()
         {
-            var month = _month;
-            var year = _year;
-            var day = _day;
+            var years = Enumerable.Range(1, 9999).ToList();
 
-            ++month;
+            if (MinDate.HasValue)
+                years = years.Where(y => y >= MinDate.Value.Year).ToList();
 
-            if (month == 13)
+            if (MaxDate.HasValue)
+                years = years.Where(y => y <= MaxDate.Value.Year).ToList();
+
+            Years = years;
+
+            if (_year < Years.First())
+                _year = Years.First();
+            else if (_year > Years.Last())
+                _year = Years.Last();
+
+            var months = Enumerable.Range(1, 12).ToList();
+
+            if (MinDate.HasValue && _year == MinDate.Value.Year)
+                months = months.Where(m => m >= MinDate.Value.Month).ToList();
+
+            if (MaxDate.HasValue && _year == MaxDate.Value.Year)
+                months = months.Where(m => m <= MaxDate.Value.Month).ToList();
+
+            Months = months;
+
+            if (_month < Months.First())
+                _month = Months.First();
+            else if (_month > Months.Last())
+                _month = Months.Last();
+
+            int maxDay;
+            try
             {
-                month = 1;
-                ++year;
+                var nextMonth = _month == 12 ? 1 : _month + 1;
+                var nextYear = _month == 12 ? _year + 1 : _year;
+                maxDay = new DateTime(nextYear, nextMonth, 1).AddDays(-1).Day;
+            }
+            catch
+            {
+                Days = new();
+                return;
             }
 
-            Days = Enumerable.Range(1, new DateTime(year, month, 1).AddDays(-1).Day).ToList();
-            if (Days.Last() < _day)
-            {
+            var days = Enumerable.Range(1, maxDay).ToList();
+
+            if (MinDate.HasValue && _year == MinDate.Value.Year && _month == MinDate.Value.Month)
+                days = days.Where(d => d >= MinDate.Value.Day).ToList();
+
+            if (MaxDate.HasValue && _year == MaxDate.Value.Year && _month == MaxDate.Value.Month)
+                days = days.Where(d => d <= MaxDate.Value.Day).ToList();
+
+            Days = days;
+
+            if (Days.Count == 0)
+                _day = 1;
+            else if (_day < Days.First())
+                _day = Days.First();
+            else if (_day > Days.Last())
                 _day = Days.Last();
-            }
         }
 
         private void OnMonthChanged(int month)
         {
             _month = month;
 
+            RefreshDays();
+        }
+
+        private void OnYearChanged(int year)
+        {
+            _year = year;
             RefreshDays();
         }
 

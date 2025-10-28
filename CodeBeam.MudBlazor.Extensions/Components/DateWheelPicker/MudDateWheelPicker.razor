@@ -37,9 +37,9 @@
                         {
                             string dateFormat = new string(DateFormat);
 
-                            while (dateFormat.Length > 0)
+                            foreach (var ch in dateFormat.Distinct())
                             {
-                                switch (dateFormat[0])
+                                switch (ch)
                                 {
                                     case 'd':
                                         <MudWheel Class="mud-width-full" @bind-Value="_day" ItemCollection="Days" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Day : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixDay" />
@@ -48,11 +48,9 @@
                                         <MudWheel Class="mud-width-full" Value="_month" ValueChanged=@((int m) => OnMonthChanged(m)) ItemCollection="Months" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Month : null)" ToStringFunc="new Func<int, string>(NumberToString)" Dense="@Dense" Color="@Color" Disabled="FixMonth" />
                                         break;
                                     case 'y':
-                                        <MudWheel Class="mud-width-full" @bind-Value="_year" ItemCollection="Years" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Year : null)" Dense="@Dense" Color="@Color" Disabled="FixYear" />
+                                        <MudWheel Class="mud-width-full" @bind-Value:get="_year" @bind-Value:set="@((int y) => OnYearChanged(y))" ItemCollection="Years" Sensitivity="@Sensitivity" Label="@(ShowHeader ? LocalizedStrings.Year : null)" Dense="@Dense" Color="@Color" Disabled="FixYear" />
                                         break;
                                 }
-
-                                dateFormat = dateFormat.Replace(dateFormat[0].ToString(), string.Empty);
                             }
                         }
                         @if (DateView == DateView.Time || DateView == DateView.Both)

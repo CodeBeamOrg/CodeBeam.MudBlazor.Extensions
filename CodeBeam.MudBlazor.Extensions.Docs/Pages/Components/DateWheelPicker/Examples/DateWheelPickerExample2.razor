@@ -1,0 +1,23 @@
+﻿@namespace MudExtensions.Docs.Examples
+@using MudBlazor.Extensions
+
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <MudDateWheelPicker @bind-Value="_date" Label="Date" Clearable
+        TransformOrigin="Origin.TopCenter" AnchorOrigin="Origin.BottomCenter" MinDate="@_minDate" MaxDate="@_maxDate" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudDatePicker @bind-Date="@_minDate" Label="Min Date" Variant="Variant.Outlined" />
+            <MudDatePicker @bind-Date="@_maxDate" Label="Max Date" Variant="Variant.Outlined" />
+            <MudButton OnClick="@(() => _date = DateTime.Now)">Set Today</MudButton>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    DateTime? _date = DateTime.Now;
+    DateTime? _minDate = DateTime.Now;
+    DateTime? _maxDate = DateTime.Now.AddYears(3);
+}
