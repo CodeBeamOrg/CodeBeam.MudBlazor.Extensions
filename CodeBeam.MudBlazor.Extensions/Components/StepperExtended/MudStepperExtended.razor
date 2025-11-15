@@ -1,5 +1,11 @@
 ﻿@namespace MudExtensions
 @inherits MudComponentBase
+@inject IBrowserViewportService BrowserViewportService
+
+@if(MobileBreakpoint != null)
+{
+    <MudBreakpointProvider OnBreakpointChanged="OnBreakpointChanged" />
+}
 
 <CascadingValue Value="this" IsFixed="true">
     <MudStack Row="@Vertical" Class="@Class" Style="@Style">
