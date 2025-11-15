@@ -1,16 +1,29 @@
 ﻿@namespace MudExtensions.Docs.Examples
 
-<div class="d-flex gap-8">
-    <MudSelectExtended T="string" Label="RenderFragment Based">
-        <MudSelectItemExtended Value="@("Foo")" Text="Foo" />
-        <MudSelectItemExtended Value="@("Bar")" Text="Bar" />
-        <MudSelectItemExtended Value="@("Fizz")" Text="Fizz" />
-        <MudSelectItemExtended Value="@("Buzz")" Text="Buzz" />
-    </MudSelectExtended>
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <MudStack>
+            <MudSelectExtended T="string" Label="RenderFragment Based" Disabled="_disabled">
+                <MudSelectItemExtended Value="@("Foo")" Text="Foo" />
+                <MudSelectItemExtended Value="@("Bar")" Text="Bar" />
+                <MudSelectItemExtended Value="@("Fizz")" Text="Fizz" />
+                <MudSelectItemExtended Value="@("Buzz")" Text="Buzz" />
+            </MudSelectExtended>
+            <MudSelectExtended T="string" Label="Data Based" ItemCollection="_collection" Disabled="_disabled"  />
+            <MudSelectExtended T="string" Label="Data Based" ItemCollection="_collection" Disabled="_disabled" AddNullItem="true" AddedNullItemText="@_nullItemText" />
+        </MudStack>
+    </MudItem>
 
-    <MudSelectExtended T="string" Label="Data Based" ItemCollection="_collection" />
-</div>
+    <MudItem xs="12" sm="4">
+        <MudStack>
+            <MudSwitchM3 @bind-Value="_disabled" Color="Color.Secondary" Label="Disabled" />
+            <MudTextField @bind-Value="_nullItemText" Label="Null Item Text" Variant="Variant.Outlined" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
 
 @code {
-    string[] _collection = new string[] { "Foo", "Bar", "Fizz", "Buzz" };
+    private bool _disabled = false;
+    private string[] _collection = new string[] { "Foo", "Bar", "Fizz", "Buzz" };
+    private string? _nullItemText = "None";
 }
