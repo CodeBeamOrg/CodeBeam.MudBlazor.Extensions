@@ -11,5 +11,7 @@ namespace MudExtensions
         End,
         [Description("start")]
         Start,
+        [Description("center")]
+        Center,
     }
 }

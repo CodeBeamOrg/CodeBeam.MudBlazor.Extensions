@@ -10,7 +10,7 @@
                     ShowSkipButton="_showSkipButton" ShowStepResultIndicator="_showStepResultIndicator" HeaderBadgeView="_headerBadgeView" 
                     HeaderTextView="_headerTextView" PreventStepChangeAsync="new Func<StepChangeDirection, int, Task<bool>>(CheckChange)" LocalizedStrings="GetLocalizedStrings()"
                     MobileView="_mobileView" IconActionButtons="_iconActionButtons" Loading="_loading" HeaderSize="_headerSize"
-                    StepperActionsJustify="_stepperActionsJustify">
+                    StepperActionsJustify="_stepperActionsJustify" MobileBreakpoint="_mobileBreakpoint">
             <StaticContent>
                 @if (_showStaticContent)
                 {
@@ -122,6 +122,13 @@
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
+            <MudSelectExtended T="Breakpoint ?" @bind-Value="_mobileBreakpoint" Variant="Variant.Outlined" Label="Mobile Breakpoint" Margin="Margin.Dense" Dense="true">
+                <MudSelectItemExtended T="Breakpoint?" Value="null">None</MudSelectItemExtended>
+                @foreach (Breakpoint item in Enum.GetValues<Breakpoint>())
+                {
+                    <MudSelectItemExtended T="Breakpoint ?" Value="item">@item.ToDescriptionString()</MudSelectItemExtended>
+                }
+            </MudSelectExtended>
             <MudSelectExtended @bind-Value="_headerSize" ItemCollection="@(Enum.GetValues<Size>())" Variant="Variant.Outlined" Label="Header Size" Margin="Margin.Dense" Dense="true" />
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => _stepper?.Reset())">Reset</MudButton>
         </MudStack>
@@ -154,6 +161,7 @@
     bool _vertical = false;
     Size _headerSize = Size.Medium;
     StepperActionsJustify _stepperActionsJustify = StepperActionsJustify.SpaceBetween;
+    Breakpoint? _mobileBreakpoint;
 
     private async Task<bool> CheckChange(StepChangeDirection direction, int targetIndex)
     {

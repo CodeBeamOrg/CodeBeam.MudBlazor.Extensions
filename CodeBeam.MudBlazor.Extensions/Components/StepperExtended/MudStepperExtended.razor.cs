@@ -35,6 +35,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string? ActionClassname => new CssBuilder("d-flex gap-4")
+            .AddClass("justify-center", StepperActionsJustify == StepperActionsJustify.Center)
             .AddClass(ActionClass)
             .Build();
 
@@ -236,6 +237,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public bool MobileView { get; set; }
+
+        /// <summary>
+        /// Gets or sets the breakpoint at which the component automatically switches to mobile layout. Overrides MobileView parameter.
+        /// </summary>
+        /// <remarks>Use this property to define the responsive threshold for mobile-specific rendering.
+        /// The value determines at which screen size the component adapts its layout for mobile devices.</remarks>
+        [Parameter]
+        public Breakpoint? MobileBreakpoint { get; set; }
 
         /// <summary>
         /// If true, a linear loading indicator shows under the header.
@@ -647,6 +656,27 @@ namespace MudExtensions
         public void ForceRender()
         {
             UpdateProgressValue();
+            StateHasChanged();
+        }
+
+        /// <summary>
+        /// Handles changes to the specified breakpoint and updates the mobile view state accordingly.
+        /// </summary>
+        /// <remarks>This method updates the mobile view only if a mobile breakpoint is defined. It is
+        /// typically called when the application's layout needs to respond to breakpoint changes, such as during window
+        /// resizing or device orientation changes.</remarks>
+        /// <param name="breakpoint">The breakpoint value that triggered the change. Determines whether the mobile view should be enabled or
+        /// disabled.</param>
+        protected void OnBreakpointChanged(Breakpoint breakpoint)
+        {
+            if (MobileBreakpoint.HasValue && breakpoint <= MobileBreakpoint )
+            {
+                MobileView = true;
+            }
+            else
+            {
+                MobileView = false;
+            }
             StateHasChanged();
         }
 
