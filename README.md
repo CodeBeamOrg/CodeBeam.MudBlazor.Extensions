@@ -65,7 +65,7 @@ Look at the [Breaking Changes](https://github.com/CodeBeamOrg/CodeBeam.MudBlazor
 
 ## API
 
-https://codebeam-mudextensions.pages.dev/api
+https://mudextensions.codebeam.org/api
 
 ## Supported MudBlazor Versions
 
