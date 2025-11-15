@@ -522,6 +522,18 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// If true, a null item will be added to the list (Only for ItemCollection).
+        /// </summary>
+        [Parameter]
+        public bool AddNullItem { get; set; }
+
+        /// <summary>
+        /// Gets or sets the text displayed for a null item that has been added.
+        /// </summary>
+        [Parameter]
+        public string? AddedNullItemText { get; set; } = "None";
+
         #endregion
 
 

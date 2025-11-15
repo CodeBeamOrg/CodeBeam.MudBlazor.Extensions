@@ -396,6 +396,19 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback<ListItemClickEventArgs<T?>> OnDoubleClick { get; set; }
 
+        /// <summary>
+        /// If true, a null item will be added to the list (Only for ItemCollection).
+        /// </summary>
+        [Parameter]
+        public bool AddNullItem { get; set; }
+
+        /// <summary>
+        /// Gets or sets the text displayed for a null item that has been added.
+        /// </summary>
+        [Parameter]
+        public string? AddedNullItemText { get; set; } = "None";
+
+
         #endregion
 
 
@@ -740,6 +753,19 @@ namespace MudExtensions
         /// </summary>
         protected override void OnParametersSet()
         {
+            //if (ItemCollection != null)
+            //{
+            //    var list = ItemCollection.ToList();
+
+            //    if (PopulateOptions == ItemPopulateOptions.AddNullItem)
+            //    {
+            //        if (!list.Contains(default(T)))
+            //            list.Insert(0, default(T)); // null item
+            //    }
+
+            //    ItemCollection = list;
+            //}
+
             base.OnParametersSet();
             ParametersChanged?.Invoke();
         }

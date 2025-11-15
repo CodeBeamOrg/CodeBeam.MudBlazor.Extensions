@@ -2897,6 +2897,16 @@
             Fired on the OnDoubleClick event.
             </summary>
         </member>
+        <member name="P:MudExtensions.MudListExtended`1.AddNullItem">
+            <summary>
+            If true, a null item will be added to the list (Only for ItemCollection).
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudListExtended`1.AddedNullItemText">
+            <summary>
+            Gets or sets the text displayed for a null item that has been added.
+            </summary>
+        </member>
         <member name="M:MudExtensions.MudListExtended`1.HandleCentralValueCommander(System.String,System.Boolean)">
             <summary>
             
@@ -4537,6 +4547,16 @@
         <member name="P:MudExtensions.MudSelectExtended`1.ToStringFunc">
             <summary>
             Defines how values are displayed in the drop-down list
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudSelectExtended`1.AddNullItem">
+            <summary>
+            If true, a null item will be added to the list (Only for ItemCollection).
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudSelectExtended`1.AddedNullItemText">
+            <summary>
+            Gets or sets the text displayed for a null item that has been added.
             </summary>
         </member>
         <member name="P:MudExtensions.MudSelectExtended`1.SelectedValues">

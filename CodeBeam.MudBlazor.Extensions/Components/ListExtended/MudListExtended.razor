@@ -41,6 +41,17 @@
                     <MudDivider />
                 }
             }
+            @if (AddNullItem)
+            {
+                @if (MudSelectExtended != null)
+                {
+                    <MudSelectItemExtended Value="default(T)" Text="@AddedNullItemText" />
+                }
+                else
+                {
+                    <MudListItemExtended Value="default(T)" Text="@AddedNullItemText" />
+                }
+            }
             <MudVirtualize Enabled="@Virtualize" Items="GetSearchedItems()" Context="item" OverscanCount="@OverscanCount">
                 @if (MudSelectExtended != null)
                 {
