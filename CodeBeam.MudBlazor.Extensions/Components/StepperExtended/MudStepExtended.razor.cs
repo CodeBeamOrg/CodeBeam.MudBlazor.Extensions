@@ -13,7 +13,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string? Classname => new CssBuilder()
-            .AddClass("d-none", ((MudStepperExtended.ActiveIndex < MudStepperExtended.Steps.Count && MudStepperExtended.Steps[MudStepperExtended.ActiveIndex] != this) || (MudStepperExtended.ShowResultStep() && !IsResultStep)) || (IsResultStep && !MudStepperExtended.ShowResultStep()))
+            .AddClass("d-none", ShouldBeHidden())
             .AddClass(Class)
             .Build();
 
@@ -21,7 +21,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         [CascadingParameter]
-        public MudStepperExtended MudStepperExtended { get; set; } = new();
+        public MudStepperExtended MudStepperExtended { get; set; } = default!;
 
         /// <summary>
         /// Step text to show on header.
@@ -45,18 +45,11 @@ namespace MudExtensions
         }
 
         /// <summary>
-        /// 
+        /// Gets a value indicating whether this step is currently active within the associated stepper control.
         /// </summary>
-        public bool IsActive
-        {
-            get
-            {
-                return MudStepperExtended?.ActiveIndex == this.Number;
-            }
-        }
+        public bool IsActive => MudStepperExtended?.Steps.IndexOf(this) == MudStepperExtended?.ActiveIndex;
 
-
-        StepStatus _status = StepStatus.Continued;
+        StepStatus _status = StepStatus.NotStarted;
         /// <summary>
         /// The step status flag to show step is continued, skipped or completed. Do not set it directly unless you know what you do exactly.
         /// </summary>
@@ -71,7 +64,7 @@ namespace MudExtensions
                     return;
                 }
                 _status = value;
-                StatusChanged.InvokeAsync(_status).CatchAndLog();
+                _ = StatusChanged.InvokeAsync(_status);
             }
         }
 
@@ -103,12 +96,6 @@ namespace MudExtensions
         /// 
         /// </summary>
         [Parameter]
-        public int Number { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Parameter]
         public RenderFragment<MudStepExtended>? Template { get; set; }
 
         /// <summary>
@@ -134,6 +121,23 @@ namespace MudExtensions
         protected internal void SetStatus(StepStatus status)
         {
             Status = status;
+        }
+
+        private bool ShouldBeHidden()
+        {
+            bool showingResult = MudStepperExtended.ShowResultStep();
+
+            if (IsResultStep)
+                return !showingResult;
+
+            if (showingResult && !IsResultStep)
+                return true;
+
+            // Normal step görünürlüğü
+            bool isActive = MudStepperExtended.ActiveIndex < MudStepperExtended.Steps.Count &&
+                            MudStepperExtended.Steps[MudStepperExtended.ActiveIndex] == this;
+
+            return !isActive;
         }
 
         /// <summary>

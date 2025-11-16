@@ -1,0 +1,213 @@
+﻿@namespace MudExtensions.Docs.Examples
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<MudGrid Class="cursor-default">
+    <MudItem xs="12" sm="8" Class="d-flex align-center">
+
+        <MudStepperExtended @ref="_stepper"
+                            Class="mud-width-full"
+                            ContentStyle="min-height: 400px"
+                            Linear="_linear"
+                            Vertical="_vertical"
+                            PreventStepChangeAsync="CheckChange"
+                            BeforeFinishedAsync="BeforeFinishedAsync"
+                            OnFinished="OnFinished"
+                            Variant="Variant.Filled"
+                            Color="Color.Secondary"
+                            MobileView="_mobileView"
+                            Loading="_loading"
+                            HeaderTextView="HeaderTextView.All">
+
+            <ChildContent>
+
+                <MudStepExtended Icon="@Icons.Material.Filled.Approval"
+                                 Title="Customer Info"
+                                 StatusChanged="OnStatusChanged"
+                                 Order="_infoStepOrder">
+
+                    <ChildContent>
+                        <MudForm @ref="_form">
+                            <MudStack>
+                                <MudTextField T="string"
+                                              Label="Name"
+                                              Variant="Variant.Filled"
+                                              Required="true" />
+                                <MudTextField T="string"
+                                              Label="Last Name"
+                                              Variant="Variant.Filled"
+                                              Required="true" />
+                                <MudTextField T="string"
+                                              Label="Address"
+                                              Variant="Variant.Filled" />
+                            </MudStack>
+                        </MudForm>
+                    </ChildContent>
+
+                </MudStepExtended>
+
+                <MudStepExtended Title="Booking Options"
+                                 Icon="@Icons.Material.Filled.MoreVert"
+                                 Optional="true"
+                                 Order="_optionsStepOrder">
+
+                    <ChildContent>
+                        <MudCheckBox T="bool" Label="Early Check-in" />
+                        <MudCheckBox T="bool" Label="Late Check-out" />
+                        <MudCheckBox T="bool" Label="Twin Bed" />
+                    </ChildContent>
+
+                </MudStepExtended>
+
+                <MudStepExtended Icon="@Icons.Material.Filled.Money"
+                                 Title="Payment"
+                                 Order="_paymentStepOrder">
+
+                    <ChildContent>
+                        <MudForm @ref="_form2">
+                            <MudStack>
+                                <MudTextField T="string"
+                                              Label="Card Number"
+                                              Variant="Variant.Filled"
+                                              Required="true" />
+
+                                <MudStack Row="true">
+                                    <MudTextField T="string" Label="Expire Date" Required="true" />
+                                    <MudTextField T="string" Label="CVC" Required="true" />
+                                </MudStack>
+                            </MudStack>
+                        </MudForm>
+                    </ChildContent>
+
+                </MudStepExtended>
+
+                @if (_hasResultStep)
+                {
+                    <MudStepExtended Icon="@Icons.Material.Filled.DoneAll"
+                                     Title="Reservation Completed"
+                                     IsResultStep="true">
+                        <ChildContent>
+                            <div class="d-flex flex-column align-center justify-center" style="height: 200px">
+                                <MudIcon Icon="@Icons.Material.Filled.CheckCircle"
+                                         Size="Size.Large"
+                                         Color="Color.Success" />
+                                <MudText Typo="Typo.h6" Class="mt-2">
+                                    Your reservation is completed successfully.
+                                </MudText>
+                            </div>
+                        </ChildContent>
+                    </MudStepExtended>
+                }
+
+            </ChildContent>
+
+        </MudStepperExtended>
+
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudNumericField @bind-Value="_infoStepOrder"
+                             Label="Info Step Order"
+                             @bind-Value:after="@(() => _stepper.ForceRender())"
+                             Variant="Variant.Outlined"
+                             Margin="Margin.Dense"
+                             Immediate="true" />
+
+            <MudNumericField @bind-Value="_optionsStepOrder"
+                             Label="Options Step Order"
+                             @bind-Value:after="@(() => _stepper.ForceRender())"
+                             Variant="Variant.Outlined"
+                             Margin="Margin.Dense"
+                             Immediate="true" />
+
+            <MudNumericField @bind-Value="_paymentStepOrder"
+                             Label="Payment Step Order"
+                             @bind-Value:after="@(() => _stepper.ForceRender())"
+                             Variant="Variant.Outlined"
+                             Margin="Margin.Dense"
+                             Immediate="true" />
+
+            <MudCheckBox @bind-Value="_vertical" Label="Vertical" />
+            <MudCheckBox @bind-Value="_linear" Label="Linear" />
+            <MudSwitchM3 @bind-Value="_mobileView" Label="Mobile View" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="_hasResultStep" Label="Has Result Step" Color="Color.Secondary" />
+
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="(() => _stepper?.Reset())">
+                Reset
+            </MudButton>
+        </MudStack>
+    </MudItem>
+
+</MudGrid>
+
+@code {
+    MudStepperExtended? _stepper;
+    MudForm _form = new();
+    MudForm _form2 = new();
+    bool _linear;
+    bool _mobileView;
+    bool _vertical;
+    bool _loading;
+    bool _hasResultStep = true;
+    int _infoStepOrder;
+    int _optionsStepOrder;
+    int _paymentStepOrder;
+
+    private void OnStatusChanged(StepStatus status)
+    {
+        Snackbar.Add($"Customer Info step is now: {status}.", Severity.Info);
+    }
+
+    private async Task<bool> CheckChange(StepChangeDirection direction, int targetIndex)
+    {
+        if (direction == StepChangeDirection.Backward)
+            return false;
+
+        if (_stepper?.GetActiveIndex() == 0)
+        {
+            _loading = true;
+            StateHasChanged();
+            await Task.Delay(500);
+
+            await _form.Validate();
+            _loading = false;
+            StateHasChanged();
+
+            return !_form.IsValid;
+        }
+
+        if (_stepper?.GetActiveIndex() == 2)
+        {
+            _loading = true;
+            StateHasChanged();
+            await Task.Delay(500);
+
+            await _form2.Validate();
+            _loading = false;
+            StateHasChanged();
+
+            return !_form2.IsValid;
+        }
+
+        return false;
+    }
+
+    private async Task<bool> BeforeFinishedAsync()
+    {
+        var result = await DialogService.ShowMessageBox(
+            "Confirm",
+            "All steps are completed. Do you want to finish?",
+            yesText: "Finish",
+            cancelText: "Cancel"
+        );
+
+        return result == true;
+    }
+
+    private Task OnFinished()
+    {
+        Snackbar.Add("Reservation process finished successfully!", Severity.Success);
+        return Task.CompletedTask;
+    }
+}

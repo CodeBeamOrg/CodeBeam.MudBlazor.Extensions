@@ -2,11 +2,29 @@
 @namespace MudExtensions.Docs.Pages
 
 <ExamplePage Component="typeof(MudStepperExtended)">
-    <ExampleCard ComponentName="StepperExtended" ExampleName="StepperExtendedExample1" Title="Playground" Description="Place MudSteps in the MudStepper.">
+
+    <ExampleCard ComponentName="StepperExtended"
+                 ExampleName="StepperExtendedExample1"
+                 Title="Playground"
+                 Description="Basic usage and interactive settings.">
+
         <StepperExtendedExample1 />
     </ExampleCard>
 
-    <ExampleCard ComponentName="StepperExtended" ExampleName="StepperExtendedExample2" Title="Order" Description="You can set each step's order dynamically.">
+    <ExampleCard ComponentName="StepperExtended"
+                 ExampleName="StepperExtendedExample2"
+                 Title="Order"
+                 Description="You can set each step's order dynamically and reorder at runtime.">
+
         <StepperExtendedExample2 />
     </ExampleCard>
+
+    <ExampleCard ComponentName="StepperExtended"
+                 ExampleName="StepperExtendedExample3"
+                 Title="Full Flow & Validation"
+                 Description="Advanced flow with BeforeFinishedAsync, OnFinished, validation, dynamic ResultStep, and step status events.">
+
+        <StepperExtendedExample3 />
+    </ExampleCard>
+
 </ExamplePage>

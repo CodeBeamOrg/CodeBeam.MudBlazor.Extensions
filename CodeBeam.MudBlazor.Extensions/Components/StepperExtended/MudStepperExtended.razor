@@ -9,8 +9,8 @@
 
 <CascadingValue Value="this" IsFixed="true">
     <MudStack Row="@Vertical" Class="@Class" Style="@Style">
-        <div style="@GetStepperStyle()">
-            <div style=@GetStepperSubStyle()>
+        <div class="mud-stepper-inner-header-extended" style="@GetStepperStyle()">
+            <div class="mud-stepper-sub-inner-header-extended" style=@GetStepperSubStyle()>
                 @{
                     MudStepExtended? currentStep = null;
                 }
@@ -26,7 +26,7 @@
                     }
 
                     <div class="@GetStepClass()" style="@GetStepPercent()">
-                        <div @onclick="@(Linear ? null : () => SetActiveIndex(step))" class="@HeaderClassname">
+                        <div @onclick="@(Linear ? null : () => GoToStepByReferenceAsync(step))" class="@HeaderClassname">
                             @{
                                 bool active = IsStepActive(step);
                             }
@@ -84,14 +84,12 @@
             <MudProgressLinear Indeterminate="true" Color="@Color" />
         }
         @StaticContent
-        <MudStack Class="mud-width-full" Justify="Justify.SpaceBetween">
             <div class="@ContentClassname" style="@ContentStyle">
                 @ChildContent
             </div>
-            @if (ShowPreviousButton == true || ShowNextButton == true || ShowSkipButton == false)
+        @if (ShowActions && (ShowPreviousButton || ShowNextButton || ShowSkipButton))
             {
                 <div class="@ActionClassname">
-
                     @{
                         bool showResultStep = ShowResultStep();
                     }
@@ -110,12 +108,12 @@
                         if (IconActionButtons || MobileView)
                         {
                             <MudTooltip Text="@LocalizedStrings.Previous" Delay="300">
-                                <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Material.Filled.ChevronLeft" OnClick="@(() => SetActiveIndex(-1))" />
+                                <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Material.Filled.ChevronLeft" OnClick="@(() => GoPreviousStepAsync())" />
                             </MudTooltip>
                         }
                         else
                         {
-                            <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(-1))">@LocalizedStrings.Previous</MudButton>
+                            <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => GoPreviousStepAsync())">@LocalizedStrings.Previous</MudButton>
                         }
                     }
 
@@ -131,7 +129,7 @@
 
                     @if (showResultStep == false)
                     {
-                        if ((ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued) || (ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
+                    if (Steps[ActiveIndex].Status == StepStatus.Completed || Steps[ActiveIndex].Status == StepStatus.Skipped)
                         {
                             if (ShowStepResultIndicator && MobileView == false)
                             {
@@ -159,17 +157,18 @@
 
                     @if (showResultStep == false && ShowNextButton && !(ActiveIndex == Steps.Count - 1 && HasResultStep() == false && IsAllStepsCompleted()))
                     {
-                        if (ActiveIndex < Steps.Count && Steps[ActiveIndex].Status != StepStatus.Continued)
+                    if ((ActiveIndex < Steps.Count &&
+                    (Steps[ActiveIndex].Status == StepStatus.Completed || Steps[ActiveIndex].Status == StepStatus.Skipped)))
                         {
                             if (IconActionButtons || MobileView)
                             {
                                 <MudTooltip Text="@GetNextButtonString()" Delay="300">
-                                    <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Material.Filled.ChevronRight" OnClick="@(() => SetActiveIndex(1))" />
+                                    <MudIconButton Color="@Color" Variant="@Variant" Icon="@Icons.Material.Filled.ChevronRight" OnClick="@(() => GoNextStepAsync())" />
                                 </MudTooltip>
                             }
                             else
                             {
-                                <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => SetActiveIndex(1))">@GetNextButtonString()</MudButton>
+                                <MudButton Color="@Color" Variant="@Variant" OnClick="@(() => GoNextStepAsync())">@GetNextButtonString()</MudButton>
                             }
                         }
                         else
@@ -189,7 +188,6 @@
                     }
                 </div>
             }
-        </MudStack>
     </MudStack>
 </CascadingValue>
 
