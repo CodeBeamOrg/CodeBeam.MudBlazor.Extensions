@@ -38,6 +38,7 @@ namespace MudExtensions
         /// </summary>
         protected string? ActionClassname => new CssBuilder("d-flex gap-4 mud-stepper-actions-extended")
             .AddClass("justify-center", StepperActionsJustify == StepperActionsJustify.Center)
+            .AddClass("justify-end", StepperActionsJustify == StepperActionsJustify.End)
             .AddClass(ActionClass)
             .Build();
 
