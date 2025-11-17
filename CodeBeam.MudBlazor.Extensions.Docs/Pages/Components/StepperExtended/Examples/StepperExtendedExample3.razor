@@ -9,94 +9,53 @@
                             Class="mud-width-full" ContentStyle="min-height: 400px"
                             Linear="_linear" Vertical="_vertical"
                             PreventStepChangeAsync="CheckChange" BeforeFinishedAsync="BeforeFinishedAsync" OnFinished="OnFinished"
-                            Variant="Variant.Filled" Color="Color.Secondary"
+                            Variant="Variant.Filled" Color="Color.Secondary" ContentClass="d-flex align-center justify-center mud-height-full"
                             MobileView="_mobileView" Loading="_loading" HeaderTextView="HeaderTextView.All" StepperActionsJustify="_stepperActionsJustify">
 
             <ChildContent>
                 <MudStepExtended Icon="@Icons.Material.Filled.DoneAll" Title="Start Your Reservation" IsIntroStep="true">
                     <div class="d-flex flex-column align-center justify-center mud-height-full">
-                        <MudIcon Icon="@Icons.Material.Filled.Book"
-                                 Size="Size.Large"
-                                 Color="Color.Secondary" />
+                        <MudIcon Icon="@Icons.Material.Filled.Book" Size="Size.Large" Color="Color.Secondary" />
                         <MudText Typo="Typo.h6" Class="mt-2">This is your reservation wizard.</MudText>
                         <MudText Typo="Typo.h6" Class="mt-2">Press start when you are ready.</MudText>
                     </div>
                 </MudStepExtended>
-                <MudStepExtended Icon="@Icons.Material.Filled.Approval"
-                                 Title="Customer Info"
-                                 StatusChanged="OnStatusChanged"
-                                 Order="_infoStepOrder">
 
-                    <ChildContent>
-                        <MudForm @ref="_form">
-                            <MudStack>
-                                <MudTextField T="string"
-                                              Label="Name"
-                                              Variant="Variant.Filled"
-                                              Required="true" />
-                                <MudTextField T="string"
-                                              Label="Last Name"
-                                              Variant="Variant.Filled"
-                                              Required="true" />
-                                <MudTextField T="string"
-                                              Label="Address"
-                                              Variant="Variant.Filled" />
-                            </MudStack>
-                        </MudForm>
-                    </ChildContent>
-
+                <MudStepExtended Icon="@Icons.Material.Filled.Approval" Title="Customer Info" StatusChanged="OnStatusChanged" Order="_infoStepOrder">
+                    <MudForm @ref="_form">
+                        <MudStack>
+                            <MudTextField T="string" Label="Name" Variant="Variant.Filled" Required="true" />
+                            <MudTextField T="string" Label="Last Name" Variant="Variant.Filled" Required="true" />
+                            <MudTextField T="string" Label="Address" Variant="Variant.Filled" />
+                        </MudStack>
+                    </MudForm>
                 </MudStepExtended>
 
-                <MudStepExtended Title="Booking Options"
-                                 Icon="@Icons.Material.Filled.MoreVert"
-                                 Optional="true"
-                                 Order="_optionsStepOrder">
-
-                    <ChildContent>
-                        <MudCheckBox T="bool" Label="Early Check-in" />
-                        <MudCheckBox T="bool" Label="Late Check-out" />
-                        <MudCheckBox T="bool" Label="Twin Bed" />
-                    </ChildContent>
-
+                <MudStepExtended Title="Booking Options" Icon="@Icons.Material.Filled.MoreVert" Optional="true" Order="_optionsStepOrder">
+                    <MudCheckBox T="bool" Label="Early Check-in" />
+                    <MudCheckBox T="bool" Label="Late Check-out" />
+                    <MudCheckBox T="bool" Label="Twin Bed" />
                 </MudStepExtended>
 
-                <MudStepExtended Icon="@Icons.Material.Filled.Money"
-                                 Title="Payment"
-                                 Order="_paymentStepOrder">
-
-                    <ChildContent>
-                        <MudForm @ref="_form2">
-                            <MudStack>
-                                <MudTextField T="string"
-                                              Label="Card Number"
-                                              Variant="Variant.Filled"
-                                              Required="true" />
-
-                                <MudStack Row="true">
-                                    <MudTextField T="string" Label="Expire Date" Required="true" />
-                                    <MudTextField T="string" Label="CVC" Required="true" />
-                                </MudStack>
+                <MudStepExtended Icon="@Icons.Material.Filled.Money" Title="Payment" Order="_paymentStepOrder">
+                    <MudForm @ref="_form2">
+                        <MudStack>
+                            <MudTextField T="string" Label="Card Number" Variant="Variant.Filled" Required="true" />
+                            <MudStack Row="true">
+                                <MudTextField T="string" Label="Expire Date" Required="true" />
+                                <MudTextField T="string" Label="CVC" Required="true" />
                             </MudStack>
-                        </MudForm>
-                    </ChildContent>
-
+                        </MudStack>
+                    </MudForm>
                 </MudStepExtended>
 
                 @if (_hasResultStep)
                 {
-                    <MudStepExtended Icon="@Icons.Material.Filled.DoneAll"
-                                     Title="Reservation Completed"
-                                     IsResultStep="true">
-                        <ChildContent>
-                            <div class="d-flex flex-column align-center justify-center" style="height: 200px">
-                                <MudIcon Icon="@Icons.Material.Filled.CheckCircle"
-                                         Size="Size.Large"
-                                         Color="Color.Success" />
-                                <MudText Typo="Typo.h6" Class="mt-2">
-                                    Your reservation is completed successfully.
-                                </MudText>
-                            </div>
-                        </ChildContent>
+                    <MudStepExtended Icon="@Icons.Material.Filled.DoneAll" Title="Reservation Completed" IsResultStep="true">
+                        <div class="d-flex flex-column align-center justify-center" style="height: 200px">
+                            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Large" Color="Color.Secondary" />
+                            <MudText Typo="Typo.h6" Class="mt-2">Your reservation is completed successfully.</MudText>
+                        </div>
                     </MudStepExtended>
                 }
 
