@@ -8,10 +8,10 @@
 }
 
 <CascadingValue Value="this" IsFixed="true">
-    <MudStack Class="@Class" Style="@Style">
+    <MudStack Class="@Classname" Style="@Style">
         <MudStack Class="mud-stepper-header-content-wrapper-extended" Row="@Vertical">
-            <div class="mud-stepper-inner-header-extended" style="@GetStepperStyle()">
-                <div class="mud-stepper-sub-inner-header-extended" style=@GetStepperSubStyle()>
+            <div class="mud-stepper-inner-header-extended mud-stepper-grid-@Steps.Count @(Vertical ? "vertical" : "horizontal")">
+                <div class="@(Vertical ? "mud-stepper-sub-inner-header-vertical-extended" : "mud-stepper-sub-inner-header-extended")">
                     @{
                         MudStepExtended? currentStep = null;
                     }
@@ -26,7 +26,7 @@
                             continue;
                         }
 
-                        <div class="@GetStepClass()" style="@GetStepPercent()">
+                        <div class="mud-stepper-step mud-stepper-step-@Steps.Count @(Vertical ? "vertical" : "horizontal") @(Vertical ? "d-flex" : "")">
                             <div @onclick="@(Linear ? null! : () => GoToStepByReferenceAsync(step))" class="@HeaderClassname">
                                 @{
                                     bool active = IsStepActive(step);
@@ -39,8 +39,8 @@
                                 {
                                     @if (step.Status == StepStatus.Completed)
                                     {
-                                        <MudBadge BadgeClass="mud-stepper-badge" Overlap="true" Bordered="true" Color="@Color" Icon="@Icons.Material.Filled.Done">
-                                            <MudAvatar Style="@AvatarStylename" Color="@Color" Variant="@Variant" Size="@HeaderSize">
+                                        <MudBadge BadgeClass="mud-stepper-badge-extended" Overlap="true" Bordered="true" Color="@Color" Icon="@Icons.Material.Filled.Done">
+                                            <MudAvatar Class="@AvatarClassname" Color="@Color" Variant="@Variant" Size="@HeaderSize">
                                                 @if (!string.IsNullOrWhiteSpace(step.Icon))
                                                 {
                                                     <MudIcon Class="pa-1" Icon="@step.Icon" Size="@HeaderSize" />
@@ -51,7 +51,7 @@
                                     else
                                     {
                                         Color incompleteColor = (HeaderBadgeView == HeaderBadgeView.GreyOutIncomplete) && !active ? Color.Transparent : @Color;
-                                        <MudAvatar Style="@AvatarStylename" Color="@incompleteColor" Variant="@Variant" Size="@HeaderSize">
+                                        <MudAvatar Class="@AvatarClassname" Color="@incompleteColor" Variant="@Variant" Size="@HeaderSize">
                                             <MudIcon Class="pa-1" Icon="@step.Icon" Size="@HeaderSize" />
                                         </MudAvatar>
                                     }
@@ -75,9 +75,9 @@
                 </div>
                 @if (MobileView == true)
                 {
-                    <MudText Style="@GetMobileStyle()" Typo="Typo.body2" Color="@Color">@GetMobileStepPositionText()</MudText>
+                    <MudText Class="@(Vertical ? "mud-stepper-text-mobile-vertical-extended" : "mud-stepper-text-mobile-extended")" Typo="Typo.body2" Color="@Color">@GetMobileStepPositionText()</MudText>
                 }
-                <MudProgressLinear Vertical="@Vertical" Color="@Color" Value="@ProgressValue" Min="0" Max="100" Style="@GetProgressLinearStyle()" />
+                <MudProgressLinear Class="@ProgressClassname" Vertical="@Vertical" Color="@Color" Value="@ProgressValue" Min="0" Max="100" />
 
             </div>
             @if (Loading)

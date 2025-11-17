@@ -1,7 +1,6 @@
 ﻿using MudExtensions.Utilities;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -17,13 +16,26 @@ namespace MudExtensions
         Guid _animateGuid = Guid.NewGuid();
 
         /// <summary>
+        /// Gets the CSS class string that represents the current visual state of the stepper component.
+        /// </summary>
+        /// <remarks>The returned class string includes base and orientation-specific classes, as well as
+        /// any additional classes specified by the user. This property is typically used to apply styling to the
+        /// stepper element based on its configuration.</remarks>
+        protected string? Classname => new CssBuilder("mud-stepper-extended")
+            .AddClass("mud-stepper-horizontal-extended", !Vertical)
+            .AddClass("mud-stepper-vertical-extended", Vertical)
+            .AddClass(Class)
+            .Build();
+
+        /// <summary>
         /// 
         /// </summary>
-        protected string? HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header gap-4 pa-3")
+        protected string? HeaderClassname => new CssBuilder("d-flex align-center mud-stepper-header-extended gap-4 pa-3")
             .AddClass("mud-ripple", Ripple && !Linear)
-            .AddClass("cursor-pointer mud-stepper-header-non-linear", !Linear)
+            .AddClass("cursor-pointer mud-stepper-header-non-linear-extended", !Linear)
             .AddClass("flex-column", !Vertical)
             .AddClass("flex-row", Vertical)
+            .AddClass(HeaderClass)
             .Build();
 
         /// <summary>
@@ -43,78 +55,31 @@ namespace MudExtensions
             .Build();
 
         /// <summary>
-        /// 
+        /// Gets the CSS class string that represents the current progress state of the stepper component, including
+        /// orientation, header size, mobile view, and step count.
         /// </summary>
-        protected string? AvatarStylename => new StyleBuilder()
-            .AddStyle("z-index: 20")
-            .AddStyle("background-color", "var(--mud-palette-background)", Variant == Variant.Outlined)
+        /// <remarks>The returned class string reflects the visual configuration of the stepper and can be
+        /// used to style the progress indicator appropriately. The value updates dynamically based on the component's
+        /// properties such as orientation and step count.</remarks>
+        protected string ProgressClassname => new CssBuilder("mud-stepper-progress-extended")
+            .AddClass("vertical", Vertical)
+            .AddClass("horizontal", !Vertical)
+            .AddClass($"header-size-{HeaderSize.ToDescriptionString()}")
+            .AddClass("mobile", MobileView)
+            .AddClass($"steps-{Steps.Count}")
             .Build();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected string? GetMobileStyle()
-        {
-            if(Vertical)
-            {
-                return "grid-column:1;margin-inline-start:22px;";
-            }
-            else
-            {
-                return "grid-row:1;margin-top:22px;";
-            }
-        }
 
         /// <summary>
-        /// 
+        /// Gets the CSS class string used to style the stepper avatar based on the current variant.
         /// </summary>
-        /// <returns></returns>
-        protected string? GetStepperStyle()
-        {
-            var count = Steps.Count * 2;
-            if (Vertical)
-            {
-                return $"display:grid;grid-template-rows:repeat({count}, 1fr);";
-            }
-            else
-            {
-                return $"display:grid;grid-template-columns:repeat({count}, 1fr);";
-            }
-        }
+        /// <remarks>The returned class name reflects the visual style of the avatar, including background
+        /// styling when the variant is set to outlined. This property is intended for use in rendering the component's
+        /// HTML and may change if the variant changes.</remarks>
+        protected string AvatarClassname => new CssBuilder("mud-stepper-avatar-extended")
+            .AddClass("mud-stepper-avatar-bg-extended", Variant == Variant.Outlined)
+            .Build();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected string? GetStepperSubStyle()
-        {
-            if (Vertical)
-            {
-                return "grid-row-start:1;grid-row-end:-1;flex-direction:column;grid-column:1;list-style:none;display:flex;";
-            }
-            else
-            {
-                return "grid-column-start:1;grid-column-end:-1;flex-direction:row;grid-row:1;list-style:none;display:flex;";
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected string? GetStepPercent()
-        {
-            var dPercent = (100.0 / Steps.Count).ToInvariantString();
-            if (Vertical)
-            {
-                return $"height:{dPercent}%";
-            }
-            else
-            {
-                return $"width:{dPercent}%";
-            }
-        }
 
         /// <summary>
         /// Returns a formatted string representing the current step position in the mobile step sequence.
@@ -138,40 +103,6 @@ namespace MudExtensions
                 return $"{ActiveIndex + 1} / {totalSteps}";
 
             return string.Empty;
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected string? GetStepClass()
-        {
-            if (Vertical)
-            {
-                return $"d-flex";
-            }
-            else
-            {
-                return $"";
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected string? GetProgressLinearStyle()
-        {
-            var end = Steps.Count * 2;
-            if (Vertical)
-            {
-                return $"grid-row-start:2;grid-row-end:{end};grid-column:1/-1;display:inline-grid;left:{(HeaderSize == Size.Medium ? 30 : HeaderSize == Size.Large ? 38 : 22)}px;z-index:10;transform:rotateX(180deg);";
-            }
-            else
-            {
-                return $"grid-column-start:2;grid-column-end:{end};grid-row:1/-1;display:inline-grid;top:{(HeaderSize == Size.Medium ? 30 : HeaderSize == Size.Large ? 38 : 22)}px;{(HeaderSize == Size.Small ? "height:2px;" : HeaderSize == Size.Medium ? "height:3px;" : null)}{(MobileView ? "margin-inline-start:40px;" : null)}z-index:10";
-            }
         }
 
         private int _activeIndex;
@@ -206,8 +137,35 @@ namespace MudExtensions
         /// </summary>
         protected void UpdateProgressValue()
         {
-            ProgressValue = _activeIndex * (100.0 / (Steps.Count - 1));
+            int total = Steps.Count;
+
+            if (ActiveIndex == -1)
+            {
+                ProgressValue = 0;
+                return;
+            }
+
+            if (ActiveIndex == total)
+            {
+                ProgressValue = 100;
+                return;
+            }
+
+            if (total <= 1)
+            {
+                ProgressValue = 0;
+                return;
+            }
+
+            ProgressValue = (ActiveIndex / (double)(total - 1)) * 100.0;
         }
+
+
+        /// <summary>
+        /// Gets or sets the CSS class to apply to the header element.
+        /// </summary>
+        [Parameter]
+        public string? HeaderClass { get; set; }
 
         /// <summary>
         /// Provides CSS classes for the step content.

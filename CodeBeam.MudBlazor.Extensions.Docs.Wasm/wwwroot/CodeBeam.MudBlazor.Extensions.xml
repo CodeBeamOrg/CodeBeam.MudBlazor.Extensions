@@ -5444,6 +5444,14 @@
             Stepper component with extended features.
             </summary>
         </member>
+        <member name="P:MudExtensions.MudStepperExtended.Classname">
+            <summary>
+            Gets the CSS class string that represents the current visual state of the stepper component.
+            </summary>
+            <remarks>The returned class string includes base and orientation-specific classes, as well as
+            any additional classes specified by the user. This property is typically used to apply styling to the
+            stepper element based on its configuration.</remarks>
+        </member>
         <member name="P:MudExtensions.MudStepperExtended.HeaderClassname">
             <summary>
             
@@ -5459,46 +5467,32 @@
             
             </summary>
         </member>
-        <member name="P:MudExtensions.MudStepperExtended.AvatarStylename">
+        <member name="P:MudExtensions.MudStepperExtended.ProgressClassname">
             <summary>
-            
+            Gets the CSS class string that represents the current progress state of the stepper component, including
+            orientation, header size, mobile view, and step count.
             </summary>
+            <remarks>The returned class string reflects the visual configuration of the stepper and can be
+            used to style the progress indicator appropriately. The value updates dynamically based on the component's
+            properties such as orientation and step count.</remarks>
         </member>
-        <member name="M:MudExtensions.MudStepperExtended.GetMobileStyle">
+        <member name="P:MudExtensions.MudStepperExtended.AvatarClassname">
             <summary>
-            
+            Gets the CSS class string used to style the stepper avatar based on the current variant.
             </summary>
-            <returns></returns>
+            <remarks>The returned class name reflects the visual style of the avatar, including background
+            styling when the variant is set to outlined. This property is intended for use in rendering the component's
+            HTML and may change if the variant changes.</remarks>
         </member>
-        <member name="M:MudExtensions.MudStepperExtended.GetStepperStyle">
+        <member name="M:MudExtensions.MudStepperExtended.GetMobileStepPositionText">
             <summary>
-            
+            Returns a formatted string representing the current step position in the mobile step sequence.
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudStepperExtended.GetStepperSubStyle">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudStepperExtended.GetStepPercent">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudStepperExtended.GetStepClass">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudStepperExtended.GetProgressLinearStyle">
-            <summary>
-            
-            </summary>
-            <returns></returns>
+            <remarks>The returned string is intended for display in mobile step navigation scenarios,
+            providing users with a clear indication of their progress through the steps.</remarks>
+            <returns>A string in the format "currentStep / totalSteps" indicating the active step position. Returns "Intro /
+            totalSteps" if the intro step is active, "totalSteps / totalSteps" if the result step is active, or an empty
+            string if the position cannot be determined.</returns>
         </member>
         <member name="M:MudExtensions.MudStepperExtended.OnAfterRenderAsync(System.Boolean)">
             <summary>
@@ -5508,6 +5502,11 @@
         <member name="M:MudExtensions.MudStepperExtended.UpdateProgressValue">
             <summary>
             
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudStepperExtended.HeaderClass">
+            <summary>
+            Gets or sets the CSS class to apply to the header element.
             </summary>
         </member>
         <member name="P:MudExtensions.MudStepperExtended.ContentClass">

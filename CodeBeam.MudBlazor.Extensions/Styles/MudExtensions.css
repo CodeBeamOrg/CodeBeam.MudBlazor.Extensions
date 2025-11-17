@@ -446,14 +446,458 @@
 .mud-splitter-thumb-disabled ::-moz-range-thumb {
   cursor: default !important; }
 
-.mud-stepper-header {
+.mud-stepper-header-extended {
   min-height: 62px;
   border-radius: var(--mud-default-borderradius); }
-  .mud-stepper-header.mud-stepper-header-non-linear:hover {
+  .mud-stepper-header-extended.mud-stepper-header-non-linear-extended:hover {
     background-color: var(--mud-palette-action-default-hover); }
 
-.mud-stepper-badge {
+.mud-stepper-badge-extended {
   z-index: 21; }
+
+.mud-stepper-avatar-extended {
+  z-index: 20; }
+
+.mud-stepper-avatar-bg-extended {
+  background-color: var(--mud-palette-background); }
+
+.mud-stepper-sub-inner-header-extended {
+  grid-column-start: 1;
+  grid-column-end: -1;
+  flex-direction: row;
+  grid-row: 1;
+  list-style: none;
+  display: flex; }
+
+.mud-stepper-sub-inner-header-vertical-extended {
+  grid-row-start: 1;
+  grid-row-end: -1;
+  flex-direction: column;
+  grid-column: 1;
+  list-style: none;
+  display: flex; }
+
+.mud-stepper-text-mobile-extended {
+  grid-row: 1;
+  margin-top: 22px; }
+
+.mud-stepper-text-mobile-vertical-extended {
+  grid-column: 1;
+  margin-inline-start: 22px; }
+
+.mud-stepper-step-1.horizontal {
+  width: calc(100% / 1); }
+
+.mud-stepper-step-1.vertical {
+  height: calc(100% / 1); }
+
+.mud-stepper-step-2.horizontal {
+  width: calc(100% / 2); }
+
+.mud-stepper-step-2.vertical {
+  height: calc(100% / 2); }
+
+.mud-stepper-step-3.horizontal {
+  width: calc(100% / 3); }
+
+.mud-stepper-step-3.vertical {
+  height: calc(100% / 3); }
+
+.mud-stepper-step-4.horizontal {
+  width: calc(100% / 4); }
+
+.mud-stepper-step-4.vertical {
+  height: calc(100% / 4); }
+
+.mud-stepper-step-5.horizontal {
+  width: calc(100% / 5); }
+
+.mud-stepper-step-5.vertical {
+  height: calc(100% / 5); }
+
+.mud-stepper-step-6.horizontal {
+  width: calc(100% / 6); }
+
+.mud-stepper-step-6.vertical {
+  height: calc(100% / 6); }
+
+.mud-stepper-step-7.horizontal {
+  width: calc(100% / 7); }
+
+.mud-stepper-step-7.vertical {
+  height: calc(100% / 7); }
+
+.mud-stepper-step-8.horizontal {
+  width: calc(100% / 8); }
+
+.mud-stepper-step-8.vertical {
+  height: calc(100% / 8); }
+
+.mud-stepper-step-9.horizontal {
+  width: calc(100% / 9); }
+
+.mud-stepper-step-9.vertical {
+  height: calc(100% / 9); }
+
+.mud-stepper-step-10.horizontal {
+  width: calc(100% / 10); }
+
+.mud-stepper-step-10.vertical {
+  height: calc(100% / 10); }
+
+.mud-stepper-step-11.horizontal {
+  width: calc(100% / 11); }
+
+.mud-stepper-step-11.vertical {
+  height: calc(100% / 11); }
+
+.mud-stepper-step-12.horizontal {
+  width: calc(100% / 12); }
+
+.mud-stepper-step-12.vertical {
+  height: calc(100% / 12); }
+
+.mud-stepper-grid-1.horizontal {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); }
+
+.mud-stepper-grid-1.vertical {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr); }
+
+.mud-stepper-grid-2.horizontal {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); }
+
+.mud-stepper-grid-2.vertical {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr); }
+
+.mud-stepper-grid-3.horizontal {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); }
+
+.mud-stepper-grid-3.vertical {
+  display: grid;
+  grid-template-rows: repeat(6, 1fr); }
+
+.mud-stepper-grid-4.horizontal {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr); }
+
+.mud-stepper-grid-4.vertical {
+  display: grid;
+  grid-template-rows: repeat(8, 1fr); }
+
+.mud-stepper-grid-5.horizontal {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); }
+
+.mud-stepper-grid-5.vertical {
+  display: grid;
+  grid-template-rows: repeat(10, 1fr); }
+
+.mud-stepper-grid-6.horizontal {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr); }
+
+.mud-stepper-grid-6.vertical {
+  display: grid;
+  grid-template-rows: repeat(12, 1fr); }
+
+.mud-stepper-grid-7.horizontal {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr); }
+
+.mud-stepper-grid-7.vertical {
+  display: grid;
+  grid-template-rows: repeat(14, 1fr); }
+
+.mud-stepper-grid-8.horizontal {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr); }
+
+.mud-stepper-grid-8.vertical {
+  display: grid;
+  grid-template-rows: repeat(16, 1fr); }
+
+.mud-stepper-grid-9.horizontal {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr); }
+
+.mud-stepper-grid-9.vertical {
+  display: grid;
+  grid-template-rows: repeat(18, 1fr); }
+
+.mud-stepper-grid-10.horizontal {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr); }
+
+.mud-stepper-grid-10.vertical {
+  display: grid;
+  grid-template-rows: repeat(20, 1fr); }
+
+.mud-stepper-grid-11.horizontal {
+  display: grid;
+  grid-template-columns: repeat(22, 1fr); }
+
+.mud-stepper-grid-11.vertical {
+  display: grid;
+  grid-template-rows: repeat(22, 1fr); }
+
+.mud-stepper-grid-12.horizontal {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr); }
+
+.mud-stepper-grid-12.vertical {
+  display: grid;
+  grid-template-rows: repeat(24, 1fr); }
+
+.mud-stepper-grid-13.horizontal {
+  display: grid;
+  grid-template-columns: repeat(26, 1fr); }
+
+.mud-stepper-grid-13.vertical {
+  display: grid;
+  grid-template-rows: repeat(26, 1fr); }
+
+.mud-stepper-grid-14.horizontal {
+  display: grid;
+  grid-template-columns: repeat(28, 1fr); }
+
+.mud-stepper-grid-14.vertical {
+  display: grid;
+  grid-template-rows: repeat(28, 1fr); }
+
+.mud-stepper-grid-15.horizontal {
+  display: grid;
+  grid-template-columns: repeat(30, 1fr); }
+
+.mud-stepper-grid-15.vertical {
+  display: grid;
+  grid-template-rows: repeat(30, 1fr); }
+
+.mud-stepper-grid-16.horizontal {
+  display: grid;
+  grid-template-columns: repeat(32, 1fr); }
+
+.mud-stepper-grid-16.vertical {
+  display: grid;
+  grid-template-rows: repeat(32, 1fr); }
+
+.mud-stepper-grid-17.horizontal {
+  display: grid;
+  grid-template-columns: repeat(34, 1fr); }
+
+.mud-stepper-grid-17.vertical {
+  display: grid;
+  grid-template-rows: repeat(34, 1fr); }
+
+.mud-stepper-grid-18.horizontal {
+  display: grid;
+  grid-template-columns: repeat(36, 1fr); }
+
+.mud-stepper-grid-18.vertical {
+  display: grid;
+  grid-template-rows: repeat(36, 1fr); }
+
+.mud-stepper-grid-19.horizontal {
+  display: grid;
+  grid-template-columns: repeat(38, 1fr); }
+
+.mud-stepper-grid-19.vertical {
+  display: grid;
+  grid-template-rows: repeat(38, 1fr); }
+
+.mud-stepper-grid-20.horizontal {
+  display: grid;
+  grid-template-columns: repeat(40, 1fr); }
+
+.mud-stepper-grid-20.vertical {
+  display: grid;
+  grid-template-rows: repeat(40, 1fr); }
+
+.mud-stepper-grid-21.horizontal {
+  display: grid;
+  grid-template-columns: repeat(42, 1fr); }
+
+.mud-stepper-grid-21.vertical {
+  display: grid;
+  grid-template-rows: repeat(42, 1fr); }
+
+.mud-stepper-grid-22.horizontal {
+  display: grid;
+  grid-template-columns: repeat(44, 1fr); }
+
+.mud-stepper-grid-22.vertical {
+  display: grid;
+  grid-template-rows: repeat(44, 1fr); }
+
+.mud-stepper-grid-23.horizontal {
+  display: grid;
+  grid-template-columns: repeat(46, 1fr); }
+
+.mud-stepper-grid-23.vertical {
+  display: grid;
+  grid-template-rows: repeat(46, 1fr); }
+
+.mud-stepper-grid-24.horizontal {
+  display: grid;
+  grid-template-columns: repeat(48, 1fr); }
+
+.mud-stepper-grid-24.vertical {
+  display: grid;
+  grid-template-rows: repeat(48, 1fr); }
+
+.steps-1.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row: 1 / -1; }
+
+.steps-1.vertical {
+  grid-row-start: 2;
+  grid-row-end: 2;
+  grid-column: 1 / -1; }
+
+.steps-2.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row: 1 / -1; }
+
+.steps-2.vertical {
+  grid-row-start: 2;
+  grid-row-end: 4;
+  grid-column: 1 / -1; }
+
+.steps-3.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 6;
+  grid-row: 1 / -1; }
+
+.steps-3.vertical {
+  grid-row-start: 2;
+  grid-row-end: 6;
+  grid-column: 1 / -1; }
+
+.steps-4.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 8;
+  grid-row: 1 / -1; }
+
+.steps-4.vertical {
+  grid-row-start: 2;
+  grid-row-end: 8;
+  grid-column: 1 / -1; }
+
+.steps-5.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 10;
+  grid-row: 1 / -1; }
+
+.steps-5.vertical {
+  grid-row-start: 2;
+  grid-row-end: 10;
+  grid-column: 1 / -1; }
+
+.steps-6.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 12;
+  grid-row: 1 / -1; }
+
+.steps-6.vertical {
+  grid-row-start: 2;
+  grid-row-end: 12;
+  grid-column: 1 / -1; }
+
+.steps-7.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 14;
+  grid-row: 1 / -1; }
+
+.steps-7.vertical {
+  grid-row-start: 2;
+  grid-row-end: 14;
+  grid-column: 1 / -1; }
+
+.steps-8.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 16;
+  grid-row: 1 / -1; }
+
+.steps-8.vertical {
+  grid-row-start: 2;
+  grid-row-end: 16;
+  grid-column: 1 / -1; }
+
+.steps-9.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 18;
+  grid-row: 1 / -1; }
+
+.steps-9.vertical {
+  grid-row-start: 2;
+  grid-row-end: 18;
+  grid-column: 1 / -1; }
+
+.steps-10.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 20;
+  grid-row: 1 / -1; }
+
+.steps-10.vertical {
+  grid-row-start: 2;
+  grid-row-end: 20;
+  grid-column: 1 / -1; }
+
+.steps-11.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 22;
+  grid-row: 1 / -1; }
+
+.steps-11.vertical {
+  grid-row-start: 2;
+  grid-row-end: 22;
+  grid-column: 1 / -1; }
+
+.steps-12.horizontal {
+  grid-column-start: 2;
+  grid-column-end: 24;
+  grid-row: 1 / -1; }
+
+.steps-12.vertical {
+  grid-row-start: 2;
+  grid-row-end: 24;
+  grid-column: 1 / -1; }
+
+.mud-stepper-progress-extended.horizontal.header-size-small {
+  top: 22px;
+  height: 2px; }
+
+.mud-stepper-progress-extended.horizontal.header-size-medium {
+  top: 30px;
+  height: 3px; }
+
+.mud-stepper-progress-extended.horizontal.header-size-large {
+  top: 38px;
+  height: 4px; }
+
+.mud-stepper-progress-extended.vertical.header-size-small {
+  left: 22px; }
+
+.mud-stepper-progress-extended.vertical.header-size-medium {
+  left: 30px; }
+
+.mud-stepper-progress-extended.vertical.header-size-large {
+  left: 38px; }
+
+.mobile.horizontal .mud-stepper-progress-extended {
+  margin-inline-start: 40px; }
+
+.mud-stepper-progress-extended {
+  display: inline-grid;
+  z-index: 10; }
+  .mud-stepper-progress-extended.vertical {
+    transform: rotateX(180deg); }
 
 .mud-switch-m3 {
   cursor: pointer;
