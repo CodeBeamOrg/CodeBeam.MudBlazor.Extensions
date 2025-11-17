@@ -10,7 +10,7 @@
 <CascadingValue Value="this" IsFixed="true">
     <MudStack Class="@Classname" Style="@Style">
         <MudStack Class="mud-stepper-header-content-wrapper-extended" Row="@Vertical">
-            <div class="mud-stepper-inner-header-extended mud-stepper-grid-@Steps.Count @(Vertical ? "vertical" : "horizontal")">
+            <div class="mud-stepper-inner-header-extended mud-stepper-grid-@Steps.Count @(Vertical ? "vertical" : "horizontal")" role="list">
                 <div class="@(Vertical ? "mud-stepper-sub-inner-header-vertical-extended" : "mud-stepper-sub-inner-header-extended")">
                     @{
                         MudStepExtended? currentStep = null;
@@ -27,7 +27,7 @@
                         }
 
                         <div class="mud-stepper-step mud-stepper-step-@Steps.Count @(Vertical ? "vertical" : "horizontal") @(Vertical ? "d-flex" : "")">
-                            <div @onclick="@(Linear ? null! : () => GoToStepByReferenceAsync(step))" class="@HeaderClassname">
+                            <div @onclick="@(Linear ? null! : () => GoToStepByReferenceAsync(step))" class="@HeaderClassname" role="button" tabindex="@(Linear ? -1 : 0)" @onkeydown="(args) => HandleHeaderKeyDown(args, step)">
                                 @{
                                     bool active = IsStepActive(step);
                                 }
@@ -77,8 +77,8 @@
                 {
                     <MudText Class="@(Vertical ? "mud-stepper-text-mobile-vertical-extended" : "mud-stepper-text-mobile-extended")" Typo="Typo.body2" Color="@Color">@GetMobileStepPositionText()</MudText>
                 }
-                <MudProgressLinear Class="@ProgressClassname" Vertical="@Vertical" Color="@Color" Value="@ProgressValue" Min="0" Max="100" />
-
+                <MudProgressLinear Class="@ProgressClassname" Vertical="@Vertical" Color="@Color" Value="@ProgressValue" Min="0" Max="100"
+                                   role="progressbar" aria-valuenow="@ProgressValue" aria-valuemin="0" aria-valuemax="100" />
             </div>
             @if (Loading)
             {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace MudExtensions
 {
@@ -282,7 +283,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public Variant Variant { get; set; }
-        
+
         /// <summary>
         /// Choose header badge view. Default is all.
         /// </summary>
@@ -340,7 +341,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public Func<StepChangeDirection, int, Task<bool>>? PreventStepChangeAsync { get; set; }
-        
+
         /// <summary>
         /// Gets or sets a delegate that is invoked asynchronously before the finishing action occurs. The delegate
         /// should return a task that resolves to <see langword="true"/> to allow the action to proceed, or <see
@@ -1017,7 +1018,7 @@ namespace MudExtensions
         /// disabled.</param>
         protected void OnBreakpointChanged(Breakpoint breakpoint)
         {
-            if (MobileBreakpoint.HasValue && breakpoint <= MobileBreakpoint )
+            if (MobileBreakpoint.HasValue && breakpoint <= MobileBreakpoint)
             {
                 MobileView = true;
             }
@@ -1026,6 +1027,19 @@ namespace MudExtensions
                 MobileView = false;
             }
             StateHasChanged();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <param name="step"></param>
+        protected async Task HandleHeaderKeyDown(KeyboardEventArgs args, MudStepExtended step)
+        {
+            if (args.Key == "Enter" || args.Key == "NumpadEnter")
+            {
+                await GoToStepByReferenceAsync(step);
+            }
         }
 
     }

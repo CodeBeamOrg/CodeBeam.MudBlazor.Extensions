@@ -143,7 +143,6 @@ namespace MudExtensions
             if (showingResult || showingIntro)
                 return true;
 
-            // Normal step görünürlüğü
             bool isActive = MudStepperExtended.ActiveIndex < MudStepperExtended.Steps.Count &&
                             MudStepperExtended.Steps[MudStepperExtended.ActiveIndex] == this;
 
