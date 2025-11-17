@@ -2,6 +2,9 @@
 @namespace MudExtensions.Docs.Pages
 
 <ExamplePage Component="typeof(MudCsvMapper)">
+    <MudAlert Severity="Severity.Info" Elevation="0" Class="mb-4">
+        <MudText>MudCsvMapper has external dependencies and is part of <MudLink Href="">CodeBeam.MudBlazor.Extensions.CsvMapper</MudLink> NuGet package</MudText>
+    </MudAlert>
     <ExampleCard ComponentName="CsvMapper" ExampleName="CsvMapperExample1" Title="Playground" Description="Place a CSV file in the MudCsvMapper. Then you can map expected fields the csv header fields">
         <CsvMapperExample1 />
     </ExampleCard>

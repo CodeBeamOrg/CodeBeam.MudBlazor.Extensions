@@ -2,6 +2,9 @@
 @namespace MudExtensions.Docs.Pages
 
 <ExamplePage Component="typeof(MudBarcode)">
+    <MudAlert Severity="Severity.Info" Elevation="0" Class="mb-4">
+        <MudText>MudBarcode has external dependencies and is part of <MudLink Href="">CodeBeam.MudBlazor.Extensions.Qr</MudLink> NuGet package.</MudText>
+    </MudAlert>
     <ExampleCard ComponentName="Barcode" ExampleName="BarcodeExampleIntro" Title="Intro & Tips" AliasName="intro" ShowCodeSection="false">
         <BarcodeExampleIntro />
     </ExampleCard>

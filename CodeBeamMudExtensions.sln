@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.3.32922.545
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudBlazor.Extensions", "CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj", "{542668A8-79D0-4697-9861-87EC5266EA65}"
 EndProject
@@ -19,6 +19,16 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudBlazor.Extensions.Docs.Server", "CodeBeam.MudBlazor.Extensions.Docs.Server\CodeBeam.MudBlazor.Extensions.Docs.Server.csproj", "{72BFC7DC-6A68-4424-9612-F46A8DBCCCD9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBeam.MudBlazor.Extensions.Docs.Wasm", "CodeBeam.MudBlazor.Extensions.Docs.Wasm\CodeBeam.MudBlazor.Extensions.Docs.Wasm.csproj", "{2186BDE4-C478-4150-B131-61B519092B97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeBeam.MudBlazor.Extensions.Qr", "CodeBeam.MudBlazor.Extensions.Qr\CodeBeam.MudBlazor.Extensions.Qr.csproj", "{E83BB9CB-93D9-4021-B5D8-A8E61B127391}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeBeam.MudBlazor.Extensions.CsvMapper", "CodeBeam.MudBlazor.Extensions.CsvMapper\CodeBeam.MudBlazor.Extensions.CsvMapper.csproj", "{C1B53F79-48D0-4673-A510-6D7FFED2C08C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DependentComponents", "DependentComponents", "{87A9016A-436D-4F84-A25C-CD054DF71D2B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EBD1D7D1-C3F9-41C1-84DF-807AED7C4BD2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F1A75015-6EB7-4F32-A0DA-7AA0189993F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,9 +60,26 @@ Global
 		{2186BDE4-C478-4150-B131-61B519092B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2186BDE4-C478-4150-B131-61B519092B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2186BDE4-C478-4150-B131-61B519092B97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E83BB9CB-93D9-4021-B5D8-A8E61B127391}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E83BB9CB-93D9-4021-B5D8-A8E61B127391}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E83BB9CB-93D9-4021-B5D8-A8E61B127391}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E83BB9CB-93D9-4021-B5D8-A8E61B127391}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1B53F79-48D0-4673-A510-6D7FFED2C08C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1B53F79-48D0-4673-A510-6D7FFED2C08C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1B53F79-48D0-4673-A510-6D7FFED2C08C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1B53F79-48D0-4673-A510-6D7FFED2C08C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{75F2BF6B-9046-4E68-BA97-ED1CA2C1D572} = {EBD1D7D1-C3F9-41C1-84DF-807AED7C4BD2}
+		{590CCBEC-3D84-42C8-A925-C0CD2135268C} = {EBD1D7D1-C3F9-41C1-84DF-807AED7C4BD2}
+		{808988C0-67E6-47F9-A32B-5177C99BDBBB} = {F1A75015-6EB7-4F32-A0DA-7AA0189993F4}
+		{72BFC7DC-6A68-4424-9612-F46A8DBCCCD9} = {F1A75015-6EB7-4F32-A0DA-7AA0189993F4}
+		{2186BDE4-C478-4150-B131-61B519092B97} = {F1A75015-6EB7-4F32-A0DA-7AA0189993F4}
+		{E83BB9CB-93D9-4021-B5D8-A8E61B127391} = {87A9016A-436D-4F84-A25C-CD054DF71D2B}
+		{C1B53F79-48D0-4673-A510-6D7FFED2C08C} = {87A9016A-436D-4F84-A25C-CD054DF71D2B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4ABECB5-60B3-4248-83F3-5BAB1881D9B6}
