@@ -29,7 +29,7 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        protected string? ContentClassname => new CssBuilder($"mud-stepper-content-extended mud-stepper-ani-{_animateGuid.ToString()}")
+        protected string? ContentClassname => new CssBuilder($"mud-stepper-content-extended mud-width-full mud-stepper-ani-{_animateGuid.ToString()}")
             .AddClass(ContentClass)
             .Build();
 
@@ -115,6 +115,31 @@ namespace MudExtensions
                 return $"width:{dPercent}%";
             }
         }
+
+        /// <summary>
+        /// Returns a formatted string representing the current step position in the mobile step sequence.
+        /// </summary>
+        /// <remarks>The returned string is intended for display in mobile step navigation scenarios,
+        /// providing users with a clear indication of their progress through the steps.</remarks>
+        /// <returns>A string in the format "currentStep / totalSteps" indicating the active step position. Returns "Intro /
+        /// totalSteps" if the intro step is active, "totalSteps / totalSteps" if the result step is active, or an empty
+        /// string if the position cannot be determined.</returns>
+        protected internal string GetMobileStepPositionText()
+        {
+            int totalSteps = Steps.Count;
+
+            if (HasIntroStep() && ActiveIndex == -1)
+                return $"0 / {totalSteps}";
+
+            if (HasResultStep() && ActiveIndex == Steps.Count)
+                return $"{totalSteps} / {totalSteps}";
+
+            if (ActiveIndex >= 0 && ActiveIndex < Steps.Count)
+                return $"{ActiveIndex + 1} / {totalSteps}";
+
+            return string.Empty;
+        }
+
 
         /// <summary>
         /// 

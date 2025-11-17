@@ -8,85 +8,87 @@
 }
 
 <CascadingValue Value="this" IsFixed="true">
-    <MudStack Row="@Vertical" Class="@Class" Style="@Style">
-        <div class="mud-stepper-inner-header-extended" style="@GetStepperStyle()">
-            <div class="mud-stepper-sub-inner-header-extended" style=@GetStepperSubStyle()>
-                @{
-                    MudStepExtended? currentStep = null;
-                }
-                @foreach (MudStepExtended step in _steps)
-                {
-                    if (IsStepActive(step))
-                    {
-                        currentStep = step;
+    <MudStack Class="@Class" Style="@Style">
+        <MudStack Class="mud-stepper-header-content-wrapper-extended" Row="@Vertical">
+            <div class="mud-stepper-inner-header-extended" style="@GetStepperStyle()">
+                <div class="mud-stepper-sub-inner-header-extended" style=@GetStepperSubStyle()>
+                    @{
+                        MudStepExtended? currentStep = null;
                     }
-                    if (step.IsResultStep || step.IsIntroStep || (MobileView == true && IsStepActive(step) == false))
+                    @foreach (MudStepExtended step in _steps)
                     {
-                        continue;
-                    }
+                        if (IsStepActive(step))
+                        {
+                            currentStep = step;
+                        }
+                        if (step.IsResultStep || step.IsIntroStep || (MobileView == true && IsStepActive(step) == false))
+                        {
+                            continue;
+                        }
 
-                    <div class="@GetStepClass()" style="@GetStepPercent()">
-                        <div @onclick="@(Linear ? null : () => GoToStepByReferenceAsync(step))" class="@HeaderClassname">
-                            @{
-                                bool active = IsStepActive(step);
-                            }
-                            @if (step.Template != null)
-                            {
-                                @step.Template(step)
-                            }
-                            else
-                            {
-                                @if (step.Status == StepStatus.Completed)
+                        <div class="@GetStepClass()" style="@GetStepPercent()">
+                            <div @onclick="@(Linear ? null! : () => GoToStepByReferenceAsync(step))" class="@HeaderClassname">
+                                @{
+                                    bool active = IsStepActive(step);
+                                }
+                                @if (step.Template != null)
                                 {
-                                    <MudBadge BadgeClass="mud-stepper-badge" Overlap="true" Bordered="true" Color="@Color" Icon="@Icons.Material.Filled.Done">
-                                        <MudAvatar Style="@AvatarStylename" Color="@Color" Variant="@Variant" Size="@HeaderSize">
-                                            @if (!string.IsNullOrWhiteSpace(step.Icon))
-                                            {
-                                                <MudIcon Class="pa-1" Icon="@step.Icon" Size="@HeaderSize" />
-                                            }
-                                        </MudAvatar>
-                                    </MudBadge>
+                                    @step.Template(step)
                                 }
                                 else
                                 {
-                                    Color incompleteColor = (HeaderBadgeView == HeaderBadgeView.GreyOutIncomplete) && !active ? Color.Transparent : @Color;
-                                    <MudAvatar Style="@AvatarStylename" Color="@incompleteColor" Variant="@Variant" Size="@HeaderSize">
-                                        <MudIcon Class="pa-1" Icon="@step.Icon" Size="@HeaderSize" />
-                                    </MudAvatar>
+                                    @if (step.Status == StepStatus.Completed)
+                                    {
+                                        <MudBadge BadgeClass="mud-stepper-badge" Overlap="true" Bordered="true" Color="@Color" Icon="@Icons.Material.Filled.Done">
+                                            <MudAvatar Style="@AvatarStylename" Color="@Color" Variant="@Variant" Size="@HeaderSize">
+                                                @if (!string.IsNullOrWhiteSpace(step.Icon))
+                                                {
+                                                    <MudIcon Class="pa-1" Icon="@step.Icon" Size="@HeaderSize" />
+                                                }
+                                            </MudAvatar>
+                                        </MudBadge>
+                                    }
+                                    else
+                                    {
+                                        Color incompleteColor = (HeaderBadgeView == HeaderBadgeView.GreyOutIncomplete) && !active ? Color.Transparent : @Color;
+                                        <MudAvatar Style="@AvatarStylename" Color="@incompleteColor" Variant="@Variant" Size="@HeaderSize">
+                                            <MudIcon Class="pa-1" Icon="@step.Icon" Size="@HeaderSize" />
+                                        </MudAvatar>
+                                    }
+                                    @if (HeaderTextView == HeaderTextView.All || HeaderTextView == HeaderTextView.OnlyActiveText)
+                                    {
+                                        <MudText Align="Align.Center" Class="mt-n1">
+                                            @if (step.MudStepperExtended.GetActiveIndex() == @step.MudStepperExtended.Steps.IndexOf(@step))
+                                            {
+                                                <MudText Color="@(step.Status != StepStatus.Continued ? Color : Color.Inherit)"><b>@step.Title</b></MudText>
+                                            }
+                                            else if (HeaderTextView != HeaderTextView.OnlyActiveText)
+                                            {
+                                                <MudText Color="@(step.Status != StepStatus.Continued ? Color : Color.Inherit)">@step.Title</MudText>
+                                            }
+                                        </MudText>
+                                    }
                                 }
-                                @if (HeaderTextView == HeaderTextView.All || HeaderTextView == HeaderTextView.OnlyActiveText)
-                                {
-                                    <MudText Align="Align.Center" Class="mt-n1">
-                                        @if (step.MudStepperExtended.GetActiveIndex() == @step.MudStepperExtended.Steps.IndexOf(@step))
-                                        {
-                                            <MudText Color="@(step.Status != StepStatus.Continued ? Color : Color.Inherit)"><b>@step.Title</b></MudText>
-                                        }
-                                        else if (HeaderTextView != HeaderTextView.OnlyActiveText)
-                                        {
-                                            <MudText Color="@(step.Status != StepStatus.Continued ? Color : Color.Inherit)">@step.Title</MudText>
-                                        }
-                                    </MudText>
-                                }
-                            }
+                            </div>
                         </div>
-                    </div>
+                    }
+                </div>
+                @if (MobileView == true)
+                {
+                    <MudText Style="@GetMobileStyle()" Typo="Typo.body2" Color="@Color">@GetMobileStepPositionText()</MudText>
                 }
-            </div>
-            @if (MobileView == true)
-            {
-                <MudText Style="@GetMobileStyle()" Typo="Typo.body2" Color="@Color">@(_steps?.IndexOf(currentStep ?? new()) + 1) / @(_steps?.Count)</MudText>
-            }
-            <MudProgressLinear Vertical="@Vertical" Color="@Color" Value="@ProgressValue" Min="0" Max="100" Style="@GetProgressLinearStyle()" />
+                <MudProgressLinear Vertical="@Vertical" Color="@Color" Value="@ProgressValue" Min="0" Max="100" Style="@GetProgressLinearStyle()" />
 
-        </div>
-        @if (Loading)
-        {
-            <MudProgressLinear Indeterminate="true" Color="@Color" />
-        }
-        @StaticContent
-        <div class="@ContentClassname" style="@ContentStyle">
-            @ChildContent
-        </div>
+            </div>
+            @if (Loading)
+            {
+                <MudProgressLinear Indeterminate="true" Color="@Color" />
+            }
+            @StaticContent
+            <div class="@ContentClassname" style="@ContentStyle">
+                @ChildContent
+            </div>
+        </MudStack>
         @if (ShowActions && (ShowPreviousButton || ShowNextButton || ShowSkipButton))
         {
             <div class="@ActionClassname">
