@@ -6,7 +6,8 @@
 	public class StepperLocalizedStrings
 	{
 #pragma warning disable CS1591
-		public string? Previous { get; set; } = "Previous";
+        public string? Start { get; set; } = "Start";
+        public string? Previous { get; set; } = "Previous";
 		public string? Next { get; set; } = "Next";
 		public string? Finish { get; set; } = "Finish";
 		public string? Skip { get; set; } = "Skip";

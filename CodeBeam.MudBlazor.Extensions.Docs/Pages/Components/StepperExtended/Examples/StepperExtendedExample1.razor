@@ -4,7 +4,7 @@
 @using MudExtensions.Utilities
 
 <MudGrid Class="cursor-default">
-    <MudItem xs="12" sm="8" Class="d-flex align-center">
+    <MudItem xs="12" sm="8">
         <MudStepperExtended @ref="_stepper" Class="mud-width-full" ContentStyle="min-height: 400px" Linear="_linear" Vertical="_vertical" Color="_color" Variant="_variant"
                     Animation="_animation" ShowPreviousButton="_showPreviousButton" ShowNextButton="_showNextButton" 
                     ShowSkipButton="_showSkipButton" ShowStepResultIndicator="_showStepResultIndicator" HeaderBadgeView="_headerBadgeView" 
@@ -70,14 +70,13 @@
                 {
                     <MudButton Color="Color.Secondary" Variant="_variant" OnClick="@(() => Snackbar.Add("Custom cancel button clicked.", Severity.Info))">Cancel</MudButton>
                 }
-                @* <MudSpacer /> *@
             </ActionContent>
         </MudStepperExtended>
     </MudItem>
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="4">
-            <MudNumericField @bind-Value="_activeIndex" Label="Change ActiveIndex" @bind-Value:after="(() => _stepper.SetActiveStepByIndex(_activeIndex))" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudNumericField @bind-Value="_activeIndex" Label="Change ActiveIndex" @bind-Value:after="(async() => await _stepper.GoToStepAsync(_activeIndex))" Variant="Variant.Outlined" Margin="Margin.Dense" />
             <MudCheckBox @bind-Value="_vertical" Color="Color.Secondary" Label="Vertical" Dense="true" />
             <MudCheckBox @bind-Value="_linear" Color="Color.Secondary" Label="Linear" Dense="true" />
             <MudCheckBox @bind-Value="_animation" Color="Color.Secondary" Label="Enable Animation" Dense="true" />
@@ -136,9 +135,9 @@
 </MudGrid>
 
 @code {
-    MudStepperExtended? _stepper = new();
-    MudForm? _form = new();
-    MudForm? _form2 = new();
+    MudStepperExtended _stepper = default!;
+    MudForm _form = default!;
+    MudForm _form2 = default!;
     bool _checkValidationBeforeComplete = false;
     bool _linear;
     bool _mobileView;
