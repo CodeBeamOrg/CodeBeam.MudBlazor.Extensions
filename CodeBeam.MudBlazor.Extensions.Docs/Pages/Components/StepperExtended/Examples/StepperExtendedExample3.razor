@@ -6,21 +6,22 @@
     <MudItem xs="12" sm="8" Class="d-flex align-center">
 
         <MudStepperExtended @ref="_stepper"
-                            Class="mud-width-full"
-                            ContentStyle="min-height: 400px"
-                            Linear="_linear"
-                            Vertical="_vertical"
-                            PreventStepChangeAsync="CheckChange"
-                            BeforeFinishedAsync="BeforeFinishedAsync"
-                            OnFinished="OnFinished"
-                            Variant="Variant.Filled"
-                            Color="Color.Secondary"
-                            MobileView="_mobileView"
-                            Loading="_loading"
-                            HeaderTextView="HeaderTextView.All">
+                            Class="mud-width-full" ContentStyle="min-height: 400px"
+                            Linear="_linear" Vertical="_vertical"
+                            PreventStepChangeAsync="CheckChange" BeforeFinishedAsync="BeforeFinishedAsync" OnFinished="OnFinished"
+                            Variant="Variant.Filled" Color="Color.Secondary"
+                            MobileView="_mobileView" Loading="_loading" HeaderTextView="HeaderTextView.All" StepperActionsJustify="_stepperActionsJustify">
 
             <ChildContent>
-
+                <MudStepExtended Icon="@Icons.Material.Filled.DoneAll" Title="Start Your Reservation" IsIntroStep="true">
+                    <div class="d-flex flex-column align-center justify-center mud-height-full">
+                        <MudIcon Icon="@Icons.Material.Filled.Book"
+                                 Size="Size.Large"
+                                 Color="Color.Secondary" />
+                        <MudText Typo="Typo.h6" Class="mt-2">This is your reservation wizard.</MudText>
+                        <MudText Typo="Typo.h6" Class="mt-2">Press start when you are ready.</MudText>
+                    </div>
+                </MudStepExtended>
                 <MudStepExtended Icon="@Icons.Material.Filled.Approval"
                                  Title="Customer Info"
                                  StatusChanged="OnStatusChanged"
@@ -127,7 +128,12 @@
                              Variant="Variant.Outlined"
                              Margin="Margin.Dense"
                              Immediate="true" />
-
+            <MudSelect @bind-Value="_stepperActionsJustify" Variant="Variant.Outlined" Label="Action Buttons Justify" Margin="Margin.Dense" Dense="true">
+                @foreach (StepperActionsJustify item in Enum.GetValues<StepperActionsJustify>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
             <MudCheckBox @bind-Value="_vertical" Label="Vertical" />
             <MudCheckBox @bind-Value="_linear" Label="Linear" />
             <MudSwitchM3 @bind-Value="_mobileView" Label="Mobile View" Color="Color.Secondary" />
@@ -153,6 +159,7 @@
     int _infoStepOrder;
     int _optionsStepOrder;
     int _paymentStepOrder;
+    StepperActionsJustify _stepperActionsJustify = StepperActionsJustify.SpaceBetween;
 
     private void OnStatusChanged(StepStatus status)
     {

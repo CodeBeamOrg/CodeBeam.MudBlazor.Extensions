@@ -160,6 +160,21 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+            if (firstRender)
+            {
+                if (HasIntroStep())
+                    _activeIndex = -1;
+                StateHasChanged();
+            }
+        }
+
+
         internal double ProgressValue;
         /// <summary>
         /// 
@@ -399,7 +414,7 @@ namespace MudExtensions
                     throw new InvalidOperationException("Only one ResultStep is allowed.");
             }
             _allSteps.Add(step);
-            if (!step.IsResultStep)
+            if (!step.IsResultStep && !step.IsIntroStep)
             {
                 Steps.Add(step);
                 ReorderSteps();
@@ -439,6 +454,12 @@ namespace MudExtensions
         /// completed and any subsequent actions have finished.</returns>
         public async Task CompleteStep(int index, bool moveToNextStep = true)
         {
+            if (ActiveIndex == -1)
+                return;
+
+            if (ActiveIndex == Steps.Count)
+                return;
+
             bool isActiveStep = (index == ActiveIndex);
 
             if (isActiveStep)
@@ -506,6 +527,12 @@ namespace MudExtensions
         /// <returns>A task that represents the asynchronous skip operation.</returns>
         public async Task SkipStep(int index, bool moveToNextStep = true)
         {
+            if (ActiveIndex == -1)
+                return;
+
+            if (ActiveIndex == Steps.Count)
+                return;
+
             bool isActiveStep = (index == ActiveIndex);
 
             if (isActiveStep)
@@ -567,8 +594,24 @@ namespace MudExtensions
         {
             int stepCount = Steps.Count;
 
+            if (HasIntroStep() && targetIndex == -1)
+            {
+                if (!skipPrevent && PreventStepChangeAsync is not null)
+                {
+                    bool prevented = await PreventStepChangeAsync.Invoke(
+                        StepChangeDirection.Backward, targetIndex
+                    );
+                    if (prevented)
+                        return;
+                }
+
+                ActiveIndex = -1;
+                await ActiveStepChanged.InvokeAsync(ActiveIndex);
+                return;
+            }
+
             if (targetIndex < 0)
-                targetIndex = 0;
+                targetIndex = HasIntroStep() ? -1 : 0;
 
             bool isResultStepTarget = (targetIndex == stepCount);
 
@@ -663,6 +706,12 @@ namespace MudExtensions
         /// step is finished.</returns>
         public async Task GoNextStepAsync(bool skipPrevent = false)
         {
+            if (ActiveIndex == -1 && HasIntroStep())
+            {
+                await NavigateToStepAsync(0, skipPrevent);
+                return;
+            }
+
             if (ActiveIndex < Steps.Count - 1)
             {
                 await NavigateToStepAsync(ActiveIndex + 1, skipPrevent);
@@ -694,6 +743,12 @@ namespace MudExtensions
         /// <returns>A task that represents the asynchronous navigation operation.</returns>
         public async Task GoPreviousStepAsync(bool skipPrevent = false)
         {
+            if (ActiveIndex == 0 && HasIntroStep())
+            {
+                await NavigateToStepAsync(-1, skipPrevent);
+                return;
+            }
+
             if (ActiveIndex <= 0)
                 return;
 
@@ -701,6 +756,8 @@ namespace MudExtensions
         }
 
         #endregion
+
+        #region The Obsoletes
 
         [Obsolete("Use GoToStepByReferenceAsync() instead.")]
         protected internal async Task SetActiveIndex(MudStepExtended step, bool skipPreventProcess = false)
@@ -776,20 +833,7 @@ namespace MudExtensions
             }
         }
 
-        /// <summary>
-        /// Sets the active step in the sequence to the specified index, optionally marking the first step as completed
-        /// and controlling whether step change prevention logic is applied.
-        /// </summary>
-        /// <remarks>If the specified index is out of range, equal to the current active index, or if all
-        /// steps are not completed when attempting to activate the final step, the method does not change the active
-        /// step. If step change prevention logic is enabled and indicates the change should be prevented, the operation
-        /// is aborted.</remarks>
-        /// <param name="index">The zero-based index of the step to activate. Must be within the valid range of steps.</param>
-        /// <param name="firstCompleted">Indicates whether the first step should be marked as completed when activating the specified step. Set to
-        /// <see langword="true"/> to mark the first step as completed; otherwise, <see langword="false"/>.</param>
-        /// <param name="skipPreventProcess">If <see langword="true"/>, bypasses any step change prevention logic; otherwise, applies the prevention
-        /// logic before changing the active step.</param>
-        /// <returns>A task that represents the asynchronous operation of setting the active step.</returns>
+        [Obsolete("Use GoNextAsync/GoPreviousAsync or GoToStepAsync instead.")]
         public async Task SetActiveStepByIndex(int index, bool firstCompleted = false, bool skipPreventProcess = false)
         {
             var stepChangeDirection = (
@@ -834,6 +878,10 @@ namespace MudExtensions
 
             await ActiveStepChanged.InvokeAsync(ActiveIndex);
         }
+
+        #endregion
+
+        #region Logic Checks
 
         /// <summary>
         /// 
@@ -892,12 +940,21 @@ namespace MudExtensions
         }
 
         /// <summary>
-        /// 
+        /// Determines whether the collection contains result step.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true if an result step exists in the collection; otherwise, false.</returns>
         protected internal bool HasResultStep()
         {
             return _allSteps.Any(x => x.IsResultStep);
+        }
+
+        /// <summary>
+        /// Determines whether the collection contains introductory step.
+        /// </summary>
+        /// <returns>true if an introductory step exists in the collection; otherwise, false.</returns>
+        protected internal bool HasIntroStep()
+        {
+            return _allSteps.Any(x => x.IsIntroStep);
         }
 
         /// <summary>
@@ -921,13 +978,22 @@ namespace MudExtensions
             return ActiveIndex;
         }
 
+        #endregion
+
         /// <summary>
         /// 
         /// </summary>
         public void Reset()
         {
             Steps.ForEach(x => x.SetStatus(StepStatus.NotStarted));
-            ActiveIndex = 0;
+            if (HasIntroStep())
+            {
+                ActiveIndex = -1;
+            }
+            else
+            {
+                ActiveIndex = 0;
+            }
             UpdateProgressValue();
         }
 

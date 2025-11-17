@@ -5380,7 +5380,7 @@
         </member>
         <member name="P:MudExtensions.MudStepExtended.IsActive">
             <summary>
-            
+            Gets a value indicating whether this step is currently active within the associated stepper control.
             </summary>
         </member>
         <member name="P:MudExtensions.MudStepExtended.Status">
@@ -5391,6 +5391,11 @@
         <member name="P:MudExtensions.MudStepExtended.Optional">
             <summary>
             If true the step is skippable.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudStepExtended.IsIntroStep">
+            <summary>
+            Gets or sets a value indicating whether the current step is an introductory step in the workflow.
             </summary>
         </member>
         <member name="P:MudExtensions.MudStepExtended.IsResultStep">
@@ -5406,11 +5411,6 @@
         <member name="P:MudExtensions.MudStepExtended.StatusChanged">
             <summary>
             Fires when step status changed.
-            </summary>
-        </member>
-        <member name="P:MudExtensions.MudStepExtended.Number">
-            <summary>
-            
             </summary>
         </member>
         <member name="P:MudExtensions.MudStepExtended.Template">
@@ -5500,6 +5500,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:MudExtensions.MudStepperExtended.OnAfterRenderAsync(System.Boolean)">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:MudExtensions.MudStepperExtended.UpdateProgressValue">
             <summary>
             
@@ -5538,6 +5543,11 @@
         <member name="P:MudExtensions.MudStepperExtended.Animation">
             <summary>
             If true, disables the default animation on step changing.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudStepperExtended.ShowActions">
+            <summary>
+            Gets or sets a value indicating whether action controls are displayed in the component.
             </summary>
         </member>
         <member name="P:MudExtensions.MudStepperExtended.ShowPreviousButton">
@@ -5646,6 +5656,24 @@
             Runs a task to prevent step change. Has change direction (backwards or forwards) and target index and returns a bool value.
             </summary>
         </member>
+        <member name="P:MudExtensions.MudStepperExtended.BeforeFinishedAsync">
+            <summary>
+            Gets or sets a delegate that is invoked asynchronously before the finishing action occurs. The delegate
+            should return a task that resolves to <see langword="true"/> to allow the action to proceed, or <see
+            langword="false"/> to cancel it.
+            </summary>
+            <remarks>If the delegate is <see langword="null"/>, the finishing action proceeds without
+            additional checks. The asynchronous operation can be used to perform validation, confirmation dialogs, or
+            other pre-finish logic.</remarks>
+        </member>
+        <member name="P:MudExtensions.MudStepperExtended.OnFinished">
+            <summary>
+            Gets or sets the callback that is invoked when the operation has finished.
+            </summary>
+            <remarks>Use this property to specify an action to perform after the component completes its
+            process. The callback is triggered when the operation concludes, allowing you to execute custom logic such
+            as updating the UI or notifying other components.</remarks>
+        </member>
         <member name="P:MudExtensions.MudStepperExtended.Steps">
             <summary>
             
@@ -5656,47 +5684,89 @@
             
             </summary>
         </member>
-        <member name="M:MudExtensions.MudStepperExtended.SetActiveIndex(MudExtensions.MudStepExtended,System.Boolean)">
+        <member name="M:MudExtensions.MudStepperExtended.CompleteStep(System.Int32,System.Boolean)">
+            <summary>
+            Marks the specified step as completed and optionally advances to the next step in the sequence.
+            </summary>
+            <remarks>If the specified step is the last remaining step, the method triggers any
+            finalization logic before marking the step as completed. If step change prevention or finalization callbacks
+            are configured, their results may prevent the completion or advancement. This method is typically used in
+            multi-step workflows to manage progression and completion logic.</remarks>
+            <param name="index">The zero-based index of the step to complete. Must be within the valid range of steps.</param>
+            <param name="moveToNextStep">Specifies whether to automatically move to the next step after completing the current one. The default value
+            is <see langword="true"/>.</param>
+            <returns>A task that represents the asynchronous operation. The task completes when the step has been marked as
+            completed and any subsequent actions have finished.</returns>
+        </member>
+        <member name="M:MudExtensions.MudStepperExtended.SkipStep(System.Int32,System.Boolean)">
+            <summary>
+            Marks the step at the specified <paramref name="index"/> as skipped.
+            Optionally advances to the next step when <paramref name="moveToNextStep"/> is <c>true</c>.
+            </summary>
+            <remarks>
+            If the step at <paramref name="index"/> is the active step and a step-change prevention callback
+            (<see cref="P:MudExtensions.MudStepperExtended.PreventStepChangeAsync"/>) is provided, that callback is invoked before skipping.
+            If the step is the last remaining incomplete step, this method will invoke the
+            <see cref="P:MudExtensions.MudStepperExtended.BeforeFinishedAsync"/> callback (if provided) and then trigger <see cref="P:MudExtensions.MudStepperExtended.OnFinished"/>.
+            After finishing, if a result step exists the component will navigate to it.
+            </remarks>
+            <param name="index">Zero-based index of the step to mark as skipped.</param>
+            <param name="moveToNextStep">
+            When <c>true</c> (the default), and the skipped step is the currently active step, the component will
+            advance to the next appropriate step after skipping.
+            </param>
+            <returns>A task that represents the asynchronous skip operation.</returns>
+        </member>
+        <member name="M:MudExtensions.MudStepperExtended.NavigateToStepAsync(System.Int32,System.Boolean)">
+            <summary>
+            Central navigation method for stepper transitions.
+            All public navigation APIs should call this method.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudStepperExtended.GoToStepAsync(System.Int32,System.Boolean)">
+            <summary>
+            Asynchronously navigates to the specified step in the workflow.
+            </summary>
+            <param name="index">The zero-based index of the step to navigate to. Must be within the valid range of steps.</param>
+            <param name="skipPrevent">If <see langword="true"/>, bypasses any checks or conditions that would normally prevent navigation to the
+            specified step; otherwise, enforces all navigation rules.</param>
+            <returns>A task that represents the asynchronous navigation operation.</returns>
+        </member>
+        <member name="M:MudExtensions.MudStepperExtended.GoByIndexAsync(System.Int32,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="offset"></param>
+            <param name="skipPrevent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudStepperExtended.GoToStepByReferenceAsync(MudExtensions.MudStepExtended,System.Boolean)">
             <summary>
             
             </summary>
             <param name="step"></param>
-            <param name="skipPreventProcess"></param>
+            <param name="skipPrevent"></param>
             <returns></returns>
         </member>
-        <member name="M:MudExtensions.MudStepperExtended.SetActiveIndex(System.Int32,System.Boolean,System.Boolean)">
+        <member name="M:MudExtensions.MudStepperExtended.GoNextStepAsync(System.Boolean)">
             <summary>
-            
+            Advances to the next step in the workflow asynchronously, or navigates to the first unfinished step if the
+            workflow is at its final step.
             </summary>
-            <param name="count"></param>
-            <param name="firstCompleted"></param>
-            <param name="skipPreventProcess"></param>
-            <returns></returns>
+            <remarks>If the workflow is already at the last step, this method navigates to the first step
+            that is not completed or skipped. If all steps are finished, goes to result step if set.</remarks>
+            <param name="skipPrevent">If set to <see langword="true"/>, bypasses any checks that would normally prevent navigation to the next
+            step. The default is <see langword="false"/>.</param>
+            <returns>A task that represents the asynchronous operation. The task completes when navigation to the appropriate
+            step is finished.</returns>
         </member>
-        <member name="M:MudExtensions.MudStepperExtended.SetActiveStepByIndex(System.Int32,System.Boolean,System.Boolean)">
+        <member name="M:MudExtensions.MudStepperExtended.GoPreviousStepAsync(System.Boolean)">
             <summary>
-            
+            Navigates asynchronously to the previous step in the sequence, if the current step is not the first.
             </summary>
-            <param name="index"></param>
-            <param name="firstCompleted"></param>
-            <param name="skipPreventProcess"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudStepperExtended.CompleteStep(System.Int32,System.Boolean)">
-            <summary>
-            
-            </summary>
-            <param name="index"></param>
-            <param name="moveToNextStep"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudStepperExtended.SkipStep(System.Int32,System.Boolean)">
-            <summary>
-            
-            </summary>
-            <param name="index"></param>
-            <param name="moveToNextStep"></param>
-            <returns></returns>
+            <param name="skipPrevent">If set to <see langword="true"/>, bypasses any checks or conditions that would normally prevent navigation
+            to the previous step.</param>
+            <returns>A task that represents the asynchronous navigation operation.</returns>
         </member>
         <member name="M:MudExtensions.MudStepperExtended.IsStepActive(MudExtensions.MudStepExtended)">
             <summary>
@@ -5705,11 +5775,14 @@
             <param name="step"></param>
             <returns></returns>
         </member>
-        <member name="M:MudExtensions.MudStepperExtended.CompletedStepCount">
+        <member name="M:MudExtensions.MudStepperExtended.IsLastRemainingStep(System.Int32)">
             <summary>
-            
+            Determines whether the step at the specified index is the last remaining incomplete step.
             </summary>
-            <returns></returns>
+            <remarks>A step is considered incomplete if its status is neither Completed nor Skipped. If
+            there are no incomplete steps, the method returns false.</remarks>
+            <param name="index">The zero-based index of the step to evaluate within the collection of steps.</param>
+            <returns>true if the step at the specified index is the only incomplete step remaining; otherwise, false.</returns>
         </member>
         <member name="M:MudExtensions.MudStepperExtended.GetNextButtonString">
             <summary>
@@ -5725,15 +5798,24 @@
         </member>
         <member name="M:MudExtensions.MudStepperExtended.HasResultStep">
             <summary>
-            
+            Determines whether the collection contains result step.
             </summary>
-            <returns></returns>
+            <returns>true if an result step exists in the collection; otherwise, false.</returns>
+        </member>
+        <member name="M:MudExtensions.MudStepperExtended.HasIntroStep">
+            <summary>
+            Determines whether the collection contains introductory step.
+            </summary>
+            <returns>true if an introductory step exists in the collection; otherwise, false.</returns>
         </member>
         <member name="M:MudExtensions.MudStepperExtended.IsAllStepsCompleted">
             <summary>
-            
+            Determines whether all steps in the collection have been completed or skipped.
             </summary>
-            <returns></returns>
+            <remarks>This method evaluates the status of each step in the Steps collection. It is useful
+            for checking whether a process or workflow has finished all required actions, including those that were
+            intentionally skipped.</remarks>
+            <returns>true if every step has a status of Completed or Skipped; otherwise, false.</returns>
         </member>
         <member name="M:MudExtensions.MudStepperExtended.GetActiveIndex">
             <summary>
@@ -5757,6 +5839,14 @@
             <summary>
             Update all component and render again.
             </summary>
+        </member>
+        <member name="M:MudExtensions.MudStepperExtended.OnBeforeNavigate(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="from"></param>
+            <param name="to"></param>
+            <returns></returns>
         </member>
         <member name="M:MudExtensions.MudStepperExtended.OnBreakpointChanged(MudBlazor.Breakpoint)">
             <summary>

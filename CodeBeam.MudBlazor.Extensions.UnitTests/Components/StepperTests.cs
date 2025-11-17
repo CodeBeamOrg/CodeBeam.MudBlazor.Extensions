@@ -500,5 +500,132 @@ namespace MudExtensions.UnitTests.Components
             step1.Instance.Status.Should().Be(StepStatus.Continued);
         }
 
+        [Test]
+        public async Task StepperGoesToIntroStepWhenIntroExists()
+        {
+            var stepper = Context.RenderComponent<MudStepperExtended>();
+            var intro = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance),
+                ComponentParameterFactory.Parameter(nameof(MudStepExtended.IsIntroStep), true)
+            );
+            var step0 = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance)
+            );
+
+            await stepper.Instance.GoToStepAsync(-1);
+
+            stepper.Instance.ActiveIndex.Should().Be(-1);
+        }
+
+        [Test]
+        public async Task StepperNegativeIndexGoesToZeroWhenNoIntroStepExists()
+        {
+            var stepper = Context.RenderComponent<MudStepperExtended>();
+            var step0 = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance)
+            );
+
+            await stepper.Instance.GoToStepAsync(-1);
+
+            stepper.Instance.ActiveIndex.Should().Be(0);
+        }
+
+        [Test]
+        public async Task StepperResetReturnsToIntroStep()
+        {
+            var stepper = Context.RenderComponent<MudStepperExtended>();
+            var intro = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance),
+                ComponentParameterFactory.Parameter(nameof(MudStepExtended.IsIntroStep), true)
+            );
+            var step0 = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance)
+            );
+
+            await stepper.Instance.GoToStepAsync(0);
+            stepper.Instance.Reset();
+
+            stepper.Instance.ActiveIndex.Should().Be(-1);
+        }
+
+        [Test]
+        public async Task StepperNextFromIntroGoesToFirstStep()
+        {
+            var stepper = Context.RenderComponent<MudStepperExtended>();
+            var intro = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance),
+                ComponentParameterFactory.Parameter(nameof(MudStepExtended.IsIntroStep), true)
+            );
+            var step0 = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance)
+            );
+
+            await stepper.Instance.GoToStepAsync(-1);
+
+            await stepper.Instance.GoNextStepAsync(true);
+
+            stepper.Instance.ActiveIndex.Should().Be(0);
+        }
+
+        [Test]
+        public async Task StepperPreviousFromFirstStepGoesToIntroWhenExists()
+        {
+            var stepper = Context.RenderComponent<MudStepperExtended>();
+            var intro = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance),
+                ComponentParameterFactory.Parameter(nameof(MudStepExtended.IsIntroStep), true)
+            );
+            var step0 = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance)
+            );
+
+            await stepper.Instance.GoToStepAsync(0);
+            await stepper.Instance.GoPreviousStepAsync(true);
+
+            stepper.Instance.ActiveIndex.Should().Be(-1);
+        }
+
+        [Test]
+        public async Task StepperCannotSkipIntroStep()
+        {
+            var stepper = Context.RenderComponent<MudStepperExtended>();
+            var intro = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance),
+                ComponentParameterFactory.Parameter(nameof(MudStepExtended.IsIntroStep), true)
+            );
+            var step0 = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance)
+            );
+
+            await stepper.Instance.GoToStepAsync(-1);
+
+            await stepper.Instance.SkipStep(stepper.Instance.Steps.IndexOf(intro.Instance));
+
+            stepper.Instance.ActiveIndex.Should().Be(-1);
+        }
+
+        [Test]
+        public async Task StepperIntroThenResultStepFlowIsCorrect()
+        {
+            var stepper = Context.RenderComponent<MudStepperExtended>();
+            var intro = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance),
+                ComponentParameterFactory.Parameter(nameof(MudStepExtended.IsIntroStep), true)
+            );
+            var step0 = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance)
+            );
+            var result = Context.RenderComponent<MudStepExtended>(
+                ComponentParameterFactory.CascadingValue(stepper.Instance),
+                ComponentParameterFactory.Parameter(nameof(MudStepExtended.IsResultStep), true)
+            );
+
+            await stepper.Instance.GoToStepAsync(-1);
+            await stepper.Instance.GoNextStepAsync(true);
+            await stepper.Instance.CompleteStep(stepper.Instance.Steps.IndexOf(step0.Instance), true);
+
+            stepper.Instance.ActiveIndex.Should().Be(1);
+        }
+
     }
 }

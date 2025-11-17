@@ -75,6 +75,12 @@ namespace MudExtensions
         public bool Optional { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the current step is an introductory step in the workflow.
+        /// </summary>
+        [Parameter]
+        public bool IsIntroStep { get; set; }
+
+        /// <summary>
         /// If true, the step show when the stepper is completed. There should be only one result step.
         /// </summary>
         [Parameter]
@@ -126,11 +132,15 @@ namespace MudExtensions
         private bool ShouldBeHidden()
         {
             bool showingResult = MudStepperExtended.ShowResultStep();
+            bool showingIntro = MudStepperExtended.ActiveIndex == -1;
 
             if (IsResultStep)
                 return !showingResult;
 
-            if (showingResult && !IsResultStep)
+            if (IsIntroStep)
+                return !showingIntro;
+
+            if (showingResult || showingIntro)
                 return true;
 
             // Normal step görünürlüğü
