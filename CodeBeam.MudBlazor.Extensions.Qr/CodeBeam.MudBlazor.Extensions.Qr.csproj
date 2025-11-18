@@ -6,10 +6,14 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Version>1.0.0</Version>
-		<Title>CodeBeam.MudBlazor.Extensions</Title>
+		<Title>CodeBeam.MudBlazor.Extensions.Qr</Title>
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
-		<Description>QR (Barcode) Component for MudBlazor and CodeBeam.MudBlazor.Extensions</Description>
+		<Description>
+			QR (Barcode) Component for MudBlazor and CodeBeam.MudBlazor.Extensions
+			Requires CodeBeam.MudBlazor.Extensions.
+			https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions
+		</Description>
 		<Copyright>CodeBeam OpenSource MIT</Copyright>
 		<PackageIcon>Mud_Secondary.png</PackageIcon>
 		<PackageProjectUrl>https://mudextensions.codebeam.org/</PackageProjectUrl>
@@ -26,6 +30,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="8.3.0" />
 		<PackageReference Include="MudBlazor" Version="8.0.0" />
 		<PackageReference Include="ZXing.Net" Version="0.16.11" />
 	</ItemGroup>

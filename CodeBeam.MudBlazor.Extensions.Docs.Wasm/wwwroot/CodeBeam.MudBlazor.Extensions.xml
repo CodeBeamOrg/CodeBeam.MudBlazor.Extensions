@@ -5571,6 +5571,13 @@
             <param name="breakpoint">The breakpoint value that triggered the change. Determines whether the mobile view should be enabled or
             disabled.</param>
         </member>
+        <member name="M:MudExtensions.MudStepperExtended.HandleHeaderKeyDown(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs,MudExtensions.MudStepExtended)">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
+            <param name="step"></param>
+        </member>
         <member name="T:MudExtensions.MudStepTemplate">
             <summary>
             
