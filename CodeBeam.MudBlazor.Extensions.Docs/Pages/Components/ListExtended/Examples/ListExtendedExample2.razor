@@ -4,17 +4,17 @@
     <MudItem xs="12" sm="8" Class="d-flex gap-8 align-top justify-center" Style="height: 500px">
         <MudPaper Width="300px" Elevation="0">
             <MudText Class="ma-4">Array List</MudText>
-            <MudListExtended ItemCollection="_states" Clickable="true" MaxItems="_maxItems" SearchBox="_searchBox" SearchFunc="@(new Func<string, string, bool>(SearchItems))" @bind-SelectedValue="_selectedState" />
+            <MudListExtended ItemCollection="_states" Clickable="true" MaxItems="_maxItems" SearchBox="_searchBox" @bind-SearchString="@_searchString" SearchFunc="@(new Func<string, string, bool>(SearchItems))" @bind-SelectedValue="_selectedState" />
         </MudPaper>
 
         <MudPaper Width="300px" Elevation="0">
             <MudText Class="ma-4">Enum List</MudText>
-            <MudListExtended T="Continent" ItemCollection="(ICollection<Continent>)Enum.GetValues<Continent>()" Clickable="true" MaxItems="_maxItems" SearchBox="_searchBox" />
+            <MudListExtended T="Continent" ItemCollection="(ICollection<Continent>)Enum.GetValues<Continent>()" Clickable="true" MaxItems="_maxItems" SearchBox="_searchBox" @bind-SearchString="@_searchString" />
         </MudPaper>
 
         <MudPaper Width="300px" Elevation="0">
             <MudText Class="ma-4">Complex Type List</MudText>
-            <MudListExtended T="ComplexTypes" ItemCollection="_complexTypeCollection" Clickable="true" MaxItems="_maxItems" SearchBox="_searchBox"
+            <MudListExtended T="ComplexTypes" ItemCollection="_complexTypeCollection" Clickable="true" MaxItems="_maxItems" SearchBox="_searchBox" @bind-SearchString="@_searchString"
                 ToStringFunc="@(e => e?.Name + " " + e?.SurName)" />
         </MudPaper>
     </MudItem>
@@ -24,6 +24,7 @@
             <MudText>Selected State: @_selectedState</MudText>
             <MudNumericField @bind-Value="_maxItems" Label="Max Items" Min="0" Max="16" HelperText="Between 0 - 16" HelperTextOnFocus="true" />
             <MudSwitchM3 @bind-Value="_searchBox" Color="Color.Primary" Label="SearchBox" />
+            <MudTextField Disabled="@(!_searchBox)" Immediate @bind-Value="_searchString" Label="Search String" HelperText="The string used for searching items"/>
         </MudStack>
     </MudItem>
 </MudGrid>
@@ -33,6 +34,7 @@
     int _maxItems = 8;
     bool _searchBox = false;
     string? _selectedState;
+    string? _searchString;
     ICollection<ComplexTypes> _complexTypeCollection = new List<ComplexTypes>()
     {
         new ComplexTypes() { Name = "John", SurName = "Star" },

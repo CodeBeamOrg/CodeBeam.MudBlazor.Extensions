@@ -227,6 +227,22 @@ namespace MudExtensions
         public string? SearchBoxPlaceholder { get; set; }
 
         /// <summary>
+        /// The string used to search the list of items
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public string? SearchString
+        {
+            get => _searchString;
+            set
+            {
+                if (_searchString == value)
+                    return;
+                SearchChanged(value).CatchAndLog();
+            }
+        }
+
+        /// <summary>
         /// Fired when the search value changes.
         /// </summary>
         [Parameter] public EventCallback<string> OnSearchStringChange { get; set; }
