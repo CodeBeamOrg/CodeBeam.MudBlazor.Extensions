@@ -348,6 +348,9 @@ namespace MudExtensions
         /// <returns></returns>
         protected virtual async Task ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
+            if (Disabled || ReadOnly)
+                return;
+
             await SetTextAsync(string.Empty, updateValue: true);
             await ElementReference.FocusAsync();
             await OnClearButtonClick.InvokeAsync(e);
