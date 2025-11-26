@@ -120,7 +120,7 @@
 
                     </MudInputExtended>
 
-                    <MudPopover Open="true" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" OverflowBehavior="OverflowBehavior.FlipAlways" Class="@PopoverClassname" RelativeWidth="@RelativeWidth">
+                    <MudPopover Open="_isOpen" MaxHeight="@MaxHeight" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin" OverflowBehavior="OverflowBehavior.FlipAlways" Class="@PopoverClassname" RelativeWidth="@RelativeWidth">
                         <CascadingValue Value="@this" IsFixed="true">
                             <div id="@_popoverId" style="@($"overflow-y: auto; max-height: {MaxHeight}px")">
                                 @PopoverStartContent
