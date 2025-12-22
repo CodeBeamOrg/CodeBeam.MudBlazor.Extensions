@@ -116,7 +116,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
-        public DefaultConverter<T?> Converter { get; set; } = new DefaultConverter<T?>();
+        public IConverter<T?, string> Converter { get; set; } = new DefaultConverter<T?>();
 
         private IEqualityComparer<T?>? _comparer;
         /// <summary>
@@ -148,20 +148,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T?, string?>? ToStringFunc
-        {
-            get => _toStringFunc;
-            set
-            {
-                if (_toStringFunc == value)
-                    return;
-                _toStringFunc = value;
-                Converter = new DefaultConverter<T?>
-                {
-                    SetFunc = _toStringFunc ?? (x => x?.ToString()),
-                };
-            }
-        }
+        public Func<T?, string?>? ToStringFunc { get; set; }
 
         /// <summary>
         /// Predefined enumerable items. If its not null, creates list items automatically.
@@ -529,7 +516,7 @@ namespace MudExtensions
             get => _selectedValue;
             set
             {
-                if (Converter.Set(_selectedValue) != Converter.Set(default(T)) && !_firstRendered)
+                if (Converter.Convert(_selectedValue) != Converter.Convert(default(T)) && !_firstRendered)
                 {
                     return;
                 }
@@ -1490,7 +1477,7 @@ namespace MudExtensions
             }
 
             // find first item that starts with the letter
-            var possibleItems = items.Where(x => (x.Text ?? Converter.Set(x.Value) ?? "").StartsWith(startChar, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            var possibleItems = items.Where(x => (x.Text ?? Converter.Convert(x.Value) ?? "").StartsWith(startChar, StringComparison.CurrentCultureIgnoreCase)).ToList();
             if (possibleItems == null || !possibleItems.Any())
             {
                 DeactiveAllItems(items);
@@ -1695,7 +1682,7 @@ namespace MudExtensions
                 return ItemCollection.Where(x => SearchFunc.Invoke(x, _searchString)).ToList();
             }
 
-            return ItemCollection.Where(x => Converter?.Set(x)?.Contains(_searchString, StringComparison.InvariantCultureIgnoreCase) == true).ToList();
+            return ItemCollection.Where(x => Converter.Convert(x)?.Contains(_searchString, StringComparison.InvariantCultureIgnoreCase) == true).ToList();
         }
 
         /// <summary>

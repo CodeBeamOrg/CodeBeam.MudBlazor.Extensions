@@ -19,7 +19,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string? Classname => MudInputCssHelperExtended.GetClassname(this,
-            () => HasNativeHtmlPlaceholder() || ShrinkLabel == true || !string.IsNullOrEmpty(Text) || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(Converter.Set(Value)));
+            () => HasNativeHtmlPlaceholder() || ShrinkLabel == true || !string.IsNullOrEmpty(Text) || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(base.ConvertSet(Value)));
 
         /// <summary>
         /// 
@@ -114,49 +114,38 @@ namespace MudExtensions
         /// </summary>
         protected string? InputTypeString => InputType.ToDescriptionString();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        protected Task OnInputHandler(ChangeEventArgs args)
+        private async Task OnInputOrOnChangeAsync(string? input)
         {
-            if (!Immediate)
-                return Task.CompletedTask;
-            _isFocused = true;
-            OnInput.InvokeAsync();
-            if (AutoSize)
+            if (Immediate)
             {
-                if (JSRuntime != null)
-                {
-                    JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
-                }
+                await OnInputHandler(input);
+                await OnInput.InvokeAsync(input);
             }
-            return SetTextAsync(args?.Value as string);
+            else
+            {
+                await OnChangeHandler(input);
+                await OnChange.InvokeAsync(input);
+            }
+
+            if (AutoSize && JSRuntime != null)
+            {
+                await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        protected async Task OnChangeHandler(ChangeEventArgs args)
+        protected async Task OnInputHandler(string? args)
         {
-            _internalText = args?.Value as string;
+            _isFocused = true;
+            _internalText = args;
             await OnInternalInputChanged.InvokeAsync(args);
-            if (!Immediate)
-            {
-                await SetTextAsync(args?.Value as string);
-                if (AutoSize)
-                {
-                    if (JSRuntime != null)
-                    {
-                        await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
-                    }
-                }
-                
-                await OnChange.InvokeAsync();
-            }
+            await SetTextAndUpdateValueAsync(args);
+        }
+
+        protected async Task OnChangeHandler(string? args)
+        {
+            _internalText = args;
+            await OnInternalInputChanged.InvokeAsync(args);
+            await SetTextAndUpdateValueAsync(args);
         }
 
         /// <summary>

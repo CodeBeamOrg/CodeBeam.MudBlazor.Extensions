@@ -16,7 +16,7 @@ namespace MudExtensions
         /// <summary>
         /// MudCodeInput constructor.
         /// </summary>
-        public MudCodeInput() : base(new DefaultConverter<T>())
+        public MudCodeInput()
         {
             using var registerScope = CreateRegisterScope();
             _theValue = registerScope.RegisterParameter<T?>(nameof(Value))
@@ -218,7 +218,7 @@ namespace MudExtensions
                 _skipRefocus = false;
                 return;
             }
-            string str = Converter.Set(_theValue.Value) ?? string.Empty;
+            string str = base.ConvertSet(_theValue.Value) ?? string.Empty;
             await _elementReferences[str.Length].FocusAsync();
         }
 
@@ -288,7 +288,7 @@ namespace MudExtensions
                 result += val;
             }
 
-            await _theValue.SetValueAsync(Converter.Get(result));
+            await _theValue.SetValueAsync(base.ConvertGet(result));
         }
 
         /// <summary>
@@ -298,12 +298,12 @@ namespace MudExtensions
         /// <returns></returns>
         public async Task SetValueFromOutside(T? value)
         {
-            string? val = Converter.Set(value);
+            string? val = base.ConvertSet(value);
             if (_count.Value < val?.Length)
             {
                 val = val.Substring(0, _count.Value);
             }
-            await _theValue.SetValueAsync(Converter.Get(val));
+            await _theValue.SetValueAsync(base.ConvertGet(val));
             for (int i = 0; i < _count.Value; i++)
             {
                 if (i < val?.Length)

@@ -507,20 +507,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T?, string?>? ToStringFunc
-        {
-            get => _toStringFunc;
-            set
-            {
-                if (_toStringFunc == value)
-                    return;
-                _toStringFunc = value;
-                Converter = new Converter<T?>
-                {
-                    SetFunc = _toStringFunc ?? (x => x?.ToString()),
-                };
-            }
-        }
+        public Func<T?, string?>? ToStringFunc { get; set; }
 
         /// <summary>
         /// If true, a null item will be added to the list (Only for ItemCollection).
@@ -701,7 +688,7 @@ namespace MudExtensions
                         var collectionValue = ItemCollection.FirstOrDefault(x => x != null && (Comparer != null ? Comparer.Equals(x, val) : x.Equals(val)));
                         if (collectionValue != null)
                         {
-                            textList.Add(Converter.Set(collectionValue));
+                            textList.Add(base.ConvertSet(collectionValue));
                         }
                     }
                 }
@@ -711,13 +698,13 @@ namespace MudExtensions
                     {
                         if (!Strict && !Items.Select(x => x.Value).Contains(val))
                         {
-                            textList.Add(ToStringFunc != null ? ToStringFunc(val) : Converter.Set(val));
+                            textList.Add(ToStringFunc != null ? ToStringFunc(val) : base.ConvertSet(val));
                             continue;
                         }
                         var item = Items.FirstOrDefault(x => x != null && (x.Value == null ? val == null : Comparer != null ? Comparer.Equals(x.Value, val) : x.Value.Equals(val)));
                         if (item != null)
                         {
-                            textList.Add(!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
+                            textList.Add(!string.IsNullOrEmpty(item.Text) ? item.Text : base.ConvertSet(item.Value));
                         }
                     }
                 }
@@ -743,9 +730,9 @@ namespace MudExtensions
                 var item = Items?.FirstOrDefault(x => Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(Value, x.Value) : Value.Equals(x.Value));
                 if (item == null)
                 {
-                    return SetTextAsync(Converter.Set(Value), false);
+                    return SetTextAsync(base.ConvertSet(Value), false);
                 }
-                return SetTextAsync((!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value)), updateValue: updateValue);
+                return SetTextAsync((!string.IsNullOrEmpty(item.Text) ? item.Text : base.ConvertSet(item.Value)), updateValue: updateValue);
             }
         }
 
@@ -1332,5 +1319,10 @@ namespace MudExtensions
         {
             return _isOpen;
         }
+
+        /// <summary>
+        /// Internal method for MudSelectItem to access the converted string value.
+        /// </summary>
+        internal string? ConvertValueToString(T? value) => ConvertSet(value);
     }
 }

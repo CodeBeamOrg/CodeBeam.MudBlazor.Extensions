@@ -125,10 +125,10 @@ namespace MudExtensions
             var result = args.Key;
             if (result.Equals(Delimiter, StringComparison.InvariantCultureIgnoreCase) && _internalValue != null)
             {
-                if (AllowSameValues == false && Values?.Contains(Converter.Set(_internalValue) ?? string.Empty) == true)
+                if (AllowSameValues == false && Values?.Contains(base.ConvertSet(_internalValue) ?? string.Empty) == true)
                 {
                     await Task.Delay(10);
-                    _internalValue = Converter.Get(Converter.Set(_internalValue)?.Replace(result, null).ToString());
+                    _internalValue = base.ConvertGet(base.ConvertSet(_internalValue)?.Replace(result, null).ToString());
                     await SetValueAsync(_internalValue);
                     StateHasChanged();
                     return;
@@ -137,7 +137,7 @@ namespace MudExtensions
                 StateHasChanged();
             }
 
-            if (args.Key == "Backspace" && string.IsNullOrEmpty(Converter.Set(_internalValue)) && Values != null && Values.Any() && BackspaceChipRemoval == true)
+            if (args.Key == "Backspace" && string.IsNullOrEmpty(base.ConvertSet(_internalValue)) && Values != null && Values.Any() && BackspaceChipRemoval == true)
             {
                 Values.RemoveAt(Values.Count - 1);
                 await ValuesChanged.InvokeAsync(Values);
@@ -172,7 +172,7 @@ namespace MudExtensions
             {
                 Values = new();
             }
-            Values.Add(Converter.Set(_internalValue) ?? "");
+            Values.Add(base.ConvertSet(_internalValue) ?? "");
             await ValuesChanged.InvokeAsync(Values);
             if (RuntimeLocation.IsServerSide)
             {

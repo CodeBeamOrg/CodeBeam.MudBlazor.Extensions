@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Utilities;
 using MudExtensions.Utilities;
+using System.Globalization;
 
 namespace MudExtensions
 {
@@ -11,6 +12,11 @@ namespace MudExtensions
     /// </summary>
     public partial class MudDateWheelPicker : MudBaseInput<DateTime?>
     {
+        MudDateWheelPicker()
+        {
+            Converter = Conversions.From((DateTime? x) => x?.ToString(DateFormat), x => DateTime.TryParseExact(x, DateFormat, null, DateTimeStyles.None, out DateTime dt) ? dt : null);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -19,17 +25,6 @@ namespace MudExtensions
            .AddClass(Class)
            .Build();
         DateTime dt;
-        /// <summary>
-        /// 
-        /// </summary>
-        protected override void OnInitialized()
-        {
-            Converter = new MudBlazor.Converter<DateTime?, string>()
-            {
-                SetFunc = x => x?.ToString(DateFormat),
-                GetFunc = x => DateTime.TryParseExact(x, DateFormat, null, System.Globalization.DateTimeStyles.None, out dt) ? dt : null,
-            };
-        }
 
         /// <summary>
         /// 
@@ -300,11 +295,11 @@ namespace MudExtensions
             var _backUpValue = Value;
             try
             {
-                await SetValueAsync(new DateTime(_year, _month, _day, _hour, _minute, _second), updateText);
+                await SetValueAndUpdateTextAsync(new DateTime(_year, _month, _day, _hour, _minute, _second), updateText);
             }
             catch
             {
-                await SetValueAsync(_backUpValue, updateText);
+                await SetValueAndUpdateTextAsync(_backUpValue, updateText);
             }
         }
 
@@ -360,7 +355,7 @@ namespace MudExtensions
         /// <returns></returns>
         protected async Task HandleOnBlur()
         {
-            await SetTextAsync(InputReference.Text, true);
+            await SetTextAndUpdateValueAsync(InputReference.Text, true);
         }
 
         /// <summary>

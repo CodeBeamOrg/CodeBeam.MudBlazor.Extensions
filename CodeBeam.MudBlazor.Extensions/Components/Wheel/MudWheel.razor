@@ -19,7 +19,7 @@
                 if (0 <= index - a)
                 {
                     <div class="@OuterItemClassname(index - a)" @onclick="@(async() => await ChangeWheel(-a))">
-                        <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index - a]) : Converter.Set(ItemCollection[index - a]))</MudText>
+                        <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index - a]) : Converter.Convert(ItemCollection[index - a]))</MudText>
                     </div>
                 }
                 else
@@ -31,7 +31,7 @@
             <span class="@BorderClassname" />
 
             <div class="@MiddleItemClassname">
-                <MudText Class="@($"mud-wheel-ani-{_animateGuid} my-2)")" Typo="@(Dense ? Typo.body1 : Typo.h6)" Color="@Color" Style="font-weight: 900">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index]) : Converter.Set(ItemCollection[index]))</MudText>
+                <MudText Class="@($"mud-wheel-ani-{_animateGuid} my-2)")" Typo="@(Dense ? Typo.body1 : Typo.h6)" Color="@Color" Style="font-weight: 900">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index]) : Converter.Convert(ItemCollection[index]))</MudText>
             </div>
 
             <div class="@BorderClassname" />
@@ -42,7 +42,7 @@
                 if (index + a < ItemCollection?.Count)
                 {
                     <div class="@OuterItemClassname(index + a)" @onclick="@(async() => await ChangeWheel(a))">
-                        <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index + a]) : Converter.Set(ItemCollection[index + a]))</MudText>
+                        <MudText Typo="@(Dense ? Typo.body1 : Typo.h6)">@(ToStringFunc != null ? ToStringFunc(ItemCollection[index + a]) : Converter.Convert(ItemCollection[index + a]))</MudText>
                     </div>
                 }
                 else

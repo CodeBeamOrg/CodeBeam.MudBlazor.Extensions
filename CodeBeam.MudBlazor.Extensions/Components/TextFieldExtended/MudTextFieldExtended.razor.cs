@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -203,10 +204,10 @@ namespace MudExtensions
         {
             if (_mask != null)
             {
-                var textValue = Converter.Set(value);
+                var textValue = Converter.Convert(value);
                 _mask.SetText(textValue);
                 textValue = Mask?.GetCleanText();
-                value = Converter.Get(textValue);
+                value = Converter.ConvertBack(textValue);
             }
             return base.SetValueAsync(value, updateText, force);
         }

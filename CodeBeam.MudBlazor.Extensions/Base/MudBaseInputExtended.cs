@@ -1,8 +1,9 @@
-﻿using System.Globalization;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.State;
 using MudBlazor.Utilities;
+using MudExtensions.Base;
 
 namespace MudExtensions
 {
@@ -14,11 +15,49 @@ namespace MudExtensions
     {
         private bool _isDirty;
         private bool _validated;
+        protected bool _isFocused;
+        protected bool _forceTextUpdate;
+        protected string? InputElementId => _inputIdState.Value;
+        private string? _userAttributesId = Identifier.Create("mudinputextended");
+        private readonly string _componentId = Identifier.Create("mudinputextended");
 
         /// <summary>
         /// 
         /// </summary>
-        protected MudBaseInputExtended() : base(new DefaultConverter<T>()) { }
+        protected virtual bool SkipUpdateProcessOnSetParameters { get; set; }
+
+        private readonly ParameterState<string?> _textState;
+        private readonly ParameterState<T?> _valueState;
+        private readonly ParameterState<string?> _formatState;
+        private readonly ParameterState<string?> _inputIdState;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected MudBaseInputExtended()
+        {
+            Converter = new DefaultConverter<T>
+            {
+                Culture = GetCulture,
+                Format = GetFormat
+            };
+
+            using var registerScope = CreateRegisterScope();
+            _textState = registerScope.RegisterParameter<string?>(nameof(Text))
+                .WithParameter(() => Text)
+                .WithEventCallback(() => TextChanged)
+                .WithChangeHandler(OnTextParameterChangedAsync);
+            _valueState = registerScope.RegisterParameter<T?>(nameof(Value))
+                .WithParameter(() => Value)
+                .WithEventCallback(() => ValueChanged)
+                .WithChangeHandler(OnValueParameterChangedAsync);
+            _formatState = registerScope.RegisterParameter<string?>(nameof(Format))
+                .WithParameter(() => Format)
+                .WithChangeHandler(OnCultureAndFormatChangedAsync);
+            _inputIdState = registerScope.RegisterParameter<string?>(nameof(InputId))
+                .WithParameter(() => InputId)
+                .WithChangeHandler(UpdateInputIdStateAsync);
+        }
 
         [CascadingParameter(Name = "ParentDisabled")] private bool ParentDisabled { get; set; }
         [CascadingParameter(Name = "ParentReadOnly")] private bool ParentReadOnly { get; set; }
@@ -58,6 +97,16 @@ namespace MudExtensions
         /// Fires on change.
         /// </summary>
         [Parameter] public EventCallback OnChange { get; set; }
+
+        /// <summary>
+        /// The ID of the input element.
+        /// </summary>
+        /// <remarks>
+        /// When set takes precedence over any internally generated IDs.
+        /// </remarks>
+        [Parameter, ParameterState]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public string? InputId { get; set; }
 
         /// <summary>
         /// Set the text-align on the component.
@@ -162,7 +211,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public bool ShrinkLabel { get; set; } = MudGlobal.InputDefaults.ShrinkLabel;
+        public bool ShrinkLabel { get; set; }
 
         /// <summary>
         /// The color of the adornment if used. It supports the theme colors.
@@ -188,14 +237,14 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public Variant Variant { get; set; } = MudGlobal.InputDefaults.Variant;
+        public Variant Variant { get; set; } = Variant.Text;
 
         /// <summary>
         ///  Will adjust vertical spacing.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
-        public Margin Margin { get; set; } = MudGlobal.InputDefaults.Margin;
+        public Margin Margin { get; set; } = Margin.None;
 
         /// <summary>
         /// The short hint displayed in the input before the user enters a value.
@@ -316,26 +365,26 @@ namespace MudExtensions
         /// </summary>
         protected virtual Task UpdateTextPropertyAsync(bool updateValue)
         {
-            return SetTextAsync(Converter.Set(Value), updateValue);
+            return SetTextAndUpdateValueAsync(ConvertSet(ReadValue), updateValue);
         }
 
         /// <summary>
         /// Focus to the element.
         /// </summary>
         /// <returns>The ValueTask</returns>
-        public virtual ValueTask FocusAsync() { return new ValueTask(); }
+        public virtual ValueTask FocusAsync() => ValueTask.CompletedTask;
 
         /// <summary>
         /// Blur from the element.
         /// </summary>
         /// <returns></returns>
-        public virtual ValueTask BlurAsync() { return new ValueTask(); }
+        public virtual ValueTask BlurAsync() => ValueTask.CompletedTask;
 
         /// <summary>
         /// Focus and select all text.
         /// </summary>
         /// <returns></returns>
-        public virtual ValueTask SelectAsync() { return new ValueTask(); }
+        public virtual ValueTask SelectAsync() => ValueTask.CompletedTask;
 
         /// <summary>
         /// Focus and select partial text with given positions.
@@ -343,7 +392,7 @@ namespace MudExtensions
         /// <param name="pos1"></param>
         /// <param name="pos2"></param>
         /// <returns></returns>
-        public virtual ValueTask SelectRangeAsync(int pos1, int pos2) { return new ValueTask(); }
+        public virtual ValueTask SelectRangeAsync(int pos1, int pos2) => ValueTask.CompletedTask;
 
         /// <summary>
         /// Fired when the text value changes.
@@ -359,12 +408,7 @@ namespace MudExtensions
         /// Fired when the element changes internally its text value.
         /// </summary>
         [Parameter]
-        public EventCallback<ChangeEventArgs> OnInternalInputChanged { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        protected bool _isFocused;
+        public EventCallback<string?> OnInternalInputChanged { get; set; }
 
         /// <summary>
         /// 
@@ -487,62 +531,31 @@ namespace MudExtensions
         /// </summary>
         protected virtual Task UpdateValuePropertyAsync(bool updateText)
         {
-            return SetValueAsync(Converter.Get(Text), updateText);
+            return SetValueAndUpdateTextAsync(ConvertGet(ReadText), updateText);
         }
 
         /// <summary>
-        /// 
+        /// The format applied to values.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        protected override bool SetConverter(MudBlazor.Converter<T, string> value)
-        {
-            var changed = base.SetConverter(value);
-            if (changed)
-                UpdateTextPropertyAsync(false).CatchAndLog();      // refresh only Text property from current Value
-
-            return changed;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        protected override bool SetCulture(CultureInfo value)
-        {
-            var changed = base.SetCulture(value);
-            if (changed)
-                UpdateTextPropertyAsync(false).CatchAndLog();      // refresh only Text property from current Value
-
-            return changed;
-        }
-
-        /// <summary>
-        /// Conversion format parameter for ToString(), can be used for formatting primitive types, DateTimes and TimeSpans
-        /// </summary>
-        [Parameter]
+        /// <remarks>
+        /// This property is passed into the <c>ToString()</c> method of the <see cref="Value"/> property, such as formatting <c>int</c>, <c>float</c>, <c>DateTime</c> and <c>TimeSpan</c> values.
+        /// </remarks>
+        [Parameter, ParameterState]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public string? Format
+        public string? Format { get; set; }
+
+        protected override string? GetFormat() => _formatState.Value;
+
+        protected override async Task OnCultureAndFormatChangedAsync()
         {
-            get => ((Converter<T>)Converter).Format;
-            set => SetFormat(value);
+            await base.OnCultureAndFormatChangedAsync();
+            await UpdateTextPropertyAsync(false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        protected virtual bool SetFormat(string? value)
+        protected override async Task OnConverterChangedAsync()
         {
-            var changed = Format != value;
-            if (changed)
-            {
-                ((Converter<T>)Converter).Format = value;
-                UpdateTextPropertyAsync(false).CatchAndLog();      // refresh only Text property from current Value
-            }
-            return changed;
+            await base.OnConverterChangedAsync();
+            await UpdateTextPropertyAsync(false);
         }
 
         /// <summary>
@@ -594,14 +607,6 @@ namespace MudExtensions
             await UpdateTextPropertyAsync(false);
             StateHasChanged();
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        protected bool _forceTextUpdate;
-        /// <summary>
-        /// 
-        /// </summary>
-        protected virtual bool SkipUpdateProcessOnSetParameters { get; set; }
 
         /// <summary>
         /// 
@@ -679,6 +684,111 @@ namespace MudExtensions
         [CascadingParameter(Name = "SubscribeToParentFormExtended")]
         internal bool SubscribeToParentFormExtended { get; set; } = true;
 
+        private async Task UpdateInputIdStateAsync()
+        {
+            if (_inputIdState.Value is not null)
+            {
+                return;
+            }
+
+            if (_userAttributesId is not null)
+            {
+                await _inputIdState.SetValueAsync(_userAttributesId);
+                return;
+            }
+
+            await _inputIdState.SetValueAsync(_componentId);
+        }
+
+        private async Task OnValueParameterChangedAsync(ParameterChangedEventArgs<T?> arg)
+        {
+            _isDirty = true;
+            _validated = false;
+
+            // When Value changes from parent, update Text from Value
+            // But only if Text is not also being set in the same parameter update
+            // Check ParameterView to see if Text is also present
+            if (!arg.ParameterView.Contains<string?>(nameof(Text)))
+            {
+                // Always update text when Value changes (TextUpdateSuppression removed)
+                _forceTextUpdate = false;
+                await UpdateTextPropertyAsync(false);
+            }
+        }
+
+        private async Task OnTextParameterChangedAsync(ParameterChangedEventArgs<string?> arg)
+        {
+            _validated = false;
+
+            if (!string.IsNullOrEmpty(arg.Value))
+            {
+                Touched = true;
+            }
+
+            // When Text changes from parent, update Value from Text using UpdateValuePropertyAsync
+            // But only if Value is not also being set in the same parameter update
+            // Check ParameterView to see if Value is also present
+            if (!arg.ParameterView.Contains<T?>(nameof(Value)))
+            {
+                await UpdateValuePropertyAsync(updateText: false);
+            }
+        }
+
+        protected internal string? ReadText => _textState.Value;
+        protected Task SetTextAsync(string? text) => _textState.SetValueAsync(text);
+
+        protected virtual async Task SetValueAndUpdateTextAsync(T? value, bool updateText = true, bool force = false)
+        {
+            var valueChanged = !EqualityComparer<T?>.Default.Equals(ReadValue, value);
+
+            if (!valueChanged && !force)
+            {
+                return;
+            }
+
+            _isDirty = true;
+            _validated = false;
+
+            // Use ParameterState to set Value instead of direct assignment
+            // This ensures proper parameter lifecycle management
+            await _valueState.SetValueAsync(value);
+
+            // If force is true but value hasn't changed, ParameterState won't fire the callback
+            // so we need to manually invoke it to maintain backward compatibility
+            if (force && !valueChanged)
+            {
+                await ValueChanged.InvokeAsync(value);
+            }
+
+            if (updateText)
+            {
+                await UpdateTextPropertyAsync(false);
+            }
+
+            FieldChanged(value);
+            await BeginValidateAsync();
+        }
+
+        protected virtual async Task SetTextAndUpdateValueAsync(string? text, bool updateValue = true)
+        {
+            if (ReadText == text)
+            {
+                return;
+            }
+
+            _validated = false;
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                Touched = true;
+            }
+
+            await _textState.SetValueAsync(text);
+            if (updateValue)
+            {
+                await UpdateValuePropertyAsync(false);
+            }
+        }
     }
 
     internal static class ParameterViewExtensions

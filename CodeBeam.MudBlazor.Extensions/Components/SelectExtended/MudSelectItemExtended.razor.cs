@@ -164,7 +164,7 @@ namespace MudExtensions
                 var converter = MudSelectExtended?.Converter;
                 if (converter == null)
                     return $"{(string.IsNullOrEmpty(Text) ? Value : Text)}";
-                return !string.IsNullOrEmpty(Text) ? Text : converter.Set(Value);
+                return !string.IsNullOrEmpty(Text) ? Text : converter.Convert(Value);
             }
         }
 

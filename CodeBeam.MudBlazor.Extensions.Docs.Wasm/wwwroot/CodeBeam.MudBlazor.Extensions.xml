@@ -4,11 +4,36 @@
         <name>CodeBeam.MudBlazor.Extensions</name>
     </assembly>
     <members>
+        <member name="T:MudExtensions.Base.Identifier">
+            <summary>
+            Provides methods to create unique identifiers with optional prefixes.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.Base.Identifier.Create(System.ReadOnlySpan{System.Char})">
+            <summary>
+            Creates a unique identifier with the specified prefix.
+            </summary>
+            <param name="prefix">The prefix to prepend to the unique identifier.</param>
+            <returns>A unique identifier string with the specified prefix.</returns>
+            <example><code>prefixdb54bcd0</code></example>
+        </member>
+        <member name="M:MudExtensions.Base.Identifier.Create">
+            <summary>
+            Creates a unique identifier.
+            </summary>
+            <returns>A unique identifier string.</returns>
+            <example><code>adb54bcd0</code></example>
+        </member>
         <member name="T:MudExtensions.MudBaseInputExtended`1">
             <summary>
             The extended base input fundamentals.
             </summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:MudExtensions.MudBaseInputExtended`1.SkipUpdateProcessOnSetParameters">
+            <summary>
+            
+            </summary>
         </member>
         <member name="M:MudExtensions.MudBaseInputExtended`1.#ctor">
             <summary>
@@ -46,6 +71,14 @@
             <summary>
             Fires on change.
             </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseInputExtended`1.InputId">
+            <summary>
+            The ID of the input element.
+            </summary>
+            <remarks>
+            When set takes precedence over any internally generated IDs.
+            </remarks>
         </member>
         <member name="P:MudExtensions.MudBaseInputExtended`1.Typo">
             <summary>
@@ -272,11 +305,6 @@
             Fired when the element changes internally its text value.
             </summary>
         </member>
-        <member name="F:MudExtensions.MudBaseInputExtended`1._isFocused">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="M:MudExtensions.MudBaseInputExtended`1.OnBlurredAsync(Microsoft.AspNetCore.Components.Web.FocusEventArgs)">
             <summary>
             
@@ -347,31 +375,13 @@
             Value change hook for descendants. Called when Value needs to be refreshed from current Text property.
             </summary>
         </member>
-        <member name="M:MudExtensions.MudBaseInputExtended`1.SetConverter(MudBlazor.Converter{`0,System.String})">
-            <summary>
-            
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudBaseInputExtended`1.SetCulture(System.Globalization.CultureInfo)">
-            <summary>
-            
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
         <member name="P:MudExtensions.MudBaseInputExtended`1.Format">
             <summary>
-            Conversion format parameter for ToString(), can be used for formatting primitive types, DateTimes and TimeSpans
+            The format applied to values.
             </summary>
-        </member>
-        <member name="M:MudExtensions.MudBaseInputExtended`1.SetFormat(System.String)">
-            <summary>
-            
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
+            <remarks>
+            This property is passed into the <c>ToString()</c> method of the <see cref="P:MudExtensions.MudBaseInputExtended`1.Value"/> property, such as formatting <c>int</c>, <c>float</c>, <c>DateTime</c> and <c>TimeSpan</c> values.
+            </remarks>
         </member>
         <member name="M:MudExtensions.MudBaseInputExtended`1.ValidateValue">
             <summary>
@@ -391,16 +401,6 @@
             </summary>
             <param name="forceTextUpdate"></param>
             <returns></returns>
-        </member>
-        <member name="F:MudExtensions.MudBaseInputExtended`1._forceTextUpdate">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:MudExtensions.MudBaseInputExtended`1.SkipUpdateProcessOnSetParameters">
-            <summary>
-            
-            </summary>
         </member>
         <member name="M:MudExtensions.MudBaseInputExtended`1.SetParametersAsync(Microsoft.AspNetCore.Components.ParameterView)">
             <summary>
@@ -1594,11 +1594,6 @@
             
             </summary>
         </member>
-        <member name="M:MudExtensions.MudDateWheelPicker.OnInitialized">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="P:MudExtensions.MudDateWheelPicker.InputReference">
             <summary>
             
@@ -2148,20 +2143,6 @@
             <summary>
             
             </summary>
-        </member>
-        <member name="M:MudExtensions.MudInputExtended`1.OnInputHandler(Microsoft.AspNetCore.Components.ChangeEventArgs)">
-            <summary>
-            
-            </summary>
-            <param name="args"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudInputExtended`1.OnChangeHandler(Microsoft.AspNetCore.Components.ChangeEventArgs)">
-            <summary>
-            
-            </summary>
-            <param name="args"></param>
-            <returns></returns>
         </member>
         <member name="M:MudExtensions.MudInputExtended`1.ForceAutoSize">
             <summary>
@@ -4517,6 +4498,11 @@
             returns the value of the internal property _isOpen 
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudSelectExtended`1.ConvertValueToString(`0)">
+            <summary>
+            Internal method for MudSelectItem to access the converted string value.
+            </summary>
         </member>
         <member name="T:MudExtensions.MudSelectItemExtended`1">
             <summary>

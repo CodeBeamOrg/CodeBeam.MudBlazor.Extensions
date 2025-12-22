@@ -157,7 +157,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         [Parameter]
-        public Variant Variant { get; set; } = MudGlobal.InputDefaults.Variant;
+        public Variant Variant { get; set; } = Variant.Text;
 
         /// <summary>
         /// 

@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>8.3.0</Version>
+		<Version>9.0.0-preview.1</Version>
 		<Title>CodeBeam.MudBlazor.Extensions</Title>
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
@@ -26,19 +26,24 @@
 	</PropertyGroup>
 
 	<!--Added for workaround https://github.com/dotnet/aspnetcore/issues/57147#issuecomment-2572752277-->
-	<PropertyGroup>
+	<!--<PropertyGroup>
 		<PrepareForBuildDependsOn>BundleMinify;$(PrepareForBuildDependsOn)</PrepareForBuildDependsOn>
-	</PropertyGroup>
+	</PropertyGroup>-->
 
 	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
-		<PackageReference Include="MudBlazor" Version="8.0.0" />
+		<!--<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />-->
+		<PackageReference Include="MudBlazor" Version="9.0.0-preview.1" />
 	</ItemGroup>
 
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="10.0.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.*" />
+	</ItemGroup>
+	
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net9.0' ">
 		<PackageReference Include="Microsoft.AspNetCore.Components" Version="9.0.*" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.*" />
@@ -55,9 +60,9 @@
 		<Exec Command="dotnet tool restore" StandardOutputImportance="high" />
 	</Target>-->
 
-	<Target Name="PreBuild" AfterTargets="ToolRestore">
+	<!--<Target Name="PreBuild" AfterTargets="ToolRestore">
 		<Exec Command="dotnet tool run webcompiler -r Styles/MudExtensions.scss -c excubowebcompiler.json" StandardOutputImportance="high" />
-	</Target>
+	</Target>-->
 
 	<ItemGroup>
 		<Content Remove="bundleconfig.json" />

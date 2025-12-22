@@ -61,14 +61,14 @@
                                         {
                                             foreach (var item in ItemCollection.Where(x => SelectedValues?.Contains(x) == true))
                                             {
-                                                <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                                <MudChip Class="@ChipClass" Value="@item" Text="@base.ConvertSet(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
                                             }
                                         }
                                         else
                                         {
                                             foreach (var item in Items?.Where(x => SelectedValues?.Contains(x.Value) == true) ?? new List<MudSelectItemExtended<T>>())
                                             {
-                                                <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                                <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? base.ConvertSet(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
                                             }
                                         }
                                     </MudChipSet>

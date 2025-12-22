@@ -863,7 +863,7 @@ namespace MudExtensions.UnitTests.Components
             select.Value.Should().Be("Quux");
             select.Text.Should().Be("Quux");
             // check validity
-            await comp.InvokeAsync(() => select.Validate());
+            await comp.InvokeAsync(() => select.ValidateAsync());
             select.ValidationErrors.Should().NotBeEmpty();
             select.ValidationErrors.Should().HaveCount(1);
             select.ValidationErrors[0].Should().Be("Should not be longer than 3");
@@ -882,7 +882,7 @@ namespace MudExtensions.UnitTests.Components
             select.Value.Should().Be("Qux");
             select.Text.Should().Be("Qux");
             // check validity
-            await comp.InvokeAsync(() => select.Validate());
+            await comp.InvokeAsync(() => select.ValidateAsync());
             select.ValidationErrors.Should().BeEmpty();
         }
         #endregion
@@ -896,7 +896,7 @@ namespace MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<SelectRequiredTest>();
             var select = comp.FindComponent<MudSelectExtended<string>>().Instance;
             select.Required.Should().BeTrue();
-            await comp.InvokeAsync(() => select.Validate());
+            await comp.InvokeAsync(() => select.ValidateAsync());
             select.ValidationErrors.First().Should().Be("Required");
         }
 
