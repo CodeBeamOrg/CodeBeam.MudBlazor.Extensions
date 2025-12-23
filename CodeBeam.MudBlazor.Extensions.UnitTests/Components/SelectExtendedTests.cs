@@ -11,6 +11,7 @@ using NUnit.Framework;
 using static MudExtensions.UnitTests.TestComponents.SelectWithEnumTest;
 using MudBlazor;
 using MudExtensions.UnitTests.Extensions;
+using MudBlazor.Extensions;
 
 namespace MudExtensions.UnitTests.Components
 {
@@ -42,9 +43,9 @@ namespace MudExtensions.UnitTests.Components
             });
             var select = comp.FindComponent<MudSelectExtended<string>>();
 
-            select.Instance.Value.Should().Be("1");
+            select.Instance.GetState(x => x.Value).Should().Be("1");
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
-            select.Instance.Text.Should().Be("1");
+            select.Instance.GetState(x => x.Text).Should().Be("1");
         }
 
         // Note: MudSelect doesn't guaranteed the consequences of changing SelectedValues if MultiSelection is false for now.
@@ -61,9 +62,9 @@ namespace MudExtensions.UnitTests.Components
             });
             var select = comp.FindComponent<MudSelectExtended<string>>();
 
-            select.Instance.Value.Should().Be("1");
+            select.Instance.GetState(x => x.Value).Should().Be("1");
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
-            select.Instance.Text.Should().Be("1");
+            select.Instance.GetState(x => x.Text).Should().Be("1");
         }
 
         [Test]
@@ -72,20 +73,20 @@ namespace MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<SelectInitialValueTest>();
             var select = comp.FindComponent<MudSelectExtended<string>>();
 
-            select.Instance.Value.Should().BeNull();
-            select.Instance.Text.Should().BeNull();
+            select.Instance.GetState(x => x.Value).Should().BeNull();
+            select.Instance.GetState(x => x.Text).Should().BeNull();
 
             comp.SetParam("SelectedValue", "1");
             await comp.InvokeAsync(() => select.Instance.ForceUpdate());
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("1"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("1"));
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
-            select.Instance.Text.Should().Be("1");
+            select.Instance.GetState(x => x.Text).Should().Be("1");
 
             comp.SetParam("SelectedValue", "2");
             await comp.InvokeAsync(() => select.Instance.ForceUpdate());
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("2"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("2"));
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2" });
-            select.Instance.Text.Should().Be("2");
+            select.Instance.GetState(x => x.Text).Should().Be("2");
         }
 
         [Test]
@@ -97,18 +98,18 @@ namespace MudExtensions.UnitTests.Components
             });
             var select = comp.FindComponent<MudSelectExtended<string>>();
 
-            select.Instance.Value.Should().BeNull();
-            select.Instance.Text.Should().BeNullOrEmpty();
+            select.Instance.GetState(x => x.Value).Should().BeNull();
+            select.Instance.GetState(x => x.Text).Should().BeNullOrEmpty();
 
             comp.SetParam("SelectedValues", new HashSet<string>() { "1" });
-            select.Instance.Value.Should().Be("1");
+            select.Instance.GetState(x => x.Value).Should().Be("1");
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
-            select.Instance.Text.Should().Be("1");
+            select.Instance.GetState(x => x.Text).Should().Be("1");
 
             comp.SetParam("SelectedValues", new HashSet<string>() { "2", "1" });
-            select.Instance.Value.Should().Be("1");
+            select.Instance.GetState(x => x.Value).Should().Be("1");
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2", "1" });
-            select.Instance.Text.Should().Be("2, 1");
+            select.Instance.GetState(x => x.Text).Should().Be("2, 1");
         }
 
         [Test]
@@ -128,14 +129,14 @@ namespace MudExtensions.UnitTests.Components
             await comp.InvokeAsync(() => select.Instance.ForceUpdate());
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
             comp.Instance.ValuesChangeCount.Should().Be(1);
-            select.Instance.Value.Should().Be("1");
+            select.Instance.GetState(x => x.Value).Should().Be("1");
 
             // Changing value programmatically without ForceUpdate should change value, but should not fire change events
             // Its by design, so this part can be change if design changes
             await comp.InvokeAsync(() => select.SetParam("Value", "2"));
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
             comp.Instance.ValuesChangeCount.Should().Be(1);
-            select.Instance.Value.Should().Be("2");
+            select.Instance.GetState(x => x.Value).Should().Be("2");
         }
 
         [Test]
@@ -178,7 +179,7 @@ namespace MudExtensions.UnitTests.Components
             // check popover class
             menu.ClassList.Should().Contain("select-popover-class");
             // check initial state
-            select.Instance.Value.Should().BeNullOrEmpty();
+            select.Instance.GetState(x => x.Value).Should().BeNullOrEmpty();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
             // click and check if it has toggled the menu
             input.Click();
@@ -189,7 +190,7 @@ namespace MudExtensions.UnitTests.Components
             items[1].Click();
             // menu should be closed now
             comp.WaitForAssertion(() => menu.ClassList.Should().NotContain("mud-popover-open"));
-            select.Instance.Value.Should().Be("2");
+            select.Instance.GetState(x => x.Value).Should().Be("2");
             // now we cheat and click the list without opening the menu ;)
 
             input.Click();
@@ -197,12 +198,12 @@ namespace MudExtensions.UnitTests.Components
             items = comp.FindAll("div.mud-list-item-extended").ToArray();
 
             items[0].Click();
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("1"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("1"));
             //Check user on blur implementation works
             var @switch = comp.FindComponent<MudSwitch<bool>>();
             @switch.Instance.Value = true;
             await comp.InvokeAsync(() => select.Instance.OnLostFocus(new FocusEventArgs()));
-            comp.WaitForAssertion(() => @switch.Instance.Value.Should().Be(false));
+            comp.WaitForAssertion(() => @switch.Instance.GetState(x => x.Value).Should().Be(false));
         }
 
         /// <summary>
@@ -221,7 +222,7 @@ namespace MudExtensions.UnitTests.Components
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
             // check initial state
-            select.Instance.Value.Should().BeNullOrEmpty();
+            select.Instance.GetState(x => x.Value).Should().BeNullOrEmpty();
             comp.WaitForAssertion(() =>
                 comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
             // click and check if it has toggled the menu
@@ -233,13 +234,13 @@ namespace MudExtensions.UnitTests.Components
             items[1].Click();
             // menu should still be open now!!
             menu.ClassList.Should().Contain("mud-popover-open");
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("2"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("2"));
             items[0].Click();
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("2, 1"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("2, 1"));
             items[2].Click();
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("2, 1, 3"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("2, 1, 3"));
             items[0].Click();
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("2, 3"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("2, 3"));
             select.Instance.SelectedValues?.Count().Should().Be(2);
             select.Instance.SelectedValues.Should().Contain("2");
             select.Instance.SelectedValues.Should().Contain("3");
@@ -283,8 +284,8 @@ namespace MudExtensions.UnitTests.Components
             var select = comp.FindComponent<MudSelectExtended<MyEnum>>();
             var input = comp.Find("div.mud-input-control");
 
-            select.Instance.Value.Should().Be(default(MyEnum));
-            select.Instance.Text.Should().Be(default(MyEnum).ToString());
+            select.Instance.GetState(x => x.Value).Should().Be(default(MyEnum));
+            select.Instance.GetState(x => x.Text).Should().Be(default(MyEnum).ToString());
 
             comp.Find("input").Attributes["value"]?.Value.Should().Be("First");
             comp.RenderCount.Should().Be(1);
@@ -307,8 +308,8 @@ namespace MudExtensions.UnitTests.Components
             // select elements needed for the test
             var select = comp.FindComponent<MudSelectExtended<int>>();
             var input = comp.Find("div.mud-input-control");
-            select.Instance.Value.Should().Be(17);
-            select.Instance.Text.Should().Be("17");
+            select.Instance.GetState(x => x.Value).Should().Be(17);
+            select.Instance.GetState(x => x.Text).Should().Be("17");
             comp.Find("input").Attributes["value"]?.Value.Should().Be("17");
             input.Click();
             comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
@@ -317,8 +318,8 @@ namespace MudExtensions.UnitTests.Components
             items[1].Click();
             //Console.WriteLine(comp.Markup);
             //comp.WaitForAssertion(() => comp.Find("div.mud-input-slot").TextContent.Trim().Should().Be("Two"));
-            select.Instance.Value.Should().Be(2);
-            select.Instance.Text.Should().Be("2");
+            select.Instance.GetState(x => x.Value).Should().Be(2);
+            select.Instance.GetState(x => x.Text).Should().Be("2");
         }
 
         /// <summary>
@@ -333,20 +334,20 @@ namespace MudExtensions.UnitTests.Components
             var select = comp.FindComponent<MudSelectExtended<int>>();
             var input = comp.Find("div.mud-input-control");
 
-            select.Instance.Value.Should().Be(17);
-            select.Instance.Text.Should().Be("17");
+            select.Instance.GetState(x => x.Value).Should().Be(17);
+            select.Instance.GetState(x => x.Text).Should().Be("17");
             //await Task.Delay(100);
             // BUT: we have a select with Strict="true" so the Text will not be shown because it is not in the list of selectable values
-            comp.FindComponent<MudInputExtended<string>>().Instance.Value.Should().Be(null);
+            comp.FindComponent<MudInputExtended<string>>().Instance.GetState(x => x.Value).Should().Be(null);
             comp.FindComponent<MudInputExtended<string>>().Instance.InputType.Should().Be(InputType.Hidden);
             input.Click();
             comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
             var items = comp.FindAll("div.mud-list-item-extended").ToArray();
             items[1].Click();
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be(2));
-            select.Instance.Text.Should().Be("2");
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be(2));
+            select.Instance.GetState(x => x.Text).Should().Be("2");
             //Console.WriteLine(comp.Markup);
-            comp.FindComponent<MudInputExtended<string>>().Instance.Value.Should().Be("2");
+            comp.FindComponent<MudInputExtended<string>>().Instance.GetState(x => x.Value).Should().Be("2");
             comp.FindComponent<MudInputExtended<string>>().Instance.InputType.Should().Be(InputType.Hidden); // because list item has no render fragment, so we show it as text
         }
 
@@ -362,8 +363,8 @@ namespace MudExtensions.UnitTests.Components
             var select = comp.FindComponent<MudSelectExtended<bool?>>();
             var input = comp.Find("div.mud-input-control");
 
-            select.Instance.Value.Should().BeTrue();
-            select.Instance.Text.Should().Be("Open");
+            select.Instance.GetState(x => x.Value).Should().BeTrue();
+            select.Instance.GetState(x => x.Text).Should().Be("Open");
             //comp.Find("div.mud-input-slot").Attributes["style"].Value.Should().Contain("display:none");
             //comp.RenderCount.Should().Be(1);
             ////Console.WriteLine(comp.Markup);
@@ -375,14 +376,14 @@ namespace MudExtensions.UnitTests.Components
             items[2].Click();
             //comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
             //comp.WaitForAssertion(() => comp.Find("div.mud-input-slot").Attributes["style"].Value.Should().Contain("display:none"));
-            select.Instance.Value.Should().BeFalse();
-            select.Instance.Text.Should().Be("False");
+            select.Instance.GetState(x => x.Value).Should().BeFalse();
+            select.Instance.GetState(x => x.Text).Should().Be("False");
 
             input.Click();
             items = comp.FindAll("div.mud-list-item-extended").ToArray();
             items[0].Click();
-            select.Instance.Value.Should().BeNull();
-            select.Instance.Text.Should().Be("Open and Closed");
+            select.Instance.GetState(x => x.Value).Should().BeNull();
+            select.Instance.GetState(x => x.Text).Should().Be("Open and Closed");
         }
 
         [Test]
@@ -396,7 +397,7 @@ namespace MudExtensions.UnitTests.Components
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
             // check initial state
-            select.Instance.Value.Should().BeNullOrEmpty();
+            select.Instance.GetState(x => x.Value).Should().BeNullOrEmpty();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
             // click and check if it has toggled the menu
             input.Click();
@@ -407,8 +408,8 @@ namespace MudExtensions.UnitTests.Components
             items[1].Click();
             // menu should be closed now
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("2"));
-            select.Instance.Text.Should().Be("2");
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("2"));
+            select.Instance.GetState(x => x.Text).Should().Be("2");
             text.Should().Be("2");
 
             //open the menu again
@@ -417,8 +418,8 @@ namespace MudExtensions.UnitTests.Components
             items = comp.FindAll("div.mud-list-item-extended").ToArray();
 
             items[0].Click();
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("1"));
-            select.Instance.Text.Should().Be("1");
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("1"));
+            select.Instance.GetState(x => x.Text).Should().Be("1");
             text.Should().Be("1");
         }
 
@@ -451,7 +452,7 @@ namespace MudExtensions.UnitTests.Components
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
             // check initial state
-            select.Instance.Value.Should().BeNullOrEmpty();
+            select.Instance.GetState(x => x.Value).Should().BeNullOrEmpty();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
             // click and check if it has toggled the menu
             input.Click();
@@ -463,8 +464,8 @@ namespace MudExtensions.UnitTests.Components
             items[1].Click();
             // menu should be closed now
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("2"));
-            select.Instance.Text.Should().Be("2");
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("2"));
+            select.Instance.GetState(x => x.Text).Should().Be("2");
             text.Should().Be("2");
             selectedValuesChangedCount.Should().Be(1);
             textChangedCount.Should().Be(0);
@@ -475,8 +476,8 @@ namespace MudExtensions.UnitTests.Components
             items = comp.FindAll("div.mud-list-item-extended").ToArray();
 
             items[0].Click();
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("1"));
-            select.Instance.Text.Should().Be("1");
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("1"));
+            select.Instance.GetState(x => x.Text).Should().Be("1");
             text.Should().Be("1");
             string.Join(",", selectedValues ?? new List<string>()).Should().Be("1");
             comp.WaitForAssertion(() => selectedValuesChangedCount.Should().Be(3));
@@ -517,8 +518,8 @@ namespace MudExtensions.UnitTests.Components
             var items = comp.FindAll("div.mud-list-item-extended").ToArray();
             // click list item
             items[1].Click();
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("2"));
-            select.Instance.Text.Should().Be("2");
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("2"));
+            select.Instance.GetState(x => x.Text).Should().Be("2");
             text.Should().Be("2");
             selectedValuesChangedCount.Should().Be(1);
             textChangedCount.Should().Be(0);
@@ -528,7 +529,7 @@ namespace MudExtensions.UnitTests.Components
             items = comp.FindAll("div.mud-list-item-extended").ToArray();
             items[0].Click();
             comp.WaitForAssertion(() => select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2", "1" }));
-            select.Instance.Text.Should().Be("2, 1");
+            select.Instance.GetState(x => x.Text).Should().Be("2, 1");
             text.Should().Be("2, 1");
             string.Join(",", selectedValues ?? new List<string>()).Should().Be("2,1");
             selectedValuesChangedCount.Should().Be(3);
@@ -564,7 +565,7 @@ namespace MudExtensions.UnitTests.Components
             // Disabled item found twice because we have 2 shadow lists. Need to be discussed later
             comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-disabled-extended").Count.Should().Be(2));
             comp.FindAll("div.mud-list-item-disabled-extended")[0].Click();
-            comp.WaitForAssertion(() => select.Instance.Value.Should().BeNull());
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().BeNull());
         }
 
         [Test]
@@ -586,7 +587,7 @@ namespace MudExtensions.UnitTests.Components
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
             // check initial state
-            select.Instance.Value.Should().BeNullOrEmpty();
+            select.Instance.GetState(x => x.Value).Should().BeNullOrEmpty();
             select.Instance.SelectedValues.Should().BeNullOrEmpty();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
             // click and check if it has toggled the menu
@@ -598,17 +599,17 @@ namespace MudExtensions.UnitTests.Components
             await comp.InvokeAsync(() => items[1].Click());
             // menu should still be open now!!
             comp.WaitForAssertion(() => menu.ClassList.Should().Contain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("2"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("2"));
             comp.WaitForAssertion(() => select.Instance.SelectedValues.Should().Contain("2"));
             validatedValue.Should().BeEquivalentTo(new HashSet<string>() { "2" });
             items[0].Click();
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("2, 1"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("2, 1"));
             validatedValue.Should().BeEquivalentTo(new HashSet<string>() { "2", "1" });
             items[2].Click();
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("2, 1, 3"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("2, 1, 3"));
             validatedValue.Should().BeEquivalentTo(new HashSet<string>() { "2", "1", "3" });
             items[0].Click();
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("2, 3"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("2, 3"));
             validatedValue.Should().BeEquivalentTo(new HashSet<string>() { "2", "3" });
             //});
         }
@@ -633,7 +634,7 @@ namespace MudExtensions.UnitTests.Components
 
             comp.FindAll("div.mud-list-item-extended")[0].Click();
             // validate the result. all items should be selected
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("FirstA^SecondA^ThirdA"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("FirstA^SecondA^ThirdA"));
             validatedValue.Should().BeEquivalentTo(new HashSet<string>() { "FirstA", "SecondA", "ThirdA"});
         }
 
@@ -703,7 +704,7 @@ namespace MudExtensions.UnitTests.Components
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
             // check initial state
-            select.Instance.Value.Should().BeNullOrEmpty();
+            select.Instance.GetState(x => x.Value).Should().BeNullOrEmpty();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
             // click and check if it has toggled the menu
             input.Click();
@@ -714,16 +715,16 @@ namespace MudExtensions.UnitTests.Components
             comp.FindAll("div.mud-list-item-extended")[1].Click();
             // menu should be closed now
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("2"));
-            select.Instance.Text.Should().Be("2");
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("2"));
+            select.Instance.GetState(x => x.Text).Should().Be("2");
             validatedValue.Should().Be("2");
 
             input.Click();
             comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
             comp.FindAll("div.mud-list-item-extended")[0].Click();
 
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("1"));
-            select.Instance.Text.Should().Be("1");
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("1"));
+            select.Instance.GetState(x => x.Text).Should().Be("1");
             validatedValue.Should().Be("1");
         }
 
@@ -761,7 +762,7 @@ namespace MudExtensions.UnitTests.Components
                 item.Click();
             }
 
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("Empty, One, 2, 3"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("Empty, One, 2, 3"));
         }
 
         /// <summary>
@@ -800,11 +801,11 @@ namespace MudExtensions.UnitTests.Components
             var items = comp.FindAll("div.mud-list-item-extended").ToArray();
             items[1].Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("2"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("2"));
             comp.Find("button").Should().NotBeNull();
             // Selection cleared and button removed after clicking clear button
             comp.Find("button").MouseDown();
-            comp.WaitForAssertion(() => select.Instance.Value.Should().BeNullOrEmpty());
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().BeNullOrEmpty());
             comp.FindAll("button").Should().BeEmpty();
             // Clear button click handler should have been invoked
             comp.Instance.ClearButtonClicked.Should().BeTrue();
@@ -826,7 +827,7 @@ namespace MudExtensions.UnitTests.Components
 
             input.Click();
             comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
-            select.Instance.Value.Should().Be("Apple");
+            select.Instance.GetState(x => x.Value).Should().Be("Apple");
             comp.Instance.ChangeCount.Should().Be(0);
 
             // now click an item and see the value change
@@ -835,7 +836,7 @@ namespace MudExtensions.UnitTests.Components
 
             // menu should be closed now
             comp.WaitForAssertion(() => menu.ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("Orange"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("Orange"));
             comp.Instance.ChangeCount.Should().Be(1);
 
             // now click an item and see the value change
@@ -844,7 +845,7 @@ namespace MudExtensions.UnitTests.Components
             items = comp.FindAll("div.mud-list-item-extended").ToArray();
             items[1].Click();
 
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("Orange"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("Orange"));
             comp.Instance.ChangeCount.Should().Be(1);
 
         }
@@ -860,8 +861,8 @@ namespace MudExtensions.UnitTests.Components
             // Select invalid option
             await comp.InvokeAsync(() => select.SelectOption("Quux"));
             // check initial state
-            select.Value.Should().Be("Quux");
-            select.Text.Should().Be("Quux");
+            select.GetState(x => x.Value).Should().Be("Quux");
+            select.GetState(x => x.Text).Should().Be("Quux");
             // check validity
             await comp.InvokeAsync(() => select.ValidateAsync());
             select.ValidationErrors.Should().NotBeEmpty();
@@ -879,8 +880,8 @@ namespace MudExtensions.UnitTests.Components
             // Select valid option
             await comp.InvokeAsync(() => select.SelectOption("Qux"));
             // check initial state
-            select.Value.Should().Be("Qux");
-            select.Text.Should().Be("Qux");
+            select.GetState(x => x.Value).Should().Be("Qux");
+            select.GetState(x => x.Text).Should().Be("Qux");
             // check validity
             await comp.InvokeAsync(() => select.ValidateAsync());
             select.ValidationErrors.Should().BeEmpty();
@@ -913,7 +914,7 @@ namespace MudExtensions.UnitTests.Components
             var input = comp.Find("div.mud-input-control");
 
             comp.Find("div.mud-popover").ClassList.Should().Contain("select-popover-class");
-            select.Instance.Value.Should().BeNullOrEmpty();
+            select.Instance.GetState(x => x.Value).Should().BeNullOrEmpty();
             comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open");
             // open the select
             comp.Find("div.mud-input-control").Click();
@@ -923,7 +924,7 @@ namespace MudExtensions.UnitTests.Components
             // now click an item and see the value change
             comp.FindAll("div.mud-list-item-extended")[1].Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("2"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("2"));
             // open again and check hilited option
             comp.Find("div.mud-input-control").Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
@@ -948,7 +949,7 @@ namespace MudExtensions.UnitTests.Components
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
             comp.Find("div.mud-popover").ClassList.Should().Contain("select-popover-class");
-            select.Instance.Value.Should().Be("2");
+            select.Instance.GetState(x => x.Value).Should().Be("2");
             comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open");
             // open the select
             comp.Find("div.mud-input-control").Click();
@@ -960,7 +961,7 @@ namespace MudExtensions.UnitTests.Components
             // now click an item and see the value change
             comp.FindAll("div.mud-list-item-extended")[0].Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("1"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("1"));
             // open again and check hilited option
             comp.Find("div.mud-input-control").Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
@@ -981,17 +982,17 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
             comp.FindAll("div.mud-list-item-extended")[0].Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("American Samoa"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("American Samoa"));
             comp.Find("div.mud-input-control").Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
             comp.FindAll("div.mud-list-item-extended")[1].Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("Arizona"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("Arizona"));
             comp.Find("div.mud-input-control").Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
             comp.FindAll("div.mud-list-item-extended")[2].Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("Arkansas"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("Arkansas"));
             // reloading!
             comp.Find(".reload").Click();
             // check again, different values expected now
@@ -999,17 +1000,17 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
             comp.FindAll("div.mud-list-item-extended")[0].Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("Alabama"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("Alabama"));
             comp.Find("div.mud-input-control").Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
             comp.FindAll("div.mud-list-item-extended")[1].Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("Alaska"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("Alaska"));
             comp.Find("div.mud-input-control").Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
             comp.FindAll("div.mud-list-item-extended")[2].Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Instance.Value.Should().Be("American Samoa"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("American Samoa"));
         }
 
         [Test]
@@ -1064,7 +1065,7 @@ namespace MudExtensions.UnitTests.Components
             //If we didn't select an item with mouse or arrow keys yet, value should remains null.
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Value.Should().Be(null));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be(null));
 
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", AltKey = true, Type = "keydown", }));
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
@@ -1074,61 +1075,61 @@ namespace MudExtensions.UnitTests.Components
             //If dropdown is closed, arrow key should not set a value.
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Value.Should().Be(null));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be(null));
             // If no item is hiligted, enter should only close popover, not select any item and value
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "NumpadEnter", Type = "keydown", }));
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Value.Should().Be(null));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be(null));
 
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowUp", Type = "keydown", }));
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
 
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Value.Should().BeNull());
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().BeNull());
 
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Value.Should().Be("2"));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be("2"));
             //End key should not select the last disabled item
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "End", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Value.Should().Be("3"));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be("3"));
 
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => select.Value.Should().Be("3"));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be("3"));
 
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Value.Should().Be("3"));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be("3"));
 
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Home", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Value.Should().Be("1"));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be("1"));
             //Arrow up should select still the first item
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowUp", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Value.Should().Be("1"));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be("1"));
 
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "End", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Value.Should().Be("3"));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be("3"));
 
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "2", Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Value.Should().Be("3"));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be("3"));
 
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Value.Should().Be("2"));
+            comp.WaitForAssertion(() => select.GetState(x => x.Value).Should().Be("2"));
             comp.WaitForAssertion(() => select.SelectedValues.Should().HaveCount(1));
 
             await comp.InvokeAsync(() => select.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
@@ -1150,17 +1151,17 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
 
             await comp.InvokeAsync(() => select.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "a", CtrlKey = true, Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("7 felines have been selected"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("7 felines have been selected"));
 
             await comp.InvokeAsync(() => select.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "A", CtrlKey = true, Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("0 feline has been selected"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("0 feline has been selected"));
 
             await comp.InvokeAsync(() => select.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
             await comp.InvokeAsync(() => select.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("1 feline has been selected"));
+            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Text).Should().Be("1 feline has been selected"));
 
             await comp.InvokeAsync(() => select.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "A", CtrlKey = true, Type = "keydown", }));
-            comp.WaitForAssertion(() => select.Instance.Text.Should().Be("7 felines have been selected"));
+            comp.WaitForAssertion(() => select.Instance.GetState<string>("Text").Should().Be("7 felines have been selected"));
 
             await comp.InvokeAsync(() => select.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Escape", Type = "keydown", }));
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
@@ -1213,7 +1214,7 @@ namespace MudExtensions.UnitTests.Components
             await comp.InvokeAsync(() => comp.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "End", Type = "keydown", }));
             await comp.InvokeAsync(() => comp.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             comp.WaitForAssertion(() => comp.Instance.SelectedValues.Should().HaveCount(0));
-            comp.WaitForAssertion(() => comp.Instance.Value.Should().Be(null));
+            comp.WaitForAssertion(() => comp.Instance.GetState(x => x.Value).Should().Be(null));
         }
 
         [Test]
@@ -1325,13 +1326,13 @@ namespace MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<MultiSelectTest5>();
             var select = comp.FindComponent<MudSelectExtended<string>>().Instance;
             select.SelectedValues?.Count().Should().Be(2);
-            select.Text.Should().Be("Programista, test");
+            select.GetState(x => x.Text).Should().Be("Programista, test");
             await comp.InvokeAsync(() =>
             {
                 select.SelectedValues = new List<string> { "test" };
             });
             select.SelectedValues?.Count().Should().Be(1);
-            select.Text.Should().Be("test");
+            select.GetState(x => x.Text).Should().Be("test");
         }
 
         [Test]

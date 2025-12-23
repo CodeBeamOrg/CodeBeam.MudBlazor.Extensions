@@ -43,7 +43,7 @@ namespace MudExtensions
         /// The parent select component
         /// </summary>
         [CascadingParameter]
-        MudComboBox<T> MudComboBox { get; set; }
+        MudComboBox<T> MudComboBox { get; set; } = null!;
 
         /// <summary>
         /// Prevents the user from interacting with this item.

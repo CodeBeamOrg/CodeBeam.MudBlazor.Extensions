@@ -2,14 +2,14 @@
 @typeparam T
 @inherits MudFormComponent<T, string>
 
-<MudInputControl Class="@Class" Style="@Style" Error="@Error" ErrorText="@ErrorText" Required="false">
+<MudInputControl Class="@Class" Style="@Style" Error="@ErrorState.Value" ErrorText="@GetErrorText()" Required="false">
     <InputContent>
         <div class="@Classname" style="@InnerStyle">
             @for (int i = 0; i < Count; i++)
             {
                 int a = i;
                 <MudTextFieldExtended @ref="_elementReferences[a]" T="T" Class="@InputClassname" Style="@(Margin == Margin.Dense ? "width: 32px" : "width: 42px")" MaxLength="1"
-                                      @onkeydown="HandleKeyDown" @onfocus="@(() => CheckFocus(a))" @onblur="SetValue" OnInput="OnInputHandler" Error="@Error"
+                                      @onkeydown="HandleKeyDown" @onfocus="@(() => CheckFocus(a))" @onblur="SetValue" OnInput="OnInputHandler" Error="@ErrorState.Value"
                                       Variant="@Variant" Margin="@Margin" Disabled="Disabled" ReadOnly="ReadOnly" Immediate="true" InputType="InputType" />
             }
         </div>

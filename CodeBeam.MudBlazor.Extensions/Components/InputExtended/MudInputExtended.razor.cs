@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using MudBlazor;
-using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -19,7 +18,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string? Classname => MudInputCssHelperExtended.GetClassname(this,
-            () => HasNativeHtmlPlaceholder() || ShrinkLabel == true || !string.IsNullOrEmpty(Text) || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(base.ConvertSet(Value)));
+            () => HasNativeHtmlPlaceholder() || ShrinkLabel == true || !string.IsNullOrEmpty(ReadText) || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(base.ConvertSet(ReadValue)));
 
         /// <summary>
         /// 
@@ -107,7 +106,6 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public InputType InputType { get; set; } = InputType.Text;
 
-        internal override InputType GetInputType() => InputType;
 
         /// <summary>
         /// 
@@ -133,6 +131,11 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         protected async Task OnInputHandler(string? args)
         {
             _isFocused = true;
@@ -141,6 +144,11 @@ namespace MudExtensions
             await SetTextAndUpdateValueAsync(args);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         protected async Task OnChangeHandler(string? args)
         {
             _internalText = args;
@@ -304,7 +312,7 @@ namespace MudExtensions
                 Clearable = showClearable;
         }
 
-        private bool GetClearable() => Clearable && ((Value is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (Value is not string && Value is not null));
+        private bool GetClearable() => Clearable && ((ReadValue is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (ReadValue is not string && ReadValue is not null));
 
         /// <summary>
         /// 
@@ -315,7 +323,7 @@ namespace MudExtensions
         {
             await base.UpdateTextPropertyAsync(updateValue);
             if (Clearable)
-                UpdateClearable(Text);
+                UpdateClearable(ReadText);
         }
 
         /// <summary>
@@ -327,7 +335,7 @@ namespace MudExtensions
         {
             await base.UpdateValuePropertyAsync(updateText);
             if (Clearable)
-                UpdateClearable(Value);
+                UpdateClearable(ReadValue);
         }
 
         /// <summary>
@@ -337,7 +345,7 @@ namespace MudExtensions
         /// <returns></returns>
         protected virtual async Task ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
-            await SetTextAsync(string.Empty, updateValue: true);
+            await SetTextAndUpdateValueAsync(string.Empty, updateValue: true);
             await ElementReference.FocusAsync();
             await OnClearButtonClick.InvokeAsync(e);
         }
@@ -354,18 +362,7 @@ namespace MudExtensions
             await base.SetParametersAsync(parameters);
             //if (!_isFocused || _forceTextUpdate)
             //    _internalText = Text;
-            if (RuntimeLocation.IsServerSide && TextUpdateSuppression)
-            {
-                // Text update suppression, only in BSS (not in WASM).
-                // This is a fix for #1012
-                if (!_isFocused || _forceTextUpdate)
-                    _internalText = Text;
-            }
-            else
-            {
-                // in WASM (or in BSS with TextUpdateSuppression==false) we always update
-                _internalText = Text;
-            }
+            _internalText = ReadText;
         }
 
         /// <summary>
@@ -380,12 +377,23 @@ namespace MudExtensions
         }
 
 
-        // Certain HTML5 inputs (dates and color) have a native placeholder
-        private bool HasNativeHtmlPlaceholder()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool HasNativeHtmlPlaceholder()
         {
-            return GetInputType() is InputType.Color or InputType.Date or InputType.DateTimeLocal or InputType.Month
-                or InputType.Time or InputType.Week;
+            return InputType switch
+            {
+                InputType.Color => true,
+                InputType.Date => true,
+                InputType.DateTimeLocal => true,
+                InputType.Month => true,
+                InputType.Time => true,
+                InputType.Week => true,
+                _ => false
+            };
         }
-    }
 
+    }
 }

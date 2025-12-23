@@ -10,6 +10,7 @@ using MudExtensions;
 using NUnit.Framework;
 using MudBlazor;
 using MudExtensions.UnitTests.Extensions;
+using MudBlazor.Extensions;
 
 namespace MudExtensions.UnitTests.Components
 {
@@ -32,9 +33,9 @@ namespace MudExtensions.UnitTests.Components
             });
             var combobox = comp.FindComponent<MudComboBox<string?>>();
 
-            combobox.Instance.Value.Should().Be("1");
+            combobox.Instance.GetState(x => x.Value).Should().Be("1");
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string?>() { "1" });
-            combobox.Instance.Text.Should().Be("1");
+            combobox.Instance.GetState(x => x.Text).Should().Be("1");
         }
 
         // Note: MudSelect doesn't guaranteed the consequences of changing SelectedValues if MultiSelection is false for now.
@@ -51,9 +52,9 @@ namespace MudExtensions.UnitTests.Components
             });
             var combobox = comp.FindComponent<MudComboBox<string>>();
 
-            combobox.Instance.Value.Should().Be("1");
+            combobox.Instance.GetState(x => x.Value).Should().Be("1");
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
-            combobox.Instance.Text.Should().Be("1");
+            combobox.Instance.GetState(x => x.Text).Should().Be("1");
         }
 
         [Test]
@@ -62,21 +63,21 @@ namespace MudExtensions.UnitTests.Components
             var comp = Context.RenderComponent<ComboBoxInitialValueTest>();
             var combobox = comp.FindComponent<MudComboBox<string>>();
 
-            combobox.Instance.Value.Should().BeNull();
-            combobox.Instance.Text.Should().BeNull();
+            combobox.Instance.GetState(x => x.Value).Should().BeNull();
+            combobox.Instance.GetState(x => x.Text).Should().BeNull();
 
             comp.SetParam("SelectedValue", "1");
             await comp.InvokeAsync(() => combobox.Instance.ForceUpdate());
-            comp.WaitForAssertion(() => combobox.Instance.Value.Should().Be("1"));
+            comp.WaitForAssertion(() => combobox.Instance.GetState(x => x.Value).Should().Be("1"));
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
-            combobox.Instance.Text.Should().Be("1");
+            combobox.Instance.GetState(x => x.Text).Should().Be("1");
 
             comp.SetParam("SelectedValue", "2");
-            comp.WaitForAssertion(() => combobox.Instance.Value.Should().Be("2"));
+            comp.WaitForAssertion(() => combobox.Instance.GetState(x => x.Value).Should().Be("2"));
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
             await comp.InvokeAsync(() => combobox.Instance.ForceUpdate());
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2" });
-            combobox.Instance.Text.Should().Be("2");
+            combobox.Instance.GetState(x => x.Text).Should().Be("2");
         }
 
         [Test]
@@ -88,18 +89,18 @@ namespace MudExtensions.UnitTests.Components
             });
             var combobox = comp.FindComponent<MudComboBox<string>>();
 
-            combobox.Instance.Value.Should().BeNull();
-            combobox.Instance.Text.Should().BeNullOrEmpty();
+            combobox.Instance.GetState(x => x.Value).Should().BeNull();
+            combobox.Instance.GetState(x => x.Text).Should().BeNullOrEmpty();
 
             comp.SetParam("SelectedValues", new HashSet<string>() { "1" });
-            combobox.Instance.Value.Should().Be(null);
+            combobox.Instance.GetState(x => x.Value).Should().Be(null);
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
-            combobox.Instance.Text.Should().Be(null);
+            combobox.Instance.GetState(x => x.Text).Should().Be(null);
 
             comp.SetParam("SelectedValues", new HashSet<string>() { "2", "1" });
-            combobox.Instance.Value.Should().Be(null);
+            combobox.Instance.GetState(x => x.Value).Should().Be(null);
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2", "1" });
-            combobox.Instance.Text.Should().Be(null);
+            combobox.Instance.GetState(x => x.Text).Should().Be(null);
         }
 
         [Test]
@@ -119,14 +120,14 @@ namespace MudExtensions.UnitTests.Components
             await comp.InvokeAsync(() => combobox.Instance.ForceUpdate());
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
             comp.Instance.ValuesChangeCount.Should().Be(1);
-            combobox.Instance.Value.Should().Be("1");
+            combobox.Instance.GetState(x => x.Value).Should().Be("1");
 
             // Changing value programmatically without ForceUpdate should change value, but should not fire change events
             // Its by design, so this part can be change if design changes
             await comp.InvokeAsync(() => combobox.SetParam("Value", "2"));
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
             comp.Instance.ValuesChangeCount.Should().Be(1);
-            combobox.Instance.Value.Should().Be("2");
+            combobox.Instance.GetState(x => x.Value).Should().Be("2");
         }
 
         [Test]
@@ -168,7 +169,7 @@ namespace MudExtensions.UnitTests.Components
             // check popover class
             menu.ClassList.Should().Contain("combobox-popover-class");
             // check initial state
-            combobox.Instance.Value.Should().BeNullOrEmpty();
+            combobox.Instance.GetState(x => x.Value).Should().BeNullOrEmpty();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
             // click and check if it has toggled the menu
             input.Click();
@@ -179,7 +180,7 @@ namespace MudExtensions.UnitTests.Components
             items[1].Click();
             // menu should be closed now
             comp.WaitForAssertion(() => menu.ClassList.Should().Contain("d-none"));
-            combobox.Instance.Value.Should().Be("2");
+            combobox.Instance.GetState(x => x.Value).Should().Be("2");
             // now we cheat and click the list without opening the menu ;)
 
             input.Click();
@@ -187,12 +188,12 @@ namespace MudExtensions.UnitTests.Components
             items = comp.FindAll("div.mud-combobox-item").ToArray();
 
             items[0].Click();
-            comp.WaitForAssertion(() => combobox.Instance.Value.Should().Be("1"));
+            comp.WaitForAssertion(() => combobox.Instance.GetState(x => x.Value).Should().Be("1"));
             //Check user on blur implementation works
             var @switch = comp.FindComponent<MudSwitch<bool>>();
             @switch.Instance.Value = true;
             await comp.InvokeAsync(() => combobox.Instance.HandleOnBlur(new FocusEventArgs()));
-            comp.WaitForAssertion(() => @switch.Instance.Value.Should().Be(false));
+            comp.WaitForAssertion(() => @switch.Instance.GetState(x => x.Value).Should().Be(false));
         }
 
         [Test]
@@ -211,11 +212,11 @@ namespace MudExtensions.UnitTests.Components
             var items = comp.FindAll("div.mud-combobox-item").ToArray();
             items[1].Click();
             //comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
-            comp.WaitForAssertion(() => combobox.Instance.Value.Should().Be("2"));
+            comp.WaitForAssertion(() => combobox.Instance.GetState(x => x.Value).Should().Be("2"));
             comp.Find("button").Should().NotBeNull();
             // Selection cleared and button removed after clicking clear button
             comp.Find("button").MouseDown();
-            comp.WaitForAssertion(() => combobox.Instance.Value.Should().BeNullOrEmpty());
+            comp.WaitForAssertion(() => combobox.Instance.GetState(x => x.Value).Should().BeNullOrEmpty());
             comp.FindAll("button").Should().BeEmpty();
             // Clear button click handler should have been invoked
             comp.Instance.ClearButtonClicked.Should().BeTrue();
@@ -255,7 +256,7 @@ namespace MudExtensions.UnitTests.Components
             var menu = comp.Find("div.mud-popover");
             var input = combobox.Find("div.mud-input-control");
             // check initial state
-            combobox.Instance.Value.Should().BeNullOrEmpty();
+            combobox.Instance.GetState(x => x.Value).Should().BeNullOrEmpty();
             comp.WaitForAssertion(() =>
                 comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
             // click and check if it has toggled the menu
@@ -285,7 +286,7 @@ namespace MudExtensions.UnitTests.Components
             var menu = comp.Find("div.mud-popover");
             var input = combobox.Find("div.mud-input-control");
             // check initial state
-            combobox.Instance.Value.Should().BeNullOrEmpty();
+            combobox.Instance.GetState(x => x.Value).Should().BeNullOrEmpty();
             comp.WaitForAssertion(() =>
                 comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
             // click and check if it has toggled the menu
@@ -356,7 +357,7 @@ namespace MudExtensions.UnitTests.Components
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = " ", Type = "keydown", }));
             comp.Render();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be(null));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be(null));
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", AltKey = true, Type = "keydown", }));
             comp.Render();
@@ -369,28 +370,28 @@ namespace MudExtensions.UnitTests.Components
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
             comp.Render();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none"));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be(null));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be(null));
             // If no item is hiligted, enter should only close popover, not select any item and value
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Escape", Type = "keydown", }));
             comp.Render();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be(null));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be(null));
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             comp.Render();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none"));
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
-            comp.WaitForAssertion(() => combobox.Value.Should().BeNull());
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().BeNull());
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be("3"));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be("3"));
             //End key should not select the last disabled item
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "End", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() =>  combobox.Value.Should().Be("3"));
+            comp.WaitForAssertion(() =>  combobox.GetState(x => x.Value).Should().Be("3"));
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
@@ -398,35 +399,35 @@ namespace MudExtensions.UnitTests.Components
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             comp.Render();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be("1"));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be("1"));
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be("2"));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be("2"));
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Home", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be("1"));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be("1"));
             //Arrow up should select still the first item
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowUp", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be("3"));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be("3"));
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "End", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be("1"));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be("1"));
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "2", Type = "keydown", }));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be("1"));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be("1"));
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be("2"));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be("2"));
         }
 
         [Test]
@@ -440,15 +441,15 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none"));
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
-            comp.WaitForAssertion(() => combobox.Value.Should().BeNull());
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().BeNull());
 
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "ArrowDown", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => combobox.Value.Should().Be("3"));
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be("3"));
             //End key should not select the last disabled item
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
-            comp.WaitForAssertion(() => combobox.Value.Should().BeNull());
+            comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().BeNull());
         }
 
         [Test]

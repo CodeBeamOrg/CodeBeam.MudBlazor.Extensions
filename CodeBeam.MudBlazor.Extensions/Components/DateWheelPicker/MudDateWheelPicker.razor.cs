@@ -12,7 +12,10 @@ namespace MudExtensions
     /// </summary>
     public partial class MudDateWheelPicker : MudBaseInput<DateTime?>
     {
-        MudDateWheelPicker()
+        /// <summary>
+        /// 
+        /// </summary>
+        public MudDateWheelPicker()
         {
             Converter = Conversions.From((DateTime? x) => x?.ToString(DateFormat), x => DateTime.TryParseExact(x, DateFormat, null, DateTimeStyles.None, out DateTime dt) ? dt : null);
         }
@@ -172,7 +175,7 @@ namespace MudExtensions
         [Parameter]
         public DateWheelPickerLocalizedStrings LocalizedStrings { get; set; } = new();
 
-        private string GetCounterText() => Counter == null ? string.Empty : (Counter == 0 ? (string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") : ((string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") + $" / {Counter}"));
+        private string GetCounterText() => Counter == null ? string.Empty : (Counter == 0 ? (string.IsNullOrEmpty(ReadText) ? "0" : $"{ReadText.Length}") : ((string.IsNullOrEmpty(ReadText) ? "0" : $"{ReadText.Length}") + $" / {Counter}"));
 
         /// <summary>
         /// Show clear button.
@@ -292,7 +295,7 @@ namespace MudExtensions
         /// <returns></returns>
         protected async Task UpdateValueAsync(bool updateText = true)
         {
-            var _backUpValue = Value;
+            var _backUpValue = ReadValue;
             try
             {
                 await SetValueAndUpdateTextAsync(new DateTime(_year, _month, _day, _hour, _minute, _second), updateText);
@@ -480,16 +483,16 @@ namespace MudExtensions
         /// </summary>
         protected void SetWheelValues()
         {
-            if (Value == null)
+            if (ReadValue == null)
             {
                 return;
             }
-            _day = Value.Value.Day;
-            _month = Value.Value.Month;
-            _year = Value.Value.Year;
-            _hour = Value.Value.Hour;
-            _minute = Value.Value.Minute;
-            _second = Value.Value.Second;
+            _day = ReadValue.Value.Day;
+            _month = ReadValue.Value.Month;
+            _year = ReadValue.Value.Year;
+            _hour = ReadValue.Value.Hour;
+            _minute = ReadValue.Value.Minute;
+            _second = ReadValue.Value.Second;
 
             RefreshDays();
         }

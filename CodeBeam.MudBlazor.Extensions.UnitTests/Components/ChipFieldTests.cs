@@ -1,8 +1,9 @@
-﻿using MudExtensions.Docs.Examples;
+﻿using Bunit;
 using FluentAssertions;
-using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using MudBlazor.Extensions;
+using MudExtensions.Docs.Examples;
 
 namespace MudExtensions.UnitTests.Components
 {
@@ -20,7 +21,7 @@ namespace MudExtensions.UnitTests.Components
             field.Find("input").Input(new ChangeEventArgs() { Value = "sdfg" });
             await comp.InvokeAsync(() => comp.Instance.HandleKeyDown(new KeyboardEventArgs() { Key = " " }));
             comp.Instance.Values.Should().BeEquivalentTo(new List<string> { "asdf", "asd", "sdfg" });
-            comp.Instance.Value.Should().BeEquivalentTo(null);
+            comp.Instance.GetState(x => x.Value).Should().BeEquivalentTo(null);
         }
     }
 }
