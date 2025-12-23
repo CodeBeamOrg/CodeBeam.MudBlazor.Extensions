@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using MudExtensions.Docs.Pages;
 
 namespace MudExtensions.UnitTests.Components
@@ -9,77 +9,77 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void ApiPageRenderTest()
         {
-            var comp = Context.RenderComponent<ApiPage>();
+            var comp = Context.Render<ApiPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 
         [Test]
         public void AnimatePageRenderTest()
         {
-            var comp = Context.RenderComponent<AnimatePage>();
+            var comp = Context.Render<AnimatePage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 
         [Test]
         public void ComboBoxPageRenderTest()
         {
-            var comp = Context.RenderComponent<ComboBoxPage>();
+            var comp = Context.Render<ComboBoxPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 
         [Test]
         public void WheelDatePickerPageRenderTest()
         {
-            var comp = Context.RenderComponent<DateWheelPickerPage>();
+            var comp = Context.Render<DateWheelPickerPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 
         [Test]
         public void SpeedDialPageRenderTest()
         {
-            var comp = Context.RenderComponent<SpeedDialPage>();
+            var comp = Context.Render<SpeedDialPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 
         [Test]
         public void SplitterPageRenderTest()
         {
-            var comp = Context.RenderComponent<SplitterPage>();
+            var comp = Context.Render<SplitterPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 
         [Test]
         public void StepperPageRenderTest()
         {
-            var comp = Context.RenderComponent<StepperExtendedPage>();
+            var comp = Context.Render<StepperExtendedPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 
         [Test]
         public void ListExtendedPageRenderTest()
         {
-            var comp = Context.RenderComponent<ListExtendedPage>();
+            var comp = Context.Render<ListExtendedPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 
         [Test]
         public void SelectExtendedPageRenderTest()
         {
-            var comp = Context.RenderComponent<SelectExtendedPage>();
+            var comp = Context.Render<SelectExtendedPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 
         [Test]
         public void TextFieldExtendedPageRenderTest()
         {
-            var comp = Context.RenderComponent<TextFieldExtendedPage>();
+            var comp = Context.Render<TextFieldExtendedPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
 
         [Test]
         public void TransferListPageRenderTest()
         {
-            var comp = Context.RenderComponent<TransferListPage>();
+            var comp = Context.Render<TransferListPage>();
             comp.Markup.Should().NotBeNullOrEmpty();
         }
     }

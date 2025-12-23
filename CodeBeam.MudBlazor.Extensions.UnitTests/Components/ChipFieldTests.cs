@@ -1,5 +1,5 @@
 ﻿using Bunit;
-using FluentAssertions;
+using AwesomeAssertions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor.Extensions;
@@ -13,7 +13,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ChipFieldBasicTest()
         {
-            var comp = Context.RenderComponent<MudChipField<string>>(opt =>
+            var comp = Context.Render<MudChipField<string>>(opt =>
             {
                 opt.Add(a => a.Values, new List<string> { "asdf", "asd" });
             });

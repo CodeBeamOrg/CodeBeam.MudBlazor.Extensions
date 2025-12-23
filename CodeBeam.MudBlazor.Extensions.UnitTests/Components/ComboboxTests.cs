@@ -4,10 +4,8 @@
 
 using Bunit;
 using MudExtensions.UnitTests.TestComponents;
-using FluentAssertions;
+using AwesomeAssertions;
 using Microsoft.AspNetCore.Components.Web;
-using MudExtensions;
-using NUnit.Framework;
 using MudBlazor;
 using MudExtensions.UnitTests.Extensions;
 using MudBlazor.Extensions;
@@ -26,7 +24,7 @@ namespace MudExtensions.UnitTests.Components
         //[TestCase(true)]
         public void ComboBox_InitialValueTest(bool multiSelection)
         {
-            var comp = Context.RenderComponent<ComboBoxInitialValueTest>(x =>
+            var comp = Context.Render<ComboBoxInitialValueTest>(x =>
             {
                 x.Add(c => c.SelectedValue, "1");
                 x.Add(c => c.MultiSelection, multiSelection);
@@ -45,7 +43,7 @@ namespace MudExtensions.UnitTests.Components
         [TestCase(true)]
         public void ComboBox_InitialValuesTest(bool multiSelection)
         {
-            var comp = Context.RenderComponent<ComboBoxInitialValueTest>(x =>
+            var comp = Context.Render<ComboBoxInitialValueTest>(x =>
             {
                 x.Add(c => c.SelectedValues, new HashSet<string>() { "1" });
                 x.Add(c => c.MultiSelection, multiSelection);
@@ -60,19 +58,19 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ComboBox_ValueBubblingTest()
         {
-            var comp = Context.RenderComponent<ComboBoxInitialValueTest>();
+            var comp = Context.Render<ComboBoxInitialValueTest>();
             var combobox = comp.FindComponent<MudComboBox<string>>();
 
             combobox.Instance.GetState(x => x.Value).Should().BeNull();
             combobox.Instance.GetState(x => x.Text).Should().BeNull();
 
-            comp.SetParam("SelectedValue", "1");
+            comp.Render(p => p.Add(x => x.SelectedValue, "1"));
             await comp.InvokeAsync(() => combobox.Instance.ForceUpdate());
             comp.WaitForAssertion(() => combobox.Instance.GetState(x => x.Value).Should().Be("1"));
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
             combobox.Instance.GetState(x => x.Text).Should().Be("1");
 
-            comp.SetParam("SelectedValue", "2");
+            comp.Render(p => p.Add(x => x.SelectedValue, "2"));
             comp.WaitForAssertion(() => combobox.Instance.GetState(x => x.Value).Should().Be("2"));
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
             await comp.InvokeAsync(() => combobox.Instance.ForceUpdate());
@@ -83,7 +81,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void ComboBox_ValueBubblingTest_MultiSelection()
         {
-            var comp = Context.RenderComponent<ComboBoxInitialValueTest>(x =>
+            var comp = Context.Render<ComboBoxInitialValueTest>(x =>
             {
                 x.Add(c => c.MultiSelection, true);
             });
@@ -92,12 +90,12 @@ namespace MudExtensions.UnitTests.Components
             combobox.Instance.GetState(x => x.Value).Should().BeNull();
             combobox.Instance.GetState(x => x.Text).Should().BeNullOrEmpty();
 
-            comp.SetParam("SelectedValues", new HashSet<string>() { "1" });
+            comp.Render(p => p.Add(x => x.SelectedValues, new HashSet<string>() { "1" }));
             combobox.Instance.GetState(x => x.Value).Should().Be(null);
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
             combobox.Instance.GetState(x => x.Text).Should().Be(null);
 
-            comp.SetParam("SelectedValues", new HashSet<string>() { "2", "1" });
+            comp.Render(p => p.Add(x => x.SelectedValues, new HashSet<string>() { "2", "1" }));
             combobox.Instance.GetState(x => x.Value).Should().Be(null);
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2", "1" });
             combobox.Instance.GetState(x => x.Text).Should().Be(null);
@@ -106,7 +104,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ComboBox_ValueChangeEventCountTest()
         {
-            var comp = Context.RenderComponent<ComboBoxEventCountTest>(x =>
+            var comp = Context.Render<ComboBoxEventCountTest>(x =>
             {
                 x.Add(c => c.MultiSelection, false);
             });
@@ -116,7 +114,7 @@ namespace MudExtensions.UnitTests.Components
             comp.Instance.ValueChangeCount.Should().Be(0);
             comp.Instance.ValuesChangeCount.Should().Be(0);
 
-            await comp.InvokeAsync(() => combobox.SetParam("Value", "1"));
+            await comp.InvokeAsync(() => combobox.Render(p => p.Add(x => x.Value, "1")));
             await comp.InvokeAsync(() => combobox.Instance.ForceUpdate());
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
             comp.Instance.ValuesChangeCount.Should().Be(1);
@@ -124,7 +122,7 @@ namespace MudExtensions.UnitTests.Components
 
             // Changing value programmatically without ForceUpdate should change value, but should not fire change events
             // Its by design, so this part can be change if design changes
-            await comp.InvokeAsync(() => combobox.SetParam("Value", "2"));
+            await comp.InvokeAsync(() => combobox.Render(p => p.Add(x => x.Value, "2")));
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
             comp.Instance.ValuesChangeCount.Should().Be(1);
             combobox.Instance.GetState(x => x.Value).Should().Be("2");
@@ -133,7 +131,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ComboBox_ValueChangeEventCountTest_MultiSelection()
         {
-            var comp = Context.RenderComponent<ComboBoxEventCountTest>(x =>
+            var comp = Context.Render<ComboBoxEventCountTest>(x =>
             {
                 x.Add(c => c.MultiSelection, true);
             });
@@ -142,13 +140,13 @@ namespace MudExtensions.UnitTests.Components
             comp.Instance.ValueChangeCount.Should().Be(0);
             comp.Instance.ValuesChangeCount.Should().Be(0);
 
-            await comp.InvokeAsync(() => combobox.SetParam("SelectedValues", new HashSet<string>() { "1" }));
+            await comp.InvokeAsync(() => combobox.Render(p => p.Add(x => x.SelectedValues, new HashSet<string>() { "1" })));
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(0));
             comp.WaitForAssertion(() => comp.Instance.ValuesChangeCount.Should().Be(1));
 
 
             // Setting same value should not fire events
-            await comp.InvokeAsync(() => combobox.SetParam("SelectedValues", new HashSet<string>() { "1" }));
+            await comp.InvokeAsync(() => combobox.Render(p => p.Add(x => x.SelectedValues, new HashSet<string>() { "1" })));
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(0));
             comp.Instance.ValuesChangeCount.Should().Be(1);
         }
@@ -159,7 +157,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ComboBoxTest1()
         {
-            var comp = Context.RenderComponent<ComboBoxTest1>();
+            var comp = Context.Render<ComboBoxTest1>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -199,7 +197,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ComboBoxClearableTest()
         {
-            var comp = Context.RenderComponent<ComboBoxClearableTest>();
+            var comp = Context.Render<ComboBoxClearableTest>();
             var combobox = comp.FindComponent<MudComboBox<string>>();
             var input = comp.Find("div.mud-input-control");
 
@@ -225,7 +223,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void MultiSelect_SelectAll()
         {
-            var comp = Context.RenderComponent<ComboBoxMultiSelectTest2>();
+            var comp = Context.Render<ComboBoxMultiSelectTest2>();
             // select element needed for the test
             var combobox = comp.FindComponent<MudComboBox<string>>();
             var menu = comp.Find("div.mud-popover");
@@ -248,7 +246,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ComboBox_MultiSelectEditable()
         {
-            var comp = Context.RenderComponent<ComboBoxMultiSelectEditableTest>();
+            var comp = Context.Render<ComboBoxMultiSelectEditableTest>();
             // print the generated html
             Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -278,7 +276,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ComboBox_MultiSelectTest1()
         {
-            var comp = Context.RenderComponent<ComboBoxMultiSelectTest1>();
+            var comp = Context.Render<ComboBoxMultiSelectTest1>();
             // print the generated html
             Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -336,7 +334,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ComboBoxTest_KeyboardNavigation_SingleSelect()
         {
-            var comp = Context.RenderComponent<ComboBoxTest1>();
+            var comp = Context.Render<ComboBoxTest1>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -433,7 +431,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ComboBoxTest_KeyboardNavigation_ToggleSelect()
         {
-            var comp = Context.RenderComponent<ComboBoxTest1>();
+            var comp = Context.Render<ComboBoxTest1>();
             var combobox = comp.FindComponent<MudComboBox<string>>().Instance;
             combobox.ToggleSelection = true;
             await comp.InvokeAsync(() => combobox.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
@@ -455,7 +453,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ComboBoxTest_KeyboardNavigation_MultiSelect()
         {
-            var comp = Context.RenderComponent<ComboBoxMultiSelectTest3>();
+            var comp = Context.Render<ComboBoxMultiSelectTest3>();
             var combobox = comp.FindComponent<MudComboBox<string>>();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
 
@@ -500,11 +498,11 @@ namespace MudExtensions.UnitTests.Components
             await comp.InvokeAsync(() => combobox.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             comp.WaitForAssertion(() => combobox.Instance.SelectedValues.Should().NotContain("Tiger"));
 
-            combobox.SetParam("Disabled", true);
+            await comp.InvokeAsync(() => combobox.Render(p => p.Add(x => x.Disabled, true)));
             await comp.InvokeAsync(() => combobox.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             comp.WaitForAssertion(() => combobox.Instance.SelectedValues.Should().NotContain("Tiger"));
 
-            combobox.SetParam("Disabled", false);
+            await comp.InvokeAsync(() => combobox.Render(p => p.Add(x => x.Disabled, false)));
             //Test the keyup event
             await comp.InvokeAsync(() => combobox.Instance.HandleKeyUpAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keyup", }));
             comp.WaitForAssertion(() => combobox.Instance.SelectedValues.Should().NotContain("Tiger"));

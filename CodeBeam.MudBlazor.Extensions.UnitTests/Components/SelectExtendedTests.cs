@@ -4,7 +4,7 @@
 
 using Bunit;
 using MudExtensions.UnitTests.TestComponents;
-using FluentAssertions;
+using AwesomeAssertions;
 using Microsoft.AspNetCore.Components.Web;
 using MudExtensions;
 using NUnit.Framework;
@@ -24,7 +24,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void SelectLabelFor()
         {
-            var comp = Context.RenderComponent<SelectRequiredTest>();
+            var comp = Context.Render<SelectRequiredTest>();
             var label = comp.FindAll(".mud-input-label");
             label[0].Attributes.GetNamedItem("for")?.Value.Should().Be("selectLabelTest");
         }
@@ -36,7 +36,7 @@ namespace MudExtensions.UnitTests.Components
         //[TestCase(true)]
         public void Select_InitialValueTest(bool multiSelection)
         {
-            var comp = Context.RenderComponent<SelectInitialValueTest>(x =>
+            var comp = Context.Render<SelectInitialValueTest>(x =>
             {
                 x.Add(c => c.SelectedValue, "1");
                 x.Add(c => c.MultiSelection, multiSelection);
@@ -55,7 +55,7 @@ namespace MudExtensions.UnitTests.Components
         [TestCase(true)]
         public void Select_InitialValuesTest(bool multiSelection)
         {
-            var comp = Context.RenderComponent<SelectInitialValueTest>(x =>
+            var comp = Context.Render<SelectInitialValueTest>(x =>
             {
                 x.Add(c => c.SelectedValues, new HashSet<string>() { "1" });
                 x.Add(c => c.MultiSelection, multiSelection);
@@ -70,19 +70,19 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task Select_ValueBubblingTest()
         {
-            var comp = Context.RenderComponent<SelectInitialValueTest>();
+            var comp = Context.Render<SelectInitialValueTest>();
             var select = comp.FindComponent<MudSelectExtended<string>>();
 
             select.Instance.GetState(x => x.Value).Should().BeNull();
             select.Instance.GetState(x => x.Text).Should().BeNull();
 
-            comp.SetParam("SelectedValue", "1");
+            comp.Render(p => p.Add(x => x.SelectedValue, "1"));
             await comp.InvokeAsync(() => select.Instance.ForceUpdate());
             comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("1"));
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
             select.Instance.GetState(x => x.Text).Should().Be("1");
 
-            comp.SetParam("SelectedValue", "2");
+            comp.Render(p => p.Add(x => x.SelectedValue, "2"));
             await comp.InvokeAsync(() => select.Instance.ForceUpdate());
             comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("2"));
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2" });
@@ -92,7 +92,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void Select_ValueBubblingTest_MultiSelection()
         {
-            var comp = Context.RenderComponent<SelectInitialValueTest>(x =>
+            var comp = Context.Render<SelectInitialValueTest>(x =>
             {
                 x.Add(c => c.MultiSelection, true);
             });
@@ -101,12 +101,12 @@ namespace MudExtensions.UnitTests.Components
             select.Instance.GetState(x => x.Value).Should().BeNull();
             select.Instance.GetState(x => x.Text).Should().BeNullOrEmpty();
 
-            comp.SetParam("SelectedValues", new HashSet<string>() { "1" });
+            comp.Render(p => p.Add(x => x.SelectedValues, new HashSet<string>() { "1" }));
             select.Instance.GetState(x => x.Value).Should().Be("1");
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
             select.Instance.GetState(x => x.Text).Should().Be("1");
 
-            comp.SetParam("SelectedValues", new HashSet<string>() { "2", "1" });
+            comp.Render(p => p.Add(x => x.SelectedValues, new HashSet<string>() { "2", "1" }));
             select.Instance.GetState(x => x.Value).Should().Be("1");
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2", "1" });
             select.Instance.GetState(x => x.Text).Should().Be("2, 1");
@@ -115,7 +115,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task Select_ValueChangeEventCountTest()
         {
-            var comp = Context.RenderComponent<SelectEventCountTest>(x =>
+            var comp = Context.Render<SelectEventCountTest>(x =>
             {
                 x.Add(c => c.MultiSelection, false);
             });
@@ -125,7 +125,7 @@ namespace MudExtensions.UnitTests.Components
             comp.Instance.ValueChangeCount.Should().Be(0);
             comp.Instance.ValuesChangeCount.Should().Be(0);
 
-            await comp.InvokeAsync(() => select.SetParam("Value", "1"));
+            await comp.InvokeAsync(() => select.Render(p => p.Add(x => x.Value, "1")));
             await comp.InvokeAsync(() => select.Instance.ForceUpdate());
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
             comp.Instance.ValuesChangeCount.Should().Be(1);
@@ -133,7 +133,7 @@ namespace MudExtensions.UnitTests.Components
 
             // Changing value programmatically without ForceUpdate should change value, but should not fire change events
             // Its by design, so this part can be change if design changes
-            await comp.InvokeAsync(() => select.SetParam("Value", "2"));
+            await comp.InvokeAsync(() => select.Render(p => p.Add(x => x.Value, "2")));
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
             comp.Instance.ValuesChangeCount.Should().Be(1);
             select.Instance.GetState(x => x.Value).Should().Be("2");
@@ -142,7 +142,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task Select_ValueChangeEventCountTest_MultiSelection()
         {
-            var comp = Context.RenderComponent<SelectEventCountTest>(x =>
+            var comp = Context.Render<SelectEventCountTest>(x =>
             {
                 x.Add(c => c.MultiSelection, true);
             });
@@ -153,12 +153,12 @@ namespace MudExtensions.UnitTests.Components
             comp.Instance.ItemChangeCount.Should().Be(0);
             comp.Instance.ItemsChangeCount.Should().Be(0);
 
-            await comp.InvokeAsync(() => select.SetParam("SelectedValues", new HashSet<string>() { "1" }));
+            await comp.InvokeAsync(() => select.Render(p => p.Add(x => x.SelectedValues, new HashSet<string>() { "1" })));
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
             comp.Instance.ValuesChangeCount.Should().Be(1);
 
             // Setting same value should not fire events
-            await comp.InvokeAsync(() => select.SetParam("SelectedValues", new HashSet<string>() { "1" }));
+            await comp.InvokeAsync(() => select.Render(p => p.Add(x => x.SelectedValues, new HashSet<string>() { "1" })));
             comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
             comp.Instance.ValuesChangeCount.Should().Be(1);
         }
@@ -169,7 +169,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task SelectTest1()
         {
-            var comp = Context.RenderComponent<SelectTest1>();
+            var comp = Context.Render<SelectTest1>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -214,7 +214,7 @@ namespace MudExtensions.UnitTests.Components
         {
             //await ImproveChanceOfSuccess(async () =>
             //{
-            var comp = Context.RenderComponent<MultiSelectTest1>();
+            var comp = Context.Render<MultiSelectTest1>();
             // print the generated html
             Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -278,7 +278,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task SelectWithEnumTest()
         {
-            var comp = Context.RenderComponent<SelectWithEnumTest>();
+            var comp = Context.Render<SelectWithEnumTest>();
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
             var select = comp.FindComponent<MudSelectExtended<MyEnum>>();
@@ -304,7 +304,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void SelectUnrepresentableValueTest()
         {
-            var comp = Context.RenderComponent<SelectUnrepresentableValueTest>();
+            var comp = Context.Render<SelectUnrepresentableValueTest>();
             // select elements needed for the test
             var select = comp.FindComponent<MudSelectExtended<int>>();
             var input = comp.Find("div.mud-input-control");
@@ -328,7 +328,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void SelectUnrepresentableValueTest2()
         {
-            var comp = Context.RenderComponent<SelectUnrepresentableValueTest2>();
+            var comp = Context.Render<SelectUnrepresentableValueTest2>();
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
             var select = comp.FindComponent<MudSelectExtended<int>>();
@@ -357,7 +357,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void SelectWithoutItemPresentersTest()
         {
-            var comp = Context.RenderComponent<SelectTextValueTest>();
+            var comp = Context.Render<SelectTextValueTest>();
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
             var select = comp.FindComponent<MudSelectExtended<bool?>>();
@@ -389,11 +389,11 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void Select_Should_FireTextChangedWithNewValue()
         {
-            var comp = Context.RenderComponent<SelectTest1>();
+            var comp = Context.Render<SelectTest1>();
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
             string? text = null;
-            select.SetCallback(s => s.TextChanged, x => text = x);
+            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.TextChanged, (Action<string>)(x => text = x)));
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
             // check initial state
@@ -431,7 +431,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void SingleSelect_Should_FireTextChangedBeforeSelectedValuesChanged()
         {
-            var comp = Context.RenderComponent<SelectTest1>();
+            var comp = Context.Render<SelectTest1>();
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
             string? text = null;
@@ -439,16 +439,16 @@ namespace MudExtensions.UnitTests.Components
             var eventCounter = 0;
             var textChangedCount = 0;
             var selectedValuesChangedCount = 0;
-            select.SetCallback(s => s.TextChanged, x =>
-              {
-                  textChangedCount = eventCounter++;
-                  text = x;
-              });
-            select.SetCallback(s => s.SelectedValuesChanged, x =>
-              {
-                  selectedValuesChangedCount = eventCounter++;
-                  selectedValues = x;
-              });
+            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.TextChanged, (Action<string>)(x =>
+            {
+                textChangedCount = eventCounter++;
+                text = x;
+            })));
+            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.SelectedValuesChanged, (Action<IEnumerable<string>>)(x =>
+            {
+                selectedValuesChangedCount = eventCounter++;
+                selectedValues = x;
+            })));
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
             // check initial state
@@ -492,7 +492,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void MultiSelect_Should_FireTextChangedBeforeSelectedValuesChanged()
         {
-            var comp = Context.RenderComponent<SelectTest1>();
+            var comp = Context.Render<SelectTest1>();
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
             string? text = null;
@@ -500,17 +500,17 @@ namespace MudExtensions.UnitTests.Components
             var eventCounter = 0;
             var textChangedCount = 0;
             var selectedValuesChangedCount = 0;
-            select.SetParam(s => s.MultiSelection, true);
-            select.SetCallback(s => s.TextChanged, x =>
-              {
-                  textChangedCount = eventCounter++;
-                  text = x;
-              });
-            select.SetCallback(s => s.SelectedValuesChanged, x =>
-              {
-                  selectedValuesChangedCount = eventCounter++;
-                  selectedValues = x;
-              });
+            select.Render(p => p.Add(x => x.MultiSelection, true));
+            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.TextChanged, (Action<string>)(x =>
+            {
+                textChangedCount = eventCounter++;
+                text = x;
+            })));
+            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.SelectedValuesChanged, (Action<IEnumerable<string>>)(x =>
+            {
+                selectedValuesChangedCount = eventCounter++;
+                selectedValues = x;
+            })));
 
             var selectElement = comp.Find("div.mud-input-control");
             selectElement.Click();
@@ -539,11 +539,11 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task Select_Should_Not_FireOnBlur()
         {
-            var comp = Context.RenderComponent<SelectTest1>();
+            var comp = Context.Render<SelectTest1>();
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
             var eventCounter = 0;
-            select.SetCallback(s => s.OnBlur, x => eventCounter++);
+            await select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.OnBlur, () => eventCounter++));
             await comp.InvokeAsync(async () =>
             {
                 await select.Instance.OpenMenu();
@@ -555,7 +555,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void Disabled_SelectItem_Should_Be_Respected()
         {
-            var comp = Context.RenderComponent<SelectTest1>();
+            var comp = Context.Render<SelectTest1>();
             var select = comp.FindComponent<MudSelectExtended<string>>();
             //Console.WriteLine(comp.Markup);
 
@@ -573,17 +573,18 @@ namespace MudExtensions.UnitTests.Components
         {
             //await ImproveChanceOfSuccess(async () =>
             //{
-            var comp = Context.RenderComponent<MultiSelectTest1>();
+            var comp = Context.Render<MultiSelectTest1>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
             var select = comp.FindComponent<MudSelectExtended<string>>();
             IEnumerable<string?>? validatedValue = null;
-            select.SetParam(x => x.Validation, new Func<string, bool>(value =>
-            {
-                validatedValue = select.Instance.SelectedValues;
-                return true;
-            }));
+            select.Render(p => p.Add(x => x.Validation,
+                new Func<string, bool>(value =>
+                {
+                    validatedValue = select.Instance.SelectedValues;
+                    return true;
+                })));
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
             // check initial state
@@ -617,15 +618,16 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void MultiSelect_SelectAll()
         {
-            var comp = Context.RenderComponent<MultiSelectTest2>();
+            var comp = Context.Render<MultiSelectTest2>();
             // select element needed for the test
             var select = comp.FindComponent<MudSelectExtended<string>>();
             IEnumerable<string?>? validatedValue = null;
-            select.SetParam(x => x.Validation, (object)new Func<string, bool>(value =>
-            {
-                validatedValue = select.Instance.SelectedValues; // NOTE: select does only update the value for T string
-                return true;
-            }));
+            select.Render(p => p.Add(x => x.Validation,
+                (object)new Func<string, bool>(value =>
+                {
+                    validatedValue = select.Instance.SelectedValues; // NOTE: select does only update the value for T string
+                    return true;
+                })));
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
             // Open the menu
@@ -641,7 +643,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void MultiSelect_SelectAll2()
         {
-            var comp = Context.RenderComponent<MultiSelectTest3>();
+            var comp = Context.Render<MultiSelectTest3>();
             // select element needed for the test
             var select = comp.FindComponent<MudSelectExtended<string>>();
             var menu = comp.Find("div.mud-popover");
@@ -676,7 +678,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void MultiSelect_SelectAll3()
         {
-            var comp = Context.RenderComponent<MultiSelectTest4>();
+            var comp = Context.Render<MultiSelectTest4>();
             // select element needed for the test
             var select = comp.FindComponent<MudSelectExtended<string>>();
             var menu = comp.Find("div.mud-popover");
@@ -692,15 +694,16 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void SingleSelect_Should_CallValidationFunc()
         {
-            var comp = Context.RenderComponent<SelectTest1>();
+            var comp = Context.Render<SelectTest1>();
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
             string? validatedValue = null;
-            select.SetParam(x => x.Validation, (object)new Func<string, bool>(value =>
-            {
-                validatedValue = value; // NOTE: select does only update the value for T string
-                return true;
-            }));
+            select.Render(p => p.Add(x => x.Validation,
+                (object)new Func<string, bool>(value =>
+                {
+                    validatedValue = value; // NOTE: select does only update the value for T string
+                    return true;
+                })));
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
             // check initial state
@@ -736,7 +739,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task MultiSelect_Initial_Values()
         {
-            var comp = Context.RenderComponent<MultiSelectWithInitialValues>();
+            var comp = Context.Render<MultiSelectWithInitialValues>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
 
@@ -750,7 +753,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task MultiSelectTextTest()
         {
-            var comp = Context.RenderComponent<MultiSelectTextTest>();
+            var comp = Context.Render<MultiSelectTextTest>();
             var select = comp.FindComponent<MudSelectExtended<int?>>();
 
             await comp.InvokeAsync(() => select.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter" }));
@@ -773,7 +776,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task MultiSelectCustomizedTextTest()
         {
-            var comp = Context.RenderComponent<MultiSelectCustomizedTextTest>();
+            var comp = Context.Render<MultiSelectCustomizedTextTest>();
 
             // Select the input of the select
             var input = comp.Find("input");
@@ -788,7 +791,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task SelectClearableTest()
         {
-            var comp = Context.RenderComponent<SelectClearableTest>();
+            var comp = Context.Render<SelectClearableTest>();
             var select = comp.FindComponent<MudSelectExtended<string>>();
             var input = comp.Find("div.mud-input-control");
 
@@ -817,7 +820,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void SelectReselectTest()
         {
-            var comp = Context.RenderComponent<ReselectValueTest>();
+            var comp = Context.Render<ReselectValueTest>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -854,7 +857,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task TextField_Should_Validate_Data_Attribute_Fail()
         {
-            var comp = Context.RenderComponent<SelectValidationDataAttrTest>();
+            var comp = Context.Render<SelectValidationDataAttrTest>();
             //Console.WriteLine(comp.Markup);
             var selectcomp = comp.FindComponent<MudSelectExtended<string>>();
             var select = selectcomp.Instance;
@@ -873,7 +876,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task TextField_Should_Validate_Data_Attribute_Success()
         {
-            var comp = Context.RenderComponent<SelectValidationDataAttrTest>();
+            var comp = Context.Render<SelectValidationDataAttrTest>();
             //Console.WriteLine(comp.Markup);
             var selectcomp = comp.FindComponent<MudSelectExtended<string>>();
             var select = selectcomp.Instance;
@@ -894,7 +897,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task Select_Should_SetRequiredTrue()
         {
-            var comp = Context.RenderComponent<SelectRequiredTest>();
+            var comp = Context.Render<SelectRequiredTest>();
             var select = comp.FindComponent<MudSelectExtended<string>>().Instance;
             select.Required.Should().BeTrue();
             await comp.InvokeAsync(() => select.ValidateAsync());
@@ -907,7 +910,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task Select_Should_HilightSelectedValue()
         {
-            var comp = Context.RenderComponent<SelectTest1>();
+            var comp = Context.Render<SelectTest1>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string?>>();
@@ -932,7 +935,8 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(1));
             comp.FindAll("div.mud-list-item-extended")[1].ToMarkup().Should().Contain("mud-selected-item");
             await comp.InvokeAsync(() => select.Instance.CloseMenu());
-            select.SetParam(nameof(MudSelectExtended<string?>.Value), null);
+            //select.SetParam(nameof(MudSelectExtended<string?>.Value), null);
+            select.Render(p => p.Add(x => x.Value, null));
             await comp.InvokeAsync(() => select.Instance.OpenMenu());
             // no option should be hilited
             comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(0));
@@ -944,7 +948,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void Select_Should_HilightInitiallySelectedValue()
         {
-            var comp = Context.RenderComponent<SelectTest2>();
+            var comp = Context.Render<SelectTest2>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
@@ -975,7 +979,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task Select_Should_AllowReloadingItems()
         {
-            var comp = Context.RenderComponent<ReloadSelectItemsTest>();
+            var comp = Context.Render<ReloadSelectItemsTest>();
             var select = comp.FindComponent<MudSelectExtended<string>>();
             // normal, without reloading
             comp.Find("div.mud-input-control").Click();
@@ -1016,7 +1020,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task SelectTest_ToggleOpenCloseMenuMethods()
         {
-            var comp = Context.RenderComponent<SelectTest1>();
+            var comp = Context.Render<SelectTest1>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -1026,18 +1030,18 @@ namespace MudExtensions.UnitTests.Components
             await comp.InvokeAsync(() => select.Instance.ToggleMenu());
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
 
-            select.SetParam("Disabled", true);
+            select.Render(p => p.Add(x => x.Disabled, true));
             await comp.InvokeAsync(() => select.Instance.ToggleMenu());
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
             //Try to add null item and check the value should not changed.
             await comp.InvokeAsync(() => select.Instance.Add(null));
             comp.WaitForAssertion(() => select.Instance._items.Count.Should().Be(4));
 
-            select.SetParam("Disabled", false);
+            select.Render(p => p.Add(x => x.Disabled, false));
             await comp.InvokeAsync(() => select.Instance.ToggleMenu());
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
 
-            select.SetParam("Disabled", true);
+            select.Render(p => p.Add(x => x.Disabled, true));
             await comp.InvokeAsync(() => select.Instance.ToggleMenu());
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));
 
@@ -1048,7 +1052,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task SelectTest_KeyboardNavigation_SingleSelect()
         {
-            var comp = Context.RenderComponent<SelectTest1>();
+            var comp = Context.Render<SelectTest1>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -1141,7 +1145,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task SelectTest_KeyboardNavigation_MultiSelect()
         {
-            var comp = Context.RenderComponent<MultiSelectTest3>();
+            var comp = Context.Render<MultiSelectTest3>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             // select elements needed for the test
@@ -1185,11 +1189,11 @@ namespace MudExtensions.UnitTests.Components
             await comp.InvokeAsync(() => select.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             comp.WaitForAssertion(() => select.Instance.SelectedValues.Should().Contain("Tiger"));
 
-            select.SetParam("Disabled", true);
+            select.Render(p => p.Add(x => x.Disabled, true));
             await comp.InvokeAsync(() => select.Instance.HandleKeyDownAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keydown", }));
             comp.WaitForAssertion(() => select.Instance.SelectedValues.Should().Contain("Tiger"));
 
-            select.SetParam("Disabled", false);
+            select.Render(p => p.Add(x => x.Disabled, false));
             //Test the keyup event
             await comp.InvokeAsync(() => select.Instance.HandleKeyUpAsync(new KeyboardEventArgs() { Key = "Enter", Type = "keyup", }));
             comp.WaitForAssertion(() => select.Instance.SelectedValues.Should().Contain("Tiger"));
@@ -1203,7 +1207,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task SelectTest_ItemlessSelect()
         {
-            var comp = Context.RenderComponent<MudSelectExtended<string>>();
+            var comp = Context.Render<MudSelectExtended<string>>();
 
             // print the generated html
             //Console.WriteLine(comp.Markup);
@@ -1220,7 +1224,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void Select_OnCloseValueTest()
         {
-            var comp = Context.RenderComponent<SelectOnCloseTest>();
+            var comp = Context.Render<SelectOnCloseTest>();
             var select = comp.FindComponent<MudSelectExtended<string>>();
 
             comp.Find("input").Click();
@@ -1242,7 +1246,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void MultiSelectWithCustomComparerTest()
         {
-            var comp = Context.RenderComponent<MultiSelectWithCustomComparerTest>();
+            var comp = Context.Render<MultiSelectWithCustomComparerTest>();
             // print the generated html
             //Console.WriteLine(comp.Markup);
             // Click select button
@@ -1266,14 +1270,14 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void Select_Item_Collection_Should_Match_Number_Of_Select_Options()
         {
-            var comp = Context.RenderComponent<SelectTest1>();
+            var comp = Context.Render<SelectTest1>();
             var sut = comp.FindComponent<MudSelectExtended<string>>();
 
             var input = comp.Find("div.mud-input-control");
             input.Click();
             comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
 
-            sut.Instance.Items.Should().HaveCountGreaterOrEqualTo(4);
+            sut.Instance.Items.Should().HaveCountGreaterThanOrEqualTo(4);
         }
 
         // TODO: look at this test that failed after #164
@@ -1323,7 +1327,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task MultiSelectAttributesOrder()
         {
-            var comp = Context.RenderComponent<MultiSelectTest5>();
+            var comp = Context.Render<MultiSelectTest5>();
             var select = comp.FindComponent<MudSelectExtended<string>>().Instance;
             select.SelectedValues?.Count().Should().Be(2);
             select.GetState(x => x.Text).Should().Be("Programista, test");
@@ -1338,7 +1342,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void Select_Should_NotOpen_WhenDisabled()
         {
-            var comp = Context.RenderComponent<SelectTest1>(parameters =>
+            var comp = Context.Render<SelectTest1>(parameters =>
             {
                 parameters.Add(p => p.Disabled, true);
             });
@@ -1355,7 +1359,7 @@ namespace MudExtensions.UnitTests.Components
         public void Select_Should_NotOpen_WhenParentDisabled()
         {
             // Use a test component that wraps the select in a disabled parent
-            var comp = Context.RenderComponent<DisabledParentSelectTest>();
+            var comp = Context.Render<DisabledParentSelectTest>();
             var select = comp.FindComponent<MudSelectExtended<string>>();
             var input = comp.Find("div.mud-input-control");
 

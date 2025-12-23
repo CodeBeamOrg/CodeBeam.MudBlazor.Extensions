@@ -3,10 +3,9 @@
 
 using Bunit;
 using MudExtensions.UnitTests.TestComponents;
-using FluentAssertions;
+using AwesomeAssertions;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using MudBlazor.Extensions;
 
 namespace MudExtensions.UnitTests.Components
 {
@@ -16,7 +15,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task List_EventCountTest()
         {
-            var comp = Context.RenderComponent<ListExperimentalCountTest>();
+            var comp = Context.Render<ListExperimentalCountTest>();
             var list = comp.FindComponent<MudListExtended<int?>>().Instance;
 
             comp.Instance.ValueChangeCount.Should().Be(0);
@@ -107,7 +106,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ListSelectionTest()
         {
-            var comp = Context.RenderComponent<ListExperimentalSelectionTest>();
+            var comp = Context.Render<ListExperimentalSelectionTest>();
             //Console.WriteLine(comp.Markup);
             var list = comp.FindComponent<MudListExtended<int>>().Instance;
             list.SelectedItem.Should().Be(null);
@@ -134,7 +133,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ListMultiSelectionTest()
         {
-            var comp = Context.RenderComponent<ListExperimentalSelectionTest>();
+            var comp = Context.Render<ListExperimentalSelectionTest>();
             //Console.WriteLine(comp.Markup);
             var list = comp.FindComponent<MudListExtended<int>>().Instance;
             list.SelectedItem.Should().Be(null);
@@ -178,7 +177,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ListWithPreSelectedValueTest()
         {
-            var comp = Context.RenderComponent<ListExperimentalSelectionInitialValueTest>();
+            var comp = Context.Render<ListExperimentalSelectionInitialValueTest>();
             //Console.WriteLine(comp.Markup);
             var list = comp.FindComponent<MudListExtended<int?>>().Instance;
             comp.WaitForAssertion(() => comp.FindComponents<MudListItemExtended<int?>>()[0].Markup.Should().Contain("mud-selected-item"));
@@ -218,7 +217,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task List_ProgrammaticallyChangeValueAndItemTest()
         {
-            var comp = Context.RenderComponent<ListExperimentalVariantTest>();
+            var comp = Context.Render<ListExperimentalVariantTest>();
             var list = comp.FindComponent<MudListExtended<int?>>().Instance;
 
             comp.WaitForAssertion(() => list.SelectedValue.Should().Be(1));
@@ -256,7 +255,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task List_KeyboardNavigationTest()
         {
-            var comp = Context.RenderComponent<ListExperimentalEnhancedTest>();
+            var comp = Context.Render<ListExperimentalEnhancedTest>();
             //Console.WriteLine(comp.Markup);
             var list = comp.FindComponent<MudListExtended<int>>().Instance;
 
@@ -331,7 +330,7 @@ namespace MudExtensions.UnitTests.Components
         [TestCase(Color.Dark)]
         public void ListColorTest(Color color)
         {
-            var comp = Context.RenderComponent<ListExperimentalSelectionInitialValueTest>(x => x.Add(c => c.Color, color));
+            var comp = Context.Render<ListExperimentalSelectionInitialValueTest>(x => x.Add(c => c.Color, color));
             var list = comp.FindComponent<MudListExtended<int?>>().Instance;
             list.SelectedItem?.Text.Should().Be("Sparkling Water");
 
