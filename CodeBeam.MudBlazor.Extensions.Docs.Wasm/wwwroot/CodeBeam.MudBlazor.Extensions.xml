@@ -1250,6 +1250,11 @@
             
             </summary>
         </member>
+        <member name="M:MudExtensions.MudDateWheelPicker.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:MudExtensions.MudDateWheelPicker.Classname">
             <summary>
             
@@ -5147,6 +5152,32 @@
             <param name="skipPrevent">If set to <see langword="true"/>, bypasses any checks or conditions that would normally prevent navigation
             to the previous step.</param>
             <returns>A task that represents the asynchronous navigation operation.</returns>
+        </member>
+        <member name="M:MudExtensions.MudStepperExtended.SetActiveIndex(MudExtensions.MudStepExtended,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="step"></param>
+            <param name="skipPreventProcess"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudStepperExtended.SetActiveIndex(System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="count"></param>
+            <param name="firstCompleted"></param>
+            <param name="skipPreventProcess"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudStepperExtended.SetActiveStepByIndex(System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="index"></param>
+            <param name="firstCompleted"></param>
+            <param name="skipPreventProcess"></param>
+            <returns></returns>
         </member>
         <member name="M:MudExtensions.MudStepperExtended.IsStepActive(MudExtensions.MudStepExtended)">
             <summary>
