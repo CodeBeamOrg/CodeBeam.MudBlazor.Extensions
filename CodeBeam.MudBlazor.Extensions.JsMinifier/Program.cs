@@ -3,12 +3,28 @@ using System.Text;
 
 Console.WriteLine("Minifying MudExtensions.js...");
 
-// Solution root
-var solutionRoot = Directory.GetCurrentDirectory();
+// Bulunduğumuz dizinden yukarı doğru çık
+var current = Directory.GetCurrentDirectory();
+string? solutionRoot = null;
 
-// Ana proje klasörü
+while (current != null)
+{
+    if (Directory.Exists(Path.Combine(current, "CodeBeam.MudBlazor.Extensions")))
+    {
+        solutionRoot = current;
+        break;
+    }
+
+    current = Directory.GetParent(current)?.FullName;
+}
+
+if (solutionRoot == null)
+{
+    Console.Error.WriteLine("Solution root not found.");
+    Environment.Exit(1);
+}
+
 var projectRoot = Path.Combine(solutionRoot, "CodeBeam.MudBlazor.Extensions");
-
 var input = Path.Combine(projectRoot, "TScripts", "MudExtensions.js");
 var output = Path.Combine(projectRoot, "wwwroot", "MudExtensions.min.js");
 

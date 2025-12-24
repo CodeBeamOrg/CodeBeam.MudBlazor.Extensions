@@ -6493,6 +6493,26 @@
             Localized strings for MudStepper
             </summary>
         </member>
+        <member name="P:MudExtensions.MudBeforeInputEventArgs.Data">
+            <summary>
+            Text that will be inserted. Null for delete actions.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBeforeInputEventArgs.InputType">
+            <summary>
+            Type of input action (insertText, deleteContentBackward, insertFromPaste, etc.)
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBeforeInputEventArgs.IsComposing">
+            <summary>
+            True when IME composition is active (Chinese, Japanese, etc.)
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBeforeInputEventArgs.PreventDefault">
+            <summary>
+            Set true to prevent the input from happening.
+            </summary>
+        </member>
         <member name="P:MudExtensions.MudAnimate.Selector">
             <summary>
             Supports id and class selection. Use "#idName" for id selectors (ex. <Component id="idName" />) or ".idName" for class selectors (ex. <Component Class="idName" />). Leave it null or empty to effect all scrollbars.
