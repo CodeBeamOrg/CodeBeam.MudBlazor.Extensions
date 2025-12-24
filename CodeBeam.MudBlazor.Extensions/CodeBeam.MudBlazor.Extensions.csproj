@@ -44,7 +44,12 @@
 		<Copy SourceFiles="wwwroot/css/MudExtensions.min.css" DestinationFiles="wwwroot/MudExtensions.min.css" SkipUnchangedFiles="true" Condition="Exists('wwwroot/css/MudExtensions.min.css')" />
 	</Target>
 
-
+	<Target Name="MinifyMudExtensionsJs" AfterTargets="Build" Condition="'$(CI)' != 'true'
+               AND '$(TargetFramework)' == 'net10.0'
+               AND Exists('TScripts/MudExtensions.js')">
+		<Message Importance="high" Text="Minifying MudExtensions.js → MudExtensions.min.js" />
+		<Exec WorkingDirectory="$(SolutionDir)" Command="dotnet run --project CodeBeam.MudBlazor.Extensions.JsMinifier\CodeBeam.MudBlazor.Extensions.JsMinifier.csproj --configuration $(Configuration)" />
+	</Target>
 
 	<ItemGroup>
 		<Content Remove="sasscompiler.json" />
