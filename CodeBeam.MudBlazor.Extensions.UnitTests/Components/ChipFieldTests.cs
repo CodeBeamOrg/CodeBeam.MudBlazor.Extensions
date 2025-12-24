@@ -1,8 +1,9 @@
-﻿using MudExtensions.Docs.Examples;
-using FluentAssertions;
-using Bunit;
+﻿using Bunit;
+using AwesomeAssertions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using MudBlazor.Extensions;
+using MudExtensions.Docs.Examples;
 
 namespace MudExtensions.UnitTests.Components
 {
@@ -12,15 +13,15 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task ChipFieldBasicTest()
         {
-            var comp = Context.RenderComponent<MudChipField<string>>(opt =>
+            var comp = Context.Render<MudChipField<string>>(opt =>
             {
                 opt.Add(a => a.Values, new List<string> { "asdf", "asd" });
             });
             var field = comp.FindComponent<MudTextFieldExtended<string>>();
             field.Find("input").Input(new ChangeEventArgs() { Value = "sdfg" });
-            await comp.InvokeAsync(() => comp.Instance.HandleKeyDown(new KeyboardEventArgs() { Key = " " }));
+            await comp.InvokeAsync(() => comp.Instance.HandleBeforeInput(new MudBeforeInputEventArgs() { Data = " ", InputType = "insert" }));
             comp.Instance.Values.Should().BeEquivalentTo(new List<string> { "asdf", "asd", "sdfg" });
-            comp.Instance.Value.Should().BeEquivalentTo(null);
+            comp.Instance.GetState(x => x.Value).Should().BeEquivalentTo(null);
         }
     }
 }

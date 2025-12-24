@@ -43,7 +43,7 @@ namespace MudExtensions
         /// The parent select component
         /// </summary>
         [CascadingParameter]
-        MudComboBox<T> MudComboBox { get; set; }
+        MudComboBox<T> MudComboBox { get; set; } = null!;
 
         /// <summary>
         /// Prevents the user from interacting with this item.
@@ -155,12 +155,12 @@ namespace MudExtensions
                 {
                     if (converter == null)
                         return Value?.ToString();
-                    return converter.Set(Value);
+                    return converter.Convert(Value);
                 }
 
                 if (converter == null)
                     return $"{(string.IsNullOrWhiteSpace(Text) ? Value : Text)}";
-                return !string.IsNullOrWhiteSpace(Text) ? Text : converter.Set(Value);
+                return !string.IsNullOrWhiteSpace(Text) ? Text : converter.Convert(Value);
             }
         }
 
@@ -259,7 +259,7 @@ namespace MudExtensions
             }
             else
             {
-                if (MudComboBox?.Converter?.Set(Value)?.Contains(MudComboBox._searchString ?? string.Empty, StringComparison.OrdinalIgnoreCase) == true)
+                if (MudComboBox?.Converter?.Convert(Value)?.Contains(MudComboBox._searchString ?? string.Empty, StringComparison.OrdinalIgnoreCase) == true)
                     return true;
             }
 

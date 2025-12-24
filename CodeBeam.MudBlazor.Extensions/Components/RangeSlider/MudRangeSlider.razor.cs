@@ -253,7 +253,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Slider.Behavior)]
-        public Converter<T?> Converter { get; set; } = new DefaultConverter<T?>() { Culture = CultureInfo.InvariantCulture };
+        public IConverter<T?, string?> Converter { get; set; } = new DefaultConverter<T?>();
 
         /// <summary>
         /// Fires when value changed.
@@ -293,7 +293,7 @@ namespace MudExtensions
         {
             get
             {
-                if (!Range) return Converter.Set(_value.Value);
+                if (!Range) return Converter.Convert(_value.Value);
 
                 //if both lower and upper are not set then it is any
                 if ((Convert.ToDouble(_value.Value) == Convert.ToDouble(Min)) &&

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using MudBlazor;
-using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -13,13 +12,13 @@ namespace MudExtensions
     /// <typeparam name="T"></typeparam>
     public partial class MudInputExtended<T> : MudBaseInputExtended<T>
     {
-        [Inject] IJSRuntime? JSRuntime { get; set; }
+        [Inject] IJSRuntime JSRuntime { get; set; } = null!;
 
         /// <summary>
         /// 
         /// </summary>
         protected string? Classname => MudInputCssHelperExtended.GetClassname(this,
-            () => HasNativeHtmlPlaceholder() || ShrinkLabel == true || !string.IsNullOrEmpty(Text) || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(Converter.Set(Value)));
+            () => HasNativeHtmlPlaceholder() || ShrinkLabel == true || !string.IsNullOrEmpty(ReadText) || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(base.ConvertSet(ReadValue)));
 
         /// <summary>
         /// 
@@ -71,6 +70,9 @@ namespace MudExtensions
                     .AddClass("d-none", !(InputType == InputType.Hidden && ChildContent != null && ShowVisualiser == false))
                     .Build();
 
+        private bool _beforeInputAttached;
+        private DotNetObjectReference<MudInputExtended<T>>? _dotNetRef;
+
         /// <summary>
         /// 
         /// </summary>
@@ -88,6 +90,14 @@ namespace MudExtensions
                         await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
                     }
                     StateHasChanged();
+                }
+
+                if (!_beforeInputAttached)
+                {
+                    _beforeInputAttached = true;
+                    _dotNetRef = DotNetObjectReference.Create(this);
+
+                    await JSRuntime.InvokeVoidAsync("mudBeforeInput.attach", ElementReference, _dotNetRef);
                 }
             }
         }
@@ -107,32 +117,29 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public InputType InputType { get; set; } = InputType.Text;
 
-        internal override InputType GetInputType() => InputType;
 
         /// <summary>
         /// 
         /// </summary>
         protected string? InputTypeString => InputType.ToDescriptionString();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        protected Task OnInputHandler(ChangeEventArgs args)
+        private async Task OnInputOrOnChangeAsync(string? input)
         {
-            if (!Immediate)
-                return Task.CompletedTask;
-            _isFocused = true;
-            OnInput.InvokeAsync();
-            if (AutoSize)
+            if (Immediate)
             {
-                if (JSRuntime != null)
-                {
-                    JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
-                }
+                await OnInputHandler(input);
+                await OnInput.InvokeAsync(input);
             }
-            return SetTextAsync(args?.Value as string);
+            else
+            {
+                await OnChangeHandler(input);
+                await OnChange.InvokeAsync(input);
+            }
+
+            if (AutoSize && JSRuntime != null)
+            {
+                await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
+            }
         }
 
         /// <summary>
@@ -140,23 +147,24 @@ namespace MudExtensions
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        protected async Task OnChangeHandler(ChangeEventArgs args)
+        protected async Task OnInputHandler(string? args)
         {
-            _internalText = args?.Value as string;
+            _isFocused = true;
+            _internalText = args;
             await OnInternalInputChanged.InvokeAsync(args);
-            if (!Immediate)
-            {
-                await SetTextAsync(args?.Value as string);
-                if (AutoSize)
-                {
-                    if (JSRuntime != null)
-                    {
-                        await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
-                    }
-                }
-                
-                await OnChange.InvokeAsync();
-            }
+            await SetTextAndUpdateValueAsync(args);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        protected async Task OnChangeHandler(string? args)
+        {
+            _internalText = args;
+            await OnInternalInputChanged.InvokeAsync(args);
+            await SetTextAndUpdateValueAsync(args);
         }
 
         /// <summary>
@@ -315,7 +323,7 @@ namespace MudExtensions
                 Clearable = showClearable;
         }
 
-        private bool GetClearable() => Clearable && ((Value is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (Value is not string && Value is not null));
+        private bool GetClearable() => Clearable && ((ReadValue is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (ReadValue is not string && ReadValue is not null));
 
         /// <summary>
         /// 
@@ -326,7 +334,7 @@ namespace MudExtensions
         {
             await base.UpdateTextPropertyAsync(updateValue);
             if (Clearable)
-                UpdateClearable(Text);
+                UpdateClearable(ReadText);
         }
 
         /// <summary>
@@ -338,7 +346,7 @@ namespace MudExtensions
         {
             await base.UpdateValuePropertyAsync(updateText);
             if (Clearable)
-                UpdateClearable(Value);
+                UpdateClearable(ReadValue);
         }
 
         /// <summary>
@@ -348,7 +356,7 @@ namespace MudExtensions
         /// <returns></returns>
         protected virtual async Task ClearButtonClickHandlerAsync(MouseEventArgs e)
         {
-            await SetTextAsync(string.Empty, updateValue: true);
+            await SetTextAndUpdateValueAsync(string.Empty, updateValue: true);
             await ElementReference.FocusAsync();
             await OnClearButtonClick.InvokeAsync(e);
         }
@@ -365,18 +373,7 @@ namespace MudExtensions
             await base.SetParametersAsync(parameters);
             //if (!_isFocused || _forceTextUpdate)
             //    _internalText = Text;
-            if (RuntimeLocation.IsServerSide && TextUpdateSuppression)
-            {
-                // Text update suppression, only in BSS (not in WASM).
-                // This is a fix for #1012
-                if (!_isFocused || _forceTextUpdate)
-                    _internalText = Text;
-            }
-            else
-            {
-                // in WASM (or in BSS with TextUpdateSuppression==false) we always update
-                _internalText = Text;
-            }
+            _internalText = ReadText;
         }
 
         /// <summary>
@@ -391,12 +388,23 @@ namespace MudExtensions
         }
 
 
-        // Certain HTML5 inputs (dates and color) have a native placeholder
-        private bool HasNativeHtmlPlaceholder()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool HasNativeHtmlPlaceholder()
         {
-            return GetInputType() is InputType.Color or InputType.Date or InputType.DateTimeLocal or InputType.Month
-                or InputType.Time or InputType.Week;
+            return InputType switch
+            {
+                InputType.Color => true,
+                InputType.Date => true,
+                InputType.DateTimeLocal => true,
+                InputType.Month => true,
+                InputType.Time => true,
+                InputType.Week => true,
+                _ => false
+            };
         }
-    }
 
+    }
 }

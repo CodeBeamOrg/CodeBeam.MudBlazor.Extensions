@@ -15,7 +15,7 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        [Inject] public IScrollManager ScrollManager { get; set; }
+        [Inject] public IScrollManager ScrollManager { get; set; } = null!;
 
         /// <summary>
         /// 
@@ -45,7 +45,7 @@ namespace MudExtensions
         /// <param name="index"></param>
         /// <returns></returns>
         protected string? OuterItemClassname(int index) => new CssBuilder($"mud-wheel-item mud-wheel-ani-{_animateGuid}")
-            .AddClass("wheel-item-closest", Math.Abs(ItemCollection.IndexOf(Value) - index) == 1)
+            .AddClass("wheel-item-closest", Math.Abs(ItemCollection.IndexOf(ReadValue) - index) == 1)
             .AddClass("my-1", !Dense)
             .AddClass("mud-disabled", Disabled)
             .Build();
@@ -119,20 +119,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T?, string?>? ToStringFunc
-        {
-            get => _toStringFunc;
-            set
-            {
-                if (_toStringFunc == value)
-                    return;
-                _toStringFunc = value;
-                Converter = new Converter<T>
-                {
-                    SetFunc = _toStringFunc ?? (x => x?.ToString()),
-                };
-            }
-        }
+        public Func<T?, string?>? ToStringFunc { get; set; }
 
         /// <summary>
         /// 
@@ -270,6 +257,7 @@ namespace MudExtensions
                 _animateValue = - GetAnimateValue();
             }
             await _animate.Refresh();
+
             T val = ItemCollection[index + changeCount];
             await SetValueAsync(val);
         }
@@ -287,7 +275,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         /// <returns></returns>
-        protected int GetIndex() => ItemCollection.IndexOf(Value) == -1 ? 0 : ItemCollection.IndexOf(Value);
+        protected int GetIndex() => ItemCollection?.IndexOf(ReadValue) == -1 ? 0 : ItemCollection?.IndexOf(ReadValue) ?? 0;
 
         /// <summary>
         /// 

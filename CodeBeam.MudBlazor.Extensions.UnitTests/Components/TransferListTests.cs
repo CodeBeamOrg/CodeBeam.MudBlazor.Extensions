@@ -1,5 +1,5 @@
 ﻿using Bunit;
-using FluentAssertions;
+using AwesomeAssertions;
 using MudExtensions.UnitTests.TestComponents;
 
 namespace MudExtensions.UnitTests.Components
@@ -10,7 +10,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public async Task TransferListTransferAllTest()
         {
-            var comp = Context.RenderComponent<TransferListTest>();
+            var comp = Context.Render<TransferListTest>();
             var transferList = comp.FindComponent<MudTransferList<string>>();
             transferList.Instance.StartCollection.Should().Contain("Turkey");
             transferList.Instance.StartCollection.Should().NotContain("China");

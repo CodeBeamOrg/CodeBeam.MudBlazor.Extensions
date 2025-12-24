@@ -114,7 +114,7 @@ namespace MudExtensions
         private async Task OnTimerTickGuiThread()
         {
             await base.UpdateValuePropertyAsync(false);
-            await OnDebounceIntervalElapsed.InvokeAsync(Text);
+            await OnDebounceIntervalElapsed.InvokeAsync(ReadText);
         }
 
         private void ClearTimer(bool suppressTick = false)

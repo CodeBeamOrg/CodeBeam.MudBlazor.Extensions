@@ -1,5 +1,5 @@
 ﻿using Bunit;
-using FluentAssertions;
+using AwesomeAssertions;
 using MudExtensions.UnitTests.TestComponents;
 
 namespace MudExtensions.UnitTests.Components
@@ -10,7 +10,7 @@ namespace MudExtensions.UnitTests.Components
         [Test]
         public void WatchInitialValueTest()
         {
-            var comp = Context.RenderComponent<WatchTest>();
+            var comp = Context.Render<WatchTest>();
             var watch = comp.FindComponent<MudWatch>();
             watch.Instance.Value.Should().Be(new TimeSpan(1, 0, 0));
         }

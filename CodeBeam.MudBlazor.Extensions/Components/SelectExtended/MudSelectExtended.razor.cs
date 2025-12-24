@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.Extensions;
 using MudBlazor.Services;
+using MudBlazor.State;
 using MudBlazor.Utilities;
 using MudBlazor.Utilities.Exceptions;
+using System.Globalization;
 
 namespace MudExtensions
 {
@@ -507,20 +510,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T?, string?>? ToStringFunc
-        {
-            get => _toStringFunc;
-            set
-            {
-                if (_toStringFunc == value)
-                    return;
-                _toStringFunc = value;
-                Converter = new Converter<T?>
-                {
-                    SetFunc = _toStringFunc ?? (x => x?.ToString()),
-                };
-            }
-        }
+        public Func<T?, string?>? ToStringFunc { get; set; }
 
         /// <summary>
         /// If true, a null item will be added to the list (Only for ItemCollection).
@@ -578,11 +568,11 @@ namespace MudExtensions
                 SelectionChangedFromOutside?.Invoke(new HashSet<T?>(_selectedValues, _comparer));
                 if (!MultiSelection)
                 {
-                    SetValueAsync(_selectedValues.FirstOrDefault()).CatchAndLog();
+                    SetValueAndUpdateTextAsync(_selectedValues.FirstOrDefault()).CatchAndLog();
                 }
                 else
                 {
-                    SetValueAsync(_selectedValues.LastOrDefault(), false).CatchAndLog();
+                    SetValueAndUpdateTextAsync(_selectedValues.LastOrDefault(), false).CatchAndLog();
                     UpdateTextPropertyAsync(false).CatchAndLog();
                 }
 
@@ -657,7 +647,7 @@ namespace MudExtensions
             Func<List<T?>, string?>? multiSelectionTextFunc = null)
         {
             // The Text property of the control is updated
-            Text = multiSelectionTextFunc?.Invoke(selectedConvertedValues);
+            await SetTextAsync(multiSelectionTextFunc?.Invoke(selectedConvertedValues));
 
             // The comparison is made on the multiSelectionText variable
             if (multiSelectionText != text)
@@ -701,7 +691,7 @@ namespace MudExtensions
                         var collectionValue = ItemCollection.FirstOrDefault(x => x != null && (Comparer != null ? Comparer.Equals(x, val) : x.Equals(val)));
                         if (collectionValue != null)
                         {
-                            textList.Add(Converter.Set(collectionValue));
+                            textList.Add(base.ConvertSet(collectionValue));
                         }
                     }
                 }
@@ -711,13 +701,13 @@ namespace MudExtensions
                     {
                         if (!Strict && !Items.Select(x => x.Value).Contains(val))
                         {
-                            textList.Add(ToStringFunc != null ? ToStringFunc(val) : Converter.Set(val));
+                            textList.Add(ToStringFunc != null ? ToStringFunc(val) : base.ConvertSet(val));
                             continue;
                         }
                         var item = Items.FirstOrDefault(x => x != null && (x.Value == null ? val == null : Comparer != null ? Comparer.Equals(x.Value, val) : x.Value.Equals(val)));
                         if (item != null)
                         {
-                            textList.Add(!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value));
+                            textList.Add(!string.IsNullOrEmpty(item.Text) ? item.Text : base.ConvertSet(item.Value));
                         }
                     }
                 }
@@ -735,23 +725,23 @@ namespace MudExtensions
                 }
                 else
                 {
-                    return SetTextAsync(string.Join(Delimiter, textList), updateValue: updateValue);
+                    return SetTextAndUpdateValueAsync(string.Join(Delimiter, textList), updateValue: updateValue);
                 }
             }
             else
             {
-                var item = Items?.FirstOrDefault(x => Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(Value, x.Value) : Value.Equals(x.Value));
+                var item = Items?.FirstOrDefault(x => ReadValue == null ? x.Value == null : Comparer != null ? Comparer.Equals(ReadValue, x.Value) : ReadValue.Equals(x.Value));
                 if (item == null)
                 {
-                    return SetTextAsync(Converter.Set(Value), false);
+                    return SetTextAndUpdateValueAsync(base.ConvertSet(ReadValue), false);
                 }
-                return SetTextAsync((!string.IsNullOrEmpty(item.Text) ? item.Text : Converter.Set(item.Value)), updateValue: updateValue);
+                return SetTextAndUpdateValueAsync((!string.IsNullOrEmpty(item.Text) ? item.Text : base.ConvertSet(item.Value)), updateValue: updateValue);
             }
         }
 
         private string? GetSelectTextPresenter()
         {
-            return Text;
+            return ReadText;
         }
 
         #endregion
@@ -766,9 +756,9 @@ namespace MudExtensions
         {
             base.OnInitialized();
             UpdateIcon();
-            if (!MultiSelection && Value != null)
+            if (!MultiSelection && ReadValue != null)
             {
-                _selectedValues = new HashSet<T?>(_comparer) { Value };
+                _selectedValues = new HashSet<T?>(_comparer) { ReadValue };
             }
             else if (MultiSelection && SelectedValues != null)
             {
@@ -822,7 +812,7 @@ namespace MudExtensions
 
                 await UpdateTextPropertyAsync(false);
                 _list?.ForceUpdateItems();
-                SelectedListItem = Items.FirstOrDefault(x => x.Value != null && Value != null && x.Value.Equals(Value))?.ListItem;
+                SelectedListItem = Items.FirstOrDefault(x => x.Value != null && ReadValue != null && x.Value.Equals(ReadValue))?.ListItem;
                 StateHasChanged();
             }
             //Console.WriteLine("Select rendered");
@@ -924,7 +914,7 @@ namespace MudExtensions
                         }
                         else
                         {
-                            await _elementReference.SetText(Text);
+                            await _elementReference.SetText(ReadText);
                             break;
                         }
                     }
@@ -1075,7 +1065,7 @@ namespace MudExtensions
                     await CloseMenu();
                 return;
             }
-            await SelectOption(_items[index].Value);
+            await SelectOption(_items[index].GetState(x => x.Value));
         }
 
         /// <summary>
@@ -1097,7 +1087,7 @@ namespace MudExtensions
                 // CloseMenu(true) doesn't close popover in BSS
                 await CloseMenu();
 
-                if (EqualityComparer<T>.Default.Equals(Value, value))
+                if (EqualityComparer<T>.Default.Equals(ReadValue, value))
                 {
                     StateHasChanged();
                     return;
@@ -1105,7 +1095,7 @@ namespace MudExtensions
 
                 await SetValueAsync(value);
                 //await UpdateTextPropertyAsync(false);
-                _elementReference.SetText(Text).CatchAndLog();
+                _elementReference.SetText(ReadText).CatchAndLog();
                 //_selectedValues.Clear();
                 //_selectedValues.Add(value);
             }
@@ -1124,7 +1114,7 @@ namespace MudExtensions
             await base.ForceUpdate();
             if (!MultiSelection)
             {
-                SelectedValues = new HashSet<T?>(_comparer) { Value };
+                SelectedValues = new HashSet<T?>(_comparer) { ReadValue };
             }
             else
             {
@@ -1158,14 +1148,14 @@ namespace MudExtensions
                 if (item.Value != null)
                 {
                     _valueLookup[item.Value] = item;
-                    if (item.Value.Equals(Value) && !MultiSelection)
+                    if (item.Value.Equals(ReadValue) && !MultiSelection)
                         result = true;
                 }
             }
             //UpdateSelectAllChecked();
             if (!result.HasValue)
             {
-                result = item.Value?.Equals(Value);
+                result = item.Value?.Equals(ReadValue);
             }
             return result == true;
         }
@@ -1217,8 +1207,8 @@ namespace MudExtensions
         /// </summary>
         protected async ValueTask SelectClearButtonClickHandlerAsync(MouseEventArgs e)
         {
-            await SetValueAsync(default, false);
-            await SetTextAsync(default, false);
+            await SetValueAndUpdateTextAsync(default, false);
+            await SetTextAndUpdateValueAsync(default, false);
             _selectedValues?.Clear();
             SelectedListItem = null;
             SelectedListItems = null;
@@ -1233,8 +1223,8 @@ namespace MudExtensions
         /// </summary>
         public async Task Clear()
         {
-            await SetValueAsync(default, false);
-            await SetTextAsync(default, false);
+            await SetValueAndUpdateTextAsync(default, false);
+            await SetTextAndUpdateValueAsync(default, false);
             _selectedValues?.Clear();
             await BeginValidateAsync();
             StateHasChanged();
@@ -1260,12 +1250,12 @@ namespace MudExtensions
         {
             get
             {
-                if (Value == null)
+                if (ReadValue == null)
                     return false;
                 //return _shadowLookup.TryGetValue(Value, out var _);
                 foreach (var value in Items?.Select(x => x.Value) ?? new List<T?>())
                 {
-                    if (Comparer != null ? Comparer.Equals(value, Value) : value?.Equals(Value) == true) //(Converter.Set(item.Value) == Converter.Set(Value))
+                    if (Comparer != null ? Comparer.Equals(value, ReadValue) : value?.Equals(ReadValue) == true) //(Converter.Set(item.Value) == Converter.Set(Value))
                     {
                         return true;
                     }
@@ -1295,20 +1285,6 @@ namespace MudExtensions
         }
 
         /// <summary>
-        /// Fixes issue #4328
-        /// Returns true when MultiSelection is true and it has selected values(Since Value property is not used when MultiSelection=true
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns>True when component has a value</returns>
-        protected override bool HasValue(T? value)
-        {
-            if (MultiSelection)
-                return SelectedValues?.Count() > 0;
-            else
-                return base.HasValue(value);
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="chip"></param>
@@ -1323,7 +1299,14 @@ namespace MudExtensions
             SelectedValues = SelectedValues.Where(x => x?.Equals(chip.Value) == false);
             await SelectedValuesChanged.InvokeAsync(SelectedValues);
         }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected override bool HasValue(T? value) => MultiSelection ? SelectedValues?.Any() == true : base.HasValue(value);
+
         /// <summary>
         /// returns the value of the internal property _isOpen 
         /// </summary>
@@ -1332,5 +1315,10 @@ namespace MudExtensions
         {
             return _isOpen;
         }
+
+        /// <summary>
+        /// Internal method for MudSelectItem to access the converted string value.
+        /// </summary>
+        internal string? ConvertValueToString(T? value) => ConvertSet(value);
     }
 }

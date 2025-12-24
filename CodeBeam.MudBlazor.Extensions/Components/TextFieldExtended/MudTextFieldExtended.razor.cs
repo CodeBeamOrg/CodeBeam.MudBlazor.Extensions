@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -60,9 +61,7 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public InputType InputType { get; set; } = InputType.Text;
 
-        internal override InputType GetInputType() => InputType;
-
-        private string GetCounterText() => Counter == null ? string.Empty : (Counter == 0 ? (string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") : ((string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") + $" / {Counter}"));
+        private string GetCounterText() => Counter == null ? string.Empty : (Counter == 0 ? (string.IsNullOrEmpty(ReadText) ? "0" : $"{ReadText.Length}") : ((string.IsNullOrEmpty(ReadText) ? "0" : $"{ReadText.Length}") + $" / {Counter}"));
 
         /// <summary>
         /// Show clear button.
@@ -192,40 +191,40 @@ namespace MudExtensions
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="updateText"></param>
-        /// <param name="force"></param>
-        /// <returns></returns>
-        protected override Task SetValueAsync(T? value, bool updateText = true, bool force = false)
-        {
-            if (_mask != null)
-            {
-                var textValue = Converter.Set(value);
-                _mask.SetText(textValue);
-                textValue = Mask?.GetCleanText();
-                value = Converter.Get(textValue);
-            }
-            return base.SetValueAsync(value, updateText, force);
-        }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="value"></param>
+        ///// <param name="updateText"></param>
+        ///// <param name="force"></param>
+        ///// <returns></returns>
+        //protected override Task SetValueAsync(T? value, bool updateText = true, bool force = false)
+        //{
+        //    if (_mask != null)
+        //    {
+        //        var textValue = Converter.Convert(value);
+        //        _mask.SetText(textValue);
+        //        textValue = Mask?.GetCleanText();
+        //        value = Converter.ConvertBack(textValue);
+        //    }
+        //    return base.SetValueAsync(value, updateText, force);
+        //}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="updateValue"></param>
-        /// <returns></returns>
-        protected override Task SetTextAsync(string? text, bool updateValue = true)
-        {
-            if (_mask != null)
-            {
-                _mask.SetText(text);
-                text = _mask.Text;
-            }
-            return base.SetTextAsync(text, updateValue);
-        }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="text"></param>
+        ///// <param name="updateValue"></param>
+        ///// <returns></returns>
+        //protected override Task SetTextAsync(string? text, bool updateValue = true)
+        //{
+        //    if (_mask != null)
+        //    {
+        //        _mask.SetText(text);
+        //        text = _mask.Text;
+        //    }
+        //    return base.SetTextAsync(text, updateValue);
+        //}
 
         private async Task OnMaskedValueChanged(string s)
         {

@@ -743,12 +743,25 @@ namespace MudExtensions
 
         #region The Obsoletes
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="step"></param>
+        /// <param name="skipPreventProcess"></param>
+        /// <returns></returns>
         [Obsolete("Use GoToStepByReferenceAsync() instead.")]
         protected internal async Task SetActiveIndex(MudStepExtended step, bool skipPreventProcess = false)
         {
             await SetActiveStepByIndex(Steps.IndexOf(step), skipPreventProcess: skipPreventProcess);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="firstCompleted"></param>
+        /// <param name="skipPreventProcess"></param>
+        /// <returns></returns>
         [Obsolete("Use GoNextAsync/GoPreviousAsync or GoToStepAsync instead.")]
         public async Task SetActiveIndex(int count, bool firstCompleted = false, bool skipPreventProcess = false)
         {
@@ -817,6 +830,13 @@ namespace MudExtensions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="firstCompleted"></param>
+        /// <param name="skipPreventProcess"></param>
+        /// <returns></returns>
         [Obsolete("Use GoNextAsync/GoPreviousAsync or GoToStepAsync instead.")]
         public async Task SetActiveStepByIndex(int index, bool firstCompleted = false, bool skipPreventProcess = false)
         {

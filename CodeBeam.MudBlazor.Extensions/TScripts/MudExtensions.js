@@ -321,3 +321,21 @@ class MudSignaturePad {
 }
 
 window.mudSignaturePad = new MudSignaturePadManager();
+
+window.mudBeforeInput = {
+    attach: (element, dotNetRef) => {
+        if (!element) return;
+
+        element.addEventListener("beforeinput", e => {
+            dotNetRef.invokeMethodAsync("OnBeforeInput", {
+                data: e.data,
+                inputType: e.inputType,
+                isComposing: e.isComposing
+            }).then(prevent => {
+                if (prevent === true) {
+                    e.preventDefault();
+                }
+            });
+        });
+    }
+};

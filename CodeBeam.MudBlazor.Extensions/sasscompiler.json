@@ -1,0 +1,5 @@
+{
+  "Source": "Styles",
+  "Output": "wwwroot",
+  "Minify": true
+}

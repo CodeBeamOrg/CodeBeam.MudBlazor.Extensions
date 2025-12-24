@@ -52,7 +52,7 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public InputType InputType { get; set; } = InputType.Text;
 
-        private string GetCounterText() => Counter == null ? string.Empty : (Counter == 0 ? (string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") : ((string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") + $" / {Counter}"));
+        private string GetCounterText() => Counter == null ? string.Empty : (Counter == 0 ? (string.IsNullOrEmpty(ReadText) ? "0" : $"{ReadText.Length}") : ((string.IsNullOrEmpty(ReadText) ? "0" : $"{ReadText.Length}") + $" / {Counter}"));
 
         /// <summary>
         /// Show clear button.

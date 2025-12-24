@@ -31,7 +31,7 @@ namespace MudExtensions
         /// <param name="value"></param>
         protected internal void SetSearchString(T value)
         {
-            _searchString = Converter.Set(value);
+            _searchString = base.ConvertSet(value);
         }
 
         internal string? _searchString { get; set; }
@@ -88,7 +88,7 @@ namespace MudExtensions
             new StyleBuilder()
             .AddStyle("height: auto")
             .AddStyle("min-height: 1.1876em")
-            .AddStyle("display", "inline", Value != null || SelectedValues?.Any() == true)
+            .AddStyle("display", "inline", ReadValue != null || SelectedValues?.Any() == true)
             .Build();
 
         private readonly string _elementId = string.Concat("combobox_", Guid.NewGuid().ToString().AsSpan(0, 8));
@@ -515,19 +515,19 @@ namespace MudExtensions
         {
             if (singleToMultiselection == true)
             {
-                if (Value == null)
+                if (ReadValue == null)
                 {
                     SelectedValues = new HashSet<T?>();
                 }
                 else
                 {
-                    if (Value is string && string.IsNullOrWhiteSpace(Converter.Set(Value)))
+                    if (ReadValue is string && string.IsNullOrWhiteSpace(base.ConvertSet(ReadValue)))
                     {
                         SelectedValues = new HashSet<T?>();
                     }
                     else
                     {
-                        SelectedValues = new HashSet<T?>() { Value };
+                        SelectedValues = new HashSet<T?>() { ReadValue };
                     }
 
                 }
@@ -535,8 +535,8 @@ namespace MudExtensions
             }
             else
             {
-                await SetValueAsync(SelectedValues.LastOrDefault(), false);
-                _searchString = Converter.Set(SelectedValues.LastOrDefault());
+                await SetValueAndUpdateTextAsync(SelectedValues.LastOrDefault(), false);
+                _searchString = base.ConvertSet(SelectedValues.LastOrDefault());
             }
         }
 
@@ -566,20 +566,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T?, string?>? ToStringFunc
-        {
-            get => _toStringFunc;
-            set
-            {
-                if (_toStringFunc == value)
-                    return;
-                _toStringFunc = value;
-                Converter = new Converter<T?>
-                {
-                    SetFunc = _toStringFunc ?? (x => x?.ToString()),
-                };
-            }
-        }
+        public Func<T?, string?>? ToStringFunc { get; set; }
 
         #endregion
 
@@ -652,13 +639,13 @@ namespace MudExtensions
                     {
                         if (!Strict && !Items.Select(x => x.Value).Contains(val))
                         {
-                            textList.Add(ToStringFunc != null ? ToStringFunc(val) : Converter.Set(val));
+                            textList.Add(ToStringFunc != null ? ToStringFunc(val) : base.ConvertSet(val));
                             continue;
                         }
                         var item = Items.FirstOrDefault(x => x != null && (x.Value == null ? val == null : Comparer != null ? Comparer.Equals(x.Value, val) : x.Value.Equals(val)));
                         if (item != null)
                         {
-                            textList.Add(!string.IsNullOrWhiteSpace(item.Text) ? item.Text : Converter.Set(item.Value));
+                            textList.Add(!string.IsNullOrWhiteSpace(item.Text) ? item.Text : base.ConvertSet(item.Value));
                         }
                     }
                 }
@@ -686,10 +673,10 @@ namespace MudExtensions
             }
             else
             {
-                var item = Items?.FirstOrDefault(x => Value == null ? x.Value == null : Comparer != null ? Comparer.Equals(Value, x.Value) : Value.Equals(x.Value));
+                var item = Items?.FirstOrDefault(x => ReadValue == null ? x.Value == null : Comparer != null ? Comparer.Equals(ReadValue, x.Value) : ReadValue.Equals(x.Value));
                 _dataVisualiserText = item is null
-                    ? Converter.Set(Value)
-                    : (!string.IsNullOrWhiteSpace(item.Text) ? item.Text : Converter.Set(item.Value));
+                    ? base.ConvertSet(ReadValue)
+                    : (!string.IsNullOrWhiteSpace(item.Text) ? item.Text : base.ConvertSet(item.Value));
 
                 return Task.CompletedTask;
             }
@@ -705,10 +692,10 @@ namespace MudExtensions
         /// <returns></returns>
         protected async Task UpdateComboBoxValueAsync(T? value, bool updateText = true, bool updateSearchString = false, bool force = false)
         {
-            await SetValueAsync(value, updateText, force);
+            await SetValueAndUpdateTextAsync(value, updateText, force);
             if (updateSearchString)
             {
-                _searchString = Converter.Set(Value);
+                _searchString = base.ConvertSet(ReadValue);
                 await _inputReference.SetText(_searchString);
             }
         }
@@ -739,9 +726,9 @@ namespace MudExtensions
         {
             base.OnInitialized();
             UpdateIcon();
-            if (!MultiSelection && Value != null)
+            if (!MultiSelection && ReadValue != null)
             {
-                _selectedValues = new HashSet<T?>(_comparer) { Value };
+                _selectedValues = new HashSet<T?>(_comparer) { ReadValue };
             }
             else if (MultiSelection && SelectedValues != null)
             {
@@ -797,16 +784,16 @@ namespace MudExtensions
                 else
                 {
                     DeselectAllItems();
-                    if (Value is not null)
-                        Items.FirstOrDefault(x => x.Value?.Equals(Value) == true).Selected = true;
+                    if (ReadValue is not null)
+                        Items.FirstOrDefault(x => x.Value?.Equals(ReadValue) == true).Selected = true;
                 }
             }
-            if ((Value == null && _oldValue != null) || (Value != null && Value.Equals(_oldValue) == false))
+            if ((ReadValue == null && _oldValue != null) || (ReadValue != null && ReadValue.Equals(_oldValue) == false))
             {
                 await ForceUpdateItems();
                 if (MultiSelection == false)
                 {
-                    _searchString = Converter.Set(Value);
+                    _searchString = base.ConvertSet(ReadValue);
                     if (_inputReference != null)
                     {
                         await _inputReference?.SetText(_searchString);
@@ -815,7 +802,7 @@ namespace MudExtensions
             }
             await UpdateDataVisualiserTextAsync();
             _oldMultiselection = MultiSelection;
-            _oldValue = Value;
+            _oldValue = ReadValue;
         }
 
         /// <summary>
@@ -1049,7 +1036,7 @@ namespace MudExtensions
                 if (Strict)
                 {
                     // Check if the user-provided search string is an exact (case-insensitive) match against an item in the collection.
-                    var item = Items.FirstOrDefault(x => Converter.Set(x.Value)?.Equals(_searchString, StringComparison.OrdinalIgnoreCase) == true);
+                    var item = Items.FirstOrDefault(x => base.ConvertSet(x.Value)?.Equals(_searchString, StringComparison.OrdinalIgnoreCase) == true);
                     if (item is not null)
                         await ToggleOption(item, true);
 
@@ -1057,9 +1044,9 @@ namespace MudExtensions
                     else
                     {
                         // Restore the previous selected item, if any.
-                        if (Value is not null)
+                        if (ReadValue is not null)
                         {
-                            item = Items.FirstOrDefault(x => x?.Value?.Equals(Value) == true);
+                            item = Items.FirstOrDefault(x => x?.Value?.Equals(ReadValue) == true);
                             if (item is not null)
                                 await ToggleOption(item, true);
 
@@ -1074,7 +1061,7 @@ namespace MudExtensions
                     }
                 }
                 else
-                    await UpdateComboBoxValueAsync(Converter.Get(_searchString), updateText: true, updateSearchString: true);
+                    await UpdateComboBoxValueAsync(base.ConvertGet(_searchString), updateText: true, updateSearchString: true);
             }
 
             await OnBlurredAsync(obj);
@@ -1161,7 +1148,7 @@ namespace MudExtensions
 
             _allSelected = GetAllSelectedState();
 
-            _lastActivatedItem = Items.FirstOrDefault(x => x.Value?.Equals(MultiSelection ? SelectedValues.LastOrDefault() : Value) == true);
+            _lastActivatedItem = Items.FirstOrDefault(x => x.Value?.Equals(MultiSelection ? SelectedValues.LastOrDefault() : ReadValue) == true);
             if (_lastActivatedItem is not null)
                 await ScrollToMiddleAsync(_lastActivatedItem);
             else
@@ -1223,7 +1210,7 @@ namespace MudExtensions
 
             if (selected == false)
             {
-                if (MultiSelection == false && Value?.Equals(item.Value) == true)
+                if (MultiSelection == false && ReadValue?.Equals(item.Value) == true)
                 {
                     if (ToggleSelection)
                     {
@@ -1234,7 +1221,7 @@ namespace MudExtensions
                 else if (MultiSelection == true && SelectedValues?.Contains(item.Value) == true)
                 {
                     SelectedValues = SelectedValues.Where(x => x.Equals(item.Value) == false);
-                    await SetValueAsync(SelectedValues.LastOrDefault(), false);
+                    await SetValueAndUpdateTextAsync(SelectedValues.LastOrDefault(), false);
                     item.Selected = false;
                     _allSelected = GetAllSelectedState();
                 }
@@ -1248,7 +1235,7 @@ namespace MudExtensions
                 }
                 else if (SelectedValues?.Contains(item.Value) != true)
                 {
-                    await SetValueAsync(item.Value, false);
+                    await SetValueAndUpdateTextAsync(item.Value, false);
                     SelectedValues = SelectedValues.Append(item.Value);
                     await SelectedValuesChanged.InvokeAsync(_selectedValues);
                     _allSelected = GetAllSelectedState();
@@ -1339,7 +1326,7 @@ namespace MudExtensions
         {
             await UpdateComboBoxValueAsync(default);
             _searchString = null;
-            await SetTextAsync(default, false);
+            await SetTextAndUpdateValueAsync(default, false);
             _selectedValues?.Clear();
             DeselectAllItems();
             await BeginValidateAsync();
@@ -1357,9 +1344,9 @@ namespace MudExtensions
         /// </summary>
         public async Task Clear()
         {
-            await SetValueAsync(default, false);
+            await SetValueAndUpdateTextAsync(default, false);
             _searchString = null;
-            await SetTextAsync(default, false);
+            await SetTextAndUpdateValueAsync(default, false);
             _selectedValues?.Clear();
             await BeginValidateAsync();
             StateHasChanged();
@@ -1424,7 +1411,7 @@ namespace MudExtensions
                     SelectedValues = SelectedValues.Append(item.Value);
                 }
                 await SelectedValuesChanged.InvokeAsync(SelectedValues);
-                await SetValueAsync(SelectedValues.LastOrDefault(), false);
+                await SetValueAndUpdateTextAsync(SelectedValues.LastOrDefault(), false);
                 _allSelected = true;
             }
             else
@@ -1547,7 +1534,7 @@ namespace MudExtensions
 
 
             // Get a collection of items that start with "firstLetter".
-            var items = Items.Where(x => Converter?.Set(x.Value)?.StartsWith(firstLetter, StringComparison.OrdinalIgnoreCase) == true).ToList();
+            var items = Items.Where(x => base.ConvertSet(x.Value)?.StartsWith(firstLetter, StringComparison.OrdinalIgnoreCase) == true).ToList();
             if (!items.Any())
             {
                 if (_lastActivatedItem is not null)

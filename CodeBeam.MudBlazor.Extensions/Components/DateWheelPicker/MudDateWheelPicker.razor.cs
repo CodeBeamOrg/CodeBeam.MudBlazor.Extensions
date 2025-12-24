@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Utilities;
 using MudExtensions.Utilities;
+using System.Globalization;
 
 namespace MudExtensions
 {
@@ -14,22 +15,19 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
+        public MudDateWheelPicker()
+        {
+            Converter = Conversions.From((DateTime? x) => x?.ToString(DateFormat), x => DateTime.TryParseExact(x, DateFormat, null, DateTimeStyles.None, out DateTime dt) ? dt : null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected string? Classname =>
            new CssBuilder("mud-input-input-control")
            .AddClass(Class)
            .Build();
         DateTime dt;
-        /// <summary>
-        /// 
-        /// </summary>
-        protected override void OnInitialized()
-        {
-            Converter = new MudBlazor.Converter<DateTime?, string>()
-            {
-                SetFunc = x => x?.ToString(DateFormat),
-                GetFunc = x => DateTime.TryParseExact(x, DateFormat, null, System.Globalization.DateTimeStyles.None, out dt) ? dt : null,
-            };
-        }
 
         /// <summary>
         /// 
@@ -177,7 +175,7 @@ namespace MudExtensions
         [Parameter]
         public DateWheelPickerLocalizedStrings LocalizedStrings { get; set; } = new();
 
-        private string GetCounterText() => Counter == null ? string.Empty : (Counter == 0 ? (string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") : ((string.IsNullOrEmpty(Text) ? "0" : $"{Text.Length}") + $" / {Counter}"));
+        private string GetCounterText() => Counter == null ? string.Empty : (Counter == 0 ? (string.IsNullOrEmpty(ReadText) ? "0" : $"{ReadText.Length}") : ((string.IsNullOrEmpty(ReadText) ? "0" : $"{ReadText.Length}") + $" / {Counter}"));
 
         /// <summary>
         /// Show clear button.
@@ -297,14 +295,14 @@ namespace MudExtensions
         /// <returns></returns>
         protected async Task UpdateValueAsync(bool updateText = true)
         {
-            var _backUpValue = Value;
+            var _backUpValue = ReadValue;
             try
             {
-                await SetValueAsync(new DateTime(_year, _month, _day, _hour, _minute, _second), updateText);
+                await SetValueAndUpdateTextAsync(new DateTime(_year, _month, _day, _hour, _minute, _second), updateText);
             }
             catch
             {
-                await SetValueAsync(_backUpValue, updateText);
+                await SetValueAndUpdateTextAsync(_backUpValue, updateText);
             }
         }
 
@@ -360,7 +358,7 @@ namespace MudExtensions
         /// <returns></returns>
         protected async Task HandleOnBlur()
         {
-            await SetTextAsync(InputReference.Text, true);
+            await SetTextAndUpdateValueAsync(InputReference.Text, true);
         }
 
         /// <summary>
@@ -485,16 +483,16 @@ namespace MudExtensions
         /// </summary>
         protected void SetWheelValues()
         {
-            if (Value == null)
+            if (ReadValue == null)
             {
                 return;
             }
-            _day = Value.Value.Day;
-            _month = Value.Value.Month;
-            _year = Value.Value.Year;
-            _hour = Value.Value.Hour;
-            _minute = Value.Value.Minute;
-            _second = Value.Value.Second;
+            _day = ReadValue.Value.Day;
+            _month = ReadValue.Value.Month;
+            _year = ReadValue.Value.Year;
+            _hour = ReadValue.Value.Hour;
+            _minute = ReadValue.Value.Minute;
+            _second = ReadValue.Value.Second;
 
             RefreshDays();
         }

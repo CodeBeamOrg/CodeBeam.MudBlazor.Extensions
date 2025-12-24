@@ -5,16 +5,30 @@
 <CascadingValue Name="Standalone" Value="false" IsFixed="true">
     <CascadingValue Value="@this" IsFixed="true">
         <div class="mud-select-extended" style="@(Disabled ? "pointer-events: none" : null)" id="@_elementId">
-            <MudInputControl Label="@Label" Variant="@Variant" HelperText="@HelperText" HelperTextOnFocus="@HelperTextOnFocus" FullWidth="@FullWidth" Margin="@Margin" Class="@Classname" Style="@Style"
-                             Error="@Error" ErrorText="@ErrorText" ErrorId="@ErrorId" Disabled="@Disabled" @onclick="@ToggleMenu" Required="@Required" ForId="@FieldId">
+            <MudInputControl
+                Label="@Label"
+                Variant="@Variant"
+                HelperId="@GetHelperId()" 
+                HelperText="@HelperText"
+                HelperTextOnFocus="@HelperTextOnFocus"
+                FullWidth="@FullWidth"
+                Margin="@Margin"
+                Class="@Classname"
+                Style="@Style"
+                Error="@HasErrors"
+                ErrorText="@GetErrorText()"
+                ErrorId="@ErrorIdState.Value"
+                Disabled="@Disabled"
+                @onclick="@ToggleMenu"
+                Required="@Required"
+                ForId="@InputElementId">
                 <InputContent>
                     <MudInputExtended @ref="_elementReference" InputType="InputType.Hidden" Label="@Label"
                                       Class="@InputClassname" Style="@InputStyle" Margin="@Margin" Placeholder="@Placeholder"
                                       Variant="@Variant"
                                       HasAdornmentStart="@((AdornmentStart != null))"
-                                      TextUpdateSuppression="false"
-                                      Value="@(Strict && !IsValueInList ? null : Text)" Underline="@Underline"
-                                      Disabled="@GetDisabledState()" ReadOnly="true" Error="@Error" ErrorId="@ErrorId"
+                                      Value="@(Strict && !IsValueInList ? null : ReadText)" Underline="@Underline"
+                                      Disabled="@GetDisabledState()" ReadOnly="true" Error="@ErrorState.Value" ErrorId="@ErrorIdState.Value"
                                       Clearable="@Clearable" OnClearButtonClick="(async (e) => await SelectClearButtonClickHandlerAsync(e))"
                                       @attributes="UserAttributes" OnBlur="@OnLostFocus" ShrinkLabel="@(AdornmentStart != null || ShrinkLabel)" Typo="@Typo"
                                       ShowVisualiser="true" DataVisualiserStyle="min-height: 1.1876em; padding-right: 0px;">
@@ -43,7 +57,7 @@
                                 }
                                 @if (ValuePresenter == ValuePresenter.Text)
                                 {
-                                    if (string.IsNullOrEmpty(Text))
+                                    if (string.IsNullOrEmpty(ReadText))
                                     {
                                         <MudText Typo="@Typo" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
                                     }
@@ -61,14 +75,14 @@
                                         {
                                             foreach (var item in ItemCollection.Where(x => SelectedValues?.Contains(x) == true))
                                             {
-                                                <MudChip Class="@ChipClass" Value="@item" Text="@Converter.Set(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                                <MudChip Class="@ChipClass" Value="@item" Text="@base.ConvertSet(item)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
                                             }
                                         }
                                         else
                                         {
                                             foreach (var item in Items?.Where(x => SelectedValues?.Contains(x.Value) == true) ?? new List<MudSelectItemExtended<T>>())
                                             {
-                                                <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? Converter.Set(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
+                                                <MudChip Class="@ChipClass" Value="item.Value" Text="@(string.IsNullOrEmpty(item.Text) ? base.ConvertSet(item.Value) : item.Text)" Color="@Color" Size="@ChipSize" Variant="@ChipVariant" />
                                             }
                                         }
                                     </MudChipSet>
@@ -97,7 +111,7 @@
                                     }
                                     else
                                     {
-                                        @if (string.IsNullOrEmpty(Text))
+                                        @if (string.IsNullOrEmpty(ReadText))
                                         {
                                             <MudText Typo="@Typo" Class="mud-text-secondary mud-placeholder-extended">@Placeholder</MudText>
                                         }
@@ -123,7 +137,7 @@
                         @if (ItemCollection != null || ChildContent != null)
                         {
                             <CascadingValue Value="@this" IsFixed="true">
-                                <MudListExtended @ref="@_list" T="T" @bind-SelectedValue="@Value" Style="@($"overflow-y:auto; max-height: {MaxHeight}px")" @bind-SelectedValues="@SelectedValues" @bind-SelectedItem="@SelectedListItem" @bind-SelectedItems="@SelectedListItems"
+                                <MudListExtended @ref="@_list" T="T" @bind-SelectedValue:set="@SetValueAsync" @bind-SelectedValue:get="@ReadValue" Style="@($"overflow-y:auto; max-height: {MaxHeight}px")" @bind-SelectedValues="@SelectedValues" @bind-SelectedItem="@SelectedListItem" @bind-SelectedItems="@SelectedListItems"
                                                  Clickable="true" Color="@Color" Dense="@Dense" ItemCollection="@ItemCollection" Virtualize="@Virtualize" Padding="@EnablePopoverPadding" EnableSelectedItemStyle="@EnableSelectedItemStyle"
                                                  MultiSelection="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MultiSelectionAlign="@MultiSelectionAlign" SelectAll="@SelectAll" SelectAllPosition="@SelectAllPosition" SelectAllText="@SelectAllText"
                                                  CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" IndeterminateIcon="@IndeterminateIcon" SelectValueOnTab="@SelectValueOnTab" Comparer="@Comparer" AddNullItem="@AddNullItem" AddedNullItemText="@AddedNullItemText"
@@ -148,7 +162,7 @@
 
         <div style="display: none">
             <CascadingValue Value="@this" IsFixed="true">
-                <MudListExtended T="T" @bind-SelectedValue="@Value" @bind-SelectedValues="@SelectedValues" @bind-SelectedItem="@SelectedListItem" @bind-SelectedItems="@SelectedListItems"
+                <MudListExtended T="T" @bind-SelectedValue:set="@SetValueAsync" @bind-SelectedValue:get="@ReadValue" @bind-SelectedValues="@SelectedValues" @bind-SelectedItem="@SelectedListItem" @bind-SelectedItems="@SelectedListItems"
                                  Clickable="true" Color="@Color" Dense="@Dense" ItemCollection="@ItemCollection" Virtualize="@Virtualize" Padding="@EnablePopoverPadding" EnableSelectedItemStyle="@EnableSelectedItemStyle"
                                  MultiSelection="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MultiSelectionAlign="@MultiSelectionAlign" SelectAll="@SelectAll" SelectAllPosition="@SelectAllPosition" SelectAllText="@SelectAllText"
                                  CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" IndeterminateIcon="@IndeterminateIcon" SelectValueOnTab="@SelectValueOnTab" Comparer="@Comparer" AddNullItem="@AddNullItem" AddedNullItemText="@AddedNullItemText"

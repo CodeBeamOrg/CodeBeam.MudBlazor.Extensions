@@ -18,18 +18,20 @@
               @ref="ElementReference"
               rows="@Lines"
               @attributes="UserAttributes"
+              id="@InputElementId"
               type="@InputTypeString"
               placeholder="@Placeholder"
-              disabled=@Disabled
-              readonly="@ReadOnly"
+              disabled="@GetDisabledState()"
+              readonly="@GetReadOnlyState"
               inputmode="@InputMode.ToString()"
-              @oninput="OnInputHandler"
-              @onchange="OnChangeHandler"
+              @bind:event="@(Immediate ? "oninput" : "onchange")"
+              @bind:get="@_internalText"
+              @bind:set="@OnInputOrOnChangeAsync"
               @onblur="@OnBlurredAsync"
               @onkeydown="@InvokeKeyDownAsync"
               @onkeyup="@InvokeKeyUpAsync"
+              @onbeforeinput="@InvokeBeforeInputAsync"
               @onpaste="@OnPaste"
-              value="@_internalText"
               maxlength="@MaxLength"
               @onkeydown:preventDefault="@KeyDownPreventDefault"
               @onkeyup:preventDefault="@KeyUpPreventDefault"
@@ -37,10 +39,9 @@
               @onwheel="@OnMouseWheel"
               aria-invalid="@Error.ToString().ToLower()"
               aria-describedby="@ErrorId"> 
-            @Text
+            @ReadText
             </textarea>
         @*Note: double mouse wheel handlers needed for Firefox because it doesn't know onmousewheel*@
-        @*note: the value="@_internalText" is absolutely essential here. the inner html @Text is needed by tests checking it*@
     }
     else
     {
@@ -59,10 +60,11 @@
                     <input class="@InputClassname"
                            @ref="ElementReference"
                            @attributes="UserAttributes"
+                           id="@InputElementId"
                            type="@InputTypeString"
-                           value="@_internalText"
-                           @oninput="OnInputHandler"
-                           @onchange="OnChangeHandler"
+                           @bind:event="@(Immediate ? "oninput" : "onchange")"
+                           @bind:get="@_internalText"
+                           @bind:set="@OnInputOrOnChangeAsync"
                            placeholder="@Placeholder"
                            disabled=@Disabled
                            readonly="@ReadOnly"
@@ -71,6 +73,7 @@
                            pattern="@Pattern"
                            @onkeydown="@InvokeKeyDownAsync"
                            @onkeyup="@InvokeKeyUpAsync"
+                           @onbeforeinput="@InvokeBeforeInputAsync"
                            maxlength="@MaxLength"
                            @onkeydown:preventDefault="KeyDownPreventDefault"
                            @onkeyup:preventDefault="@KeyUpPreventDefault"
@@ -85,10 +88,11 @@
                     <input class="@InputClassname"
                            @ref="ElementReference"
                            @attributes="UserAttributes"
+                           id="@InputElementId"
                            type="@InputTypeString"
-                           value="@_internalText"
-                           @oninput="OnInputHandler"
-                           @onchange="OnChangeHandler"
+                           @bind:event="@(Immediate ? "oninput" : "onchange")"
+                           @bind:get="@_internalText"
+                           @bind:set="@OnInputOrOnChangeAsync"
                            placeholder="@Placeholder"
                            disabled=@Disabled
                            readonly="@ReadOnly"
@@ -97,6 +101,7 @@
                            pattern="@Pattern"
                            @onkeydown="@InvokeKeyDownAsync"
                            @onkeyup="@InvokeKeyUpAsync"
+                           @onbeforeinput="@InvokeBeforeInputAsync"
                            maxlength="@MaxLength"
                            @onkeydown:preventDefault="KeyDownPreventDefault"
                            @onkeyup:preventDefault="@KeyUpPreventDefault"
