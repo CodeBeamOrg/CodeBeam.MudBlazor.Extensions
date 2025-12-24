@@ -29,6 +29,14 @@
 		<SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<SassCompilerEnabled>true</SassCompilerEnabled>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(CI)' == 'true'">
+		<SassCompilerEnabled>false</SassCompilerEnabled>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
