@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.Extensions;
 using MudBlazor.Interfaces;
 using MudBlazor.State;
 using MudBlazor.Utilities;
@@ -18,6 +19,12 @@ namespace MudExtensions
         /// </summary>
         public MudCodeInput()
         {
+            Converter = new DefaultConverter<T>
+            {
+                Culture = GetCulture,
+                Format = GetFormat
+            };
+
             using var registerScope = CreateRegisterScope();
             _theValue = registerScope.RegisterParameter<T?>(nameof(Value))
                 .WithParameter(() => Value)
@@ -279,7 +286,7 @@ namespace MudExtensions
             string result = "";
             for (int i = 0; i < _count.Value; i++)
             {
-                var val = _elementReferences[i].Value?.ToString();
+                var val = _elementReferences[i].GetState(x => x.Value)?.ToString();
                 if (val == null)
                 {
                     continue;

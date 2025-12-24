@@ -10,18 +10,9 @@
                 int a = i;
                 <MudTextFieldExtended @ref="_elementReferences[a]" T="T" Class="@InputClassname" Style="@(Margin == Margin.Dense ? "width: 32px" : "width: 42px")" MaxLength="1"
                                       @onkeydown="HandleKeyDown" @onfocus="@(() => CheckFocus(a))" @onblur="SetValue" OnInput="OnInputHandler" Error="@ErrorState.Value"
-                                      Variant="@Variant" Margin="@Margin" Disabled="Disabled" ReadOnly="ReadOnly" Immediate="true" InputType="InputType" />
+                                      Variant="@Variant" Margin="@Margin" Disabled="Disabled" ReadOnly="ReadOnly" Immediate="true" InputType="InputType"
+                                      HasAdornmentStart="false" HasAdornmentEnd="false" />
             }
         </div>
     </InputContent>
 </MudInputControl>
-
-<style>
-    .justify-text-center input {
-        text-align: center;
-    }
-
-    .mud-code input {
-        padding: 12px 0px !important;
-    }
-</style>

@@ -1,5 +1,5 @@
 {
-  "Source": "Styles",
-  "Output": "wwwroot",
-  "Minify": true
+  "SourceFolder": "Styles/MudExtensions.scss",
+  "Target": "wwwroot/MudExtensions.min.css",
+  "Arguments": "--style=compressed --no-source-map --silence-deprecation=import --silence-deprecation=global-builtin"
 }

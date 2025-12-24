@@ -44,8 +44,8 @@ namespace MudExtensions
 
         public static string GetAdornmentClassname<T>(MudBaseInputExtended<T> baseInput) =>
             new CssBuilder("mud-input-adornment")
-                .AddClass($"mud-input-adornment-start", baseInput.AdornmentStart != null)
-                .AddClass($"mud-input-adornment-end", baseInput.AdornmentEnd != null)
+                .AddClass($"mud-input-adornment-start", baseInput.HasAdornmentStart)
+                .AddClass($"mud-input-adornment-end", baseInput.HasAdornmentEnd)
                 .AddClass($"mud-text", !string.IsNullOrEmpty(baseInput.AdornmentText))
                 .AddClass($"mud-input-root-filled-shrink", baseInput.Variant == Variant.Filled)
                 .AddClass(baseInput.Class)
