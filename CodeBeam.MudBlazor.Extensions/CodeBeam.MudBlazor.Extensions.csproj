@@ -27,10 +27,7 @@
 		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<SassCompilerEnabled>true</SassCompilerEnabled>
+		<SassCompilerFailOnWarnings>false</SassCompilerFailOnWarnings>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(CI)' == 'true'">
