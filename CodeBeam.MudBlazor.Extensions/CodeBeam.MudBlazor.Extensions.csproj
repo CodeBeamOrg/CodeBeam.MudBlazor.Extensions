@@ -27,11 +27,6 @@
 		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
-		<SassCompilerFailOnWarnings>false</SassCompilerFailOnWarnings>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(CI)' == 'true'">
-		<SassCompilerEnabled>false</SassCompilerEnabled>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -40,19 +35,16 @@
 
 	<ItemGroup>
 		<PackageReference Include="MudBlazor" Version="9.0.0-preview.1" />
-		<PackageReference Include="MudBlazor.SassCompiler" Version="2.0.7">
+		<!--<PackageReference Include="MudBlazor.SassCompiler" Version="2.0.7">
 			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
+		</PackageReference>-->
 	</ItemGroup>
 
 	<Target Name="CopyMudExtensionsCss" AfterTargets="Build">
 		<Copy SourceFiles="wwwroot/css/MudExtensions.min.css" DestinationFiles="wwwroot/MudExtensions.min.css" SkipUnchangedFiles="true" Condition="Exists('wwwroot/css/MudExtensions.min.css')" />
 	</Target>
 
-	<Target Name="MinifyMudExtensionsJs" AfterTargets="Build" Condition="'$(TargetFramework)' == 'net10.0' AND Exists('TScripts/MudExtensions.js')">
-		<Message Importance="high" Text="Minifying MudExtensions.js → MudExtensions.min.js" />
-		<Exec WorkingDirectory="$(SolutionDir)" Command="dotnet run --project CodeBeam.MudBlazor.Extensions.JsMinifier\CodeBeam.MudBlazor.Extensions.JsMinifier.csproj --configuration $(Configuration)" />
-	</Target>
+
 
 	<ItemGroup>
 		<Content Remove="sasscompiler.json" />
