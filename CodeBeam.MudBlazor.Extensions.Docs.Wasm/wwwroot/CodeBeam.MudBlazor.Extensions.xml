@@ -4164,19 +4164,18 @@
             <param name="select_item"></param>
             <exception cref="T:MudBlazor.Utilities.Exceptions.GenericTypeMismatchException"></exception>
         </member>
-        <member name="M:MudExtensions.MudSelectExtended`1.HasValue(`0)">
-            <summary>
-            Fixes issue #4328
-            Returns true when MultiSelection is true and it has selected values(Since Value property is not used when MultiSelection=true
-            </summary>
-            <param name="value"></param>
-            <returns>True when component has a value</returns>
-        </member>
         <member name="M:MudExtensions.MudSelectExtended`1.ChipClosed(MudBlazor.MudChip{`0})">
             <summary>
             
             </summary>
             <param name="chip"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudSelectExtended`1.HasValue(`0)">
+            <summary>
+            
+            </summary>
+            <param name="value"></param>
             <returns></returns>
         </member>
         <member name="M:MudExtensions.MudSelectExtended`1.GetOpenState">

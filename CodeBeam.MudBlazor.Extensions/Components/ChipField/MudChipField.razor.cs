@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.State;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -11,6 +12,16 @@ namespace MudExtensions
     /// <typeparam name="T"></typeparam>
     public partial class MudChipField<T> : MudTextFieldExtended<T>
     {
+        public MudChipField()
+        {
+            using var registerScope = CreateRegisterScope();
+            _valuesState = registerScope.RegisterParameter<List<string>?>(nameof(Values))
+                .WithParameter(() => Values)
+                .WithEventCallback(() => ValuesChanged);
+        }
+
+        private readonly ParameterState<List<string>?> _valuesState;
+
         /// <summary>
         /// Protected classes.
         /// </summary>
@@ -41,7 +52,7 @@ namespace MudExtensions
         /// Fires when values changed
         /// </summary>
         [Parameter]
-        public EventCallback<List<string>> ValuesChanged { get; set; }
+        public EventCallback<List<string>?> ValuesChanged { get; set; }
 
         /// <summary>
         /// If false, pressing delimeter key has no effect if the value is already in values. Default is false.
@@ -122,28 +133,28 @@ namespace MudExtensions
         /// <returns></returns>
         protected internal async Task HandleKeyDown(KeyboardEventArgs args)
         {
-            var result = args.Key;
-            if (result.Equals(Delimiter, StringComparison.InvariantCultureIgnoreCase) && _internalValue != null)
-            {
-                if (AllowSameValues == false && Values?.Contains(base.ConvertSet(_internalValue) ?? string.Empty) == true)
-                {
-                    await Task.Delay(10);
-                    _internalValue = base.ConvertGet(base.ConvertSet(_internalValue)?.Replace(result, null).ToString());
-                    await SetValueAsync(_internalValue);
-                    StateHasChanged();
-                    return;
-                }
-                await SetChips();
-                StateHasChanged();
-            }
+            //var result = args.Key;
+            //if (result.Equals(Delimiter, StringComparison.InvariantCultureIgnoreCase) && _internalValue != null)
+            //{
+            //    if (AllowSameValues == false && _valuesState.Value?.Contains(base.ConvertSet(_internalValue) ?? string.Empty) == true)
+            //    {
+            //        await Task.Delay(10);
+            //        _internalValue = base.ConvertGet(base.ConvertSet(_internalValue)?.Replace(result, null).ToString());
+            //        await SetValueAsync(_internalValue);
+            //        StateHasChanged();
+            //        return;
+            //    }
+            //    await SetChips();
+            //    StateHasChanged();
+            //}
 
-            if (args.Key == "Backspace" && string.IsNullOrEmpty(base.ConvertSet(_internalValue)) && Values != null && Values.Any() && BackspaceChipRemoval == true)
-            {
-                Values.RemoveAt(Values.Count - 1);
-                await ValuesChanged.InvokeAsync(Values);
-            }
-            await Task.Delay(10);
-            await SetValueAsync(_internalValue);
+            //if (args.Key == "Backspace" && string.IsNullOrEmpty(base.ConvertSet(_internalValue)) && _valuesState.Value != null && _valuesState.Value.Any() && BackspaceChipRemoval == true)
+            //{
+            //    _valuesState.Value.RemoveAt(_valuesState.Value.Count - 1);
+            //    await ValuesChanged.InvokeAsync(_valuesState.Value);
+            //}
+            //await Task.Delay(10);
+            //await SetValueAsync(_internalValue);
             await OnKeyDown.InvokeAsync(args);
         }
 
@@ -157,6 +168,62 @@ namespace MudExtensions
             await OnKeyUp.InvokeAsync(args);
         }
 
+        protected internal async Task HandleBeforeInput(MudBeforeInputEventArgs args)
+        {
+            if (args.IsComposing)
+            {
+                return;
+            }
+
+            if (args.IsInsert && args.Data == Delimiter && _internalValue is not null)
+            {
+                args.PreventDefault = true;
+                var currentText = base.ConvertSet(_internalValue);
+
+                if (!string.IsNullOrEmpty(currentText))
+                {
+                    if (!AllowSameValues && _valuesState.Value?.Contains(currentText) == true)
+                    {
+                        return;
+                    }
+
+                    await SetChips();
+                }
+                return;
+            }
+
+            if (args.IsDeleteBackward && string.IsNullOrEmpty(base.ConvertSet(_internalValue)) && _valuesState.Value is { Count: > 0 } && BackspaceChipRemoval)
+            {
+                args.PreventDefault = true;
+
+                _valuesState.Value.RemoveAt(_valuesState.Value.Count - 1);
+                await ValuesChanged.InvokeAsync(_valuesState.Value);
+
+                return;
+            }
+
+            if (args.IsPaste && !string.IsNullOrEmpty(args.Data))
+            {
+                args.PreventDefault = true;
+
+                var parts = args.Data
+                    .Split(Delimiter, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+                if (_valuesState.Value == null)
+                    await _valuesState.SetValueAsync(new List<string>());
+
+                foreach (var part in parts)
+                {
+                    if (AllowSameValues || !_valuesState.Value.Contains(part))
+                    {
+                        _valuesState.Value.Add(part);
+                    } 
+                }
+
+                await ValuesChanged.InvokeAsync(_valuesState.Value);
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -168,12 +235,12 @@ namespace MudExtensions
                 return;
             }
 
-            if (Values == null)
+            if (_valuesState.Value == null)
             {
-                Values = new();
+                await _valuesState.SetValueAsync(new List<string>());
             }
-            Values.Add(base.ConvertSet(_internalValue) ?? "");
-            await ValuesChanged.InvokeAsync(Values);
+            _valuesState.Value.Add(base.ConvertSet(_internalValue) ?? "");
+            await ValuesChanged.InvokeAsync(_valuesState.Value);
             if (RuntimeLocation.IsServerSide)
             {
                 await _textFieldExtendedReference.BlurAsync();
@@ -183,6 +250,8 @@ namespace MudExtensions
                 await Task.Delay((int)DebounceInterval + 10);
             }
             await _textFieldExtendedReference.Clear();
+            _internalValue = default;
+            await _textFieldExtendedReference.ValueChanged.InvokeAsync(_internalValue);
             if (RuntimeLocation.IsServerSide)
             {
                 await _textFieldExtendedReference.FocusAsync();
@@ -200,8 +269,8 @@ namespace MudExtensions
             {
                 return;
             }
-            Values?.Remove(chip.Text ?? "");
-            await ValuesChanged.InvokeAsync(Values);
+            _valuesState.Value?.Remove(chip.Text ?? "");
+            await ValuesChanged.InvokeAsync(_valuesState.Value);
             await _textFieldExtendedReference.FocusAsync();
         }
 

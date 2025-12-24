@@ -19,7 +19,7 @@ namespace MudExtensions.UnitTests.Components
             });
             var field = comp.FindComponent<MudTextFieldExtended<string>>();
             field.Find("input").Input(new ChangeEventArgs() { Value = "sdfg" });
-            await comp.InvokeAsync(() => comp.Instance.HandleKeyDown(new KeyboardEventArgs() { Key = " " }));
+            await comp.InvokeAsync(() => comp.Instance.HandleBeforeInput(new MudBeforeInputEventArgs() { Data = " ", InputType = "insert" }));
             comp.Instance.Values.Should().BeEquivalentTo(new List<string> { "asdf", "asd", "sdfg" });
             comp.Instance.GetState(x => x.Value).Should().BeEquivalentTo(null);
         }

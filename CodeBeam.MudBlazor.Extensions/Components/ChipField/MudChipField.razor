@@ -7,6 +7,7 @@
                       Immediate="true"
                       OnKeyDown="HandleKeyDown"
                       OnKeyUp="HandleKeyUp"
+                      OnBeforeInput="@HandleBeforeInput"
                       OnBlur="@(async() => await OnBlur.InvokeAsync())"
                       OnClearButtonClick="@(async() => await OnClearButtonClick.InvokeAsync())"
                       OnDebounceIntervalElapsed="@(async() => await OnDebounceIntervalElapsed.InvokeAsync())"

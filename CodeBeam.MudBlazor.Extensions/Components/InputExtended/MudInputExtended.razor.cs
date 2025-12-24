@@ -12,7 +12,7 @@ namespace MudExtensions
     /// <typeparam name="T"></typeparam>
     public partial class MudInputExtended<T> : MudBaseInputExtended<T>
     {
-        [Inject] IJSRuntime? JSRuntime { get; set; }
+        [Inject] IJSRuntime JSRuntime { get; set; } = null!;
 
         /// <summary>
         /// 
@@ -70,6 +70,9 @@ namespace MudExtensions
                     .AddClass("d-none", !(InputType == InputType.Hidden && ChildContent != null && ShowVisualiser == false))
                     .Build();
 
+        private bool _beforeInputAttached;
+        private DotNetObjectReference<MudInputExtended<T>>? _dotNetRef;
+
         /// <summary>
         /// 
         /// </summary>
@@ -87,6 +90,14 @@ namespace MudExtensions
                         await JSRuntime.InvokeVoidAsync("auto_size", ElementReference);
                     }
                     StateHasChanged();
+                }
+
+                if (!_beforeInputAttached)
+                {
+                    _beforeInputAttached = true;
+                    _dotNetRef = DotNetObjectReference.Create(this);
+
+                    await JSRuntime.InvokeVoidAsync("mudBeforeInput.attach", ElementReference, _dotNetRef);
                 }
             }
         }

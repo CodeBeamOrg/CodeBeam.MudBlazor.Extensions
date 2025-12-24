@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using MudBlazor;
-using MudBlazor.State;
-using MudBlazor.Utilities;
 using MudExtensions.Base;
 
 namespace MudExtensions
@@ -21,11 +20,11 @@ namespace MudExtensions
         /// </summary>
         protected MudBaseInputExtended()
         {
-            //Converter = new DefaultConverter<T>
-            //{
-            //    Culture = GetCulture,
-            //    Format = GetFormat
-            //};
+            Converter = new DefaultConverter<T>
+            {
+                Culture = GetCulture,
+                Format = GetFormat
+            };
 
             //using var registerScope = CreateRegisterScope();
             //_textState = registerScope.RegisterParameter<string?>(nameof(Text))
@@ -55,6 +54,9 @@ namespace MudExtensions
         /// Fires on change.
         /// </summary>
         [Parameter] public EventCallback OnChange { get; set; }
+
+        [Parameter]
+        public EventCallback<MudBeforeInputEventArgs> OnBeforeInput { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the component has an adornment at the start.
@@ -89,6 +91,15 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool DisablePaste { get; set; }
 
+        protected async Task InvokeBeforeInputAsync(MudBeforeInputEventArgs args)
+        {
+            _isFocused = true;
+            await OnBeforeInputAsync(args);
+
+            if (OnBeforeInput.HasDelegate)
+                await OnBeforeInput.InvokeAsync(args);
+        }
+
 
         /// <summary>
         /// 
@@ -116,13 +127,22 @@ namespace MudExtensions
         /// <returns></returns>
         protected string? ResolveAriaDescribedBy() => GetAriaDescribedByString();
 
-    }
-
-    internal static class ParameterViewExtensions
-    {
-        public static bool Contains<T>(this ParameterView view, string parameterName)
+        [JSInvokable("OnBeforeInput")]
+        public async Task<bool> OnBeforeInputFromJs(MudBeforeInputJsDto dto)
         {
-            return view.TryGetValue<T>(parameterName, out var _);
+            var args = new MudBeforeInputEventArgs
+            {
+                Data = dto.Data,
+                InputType = dto.InputType,
+                IsComposing = dto.IsComposing
+            };
+
+            await InvokeBeforeInputAsync(args);
+            return args.PreventDefault;
         }
+
+        protected virtual Task OnBeforeInputAsync(MudBeforeInputEventArgs args) => Task.CompletedTask;
+
+
     }
 }

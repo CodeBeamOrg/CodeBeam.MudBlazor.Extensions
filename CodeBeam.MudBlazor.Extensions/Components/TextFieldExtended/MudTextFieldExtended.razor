@@ -16,7 +16,7 @@
                          Disabled="@Disabled"
                          Margin="@Margin"
                          Required="@Required"
-                         ForId="@FieldId">
+                         ForId="@InputElementId">
             <InputContent>
                 <CascadingValue Name="SubscribeToParentForm2" Value="false" IsFixed="true">
                     @if (_mask == null)
@@ -32,7 +32,7 @@
                                       Variant="@Variant"
                                       HasAdornmentStart="@((AdornmentStart != null))"
                                       Value="@ReadText"
-                                      ValueChanged="(s) => SetTextAsync(s)"
+                                      ValueChanged="(s) => SetTextAndUpdateValueAsync(s)"
                                       Placeholder="@Placeholder"
                                       Disabled="@GetDisabledState()"
                                       Underline="@Underline"
@@ -48,6 +48,7 @@
                                       OnKeyDown="@InvokeKeyDownAsync"
                                       OnInternalInputChanged="OnChanged"
                                       OnKeyUp="@InvokeKeyUpAsync"
+                                      OnBeforeInput="@InvokeBeforeInputAsync"
                                       KeyDownPreventDefault="KeyDownPreventDefault"
                                       KeyUpPreventDefault="KeyUpPreventDefault"
                                       HideSpinButtons="true"

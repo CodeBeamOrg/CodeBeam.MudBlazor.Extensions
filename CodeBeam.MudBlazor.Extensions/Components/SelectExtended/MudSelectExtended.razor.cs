@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.Extensions;
 using MudBlazor.Services;
 using MudBlazor.State;
 using MudBlazor.Utilities;
@@ -811,7 +812,7 @@ namespace MudExtensions
 
                 await UpdateTextPropertyAsync(false);
                 _list?.ForceUpdateItems();
-                SelectedListItem = Items.FirstOrDefault(x => x.Value != null && Value != null && x.Value.Equals(ReadValue))?.ListItem;
+                SelectedListItem = Items.FirstOrDefault(x => x.Value != null && ReadValue != null && x.Value.Equals(ReadValue))?.ListItem;
                 StateHasChanged();
             }
             //Console.WriteLine("Select rendered");
@@ -1064,7 +1065,7 @@ namespace MudExtensions
                     await CloseMenu();
                 return;
             }
-            await SelectOption(_items[index].Value);
+            await SelectOption(_items[index].GetState(x => x.Value));
         }
 
         /// <summary>
@@ -1284,20 +1285,6 @@ namespace MudExtensions
         }
 
         /// <summary>
-        /// Fixes issue #4328
-        /// Returns true when MultiSelection is true and it has selected values(Since Value property is not used when MultiSelection=true
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns>True when component has a value</returns>
-        protected override bool HasValue(T? value)
-        {
-            if (MultiSelection)
-                return SelectedValues?.Count() > 0;
-            else
-                return base.HasValue(value);
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="chip"></param>
@@ -1312,7 +1299,14 @@ namespace MudExtensions
             SelectedValues = SelectedValues.Where(x => x?.Equals(chip.Value) == false);
             await SelectedValuesChanged.InvokeAsync(SelectedValues);
         }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected override bool HasValue(T? value) => MultiSelection ? SelectedValues?.Any() == true : base.HasValue(value);
+
         /// <summary>
         /// returns the value of the internal property _isOpen 
         /// </summary>
