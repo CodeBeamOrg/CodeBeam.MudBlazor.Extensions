@@ -26,6 +26,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage"
+      run: dotnet test --configuration Release -f net10.0 --collect:"XPlat Code Coverage"
     - name: Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
