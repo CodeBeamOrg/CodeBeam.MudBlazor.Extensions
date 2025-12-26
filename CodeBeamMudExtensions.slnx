@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/docs/">
+    <Project Path="docs/CodeBeam.MudBlazor.Extensions.Docs.Server/CodeBeam.MudBlazor.Extensions.Docs.Server.csproj" />
+    <Project Path="docs/CodeBeam.MudBlazor.Extensions.Docs.Wasm/CodeBeam.MudBlazor.Extensions.Docs.Wasm.csproj" />
+    <Project Path="docs/CodeBeam.MudBlazor.Extensions.Docs/CodeBeam.MudBlazor.Extensions.Docs.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CodeBeam.MudBlazor.Extensions.UnitTests.Viewer/CodeBeam.MudBlazor.Extensions.UnitTests.Viewer.csproj" />
+    <Project Path="tests/CodeBeam.MudBlazor.Extensions.UnitTests/CodeBeam.MudBlazor.Extensions.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/utilities/">
+    <Project Path="utilities/CodeBeam.MudBlazor.Extensions.JsMinifier/CodeBeam.MudBlazor.Extensions.JsMinifier.csproj" />
+  </Folder>
+  <Project Path="src/CodeBeam.MudBlazor.Extensions.CsvMapper/CodeBeam.MudBlazor.Extensions.CsvMapper.csproj" />
+  <Project Path="src/CodeBeam.MudBlazor.Extensions.Qr/CodeBeam.MudBlazor.Extensions.Qr.csproj" />
+  <Project Path="src/CodeBeam.MudBlazor.Extensions/CodeBeam.MudBlazor.Extensions.csproj" />
+</Solution>
