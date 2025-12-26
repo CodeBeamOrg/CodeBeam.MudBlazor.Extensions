@@ -21,7 +21,7 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release --no-restore
     - name: Publish
-      run: dotnet publish /home/runner/work/CodeBeam.MudBlazor.Extensions/CodeBeam.MudBlazor.Extensions/CodeBeam.MudBlazor.Extensions.Docs.Wasm/CodeBeam.MudBlazor.Extensions.Docs.Wasm.csproj -c Release -f net10.0 --output ./Release
+      run: dotnet publish /home/runner/work/CodeBeam.MudBlazor.Extensions/CodeBeam.MudBlazor.Extensions/docs/CodeBeam.MudBlazor.Extensions.Docs.Wasm/CodeBeam.MudBlazor.Extensions.Docs.Wasm.csproj -c Release -f net10.0 --output ./Release
     
     - name: 📂 Sync files
       if: ${{ github.repository_owner == 'CodeBeamOrg' }}
