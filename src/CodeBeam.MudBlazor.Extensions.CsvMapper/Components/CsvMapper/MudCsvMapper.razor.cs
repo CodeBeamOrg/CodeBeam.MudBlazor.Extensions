@@ -10,9 +10,19 @@ using CsvHelper.Configuration;
 
 namespace MudExtensions
 {
-    internal class ConfirmedDefaultValue
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ConfirmedDefaultValue
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public string? DefaultValue { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public bool Confirmed { get; set; }
     }
 
