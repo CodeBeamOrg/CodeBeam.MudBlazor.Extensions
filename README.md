@@ -9,6 +9,7 @@
 [![Contributors](https://img.shields.io/github/contributors/codebeamorg/codebeam.mudblazor.extensions?color=594ae2&style=flat-square&logo=github)](https://github.com/codebeamorg/codebeam.mudblazor.extensions/graphs/contributors)
 [![NuGet version](https://img.shields.io/nuget/v/CodeBeam.mudblazor.extensions?color=ff4081&label=nuget%20version&logo=nuget&style=flat-square)](https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions)
 [![NuGet downloads](https://img.shields.io/nuget/dt/CodeBeam.mudblazor.extensions?color=ff4081&label=nuget%20downloads&logo=nuget&style=flat-square)](https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions)
+[![codecov](https://codecov.io/gh/CodeBeamOrg/CodeBeam.MudBlazor.Extensions/branch/dev/graph/badge.svg)](https://codecov.io/gh/CodeBeamOrg/CodeBeam.MudBlazor.Extensions)
 
 ## Utilities
 
@@ -69,18 +70,19 @@ https://mudextensions.codebeam.org/api
 
 ## Supported MudBlazor Versions
 
-| MudExtensions  |    MudBlazor    |      .NET       |
-| :------------- | :-------------: | :-------------: |
-| 6.0.0 - 6.0.3  |     6.0.16      |     .NET 6      |
-| 6.0.4 - 6.0.12 | 6.0.17 - 6.0.18 |     .NET 6      |
-| 6.1.0 - 6.1.4  |  6.1.0 - 6.1.2  | .NET 6 & 7 |
-| 6.1.5 - 6.1.9  |  6.1.4 - 6.1.7  | .NET 6 & 7 |
-| 6.2.0 - 6.2.5  |      6.1.8      | .NET 6 & 7 |
-| 6.2.6 - 6.4.8  |  6.1.9 - 6.2.0  | .NET 6 & 7 |
-| 6.4.9 - 6.6.x  |  6.2.1 - 6.11.1 | .NET 6 & 7 |
-| 6.8.0 - 6.9.2  |  6.12.0 - 6.21.0 | .NET 6 & 7 & 8 |
-| 7.0.0 - 7.1.0  |  7.0.0 - 7.16.0 | .NET 7 & 8 |
-| 8.0.0 =>  |  8.0.0 => | .NET 8 & 9 |
+| MudExtensions  |    MudBlazor    |      .NET       |  Support  |
+| :------------- | :-------------: | :-------------: |:----------|
+| 6.0.0 - 6.0.3  |     6.0.16      |     .NET 6      | Ended     |
+| 6.0.4 - 6.0.12 | 6.0.17 - 6.0.18 |     .NET 6      | Ended     |
+| 6.1.0 - 6.1.4  |  6.1.0 - 6.1.2  | .NET 6 & 7      | Ended     |
+| 6.1.5 - 6.1.9  |  6.1.4 - 6.1.7  | .NET 6 & 7      | Ended     |
+| 6.2.0 - 6.2.5  |      6.1.8      | .NET 6 & 7      | Ended     |
+| 6.2.6 - 6.4.8  |  6.1.9 - 6.2.0  | .NET 6 & 7      | Ended     |
+| 6.4.9 - 6.6.x  |  6.2.1 - 6.11.1 | .NET 6 & 7      | Ended     |
+| 6.8.0 - 6.9.2  | 6.12.0 - 6.21.0 | .NET 6 & 7 & 8  | Ended     |
+| 7.0.0 - 7.1.0  |  7.0.0 - 7.16.0 | .NET 7 & 8      | Ended     |
+| 8.0.0 =>       |  8.0.0 =>       | .NET 8 & 9      | Limited   |
+| 9.0.0 =>       |  9.0.0 =>       | .NET 8 & 9 & 10 | Full      |
 
 ## Installation
 
