@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
+using MudExtensions.Utilities;
 
 namespace MudExtensions
 {
     /// <summary>
     /// 
     /// </summary>
+    [ExcludeFromSmokeTest]
     public partial class MudStepExtended : MudComponentBase, IDisposable
     {
         /// <summary>

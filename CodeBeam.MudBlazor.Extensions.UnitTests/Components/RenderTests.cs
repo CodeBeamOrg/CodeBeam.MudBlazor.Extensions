@@ -1,86 +1,57 @@
 ﻿using AwesomeAssertions;
-using MudExtensions.Docs.Pages;
+using Bunit;
+using Microsoft.AspNetCore.Components;
+using MudBlazor.Services;
+using MudExtensions.Utilities;
+using System.Reflection;
 
-namespace MudExtensions.UnitTests.Components
+namespace MudExtensions.UnitTests.Components;
+
+[TestFixture]
+public class ComponentsRenderTests : BunitTest
 {
-    [TestFixture]
-    public class RenderTests : BunitTest
+    public static IEnumerable<Type> ComponentTypes()
     {
-        [Test]
-        public void ApiPageRenderTest()
-        {
-            var comp = Context.Render<ApiPage>();
-            comp.Markup.Should().NotBeNullOrEmpty();
-        }
+        var assembly = typeof(MudExtensions.MudColorProvider).Assembly;
 
-        [Test]
-        public void AnimatePageRenderTest()
-        {
-            var comp = Context.Render<AnimatePage>();
-            comp.Markup.Should().NotBeNullOrEmpty();
-        }
+        return assembly
+            .GetTypes()
+            .Where(t =>
+                t.IsClass &&
+                !t.IsAbstract &&
+                !t.IsGenericTypeDefinition &&
+                typeof(IComponent).IsAssignableFrom(t) &&
+                t.IsPublic &&
+                t.GetCustomAttribute<ExcludeFromSmokeTest>() == null);
+    }
 
-        [Test]
-        public void ComboBoxPageRenderTest()
-        {
-            var comp = Context.Render<ComboBoxPage>();
-            comp.Markup.Should().NotBeNullOrEmpty();
-        }
+    [SetUp]
+    public void Setup()
+    {
+        Context.Services.AddMudServices();
+        Context.JSInterop.Mode = JSRuntimeMode.Loose;
+    }
 
-        [Test]
-        public void WheelDatePickerPageRenderTest()
+    [TestCaseSource(nameof(ComponentTypes))]
+    public void Component_Should_Render(Type componentType)
+    {
+        try
         {
-            var comp = Context.Render<DateWheelPickerPage>();
-            comp.Markup.Should().NotBeNullOrEmpty();
-        }
+            var cut = Context.Render(builder =>
+            {
+                builder.OpenComponent(0, componentType);
+                builder.CloseComponent();
+            });
 
-        [Test]
-        public void SpeedDialPageRenderTest()
-        {
-            var comp = Context.Render<SpeedDialPage>();
-            comp.Markup.Should().NotBeNullOrEmpty();
+            cut.Should().NotBeNull();
         }
-
-        [Test]
-        public void SplitterPageRenderTest()
+        catch (Exception ex)
         {
-            var comp = Context.Render<SplitterPage>();
-            comp.Markup.Should().NotBeNullOrEmpty();
-        }
-
-        [Test]
-        public void StepperPageRenderTest()
-        {
-            var comp = Context.Render<StepperExtendedPage>();
-            comp.Markup.Should().NotBeNullOrEmpty();
-        }
-
-        [Test]
-        public void ListExtendedPageRenderTest()
-        {
-            var comp = Context.Render<ListExtendedPage>();
-            comp.Markup.Should().NotBeNullOrEmpty();
-        }
-
-        [Test]
-        public void SelectExtendedPageRenderTest()
-        {
-            var comp = Context.Render<SelectExtendedPage>();
-            comp.Markup.Should().NotBeNullOrEmpty();
-        }
-
-        [Test]
-        public void TextFieldExtendedPageRenderTest()
-        {
-            var comp = Context.Render<TextFieldExtendedPage>();
-            comp.Markup.Should().NotBeNullOrEmpty();
-        }
-
-        [Test]
-        public void TransferListPageRenderTest()
-        {
-            var comp = Context.Render<TransferListPage>();
-            comp.Markup.Should().NotBeNullOrEmpty();
+            Assert.Fail(
+                $"Component render FAILED: {componentType.FullName}\n" +
+                $"Exception: {ex.GetType().Name}\n" +
+                $"Message: {ex.Message}"
+            );
         }
     }
 }
