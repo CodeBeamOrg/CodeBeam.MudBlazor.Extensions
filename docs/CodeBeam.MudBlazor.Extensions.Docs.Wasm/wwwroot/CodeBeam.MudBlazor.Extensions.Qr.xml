@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CodeBeam.MudBlazor.Extensions.Qr</name>
+    </assembly>
+    <members>
+        <member name="T:MudExtensions.BarcodeResult">
+            <summary>
+            The result that used in MudBarcode component to show one of the barcode formats.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.BarcodeResult.#ctor(ZXing.Common.BitMatrix,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="bitMatrix"></param>
+            <param name="moduleSizeX"></param>
+            <param name="moduleSizeY"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="P:MudExtensions.BarcodeResult.Columns">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BarcodeResult.ModuleSizeX">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BarcodeResult.ModuleSizeY">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BarcodeResult.Rows">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BarcodeResult.Item(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MudExtensions.MudBarcode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.OuterStylename">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.BarcodeFormat">
+            <summary>
+            Determines which barcode format will shown. Default is QR Code.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.OuterClass">
+            <summary>
+            The outer div classname.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.OuterStyle">
+            <summary>
+            The outer div classname.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.EmptySrc">
+            <summary>
+            The image source shows when the value is null.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.Clickable">
+            <summary>
+            If true, it goes to specified href when click.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.ErrorText">
+            <summary>
+            The error content.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.Width">
+            <summary>
+            The width value as integer.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.Height">
+            <summary>
+            The height value as integer.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.ForceHeight">
+            <summary>
+            Use this value on not square sized barcode formats like UPC_A and UPC_E.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.StrokeWidth">
+            <summary>
+            Increase the stroke width if readers can not read the barcode easily.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.Target">
+            <summary>
+            Determines how user go to href content. Default is open in a new tab.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.Value">
+            <summary>
+            The value of the barcode format.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.Color">
+            <summary>
+            The color of the barcode as string. Accepts all kinds of CSS property values. (ex. #123456) Default is "black".
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.BackgroundColor">
+            <summary>
+            The background color of the barcode as string. Accepts all kinds of CSS property values. (ex. #123456) Default is "white".
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.ValueChanged">
+            <summary>
+            Fires when value changed.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBarcode.ChildContent">
+            <summary>
+            Shows a component inside the barcode.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudBarcode.GetCode">
+            <summary>
+            Barcode process that returns BarcodeResult. Returns null if value is also null or empty.
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

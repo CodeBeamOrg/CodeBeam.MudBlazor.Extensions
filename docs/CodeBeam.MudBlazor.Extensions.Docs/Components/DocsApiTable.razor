@@ -22,7 +22,7 @@
             <MudText Typo="Typo.body2">@value</MudText>
         </MudTd>
         <MudTd DataLabel="Description">
-            @(_docReader?.GetSummary(context) ?? "—")
+            @(GetDocReaderFor(context.DeclaringType!)?.GetSummary(context) ?? "—")
         </MudTd>
     </RowTemplate>
     <NoRecordsContent>
@@ -40,7 +40,7 @@
     <RowTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Type">@DocUtilities.GetFriendlyTypeName(context.PropertyType)</MudTd>
-        <MudTd DataLabel="Description">@(_docReader?.GetSummary(context) ?? "—")</MudTd>
+        <MudTd DataLabel="Description">@(GetDocReaderFor(context.DeclaringType!)?.GetSummary(context) ?? "—")</MudTd>
     </RowTemplate>
     <NoRecordsContent>
         No specific items.
@@ -57,7 +57,7 @@
     <RowTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Return Type">@DocUtilities.GetFriendlyTypeName(context.ReturnType)</MudTd>
-        <MudTd DataLabel="Description">@(_docReader?.GetSummary(context) ?? "—")</MudTd>
+        <MudTd DataLabel="Description">@(GetDocReaderFor(context.DeclaringType!)?.GetSummary(context) ?? "—")</MudTd>
     </RowTemplate>
     <NoRecordsContent>
         No specific items.
@@ -79,7 +79,8 @@
     [Parameter] public Type? Type { get; set; }
     [Parameter] public MudExtensionComponentInfo? Component { get; set; }
 
-    private SimpleXmlDocReader? _docReader;
+    // private SimpleXmlDocReader? _docReader;
+    private readonly Dictionary<string, SimpleXmlDocReader> _docReaders = new();
 
     private List<string> _excludedMethods = new()
     {
@@ -122,24 +123,55 @@
         }
     }
 
+    private SimpleXmlDocReader? GetDocReaderFor(Type memberType)
+    {
+        var asmName = memberType.Assembly.GetName().Name;
+
+        return asmName switch
+        {
+            "CodeBeam.MudBlazor.Extensions" => _docReaders.GetValueOrDefault("CodeBeam.MudBlazor.Extensions.xml"),
+            "CodeBeam.MudBlazor.Extensions.Qr" => _docReaders.GetValueOrDefault("CodeBeam.MudBlazor.Extensions.Qr.xml"),
+            "CodeBeam.MudBlazor.Extensions.CsvMapper" => _docReaders.GetValueOrDefault("CodeBeam.MudBlazor.Extensions.CsvMapper.xml"),
+            _ => null
+        };
+    }
+
     protected override async Task OnInitializedAsync()
     {
-        string? xmlContent = null;
+        var xmlFiles = new[]
+        {
+        "CodeBeam.MudBlazor.Extensions.xml",
+        "CodeBeam.MudBlazor.Extensions.Qr.xml",
+        "CodeBeam.MudBlazor.Extensions.CsvMapper.xml"
+    };
 
-        if (OperatingSystem.IsBrowser())
+        foreach (var file in xmlFiles)
         {
-            xmlContent = await Http.GetStringAsync("CodeBeam.MudBlazor.Extensions.xml");
-        }
-        else
-        {
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, "CodeBeam.MudBlazor.Extensions.xml");
-            if (File.Exists(xmlPath))
-                xmlContent = await File.ReadAllTextAsync(xmlPath);
-        }
+            string? xmlContent = null;
 
-        if (!string.IsNullOrEmpty(xmlContent))
-        {
-            _docReader = new SimpleXmlDocReader(xmlContent);
+            try
+            {
+                if (OperatingSystem.IsBrowser())
+                {
+                    xmlContent = await Http.GetStringAsync(file);
+                }
+                else
+                {
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, file);
+                    if (File.Exists(xmlPath))
+                        xmlContent = await File.ReadAllTextAsync(xmlPath);
+                }
+
+                if (!string.IsNullOrWhiteSpace(xmlContent))
+                {
+                    _docReaders[file] = new SimpleXmlDocReader(xmlContent);
+                }
+            }
+            catch
+            {
+                
+            }
         }
     }
+
 }
