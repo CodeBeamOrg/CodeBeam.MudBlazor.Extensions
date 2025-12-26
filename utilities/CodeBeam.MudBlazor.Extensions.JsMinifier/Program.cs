@@ -3,28 +3,32 @@ using System.Text;
 
 Console.WriteLine("Minifying MudExtensions.js...");
 
-// Bulunduğumuz dizinden yukarı doğru çık
 var current = Directory.GetCurrentDirectory();
-string? solutionRoot = null;
+string? repoRoot = null;
 
 while (current != null)
 {
-    if (Directory.Exists(Path.Combine(current, "CodeBeam.MudBlazor.Extensions")))
+    if (Directory.GetFiles(current, "*.sln").Any())
     {
-        solutionRoot = current;
+        repoRoot = current;
         break;
     }
 
     current = Directory.GetParent(current)?.FullName;
 }
 
-if (solutionRoot == null)
+if (repoRoot == null)
 {
-    Console.Error.WriteLine("Solution root not found.");
+    Console.Error.WriteLine("Repository root (.sln) not found.");
     Environment.Exit(1);
 }
 
-var projectRoot = Path.Combine(solutionRoot, "CodeBeam.MudBlazor.Extensions");
+var projectRoot = Path.Combine(
+    repoRoot,
+    "src",
+    "CodeBeam.MudBlazor.Extensions"
+);
+
 var input = Path.Combine(projectRoot, "TScripts", "MudExtensions.js");
 var output = Path.Combine(projectRoot, "wwwroot", "MudExtensions.min.js");
 
@@ -43,7 +47,7 @@ var result = Uglify.Js(js);
 if (result.HasErrors)
 {
     foreach (var error in result.Errors)
-        Console.Error.WriteLine(error.ToString());
+        Console.Error.WriteLine(error);
 
     Environment.Exit(1);
 }

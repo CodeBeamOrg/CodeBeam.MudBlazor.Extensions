@@ -17,18 +17,24 @@
 	</ItemGroup>-->
 	
   <ItemGroup>
-    <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
-    <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions.Docs\CodeBeam.MudBlazor.Extensions.Docs.csproj" />
+    <ProjectReference Include="..\..\src\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
+    <ProjectReference Include="..\..\docs\CodeBeam.MudBlazor.Extensions.Docs\CodeBeam.MudBlazor.Extensions.Docs.csproj" />
   </ItemGroup>
 
 	<Target Name="CopyXmlDocToWwwRoot" AfterTargets="Build">
+		<ItemGroup>
+			<_XmlDoc Include="..\..\src\CodeBeam.MudBlazor.Extensions\bin\$(Configuration)\$(TargetFramework)\CodeBeam.MudBlazor.Extensions.xml" />
+		</ItemGroup>
+
 		<Copy
-		  SourceFiles="..\CodeBeam.MudBlazor.Extensions\bin\$(Configuration)\net9.0\CodeBeam.MudBlazor.Extensions.xml"
+		  SourceFiles="@(_XmlDoc)"
 		  DestinationFolder="wwwroot"
-		  SkipUnchangedFiles="true" />
+		  SkipUnchangedFiles="true"
+		  Condition="Exists('%(Identity)')" />
 	</Target>
 
-  <ItemGroup>
+
+	<ItemGroup>
     <Content Update="wwwroot\favicon.ico">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

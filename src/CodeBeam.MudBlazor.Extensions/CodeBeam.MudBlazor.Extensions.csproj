@@ -35,9 +35,9 @@
 
 	<!--Uncomment it and build again when you change the CSS/SASS files, currently it fails the CI process-->
 	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
-		<!--<PackageReference Include="MudBlazor.SassCompiler" Version="2.0.7">
+		<PackageReference Include="MudBlazor.SassCompiler" Version="2.0.7">
 			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>-->
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,7 +48,7 @@
                AND '$(TargetFramework)' == 'net10.0'
                AND Exists('TScripts/MudExtensions.js')">
 		<Message Importance="high" Text="Minifying MudExtensions.js → MudExtensions.min.js" />
-		<Exec WorkingDirectory="$(SolutionDir)" Command="dotnet run --project CodeBeam.MudBlazor.Extensions.JsMinifier\CodeBeam.MudBlazor.Extensions.JsMinifier.csproj --configuration $(Configuration)" />
+		<Exec WorkingDirectory="$(SolutionDir)" Command="dotnet run --project utilities\CodeBeam.MudBlazor.Extensions.JsMinifier\CodeBeam.MudBlazor.Extensions.JsMinifier.csproj --configuration $(Configuration)" />
 	</Target>
 
 	<ItemGroup>

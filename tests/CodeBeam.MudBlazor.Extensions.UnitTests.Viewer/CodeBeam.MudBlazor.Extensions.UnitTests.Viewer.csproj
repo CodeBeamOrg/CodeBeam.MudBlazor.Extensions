@@ -8,7 +8,7 @@
   </PropertyGroup>
 	
 	<ItemGroup>
-	  <ProjectReference Include="..\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
+	  <ProjectReference Include="..\..\src\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
