@@ -304,6 +304,19 @@ namespace MudExtensions
                 MudListExtended.ParametersChanged += OnListParametersChanged;
             }
         }
+        internal bool IsRendered { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstRender"></param>
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                IsRendered = true;
+            }
+        }
 
         /// <summary>
         /// 
@@ -316,6 +329,7 @@ namespace MudExtensions
                     return;
                 MudListExtended.ParametersChanged -= OnListParametersChanged;
                 MudListExtended.Unregister(this);
+                IsRendered = false;
             }
             catch (Exception) { /*ignore*/ }
         }
@@ -458,6 +472,14 @@ namespace MudExtensions
             }
             return Disabled;
         }
+
+        internal bool IsVisible { get; private set; } = true;
+
+        internal void ApplySearch(bool visible)
+        {
+            IsVisible = visible;
+        }
+
 
         #endregion
 

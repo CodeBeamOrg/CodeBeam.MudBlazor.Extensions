@@ -58,6 +58,11 @@
             Gets or sets a value indicating whether the component has an adornment at the start.
             </summary>
         </member>
+        <member name="P:MudExtensions.MudBaseInputExtended`1.HasAdornmentEnd">
+            <summary>
+            Gets or sets a value indicating whether the component has an adornment at the end.
+            </summary>
+        </member>
         <member name="P:MudExtensions.MudBaseInputExtended`1.AdornmentStart">
             <summary>
             The Adornment if used. By default, it is set to None.
@@ -2620,6 +2625,16 @@
             <param name="itemValue"></param>
             <returns></returns>
         </member>
+        <member name="P:MudExtensions.MudListExtended`1.ActiveItem">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudListExtended`1.ActiveIndex">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:MudExtensions.ListItemClickEventArgs`1">
             <summary>
             
@@ -2817,6 +2832,12 @@
             <summary>
             
             </summary>
+        </member>
+        <member name="M:MudExtensions.MudListItemExtended`1.OnAfterRender(System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="firstRender"></param>
         </member>
         <member name="M:MudExtensions.MudListItemExtended`1.Dispose">
             <summary>
@@ -4183,6 +4204,14 @@
             <param name="select_item"></param>
             <exception cref="T:MudBlazor.Utilities.Exceptions.GenericTypeMismatchException"></exception>
         </member>
+        <member name="M:MudExtensions.MudSelectExtended`1.HasValue(`0)">
+            <summary>
+            Fixes issue #4328
+            Returns true when MultiSelection is true and it has selected values(Since Value property is not used when MultiSelection=true
+            </summary>
+            <param name="value"></param>
+            <returns>True when component has a value</returns>
+        </member>
         <member name="M:MudExtensions.MudSelectExtended`1.ChipClosed(MudBlazor.MudChip{`0})">
             <summary>
             
@@ -4190,23 +4219,11 @@
             <param name="chip"></param>
             <returns></returns>
         </member>
-        <member name="M:MudExtensions.MudSelectExtended`1.HasValue(`0)">
-            <summary>
-            
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
         <member name="M:MudExtensions.MudSelectExtended`1.GetOpenState">
             <summary>
             returns the value of the internal property _isOpen 
             </summary>
             <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudSelectExtended`1.ConvertValueToString(`0)">
-            <summary>
-            Internal method for MudSelectItem to access the converted string value.
-            </summary>
         </member>
         <member name="T:MudExtensions.MudSelectItemExtended`1">
             <summary>
@@ -6501,6 +6518,27 @@
             </summary>
             <param name="reference"></param>
             <returns></returns>
+        </member>
+        <member name="M:MudExtensions.Utilities.SequenceComparer`1.#ctor(System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:MudExtensions.Utilities.SequenceComparer`1"/> class.
+            </summary>
+            <param name="elementComparer">The comparer to use for individual elements. If null, uses the default comparer.</param>
+        </member>
+        <member name="M:MudExtensions.Utilities.SequenceComparer`1.Equals(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Determines whether two sequences are equal by comparing each element.
+            </summary>
+            <param name="x">The first sequence to compare.</param>
+            <param name="y">The second sequence to compare.</param>
+            <returns>True if the sequences are equal; otherwise, false.</returns>
+        </member>
+        <member name="M:MudExtensions.Utilities.SequenceComparer`1.GetHashCode(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Returns a hash code for the specified sequence.
+            </summary>
+            <param name="obj">The sequence for which to get a hash code.</param>
+            <returns>A hash code for the sequence.</returns>
         </member>
         <member name="T:MudExtensions.Utilities.SignaturePadLocalizedStrings">
             <summary>

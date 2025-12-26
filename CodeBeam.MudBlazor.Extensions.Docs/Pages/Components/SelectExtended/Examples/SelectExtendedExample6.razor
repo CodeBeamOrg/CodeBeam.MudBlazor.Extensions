@@ -2,7 +2,13 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex gap-4">
-        <MudSelectExtended MultiSelection="@_multiselection" ItemCollection="_states" SearchBox="true" SearchBoxAutoFocus="@_searchBoxAutoFocus" T="string" Label="Standard Search" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" HelperText="Search with 'Contains' logic" SearchBoxClearable="_searchBoxClearable" />
+        <MudSelectExtended @bind-Value="@_selectedState" MultiSelection="@_multiselection" SearchBox="true" SearchBoxAutoFocus="@_searchBoxAutoFocus" Label="Standard (RenderFragment)" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" HelperText="Search with 'Contains' logic" SearchBoxClearable="_searchBoxClearable">
+            @foreach (var state in _states)
+            {
+                <MudSelectItemExtended Value="@state" Text="@state">@state</MudSelectItemExtended>
+            }
+        </MudSelectExtended>
+        <MudSelectExtended MultiSelection="@_multiselection" ItemCollection="_states" SearchBox="true" SearchBoxAutoFocus="@_searchBoxAutoFocus" T="string" Label="Standard (ItemCollection)" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" HelperText="Search with 'Contains' logic" SearchBoxClearable="_searchBoxClearable" />
         <MudSelectExtended MultiSelection="@_multiselection" ItemCollection="_states" SearchBox="true" SearchBoxAutoFocus="@_searchBoxAutoFocus" SearchFunc="@(new Func<string, string, bool>(SearchItems))" T="string" Label="Custom Search Func" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" SearchBoxPlaceholder="Some Placeholder" HelperText="Search with 'StartsWith' logic" SearchBoxClearable="_searchBoxClearable" />
     </MudItem>
 
@@ -19,6 +25,7 @@
     bool _multiselection;
     bool _searchBoxAutoFocus;
     bool _searchBoxClearable;
+    private string? _selectedState;
 
     private string[] _states =
     {

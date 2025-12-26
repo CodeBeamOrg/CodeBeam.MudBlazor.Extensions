@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using MudBlazor.Extensions;
 using MudBlazor.Services;
-using MudBlazor.State;
 using MudBlazor.Utilities;
 using MudBlazor.Utilities.Exceptions;
-using System.Globalization;
 
 namespace MudExtensions
 {
@@ -510,7 +507,23 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
-        public Func<T?, string?>? ToStringFunc { get; set; }
+        public Func<T?, string?>? ToStringFunc
+        {
+            get => _toStringFunc;
+            set
+            {
+                if (_toStringFunc == value)
+                    return;
+                _toStringFunc = value;
+                Converter = Conversions.From<T, string>(
+                    x => _toStringFunc?.Invoke(x) ?? x?.ToString() ?? string.Empty,
+                    _ => throw new NotSupportedException("String -> T conversion is not supported."));
+                //Converter = new DefaultConverter<T?>
+                //{
+                //    SetFunc = _toStringFunc ?? (x => x?.ToString()),
+                //};
+            }
+        }
 
         /// <summary>
         /// If true, a null item will be added to the list (Only for ItemCollection).
@@ -1065,7 +1078,7 @@ namespace MudExtensions
                     await CloseMenu();
                 return;
             }
-            await SelectOption(_items[index].GetState(x => x.Value));
+            await SelectOption(_items[index].Value);
         }
 
         /// <summary>
@@ -1250,12 +1263,12 @@ namespace MudExtensions
         {
             get
             {
-                if (ReadValue == null)
+                if (Value == null)
                     return false;
                 //return _shadowLookup.TryGetValue(Value, out var _);
                 foreach (var value in Items?.Select(x => x.Value) ?? new List<T?>())
                 {
-                    if (Comparer != null ? Comparer.Equals(value, ReadValue) : value?.Equals(ReadValue) == true) //(Converter.Set(item.Value) == Converter.Set(Value))
+                    if (Comparer != null ? Comparer.Equals(value, Value) : value?.Equals(Value) == true) //(Converter.Set(item.Value) == Converter.Set(Value))
                     {
                         return true;
                     }
@@ -1285,6 +1298,20 @@ namespace MudExtensions
         }
 
         /// <summary>
+        /// Fixes issue #4328
+        /// Returns true when MultiSelection is true and it has selected values(Since Value property is not used when MultiSelection=true
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>True when component has a value</returns>
+        protected override bool HasValue(T? value)
+        {
+            if (MultiSelection)
+                return SelectedValues?.Count() > 0;
+            else
+                return base.HasValue(value);
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="chip"></param>
@@ -1301,13 +1328,6 @@ namespace MudExtensions
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        protected override bool HasValue(T? value) => MultiSelection ? SelectedValues?.Any() == true : base.HasValue(value);
-
-        /// <summary>
         /// returns the value of the internal property _isOpen 
         /// </summary>
         /// <returns></returns>
@@ -1315,10 +1335,5 @@ namespace MudExtensions
         {
             return _isOpen;
         }
-
-        /// <summary>
-        /// Internal method for MudSelectItem to access the converted string value.
-        /// </summary>
-        internal string? ConvertValueToString(T? value) => ConvertSet(value);
     }
 }

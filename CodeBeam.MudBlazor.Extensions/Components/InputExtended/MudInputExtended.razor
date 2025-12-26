@@ -68,8 +68,8 @@
                            @bind:get="@_internalText"
                            @bind:set="@OnInputOrOnChangeAsync"
                            placeholder="@Placeholder"
-                           disabled=@Disabled
-                           readonly="@ReadOnly"
+                           disabled="@GetDisabledState()"
+                           readonly="@GetReadOnlyState()"
                            @onblur="@OnBlurredAsync"
                            inputmode="@InputMode.ToString()"
                            pattern="@Pattern"
@@ -98,8 +98,8 @@
                            @bind:get="@_internalText"
                            @bind:set="@OnInputOrOnChangeAsync"
                            placeholder="@Placeholder"
-                           disabled=@Disabled
-                           readonly="@ReadOnly"
+                           disabled="@GetDisabledState()"
+                           readonly="@GetReadOnlyState()"
                            @onblur="@OnBlurredAsync"
                            inputmode="@InputMode.ToString()"
                            pattern="@Pattern"
@@ -126,7 +126,7 @@
                 if (Disabled)
                 {
                     <div class="@InputClassname @ChildContentClassname" style="@ChildContentStyle"
-             @onblur="@OnBlurredAsync" @ref="@_elementReference1">
+                        @onblur="@OnBlurredAsync" @ref="@_elementReference1">
                         @ChildContent
                     </div>
                 }
@@ -134,7 +134,7 @@
                 {
                     <div class="@InputClassname @ChildContentClassname" style="@ChildContentStyle"
                          tabindex="@(InputType == InputType.Hidden && ChildContent != null ? 0 : -1)"
-             @onblur="@OnBlurredAsync" @ref="@_elementReference1">
+                        @onblur="@OnBlurredAsync" @ref="@_elementReference1">
                         @ChildContent
                     </div>
                 }
@@ -155,7 +155,7 @@
         </div>
     }
 
-    @if (HasAdornmentEnd != true)
+    @if (HasAdornmentEnd == true)
     {
         <div class="@AdornmentEndClassname">
             @AdornmentEnd

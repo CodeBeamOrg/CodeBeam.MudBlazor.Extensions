@@ -339,17 +339,14 @@ namespace MudExtensions
                 return false;
             }
 
-            if (GetReadOnlyState())
-            {
-                return false;
-            }
+            // TODO: Add SubscribeToParentForm and GetReadOnlyState from MudBaseInput when Mud 9 released, it's currently internal
+            // Select extended is currently hardcoded readonly true, do not uncomment
+            //if (ReadOnly)
+            //{
+            //    return false;
+            //}
 
-            if (ReadValue is string stringValue)
-            {
-                return !string.IsNullOrWhiteSpace(stringValue);
-            }
-
-            return ReadValue is not string and not null;
+            return HasValue(ReadValue);
         }
 
         /// <summary>
