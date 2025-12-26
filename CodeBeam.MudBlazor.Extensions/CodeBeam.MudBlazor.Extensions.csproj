@@ -29,6 +29,11 @@
 		<SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DisableSassCompiler>true</DisableSassCompiler>
+	</PropertyGroup>
+
+
 	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
