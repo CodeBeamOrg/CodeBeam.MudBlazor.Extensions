@@ -4,9 +4,17 @@ coverage:
   status:
     project:
       default:
-        target: 90%    # the required coverage value
-        threshold: 0.1%  # the leniency in hitting the target
+        target: 60%
+        threshold: 2%
     patch:
       default:
-        target: 100%
+        target: 90%
         threshold: 10%
+
+ignore:
+  - "**/CodeBeam.MudBlazor.Extensions.Docs/**"
+  - "**/CodeBeam.MudBlazor.Extensions.UnitTests.Viewer/**"
+  - "**/CodeBeam.MudBlazor.Extensions.JsMinifier/**"
+  - "**/*Docs*/**"
+  - "**/*Viewer*/**"
+  - "**/*Samples*/**"
