@@ -5,6 +5,14 @@
         let parent = document.getElementById(parentId);
         let child = document.getElementById(childId);
 
+        if (!parent || !child) {
+            return;
+        }
+
+        if (!child.offsetParent) {
+            return;
+        }
+
         parent.scrollTop = (child.offsetTop - parent.offsetHeight) + (parent.offsetHeight / 2) + (child.offsetHeight / 2);
     }
 };

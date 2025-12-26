@@ -142,7 +142,6 @@ namespace MudExtensions
             }
         }
 
-        private Func<T?, string?>? _toStringFunc = x => x?.ToString();
         /// <summary>
         /// Defines how values are displayed in the drop-down list
         /// </summary>
@@ -840,6 +839,10 @@ namespace MudExtensions
                 _firstRendered = true;
             }
 
+            //if (MudSelectExtended?.ConsumeScrollToSelectedOnOpen() == true)
+            //{
+            //    ScrollToSelectedItemSafe();
+            //}
             _centralCommanderResultRendered = true;
         }
 
@@ -987,7 +990,7 @@ namespace MudExtensions
             }
 
             var key = obj.Key.ToLowerInvariant();
-            if (key.Length == 1 && key != " " && !(obj.CtrlKey || obj.ShiftKey || obj.AltKey || obj.MetaKey))
+            if (key.Length == 1 && key != " " && !(obj.CtrlKey || obj.ShiftKey || obj.AltKey || obj.MetaKey) && SearchBox == false)
             {
                 await ActiveFirstItem(key);
                 return;
@@ -1018,7 +1021,14 @@ namespace MudExtensions
                     {
                         return;
                     }
-                    SetSelectedValue(_lastActivatedItem);
+                    if (ItemCollection != null)
+                    {
+                        SetSelectedValue(_lastActivatedItem.Value, force: true);
+                    }
+                    else
+                    {
+                        SetSelectedValue(_lastActivatedItem);
+                    }
                     break;
                 case "a":
                 case "A":
@@ -1071,7 +1081,15 @@ namespace MudExtensions
         protected async Task SearchChanged(string? searchString)
         {
             _searchString = searchString;
+
+            var items = CollectAllMudListItems(true);
+            foreach (var item in items)
+            {
+                item.ApplySearch(IsMatch(item));
+            }
+
             await OnSearchStringChange.InvokeAsync(searchString);
+            StateHasChanged();
         }
 
         #endregion
@@ -1400,6 +1418,40 @@ namespace MudExtensions
             }
         }
 
+        protected int GetActiveItemIndex(List<MudListItemExtended<T?>> items)
+        {
+            if (items == null || items.Count == 0)
+                return -1;
+
+            if (_lastActivatedItem == null)
+                return items.FindIndex(x => x.IsActive);
+
+            return items.FindIndex(x =>
+                ReferenceEquals(x, _lastActivatedItem)
+                || (
+                    _lastActivatedItem.Value == null
+                        ? x.Value == null
+                        : Comparer != null
+                            ? Comparer.Equals(x.Value, _lastActivatedItem.Value)
+                            : Equals(x.Value, _lastActivatedItem.Value)
+                )
+            );
+        }
+
+        private List<MudListItemExtended<T?>> GetNavigableItems()
+        {
+            var items = CollectAllMudListItems(exceptNestedAndExceptional: true);
+
+            if (SearchBox && !string.IsNullOrWhiteSpace(_searchString))
+                items = items.Where(x => x.IsVisible).ToList();
+
+            if (Virtualize)
+                items = items.Where(x => x.IsRendered).ToList();
+
+            return items;
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -1536,34 +1588,76 @@ namespace MudExtensions
         /// </summary>
         /// <param name="changeCount"></param>
         /// <returns></returns>
+        //public async Task ActiveAdjacentItem(int changeCount)
+        //{
+        //    var items = CollectAllMudListItems(true);
+        //    if (items == null || items.Count == 0)
+        //    {
+        //        return;
+        //    }
+        //    int index = GetActiveItemIndex();
+        //    if (index + changeCount >= items.Count || 0 > index + changeCount)
+        //    {
+        //        return;
+        //    }
+        //    if (items[index + changeCount].GetDisabledStatus())
+        //    {
+        //        // Recursive
+        //        await ActiveAdjacentItem(changeCount > 0 ? changeCount + 1 : changeCount - 1);
+        //        return;
+        //    }
+        //    DeactiveAllItems(items);
+        //    items[index + changeCount].SetActive(true);
+        //    _lastActivatedItem = items[index + changeCount];
+
+        //    if (items[index + changeCount].ParentListItem != null && !items[index + changeCount].ParentListItem.Expanded)
+        //    {
+        //        items[index + changeCount].ParentListItem.Expanded = true;
+        //    }
+
+        //    await ScrollToMiddleAsync(items[index + changeCount]);
+        //}
+
         public async Task ActiveAdjacentItem(int changeCount)
         {
-            var items = CollectAllMudListItems(true);
-            if (items == null || items.Count == 0)
+            var items = GetNavigableItems();
+            if (items.Count == 0)
+                return;
+
+            int index = GetActiveItemIndex(items);
+
+            if (index < 0)
             {
+                var first = items.FirstOrDefault();
+                if (first == null)
+                    return;
+
+                DeactiveAllItems(items);
+                first.SetActive(true);
+                _lastActivatedItem = first;
+                await ScrollToMiddleAsync(first);
                 return;
             }
-            int index = GetActiveItemIndex();
-            if (index + changeCount >= items.Count || 0 > index + changeCount)
-            {
+
+            int nextIndex = index + changeCount;
+            if (nextIndex < 0 || nextIndex >= items.Count)
                 return;
-            }
-            if (items[index + changeCount].GetDisabledStatus())
+
+            var target = items[nextIndex];
+            if (target.GetDisabledStatus())
             {
-                // Recursive
                 await ActiveAdjacentItem(changeCount > 0 ? changeCount + 1 : changeCount - 1);
                 return;
             }
+
             DeactiveAllItems(items);
-            items[index + changeCount].SetActive(true);
-            _lastActivatedItem = items[index + changeCount];
+            target.SetActive(true);
+            _lastActivatedItem = target;
 
-            if (items[index + changeCount].ParentListItem != null && !items[index + changeCount].ParentListItem.Expanded)
-            {
-                items[index + changeCount].ParentListItem.Expanded = true;
-            }
+            if (target.ParentListItem != null && !target.ParentListItem.Expanded)
+                target.ParentListItem.Expanded = true;
 
-            await ScrollToMiddleAsync(items[index + changeCount]);
+            await ScrollToMiddleAsync(target);
         }
 
         /// <summary>
@@ -1657,13 +1751,19 @@ namespace MudExtensions
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        protected internal ValueTask ScrollToMiddleAsync(MudListItemExtended<T?>? item)
+        protected internal async ValueTask ScrollToMiddleAsync(MudListItemExtended<T?>? item)
         {
             if (item == null || ScrollManagerExtended == null)
             {
-                return ValueTask.CompletedTask;
+                return;
             }
-            return ScrollManagerExtended.ScrollToMiddleAsync(_elementId, item.ItemId ?? string.Empty);
+            if (!item.IsRendered)
+            {
+                return;
+            }
+
+            await Task.Yield();
+            await ScrollManagerExtended.ScrollToMiddleAsync(_elementId, item.ItemId ?? string.Empty);
         }
 
         /// <summary>
@@ -1725,6 +1825,66 @@ namespace MudExtensions
         }
 
         #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected internal MudListItemExtended<T?>? ActiveItem => _lastActivatedItem;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        protected internal int ActiveIndex => GetActiveItemIndex();
+
+        private bool IsMatch(MudListItemExtended<T?> item)
+        {
+            if (string.IsNullOrWhiteSpace(_searchString))
+                return true;
+
+            if (SearchFunc != null)
+                return SearchFunc(item.Value, _searchString);
+
+            // Default search
+            var text =
+                item.Text
+                ?? Converter.Convert(item.Value)
+                ?? item.Value?.ToString();
+
+            return text?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true;
+        }
+
+        private async void ScrollToSelectedItemSafe()
+        {
+            var items = CollectAllMudListItems(true);
+
+            if (items.Count == 0)
+                return;
+
+            MudListItemExtended<T?>? target = null;
+
+            if (!MultiSelection)
+            {
+                target = items.FirstOrDefault(x =>
+                    Comparer?.Equals(x.Value, SelectedValue) ?? Equals(x.Value, SelectedValue)
+                );
+            }
+            else if (SelectedValues != null)
+            {
+                var last = SelectedValues.LastOrDefault();
+                target = items.FirstOrDefault(x =>
+                    Comparer?.Equals(x.Value, last) ?? Equals(x.Value, last)
+                );
+            }
+
+            if (target == null || !target.IsRendered)
+                return;
+
+            _lastActivatedItem = target;
+            target.SetActive(true);
+
+            await ScrollToMiddleAsync(target);
+        }
+
     }
 
     /// <summary>

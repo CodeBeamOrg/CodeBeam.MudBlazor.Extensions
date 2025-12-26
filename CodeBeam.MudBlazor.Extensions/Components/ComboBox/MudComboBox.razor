@@ -20,7 +20,7 @@
                                       ShowVisualiser="@((MultiSelection && SelectedValues?.Any() == true) || !Editable)" DataVisualiserStyle="min-height: 1.1876em"
                                       @bind-Value="@_searchString" Typo="@Typo"
                                       Underline="@Underline"
-                                      HasAdornmentStart="@((AdornmentStart != null))"
+                                      HasAdornmentStart="@(AdornmentStart != null)" HasAdornmentEnd="@(AdornmentEnd != null)"
                                       Disabled="@GetDisabledState()" ReadOnly="@GetReadOnlyState()" Error="@ErrorState.Value" ErrorId="@ErrorIdState.Value"
                                       Clearable="@Clearable" ForceClearable="@(Clearable && HasValue(ReadValue))" OnClearButtonClick="@ClearButtonClickHandlerAsync"
                                       MaxLength="@MaxLength" @attributes="UserAttributes" OnBlur="@HandleOnBlur" ShrinkLabel="@(HasValue(ReadValue) || AdornmentStart != null || _isOpen || ShrinkLabel)">

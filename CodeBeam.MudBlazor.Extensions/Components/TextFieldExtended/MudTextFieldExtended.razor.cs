@@ -1,9 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -228,7 +225,7 @@ namespace MudExtensions
 
         private async Task OnMaskedValueChanged(string s)
         {
-            await SetTextAsync(s);
+            await SetTextAndUpdateValueAsync(s, false);
         }
 
     }

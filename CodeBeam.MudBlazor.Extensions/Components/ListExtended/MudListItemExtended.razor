@@ -3,107 +3,110 @@
 @inherits MudComponentBase
 @using MudBlazor
 
-<div tabindex="0" @attributes="UserAttributes" id="@ItemId" class="@Classname" @onclick="@(((MudListExtended?.Clickable == true || NestedList != null) && IsFunctional == false) ? OnClickHandler : OnlyOnClick)" @onclick:stopPropagation="@OnClickStopPropagation" style="@Style">
-
-    @if (MudListExtended?.ItemDisabledTemplate != null && GetDisabledStatus() == true)
-    {
-        @MudListExtended.ItemDisabledTemplate(this)
-    }
-    else if (MudListExtended?.ItemSelectedTemplate != null && IsSelected == true)
-    {
-        @MudListExtended.ItemSelectedTemplate(this)
-    }
-    else if (MudListExtended?.ItemTemplate != null)
-    {
-        @MudListExtended.ItemTemplate(this)
-    }
-    else
-    {
-        if (MudListExtended != null && NestedList == null && MudListExtended.MultiSelection == true && MudListExtended.MultiSelectionAlign != Align.End && IsFunctional == false &&
-        (OverrideMultiSelectionComponent != MultiSelectionComponent.None || (MudListExtended.MultiSelectionComponent == MultiSelectionComponent.None && (OverrideMultiSelectionComponent != null || OverrideMultiSelectionComponent != MultiSelectionComponent.None))))
-        {
-            <div class="@MultiSelectClassName">
-                @if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.CheckBox : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.CheckBox)
-                {
-                    <MudCheckBox Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" Dense="true" />
-                }
-                else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.Switch : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.Switch)
-                {
-                    <MudSwitch Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true" />
-                }
-                else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.SwitchM3 : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.SwitchM3)
-                {
-                    <MudSwitchM3 Class="mr-4" Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true" />
-                }
-            </div>
-        }
-
-        if (!string.IsNullOrWhiteSpace(Avatar))
-        {
-            <div class="mud-list-item-avatar-extended">
-                <MudAvatar Class="@AvatarClass">
-                    <MudIcon Icon="@Avatar" Color="@IconColor" Size="@IconSize" />
-                </MudAvatar>
-            </div>
-        }
-        else if (!string.IsNullOrWhiteSpace(Icon))
-        {
-            <div class="mud-list-item-icon-extended">
-                <MudIcon Icon="@Icon" Color="@IconColor" Size="@IconSize" />
-            </div>
-        }
-        <div class="mud-list-item-text-extended @(Inset? "mud-list-item-text-inset-extended" : "")">
-            <MudText Typo="@_textTypo">
-                @if (ChildContent != null)
-                {
-                    @ChildContent
-                }
-                else
-                {
-                    @Text
-                    <br />
-                    <MudText Style="font-weight:500; color: var(--mud-palette-text-secondary)" Typo="Typo.subtitle2">@SecondaryText</MudText>
-                }
-            </MudText>
-        </div>
-
-        if (MudListExtended != null && NestedList == null && MudListExtended.MultiSelection == true && MudListExtended.MultiSelectionAlign == Align.End && IsFunctional == false &&
-        (OverrideMultiSelectionComponent != MultiSelectionComponent.None || (MudListExtended.MultiSelectionComponent == MultiSelectionComponent.None && (OverrideMultiSelectionComponent != null || OverrideMultiSelectionComponent != MultiSelectionComponent.None))))
-        {
-            <div class="@MultiSelectClassName">
-                @if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.CheckBox : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.CheckBox)
-                {
-                    <MudCheckBox Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" Dense="true" />
-                }
-                else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.Switch : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.Switch)
-                {
-                    <MudSwitch Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true" />
-                }
-                else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.SwitchM3 : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.SwitchM3)
-                {
-                    <MudSwitchM3 Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true" />
-                }
-            </div>
-        }
-
-        if (NestedList != null)
-        {
-            <MudIcon Icon="@($"{(_expanded ? ExpandLessIcon : ExpandMoreIcon)}")" Size="@IconSize" Color="@AdornmentColor" />
-        }
-    }
-
-
-</div>
-
-@if (NestedList != null)
+@if (IsVisible)
 {
-    <CascadingValue Value="this" IsFixed="true">
-        <MudCollapse Expanded="@Expanded" ExpandedChanged="@ExpandedChanged">
-            <MudListExtended T="T" Clickable="MudListExtended?.Clickable ?? false" Color="MudListExtended?.Color ?? Color.Primary" MultiSelection="MudListExtended?.MultiSelection ?? false" MultiSelectionComponent="MudListExtended?.MultiSelectionComponent ?? MultiSelectionComponent.CheckBox" MultiSelectionAlign="MudListExtended?.MultiSelectionAlign ?? Align.Start" Padding="false" Class="mud-nested-list" Disabled="@GetDisabledStatus()" Dense="@((Dense ?? MudListExtended?.Dense) ?? false)">
-                <ChildContent>
-                    @NestedList
-                </ChildContent>
-            </MudListExtended>
-        </MudCollapse>
-    </CascadingValue>
+    <div tabindex="0" @attributes="UserAttributes" id="@ItemId" class="@Classname" @onclick="@(((MudListExtended?.Clickable == true || NestedList != null) && IsFunctional == false) ? OnClickHandler : OnlyOnClick)" @onclick:stopPropagation="@OnClickStopPropagation" style="@Style">
+
+        @if (MudListExtended?.ItemDisabledTemplate != null && GetDisabledStatus() == true)
+        {
+            @MudListExtended.ItemDisabledTemplate(this)
+        }
+        else if (MudListExtended?.ItemSelectedTemplate != null && IsSelected == true)
+        {
+            @MudListExtended.ItemSelectedTemplate(this)
+        }
+        else if (MudListExtended?.ItemTemplate != null)
+        {
+            @MudListExtended.ItemTemplate(this)
+        }
+        else
+        {
+            if (MudListExtended != null && NestedList == null && MudListExtended.MultiSelection == true && MudListExtended.MultiSelectionAlign != Align.End && IsFunctional == false &&
+            (OverrideMultiSelectionComponent != MultiSelectionComponent.None || (MudListExtended.MultiSelectionComponent == MultiSelectionComponent.None && (OverrideMultiSelectionComponent != null || OverrideMultiSelectionComponent != MultiSelectionComponent.None))))
+            {
+                <div class="@MultiSelectClassName">
+                    @if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.CheckBox : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.CheckBox)
+                    {
+                        <MudCheckBox Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" Dense="true" />
+                    }
+                    else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.Switch : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.Switch)
+                    {
+                        <MudSwitch Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true" />
+                    }
+                    else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.SwitchM3 : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.SwitchM3)
+                    {
+                        <MudSwitchM3 Class="mr-4" Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true" />
+                    }
+                </div>
+            }
+
+            if (!string.IsNullOrWhiteSpace(Avatar))
+            {
+                <div class="mud-list-item-avatar-extended">
+                    <MudAvatar Class="@AvatarClass">
+                        <MudIcon Icon="@Avatar" Color="@IconColor" Size="@IconSize" />
+                    </MudAvatar>
+                </div>
+            }
+            else if (!string.IsNullOrWhiteSpace(Icon))
+            {
+                <div class="mud-list-item-icon-extended">
+                    <MudIcon Icon="@Icon" Color="@IconColor" Size="@IconSize" />
+                </div>
+            }
+            <div class="mud-list-item-text-extended @(Inset ? "mud-list-item-text-inset-extended" : "")">
+                <MudText Typo="@_textTypo">
+                    @if (ChildContent != null)
+                    {
+                        @ChildContent
+                    }
+                    else
+                    {
+                        @Text
+                        <br />
+                        <MudText Style="font-weight:500; color: var(--mud-palette-text-secondary)" Typo="Typo.subtitle2">@SecondaryText</MudText>
+                    }
+                </MudText>
+            </div>
+
+            if (MudListExtended != null && NestedList == null && MudListExtended.MultiSelection == true && MudListExtended.MultiSelectionAlign == Align.End && IsFunctional == false &&
+            (OverrideMultiSelectionComponent != MultiSelectionComponent.None || (MudListExtended.MultiSelectionComponent == MultiSelectionComponent.None && (OverrideMultiSelectionComponent != null || OverrideMultiSelectionComponent != MultiSelectionComponent.None))))
+            {
+                <div class="@MultiSelectClassName">
+                    @if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.CheckBox : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.CheckBox)
+                    {
+                        <MudCheckBox Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" Dense="true" />
+                    }
+                    else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.Switch : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.Switch)
+                    {
+                        <MudSwitch Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true" />
+                    }
+                    else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.SwitchM3 : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.SwitchM3)
+                    {
+                        <MudSwitchM3 Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true" />
+                    }
+                </div>
+            }
+
+            if (NestedList != null)
+            {
+                <MudIcon Icon="@($"{(_expanded ? ExpandLessIcon : ExpandMoreIcon)}")" Size="@IconSize" Color="@AdornmentColor" />
+            }
+        }
+
+
+    </div>
+
+    @if (NestedList != null)
+    {
+        <CascadingValue Value="this" IsFixed="true">
+            <MudCollapse Expanded="@Expanded" ExpandedChanged="@ExpandedChanged">
+                <MudListExtended T="T" Clickable="MudListExtended?.Clickable ?? false" Color="MudListExtended?.Color ?? Color.Primary" MultiSelection="MudListExtended?.MultiSelection ?? false" MultiSelectionComponent="MudListExtended?.MultiSelectionComponent ?? MultiSelectionComponent.CheckBox" MultiSelectionAlign="MudListExtended?.MultiSelectionAlign ?? Align.Start" Padding="false" Class="mud-nested-list" Disabled="@GetDisabledStatus()" Dense="@((Dense ?? MudListExtended?.Dense) ?? false)">
+                    <ChildContent>
+                        @NestedList
+                    </ChildContent>
+                </MudListExtended>
+            </MudCollapse>
+        </CascadingValue>
+    }
 }

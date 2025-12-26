@@ -17,7 +17,7 @@
             <MudSelectItemExtended Value="@("Triceratops")" />
             <MudSelectItemExtended Value="@("Benno Rex")" />
         </MudSelectExtended>
-        <MudSelectExtended T="string" Label="US States" MultiSelection="true" Color="_color">
+        <MudSelectExtended @bind-SelectedValues="@_stateValues" Label="US States" MultiSelection="true" Color="_color">
             @foreach (var state in states)
             {
                 <MudSelectItemExtended T="string" Value="@state">@state</MudSelectItemExtended>
@@ -39,7 +39,8 @@
 </MudGrid>
 
 @code{
-    Color _color = Color.Primary;
+    private Color _color = Color.Primary;
+    private IEnumerable<string?> _stateValues;
 
     private string[] states =
     {

@@ -18,7 +18,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string? Classname => MudInputCssHelperExtended.GetClassname(this,
-            () => HasNativeHtmlPlaceholder() || ShrinkLabel == true || !string.IsNullOrEmpty(ReadText) || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrEmpty(base.ConvertSet(ReadValue)));
+            () => HasNativeHtmlPlaceholder() || ShrinkLabel == true || !string.IsNullOrEmpty(ReadText) || !string.IsNullOrWhiteSpace(Placeholder) || HasValue(ReadValue));
 
         /// <summary>
         /// 
@@ -34,7 +34,8 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string? AdornmentStartClassname =>
-            new CssBuilder("mud-input-adornment mud-input-adornment-start-extended")
+            new CssBuilder("mud-input-adornment")
+                .AddClass("mud-input-adornment-start-extended", HasAdornmentStart)
                 .AddClass($"mud-input-{Variant.ToDescriptionString()}-extended")
                 .AddClass($"mud-text", !string.IsNullOrEmpty(AdornmentText))
                 .AddClass($"mud-input-root-filled-shrink", Variant == Variant.Filled)
@@ -44,7 +45,8 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string? AdornmentEndClassname =>
-            new CssBuilder("mud-input-adornment mud-input-adornment-end-extended")
+            new CssBuilder("mud-input-adornment")
+                .AddClass("mud-input-adornment-end-extended", HasAdornmentEnd)
                 .AddClass($"mud-input-{Variant.ToDescriptionString()}-extended")
                 .AddClass($"mud-text", !string.IsNullOrEmpty(AdornmentText))
                 .AddClass($"mud-input-root-filled-shrink", Variant == Variant.Filled)
@@ -323,31 +325,53 @@ namespace MudExtensions
                 Clearable = showClearable;
         }
 
-        private bool GetClearable() => Clearable && ((ReadValue is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (ReadValue is not string && ReadValue is not null));
+        //private bool GetClearable() => Clearable && ((ReadValue is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (ReadValue is not string && ReadValue is not null));
+
+        private bool ShowClearButton()
+        {
+            if (GetDisabledState())
+            {
+                return false;
+            }
+
+            if (!Clearable)
+            {
+                return false;
+            }
+
+            // TODO: Add SubscribeToParentForm and GetReadOnlyState from MudBaseInput when Mud 9 released, it's currently internal
+            // Select extended is currently hardcoded readonly true, do not uncomment
+            //if (ReadOnly)
+            //{
+            //    return false;
+            //}
+
+            return HasValue(ReadValue);
+        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="updateValue"></param>
         /// <returns></returns>
-        protected override async Task UpdateTextPropertyAsync(bool updateValue)
-        {
-            await base.UpdateTextPropertyAsync(updateValue);
-            if (Clearable)
-                UpdateClearable(ReadText);
-        }
+        //protected override async Task UpdateTextPropertyAsync(bool updateValue)
+        //{
+        //    await base.UpdateTextPropertyAsync(updateValue);
+        //    if (Clearable)
+        //        UpdateClearable(ReadText);
+        //}
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="updateText"></param>
         /// <returns></returns>
-        protected override async Task UpdateValuePropertyAsync(bool updateText)
-        {
-            await base.UpdateValuePropertyAsync(updateText);
-            if (Clearable)
-                UpdateClearable(ReadValue);
-        }
+        //protected override async Task UpdateValuePropertyAsync(bool updateText)
+        //{
+        //    await base.UpdateValuePropertyAsync(updateText);
+        //    if (Clearable)
+        //        UpdateClearable(ReadValue);
+        //}
 
         /// <summary>
         /// 
@@ -384,7 +408,7 @@ namespace MudExtensions
         public Task SetText(string? text)
         {
             _internalText = text;
-            return SetTextAsync(text);
+            return SetTextAndUpdateValueAsync(text);
         }
 
 

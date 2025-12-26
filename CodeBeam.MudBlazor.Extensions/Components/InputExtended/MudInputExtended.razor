@@ -22,8 +22,8 @@
               type="@InputTypeString"
               placeholder="@Placeholder"
               disabled="@GetDisabledState()"
-              readonly="@GetReadOnlyState"
-              inputmode="@InputMode.ToString()"
+              readonly="@GetReadOnlyState()"
+              inputmode="@InputMode.ToDescriptionString()"
               @bind:event="@(Immediate ? "oninput" : "onchange")"
               @bind:get="@_internalText"
               @bind:set="@OnInputOrOnChangeAsync"
@@ -37,8 +37,10 @@
               @onkeyup:preventDefault="@KeyUpPreventDefault"
               @onmousewheel="@OnMouseWheel"
               @onwheel="@OnMouseWheel"
-              aria-invalid="@Error.ToString().ToLower()"
-              aria-describedby="@ErrorId"> 
+              aria-describedby="@GetAriaDescribedByString()"
+              aria-invalid="@ErrorState.Value.ToString().ToLowerInvariant()"
+              required="@Required"
+              aria-required="@Required.ToString().ToLowerInvariant()">
             @ReadText
             </textarea>
         @*Note: double mouse wheel handlers needed for Firefox because it doesn't know onmousewheel*@
@@ -66,8 +68,8 @@
                            @bind:get="@_internalText"
                            @bind:set="@OnInputOrOnChangeAsync"
                            placeholder="@Placeholder"
-                           disabled=@Disabled
-                           readonly="@ReadOnly"
+                           disabled="@GetDisabledState()"
+                           readonly="@GetReadOnlyState()"
                            @onblur="@OnBlurredAsync"
                            inputmode="@InputMode.ToString()"
                            pattern="@Pattern"
@@ -80,8 +82,10 @@
                            onpaste="return false"
                            @onmousewheel="@OnMouseWheel"
                            @onwheel="@OnMouseWheel"
-                           aria-invalid="@Error.ToString().ToLower()"
-                           aria-describedby="@ErrorId" />
+                           aria-describedby="@GetAriaDescribedByString()"
+                           aria-invalid="@ErrorState.Value.ToString().ToLowerInvariant()"
+                           required="@Required"
+                           aria-required="@Required.ToString().ToLowerInvariant()">
                 }
                 else
                 {
@@ -94,8 +98,8 @@
                            @bind:get="@_internalText"
                            @bind:set="@OnInputOrOnChangeAsync"
                            placeholder="@Placeholder"
-                           disabled=@Disabled
-                           readonly="@ReadOnly"
+                           disabled="@GetDisabledState()"
+                           readonly="@GetReadOnlyState()"
                            @onblur="@OnBlurredAsync"
                            inputmode="@InputMode.ToString()"
                            pattern="@Pattern"
@@ -107,8 +111,10 @@
                            @onkeyup:preventDefault="@KeyUpPreventDefault"
                            @onmousewheel="@OnMouseWheel"
                            @onwheel="@OnMouseWheel"
-                           aria-invalid="@Error.ToString().ToLower()"
-                           aria-describedby="@ErrorId" />
+                           aria-describedby="@GetAriaDescribedByString()"
+                           aria-invalid="@ErrorState.Value.ToString().ToLowerInvariant()"
+                           required="@Required"
+                           aria-required="@Required.ToString().ToLowerInvariant()">
                 }
                 
             </div>
@@ -120,7 +126,7 @@
                 if (Disabled)
                 {
                     <div class="@InputClassname @ChildContentClassname" style="@ChildContentStyle"
-             @onblur="@OnBlurredAsync" @ref="@_elementReference1">
+                        @onblur="@OnBlurredAsync" @ref="@_elementReference1">
                         @ChildContent
                     </div>
                 }
@@ -128,7 +134,7 @@
                 {
                     <div class="@InputClassname @ChildContentClassname" style="@ChildContentStyle"
                          tabindex="@(InputType == InputType.Hidden && ChildContent != null ? 0 : -1)"
-             @onblur="@OnBlurredAsync" @ref="@_elementReference1">
+                        @onblur="@OnBlurredAsync" @ref="@_elementReference1">
                         @ChildContent
                     </div>
                 }
@@ -137,7 +143,7 @@
         </div>
     }
 
-    @if (GetClearable() && !GetDisabledState() || ForceClearable)
+    @if (ShowClearButton() || ForceClearable)
     {
         <div @onmousedown:stopPropagation>
             <MudIconButton Class="@ClearButtonClassname"
@@ -149,7 +155,7 @@
         </div>
     }
 
-    @if (AdornmentEnd != null)
+    @if (HasAdornmentEnd == true)
     {
         <div class="@AdornmentEndClassname">
             @AdornmentEnd

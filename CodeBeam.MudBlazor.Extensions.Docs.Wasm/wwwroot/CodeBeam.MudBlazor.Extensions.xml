@@ -45,9 +45,22 @@
             Fires on change.
             </summary>
         </member>
+        <member name="P:MudExtensions.MudBaseInputExtended`1.OnBeforeInput">
+            <summary>
+            Gets or sets a callback that is invoked before input is processed.
+            </summary>
+            <remarks>Use this callback to perform custom logic or validation before the input event is
+            handled. This can be useful for intercepting or modifying input behavior in advanced scenarios
+            </remarks>
+        </member>
         <member name="P:MudExtensions.MudBaseInputExtended`1.HasAdornmentStart">
             <summary>
             Gets or sets a value indicating whether the component has an adornment at the start.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseInputExtended`1.HasAdornmentEnd">
+            <summary>
+            Gets or sets a value indicating whether the component has an adornment at the end.
             </summary>
         </member>
         <member name="P:MudExtensions.MudBaseInputExtended`1.AdornmentStart">
@@ -70,6 +83,14 @@
             If true disables paste to input component. Default is false.
             </summary>
         </member>
+        <member name="M:MudExtensions.MudBaseInputExtended`1.InvokeBeforeInputAsync(MudExtensions.MudBeforeInputEventArgs)">
+            <summary>
+            Invokes logic to be executed before input is processed, including raising the BeforeInput event if a
+            delegate is assigned.
+            </summary>
+            <param name="args">The event data associated with the before input operation.</param>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
         <member name="M:MudExtensions.MudBaseInputExtended`1.OnCultureAndFormatChangedAsync">
             <summary>
             
@@ -87,6 +108,23 @@
             
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudBaseInputExtended`1.OnBeforeInputFromJs(MudExtensions.MudBeforeInputJsDto)">
+            <summary>
+            
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudBaseInputExtended`1.OnBeforeInputAsync(MudExtensions.MudBeforeInputEventArgs)">
+            <summary>
+            Invoked before processing input, allowing for custom logic or validation to be performed asynchronously.
+            </summary>
+            <remarks>Override this method in a derived class to implement custom pre-processing or
+            validation logic before input is handled. This method is called before the main input processing
+            occurs.</remarks>
+            <param name="args">An object containing event data for the input operation.</param>
+            <returns>A task that represents the asynchronous operation. The default implementation returns a completed task.</returns>
         </member>
         <member name="T:MudExtensions.MudChipField`1">
             <summary>
@@ -1933,20 +1971,6 @@
             Custom numeric down icon.
             </summary>
         </member>
-        <member name="M:MudExtensions.MudInputExtended`1.UpdateTextPropertyAsync(System.Boolean)">
-            <summary>
-            
-            </summary>
-            <param name="updateValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudInputExtended`1.UpdateValuePropertyAsync(System.Boolean)">
-            <summary>
-            
-            </summary>
-            <param name="updateText"></param>
-            <returns></returns>
-        </member>
         <member name="M:MudExtensions.MudInputExtended`1.ClearButtonClickHandlerAsync(Microsoft.AspNetCore.Components.Web.MouseEventArgs)">
             <summary>
             
@@ -2601,6 +2625,16 @@
             <param name="itemValue"></param>
             <returns></returns>
         </member>
+        <member name="P:MudExtensions.MudListExtended`1.ActiveItem">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudListExtended`1.ActiveIndex">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:MudExtensions.ListItemClickEventArgs`1">
             <summary>
             
@@ -2798,6 +2832,12 @@
             <summary>
             
             </summary>
+        </member>
+        <member name="M:MudExtensions.MudListItemExtended`1.OnAfterRender(System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="firstRender"></param>
         </member>
         <member name="M:MudExtensions.MudListItemExtended`1.Dispose">
             <summary>
@@ -4164,6 +4204,14 @@
             <param name="select_item"></param>
             <exception cref="T:MudBlazor.Utilities.Exceptions.GenericTypeMismatchException"></exception>
         </member>
+        <member name="M:MudExtensions.MudSelectExtended`1.HasValue(`0)">
+            <summary>
+            Fixes issue #4328
+            Returns true when MultiSelection is true and it has selected values(Since Value property is not used when MultiSelection=true
+            </summary>
+            <param name="value"></param>
+            <returns>True when component has a value</returns>
+        </member>
         <member name="M:MudExtensions.MudSelectExtended`1.ChipClosed(MudBlazor.MudChip{`0})">
             <summary>
             
@@ -4171,23 +4219,11 @@
             <param name="chip"></param>
             <returns></returns>
         </member>
-        <member name="M:MudExtensions.MudSelectExtended`1.HasValue(`0)">
-            <summary>
-            
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
         <member name="M:MudExtensions.MudSelectExtended`1.GetOpenState">
             <summary>
             returns the value of the internal property _isOpen 
             </summary>
             <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudSelectExtended`1.ConvertValueToString(`0)">
-            <summary>
-            Internal method for MudSelectItem to access the converted string value.
-            </summary>
         </member>
         <member name="T:MudExtensions.MudSelectItemExtended`1">
             <summary>
@@ -6482,6 +6518,27 @@
             </summary>
             <param name="reference"></param>
             <returns></returns>
+        </member>
+        <member name="M:MudExtensions.Utilities.SequenceComparer`1.#ctor(System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:MudExtensions.Utilities.SequenceComparer`1"/> class.
+            </summary>
+            <param name="elementComparer">The comparer to use for individual elements. If null, uses the default comparer.</param>
+        </member>
+        <member name="M:MudExtensions.Utilities.SequenceComparer`1.Equals(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Determines whether two sequences are equal by comparing each element.
+            </summary>
+            <param name="x">The first sequence to compare.</param>
+            <param name="y">The second sequence to compare.</param>
+            <returns>True if the sequences are equal; otherwise, false.</returns>
+        </member>
+        <member name="M:MudExtensions.Utilities.SequenceComparer`1.GetHashCode(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Returns a hash code for the specified sequence.
+            </summary>
+            <param name="obj">The sequence for which to get a hash code.</param>
+            <returns>A hash code for the sequence.</returns>
         </member>
         <member name="T:MudExtensions.Utilities.SignaturePadLocalizedStrings">
             <summary>

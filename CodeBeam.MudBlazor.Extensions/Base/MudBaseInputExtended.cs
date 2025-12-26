@@ -55,6 +55,12 @@ namespace MudExtensions
         /// </summary>
         [Parameter] public EventCallback OnChange { get; set; }
 
+        /// <summary>
+        /// Gets or sets a callback that is invoked before input is processed.
+        /// </summary>
+        /// <remarks>Use this callback to perform custom logic or validation before the input event is
+        /// handled. This can be useful for intercepting or modifying input behavior in advanced scenarios
+        /// </remarks>
         [Parameter]
         public EventCallback<MudBeforeInputEventArgs> OnBeforeInput { get; set; }
 
@@ -63,6 +69,12 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         public bool HasAdornmentStart { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the component has an adornment at the end.
+        /// </summary>
+        [Parameter]
+        public bool HasAdornmentEnd { get; set; }
 
         /// <summary>
         /// The Adornment if used. By default, it is set to None.
@@ -91,6 +103,12 @@ namespace MudExtensions
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool DisablePaste { get; set; }
 
+        /// <summary>
+        /// Invokes logic to be executed before input is processed, including raising the BeforeInput event if a
+        /// delegate is assigned.
+        /// </summary>
+        /// <param name="args">The event data associated with the before input operation.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         protected async Task InvokeBeforeInputAsync(MudBeforeInputEventArgs args)
         {
             _isFocused = true;
@@ -127,13 +145,18 @@ namespace MudExtensions
         /// <returns></returns>
         protected string? ResolveAriaDescribedBy() => GetAriaDescribedByString();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [JSInvokable("OnBeforeInput")]
         public async Task<bool> OnBeforeInputFromJs(MudBeforeInputJsDto dto)
         {
             var args = new MudBeforeInputEventArgs
             {
                 Data = dto.Data,
-                InputType = dto.InputType,
+                InputType = dto.InputType ?? string.Empty,
                 IsComposing = dto.IsComposing
             };
 
@@ -141,6 +164,14 @@ namespace MudExtensions
             return args.PreventDefault;
         }
 
+        /// <summary>
+        /// Invoked before processing input, allowing for custom logic or validation to be performed asynchronously.
+        /// </summary>
+        /// <remarks>Override this method in a derived class to implement custom pre-processing or
+        /// validation logic before input is handled. This method is called before the main input processing
+        /// occurs.</remarks>
+        /// <param name="args">An object containing event data for the input operation.</param>
+        /// <returns>A task that represents the asynchronous operation. The default implementation returns a completed task.</returns>
         protected virtual Task OnBeforeInputAsync(MudBeforeInputEventArgs args) => Task.CompletedTask;
 
 

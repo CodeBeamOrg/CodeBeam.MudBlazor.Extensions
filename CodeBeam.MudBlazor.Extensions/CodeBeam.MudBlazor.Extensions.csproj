@@ -22,7 +22,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<IsTrimmable>true</IsTrimmable>
+		<IsTrimmable>false</IsTrimmable>
 		<TrimMode>link</TrimMode>
 		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -33,22 +33,26 @@
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="MudBlazor" Version="9.0.0-preview.1" />
+	<!--Uncomment it and build again when you change the CSS/SASS files, currently it fails the CI process-->
+	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
 		<!--<PackageReference Include="MudBlazor.SassCompiler" Version="2.0.7">
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>-->
 	</ItemGroup>
 
-	<Target Name="CopyMudExtensionsCss" AfterTargets="Build">
-		<Copy SourceFiles="wwwroot/css/MudExtensions.min.css" DestinationFiles="wwwroot/MudExtensions.min.css" SkipUnchangedFiles="true" Condition="Exists('wwwroot/css/MudExtensions.min.css')" />
+	<ItemGroup>
+		<PackageReference Include="MudBlazor" Version="9.0.0-preview.1" />
+	</ItemGroup>
+
+	<Target Name="MinifyMudExtensionsJs" AfterTargets="Build" Condition="'$(CI)' != 'true'
+               AND '$(TargetFramework)' == 'net10.0'
+               AND Exists('TScripts/MudExtensions.js')">
+		<Message Importance="high" Text="Minifying MudExtensions.js → MudExtensions.min.js" />
+		<Exec WorkingDirectory="$(SolutionDir)" Command="dotnet run --project CodeBeam.MudBlazor.Extensions.JsMinifier\CodeBeam.MudBlazor.Extensions.JsMinifier.csproj --configuration $(Configuration)" />
 	</Target>
-
-
 
 	<ItemGroup>
 		<Content Remove="sasscompiler.json" />
-		<Content Remove="wwwroot/css/**" />
 	</ItemGroup>
 
 	<ItemGroup>

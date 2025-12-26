@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Extensions;
 using MudBlazor.Utilities;
-using MudExtensions;
 
 namespace MudExtensions
 {
@@ -22,6 +22,7 @@ namespace MudExtensions
         public MudListItemExtended<T> ListItem { get; set; } = new();
         internal string ItemId { get; } = "selectItem_"+Guid.NewGuid().ToString().Substring(0,8);
 
+        private IMudShadowSelectExtended? _shadowParent;
         /// <summary>
         /// The parent select component
         /// </summary>
@@ -63,18 +64,6 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.List.Behavior)]
         public string? Text { get; set; }
-
-        private IMudShadowSelectExtended? _shadowParent;
-        [CascadingParameter]
-        internal IMudShadowSelectExtended? IMudShadowSelectExtended
-        {
-            get => _shadowParent;
-            set
-            {
-                _shadowParent = value;
-                ((MudSelectExtended<T?>?)_shadowParent)?.RegisterShadowItem(this);
-            }
-        }
 
         /// <summary>
         /// Select items with HideContent==true are only there to register their RenderFragment with the select but
@@ -161,7 +150,7 @@ namespace MudExtensions
         {
             get
             {
-                var converter = MudSelectExtended?.Converter;
+                var converter = MudSelectExtended?.GetState(x => x.Converter);
                 if (converter == null)
                     return $"{(string.IsNullOrEmpty(Text) ? Value : Text)}";
                 return !string.IsNullOrEmpty(Text) ? Text : converter.Convert(Value);
@@ -174,11 +163,11 @@ namespace MudExtensions
         protected async Task HandleOnClickAsync()
         {
             // Selection works on list. We arrange only popover state and some minor arrangements on click.
-            await MudSelectExtended?.SelectOption(Value);
+            await MudSelectExtended!.SelectOption(Value);
             await InvokeAsync(StateHasChanged);
             if (!MultiSelection)
             {
-                await MudSelectExtended?.CloseMenu();
+                await MudSelectExtended!.CloseMenu();
             }
             else
             {
@@ -199,6 +188,7 @@ namespace MudExtensions
             }
             return Disabled;
         }
+
 
         /// <summary>
         /// 
