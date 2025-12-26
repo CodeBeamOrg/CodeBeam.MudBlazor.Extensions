@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using CsvHelper;
+﻿using CsvHelper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
@@ -315,7 +314,7 @@ namespace MudExtensions
             await using (var csv = new CsvWriter(writer, config))
             {
                 var dynamicContent = CsvContent?.Cast<dynamic>();
-                await csv.WriteRecordsAsync(dynamicContent);
+                await csv.WriteRecordsAsync(dynamicContent ?? Enumerable.Empty<dynamic>());
 
                 var str = writer.ToString();
                 FileContentByte = Encoding.UTF8.GetBytes(str);
