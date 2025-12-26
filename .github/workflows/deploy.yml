@@ -1,5 +1,7 @@
 on: 
   push:
+    branches:
+      - dev
   workflow_dispatch:
 name: 🚀 Deploy website on push
 jobs:
@@ -13,11 +15,9 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          8.0.x
-          9.0.x
           10.0.x
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore --configuration Release
     - name: Build with dotnet
       run: dotnet build --configuration Release --no-restore
     - name: Publish
