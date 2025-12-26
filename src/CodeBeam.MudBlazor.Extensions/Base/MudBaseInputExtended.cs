@@ -62,7 +62,7 @@ namespace MudExtensions
         /// handled. This can be useful for intercepting or modifying input behavior in advanced scenarios
         /// </remarks>
         [Parameter]
-        public EventCallback<MudBeforeInputEventArgs> OnBeforeInput { get; set; }
+        public EventCallback<BeforeInputEventArgs> OnBeforeInput { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the component has an adornment at the start.
@@ -109,7 +109,7 @@ namespace MudExtensions
         /// </summary>
         /// <param name="args">The event data associated with the before input operation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        protected async Task InvokeBeforeInputAsync(MudBeforeInputEventArgs args)
+        protected async Task InvokeBeforeInputAsync(BeforeInputEventArgs args)
         {
             _isFocused = true;
             await OnBeforeInputAsync(args);
@@ -151,9 +151,9 @@ namespace MudExtensions
         /// <param name="dto"></param>
         /// <returns></returns>
         [JSInvokable("OnBeforeInput")]
-        public async Task<bool> OnBeforeInputFromJs(MudBeforeInputJsDto dto)
+        public async Task<bool> OnBeforeInputFromJs(BeforeInputJsDto dto)
         {
-            var args = new MudBeforeInputEventArgs
+            var args = new BeforeInputEventArgs
             {
                 Data = dto.Data,
                 InputType = dto.InputType ?? string.Empty,
@@ -172,7 +172,7 @@ namespace MudExtensions
         /// occurs.</remarks>
         /// <param name="args">An object containing event data for the input operation.</param>
         /// <returns>A task that represents the asynchronous operation. The default implementation returns a completed task.</returns>
-        protected virtual Task OnBeforeInputAsync(MudBeforeInputEventArgs args) => Task.CompletedTask;
+        protected virtual Task OnBeforeInputAsync(BeforeInputEventArgs args) => Task.CompletedTask;
 
 
     }

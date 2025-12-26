@@ -38,7 +38,7 @@ namespace MudExtensions
         /// </summary>
         public MudInputExtended<string?> InputReference { get; private set; } = null!;
         private InputType GetPasswordInputType() => _passwordMode.Value ? InputType.Password : InputType.Text;
-        private string? GetPasswordIcon() => _passwordMode.Value ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility;
+        private string? GetPasswordIcon() => _passwordMode.Value ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff;
         //InputType _passwordInput = InputType.Password;
         //string? _passwordIcon = Icons.Material.Filled.VisibilityOff;
 

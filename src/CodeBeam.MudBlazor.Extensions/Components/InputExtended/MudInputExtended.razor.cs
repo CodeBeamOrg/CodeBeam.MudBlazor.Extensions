@@ -349,11 +349,6 @@ namespace MudExtensions
             return HasValue(ReadValue);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="updateValue"></param>
-        /// <returns></returns>
         //protected override async Task UpdateTextPropertyAsync(bool updateValue)
         //{
         //    await base.UpdateTextPropertyAsync(updateValue);
@@ -361,11 +356,6 @@ namespace MudExtensions
         //        UpdateClearable(ReadText);
         //}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="updateText"></param>
-        /// <returns></returns>
         //protected override async Task UpdateValuePropertyAsync(bool updateText)
         //{
         //    await base.UpdateValuePropertyAsync(updateText);

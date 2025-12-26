@@ -83,7 +83,7 @@
             If true disables paste to input component. Default is false.
             </summary>
         </member>
-        <member name="M:MudExtensions.MudBaseInputExtended`1.InvokeBeforeInputAsync(MudExtensions.MudBeforeInputEventArgs)">
+        <member name="M:MudExtensions.MudBaseInputExtended`1.InvokeBeforeInputAsync(MudExtensions.BeforeInputEventArgs)">
             <summary>
             Invokes logic to be executed before input is processed, including raising the BeforeInput event if a
             delegate is assigned.
@@ -109,14 +109,14 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MudExtensions.MudBaseInputExtended`1.OnBeforeInputFromJs(MudExtensions.MudBeforeInputJsDto)">
+        <member name="M:MudExtensions.MudBaseInputExtended`1.OnBeforeInputFromJs(MudExtensions.BeforeInputJsDto)">
             <summary>
             
             </summary>
             <param name="dto"></param>
             <returns></returns>
         </member>
-        <member name="M:MudExtensions.MudBaseInputExtended`1.OnBeforeInputAsync(MudExtensions.MudBeforeInputEventArgs)">
+        <member name="M:MudExtensions.MudBaseInputExtended`1.OnBeforeInputAsync(MudExtensions.BeforeInputEventArgs)">
             <summary>
             Invoked before processing input, allowing for custom logic or validation to be performed asynchronously.
             </summary>
@@ -131,6 +131,11 @@
             A Mud input component has special features to working with chips.
             </summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:MudExtensions.MudChipField`1.#ctor">
+            <summary>
+            
+            </summary>
         </member>
         <member name="P:MudExtensions.MudChipField`1.ChipClassname">
             <summary>
@@ -222,6 +227,13 @@
         <member name="M:MudExtensions.MudChipField`1.HandleKeyUp(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs)">
             <summary>
             Protected keyup event.
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudChipField`1.HandleBeforeInput(MudExtensions.BeforeInputEventArgs)">
+            <summary>
+            
             </summary>
             <param name="args"></param>
             <returns></returns>
@@ -2070,6 +2082,13 @@
             <summary>
             Gets or sets a children text.
             </summary>
+        </member>
+        <member name="M:MudExtensions.MudJsonTreeViewNode.RenderJsonItem(System.Collections.Generic.KeyValuePair{System.String,System.Text.Json.Nodes.JsonNode})">
+            <summary>
+            
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
         </member>
         <member name="T:MudExtensions.MudListExtended`1">
             <summary>
@@ -6383,6 +6402,76 @@
             Auto: is immediate
             </summary>
         </member>
+        <member name="P:MudExtensions.BeforeInputEventArgs.Data">
+            <summary>
+            Text that will be inserted. Null for delete actions.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BeforeInputEventArgs.InputType">
+            <summary>
+            Type of input action (insertText, deleteContentBackward, insertFromPaste, etc.)
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BeforeInputEventArgs.IsComposing">
+            <summary>
+            True when IME composition is active (Chinese, Japanese, etc.)
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BeforeInputEventArgs.PreventDefault">
+            <summary>
+            Set true to prevent the input from happening.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BeforeInputEventArgs.IsInsert">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BeforeInputEventArgs.IsDeleteBackward">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BeforeInputEventArgs.IsDeleteForward">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BeforeInputEventArgs.IsPaste">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BeforeInputEventArgs.IsEnter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MudExtensions.BeforeInputJsDto">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MudExtensions.BeforeInputJsDto.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BeforeInputJsDto.Data">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BeforeInputJsDto.InputType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.BeforeInputJsDto.IsComposing">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:MudExtensions.Utilities.DateWheelPickerLocalizedStrings">
             <summary>
             Localized strings for DateWheelPicker.
@@ -6557,26 +6646,6 @@
         <member name="T:MudExtensions.Utilities.StepperLocalizedStrings">
             <summary>
             Localized strings for MudStepper
-            </summary>
-        </member>
-        <member name="P:MudExtensions.MudBeforeInputEventArgs.Data">
-            <summary>
-            Text that will be inserted. Null for delete actions.
-            </summary>
-        </member>
-        <member name="P:MudExtensions.MudBeforeInputEventArgs.InputType">
-            <summary>
-            Type of input action (insertText, deleteContentBackward, insertFromPaste, etc.)
-            </summary>
-        </member>
-        <member name="P:MudExtensions.MudBeforeInputEventArgs.IsComposing">
-            <summary>
-            True when IME composition is active (Chinese, Japanese, etc.)
-            </summary>
-        </member>
-        <member name="P:MudExtensions.MudBeforeInputEventArgs.PreventDefault">
-            <summary>
-            Set true to prevent the input from happening.
             </summary>
         </member>
         <member name="P:MudExtensions.MudAnimate.Selector">

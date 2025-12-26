@@ -33,6 +33,11 @@ public partial class MudJsonTreeViewNode : ComponentBase
     [Parameter]
     public string Text { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
     public RenderFragment RenderJsonItem(KeyValuePair<string, JsonNode?> item) => builder =>
     {
         try

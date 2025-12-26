@@ -8,7 +8,7 @@ string? repoRoot = null;
 
 while (current != null)
 {
-    if (Directory.GetFiles(current, "*.sln").Any())
+    if (Directory.GetFiles(current, "*.slnx").Any())
     {
         repoRoot = current;
         break;
@@ -19,7 +19,7 @@ while (current != null)
 
 if (repoRoot == null)
 {
-    Console.Error.WriteLine("Repository root (.sln) not found.");
+    Console.Error.WriteLine("Repository root (.slnx) not found.");
     Environment.Exit(1);
 }
 

@@ -1,6 +1,6 @@
 ﻿namespace MudExtensions
 {
-    public sealed class MudBeforeInputEventArgs
+    public sealed class BeforeInputEventArgs
     {
         /// <summary>
         /// Text that will be inserted. Null for delete actions.
@@ -22,14 +22,29 @@
         /// </summary>
         public bool PreventDefault { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsInsert => InputType.StartsWith("insert", StringComparison.Ordinal);
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsDeleteBackward => InputType == "deleteContentBackward";
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsDeleteForward => InputType == "deleteContentForward";
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsPaste => InputType == "insertFromPaste";
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsEnter => InputType == "insertLineBreak";
     }
 }

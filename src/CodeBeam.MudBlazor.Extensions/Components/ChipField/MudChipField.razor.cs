@@ -12,6 +12,9 @@ namespace MudExtensions
     /// <typeparam name="T"></typeparam>
     public partial class MudChipField<T> : MudTextFieldExtended<T>
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public MudChipField()
         {
             using var registerScope = CreateRegisterScope();
@@ -168,7 +171,12 @@ namespace MudExtensions
             await OnKeyUp.InvokeAsync(args);
         }
 
-        protected internal async Task HandleBeforeInput(MudBeforeInputEventArgs args)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        protected internal async Task HandleBeforeInput(BeforeInputEventArgs args)
         {
             if (args.IsComposing)
             {
