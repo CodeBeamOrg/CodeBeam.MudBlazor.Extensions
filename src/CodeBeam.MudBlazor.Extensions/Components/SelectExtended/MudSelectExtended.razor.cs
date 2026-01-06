@@ -773,10 +773,10 @@ namespace MudExtensions
             {
                 _selectedValues = new HashSet<T?>(_comparer) { ReadValue };
             }
-            else if (MultiSelection && SelectedValues != null)
+            else if (MultiSelection && SelectedValues != null && SelectedValues.Any())
             {
                 // TODO: Check this line again
-                SetValueAsync(SelectedValues.FirstOrDefault()).CatchAndLog();
+                SetValueAndUpdateTextAsync(SelectedValues.FirstOrDefault()).CatchAndLog();
             }
         }
 
