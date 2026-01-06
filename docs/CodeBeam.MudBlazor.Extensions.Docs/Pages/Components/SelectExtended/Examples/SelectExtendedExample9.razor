@@ -1,0 +1,29 @@
+﻿@namespace MudExtensions.Docs.Examples
+
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <MudStack>
+            <MudSelectExtended @bind-SelectedValues="@_values" Label="Select Overview" Virtualize="true" MultiSelection="_multiselection" Clearable="_clearable">
+                <MudSelectItemExtended Value="@("Foo")" Text="Foo" />
+                <MudSelectItemExtended Value="@("Bar")" Text="Bar" />
+                <MudSelectItemExtended Value="@("Fizz")" Text="Fizz" />
+                <MudSelectItemExtended Value="@("Buzz")" Text="Buzz" />
+            </MudSelectExtended>
+            <MudSelectExtended @bind-SelectedValues="@_values" Label="Data Based" ItemCollection="_collection" Virtualize="true" MultiSelection="_multiselection" Clearable="_clearable" />
+        </MudStack>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="2">
+            <MudSwitchM3 @bind-Value="_multiselection" Color="Color.Secondary" Label="Multiselection" />
+            <MudSwitchM3 @bind-Value="_clearable" Color="Color.Secondary" Label="Clearable" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private bool _multiselection = true;
+    private bool _clearable = false;
+    private string[] _collection = new string[] { "Foo", "Bar", "Fizz", "Buzz" };
+    private IEnumerable<string?> _values = new List<string?>() { "Foo" };
+}
