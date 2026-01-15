@@ -14,6 +14,11 @@ namespace MudExtensions
     /// <typeparam name="T"></typeparam>
     public partial class MudCodeInput<T> : MudFormComponent<T, string>
     {
+
+        protected override IConverter<T?, string?> GetDefaultConverter()
+        {
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// MudCodeInput constructor.
         /// </summary>
@@ -324,5 +329,6 @@ namespace MudExtensions
             }
         }
 
+        
     }
 }
