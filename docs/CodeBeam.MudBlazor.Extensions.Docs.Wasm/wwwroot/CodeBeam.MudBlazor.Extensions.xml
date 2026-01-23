@@ -4,26 +4,6 @@
         <name>CodeBeam.MudBlazor.Extensions</name>
     </assembly>
     <members>
-        <member name="T:MudExtensions.Base.Identifier">
-            <summary>
-            Provides methods to create unique identifiers with optional prefixes.
-            </summary>
-        </member>
-        <member name="M:MudExtensions.Base.Identifier.Create(System.ReadOnlySpan{System.Char})">
-            <summary>
-            Creates a unique identifier with the specified prefix.
-            </summary>
-            <param name="prefix">The prefix to prepend to the unique identifier.</param>
-            <returns>A unique identifier string with the specified prefix.</returns>
-            <example><code>prefixdb54bcd0</code></example>
-        </member>
-        <member name="M:MudExtensions.Base.Identifier.Create">
-            <summary>
-            Creates a unique identifier.
-            </summary>
-            <returns>A unique identifier string.</returns>
-            <example><code>adb54bcd0</code></example>
-        </member>
         <member name="T:MudExtensions.MudBaseInputExtended`1">
             <summary>
             The extended base input fundamentals.

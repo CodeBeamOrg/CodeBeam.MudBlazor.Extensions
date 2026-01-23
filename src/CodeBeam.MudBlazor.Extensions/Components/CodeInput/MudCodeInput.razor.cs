@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudBlazor.Extensions;
-using MudBlazor.Interfaces;
 using MudBlazor.State;
 using MudBlazor.Utilities;
 
@@ -14,22 +13,11 @@ namespace MudExtensions
     /// <typeparam name="T"></typeparam>
     public partial class MudCodeInput<T> : MudFormComponent<T, string>
     {
-
-        protected override IConverter<T?, string?> GetDefaultConverter()
-        {
-            throw new NotImplementedException();
-        }
         /// <summary>
         /// MudCodeInput constructor.
         /// </summary>
         public MudCodeInput()
         {
-            Converter = new DefaultConverter<T>
-            {
-                Culture = GetCulture,
-                Format = GetFormat
-            };
-
             using var registerScope = CreateRegisterScope();
             _theValue = registerScope.RegisterParameter<T?>(nameof(Value))
                 .WithParameter(() => Value)
@@ -324,11 +312,22 @@ namespace MudExtensions
                 }
                 else
                 {
-                    await _elementReferences[i].SetText(null);
+                    await _elementReferences[i].SetText(string.Empty);
                 }
             }
         }
 
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected override IConverter<T?, string?> GetDefaultConverter()
+        {
+            return new DefaultConverter<T>
+            {
+                Culture = GetCulture,
+                Format = GetFormat
+            };
+        }
     }
 }
