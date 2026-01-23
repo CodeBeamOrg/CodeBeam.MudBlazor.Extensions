@@ -75,7 +75,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         [Parameter]
-        public List<T?>? ItemCollection { get; set; }
+        public List<T?> ItemCollection { get; set; } = new();
 
         /// <summary>
         /// Determines how many items will show before and after the middle one.
@@ -282,5 +282,7 @@ namespace MudExtensions
         /// </summary>
         /// <returns></returns>
         protected int GetAnimateValue() => Dense ? 24 : 42;
+
+
     }
 }

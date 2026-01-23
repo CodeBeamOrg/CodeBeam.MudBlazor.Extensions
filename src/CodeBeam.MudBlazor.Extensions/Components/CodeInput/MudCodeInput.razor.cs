@@ -312,11 +312,15 @@ namespace MudExtensions
                 }
                 else
                 {
-                    await _elementReferences[i].SetText(null);
+                    await _elementReferences[i].SetText(string.Empty);
                 }
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected override IConverter<T?, string?> GetDefaultConverter()
         {
             return new DefaultConverter<T>
