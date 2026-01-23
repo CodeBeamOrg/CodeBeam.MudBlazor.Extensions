@@ -25,7 +25,11 @@ namespace MudExtensions
             IconSize = Size.Medium;
         }
 
-        [Inject] private IKeyInterceptorService KeyInterceptorService { get; set; } = null!;
+        [Inject]
+        private IKeyInterceptorService KeyInterceptorService { get; set; } = null!;
+
+        [Inject]
+        private IPopoverService PopoverService { get; set; } = null!;
 
         private MudListExtended<T?>? _list;
         private bool _dense;
@@ -177,6 +181,19 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.List.Selecting)]
         public bool NoWrap { get; set; }
+
+        /// <summary>
+        /// If true prevent background interaction when open. Default is true.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Selecting)]
+        public bool? Modal { get; set; } = true;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected bool GetModal() => Modal ?? PopoverService.PopoverOptions.ModalOverlay;
 
         /// <summary>
         /// User class names for the popover, separated by space

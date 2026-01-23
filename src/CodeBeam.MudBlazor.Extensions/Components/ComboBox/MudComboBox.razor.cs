@@ -15,6 +15,9 @@ namespace MudExtensions
     {
         #region Constructor, Injected Services, Parameters, Fields
 
+        [Inject]
+        private IPopoverService PopoverService { get; set; } = null!;
+
         /// <summary>
         /// Constructor for ComboBox
         /// </summary>
@@ -324,6 +327,19 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListBehavior)]
         public bool SelectAll { get; set; }
+
+        /// <summary>
+        /// If true prevent background interaction when open. Default is true.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Selecting)]
+        public bool? Modal { get; set; } = true;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected bool GetModal() => Modal ?? PopoverService.PopoverOptions.ModalOverlay;
 
         /// <summary>
         /// Sets position of the Select All checkbox
