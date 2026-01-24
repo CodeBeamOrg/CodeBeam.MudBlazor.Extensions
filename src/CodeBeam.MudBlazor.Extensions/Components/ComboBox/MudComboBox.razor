@@ -55,7 +55,7 @@
                                             {
                                                 foreach (var item in CollectionsMarshal.AsSpan(collection))
                                                 {
-                                                    <MudChip Class="@ChipClass" Value="@item.Value" Text="@(ToStringFunc is not null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrWhiteSpace(item.Text) ? base.ConvertSet(item.Value) : item.Text)"
+                                                    <MudChip Class="@ChipClass" Value="@item.Value" Text="@(ToStringFunc is not null ? ToStringFunc.Invoke(item.Value) : string.IsNullOrWhiteSpace(item.Text) ? ConvertSet(item.Value) : item.Text)"
                                                              Color="@Color" Size="@ChipSize" Variant="@ChipVariant" @onmousedown:stopPropagation />
                                                 }
                                             }

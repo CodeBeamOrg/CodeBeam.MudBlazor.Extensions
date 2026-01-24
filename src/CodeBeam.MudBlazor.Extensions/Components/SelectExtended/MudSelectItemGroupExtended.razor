@@ -2,10 +2,9 @@
 @typeparam T
 @inherits MudComponentBase
 
-@if (HideContent == false)
+@if (!HideContent)
 {
-
-    if (Nested == true)
+    if (Nested)
     {
         <MudListItemExtended T="T" Class="@Class" Style="@Style" Text="@Text" InitiallyExpanded="@InitiallyExpanded" ExpandedChanged="HandleExpandedChanged">
             <NestedList>

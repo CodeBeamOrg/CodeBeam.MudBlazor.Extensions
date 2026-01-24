@@ -18,12 +18,6 @@ namespace MudExtensions
         /// </summary>
         protected MudBaseInputExtended()
         {
-            Converter = new DefaultConverter<T>
-            {
-                Culture = GetCulture,
-                Format = GetFormat
-            };
-
             //using var registerScope = CreateRegisterScope();
             //_textState = registerScope.RegisterParameter<string?>(nameof(Text))
             //    .WithParameter(() => Text)
@@ -40,8 +34,6 @@ namespace MudExtensions
             //    .WithParameter(() => InputId)
             //    .WithChangeHandler(UpdateInputIdStateAsync);
         }
-
-
 
         /// <summary>
         /// Fires on input.
@@ -171,7 +163,5 @@ namespace MudExtensions
         /// <param name="args">An object containing event data for the input operation.</param>
         /// <returns>A task that represents the asynchronous operation. The default implementation returns a completed task.</returns>
         protected virtual Task OnBeforeInputAsync(BeforeInputEventArgs args) => Task.CompletedTask;
-
-
     }
 }

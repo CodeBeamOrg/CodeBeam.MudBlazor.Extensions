@@ -10,7 +10,7 @@ namespace MudExtensions
     /// </summary>
     public partial class MudSelectItemExtended<T> : MudComponentBase, IDisposable
     {
-        private String GetCssClasses() => new CssBuilder()
+        private string GetCssClasses() => new CssBuilder()
             .AddClass(Class)
             .Build();
 
@@ -150,10 +150,12 @@ namespace MudExtensions
         {
             get
             {
-                var converter = MudSelectExtended?.GetState(x => x.Converter);
-                if (converter == null)
+                if (MudSelectExtended == null)
+                {
                     return $"{(string.IsNullOrEmpty(Text) ? Value : Text)}";
-                return !string.IsNullOrEmpty(Text) ? Text : converter.Convert(Value);
+                }
+
+                return !string.IsNullOrEmpty(Text) ? Text : MudSelectExtended.ConverterSetCore(Value);
             }
         }
 
@@ -188,7 +190,6 @@ namespace MudExtensions
             }
             return Disabled;
         }
-
 
         /// <summary>
         /// 

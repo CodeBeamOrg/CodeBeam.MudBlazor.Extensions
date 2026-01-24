@@ -5,7 +5,7 @@
 <MudInputControl Class="@Class" Style="@Style" Error="@ErrorState.Value" ErrorText="@GetErrorText()" Required="false">
     <InputContent>
         <div class="@Classname" style="@InnerStyle">
-            @for (int i = 0; i < Count; i++)
+            @for (int i = 0; i < _count.Value; i++)
             {
                 int a = i;
                 <MudTextFieldExtended @ref="_elementReferences[a]" T="T" Class="@InputClassname" Style="@(Margin == Margin.Dense ? "width: 32px" : "width: 42px")" MaxLength="1"

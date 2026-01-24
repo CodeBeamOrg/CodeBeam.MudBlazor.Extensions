@@ -100,7 +100,7 @@ namespace MudExtensions
         /// <summary>
         /// The value of the input.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public T? Value { get; set; }
 
@@ -114,7 +114,7 @@ namespace MudExtensions
         /// <summary>
         /// The number of text fields.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public int Count { get; set; }
 
@@ -218,7 +218,7 @@ namespace MudExtensions
                 _skipRefocus = false;
                 return;
             }
-            string str = base.ConvertSet(_theValue.Value) ?? string.Empty;
+            string str = ConvertSet(_theValue.Value) ?? string.Empty;
             await _elementReferences[str.Length].FocusAsync();
         }
 
@@ -298,7 +298,7 @@ namespace MudExtensions
         /// <returns></returns>
         public async Task SetValueFromOutside(T? value)
         {
-            string? val = base.ConvertSet(value);
+            string? val = ConvertSet(value);
             if (_count.Value < val?.Length)
             {
                 val = val.Substring(0, _count.Value);

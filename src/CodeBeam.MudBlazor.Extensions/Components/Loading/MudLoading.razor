@@ -1,7 +1,7 @@
 ﻿@namespace MudExtensions
 @inherits MudComponentBase
 
-@if (_loading.Value == true)
+@if (_loading.Value)
 {
     if (LoaderType == LoaderType.Circular)
     {
@@ -11,7 +11,7 @@
         }
         else
         {
-            <MudOverlay Class="mud-loading-overlay" Visible="_loading" Absolute="true" DarkBackground="@Darken">
+            <MudOverlay Class="mud-loading-overlay" Visible="@_loading.Value" Absolute="true" DarkBackground="@Darken">
                 <div class="d-flex flex-column align-center justify-center">
                     <MudProgressCircular Class="@LoaderClass" Style="@LoaderStyle" Color="@Color" Indeterminate="true" />
                     <MudText Class="@TextClassname" Style="@TextStyle">@Text</MudText>
@@ -31,7 +31,7 @@
             <MudProgressLinear Class="@LoaderClass" Style="@LoaderStyle" Color="@Color" Indeterminate="true" />
             <MudText Class="@TextClassname" Style="@TextStyle" Align="Align.Center">@Text</MudText>
 
-            <MudOverlay Class="mud-loading-overlay" Visible="_loading" Absolute="true" DarkBackground="@Darken">
+            <MudOverlay Class="mud-loading-overlay" Visible="@_loading.Value" Absolute="true" DarkBackground="@Darken">
                 <div class="d-flex align-center justify-center">
                 
                 </div>

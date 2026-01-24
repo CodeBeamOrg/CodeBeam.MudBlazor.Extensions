@@ -12,7 +12,7 @@
                       OnClearButtonClick="@(async() => await OnClearButtonClick.InvokeAsync())"
                       OnDebounceIntervalElapsed="@(async() => await OnDebounceIntervalElapsed.InvokeAsync())"
                       OnInternalInputChanged="@(async() => await OnInternalInputChanged.InvokeAsync())"
-                      ShrinkLabel="@(Values?.Any() ?? false)"
+                      ShrinkLabel="@(_valuesState.Value?.Any() ?? false)"
                       Clearable="@Clearable"
                       AutoFocus="@AutoFocus"
                       Class="@Class"
@@ -43,19 +43,19 @@
                       Variant="@Variant"
                       @bind-Value="@_internalValue"
                       TextChanged="@(async() => await TextChanged.InvokeAsync())"
-                      ShowVisualiser="@(Values?.Any() ?? false)">
+                      ShowVisualiser="@(_valuesState.Value?.Any() ?? false)">
 
     <DataVisualiser>
         <MudChipSet T="T" Class="@ChipClassname" Style="@ChipStylename" AllClosable="@Closeable" OnClose="Closed">
-            @for (int i = 0; i < (MaxChips == 0 ? Values?.Count ?? 0 : (MaxChips < (Values?.Count ?? 0) ? MaxChips : Values?.Count ?? 0)); i++)
+            @for (int i = 0; i < (MaxChips == 0 ? _valuesState.Value?.Count ?? 0 : (MaxChips < (_valuesState.Value?.Count ?? 0) ? MaxChips : _valuesState.Value?.Count ?? 0)); i++)
             {
                 int a = i;
-                <MudChip T="T" Class="@ClassChip" Style="@StyleChip" Ripple="false" Text="@(Values != null ? Values[a] : string.Empty)" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
+                <MudChip T="T" Class="@ClassChip" Style="@StyleChip" Ripple="false" Text="@(_valuesState.Value != null ? _valuesState.Value[a] : string.Empty)" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
             }
         </MudChipSet>
-        @if (Values != null && MaxChips != 0 && MaxChips < Values.Count)
+        @if (_valuesState.Value != null && MaxChips != 0 && MaxChips < _valuesState.Value.Count)
         {
-            <MudChip T="T" Ripple="false" Text="@($"+{Values.Count - MaxChips}")" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
+            <MudChip T="T" Ripple="false" Text="@($"+{_valuesState.Value.Count - MaxChips}")" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
         }
     </DataVisualiser>
 

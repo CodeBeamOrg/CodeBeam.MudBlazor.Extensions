@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -12,10 +11,15 @@ namespace MudExtensions
     /// <typeparam name="T"></typeparam>
     public partial class MudWheel<T> : MudBaseInput<T>
     {
+        private int _animateValue = 52;
+        private MudAnimate _animate = new();
+        private readonly Guid _animateGuid = Guid.NewGuid();
+
         /// <summary>
         /// 
         /// </summary>
-        [Inject] public IScrollManager ScrollManager { get; set; } = null!;
+        [Inject]
+        public IScrollManager ScrollManager { get; set; } = null!;
 
         /// <summary>
         /// 
@@ -67,15 +71,11 @@ namespace MudExtensions
             .AddClass("wheel-item-empty-dense", Dense)
             .Build();
 
-        MudAnimate _animate = new();
-        Guid _animateGuid = Guid.NewGuid();
-        int _animateValue = 52;
-
         /// <summary>
         /// 
         /// </summary>
         [Parameter]
-        public List<T?> ItemCollection { get; set; } = new();
+        public List<T?>? ItemCollection { get; set; } = new();
 
         /// <summary>
         /// Determines how many items will show before and after the middle one.
@@ -113,7 +113,6 @@ namespace MudExtensions
         [Parameter]
         public Color Color { get; set; }
 
-        private Func<T?, string?>? _toStringFunc = x => x?.ToString();
         /// <summary>
         /// Defines how values are displayed in the drop-down list
         /// </summary>
@@ -258,7 +257,7 @@ namespace MudExtensions
             }
             await _animate.Refresh();
 
-            T val = ItemCollection[index + changeCount];
+            T? val = ItemCollection is not null ? ItemCollection[index + changeCount] : default;
             await SetValueAsync(val);
         }
 
@@ -282,7 +281,5 @@ namespace MudExtensions
         /// </summary>
         /// <returns></returns>
         protected int GetAnimateValue() => Dense ? 24 : 42;
-
-
     }
 }

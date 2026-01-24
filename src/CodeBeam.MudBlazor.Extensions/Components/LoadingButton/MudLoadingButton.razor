@@ -3,7 +3,7 @@
 
 @if (ButtonVariant == ButtonVariant.Button)
 {
-    <MudButton Disabled="@(Disabled ? true : _loading.Value ? true : false)"
+    <MudButton Disabled="@(Disabled || (_loading.Value))"
            Size="@Size" Class="@Class" Style="@Style" UserAttributes="@UserAttributes" Variant="@Variant" Color="@Color" OnClick="@ButtonClick"
            Href="@Href" Target="@Target" ButtonType="@ButtonType" DropShadow="@DropShadow" Ripple="@Ripple"
            StartIcon="@StartIcon" EndIcon="@EndIcon" FullWidth="@FullWidth" HtmlTag="@HtmlTag"
@@ -37,7 +37,7 @@
 }
 else if (ButtonVariant == ButtonVariant.IconButton)
 {
-    <MudIconButton Disabled="@(Disabled ? true : _loading.Value ? true : false)"
+    <MudIconButton Disabled="@(Disabled || (_loading.Value))"
                Size="@Size" Class="@Class" Style="@Style" UserAttributes="@UserAttributes" Variant="@Variant" Color="@Color" OnClick="@ButtonClick"
                Href="@Href" Target="@Target" ButtonType="@ButtonType" DropShadow="@DropShadow" Ripple="@Ripple"
                Icon="@(_loading.Value ? null : Icon)" HtmlTag="@HtmlTag">
@@ -63,9 +63,9 @@ else if (ButtonVariant == ButtonVariant.IconButton)
 }
 else if (ButtonVariant == ButtonVariant.Fab)
 {
-    @if (_loading.Value == false)
+    @if (!_loading.Value)
     {
-        <MudFab Disabled="@(Disabled ? true : _loading.Value ? true : false)"
+        <MudFab Disabled="@(Disabled || (_loading.Value))"
         Size="@Size" Class="@Class" Style="@Style" UserAttributes="@UserAttributes" Color="@Color" OnClick="@ButtonClick"
         Href="@Href" Target="@Target" ButtonType="@ButtonType" DropShadow="@DropShadow" Ripple="@Ripple"
         StartIcon="@StartIcon" EndIcon="@EndIcon" IconColor="@IconColor" IconSize="@IconSize" Label="@Label"

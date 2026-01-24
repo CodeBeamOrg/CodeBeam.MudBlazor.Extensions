@@ -32,20 +32,21 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string? Classname =>
-        new CssBuilder("mud-list-extended")
-           .AddClass("mud-list-padding-extended", Padding)
-          .AddClass(Class)
-        .Build();
+            new CssBuilder("mud-list-extended")
+                .AddClass("mud-list-padding-extended", Padding)
+                .AddClass(Class)
+                .Build();
 
         /// <summary>
         /// 
         /// </summary>
         protected string? Stylename =>
-        new StyleBuilder()
-            .AddStyle("max-height", $"{MaxItems * (!Dense ? 48 : 36) + (Padding == false ? 0 : 16)}px", MaxItems != null)
-            .AddStyle("overflow-y", "auto", MaxItems != null)
-            .AddStyle(Style)
-            .Build();
+            new StyleBuilder()
+                .AddStyle("max-height", $"{MaxItems * (!Dense ? 48 : 36) + (Padding == false ? 0 : 16)}px",
+                    MaxItems != null)
+                .AddStyle("overflow-y", "auto", MaxItems != null)
+                .AddStyle(Style)
+                .Build();
 
         /// <summary>
         /// 
