@@ -22,12 +22,16 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<IsTrimmable>false</IsTrimmable>
+		<IsTrimmable>true</IsTrimmable>
 		<TrimMode>link</TrimMode>
 		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<TrimmerRootDescriptor Include="Linker.xml" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<SupportedPlatform Include="browser" />

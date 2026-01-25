@@ -1,0 +1,13 @@
+﻿<linker>
+	<assembly fullname="CodeBeam.MudBlazor.Extensions">
+
+		<type fullname="MudExtensions.MudBaseInputExtended`1">
+			<method name="OnBeforeInputFromJs" />
+		</type>
+
+		<type fullname="MudExtensions.BeforeInputJsDto" preserve="all" />
+		<type fullname="MudExtensions.BeforeInputEventArgs" preserve="all" />
+
+	</assembly>
+</linker>
+
