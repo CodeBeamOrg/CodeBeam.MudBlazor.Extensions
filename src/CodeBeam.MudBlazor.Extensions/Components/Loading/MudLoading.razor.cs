@@ -34,7 +34,7 @@ namespace MudExtensions
         /// <summary>
         /// Two way binded loading state.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Loading { get; set; }
 
@@ -120,6 +120,5 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
         public RenderFragment? ChildContent { get; set; }
-
     }
 }

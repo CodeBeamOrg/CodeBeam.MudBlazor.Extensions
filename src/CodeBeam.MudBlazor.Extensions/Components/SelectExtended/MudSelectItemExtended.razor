@@ -2,7 +2,7 @@
 @typeparam T
 @inherits MudComponentBase
 
-@if (HideContent == false)
+@if (!HideContent)
 {
     <MudListItemExtended @ref="@ListItem" @attributes="UserAttributes" T="T" Value="@Value" Text="@Text" id="@ItemId" OnClick="@HandleOnClickAsync" IsFunctional="@IsFunctional" Href="@Href" Disabled="@GetDisabledStatus()" Class="@GetCssClasses()" Style="@Style">
         @if (ChildContent != null && MudSelectExtended?.ItemCollection == null)

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using MudBlazor.Extensions;
 using MudBlazor.Utilities;
+using MudBlazor.Extensions;
 
 namespace MudExtensions
 {
@@ -43,7 +43,7 @@ namespace MudExtensions
         /// The parent select component
         /// </summary>
         [CascadingParameter]
-        MudComboBox<T> MudComboBox { get; set; } = null!;
+        private MudComboBox<T>? MudComboBox { get; set; }
 
         /// <summary>
         /// Prevents the user from interacting with this item.
@@ -150,17 +150,17 @@ namespace MudExtensions
         {
             get
             {
-                var converter = MudComboBox?.Converter;
-                if (MudComboBox?.ItemPresenter == ValuePresenter.None)
-                {
-                    if (converter == null)
-                        return Value?.ToString();
-                    return converter.Convert(Value);
-                }
+                var hasText = !string.IsNullOrWhiteSpace(Text);
 
-                if (converter == null)
-                    return $"{(string.IsNullOrWhiteSpace(Text) ? Value : Text)}";
-                return !string.IsNullOrWhiteSpace(Text) ? Text : converter.Convert(Value);
+                if (MudComboBox == null)
+                    return hasText ? Text : Value?.ToString();
+
+                if (MudComboBox.ItemPresenter == ValuePresenter.None)
+                    return MudComboBox.ConverterSetCore(Value);
+
+                return hasText
+                    ? Text
+                    : MudComboBox.ConverterSetCore(Value);
             }
         }
 
@@ -259,7 +259,7 @@ namespace MudExtensions
             }
             else
             {
-                if (MudComboBox?.Converter?.Convert(Value)?.Contains(MudComboBox._searchString ?? string.Empty, StringComparison.OrdinalIgnoreCase) == true)
+                if (MudComboBox?.ConverterSetCore(Value)?.Contains(MudComboBox._searchString ?? string.Empty, StringComparison.OrdinalIgnoreCase) == true)
                     return true;
             }
 
@@ -277,7 +277,7 @@ namespace MudExtensions
             if (MudComboBox.MultiSelection && MudComboBox?.SelectedValues?.Contains(Value) == true)
                 Selected = true;
 
-            else if (MudComboBox?.MultiSelection == false && ((MudComboBox.Value is null && Value is null) || MudComboBox.Value?.Equals(Value) == true))
+            else if (MudComboBox?.MultiSelection == false && ((MudComboBox.GetState(x => x.Value) is null && Value is null) || MudComboBox.GetState(x => x.Value)?.Equals(Value) == true))
                 Selected = true;
             else
                 Selected = false;
@@ -289,9 +289,13 @@ namespace MudExtensions
         /// <returns></returns>
         protected async Task HandleOnClick()
         {
-            await MudComboBox.ToggleOption(this, !Selected);
-            await InvokeAsync(StateHasChanged);
-            await MudComboBox.FocusAsync();
+            if (MudComboBox is not null)
+            {
+                await MudComboBox.ToggleOption(this, !Selected);
+                await InvokeAsync(StateHasChanged);
+                await MudComboBox.FocusAsync();
+            }
+
             await OnClick.InvokeAsync();
         }
 

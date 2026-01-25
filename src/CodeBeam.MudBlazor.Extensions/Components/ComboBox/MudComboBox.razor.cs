@@ -34,7 +34,7 @@ namespace MudExtensions
         /// <param name="value"></param>
         protected internal void SetSearchString(T value)
         {
-            _searchString = base.ConvertSet(value);
+            _searchString = ConvertSet(value);
         }
 
         internal string? _searchString { get; set; }
@@ -537,7 +537,7 @@ namespace MudExtensions
                 }
                 else
                 {
-                    if (ReadValue is string && string.IsNullOrWhiteSpace(base.ConvertSet(ReadValue)))
+                    if (ReadValue is string && string.IsNullOrWhiteSpace(ConvertSet(ReadValue)))
                     {
                         SelectedValues = new HashSet<T?>();
                     }
@@ -552,7 +552,7 @@ namespace MudExtensions
             else
             {
                 await SetValueAndUpdateTextAsync(SelectedValues.LastOrDefault(), false);
-                _searchString = base.ConvertSet(SelectedValues.LastOrDefault());
+                _searchString = ConvertSet(SelectedValues.LastOrDefault());
             }
         }
 
@@ -655,13 +655,13 @@ namespace MudExtensions
                     {
                         if (!Strict && !Items.Select(x => x.Value).Contains(val))
                         {
-                            textList.Add(ToStringFunc != null ? ToStringFunc(val) : base.ConvertSet(val));
+                            textList.Add(ConvertSet(val));
                             continue;
                         }
                         var item = Items.FirstOrDefault(x => x != null && (x.Value == null ? val == null : Comparer != null ? Comparer.Equals(x.Value, val) : x.Value.Equals(val)));
                         if (item != null)
                         {
-                            textList.Add(!string.IsNullOrWhiteSpace(item.Text) ? item.Text : base.ConvertSet(item.Value));
+                            textList.Add(!string.IsNullOrWhiteSpace(item.Text) ? item.Text : ConvertSet(item.Value));
                         }
                     }
                 }
@@ -691,8 +691,8 @@ namespace MudExtensions
             {
                 var item = Items?.FirstOrDefault(x => ReadValue == null ? x.Value == null : Comparer != null ? Comparer.Equals(ReadValue, x.Value) : ReadValue.Equals(x.Value));
                 _dataVisualiserText = item is null
-                    ? base.ConvertSet(ReadValue)
-                    : (!string.IsNullOrWhiteSpace(item.Text) ? item.Text : base.ConvertSet(item.Value));
+                    ? ConvertSet(ReadValue)
+                    : (!string.IsNullOrWhiteSpace(item.Text) ? item.Text : ConvertSet(item.Value));
 
                 return Task.CompletedTask;
             }
@@ -711,7 +711,7 @@ namespace MudExtensions
             await SetValueAndUpdateTextAsync(value, updateText, force);
             if (updateSearchString)
             {
-                _searchString = base.ConvertSet(ReadValue);
+                _searchString = ConvertSet(ReadValue);
                 await _inputReference.SetText(_searchString);
             }
         }
@@ -809,7 +809,7 @@ namespace MudExtensions
                 await ForceUpdateItems();
                 if (MultiSelection == false)
                 {
-                    _searchString = base.ConvertSet(ReadValue);
+                    _searchString = ConvertSet(ReadValue);
                     if (_inputReference != null)
                     {
                         await _inputReference?.SetText(_searchString);
@@ -1052,7 +1052,7 @@ namespace MudExtensions
                 if (Strict)
                 {
                     // Check if the user-provided search string is an exact (case-insensitive) match against an item in the collection.
-                    var item = Items.FirstOrDefault(x => base.ConvertSet(x.Value)?.Equals(_searchString, StringComparison.OrdinalIgnoreCase) == true);
+                    var item = Items.FirstOrDefault(x => ConvertSet(x.Value)?.Equals(_searchString, StringComparison.OrdinalIgnoreCase) == true);
                     if (item is not null)
                         await ToggleOption(item, true);
 
@@ -1550,7 +1550,7 @@ namespace MudExtensions
 
 
             // Get a collection of items that start with "firstLetter".
-            var items = Items.Where(x => base.ConvertSet(x.Value)?.StartsWith(firstLetter, StringComparison.OrdinalIgnoreCase) == true).ToList();
+            var items = Items.Where(x => ConvertSet(x.Value)?.StartsWith(firstLetter, StringComparison.OrdinalIgnoreCase) == true).ToList();
             if (!items.Any())
             {
                 if (_lastActivatedItem is not null)
@@ -1701,5 +1701,18 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected internal Color EffectiveCheckBoxUnCheckedColor => CheckBoxUnCheckedColor ?? Color;
+
+        /// <inheritdoc />
+        protected override string? ConvertSet(T? input) => ConverterSetCore(input);
+
+        internal string? ConverterSetCore(T? input)
+        {
+            if (ToStringFunc is null)
+            {
+                return base.ConvertSet(input);
+            }
+
+            return ToStringFunc(input);
+        }
     }
 }

@@ -13,7 +13,6 @@ namespace MudExtensions
     /// <typeparam name="T"></typeparam>
     public partial class MudRangeSlider<T> : MudComponentBase where T : struct, INumber<T>
     {
-
         private readonly ParameterState<T> _value;
         private readonly ParameterState<T> _upperValue;
         private readonly ParameterState<T?> _slideableMin;
@@ -169,14 +168,14 @@ namespace MudExtensions
         /// <summary>
         /// The minimum value can slider thumb has.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         [Category(CategoryTypes.Slider.Validation)]
         public T? SlideableMin { get; set; }
 
         /// <summary>
         /// The minimum value the upper slider thumb can have.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         [Category(CategoryTypes.Slider.Validation)]
         public T? SlideableUpperMin { get; set; }
 
@@ -190,14 +189,14 @@ namespace MudExtensions
         /// <summary>
         /// The maximum value can slider thumb has.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         [Category(CategoryTypes.Slider.Validation)]
         public T? SlideableMax { get; set; }
 
         /// <summary>
         /// The maximum value the lower slider thumb can have.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         [Category(CategoryTypes.Slider.Validation)]
         public T? SlideableLowerMax { get; set; }
 
@@ -249,7 +248,7 @@ namespace MudExtensions
         public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
-        /// 
+        /// Converter for this component.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Slider.Behavior)]
@@ -268,14 +267,14 @@ namespace MudExtensions
         /// <summary>
         /// Value of the component.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         [Category(CategoryTypes.Slider.Data)]
         public T Value { get; set; } = T.Zero;
 
         /// <summary>
         /// If range set, holds the higher value.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         [Category(CategoryTypes.Slider.Data)]
         public T UpperValue { get; set; } = T.CreateTruncating(50);
 
@@ -451,6 +450,5 @@ namespace MudExtensions
                 await _upperValue.SetValueAsync(result);
             }
         }
-
     }
 }

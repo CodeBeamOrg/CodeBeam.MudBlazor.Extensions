@@ -166,7 +166,7 @@ namespace MudExtensions
         /// <summary>
         /// If true, masks text with password mode.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         public bool PasswordMode { get; set; } = true;
 
         /// <summary>
@@ -184,6 +184,5 @@ namespace MudExtensions
             await _passwordMode.SetValueAsync(!_passwordMode.Value);
             await OnAdornmentClick.InvokeAsync();
         }
-
     }
 }

@@ -10,20 +10,21 @@ namespace MudExtensions
     /// </summary>
     public partial class MudSpeedDial : MudComponentBase
     {
+        private bool _row;
+        private Origin _anchorOrigin = Origin.TopCenter;
+        private Origin _transformOrigin = Origin.BottomCenter;
+        private readonly Guid _animationGuid = Guid.NewGuid();
+
         /// <summary>
         /// MudLoading constructor.
         /// </summary>
         public MudSpeedDial()
         {
             using var registerScope = CreateRegisterScope();
-            _origin = registerScope.RegisterParameter<Origin>(nameof(Origin))
+            registerScope.RegisterParameter<Origin>(nameof(Origin))
                 .WithParameter(() => Origin)
                 .WithChangeHandler(UpdateOrigin);
         }
-
-        private readonly ParameterState<Origin> _origin;
-
-        Guid _animationGuid = Guid.NewGuid();
 
         /// <summary>
         /// 
@@ -127,7 +128,7 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState(ParameterUsage = ParameterUsageOptions.None)]
         public Origin Origin { get; set; } = Origin.BottomRight;
 
         /// <summary>
@@ -261,9 +262,6 @@ namespace MudExtensions
             }
         }
 
-        bool _row = false;
-        Origin _anchorOrigin = Origin.TopCenter;
-        Origin _transformOrigin = Origin.BottomCenter;
         /// <summary>
         /// 
         /// </summary>

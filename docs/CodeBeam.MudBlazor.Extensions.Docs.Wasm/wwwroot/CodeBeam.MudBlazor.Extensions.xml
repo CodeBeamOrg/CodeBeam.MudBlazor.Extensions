@@ -361,6 +361,12 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="M:MudExtensions.MudCodeInput`1.GetDefaultConverter">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:MudExtensions.MudColorProvider">
             <summary>
             
@@ -672,6 +678,17 @@
             <summary>
             If set to true and the MultiSelection option is set to true, a "select all" checkbox is added at the top of the list of items.
             </summary>
+        </member>
+        <member name="P:MudExtensions.MudComboBox`1.Modal">
+            <summary>
+            If true prevent background interaction when open. Default is true.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudComboBox`1.GetModal">
+            <summary>
+            
+            </summary>
+            <returns></returns>
         </member>
         <member name="P:MudExtensions.MudComboBox`1.SelectAllPosition">
             <summary>
@@ -1119,6 +1136,9 @@
             <summary>
             
             </summary>
+        </member>
+        <member name="M:MudExtensions.MudComboBox`1.ConvertSet(`0)">
+            <inheritdoc />
         </member>
         <member name="T:MudExtensions.MudComboBoxItem`1">
             <summary>
@@ -2937,7 +2957,7 @@
         </member>
         <member name="P:MudExtensions.MudLoadingButton.Loading">
             <summary>
-            Two way binded loading state.
+            Two-way bind loading state.
             </summary>
         </member>
         <member name="P:MudExtensions.MudLoadingButton.LoadingChanged">
@@ -3027,7 +3047,7 @@
         </member>
         <member name="P:MudExtensions.MudLoadingButton.AutoDelay">
             <summary>
-            If not null, LoadingButton goes for loading state for determined miliseconds.
+            If not null, LoadingButton goes for loading state for determined milliseconds.
             </summary>
         </member>
         <member name="M:MudExtensions.MudLoadingButton.ButtonClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs)">
@@ -3552,7 +3572,7 @@
         </member>
         <member name="P:MudExtensions.MudRangeSlider`1.Converter">
             <summary>
-            
+            Converter for this component.
             </summary>
         </member>
         <member name="P:MudExtensions.MudRangeSlider`1.ValueChanged">
@@ -3751,6 +3771,17 @@
             <summary>
             If false multiline text show. Default is false.
             </summary>
+        </member>
+        <member name="P:MudExtensions.MudSelectExtended`1.Modal">
+            <summary>
+            If true prevent background interaction when open. Default is true.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudSelectExtended`1.GetModal">
+            <summary>
+            
+            </summary>
+            <returns></returns>
         </member>
         <member name="P:MudExtensions.MudSelectExtended`1.PopoverClass">
             <summary>
@@ -4224,6 +4255,9 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:MudExtensions.MudSelectExtended`1.ConvertSet(`0)">
+            <inheritdoc />
+        </member>
         <member name="T:MudExtensions.MudSelectItemExtended`1">
             <summary>
             Represents an option of a select or multi-select. To be used inside MudSelect.
@@ -4344,7 +4378,7 @@
         <member name="P:MudExtensions.MudSelectItemGroupExtended`1.HideContent">
             <summary>
             Select items with HideContent==true are only there to register their RenderFragment with the select but
-            wont render and have no other purpose!
+            Won't render and have no other purpose!
             </summary>
         </member>
         <member name="M:MudExtensions.MudSelectItemGroupExtended`1.OnAfterRenderAsync(System.Boolean)">
@@ -5457,11 +5491,6 @@
             <typeparam name="T"></typeparam>
         </member>
         <member name="P:MudExtensions.MudTextFieldExtended`1.Classname">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:MudExtensions.MudTextFieldExtended`1.SubscribeToParentForm2">
             <summary>
             
             </summary>

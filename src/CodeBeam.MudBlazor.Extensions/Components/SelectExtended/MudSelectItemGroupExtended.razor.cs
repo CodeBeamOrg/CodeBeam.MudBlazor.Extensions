@@ -59,7 +59,7 @@ namespace MudExtensions
 
         /// <summary>
         /// Select items with HideContent==true are only there to register their RenderFragment with the select but
-        /// wont render and have no other purpose!
+        /// Won't render and have no other purpose!
         /// </summary>
         [CascadingParameter(Name = "HideContent")]
         internal bool HideContent { get; set; }
@@ -86,6 +86,5 @@ namespace MudExtensions
                 MudListExtended?.UpdateSelectedStyles(false);
             }
         }
-
     }
 }

@@ -10,7 +10,6 @@ namespace MudExtensions
     /// </summary>
     public partial class MudLoadingButton : MudBaseButton
     {
-
         /// <summary>
         /// MudLoadingButton constructor.
         /// </summary>
@@ -25,9 +24,9 @@ namespace MudExtensions
         private readonly ParameterState<bool> _loading;
 
         /// <summary>
-        /// Two way binded loading state.
+        /// Two-way bind loading state.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         [Category(CategoryTypes.FormComponent.Behavior)]
         public bool Loading { get; set; }
 
@@ -150,7 +149,7 @@ namespace MudExtensions
         public string? Label { get; set; }
 
         /// <summary>
-        /// If not null, LoadingButton goes for loading state for determined miliseconds.
+        /// If not null, LoadingButton goes for loading state for determined milliseconds.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Appearance)]
@@ -163,7 +162,6 @@ namespace MudExtensions
         /// <returns></returns>
         protected async Task ButtonClick(MouseEventArgs args)
         {
-            
             if (AutoDelay != null)
             {
                 Task task = Task.Delay(AutoDelay.Value);
@@ -177,6 +175,5 @@ namespace MudExtensions
                 await OnClickHandler(args);
             }
         }
-
     }
 }

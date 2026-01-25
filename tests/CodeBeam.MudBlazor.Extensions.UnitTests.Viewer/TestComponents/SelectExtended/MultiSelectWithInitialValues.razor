@@ -28,7 +28,7 @@
         await base.OnInitializedAsync();
     }
 
-    private string ToString(TestItem x)
+    private string ToString(TestItem? x)
         => x is null ? string.Empty : $"{x.A}";
 
     private class TestItem

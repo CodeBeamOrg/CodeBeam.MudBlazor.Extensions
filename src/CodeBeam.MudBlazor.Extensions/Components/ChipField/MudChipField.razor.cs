@@ -48,7 +48,7 @@ namespace MudExtensions
         /// <summary>
         /// /The list of values.
         /// </summary>
-        [Parameter]
+        [Parameter, ParameterState]
         public List<string>? Values { get; set; }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace MudExtensions
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        protected internal async Task HandleKeyDown(KeyboardEventArgs args)
+        protected internal Task HandleKeyDown(KeyboardEventArgs args)
         {
             //var result = args.Key;
             //if (result.Equals(Delimiter, StringComparison.InvariantCultureIgnoreCase) && _internalValue != null)
@@ -158,7 +158,7 @@ namespace MudExtensions
             //}
             //await Task.Delay(10);
             //await SetValueAsync(_internalValue);
-            await OnKeyDown.InvokeAsync(args);
+            return OnKeyDown.InvokeAsync(args);
         }
 
         /// <summary>
@@ -166,9 +166,9 @@ namespace MudExtensions
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        protected async Task HandleKeyUp(KeyboardEventArgs args)
+        protected Task HandleKeyUp(KeyboardEventArgs args)
         {
-            await OnKeyUp.InvokeAsync(args);
+            return OnKeyUp.InvokeAsync(args);
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace MudExtensions
             if (args.IsInsert && args.Data == Delimiter && _internalValue is not null)
             {
                 args.PreventDefault = true;
-                var currentText = base.ConvertSet(_internalValue);
+                var currentText = ConvertSet(_internalValue);
 
                 if (!string.IsNullOrEmpty(currentText))
                 {
@@ -200,7 +200,7 @@ namespace MudExtensions
                 return;
             }
 
-            if (args.IsDeleteBackward && string.IsNullOrEmpty(base.ConvertSet(_internalValue)) && _valuesState.Value is { Count: > 0 } && BackspaceChipRemoval)
+            if (args.IsDeleteBackward && string.IsNullOrEmpty(ConvertSet(_internalValue)) && _valuesState.Value is { Count: > 0 } && BackspaceChipRemoval)
             {
                 args.PreventDefault = true;
 
@@ -247,7 +247,7 @@ namespace MudExtensions
             {
                 await _valuesState.SetValueAsync(new List<string>());
             }
-            _valuesState.Value.Add(base.ConvertSet(_internalValue) ?? "");
+            _valuesState.Value.Add(ConvertSet(_internalValue) ?? "");
             await ValuesChanged.InvokeAsync(_valuesState.Value);
             if (RuntimeLocation.IsServerSide)
             {
@@ -290,6 +290,5 @@ namespace MudExtensions
         {            
            await _textFieldExtendedReference.Clear();
         }
-
     }
 }

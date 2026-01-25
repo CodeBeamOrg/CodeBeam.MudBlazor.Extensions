@@ -2,7 +2,7 @@
 @typeparam T
 @inherits MudDebouncedInputExtended<T>
 
-<CascadingValue Name="SubscribeToParentForm2" Value="@SubscribeToParentForm2" IsFixed="true">
+<CascadingValue Name="SubscribeToParentForm" Value="@SubscribeToParentForm" IsFixed="true">
         <MudInputControl Label="@Label"
                          Variant="@Variant"
                          HelperText="@HelperText"
@@ -18,7 +18,7 @@
                          Required="@Required"
                          ForId="@InputElementId">
             <InputContent>
-                <CascadingValue Name="SubscribeToParentForm2" Value="false" IsFixed="true">
+                <CascadingValue Name="SubscribeToParentForm" Value="false" IsFixed="true">
                     @if (_mask == null)
                     {
                         <MudInputExtended T="string"
