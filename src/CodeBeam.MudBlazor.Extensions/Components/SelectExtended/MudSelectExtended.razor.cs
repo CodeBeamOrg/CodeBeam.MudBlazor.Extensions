@@ -85,8 +85,8 @@ namespace MudExtensions
             .AddClass("mud-select-extended-nowrap mud-chip-scroll-container", NoWrap)
             .Build();
 
-        private string _elementId = "select_" + Guid.NewGuid().ToString().Substring(0, 8);
-        private string _popoverId = "selectpopover_" + Guid.NewGuid().ToString().Substring(0, 8);
+        private string _elementId = Identifier.Create("selectext");
+        private string _popoverId = Identifier.Create("selectpopover_");
 
         /// <summary>
         /// User class names for the input, separated by space

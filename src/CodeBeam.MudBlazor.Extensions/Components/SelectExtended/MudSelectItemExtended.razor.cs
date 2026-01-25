@@ -20,7 +20,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         public MudListItemExtended<T> ListItem { get; set; } = new();
-        internal string ItemId { get; } = "selectItem_"+Guid.NewGuid().ToString().Substring(0,8);
+        internal string ItemId { get; } = Identifier.Create("selectItem_");
 
         private IMudShadowSelectExtended? _shadowParent;
         /// <summary>

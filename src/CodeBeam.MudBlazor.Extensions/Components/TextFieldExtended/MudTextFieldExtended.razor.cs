@@ -15,16 +15,10 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected string? Classname =>
-           new CssBuilder("mud-input-input-control")
-            .AddClass("mud-no-start-adornment", AdornmentStart == null)
-           .AddClass(Class)
-           .Build();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [CascadingParameter]
-        public bool SubscribeToParentForm2 { get; set; }
+            new CssBuilder("mud-input-input-control")
+                .AddClass("mud-no-start-adornment", AdornmentStart == null)
+                .AddClass(Class)
+                .Build();
 
         /// <summary>
         /// 
