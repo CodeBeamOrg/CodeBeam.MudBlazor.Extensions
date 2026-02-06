@@ -198,7 +198,11 @@ namespace MudExtensions
             _isErasing = !_isErasing;
         }
 
-        async Task ClearPad()
+        /// <summary>
+        /// Clear the signature pad.
+        /// </summary>
+        /// <returns></returns>
+        public async Task ClearPad()
         {
             await ValueChanged.InvokeAsync(Array.Empty<byte>());
             await JsRuntime.InvokeVoidAsync("mudSignaturePad.clearPad", _reference);

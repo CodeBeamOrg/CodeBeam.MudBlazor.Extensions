@@ -31,6 +31,7 @@
             <MudSelectExtended @bind-Value="@_variant" ItemCollection="@(Enum.GetValues<Variant>())" Label="Variant" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
             <MudSelectExtended @bind-Value="@_color" ItemCollection="@(Enum.GetValues<Color>())" Label="Color" Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" />
             <MudNumericField @bind-Value="@_elevation" Min="0" Max="25" Label="Elevation" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="(async () => await _signaturePad.ClearPad())">Clear</MudButton>
         </MudStack>
     </MudItem>
 </MudGrid>
@@ -46,6 +47,7 @@
     Variant _variant;
     Color _color;
     int _elevation = 4;
+    MudSignaturePad _signaturePad = null!;
 
     SignaturePadLocalizedStrings _localizedStrings = new SignaturePadLocalizedStrings();
 
