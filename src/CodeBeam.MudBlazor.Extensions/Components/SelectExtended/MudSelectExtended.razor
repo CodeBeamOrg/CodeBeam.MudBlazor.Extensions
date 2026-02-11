@@ -137,7 +137,7 @@
                         @if (ItemCollection != null || ChildContent != null)
                         {
                             <CascadingValue Value="@this" IsFixed="true">
-                                <MudListExtended @ref="@_list" T="T" @bind-SelectedValue:set="@SetValueAsync" @bind-SelectedValue:get="@ReadValue" Style="@($"overflow-y:auto; max-height: {MaxHeight}px")" @bind-SelectedValues="@SelectedValues" @bind-SelectedItem="@SelectedListItem" @bind-SelectedItems="@SelectedListItems"
+                                <MudListExtended @ref="@_list" T="T" @bind-SelectedValue:set="@SetValueCoreAsync" @bind-SelectedValue:get="@ReadValue" Style="@($"overflow-y:auto; max-height: {MaxHeight}px")" @bind-SelectedValues="@SelectedValues" @bind-SelectedItem="@SelectedListItem" @bind-SelectedItems="@SelectedListItems"
                                                  Clickable="true" Color="@Color" Dense="@Dense" ItemCollection="@ItemCollection" Virtualize="@Virtualize" Padding="@EnablePopoverPadding" EnableSelectedItemStyle="@EnableSelectedItemStyle"
                                                  MultiSelection="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MultiSelectionAlign="@MultiSelectionAlign" SelectAll="@SelectAll" SelectAllPosition="@SelectAllPosition" SelectAllText="@SelectAllText"
                                                  CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" IndeterminateIcon="@IndeterminateIcon" SelectValueOnTab="@SelectValueOnTab" Comparer="@Comparer" AddNullItem="@AddNullItem" AddedNullItemText="@AddedNullItemText"
@@ -162,7 +162,7 @@
 
         <div style="display: none">
             <CascadingValue Value="@this" IsFixed="true">
-                <MudListExtended T="T" @bind-SelectedValue:set="@SetValueAsync" @bind-SelectedValue:get="@ReadValue" @bind-SelectedValues="@SelectedValues" @bind-SelectedItem="@SelectedListItem" @bind-SelectedItems="@SelectedListItems"
+                <MudListExtended T="T" @bind-SelectedValue:set="@SetValueCoreAsync" @bind-SelectedValue:get="@ReadValue" @bind-SelectedValues="@SelectedValues" @bind-SelectedItem="@SelectedListItem" @bind-SelectedItems="@SelectedListItems"
                                  Clickable="true" Color="@Color" Dense="@Dense" ItemCollection="@ItemCollection" Padding="@EnablePopoverPadding" EnableSelectedItemStyle="@EnableSelectedItemStyle"
                                  MultiSelection="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MultiSelectionAlign="@MultiSelectionAlign" SelectAll="@SelectAll" SelectAllPosition="@SelectAllPosition" SelectAllText="@SelectAllText"
                                  CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" IndeterminateIcon="@IndeterminateIcon" SelectValueOnTab="@SelectValueOnTab" Comparer="@Comparer" AddNullItem="@AddNullItem" AddedNullItemText="@AddedNullItemText"

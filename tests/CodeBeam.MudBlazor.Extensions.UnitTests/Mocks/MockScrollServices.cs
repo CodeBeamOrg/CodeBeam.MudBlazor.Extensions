@@ -12,6 +12,11 @@ namespace MudExtensions.UnitTests.Mocks
             {
                 Selector = selector,
             };
+
+        public IScrollListener Create(string? selector, int reportRateMs)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -19,7 +24,13 @@ namespace MudExtensions.UnitTests.Mocks
     /// </summary>
     public class MockScrollListener : IScrollListener
     {
+        public ValueTask<ScrollEventArgs> GetCurrentScrollDataAsync()
+        {
+            return ValueTask.FromResult(new ScrollEventArgs());
+        }
+
         public string? Selector { get; set; }
+        public int ReportRateMs { get; set; }
 
         public event EventHandler<ScrollEventArgs>? OnScroll;
 
@@ -32,6 +43,8 @@ namespace MudExtensions.UnitTests.Mocks
         {
            
         }
+
+        public ValueTask DisposeAsync()=> ValueTask.CompletedTask;
     }
 
 

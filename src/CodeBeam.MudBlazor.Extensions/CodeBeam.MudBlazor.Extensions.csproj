@@ -45,12 +45,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MudBlazor" Version="9.0.0-preview.2" />
+		<PackageReference Include="MudBlazor" Version="9.0.0-rc.1" />
 	</ItemGroup>
 
-	<Target Name="MinifyMudExtensionsJs" AfterTargets="Build" Condition="'$(CI)' != 'true'
-               AND '$(TargetFramework)' == 'net10.0'
-               AND Exists('TScripts/MudExtensions.js')">
+	<Target Name="MinifyMudExtensionsJs" AfterTargets="Build" Condition="'$(CI)' != 'true'&#xD;&#xA;               AND '$(TargetFramework)' == 'net10.0'&#xD;&#xA;               AND Exists('TScripts/MudExtensions.js')">
 		<Message Importance="high" Text="Minifying MudExtensions.js → MudExtensions.min.js" />
 		<Exec WorkingDirectory="$(SolutionDir)" Command="dotnet run --project utilities\CodeBeam.MudBlazor.Extensions.JsMinifier\CodeBeam.MudBlazor.Extensions.JsMinifier.csproj --configuration $(Configuration)" />
 	</Target>
