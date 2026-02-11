@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 
@@ -16,6 +17,8 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
+        [DynamicDependency(nameof(OnBeforeInputFromJs))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(BeforeInputJsDto))]
         protected MudBaseInputExtended()
         {
             //using var registerScope = CreateRegisterScope();

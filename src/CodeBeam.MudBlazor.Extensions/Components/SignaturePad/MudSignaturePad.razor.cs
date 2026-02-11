@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Services;
@@ -15,6 +16,7 @@ namespace MudExtensions
         /// <summary>
         /// Constructor for MudSignaturePad.
         /// </summary>
+        [DynamicDependency(nameof(SignatureDataChangedAsync))]
         public MudSignaturePad()
         {
             _dotnetObjectRef = DotNetObjectReference.Create<MudSignaturePad>(this);
