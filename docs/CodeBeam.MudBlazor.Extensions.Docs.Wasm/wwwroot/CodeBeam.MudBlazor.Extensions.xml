@@ -995,12 +995,6 @@
             
             </summary>
         </member>
-        <member name="M:MudExtensions.MudComboBox`1.ForceUpdate">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:MudExtensions.MudComboBox`1.AddItem(MudExtensions.MudComboBoxItem{`0})">
             <summary>
             
@@ -4162,12 +4156,6 @@
             
             </summary>
             <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudSelectExtended`1.ForceUpdate">
-            <summary>
-            
-            </summary>
             <returns></returns>
         </member>
         <member name="M:MudExtensions.MudSelectExtended`1.BeginValidatePublic">

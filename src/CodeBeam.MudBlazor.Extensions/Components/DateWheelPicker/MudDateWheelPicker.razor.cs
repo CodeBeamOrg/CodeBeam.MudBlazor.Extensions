@@ -573,7 +573,7 @@ namespace MudExtensions
         /// <returns></returns>
         public async Task Clear()
         {
-            await SetValueAsync(null);
+            await SetValueCoreAsync(null);
             await InputReference.SetText(null);
         }
 

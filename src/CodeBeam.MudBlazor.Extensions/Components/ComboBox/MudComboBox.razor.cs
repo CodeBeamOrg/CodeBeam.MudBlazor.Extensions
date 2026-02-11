@@ -749,7 +749,7 @@ namespace MudExtensions
             else if (MultiSelection && SelectedValues != null)
             {
                 // TODO: Check this line again
-                SetValueAsync(SelectedValues.FirstOrDefault()).CatchAndLog();
+                SetValueCoreAsync(SelectedValues.FirstOrDefault()).CatchAndLog();
             }
 
         }
@@ -1285,22 +1285,6 @@ namespace MudExtensions
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override async Task ForceUpdate()
-        {
-            await base.ForceUpdate();
-            if (!MultiSelection)
-            {
-                SelectedValues = new HashSet<T?>(_comparer) { Value };
-            }
-            else
-            {
-                await SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer));
-            }
-        }
 
         /// <summary>
         /// 

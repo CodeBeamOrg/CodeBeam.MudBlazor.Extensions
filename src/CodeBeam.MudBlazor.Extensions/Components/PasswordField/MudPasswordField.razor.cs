@@ -160,7 +160,7 @@ namespace MudExtensions
 
         private async Task OnMaskedValueChanged(string s)
         {
-            await SetTextAsync(s);
+            await SetTextCoreAsync(s);
         }
 
         /// <summary>
