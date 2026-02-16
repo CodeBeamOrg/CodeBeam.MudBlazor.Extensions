@@ -1,0 +1,79 @@
+﻿@namespace MudExtensions
+@using global::MudBlazor
+@inject IJSRuntime JS
+
+<MudPaper Class="mud-codeviewer pa-0" Elevation="0">
+
+    @if (ShowHeader)
+    {
+        <div class="mud-codeviewer-header">
+            <MudText Typo="Typo.caption">@Language.ToUpper()</MudText>
+
+            <MudSpacer />
+
+            @if (ShowCopyButton)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.ContentCopy"
+                               Size="Size.Small"
+                               OnClick="Copy" />
+            }
+        </div>
+    }
+
+    <pre class="@PreClass">
+        <code @ref="_codeRef" class="@CodeClass">
+@Code
+        </code>
+    </pre>
+
+</MudPaper>
+
+@code {
+
+    private ElementReference _codeRef;
+
+    [Parameter] public string Code { get; set; } = string.Empty;
+    [Parameter] public string Language { get; set; } = "csharp";
+    [Parameter] public bool ShowLineNumbers { get; set; } = true;
+    [Parameter] public bool ShowHeader { get; set; } = true;
+    [Parameter] public bool ShowCopyButton { get; set; } = true;
+
+    private string CodeClass => $"language-{Language}";
+    private string PreClass =>
+        ShowLineNumbers
+            ? $"line-numbers language-{Language}"
+            : $"language-{Language}";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("CodeBeamCode.highlight", _codeRef);
+        }
+    }
+
+    private async Task Copy()
+    {
+        await JS.InvokeVoidAsync("CodeBeamCode.copy", Code);
+    }
+}
+
+<style>
+    .mud-codeviewer {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .mud-codeviewer-header {
+        display: flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .mud-codeviewer pre {
+        margin: 0;
+        padding: 16px;
+        overflow-x: auto;
+    }
+</style>

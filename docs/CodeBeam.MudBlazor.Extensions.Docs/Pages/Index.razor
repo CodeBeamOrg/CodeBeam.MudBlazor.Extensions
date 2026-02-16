@@ -145,6 +145,23 @@
                        Description="A basic API list for all components." />
     </MudStack>
 
+    <MudCodeViewer Language="csharp" Code="@SampleCode" />
+
+@code {
+    string SampleCode = """
+public class Test
+{
+    public string Name { get; set; }
+
+    public void SayHello()
+    {
+        Console.WriteLine("Hello World");
+    }
+}
+""";
+}
+
+
     <MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
         <MudToolBar Gutters="false" Dense="true">
             <MudText Typo="Typo.body1"><b>OpenSource © 2022-@DateTime.Now.Year CodeBeam.</b> @Version</MudText>
