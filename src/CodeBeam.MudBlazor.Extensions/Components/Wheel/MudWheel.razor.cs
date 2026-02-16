@@ -165,12 +165,12 @@ namespace MudExtensions
             if (args.DeltaY < 0 && index != 0)
             {
                 T? val = ItemCollection[index - 1];
-                await SetValueAsync(val);
+                await SetValueCoreAsync(val);
             }
             else if (0 < args.DeltaY && index != ItemCollection.Count - 1)
             {
                 T? val = ItemCollection[index + 1];
-                await SetValueAsync(val);
+                await SetValueCoreAsync(val);
             }
             await Task.Delay(300);
         }
@@ -218,7 +218,7 @@ namespace MudExtensions
                     }
                     T? val = ItemCollection[index - 1];
                     index--;
-                    await SetValueAsync(val);
+                    await SetValueCoreAsync(val);
                     StateHasChanged();
                 }
                 else if (args.SwipeDirection == SwipeDirection.BottomToTop)
@@ -229,7 +229,7 @@ namespace MudExtensions
                     }
                     T? val = ItemCollection[index + 1];
                     index++;
-                    await SetValueAsync(val);
+                    await SetValueCoreAsync(val);
                     StateHasChanged();
                 }
             }
@@ -258,7 +258,7 @@ namespace MudExtensions
             await _animate.Refresh();
 
             T? val = ItemCollection is not null ? ItemCollection[index + changeCount] : default;
-            await SetValueAsync(val);
+            await SetValueCoreAsync(val);
         }
 
         /// <summary>

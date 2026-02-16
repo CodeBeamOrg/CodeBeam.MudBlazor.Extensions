@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Services;
@@ -15,6 +16,7 @@ namespace MudExtensions
         /// <summary>
         /// Constructor for MudSignaturePad.
         /// </summary>
+        [DynamicDependency(nameof(SignatureDataChangedAsync))]
         public MudSignaturePad()
         {
             _dotnetObjectRef = DotNetObjectReference.Create<MudSignaturePad>(this);
@@ -192,16 +194,32 @@ namespace MudExtensions
             await base.OnAfterRenderAsync(firstRender);
         }
 
-        private async Task IsEditToggled()
+        /// <summary>
+        /// Toggle between draw and erase mode.
+        /// </summary>
+        /// <returns></returns>
+        public async Task IsEditToggled()
         {
             await JsRuntime.InvokeVoidAsync("mudSignaturePad.togglePadEraser", _reference);
             _isErasing = !_isErasing;
         }
 
-        async Task ClearPad()
+        /// <summary>
+        /// Clear the signature pad.
+        /// </summary>
+        /// <returns></returns>
+        public async Task ClearPad()
         {
             await ValueChanged.InvokeAsync(Array.Empty<byte>());
             await JsRuntime.InvokeVoidAsync("mudSignaturePad.clearPad", _reference);
+        }
+        /// <summary>
+        /// Download the signature as an image.
+        /// </summary>
+        /// <returns></returns>
+        public async Task Download()
+        {
+            await JsRuntime.InvokeVoidAsync("mudSignaturePad.downloadPadImage", _reference);
         }
 
         async Task PushImageUpdateToJsRuntime()
@@ -214,11 +232,7 @@ namespace MudExtensions
         {
             await JsRuntime.InvokeVoidAsync("mudSignaturePad.updatePadOptions", _reference, JsOptionsStruct);
         }
-
-        async Task Download()
-        {
-            await JsRuntime.InvokeVoidAsync("mudSignaturePad.downloadPadImage", _reference);
-        }
+        
 
         private async Task LineWidthUpdated(decimal obj)
         {

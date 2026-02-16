@@ -30,7 +30,7 @@
         <MudCheckBox @bind-Value="_selectAll" Color="Color.Primary" Label="Select All" />
         <MudDivider />
         <MudTextField @bind-Value="_selectedValue" Clearable="true" />
-        <MudSelect T="int?" @bind-SelectedValues="_selectedValues" MultiSelection="true" Variant="Variant.Filled" Label="Selected Values">
+        <MudSelect T="int?" @bind-SelectedValues="_mSelectedValues" MultiSelection="true" Variant="Variant.Filled" Label="Selected Values">
             @foreach (var item in _list?.GetItems() ?? new())
             {
                 <MudSelectItem Value="item.Value">@item.Text</MudSelectItem>
@@ -57,8 +57,16 @@
     MudListExtended<int?>? _list;
     int? _selectedValue = 1;
     IEnumerable<int?> _selectedValues = new List<int?>();
+    IReadOnlyCollection<int?> _mSelectedValues;
     MudListItemExtended<int?>? _selectedItem;
     MudListItemExtended<int?> _thirdItem = new();
     MudListItemExtended<int?> _fifthItem = new();
     IEnumerable<MudListItemExtended<int?>> _selectedItems = new List<MudListItemExtended<int?>>();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _mSelectedValues = _selectedValues as IReadOnlyCollection<int?> ?? _selectedValues.ToList();
+    }
+
 }

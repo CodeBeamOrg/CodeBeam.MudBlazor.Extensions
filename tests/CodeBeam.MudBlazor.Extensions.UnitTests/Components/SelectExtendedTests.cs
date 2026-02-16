@@ -66,29 +66,7 @@ namespace MudExtensions.UnitTests.Components
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
             select.Instance.GetState(x => x.Text).Should().Be("1");
         }
-
-        [Test]
-        public async Task Select_ValueBubblingTest()
-        {
-            var comp = Context.Render<SelectInitialValueTest>();
-            var select = comp.FindComponent<MudSelectExtended<string>>();
-
-            select.Instance.GetState(x => x.Value).Should().BeNull();
-            select.Instance.GetState(x => x.Text).Should().BeNull();
-
-            comp.Render(p => p.Add(x => x.SelectedValue, "1"));
-            await comp.InvokeAsync(() => select.Instance.ForceUpdate());
-            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("1"));
-            select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "1" });
-            select.Instance.GetState(x => x.Text).Should().Be("1");
-
-            comp.Render(p => p.Add(x => x.SelectedValue, "2"));
-            await comp.InvokeAsync(() => select.Instance.ForceUpdate());
-            comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().Be("2"));
-            select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2" });
-            select.Instance.GetState(x => x.Text).Should().Be("2");
-        }
-
+        
         [Test]
         public void Select_ValueBubblingTest_MultiSelection()
         {
@@ -110,33 +88,6 @@ namespace MudExtensions.UnitTests.Components
             select.Instance.GetState(x => x.Value).Should().Be("1");
             select.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>() { "2", "1" });
             select.Instance.GetState(x => x.Text).Should().Be("2, 1");
-        }
-
-        [Test]
-        public async Task Select_ValueChangeEventCountTest()
-        {
-            var comp = Context.Render<SelectEventCountTest>(x =>
-            {
-                x.Add(c => c.MultiSelection, false);
-            });
-            var select = comp.FindComponent<MudSelectExtended<string>>();
-            var input = comp.Find("div.mud-input-control");
-
-            comp.Instance.ValueChangeCount.Should().Be(0);
-            comp.Instance.ValuesChangeCount.Should().Be(0);
-
-            await comp.InvokeAsync(() => select.Render(p => p.Add(x => x.Value, "1")));
-            await comp.InvokeAsync(() => select.Instance.ForceUpdate());
-            comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
-            comp.Instance.ValuesChangeCount.Should().Be(1);
-            select.Instance.GetState(x => x.Value).Should().Be("1");
-
-            // Changing value programmatically without ForceUpdate should change value, but should not fire change events
-            // Its by design, so this part can be change if design changes
-            await comp.InvokeAsync(() => select.Render(p => p.Add(x => x.Value, "2")));
-            comp.WaitForAssertion(() => comp.Instance.ValueChangeCount.Should().Be(1));
-            comp.Instance.ValuesChangeCount.Should().Be(1);
-            select.Instance.GetState(x => x.Value).Should().Be("2");
         }
 
         [Test]

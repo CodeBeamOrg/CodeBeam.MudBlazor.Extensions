@@ -660,7 +660,7 @@ namespace MudExtensions
             Func<List<T?>, string?>? multiSelectionTextFunc = null)
         {
             // The Text property of the control is updated
-            await SetTextAsync(multiSelectionTextFunc?.Invoke(selectedConvertedValues));
+            await SetTextCoreAsync(multiSelectionTextFunc?.Invoke(selectedConvertedValues));
 
             // The comparison is made on the multiSelectionText variable
             if (multiSelectionText != text)
@@ -1106,7 +1106,7 @@ namespace MudExtensions
                     return;
                 }
 
-                await SetValueAsync(value);
+                await SetValueCoreAsync(value);
                 //await UpdateTextPropertyAsync(false);
                 _elementReference.SetText(ReadText).CatchAndLog();
                 //_selectedValues.Clear();
@@ -1117,23 +1117,6 @@ namespace MudExtensions
             await InvokeAsync(StateHasChanged);
         }
 
-        //TODO: will override this method when core library will have the base one.
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override async Task ForceUpdate()
-        {
-            await base.ForceUpdate();
-            if (!MultiSelection)
-            {
-                SelectedValues = new HashSet<T?>(_comparer) { ReadValue };
-            }
-            else
-            {
-                await SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer));
-            }
-        }
 
         /// <summary>
         /// 
