@@ -1,0 +1,28 @@
+﻿@namespace MudExtensions.Docs.Examples
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center">
+        <MudCodeViewer Code="@_code" Editable="@_editable" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudSwitchM3 @bind-Value="@_editable" Label="Editable" Color="Color.Secondary" />
+    </MudItem>
+</MudGrid>
+
+
+@code {
+    private bool _editable = true;
+    private string _code = """
+// This is a sample code as string parameter.
+public class MudCodeViewer
+{
+    public string Language { get; set; } = "csharp";
+
+    public void Render()
+    {
+        Console.WriteLine("MudExtensions Code Viewer");
+    }
+}
+""";
+}

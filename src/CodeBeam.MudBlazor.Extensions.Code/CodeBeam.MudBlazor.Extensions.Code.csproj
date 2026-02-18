@@ -10,9 +10,9 @@
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
 		<Description>
-			CodeViewer Component for MudBlazor and CodeBeam.MudBlazor.Extensions
-			Requires CodeBeam.MudBlazor.Extensions.
-			https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions
+CodeViewer Component for MudBlazor and CodeBeam.MudBlazor.Extensions
+Requires CodeBeam.MudBlazor.Extensions.
+https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions
 		</Description>
 		<Copyright>CodeBeam OpenSource MIT</Copyright>
 		<PackageIcon>Mud_Secondary.png</PackageIcon>
@@ -38,7 +38,6 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="wwwroot\MudCode.js" />
 	</ItemGroup>
 
 	<ItemGroup>

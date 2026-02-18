@@ -15,11 +15,15 @@ namespace MudExtensions;
 public partial class MudCodeViewer : MudComponentBase
 {
     private ElementReference _codeRef;
+    private ElementReference _textAreaRef;
     private string? _copyIcon = Icons.Material.Filled.ContentCopy;
+    private bool _shouldHighlight;
+    private bool _tabEnabled;
 
     private readonly ParameterState<string?> _code;
     private readonly ParameterState<bool> _showLineNumbers;
     private readonly ParameterState<bool> _wrap;
+    private readonly ParameterState<bool> _header;
     private readonly ParameterState<CodeLanguage> _language;
 
     /// <summary>
@@ -30,12 +34,16 @@ public partial class MudCodeViewer : MudComponentBase
         using var registerScope = CreateRegisterScope();
         _code = registerScope.RegisterParameter<string?>(nameof(Code))
             .WithParameter(() => Code)
-            .WithChangeHandler(ParameterChanged);
+            .WithChangeHandler(ParameterChanged)
+            .WithEventCallback(() => CodeChanged);
         _showLineNumbers = registerScope.RegisterParameter<bool>(nameof(ShowLineNumbers))
             .WithParameter(() => ShowLineNumbers)
             .WithChangeHandler(ParameterChanged);
         _wrap = registerScope.RegisterParameter<bool>(nameof(Wrap))
             .WithParameter(() => Wrap)
+            .WithChangeHandler(ParameterChanged);
+        _header = registerScope.RegisterParameter<bool>(nameof(ShowHeader))
+            .WithParameter(() => ShowHeader)
             .WithChangeHandler(ParameterChanged);
         _language = registerScope.RegisterParameter<CodeLanguage>(nameof(Language))
             .WithParameter(() => Language)
@@ -59,6 +67,19 @@ public partial class MudCodeViewer : MudComponentBase
         .Build();
 
     /// <summary>
+    /// Gets the CSS class name representing the current programming language for syntax highlighting.
+    /// </summary>
+    protected string CodeClass => $"language-{_language.Value.ToDescriptionString()}";
+
+    /// <summary>
+    /// Gets the CSS class string used for the pre element based on the selected language and line number display settings.
+    /// </summary>
+    private string PreClass => new CssBuilder()
+        .AddClass($"line-numbers language-{_language.Value.ToDescriptionString()}", _showLineNumbers.Value)
+        .AddClass($"language-{_language.Value.ToDescriptionString()}", !_showLineNumbers.Value)
+        .Build();
+
+    /// <summary>
     /// Gets or sets the code snippet to be displayed or processed by the component.
     /// </summary>
     [Parameter]
@@ -72,9 +93,15 @@ public partial class MudCodeViewer : MudComponentBase
     [Parameter]
     public CodeLanguage Language { get; set; } = CodeLanguage.CSharp;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether line numbers are displayed in the code viewer.
+    /// </summary>
     [Parameter]
     public bool ShowLineNumbers { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the header is displayed in the code viewer component.
+    /// </summary>
     [Parameter]
     public bool ShowHeader { get; set; } = true;
 
@@ -84,6 +111,15 @@ public partial class MudCodeViewer : MudComponentBase
     [Parameter]
     public string? HeaderClass { get; set; }
 
+    /// <summary>
+    /// Gets or sets the content to be rendered in the header section of the component.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? HeaderContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the copy button is displayed in the code viewer component.
+    /// </summary>
     [Parameter]
     public bool ShowCopyButton { get; set; } = true;
 
@@ -106,12 +142,18 @@ public partial class MudCodeViewer : MudComponentBase
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the content is editable by the user.
+    /// </summary>
+    [Parameter]
+    public bool Editable { get; set; }
 
-    private string CodeClass => $"language-{_language.Value.ToDescriptionString()}";
-    private string PreClass => new CssBuilder()
-        .AddClass($"line-numbers language-{_language.Value.ToDescriptionString()}", _showLineNumbers.Value)
-        .AddClass($"language-{_language.Value.ToDescriptionString()}", !_showLineNumbers.Value)
-        .Build();
+    /// <summary>
+    /// Gets or sets the callback that is invoked when the code value changes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string?> CodeChanged { get; set; }
+
 
     /// <summary>
     /// Invoked after the component has rendered. Performs post-render logic, such as refreshing data, when the
@@ -121,6 +163,23 @@ public partial class MudCodeViewer : MudComponentBase
     {
         if (firstRender)
         {
+            await RefreshAsync();
+        }
+
+        if (Editable && !_tabEnabled)
+        {
+            await JS.InvokeVoidAsync("MudCode.enableTabIndent", _textAreaRef);
+            _tabEnabled = true;
+        }
+
+        if (!Editable)
+        {
+            _tabEnabled = false;
+        }
+
+        if (_shouldHighlight)
+        {
+            _shouldHighlight = false;
             await RefreshAsync();
         }
     }
@@ -144,12 +203,19 @@ public partial class MudCodeViewer : MudComponentBase
         await JS.InvokeVoidAsync("MudCode.copy", Code);
     }
 
+    /// <summary>
+    /// Handles changes to component parameters asynchronously and refreshes the component state.
+    /// </summary>
     protected async Task ParameterChanged()
     {
         await Task.Delay(1);
         await RefreshAsync();
     }
 
+    /// <summary>
+    /// Handles the copy button click event asynchronously, updates the copy icon to indicate success, and restores the
+    /// original icon after a brief delay.
+    /// </summary>
     protected async Task HandleCopyButtonClickAsync()
     {
         await CopyAsync();
@@ -158,5 +224,11 @@ public partial class MudCodeViewer : MudComponentBase
         await Task.Delay(2000);
         _copyIcon = Icons.Material.Filled.ContentCopy;
         StateHasChanged();
+    }
+
+    private async Task OnInput(ChangeEventArgs e)
+    {
+        await _code.SetValueAsync(e.Value?.ToString());
+        _shouldHighlight = true;
     }
 }
