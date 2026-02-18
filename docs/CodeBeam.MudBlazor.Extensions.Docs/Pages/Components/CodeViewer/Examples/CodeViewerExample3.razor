@@ -1,0 +1,46 @@
+﻿@namespace MudExtensions.Docs.Examples
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center">
+
+        <MudCodeViewer Class="mud-width-full" Code="@SampleCode" ShowLineNumbers="true" ShowHeader="@_showHeader" Wrap="@_wrap" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="2">
+            <MudSwitchM3 @bind-Value="_showHeader" Label="Header" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="_wrap" Label="Wrap Lines" Color="Color.Secondary" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private bool _showHeader = true;
+    private bool _wrap = false;
+
+    string SampleCode = """
+public class LongLineExample
+{
+    public string ExtremelyLongPropertyNameThatKeepsGoingAndGoingAndGoingAndGoingAndGoingAndGoingAndGoing { get; set; }
+
+    public void LongLinqQuery()
+    {
+        var result = Enumerable.Range(1, 100)
+            .Where(x => x % 2 == 0)
+            .Select(x => new { Number = x, Square = x * x, Cube = x * x * x })
+            .OrderByDescending(x => x.Cube)
+            .ThenBy(x => x.Number)
+            .ToList();
+
+        Console.WriteLine("This is a very very very very very very very very very very very very very very very very long string that normally would overflow horizontally and create a scrollbar if wrapping is disabled.");
+    }
+
+    public void LongJson()
+    {
+        var json = "{ \"id\": 1, \"name\": \"VeryLongNameThatDoesNotBreak\", \"description\": \"This JSON line is intentionally written in a single line to test horizontal scrolling behavior in the MudCodeViewer component.\" }";
+
+        Console.WriteLine(json);
+    }
+}
+""";
+}

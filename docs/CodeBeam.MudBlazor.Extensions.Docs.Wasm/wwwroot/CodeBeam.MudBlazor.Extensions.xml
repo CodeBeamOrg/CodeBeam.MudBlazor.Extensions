@@ -4503,6 +4503,24 @@
             <param name="firstRender"></param>
             <returns></returns>
         </member>
+        <member name="M:MudExtensions.MudSignaturePad.IsEditToggled">
+            <summary>
+            Toggle between draw and erase mode.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudSignaturePad.ClearPad">
+            <summary>
+            Clear the signature pad.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudSignaturePad.Download">
+            <summary>
+            Download the signature as an image.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:MudExtensions.MudSignaturePad.DisposeAsync">
             <summary>
             

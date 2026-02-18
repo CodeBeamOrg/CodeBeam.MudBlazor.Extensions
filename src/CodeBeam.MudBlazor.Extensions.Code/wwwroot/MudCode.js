@@ -1,4 +1,4 @@
-﻿window.CodeBeamCode = {
+﻿window.MudCode = {
 
     highlight: function (element) {
         if (window.Prism) {

@@ -1,79 +1,114 @@
-﻿@namespace MudExtensions
-@using global::MudBlazor
+﻿@inherits MudComponentBase
 @inject IJSRuntime JS
 
-<MudPaper Class="mud-codeviewer pa-0" Elevation="0">
+<div class="@Classname" style="@Style">
 
     @if (ShowHeader)
     {
-        <div class="mud-codeviewer-header">
-            <MudText Typo="Typo.caption">@Language.ToUpper()</MudText>
-
-            <MudSpacer />
+        <div class="@HeaderClassname">
+            <span class="mud-codeviewer-language">
+                @Language.ToDescriptionString()
+            </span>
 
             @if (ShowCopyButton)
             {
-                <MudIconButton Icon="@Icons.Material.Filled.ContentCopy"
-                               Size="Size.Small"
-                               OnClick="Copy" />
+                <MudIconButton Icon="@_copyIcon" Size="Size.Small" Color="Color.Default" OnClick="HandleCopyButtonClickAsync" />
             }
         </div>
     }
 
-    <pre class="@PreClass">
-        <code @ref="_codeRef" class="@CodeClass">
-@Code
-        </code>
-    </pre>
+    <div class="mud-codeviewer-body">
+        <pre class="@PreClass">
+            <code @ref="_codeRef" @key="@(_code.Value + PreClass)" class="@CodeClass">
+                @if (ChildContent != null)
+                {
+                    @ChildContent
+                }
+                else
+                {
+                    @_code.Value    
+                }
+            </code>
+        </pre>
 
-</MudPaper>
-
-@code {
-
-    private ElementReference _codeRef;
-
-    [Parameter] public string Code { get; set; } = string.Empty;
-    [Parameter] public string Language { get; set; } = "csharp";
-    [Parameter] public bool ShowLineNumbers { get; set; } = true;
-    [Parameter] public bool ShowHeader { get; set; } = true;
-    [Parameter] public bool ShowCopyButton { get; set; } = true;
-
-    private string CodeClass => $"language-{Language}";
-    private string PreClass =>
-        ShowLineNumbers
-            ? $"line-numbers language-{Language}"
-            : $"language-{Language}";
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
+        @if (!ShowHeader && ShowCopyButton)
         {
-            await JS.InvokeVoidAsync("CodeBeamCode.highlight", _codeRef);
+            <MudIconButton Class="mud-codeviewer-copy-overlay" Icon="@_copyIcon" Size="Size.Small" Color="Color.Default" OnClick="HandleCopyButtonClickAsync" />
         }
-    }
-
-    private async Task Copy()
-    {
-        await JS.InvokeVoidAsync("CodeBeamCode.copy", Code);
-    }
-}
+    </div>
+</div>
 
 <style>
     .mud-codeviewer {
-        border-radius: 8px;
+        position: relative;
+        border-radius: var(--mud-default-borderradius);
         overflow: hidden;
+    }
+
+    .mud-codeviewer-bg {
+        background: var(--mud-palette-background-gray);
+    }
+
+    .mud-codeviewer .mud-icon-button:focus-within{
+        background: unset;
     }
 
     .mud-codeviewer-header {
         display: flex;
+        min-height: 48px;
+        justify-content: space-between;
         align-items: center;
-        padding: 6px 12px;
+        padding: 8px 16px;
+        font-size: 0.75rem;
         border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .mud-codeviewer-body {
+        position: relative;
     }
 
     .mud-codeviewer pre {
         margin: 0;
         padding: 16px;
+        white-space: pre;
         overflow-x: auto;
     }
+
+    .mud-codeviewer.wrap pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .mud-codeviewer-copy-overlay {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 5;
+        opacity: 0.4;
+        transition: opacity .2s ease;
+    }
+
+    .mud-codeviewer:hover .mud-codeviewer-copy-overlay {
+        opacity: 1;
+    }
+
+    .mud-codeviewer-copy-overlay .mud-icon-button-root {
+        backdrop-filter: blur(4px);
+        border-radius: var(--mud-default-borderradius);
+    }
+
+    .mud-codeviewer-copy {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 0.75rem;
+    }
+
+        .mud-codeviewer-copy.floating {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            opacity: 0;
+            transition: opacity .2s ease;
+        }
 </style>

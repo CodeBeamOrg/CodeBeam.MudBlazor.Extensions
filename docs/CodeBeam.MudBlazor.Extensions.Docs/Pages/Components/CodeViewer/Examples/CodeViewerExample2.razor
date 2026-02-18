@@ -1,0 +1,149 @@
+﻿@namespace MudExtensions.Docs.Examples
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center">
+        <MudCodeViewer @ref="@_codeViewer" Class="mud-width-full" Language="@_language" Code="@_sampleCode" ShowLineNumbers="@_showLineNumbers" ShowHeader="@_showHeader"
+                       EnableDefaultBackground="_enableDefaultBackground" ShowCopyButton="@_showCopyButton" />   
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="2">
+            <MudSwitchM3 @bind-Value="@_showLineNumbers" Label="Line Numbers" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_showCopyButton" Label="Copy Button" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_showHeader" Label="Header" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_enableDefaultBackground" Label="Enable Default Background" Color="Color.Secondary" />
+            <MudSelectExtended T="CodeLanguage" Value="_language" ValueChanged="@OnLanguageChanged" ItemCollection="@(Enum.GetValues<CodeLanguage>())" Variant="Variant.Outlined" Dense="true" />
+            <MudButton OnClick="@(() => _codeViewer.RefreshAsync())">Refresh</MudButton>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private MudCodeViewer _codeViewer = default!;
+    private CodeLanguage _language = CodeLanguage.CSharp;
+    private string _sampleCode = string.Empty;
+    private bool _showLineNumbers = false;
+    private bool _showHeader = true;
+    private bool _enableDefaultBackground = true;
+    private bool _showCopyButton = true;
+
+    protected override void OnInitialized()
+    {
+        _sampleCode = GetSampleCode(_language);
+    }
+
+    private void OnLanguageChanged(CodeLanguage lang)
+    {
+        _language = lang;
+        _sampleCode = GetSampleCode(lang);
+    }
+
+    private string GetSampleCode(CodeLanguage lang)
+    {
+        return lang switch
+        {
+            CodeLanguage.CSharp => """
+public class MudCodeViewer
+{
+    public string Language { get; set; } = "csharp";
+
+    public void Render()
+    {
+        Console.WriteLine("MudExtensions Code Viewer");
+    }
+}
+""",
+
+            CodeLanguage.Razor => """
+@page "/counter"
+
+<MudButton Color="Color.Primary" OnClick="Increment">
+    Click me
+</MudButton>
+
+<p>Current count: @_count</p>
+
+@code {
+    private int _count;
+
+    private void Increment()
+    {
+        _count++;
+    }
+}
+""",
+
+            CodeLanguage.JavaScript => """
+function highlightCode() {
+    console.log("Prism highlight triggered");
+}
+
+document.addEventListener("DOMContentLoaded", highlightCode);
+""",
+
+            CodeLanguage.Json => """
+{
+  "name": "MudExtensions",
+  "version": "1.0.0",
+  "features": [
+    "CodeViewer",
+    "QR",
+    "SignaturePad"
+  ]
+}
+""",
+
+            CodeLanguage.Yaml => """
+name: MudExtensions
+version: 1.0.0
+features:
+  - CodeViewer
+  - QR
+  - SignaturePad
+""",
+
+            CodeLanguage.Sql => """
+SELECT Id, Name
+FROM Users
+WHERE IsActive = 1
+ORDER BY CreatedDate DESC;
+""",
+
+            CodeLanguage.PowerShell => """
+Get-Process | Where-Object { $_.CPU -gt 100 }
+""",
+
+            CodeLanguage.Markup => """
+<div class="mud-codeviewer">
+    <pre><code>Example</code></pre>
+</div>
+""",
+            CodeLanguage.Css => """
+:root {
+    --code-bg: var(--mud-palette-background-gray);
+    --code-border: rgba(0, 0, 0, 0.08);
+}
+
+/* Code viewer container */
+.mud-codeviewer {
+    position: relative;
+    border-radius: 8px;
+    background: var(--code-bg);
+    transition: background 0.2s ease-in-out;
+}
+
+.mud-codeviewer:hover {
+    background: var(--mud-palette-surface);
+}
+
+@media (max-width: 600px) {
+    .mud-codeviewer-header {
+        font-size: 0.65rem;
+    }
+}
+""",
+
+            _ => "// No sample available"
+        };
+    }
+}
