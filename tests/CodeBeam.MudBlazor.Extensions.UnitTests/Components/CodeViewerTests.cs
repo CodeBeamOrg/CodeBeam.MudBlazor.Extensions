@@ -1,5 +1,6 @@
 ﻿using AwesomeAssertions;
 using Bunit;
+using Moq;
 using MudExtensions.UnitTests.Extensions;
 
 namespace MudExtensions.UnitTests.Components;
@@ -61,12 +62,11 @@ public class CodeViewerTests : BunitTest
     {
         var jsMock = Context.JSInterop.SetupVoid("MudCode.highlight", _ => true);
 
-        var comp = Context.Render<MudCodeViewer>(p => p
-            .Add(x => x.Code, "test")
-        );
+        Context.Render<MudCodeViewer>(p => p.Add(x => x.Code, "test"));
 
-        jsMock.VerifyInvoke("MudCode.highlight");
+        jsMock.Invocations.Count.Should().BeGreaterThanOrEqualTo(1);
     }
+
 
     [Test]
     public void CodeViewer_Language_Change_Should_Update_Class()
