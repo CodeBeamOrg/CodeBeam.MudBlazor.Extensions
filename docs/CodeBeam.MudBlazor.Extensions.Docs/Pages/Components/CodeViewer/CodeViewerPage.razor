@@ -2,6 +2,10 @@
 @namespace MudExtensions.Docs.Pages
 
 <ExamplePage Component="typeof(MudCodeViewer)">
+    <MudAlert Severity="Severity.Info" Elevation="0" Class="mb-4">
+        <MudText>MudCodeViewer has external dependencies and is part of <MudLink Href="">CodeBeam.MudBlazor.Extensions.Code</MudLink> NuGet package. Please look at extra installation steps on <MudLink Href="https://github.com/CodeBeamOrg/CodeBeam.MudBlazor.Extensions/blob/dev/README.md" Target="_blank">GitHub readme</MudLink>.</MudText>
+    </MudAlert>
+
     <ExampleCard ComponentName="CodeViewer" ExampleName="CodeViewerExample1" Title="Usage" AliasName="usage" Description="MudCodeViewer can show code blocks with given Code parameter or directly placed as ChildContent render fragment.">
         <CodeViewerExample1 />
     </ExampleCard>

@@ -92,12 +92,18 @@ Add the following to your HTML **head** section, it's either `index.html` or `_L
 
 ```html
 <link href="_content/CodeBeam.MudBlazor.Extensions/MudExtensions.min.css" rel="stylesheet" />
+
+// For MudCodeViewer component only (needs CodeBeam.MudBlazor.Extensions.Code package)
+<link href="_content/CodeBeam.MudBlazor.Extensions.Code/prism/prism.min.css" rel="stylesheet" />
 ```
 
 Add the following to your HTML **body** section
 
 ```html
 <script src="_content/CodeBeam.MudBlazor.Extensions/MudExtensions.min.js"></script>
+
+// For MudCodeViewer component only (needs CodeBeam.MudBlazor.Extensions.Code package)
+<script src="_content/CodeBeam.MudBlazor.Extensions.Code/prism/prism.min.js"></script>
 ```
 
 Add the extension services into `Program.cs`

@@ -11,7 +11,9 @@
   <Folder Name="/utilities/">
     <Project Path="utilities/CodeBeam.MudBlazor.Extensions.JsMinifier/CodeBeam.MudBlazor.Extensions.JsMinifier.csproj" />
   </Folder>
-  <Project Path="src/CodeBeam.MudBlazor.Extensions.Code/CodeBeam.MudBlazor.Extensions.Code.csproj" Id="063be2f6-b7bf-487f-9095-cd2afc62c344" />
+  <Project Path="src/CodeBeam.MudBlazor.Extensions.Code/CodeBeam.MudBlazor.Extensions.Code.csproj" Id="063be2f6-b7bf-487f-9095-cd2afc62c344">
+    <Build Solution="Release|*" Project="false" />
+  </Project>
   <Project Path="src/CodeBeam.MudBlazor.Extensions.CsvMapper/CodeBeam.MudBlazor.Extensions.CsvMapper.csproj" />
   <Project Path="src/CodeBeam.MudBlazor.Extensions.Qr/CodeBeam.MudBlazor.Extensions.Qr.csproj" />
   <Project Path="src/CodeBeam.MudBlazor.Extensions/CodeBeam.MudBlazor.Extensions.csproj" />

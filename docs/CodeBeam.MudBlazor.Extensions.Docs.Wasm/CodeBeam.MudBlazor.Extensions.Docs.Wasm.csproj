@@ -22,19 +22,7 @@
 			<_XmlDoc Include="..\..\src\CodeBeam.MudBlazor.Extensions\bin\$(Configuration)\$(TargetFramework)\CodeBeam.MudBlazor.Extensions.xml" />
 		</ItemGroup>
 
-		<Copy
-		  SourceFiles="@(_XmlDoc)"
-		  DestinationFolder="wwwroot"
-		  SkipUnchangedFiles="true"
-		  Condition="Exists('%(Identity)')" />
+		<Copy SourceFiles="@(_XmlDoc)" DestinationFolder="wwwroot" SkipUnchangedFiles="true" Condition="Exists('%(Identity)')" />
 	</Target>
-
-
-	<ItemGroup>
-		<Content Update="wwwroot\favicon.ico">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
 
 </Project>
