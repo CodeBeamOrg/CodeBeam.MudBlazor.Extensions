@@ -1,0 +1,36 @@
+﻿@namespace MudExtensions.Docs.Examples
+
+<MudStack>
+    <MudCodeViewer Code="@_code" />
+
+    <MudCodeViewer>
+@("""
+// This code is written direcly as RenderFragment
+public class MudCodeViewer
+{
+    public string Language { get; set; } = "csharp";
+
+    public void Render()
+    {
+        Console.WriteLine("MudExtensions Code Viewer");
+    }
+}
+""")
+    </MudCodeViewer>
+</MudStack>
+
+
+@code {
+    private string _code = """
+// This is a sample code as string parameter.
+public class MudCodeViewer
+{
+    public string Language { get; set; } = "csharp";
+
+    public void Render()
+    {
+        Console.WriteLine("MudExtensions Code Viewer");
+    }
+}
+""";
+}

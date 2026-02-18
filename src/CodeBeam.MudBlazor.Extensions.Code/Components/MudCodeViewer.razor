@@ -1,0 +1,58 @@
+﻿@namespace MudExtensions
+@inherits MudComponentBase
+@inject IJSRuntime JS
+
+<div class="@Classname" style="@Style">
+
+    @if (_header.Value)
+    {
+        <div class="@HeaderClassname">
+            <span class="mud-codeviewer-language">
+                @Language.ToDescriptionString()
+            </span>
+
+            @if (ShowCopyButton)
+            {
+                <MudIconButton Icon="@_copyIcon" Size="Size.Small" Color="Color.Default" OnClick="HandleCopyButtonClickAsync" />
+            }
+        </div>
+
+        <MudDivider />
+    }
+
+    <div class="mud-codeviewer-body">
+        @if (!Editable)
+        {
+            <pre class="@PreClass">
+                <code @ref="_codeRef" @key="@(_code.Value + PreClass)" class="@CodeClass">
+                    @if (ChildContent != null)
+                    {
+                        @ChildContent
+                    }
+                    else
+                    {
+                        @_code.Value
+                    }
+                </code>
+            </pre>
+        }
+        else
+        {
+            <div class="mud-codeviewer-editor">
+                <pre class="@PreClass">
+                <code @ref="_codeRef" @key="@(_code.Value + PreClass)" class="@CodeClass">
+                            @_code.Value
+                    </code>
+                </pre>
+
+                <textarea @ref="_textAreaRef" class="mud-codeviewer-textarea" @bind="Code" @oninput="OnInput"
+                          spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+            </div>
+        }
+
+        @if (!_header.Value && ShowCopyButton)
+        {
+            <MudIconButton Class="mud-codeviewer-copy-overlay" Icon="@_copyIcon" Size="Size.Small" Color="Color.Default" OnClick="HandleCopyButtonClickAsync" />
+        }
+    </div>
+</div>

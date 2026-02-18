@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CodeBeam.MudBlazor.Extensions.Code</name>
+    </assembly>
+    <members>
+        <member name="T:MudExtensions.MudCodeViewer">
+            <summary>
+            Represents a component that displays formatted code snippets with syntax highlighting.
+            </summary>
+            <remarks>Use this component to present code examples or source code within a user interface, typically
+            for documentation or demonstration purposes. The component supports syntax highlighting to improve readability.
+            </remarks>
+        </member>
+        <member name="M:MudExtensions.MudCodeViewer.#ctor">
+            <summary>
+            Initializes a new instance of the MudCodeViewer class.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.Classname">
+            <summary>
+            Gets the CSS class string for the code viewer component, including any additional classes specified by the user.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.HeaderClassname">
+            <summary>
+            Gets the CSS class string applied to the header section of the code viewer.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.CodeClass">
+            <summary>
+            Gets the CSS class name representing the current programming language for syntax highlighting.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.PreClass">
+            <summary>
+            Gets the CSS class string used for the pre element based on the selected language and line number display settings.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.Code">
+            <summary>
+            Gets or sets the code snippet to be displayed or processed by the component.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.Language">
+            <summary>
+            Gets or sets the programming language used for syntax highlighting in the code viewer.
+            </summary>
+            <remarks>Set this property to specify which language's syntax rules are applied when rendering code. The default is C#.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.ShowLineNumbers">
+            <summary>
+            Gets or sets a value indicating whether line numbers are displayed in the code viewer.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.ShowHeader">
+            <summary>
+            Gets or sets a value indicating whether the header is displayed in the code viewer component.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.HeaderClass">
+            <summary>
+            Gets or sets the CSS class string applied to the header section of the code viewer, allowing for custom styling of the header.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.HeaderContent">
+            <summary>
+            Gets or sets the content to be rendered in the header section of the component.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.ShowCopyButton">
+            <summary>
+            Gets or sets a value indicating whether the copy button is displayed in the code viewer component.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.Wrap">
+            <summary>
+            Gets or sets a value indicating whether the code content should wrap to the next line when it exceeds the
+            container width.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.EnableDefaultBackground">
+            <summary>
+            Gets or sets a value indicating whether the default background should be enabled for the component.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.ChildContent">
+            <summary>
+            Gets or sets the content to be rendered inside this component.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.Editable">
+            <summary>
+            Gets or sets a value indicating whether the content is editable by the user.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCodeViewer.CodeChanged">
+            <summary>
+            Gets or sets the callback that is invoked when the code value changes.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudCodeViewer.OnAfterRenderAsync(System.Boolean)">
+            <summary>
+            Invoked after the component has rendered. Performs post-render logic, such as refreshing data, when the
+            component is rendered for the first time.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudCodeViewer.RefreshAsync">
+            <summary>
+            Asynchronously refreshes the code viewer by reapplying syntax highlighting to the displayed code.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudCodeViewer.CopyAsync">
+            <summary>
+            Asynchronously copies the current code content to the user's clipboard using JavaScript interop.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudCodeViewer.ParameterChanged">
+            <summary>
+            Handles changes to component parameters asynchronously and refreshes the component state.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudCodeViewer.HandleCopyButtonClickAsync">
+            <summary>
+            Handles the copy button click event asynchronously, updates the copy icon to indicate success, and restores the
+            original icon after a brief delay.
+            </summary>
+        </member>
+    </members>
+</doc>

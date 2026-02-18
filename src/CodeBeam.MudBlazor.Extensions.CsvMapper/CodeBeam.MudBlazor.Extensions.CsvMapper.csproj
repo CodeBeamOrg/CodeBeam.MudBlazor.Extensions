@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>9.0.0-preview.1</Version>
+		<Version>9.0.0-rc.1</Version>
 		<Title>CodeBeam.MudBlazor.Extensions.Csv</Title>
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
@@ -24,7 +24,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="9.0.0-preview.1" />
+	  <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="9.0.0-rc.1" />
 	  <PackageReference Include="CsvHelper" Version="33.1.0" />
 	</ItemGroup>
 
