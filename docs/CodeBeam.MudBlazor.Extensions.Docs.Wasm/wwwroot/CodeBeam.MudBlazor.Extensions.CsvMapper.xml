@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CodeBeam.MudBlazor.Extensions.CsvMapper</name>
+    </assembly>
+    <members>
+        <member name="T:MudExtensions.ConfirmedDefaultValue">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.ConfirmedDefaultValue.DefaultValue">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.ConfirmedDefaultValue.Confirmed">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MudExtensions.MudExpectedHeader">
+            <summary>
+            Default fields in your database
+            </summary>
+        </member>
+        <member name="F:MudExtensions.MudExpectedHeader.RequiredCss">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudExpectedHeader.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudExpectedHeader.Required">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudExpectedHeader.AllowDefaultValue">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudExpectedHeader.CreatingDefaultValue">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudExpectedHeader.MatchedFieldCount">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudExpectedHeader.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudExpectedHeader.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:MudExtensions.MudExpectedHeader.#ctor(System.String,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <param name="required"></param>
+        </member>
+        <member name="M:MudExtensions.MudExpectedHeader.#ctor(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <param name="required"></param>
+            <param name="allowDefaultValue"></param>
+        </member>
+        <member name="T:MudExtensions.MudCsvHeader">
+            <summary>
+            Header fields in your CSV File
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvHeader.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvHeader.MappedField">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudCsvHeader.#ctor(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <param name="mappedField"></param>
+        </member>
+        <member name="T:MudExtensions.MudCsvMapper">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvMapper.Classname">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvMapper.LocalizedStrings">
+            <summary>
+            A class for provide all local strings at once.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvMapper.ExpectedHeaders">
+            <summary>
+            Choose Table Column Headers
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvMapper.CsvFile">
+            <summary>
+            CsvFile as BrowserFile
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvMapper.FileContentByte">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvMapper.CsvMapping">
+            <summary>
+            Use this dictionary if you want to see what was mapped.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvMapper.OnImported">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvMapper.ShowIncludeUnmappedData">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvMapper.AllowCreateExpectedHeaders">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvMapper.NormalizeHeaders">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudCsvMapper.Delimiter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudCsvMapper.OnInitialized">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MudExtensions.Utilities.CsvMapperLocalizedStrings">
+            <summary>
+            Localized strings for CSV Mapper.
+            </summary>
+        </member>
+    </members>
+</doc>

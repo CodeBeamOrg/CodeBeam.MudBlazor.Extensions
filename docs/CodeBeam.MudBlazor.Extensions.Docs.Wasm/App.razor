@@ -3,7 +3,7 @@
 @inject LazyAssemblyLoader AssemblyLoader
 @inject ILogger<App> Logger
 
-<Router AppAssembly="@typeof(MudExtensions.Docs.Pages.Index).Assembly" AdditionalAssemblies="@_lazyLoadedAssemblies" OnNavigateAsync="@OnNavigateAsync">
+<Router AppAssembly="@typeof(MudExtensions.Docs.Pages.Index).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MudExtensions.Docs.Shared.MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -15,30 +15,3 @@
         </LayoutView>
     </NotFound>
 </Router>
-
-@code
-{
-    private readonly List<Assembly> _lazyLoadedAssemblies = new();
-
-    private async Task OnNavigateAsync(Microsoft.AspNetCore.Components.Routing.NavigationContext args)
-    {
-        try
-        {
-            //Route to the component that contains the lazy load components
-            // if (args.Path == "mudbarcode" || args.Path == "api")
-            // {
-            //     var assemblies = await AssemblyLoader
-            //         .LoadAssembliesAsync(new[]
-            //         {
-            //             "CodeBeam.MudBlazor.Extensions.Qr.dll",
-            //             "CodeBeam.MudBlazor.Extensions.CsvMapper.dll"
-            //         });
-            //     _lazyLoadedAssemblies.AddRange(assemblies);
-            // }
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError("Error: {Message}", ex.Message);
-        }
-    }
-}
