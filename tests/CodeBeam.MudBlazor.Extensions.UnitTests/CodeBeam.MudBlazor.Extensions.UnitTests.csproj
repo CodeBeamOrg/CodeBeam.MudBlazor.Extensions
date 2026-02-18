@@ -26,8 +26,6 @@
 
   <ItemGroup>
 	  <ProjectReference Include="..\..\src\CodeBeam.MudBlazor.Extensions.Code\CodeBeam.MudBlazor.Extensions.Code.csproj" />
-	  <ProjectReference Include="..\..\src\CodeBeam.MudBlazor.Extensions.CsvMapper\CodeBeam.MudBlazor.Extensions.CsvMapper.csproj" />
-	  <ProjectReference Include="..\..\src\CodeBeam.MudBlazor.Extensions.Qr\CodeBeam.MudBlazor.Extensions.Qr.csproj" />
 	  <ProjectReference Include="..\..\src\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
 	  <ProjectReference Include="..\..\docs\CodeBeam.MudBlazor.Extensions.Docs\CodeBeam.MudBlazor.Extensions.Docs.csproj" />
 	  <ProjectReference Include="..\..\tests\CodeBeam.MudBlazor.Extensions.UnitTests.Viewer\CodeBeam.MudBlazor.Extensions.UnitTests.Viewer.csproj" />
