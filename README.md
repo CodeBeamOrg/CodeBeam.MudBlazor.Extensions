@@ -22,6 +22,7 @@
 - MudBarcode
 - MudChipField
 - MudCodeInput
+- MudCodeViewer
 - MudColorProvider
 - MudComboBox
 - MudCsvMapper
