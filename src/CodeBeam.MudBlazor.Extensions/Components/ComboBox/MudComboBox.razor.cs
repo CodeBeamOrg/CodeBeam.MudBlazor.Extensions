@@ -810,7 +810,7 @@ namespace MudExtensions
                 if (MultiSelection == false)
                 {
                     _searchString = ConvertSet(ReadValue);
-                    if (_inputReference != null)
+                    if (_firstRendered)
                     {
                         await _inputReference?.SetText(_searchString);
                     }
