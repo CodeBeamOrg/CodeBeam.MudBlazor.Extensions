@@ -39,19 +39,6 @@ namespace MudExtensions
         public MudInputExtended<string?> InputReference { get; private set; } = null!;
         private InputType GetPasswordInputType() => _passwordMode.Value ? InputType.Password : InputType.Text;
         private string? GetPasswordIcon() => _passwordMode.Value ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff;
-        //InputType _passwordInput = InputType.Password;
-        //string? _passwordIcon = Icons.Material.Filled.VisibilityOff;
-
-        [CascadingParameter(Name = "Standalone")]
-        internal bool StandaloneEx { get; set; } = true;
-
-        /// <summary>
-        /// Type of the input element. It should be a valid HTML5 input type.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.Behavior)]
-        public InputType InputType { get; set; } = InputType.Text;
-
         private string GetCounterText() => Counter == null ? string.Empty : (Counter == 0 ? (string.IsNullOrEmpty(ReadText) ? "0" : $"{ReadText.Length}") : ((string.IsNullOrEmpty(ReadText) ? "0" : $"{ReadText.Length}") + $" / {Counter}"));
 
         /// <summary>
@@ -156,11 +143,6 @@ namespace MudExtensions
         {
             if (InputReference != null)
                 await InputReference.SetText(text);
-        }
-
-        private async Task OnMaskedValueChanged(string s)
-        {
-            await SetTextCoreAsync(s);
         }
 
         /// <summary>
