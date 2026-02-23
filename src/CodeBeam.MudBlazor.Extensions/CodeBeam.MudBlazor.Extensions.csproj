@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<Version>9.0.0</Version>
+		<Version>9.0.1</Version>
 		<Title>CodeBeam.MudBlazor.Extensions</Title>
 		<PackageId>CodeBeam.MudBlazor.Extensions</PackageId>
 		<Authors>CodeBeam</Authors>
