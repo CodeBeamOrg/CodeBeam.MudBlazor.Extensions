@@ -812,7 +812,7 @@ namespace MudExtensions
                     _searchString = ConvertSet(ReadValue);
                     if (_inputReference != null)
                     {
-                        await _inputReference?.SetText(_searchString);
+                        await SetTextCoreAsync(_searchString);
                     }
                 }
             }
