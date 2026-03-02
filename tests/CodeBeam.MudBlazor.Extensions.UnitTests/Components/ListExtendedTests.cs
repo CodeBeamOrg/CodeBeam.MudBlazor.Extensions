@@ -337,5 +337,31 @@ namespace MudExtensions.UnitTests.Components
             var listItemClasses = comp.Find(".mud-selected-item");
             listItemClasses.ClassList.Should().ContainInOrder(new[] { $"mud-{color.ToDescriptionString()}-text", $"mud-{color.ToDescriptionString()}-hover" });
         }
+
+        [Test]
+        public async Task List_SearchChanged_WithNullItemCollection()
+        {
+            var comp = Context.Render<ListExperimentalSelectionTest>();
+            var list = comp.FindComponent<MudListExtended<int>>().Instance;
+
+            // Verify ItemCollection is null - items are defined in markup
+            list.ItemCollection.Should().BeNull();
+
+            // Verify initial items count from markup
+            var initialItems = comp.FindAll("div.mud-list-item-extended").Count;
+            initialItems.Should().Be(9); // 7 choices, 2 groups
+
+            // Verify we can access items via GetItems() - this calls CollectAllMudListItems internally
+            var items = list.GetItems();
+            items.Should().HaveCount(7);
+
+            // Select an item to verify the list still works correctly
+            await comp.InvokeAsync(() => list.SelectedValue = 1);
+            comp.WaitForAssertion(() => list.SelectedItem?.Text.Should().Be("Sparkling Water"));
+
+            // Verify all items are still accessible
+            var finalItems = comp.FindAll("div.mud-list-item-extended").Count;
+            finalItems.Should().Be(9);
+        }
     }
 }
