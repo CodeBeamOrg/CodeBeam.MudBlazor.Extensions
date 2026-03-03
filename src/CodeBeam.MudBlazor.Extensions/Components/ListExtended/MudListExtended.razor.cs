@@ -1083,10 +1083,13 @@ namespace MudExtensions
         {
             _searchString = searchString;
 
-            var items = CollectAllMudListItems(true);
-            foreach (var item in items)
+            if (ItemCollection == null)
             {
-                item.ApplySearch(IsMatch(item));
+                var items = CollectAllMudListItems(true);
+                foreach (var item in items)
+                {
+                    item.ApplySearch(IsMatch(item));
+                }
             }
 
             await OnSearchStringChange.InvokeAsync(searchString);
