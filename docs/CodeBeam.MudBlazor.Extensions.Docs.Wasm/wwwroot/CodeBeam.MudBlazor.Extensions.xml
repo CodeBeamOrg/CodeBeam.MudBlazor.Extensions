@@ -3291,11 +3291,6 @@
             
             </summary>
         </member>
-        <member name="P:MudExtensions.MudPasswordField`1.InputType">
-            <summary>
-            Type of the input element. It should be a valid HTML5 input type.
-            </summary>
-        </member>
         <member name="P:MudExtensions.MudPasswordField`1.Clearable">
             <summary>
             Show clear button.
