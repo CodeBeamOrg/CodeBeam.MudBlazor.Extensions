@@ -1,0 +1,26 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+
+<MudListExtended @ref="List"
+                 SearchBox="true"
+                 ItemCollection="Houses"
+                 MultiSelection="true"
+                 ToStringFunc="@(house => $"{house!.Number} - {house.Name}")">
+</MudListExtended>
+
+@code {
+    public MudListExtended<TestHouse>? List { get; set; }
+
+    public List<TestHouse> Houses = new()
+    {
+        new TestHouse { Number = 1, Name = "Test1", Postcode = "12345" },
+        new TestHouse { Number = 2, Name = "Test2", Postcode = "54321" },
+        new TestHouse { Number = 3, Name = "Test3", Postcode = "67890" },
+    };
+
+    public class TestHouse
+    {
+        public int Number { get; set; }
+        public string? Name { get; set; }
+        public string? Postcode { get; set; }
+    }
+}
