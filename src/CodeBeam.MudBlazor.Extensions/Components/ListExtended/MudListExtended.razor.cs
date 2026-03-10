@@ -956,7 +956,7 @@ namespace MudExtensions
                         await MudSelectExtended.FocusAsync();
                     }
                     break;
-                 case "Escape":                    
+                case "Escape":
                     if (MudSelectExtended != null && MultiSelection == false)
                     {
                         await MudSelectExtended.CloseMenu();
@@ -1783,10 +1783,14 @@ namespace MudExtensions
 
             if (SearchFunc != null)
             {
-                return ItemCollection.Where(x => SearchFunc.Invoke(x, _searchString)).ToList();
+                return [.. ItemCollection.Where(x => SearchFunc.Invoke(x, _searchString))];
             }
 
-            return ItemCollection.Where(x => Converter.Convert(x)?.Contains(_searchString, StringComparison.InvariantCultureIgnoreCase) == true).ToList();
+            var stringValue = new Func<T?, string?>(x =>
+                ToStringFunc != null ? ToStringFunc(x) : Converter.Convert(x)
+            );
+
+            return [.. ItemCollection.Where(x => stringValue(x)?.Contains(_searchString, StringComparison.InvariantCultureIgnoreCase) == true)];
         }
 
         /// <summary>
@@ -1834,7 +1838,7 @@ namespace MudExtensions
         /// 
         /// </summary>
         protected internal MudListItemExtended<T?>? ActiveItem => _lastActivatedItem;
-        
+
         /// <summary>
         /// 
         /// </summary>

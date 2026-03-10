@@ -363,5 +363,50 @@ namespace MudExtensions.UnitTests.Components
             var finalItems = comp.FindAll("div.mud-list-item-extended").Count;
             finalItems.Should().Be(9);
         }
+
+
+        [Test]
+        public void ListExtended_Search_With_ItemCollection_Should_Use_ToStringFunc()
+        {
+            // Arrange
+            var comp = Context.Render<ListExtendedItemCollectionSearchTest>();
+            var list = comp.FindComponent<MudListExtended<ListExtendedItemCollectionSearchTest.TestHouse>>().Instance;
+
+            list.SearchBox.Should().BeTrue();
+            list.ItemCollection.Should().HaveCount(3);
+
+            // Act - search for "1 - Test1" using reflection to set _searchString
+            var searchStringField = typeof(MudListExtended<ListExtendedItemCollectionSearchTest.TestHouse>)
+                .GetField("_searchString", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            searchStringField?.SetValue(list, "1 - Test1");
+
+            var result = list.GetSearchedItems();
+
+            // Assert - should find item by ToStringFunc format, not class name
+            result.Should().NotBeNull();
+            result.Should().HaveCount(1);
+            result.First().Number.Should().Be(1);
+            result.First().Name.Should().Be("Test1");
+        }
+
+        [Test]
+        public void ListExtended_Search_Should_Find_Items_By_Custom_Display_Format_Not_ClassName()
+        {
+            // Arrange
+            var comp = Context.Render<ListExtendedItemCollectionSearchTest>();
+            var list = comp.FindComponent<MudListExtended<ListExtendedItemCollectionSearchTest.TestHouse>>().Instance;
+
+            // Act - search for "Test2" (part of the formatted display, not the class name)
+            var searchStringField = typeof(MudListExtended<ListExtendedItemCollectionSearchTest.TestHouse>)
+                .GetField("_searchString", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            searchStringField?.SetValue(list, "Test2");
+
+            var result = list.GetSearchedItems();
+
+            // Assert
+            result.Should().HaveCount(1);
+            result.First().Name.Should().Be("Test2");
+            result.First().Number.Should().Be(2);
+        }
     }
 }

@@ -14,10 +14,45 @@
 
     <MudItem xs="12" sm="4">
         <MudStack>
-            <MudSwitchM3 @bind-Value="_multiselection" Color="Color.Primary" Label="MultiSelection" />
-            <MudSwitchM3 @bind-Value="_searchBoxAutoFocus" Color="Color.Primary" Label="AutoFocus (SearchBox)" />
-            <MudSwitchM3 @bind-Value="_searchBoxClearable" Color="Color.Primary" Label="Clearable (SearchBox)" />
+            <MudSwitchM3 @bind-Value="_multiselection" Color="Color.Secondary" Label="MultiSelection" />
+            <MudSwitchM3 @bind-Value="_searchBoxAutoFocus" Color="Color.Secondary" Label="AutoFocus (SearchBox)" />
+            <MudSwitchM3 @bind-Value="_searchBoxClearable" Color="Color.Secondary" Label="Clearable (SearchBox)" />
         </MudStack>
+    </MudItem>
+</MudGrid>
+
+<MudGrid Class="mt-8">
+    <MudItem xs="12">
+        <MudText Typo="Typo.h6" Class="mb-4">Complex Type with ToStringFunc and Search</MudText>
+    </MudItem>
+    <MudItem xs="12" sm="8" Class="d-flex gap-4">
+        <MudSelectExtended MultiSelection="true"
+                           ItemCollection="TestHouses"
+                           @bind-Value="_selectedHouse"
+                           SearchBox="true"
+                           T="TestHouse"
+                           Label="Houses (Complex Type)"
+                           ToStringFunc="@((TestHouse house) => $"{house.Number} - {house.Name}")"
+                           AnchorOrigin="Origin.BottomCenter"
+                           Variant="Variant.Outlined"
+                           HelperText="Search by number or name (e.g., '1 -' or 'Test3')"
+                           SearchBoxClearable="true" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4" Elevation="0" Outlined="true">
+            <MudText Typo="Typo.subtitle2" Class="mb-2"><strong>Selected House:</strong></MudText>
+            @if (_selectedHouse != null)
+            {
+                <MudText Typo="Typo.body2">Number: @_selectedHouse.Number</MudText>
+                <MudText Typo="Typo.body2">Name: @_selectedHouse.Name</MudText>
+                <MudText Typo="Typo.body2">Postcode: @_selectedHouse.Postcode</MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.body2" Color="Color.Secondary">None selected</MudText>
+            }
+        </MudPaper>
     </MudItem>
 </MudGrid>
 
@@ -26,6 +61,7 @@
     bool _searchBoxAutoFocus;
     bool _searchBoxClearable;
     private string? _selectedState;
+    private TestHouse? _selectedHouse;
 
     private string[] _states =
     {
@@ -43,6 +79,22 @@
         "Rhode Island", "South Carolina", "South Dakota", "Tennessee",
         "Texas", "Utah", "Vermont", "Virgin Island", "Virginia",
         "Washington", "West Virginia", "Wisconsin", "Wyoming",
+    };
+
+    private class TestHouse
+    {
+        public int Number { get; set; }
+        public string? Name { get; set; }
+        public string? Postcode { get; set; }
+    }
+
+    private List<TestHouse> TestHouses = new()
+    {
+        new TestHouse { Number = 1, Name = "Test1", Postcode = "12345" },
+        new TestHouse { Number = 2, Name = "Test2", Postcode = "54321" },
+        new TestHouse { Number = 3, Name = "Test3", Postcode = "67890" },
+        new TestHouse { Number = 4, Name = "Test4", Postcode = "09876" },
+        new TestHouse { Number = 5, Name = "Test5", Postcode = "11223" },
     };
 
     private bool SearchItems(string value, string searchString)

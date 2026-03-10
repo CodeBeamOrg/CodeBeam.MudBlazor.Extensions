@@ -12,9 +12,9 @@
 
     <MudItem xs="12" sm="4">
         <MudRadioGroup T="SelectAllPosition" @bind-Value="_selectAllPosition">
-            <MudRadio Value="SelectAllPosition.BeforeSearchBox" Color="Color.Primary">Before Search (Default)</MudRadio>
-            <MudRadio Value="SelectAllPosition.NextToSearchBox" Color="Color.Primary">Start of the searchbox in the same line</MudRadio>
-            <MudRadio Value="SelectAllPosition.AfterSearchBox" Color="Color.Primary">After Search</MudRadio>
+            <MudRadio Value="SelectAllPosition.BeforeSearchBox" Color="Color.Secondary">Before Search (Default)</MudRadio>
+            <MudRadio Value="SelectAllPosition.NextToSearchBox" Color="Color.Secondary">Start of the searchbox in the same line</MudRadio>
+            <MudRadio Value="SelectAllPosition.AfterSearchBox" Color="Color.Secondary">After Search</MudRadio>
         </MudRadioGroup>
         <MudGrid Class="mt-3 px-4">
             <MudItem xs="6">
@@ -33,11 +33,11 @@
     </MudItem>
 </MudGrid>
 
-    @code {
-    ValuePresenter _valuePresenter = ValuePresenter.Text;
-    SelectAllPosition _selectAllPosition;
-    string value { get; set; } = "Nothing selected";
-    IEnumerable<string> options { get; set; } = new HashSet<string>() { "Alaska", "California" };
+@code {
+    private ValuePresenter _valuePresenter = ValuePresenter.Text;
+    private SelectAllPosition _selectAllPosition;
+    private string value { get; set; } = "Nothing selected";
+    private IEnumerable<string> options { get; set; } = new HashSet<string>() { "Alaska", "California" };
 
     private string[] states =
     {
