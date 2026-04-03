@@ -1,0 +1,12 @@
+services:
+  mudextensions:
+    build:
+      context: .
+    container_name: mudextensions
+    restart: unless-stopped
+    networks:
+      - edge
+
+networks:
+  edge:
+    external: true
