@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using MudExtensions.Utilities;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -34,7 +34,7 @@ namespace MudExtensions
             _timer.Elapsed += Elapse;
             if (Mode == WatchMode.Watch)
             {
-                Value = DateTime.Now.TimeOfDay;
+                Value = GetCurrentTime();
             }
             else if (Mode == WatchMode.CountDown)
             {
@@ -76,13 +76,13 @@ namespace MudExtensions
 
         TimeSpan _interval = TimeSpan.FromSeconds(1);
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public TimeSpan Interval 
-        { 
-            get => _interval; 
+        public TimeSpan Interval
+        {
+            get => _interval;
             set
             {
                 if (_interval == value)
@@ -93,6 +93,13 @@ namespace MudExtensions
                 _timer.Interval = _interval.TotalMilliseconds;
             }
         }
+
+        /// <summary>
+        /// The timezone of the watch. If null, DateTime.Now will be used.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.FormComponent.Behavior)]
+        public TimeZoneInfo? TimeZone { get; set; }
 
         WatchMode _watchMode = WatchMode.Watch;
         /// <summary>
@@ -254,7 +261,7 @@ namespace MudExtensions
             int oldSecond = ((int)Value.TotalSeconds);
             if (Mode == WatchMode.Watch)
             {
-                Value = DateTime.Now.TimeOfDay;
+                Value = GetCurrentTime();
             }
             else if (Mode == WatchMode.CountDown)
             {
@@ -389,7 +396,7 @@ namespace MudExtensions
             if (mode == WatchMode.Watch)
             {
                 Interval = TimeSpan.FromSeconds(1);
-                Value = DateTime.Now.TimeOfDay;
+                Value = GetCurrentTime();
                 ShowHour = true;
                 ShowMinute = true;
                 ShowSecond = true;
@@ -427,6 +434,15 @@ namespace MudExtensions
             _minute = Value.Minutes;
             _second = Value.Seconds;
             _milliSecond = Value.Milliseconds;
+        }
+
+        protected TimeSpan GetCurrentTime()
+        {
+            if (TimeZone != null)
+            {
+                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZone).TimeOfDay;
+            }
+            return DateTime.Now.TimeOfDay;
         }
 
         /// <summary>
