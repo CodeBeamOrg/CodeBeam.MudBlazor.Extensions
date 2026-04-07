@@ -29,6 +29,41 @@ namespace MudExtensions.UnitTests.Components
             label[0].Attributes.GetNamedItem("for")?.Value.Should().Be("selectLabelTest");
         }
 
+        [Test]
+        public void Select_Items_Should_Expose_Accessible_Role_And_Label()
+        {
+            var comp = Context.Render<SelectTest1>();
+            comp.Find("div.mud-input-control").Click();
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
+
+            var items = comp.FindAll("div.mud-list-item-extended").ToArray();
+            var item = items[1];
+            item.GetAttribute("role").Should().Be("option");
+            item.GetAttribute("aria-selected").Should().Be("false");
+            var ariaLabel = item.GetAttribute("aria-label");
+            ariaLabel.Should().NotBeNullOrEmpty();
+            ariaLabel.Trim().Should().Be("2");
+        }
+
+        [Test]
+        public void MultiSelect_Items_Should_Expose_Checkbox_AriaLabel_And_TestId()
+        {
+            var comp = Context.Render<MultiSelectTest1>();
+            comp.Find("div.mud-input-control").Click();
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-extended").Count.Should().BeGreaterThan(0));
+
+            var items = comp.FindAll("div.mud-list-item-extended").ToArray();
+            var item = items[1];
+            item.GetAttribute("role").Should().Be("option");
+            var checkbox = item.QuerySelector("input[type=checkbox]");
+            checkbox.Should().NotBeNull();
+            var ariaLabel = checkbox.GetAttribute("aria-label");
+            ariaLabel.Should().NotBeNullOrEmpty();
+            var optionAria = item.GetAttribute("aria-label");
+            optionAria.Should().NotBeNullOrEmpty();
+            optionAria.Trim().Should().Be(ariaLabel.Trim());
+        }
+
         // Note: MudSelect doesn't guaranteed the consequences of changing Value if MultiSelection is true for now.
         // When this feature will add, just uncomment the testcase to test it. No need to write new test.
         [Test]

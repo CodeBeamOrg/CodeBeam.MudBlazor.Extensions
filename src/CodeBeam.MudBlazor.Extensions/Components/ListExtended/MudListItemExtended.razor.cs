@@ -1,7 +1,5 @@
-﻿using System.Windows.Input;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 using MudBlazor;
 
@@ -59,7 +57,29 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        protected internal string? ItemId { get; } = "listitem_" + Guid.NewGuid().ToString().Substring(0, 8);
+        protected internal string? ItemId { get; } = string.Concat("listitem_", Guid.NewGuid().ToString().AsSpan(0, 8));
+
+        /// <summary>
+        /// The accessible name used for the item. Prefer Text, then SecondaryText, then Value.ToString().
+        /// If the parent list has a ToStringFunc use that for Value formatting.
+        /// </summary>
+        protected string AccessibleName
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(Text))
+                    return Text!;
+                if (!string.IsNullOrWhiteSpace(SecondaryText))
+                    return SecondaryText!;
+                if (Value != null)
+                {
+                    if (MudListExtended?.ToStringFunc != null)
+                        return MudListExtended.ToStringFunc(Value) ?? Value.ToString() ?? string.Empty;
+                    return Value.ToString() ?? string.Empty;
+                }
+                return string.Empty;
+            }
+        }
 
         /// <summary>
         /// Functional items does not hold values. If a value set on Functional item, it ignores by the MudList. They can not count on Items list (they count on AllItems), cannot be subject of keyboard navigation and selection.

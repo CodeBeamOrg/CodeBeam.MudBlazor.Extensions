@@ -2699,6 +2699,12 @@
             
             </summary>
         </member>
+        <member name="P:MudExtensions.MudListItemExtended`1.AccessibleName">
+            <summary>
+            The accessible name used for the item. Prefer Text, then SecondaryText, then Value.ToString().
+            If the parent list has a ToStringFunc use that for Value formatting.
+            </summary>
+        </member>
         <member name="P:MudExtensions.MudListItemExtended`1.IsFunctional">
             <summary>
             Functional items does not hold values. If a value set on Functional item, it ignores by the MudList. They can not count on Items list (they count on AllItems), cannot be subject of keyboard navigation and selection.
