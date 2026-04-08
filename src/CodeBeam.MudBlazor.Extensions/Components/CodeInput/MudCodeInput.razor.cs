@@ -162,7 +162,12 @@ namespace MudExtensions
                 _skipInputEvent = false;
                 return;
             }
-            await FocusNext();
+
+            var current = _elementReferences[_lastFocusedIndex];
+            var val = current.GetState(x => x.Value)?.ToString();
+
+            if (!string.IsNullOrEmpty(val))
+                await FocusNext();
         }
 
         /// <summary>
@@ -173,36 +178,49 @@ namespace MudExtensions
         protected async Task HandleKeyDown(KeyboardEventArgs arg)
         {
             if (Disabled || ReadOnly)
+                return;
+
+            if (arg.Key == "Backspace")
             {
+                var current = _elementReferences[_lastFocusedIndex];
+                var currentValue = current.GetState(x => x.Value)?.ToString();
+
+                if (!string.IsNullOrEmpty(currentValue))
+                {
+                    _skipInputEvent = true;
+                    await current.Clear();
+                    _skipInputEvent = false;
+                    return;
+                }
+
+                _skipRefocus = true;
+
+                if (RuntimeLocation.IsClientSide)
+                    await Task.Delay(10);
+
+                await FocusPrevious();
                 return;
             }
 
-            if (arg.Key == "Backspace" || arg.Key == "ArrowLeft" || arg.Key == "Delete")
+            if (arg.Key == "Delete")
             {
                 _skipInputEvent = true;
-                _skipRefocus = true;
-                if (arg.Key == "Delete")
-                {
-                    await _elementReferences[_lastFocusedIndex].Clear();
-                    _skipInputEvent = false;
-                }
-                if (RuntimeLocation.IsClientSide)
-                {
-                    await Task.Delay(10);
-                }
+                await _elementReferences[_lastFocusedIndex].Clear();
+                _skipInputEvent = false;
+                return;
+            }
+
+            if (arg.Key == "ArrowLeft")
+            {
                 await FocusPrevious();
                 return;
             }
 
             if (arg.Key == "ArrowRight")
             {
-                if (RuntimeLocation.IsClientSide)
-                {
-                    await Task.Delay(10);
-                }
                 await FocusNext();
+                return;
             }
-
         }
 
         private int _lastFocusedIndex = 0;
