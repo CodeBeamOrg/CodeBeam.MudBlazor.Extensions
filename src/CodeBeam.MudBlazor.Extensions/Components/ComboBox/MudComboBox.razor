@@ -7,7 +7,7 @@
 @inject IKeyInterceptorService KeyInterceptorService
 @inject IScrollManagerExtended ScrollManagerExtended
 
-<CascadingValue Name="Standalone" Value="false" IsFixed="true">
+<CascadingValue Name="SubscribeToParentForm" Value="false" IsFixed="true">
     <CascadingValue Value="@this" IsFixed="true">
         <div class="mud-select-extended" id="@_elementId">
             <MudInputControl Label="@Label" Variant="@Variant" HelperText="@HelperText" HelperTextOnFocus="@HelperTextOnFocus" FullWidth="@FullWidth" Margin="@Margin" Class="@Classname" Style="@Style"
@@ -22,7 +22,7 @@
                                       Underline="@Underline"
                                       HasAdornmentStart="@(AdornmentStart != null)" HasAdornmentEnd="@(AdornmentEnd != null)"
                                       Disabled="@GetDisabledState()" ReadOnly="@GetReadOnlyState()" Error="@ErrorState.Value" ErrorId="@ErrorIdState.Value"
-                                      Clearable="@Clearable" ForceClearable="@(Clearable && HasValue(ReadValue))" OnClearButtonClick="@ClearButtonClickHandlerAsync"
+                                      Clearable="@(Clearable && !GetReadOnlyState())" ForceClearable="@ForceClearable" OnClearButtonClick="@ClearButtonClickHandlerAsync"
                                       MaxLength="@MaxLength" @attributes="UserAttributes" OnBlur="@HandleOnBlur" ShrinkLabel="@(HasValue(ReadValue) || AdornmentStart != null || _isOpen || ShrinkLabel)">
 
                         <AdornmentStart>

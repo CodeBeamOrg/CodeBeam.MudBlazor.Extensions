@@ -380,6 +380,13 @@ namespace MudExtensions
         //public bool Virtualize { get; set; }
 
         /// <summary>
+        /// If true, clear button forced to show even on readonly or disabled ComboBox.
+        /// </summary>
+        [Parameter]
+        [Category(CategoryTypes.List.Behavior)]
+        public bool ForceClearable { get; set; }
+
+        /// <summary>
         /// If true, chips has close button and remove from SelectedValues when pressed the close button.
         /// </summary>
         [Parameter]
@@ -757,6 +764,7 @@ namespace MudExtensions
         bool _oldShowCheckbox = true;
         bool _oldBordered;
         Dense _oldDense = Dense.Standard;
+        bool _oldReadonly;
         /// <summary>
         /// 
         /// </summary>
@@ -765,7 +773,8 @@ namespace MudExtensions
             base.OnParametersSet();
             if (_oldShowCheckbox != ShowCheckbox ||
                 _oldBordered != Bordered ||
-                _oldDense != Dense)
+                _oldDense != Dense ||
+                _oldReadonly != ReadOnly)
             {
                 ForceRenderItems();
             }
@@ -773,6 +782,7 @@ namespace MudExtensions
             _oldBordered = Bordered;
             _oldDense = Dense;
             _allSelected = GetAllSelectedState();
+            _oldReadonly = ReadOnly;
         }
 
         bool _firstRendered = false;

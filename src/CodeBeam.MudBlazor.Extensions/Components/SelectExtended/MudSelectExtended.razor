@@ -2,7 +2,7 @@
 @typeparam T
 @inherits MudBaseInputExtended<T>
 
-<CascadingValue Name="Standalone" Value="false" IsFixed="true">
+<CascadingValue Name="SubscribeToParentForm" Value="false" IsFixed="true">
     <CascadingValue Value="@this" IsFixed="true">
         <div class="mud-select-extended" style="@(Disabled ? "pointer-events: none" : null)" id="@_elementId">
             <MudInputControl
@@ -29,7 +29,7 @@
                                       HasAdornmentStart="@(AdornmentStart != null)" HasAdornmentEnd="true"
                                       Value="@(Strict && !IsValueInList ? null : ReadText)" Underline="@Underline"
                                       Disabled="@GetDisabledState()" ReadOnly="true" Error="@ErrorState.Value" ErrorId="@ErrorIdState.Value"
-                                      Clearable="@Clearable" OnClearButtonClick="(async (e) => await SelectClearButtonClickHandlerAsync(e))"
+                                      Clearable="@(Clearable && !GetReadOnlyState())" OnClearButtonClick="(async (e) => await SelectClearButtonClickHandlerAsync(e))"
                                       @attributes="UserAttributes" OnBlur="@OnLostFocus" ShrinkLabel="@(AdornmentStart != null || ShrinkLabel)" Typo="@Typo"
                                       ShowVisualiser="true" DataVisualiserStyle="min-height: 1.1876em; padding-right: 0px;">
 
