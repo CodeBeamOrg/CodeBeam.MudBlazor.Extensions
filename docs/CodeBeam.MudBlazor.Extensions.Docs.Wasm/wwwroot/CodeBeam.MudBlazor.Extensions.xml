@@ -712,6 +712,11 @@
             Custom search func for searchbox. If doesn't set, it search with "Contains" logic by default. Passed value and searchString values.
             </summary>
         </member>
+        <member name="P:MudExtensions.MudComboBox`1.ForceClearable">
+            <summary>
+            If true, clear button forced to show even on readonly or disabled ComboBox.
+            </summary>
+        </member>
         <member name="P:MudExtensions.MudComboBox`1.ChipCloseable">
             <summary>
             If true, chips has close button and remove from SelectedValues when pressed the close button.
