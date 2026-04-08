@@ -1,0 +1,53 @@
+﻿@namespace MudExtensions.Docs.Examples
+@inject ISnackbar Snackbar
+@using MudBlazor.Extensions
+@using MudExtensions.Utilities
+
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <MudStack Class="mud-width-full" AlignItems="AlignItems.Center">
+            <MudWatch @ref="_watch" Interval="TimeSpan.FromSeconds(1)" Mode="WatchMode.Watch"
+                      Wheel="_wheel" ShowHour="_showHour" ShowMinute="_showMinute" ShowSecond="_showSecond" ShowMillisecond="_showMillisecond"
+                      TimeZone="_selectedTimeZone" />
+        </MudStack>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="4">
+            <MudSelectExtended @bind-Value="_selectedTimeZone" Label="TimeZone" Dense="true" SearchBox="true" ToStringFunc="@(tz => $"{tz.DisplayName} ({tz.Id})")">
+                @foreach (var tz in _timeZones)
+                {
+                    <MudSelectItemExtended Value="tz">
+                        @tz.DisplayName (@tz.Id)
+                    </MudSelectItemExtended>
+                }
+
+            </MudSelectExtended>
+            <MudSwitchM3 @bind-Value="_wheel" Color="Color.Secondary" Label="Wheel" />
+            <div class="d-flex flex-wrap gap-4">
+                <MudSwitchM3 @bind-Value="_showHour" Color="Color.Secondary" Label="Show Hour" />
+                <MudSwitchM3 @bind-Value="_showMinute" Color="Color.Secondary" Label="Show Minute" />
+                <MudSwitchM3 @bind-Value="_showSecond" Color="Color.Secondary" Label="Show Second" />
+                <MudSwitchM3 @bind-Value="_showMillisecond" Color="Color.Secondary" Label="Show Millisecond" />
+            </div>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    MudWatch _watch = new();
+    bool _wheel;
+    bool _showHour = true;
+    bool _showMinute = true;
+    bool _showSecond = true;
+    bool _showMillisecond = false;
+
+    private List<TimeZoneInfo> _timeZones = new();
+    private TimeZoneInfo _selectedTimeZone = TimeZoneInfo.Utc;
+
+    protected override void OnInitialized()
+    {
+        _timeZones = TimeZoneInfo.GetSystemTimeZones().ToList();
+        _selectedTimeZone = TimeZoneInfo.Local;
+    }
+}
