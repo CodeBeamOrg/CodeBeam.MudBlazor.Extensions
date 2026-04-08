@@ -82,15 +82,18 @@
                 <div class="@MultiSelectClassName">
                     @if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.CheckBox : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.CheckBox)
                     {
-                        <MudCheckBox Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" Dense="true" />
+                        <MudCheckBox Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" Dense="true"
+                                     aria-label="@($"Select {AccessibleName}")" />
                     }
                     else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.Switch : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.Switch)
                     {
-                        <MudSwitch Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true" />
+                        <MudSwitch Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true"
+                                   aria-label="@($"Select {AccessibleName}")" />
                     }
                     else if (OverrideMultiSelectionComponent == null ? MudListExtended?.MultiSelectionComponent == MultiSelectionComponent.SwitchM3 : OverrideMultiSelectionComponent.Value == MultiSelectionComponent.SwitchM3)
                     {
-                        <MudSwitchM3 Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true" />
+                        <MudSwitchM3 Color="@(MudListExtended?.Color ?? Color.Default)" Disabled="@GetDisabledStatus()" @bind-Value="_selected" @onclick="OnClickHandler" StopClickPropagation="true"
+                                   aria-label="@($"Select {AccessibleName}")" />
                     }
                 </div>
             }

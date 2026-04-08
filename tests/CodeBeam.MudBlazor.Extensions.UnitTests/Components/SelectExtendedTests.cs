@@ -57,11 +57,11 @@ namespace MudExtensions.UnitTests.Components
             item.GetAttribute("role").Should().Be("option");
             var checkbox = item.QuerySelector("input[type=checkbox]");
             checkbox.Should().NotBeNull();
-            var ariaLabel = checkbox.GetAttribute("aria-label");
-            ariaLabel.Should().NotBeNullOrEmpty();
             var optionAria = item.GetAttribute("aria-label");
             optionAria.Should().NotBeNullOrEmpty();
-            optionAria.Trim().Should().Be(ariaLabel.Trim());
+            var checkboxAria = checkbox.GetAttribute("aria-label");
+            checkboxAria.Should().NotBeNullOrEmpty();
+            checkboxAria.Trim().Should().Be($"Select {optionAria.Trim()}");
         }
 
         // Note: MudSelect doesn't guaranteed the consequences of changing Value if MultiSelection is true for now.
