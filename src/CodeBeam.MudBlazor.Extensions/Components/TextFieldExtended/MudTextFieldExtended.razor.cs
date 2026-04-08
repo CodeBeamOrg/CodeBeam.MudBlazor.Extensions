@@ -217,6 +217,12 @@ namespace MudExtensions
         //    return base.SetTextAsync(text, updateValue);
         //}
 
+        private bool ShowClearButton()
+        {
+            if (SubscribeToParentForm)
+                return Clearable && !GetReadOnlyState() && !GetDisabledState();
+            return Clearable && !GetDisabledState();
+        }
         private async Task OnMaskedValueChanged(string s)
         {
             await SetTextAndUpdateValueAsync(s, false);

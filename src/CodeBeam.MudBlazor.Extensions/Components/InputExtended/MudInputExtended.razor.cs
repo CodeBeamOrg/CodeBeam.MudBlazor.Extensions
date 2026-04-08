@@ -316,16 +316,12 @@ namespace MudExtensions
 
         private Size GetButtonSize() => Margin == Margin.Dense ? Size.Small : Size.Medium;
 
-        //private bool _showClearable;
-
         private void UpdateClearable(object? value)
         {
             var showClearable = HasValue((T?)value);
             if (Clearable != showClearable)
                 Clearable = showClearable;
         }
-
-        //private bool GetClearable() => Clearable && ((ReadValue is string stringValue && !string.IsNullOrWhiteSpace(stringValue)) || (ReadValue is not string && ReadValue is not null));
 
         private bool ShowClearButton()
         {
@@ -334,17 +330,15 @@ namespace MudExtensions
                 return false;
             }
 
-            if (!Clearable)
+            if (SubscribeToParentForm && GetReadOnlyState())
             {
                 return false;
             }
 
-            // TODO: Add SubscribeToParentForm and GetReadOnlyState from MudBaseInput when Mud 9 released, it's currently internal
-            // Select extended is currently hardcoded readonly true, do not uncomment
-            //if (ReadOnly)
-            //{
-            //    return false;
-            //}
+            if (!Clearable)
+            {
+                return false;
+            }
 
             return HasValue(ReadValue);
         }
