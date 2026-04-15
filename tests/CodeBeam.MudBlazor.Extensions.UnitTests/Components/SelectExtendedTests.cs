@@ -1354,5 +1354,101 @@ namespace MudExtensions.UnitTests.Components
             // The menu should not open
             comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open");
         }
+
+        [Test]
+        public void Select_AriaLabel_ShouldBeOnVisibleControl_NotHiddenInput()
+        {
+            var comp = Context.Render<SelectWithAriaLabelTest>(parameters =>
+            {
+                parameters.Add(p => p.UserAttributes, new Dictionary<string, object?> { { "aria-label", "Test Dropdown" } });
+            });
+
+            var visibleControl = comp.Find("div.mud-input-control");
+            var hiddenInput = comp.Find("input[type='hidden']");
+
+            // aria-label should be on the visible MudInputControl
+            visibleControl.GetAttribute("aria-label").Should().Be("Test Dropdown");
+            
+            // aria-label should NOT be on the hidden input
+            hiddenInput.GetAttribute("aria-label").Should().BeNull();
+        }
+
+        [Test]
+        public void Select_AriaLabelledBy_ShouldBeOnVisibleControl_NotHiddenInput()
+        {
+            var comp = Context.Render<SelectWithAriaLabelTest>(parameters =>
+            {
+                parameters.Add(p => p.UserAttributes, new Dictionary<string, object?> { { "aria-labelledby", "my-label-id" } });
+            });
+
+            var visibleControl = comp.Find("div.mud-input-control");
+            var hiddenInput = comp.Find("input[type='hidden']");
+
+            // aria-labelledby should be on the visible MudInputControl
+            visibleControl.GetAttribute("aria-labelledby").Should().Be("my-label-id");
+            
+            // aria-labelledby should NOT be on the hidden input
+            hiddenInput.GetAttribute("aria-labelledby").Should().BeNull();
+        }
+
+        [Test]
+        public void Select_OtherUserAttributes_ShouldBePreservedOnHiddenInput()
+        {
+            var comp = Context.Render<SelectWithAriaLabelTest>(parameters =>
+            {
+                parameters.Add(p => p.UserAttributes, new Dictionary<string, object?> 
+                { 
+                    { "aria-label", "Test Dropdown" },
+                    { "data-testid", "my-select" },
+                    { "custom-attr", "custom-value" }
+                });
+            });
+
+            var hiddenInput = comp.Find("input[type='hidden']");
+
+            // aria-label should be filtered out
+            hiddenInput.GetAttribute("aria-label").Should().BeNull();
+            
+            // Other attributes should be preserved
+            hiddenInput.GetAttribute("data-testid").Should().Be("my-select");
+            hiddenInput.GetAttribute("custom-attr").Should().Be("custom-value");
+        }
+
+        [Test]
+        public void Select_BothAriaAttributes_ShouldBeFiltered()
+        {
+            var comp = Context.Render<SelectWithAriaLabelTest>(parameters =>
+            {
+                parameters.Add(p => p.UserAttributes, new Dictionary<string, object?> 
+                { 
+                    { "aria-label", "Test Dropdown" },
+                    { "aria-labelledby", "my-label-id" }
+                });
+            });
+
+            var visibleControl = comp.Find("div.mud-input-control");
+            var hiddenInput = comp.Find("input[type='hidden']");
+
+            // Both aria attributes should be on visible control
+            visibleControl.GetAttribute("aria-label").Should().Be("Test Dropdown");
+            visibleControl.GetAttribute("aria-labelledby").Should().Be("my-label-id");
+            
+            // Neither should be on hidden input
+            hiddenInput.GetAttribute("aria-label").Should().BeNull();
+            hiddenInput.GetAttribute("aria-labelledby").Should().BeNull();
+        }
+
+        [Test]
+        public void Select_NoUserAttributes_ShouldWorkCorrectly()
+        {
+            var comp = Context.Render<SelectWithAriaLabelTest>();
+
+            var visibleControl = comp.Find("div.mud-input-control");
+            var hiddenInput = comp.Find("input[type='hidden']");
+
+            // Neither element should have aria attributes
+            visibleControl.GetAttribute("aria-label").Should().BeNull();
+            hiddenInput.GetAttribute("aria-label").Should().BeNull();
+        }
     }
 }

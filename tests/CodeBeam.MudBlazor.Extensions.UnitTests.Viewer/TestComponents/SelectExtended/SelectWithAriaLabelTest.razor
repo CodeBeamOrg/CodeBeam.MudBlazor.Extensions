@@ -1,0 +1,16 @@
+@namespace MudExtensions.UnitTests.TestComponents
+
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudSelectExtended T="string" @bind-Value="value" @attributes="UserAttributes">
+    <MudSelectItemExtended Value="@("1")"/>
+    <MudSelectItemExtended Value="@("2")"/>
+    <MudSelectItemExtended Value="@("3")"/>
+</MudSelectExtended>
+
+@code {
+    [Parameter]
+    public Dictionary<string, object?> UserAttributes { get; set; } = new();
+
+    string? value = null;
+}
