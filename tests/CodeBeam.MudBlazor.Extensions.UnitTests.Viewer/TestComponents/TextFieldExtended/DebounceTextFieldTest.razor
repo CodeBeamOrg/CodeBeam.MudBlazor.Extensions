@@ -1,0 +1,21 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+
+<div class="d-flex">
+    <MudTextFieldExtended T="string"
+                          @bind-Value="@value"
+                          Label="Extended TextField"
+                          Variant="Variant.Outlined"
+                          Margin="Margin.Dense"
+                          Clearable="true"
+                          Immediate="true"
+                          DebounceInterval="1000" />
+</div>
+
+@value
+
+@code {
+    
+    public static string __description__ = "Multi-Select Required Should Recognize Values";
+
+    string value;
+}
