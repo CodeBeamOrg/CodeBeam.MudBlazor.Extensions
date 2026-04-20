@@ -63,6 +63,16 @@
             If true disables paste to input component. Default is false.
             </summary>
         </member>
+        <member name="P:MudExtensions.MudBaseInputExtended`1.ReadValue">
+            <summary>
+            Override to read Value from ParameterState instead of backing field.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseInputExtended`1.ReadText">
+            <summary>
+            Override to write Value to ParameterState instead of backing field.
+            </summary>
+        </member>
         <member name="M:MudExtensions.MudBaseInputExtended`1.InvokeBeforeInputAsync(MudExtensions.BeforeInputEventArgs)">
             <summary>
             Invokes logic to be executed before input is processed, including raising the BeforeInput event if a
@@ -1753,13 +1763,18 @@
         </member>
         <member name="T:MudExtensions.MudDebouncedInputExtended`1">
             <summary>
-            
+            An extended base class for designing input components which update after a delay.
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="T">The type of object managed by this input.</typeparam>
+        </member>
+        <member name="M:MudExtensions.MudDebouncedInputExtended`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MudExtensions.MudDebouncedInputExtended`1"/> class.
+            </summary>
         </member>
         <member name="P:MudExtensions.MudDebouncedInputExtended`1.DebounceInterval">
             <summary>
-            Interval to be awaited in milliseconds before changing the Text value
+            The number of milliseconds to wait before updating the <see cref="P:MudBlazor.MudBaseInput`1.Text"/> value.
             </summary>
         </member>
         <member name="P:MudExtensions.MudDebouncedInputExtended`1.OnDebounceIntervalElapsed">
@@ -1768,28 +1783,20 @@
             receives the Text as a parameter
             </summary>
         </member>
-        <member name="M:MudExtensions.MudDebouncedInputExtended`1.OnChanged">
-            <summary>
-            
-            </summary>
-            <returns></returns>
+        <member name="M:MudExtensions.MudDebouncedInputExtended`1.UpdateTextPropertyAsync(System.Boolean)">
+            <inheritdoc />
         </member>
         <member name="M:MudExtensions.MudDebouncedInputExtended`1.UpdateValuePropertyAsync(System.Boolean)">
-            <summary>
-            
-            </summary>
-            <param name="updateText"></param>
-            <returns></returns>
+            <inheritdoc />
+        </member>
+        <member name="M:MudExtensions.MudDebouncedInputExtended`1.ValidateValue">
+            <inheritdoc />
         </member>
         <member name="M:MudExtensions.MudDebouncedInputExtended`1.OnParametersSet">
-            <summary>
-            
-            </summary>
+            <inheritdoc />
         </member>
         <member name="M:MudExtensions.MudDebouncedInputExtended`1.DisposeAsyncCore">
-            <summary>
-            
-            </summary>
+            <inheritdoc />
         </member>
         <member name="T:MudExtensions.MudInputExtended`1">
             <summary>
@@ -6502,6 +6509,154 @@
             <summary>
             Localized strings for DateWheelPicker.
             </summary>
+        </member>
+        <member name="T:MudExtensions.Utilities.DebounceDispatcher">
+            <summary>
+            Delays the invocation of an action until a predetermined interval has elapsed since the last call.
+            </summary>
+            <remarks>
+            <para>
+            This dispatcher implements debouncing with optional leading-edge execution.
+            In trailing mode (default), the action executes only after the specified interval has passed
+            with no new invocations. In leading mode, the first call executes immediately, then subsequent
+            calls are debounced.
+            </para>
+            <para>
+            <strong>Thread Safety:</strong> This class is thread-safe. Multiple concurrent calls to <see cref="M:MudExtensions.Utilities.DebounceDispatcher.DebounceAsync(System.Func{System.Threading.Tasks.Task},System.Threading.CancellationToken)"/>
+            are properly synchronized.
+            </para>
+            <para>
+            <strong>Guarantees:</strong>
+            <list type="bullet">
+            <item>In trailing mode: Only the last invocation's action will execute after the interval elapses.</item>
+            <item>In leading mode: First call executes immediately, subsequent calls within the interval are debounced.</item>
+            <item>Previous pending invocations are automatically cancelled.</item>
+            <item>Exceptions thrown by the action are propagated to the caller.</item>
+            <item>Disposal cancels any pending invocation.</item>
+            </list>
+            </para>
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.Utilities.DebounceDispatcher.IsPending">
+            <summary>
+            Indicates whether a debounce delay is currently pending.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.Utilities.DebounceDispatcher.#ctor(System.Int32,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MudExtensions.Utilities.DebounceDispatcher"/> class with the specified interval.
+            </summary>
+            <param name="interval">The debounce interval in milliseconds. Must be non-negative.</param>
+            <param name="leading">If true, executes on the leading edge (immediately on first call). Default is false (trailing edge).</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when interval is negative.</exception>
+        </member>
+        <member name="M:MudExtensions.Utilities.DebounceDispatcher.#ctor(System.TimeSpan,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MudExtensions.Utilities.DebounceDispatcher"/> class with the specified interval.
+            </summary>
+            <param name="interval">The debounce interval as a <see cref="T:System.TimeSpan"/>. Must be non-negative.</param>
+            <param name="leading">If true, executes on the leading edge (immediately on first call). Default is false (trailing edge).</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when interval is negative.</exception>
+        </member>
+        <member name="M:MudExtensions.Utilities.DebounceDispatcher.#ctor(System.Int32,System.Boolean,System.TimeProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MudExtensions.Utilities.DebounceDispatcher"/> class with the specified interval and time provider.
+            </summary>
+            <param name="interval">The debounce interval in milliseconds. Must be non-negative.</param>
+            <param name="leading">If true, executes on the leading edge (immediately on first call). Default is false (trailing edge).</param>
+            <param name="timeProvider">The time provider to use for delays and time queries.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when TimeProvider is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when interval is negative.</exception>
+        </member>
+        <member name="M:MudExtensions.Utilities.DebounceDispatcher.#ctor(System.TimeSpan,System.Boolean,System.TimeProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MudExtensions.Utilities.DebounceDispatcher"/> class with the specified interval and time provider.
+            </summary>
+            <param name="interval">The debounce interval as a <see cref="T:System.TimeSpan"/>. Must be non-negative.</param>
+            <param name="leading">If true, executes on the leading edge (immediately on first call). Default is false (trailing edge).</param>
+            <param name="timeProvider">The time provider to use for delays and time queries.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when TimeProvider is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when interval is negative.</exception>
+        </member>
+        <member name="M:MudExtensions.Utilities.DebounceDispatcher.DebounceAsync(System.Func{System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <summary>
+            Debounces the execution of an asynchronous action.
+            </summary>
+            <remarks>
+            <para>
+            In trailing mode (default): Each call cancels any previously pending action and starts a new timer.
+            The action executes only if no new calls occur within the configured interval.
+            </para>
+            <para>
+            In leading mode: The first call (or first call after the interval expires) executes immediately.
+            Subsequent calls within the interval cancel previous pending actions and are debounced.
+            </para>
+            <para>
+            <strong>Exception Handling:</strong> Exceptions thrown by the action are propagated to the caller.
+            Cancellation (either from the token or disposal) is handled silently without throwing exceptions.
+            </para>
+            </remarks>
+            <param name="action">The asynchronous action to invoke after the debounce interval.</param>
+            <param name="cancellationToken">Optional cancellation token to cancel the debounced action.</param>
+            <returns>A task that completes when the action executes or is cancelled/disposed.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when action is null.</exception>
+        </member>
+        <member name="M:MudExtensions.Utilities.DebounceDispatcher.Cancel">
+            <summary>
+            Cancels any pending debounced action.
+            </summary>
+            <remarks>
+            This method is thread-safe and can be called concurrently with <see cref="M:MudExtensions.Utilities.DebounceDispatcher.DebounceAsync(System.Func{System.Threading.Tasks.Task},System.Threading.CancellationToken)"/>.
+            </remarks>
+        </member>
+        <member name="M:MudExtensions.Utilities.DebounceDispatcher.UpdateIntervalAsync(System.Int32)">
+            <summary>
+            Updates the debounce interval asynchronously.
+            </summary>
+            <remarks>
+            <para>
+            This method updates the interval without affecting any currently pending debounced action.
+            The new interval will be used for the next debounce operation.
+            </para>
+            <para>
+            This method is thread-safe and can be called concurrently with <see cref="M:MudExtensions.Utilities.DebounceDispatcher.DebounceAsync(System.Func{System.Threading.Tasks.Task},System.Threading.CancellationToken)"/>.
+            </para>
+            </remarks>
+            <param name="interval">The new debounce interval in milliseconds. Must be non-negative.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when interval is negative.</exception>
+        </member>
+        <member name="M:MudExtensions.Utilities.DebounceDispatcher.UpdateIntervalAsync(System.TimeSpan)">
+            <summary>
+            Updates the debounce interval asynchronously.
+            </summary>
+            <remarks>
+            <para>
+            This method updates the interval without affecting any currently pending debounced action.
+            The new interval will be used for the next debounce operation.
+            </para>
+            <para>
+            This method is thread-safe and can be called concurrently with <see cref="M:MudExtensions.Utilities.DebounceDispatcher.DebounceAsync(System.Func{System.Threading.Tasks.Task},System.Threading.CancellationToken)"/>.
+            </para>
+            </remarks>
+            <param name="interval">The new debounce interval as a <see cref="T:System.TimeSpan"/>. Must be non-negative.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when interval is negative.</exception>
+        </member>
+        <member name="M:MudExtensions.Utilities.DebounceDispatcher.CancelAsync">
+            <summary>
+            Cancels any pending debounced action asynchronously.
+            </summary>
+            <remarks>
+            This method is thread-safe and can be called concurrently with <see cref="M:MudExtensions.Utilities.DebounceDispatcher.DebounceAsync(System.Func{System.Threading.Tasks.Task},System.Threading.CancellationToken)"/>.
+            </remarks>
+        </member>
+        <member name="M:MudExtensions.Utilities.DebounceDispatcher.Dispose">
+            <summary>
+            Releases all resources used by the <see cref="T:MudExtensions.Utilities.DebounceDispatcher"/>.
+            </summary>
+            <remarks>
+            This method cancels any pending debounced action and prevents further use of the dispatcher.
+            Cancellation is performed synchronously as this is a synchronous Dispose method.
+            </remarks>
         </member>
         <member name="T:MudExtensions.Utilities.ExcludeFromSmokeTest">
             <summary>
