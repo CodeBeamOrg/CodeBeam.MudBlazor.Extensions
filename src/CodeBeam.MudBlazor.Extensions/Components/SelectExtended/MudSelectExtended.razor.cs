@@ -1332,5 +1332,47 @@ namespace MudExtensions
             var n = ToStringFunc(input);
             return ToStringFunc(input);
         }
+
+        /// <summary>
+        /// Filters UserAttributes to exclude ARIA attributes so they don't get applied to the hidden input.
+        /// ARIA attributes should only be on the visible MudInputControl, not the hidden MudInputExtended.
+        /// </summary>
+        /// <returns>A dictionary of user attributes with ARIA attributes removed</returns>
+        protected Dictionary<string, object?> GetUserAttributesForHiddenInput()
+        {
+            if (UserAttributes == null || UserAttributes.Count == 0)
+                return [];
+
+            var filtered = new Dictionary<string, object?>(UserAttributes);
+            filtered.Remove("aria-label");
+            filtered.Remove("aria-labelledby");
+            return filtered;
+        }
+
+        /// <summary>
+        /// Extracts ARIA attributes from UserAttributes that should be applied to the visible control.
+        /// These attributes belong on the visible MudInputControl, not the hidden MudInputExtended.
+        /// </summary>
+        /// <returns>A dictionary containing only ARIA attributes</returns>
+        protected Dictionary<string, object?> GetAriaAttributes()
+        {
+            if (UserAttributes == null || UserAttributes.Count == 0)
+                return [];
+
+            var aria = new Dictionary<string, object?>();
+            
+            // Only include aria-* attributes that should be on the visible element
+            var ariaKeys = new[] { "aria-label", "aria-labelledby" };
+            
+            foreach (var key in ariaKeys)
+            {
+                if (UserAttributes.TryGetValue(key, out var value))
+                {
+                    aria[key] = value;
+                }
+            }
+
+            return aria;
+        }
     }
 }
