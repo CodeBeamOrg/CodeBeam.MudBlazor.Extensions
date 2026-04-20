@@ -94,7 +94,17 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public bool DisablePaste { get; set; }
+        public bool DisablePaste { get; set; } = false;
+
+        /// <summary>
+        /// Override to read Value from ParameterState instead of backing field.
+        /// </summary>
+        protected internal new T? ReadValue => base.ReadValue;
+
+        /// <summary>
+        /// Override to write Value to ParameterState instead of backing field.
+        /// </summary>
+        protected internal new string? ReadText => base.ReadText;
 
         /// <summary>
         /// Invokes logic to be executed before input is processed, including raising the BeforeInput event if a

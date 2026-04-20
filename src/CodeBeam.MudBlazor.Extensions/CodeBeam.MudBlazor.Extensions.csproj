@@ -41,7 +41,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MudBlazor" Version="9.0.0" />
+		<PackageReference Include="MudBlazor" Version="9.3.0" />
 	</ItemGroup>
 
 	<Target Name="MinifyMudExtensionsJs" AfterTargets="Build" Condition="'$(CI)' != 'true'&#xD;&#xA; AND '$(TargetFramework)' == 'net10.0'&#xD;&#xA;               AND Exists('TScripts/MudExtensions.js')">
