@@ -5985,8 +5985,13 @@
             </summary>
         </member>
         <member name="P:MudExtensions.MudWatch.Interval">
-            <summary>
+             <summary>
             
+             </summary>
+        </member>
+        <member name="P:MudExtensions.MudWatch.TimeZone">
+            <summary>
+            The timezone of the watch. If null, DateTime.Now will be used.
             </summary>
         </member>
         <member name="P:MudExtensions.MudWatch.Mode">
