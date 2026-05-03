@@ -3,41 +3,50 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudDateTimePicker @bind-Value="_date" Editable="_editable" Label="Date" Clearable="_clearable" AmPm="_amPm"
-            ShowToolbar="_showToolbar" Variant="_variant" Color="_color" DateFormat="@_dateFormat" />
+        <MudDateTimePicker @ref="_picker" @bind-Value="_date" Editable="_editable" Label="Date" Clearable="_clearable"
+            ShowToolbar="_showToolbar" Variant="_variant" Color="_color" DateFormat="@_dateFormat">
+            <PickerActions>
+        <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.ClearAsync())">Clear</MudButton>
+        <MudButton OnClick="@(() => _picker.CloseAsync(false))">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@(() => _picker.CloseAsync())">OK</MudButton>
+    </PickerActions>
+        </MudDateTimePicker>
     </MudItem>
 
     <MudItem xs="12" sm="4">
         <MudStack Spacing="2">
-            <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant" Margin="Margin.Dense">
+            <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant">
                 @foreach (Variant item in Enum.GetValues<Variant>())
                 {
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
             <MudSwitchM3 @bind-Value="_editable" Color="Color.Secondary" Label="Editable" />
-            <MudSwitchM3 @bind-Value="_clearable" Color="Color.Secondary" Label="Clearable" />
             <MudSwitchM3 @bind-Value="_showToolbar" Color="Color.Secondary" Label="Show Toolbar" />
-            <MudSwitchM3 @bind-Value="_amPm" Label="AmPm" Color="Color.Secondary" />
-            <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color" Margin="Margin.Dense">
+            <MudSwitchM3 @bind-Value="_submitOnClose" Color="Color.Secondary" Label="Submit On Close" />
+            <MudSwitchM3 @bind-Value="_isAdornmentEnd" Label="Adornment End" Color="Color.Secondary" />
+            <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color">
                 @foreach (Color item in Enum.GetValues<Color>())
                 {
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudTextField @bind-Value="_dateFormat" Variant="Variant.Outlined" Label="Date Format" Margin="Margin.Dense" />
+            <MudTextField @bind-Value="_dateFormat" Variant="Variant.Outlined" Label="Date Format" />
             <MudButton OnClick="@(() => _date = DateTime.Now)">Set Today</MudButton>
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code {
+    private MudDateTimePicker<DateTime?> _picker = null!;
+
     private DateTime? _date = DateTime.Now;
     private bool _editable = false;
     private bool _showToolbar = true;
+    private bool _submitOnClose = true;
     private Color _color = Color.Primary;
     private string? _dateFormat;
+    private bool _isAdornmentEnd = true;
     private bool _clearable = false;
     private Variant _variant = Variant.Outlined;
-    private bool _amPm = false;
 }

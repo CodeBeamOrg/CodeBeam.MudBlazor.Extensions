@@ -8,9 +8,13 @@ using System.Globalization;
 
 namespace MudExtensions;
 
+/// <summary>
+/// Provides date and time selection in a single component. The date and time can be submitted together or separately. The time selection is done through an interactive clock interface where the user can select hours and minutes by clicking or dragging a pointer.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 {
-    [Inject] private IJSRuntime JsRuntime { get; set; }
+    [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
 
     [DynamicDependency(nameof(OnStickClick))]
     [DynamicDependency(nameof(SelectTimeFromStick))]
@@ -19,7 +23,6 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         _dotNetReferenceLazy = new Lazy<DotNetObjectReference<MudDateTimePicker<T>>>(CreateDotNetObjectReference);
     }
 
-    //private DateTime? _selectedDate;
     private string? _clockElementReferenceId;
     private readonly Lazy<DotNetObjectReference<MudDateTimePicker<T>>> _dotNetReferenceLazy;
 
@@ -39,14 +42,6 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     protected ElementReference ClockElementReference { get; private set; }
     private bool _amPm = false;
-
-    private enum TimeView
-    {
-        Hours,
-        Minutes
-    }
-
-    private TimeView _timeView = TimeView.Hours;
 
     /// <inheritdoc />
     protected override void OnInitialized()
@@ -92,16 +87,33 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     protected PickerMode _mode = PickerMode.Date;
 
+    /// <summary>
+    /// The currently selected value.
+    /// </summary>
+    /// <remarks>
+    /// When this value changes, <see cref="ValueChanged"/> occurs.
+    /// </remarks>
     [Parameter]
     public T? Value
     {
         get => _value;
-        set => SetDateAsync(ToDateTime(value), true);
+        set => SetDateAsync(ToDateTime(value), true).CatchAndLog();
     }
 
+    /// <summary>
+    /// Occurs when <see cref="Value"/> has changed.
+    /// </summary>
     [Parameter]
     public EventCallback<T?> ValueChanged { get; set; }
 
+    /// <summary>
+    /// Shows a 12-hour selection clock.
+    /// </summary>
+    /// <remarks>
+    /// Defaults to <c>false</c>.<br />
+    /// When <c>true</c>, hours 1-12 are displayed with an AM or PM marker.<br />
+    /// When <c>false</c>, hours 0-23 are displayed.<br />
+    /// </remarks>
     [Parameter]
     public bool AmPm
     {
@@ -118,9 +130,22 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         }
     }
 
+    /// <summary>
+    /// The step interval when selecting minutes.
+    /// </summary>
+    /// <remarks>
+    /// Defaults to <c>1</c>. For example: a value of <c>15</c> would allow minutes <c>0</c>, <c>15</c>, 
+    /// <c>30</c>, and <c>45</c> be selected.
+    /// </remarks>
     [Parameter]
     public int MinuteSelectionStep { get; set; } = 1;
 
+    /// <summary>
+    /// Controls which values can be edited.
+    /// </summary>
+    /// <remarks>
+    /// Defaults to <see cref="TimeEditMode.Normal"/>.
+    /// </remarks>
     [Parameter]
     [Category(CategoryTypes.FormComponent.PickerBehavior)]
     public TimeEditMode TimeEditMode { get; set; } = TimeEditMode.Normal;
@@ -138,6 +163,18 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
         return value;
     }
+
+    /// <summary>
+    /// Gets or sets the text displayed for the AM period in a time picker or similar control.
+    /// </summary>
+    [Parameter]
+    public string AmText { get; set; } = "AM";
+
+    /// <summary>
+    /// Gets or sets the text displayed for the post-meridiem (PM) indicator.
+    /// </summary>
+    [Parameter]
+    public string PmText { get; set; } = "PM";
 
     protected override async Task WriteTextAsync(string? text)
     {
@@ -170,9 +207,6 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
             await SetTextAsync(ConvertSet(_value), false);
         }
     }
-
-    private bool IsAm => _timeSet.Hour >= 0 && _timeSet.Hour < 12;
-    private bool IsPm => _timeSet.Hour >= 12 && _timeSet.Hour < 24;
 
     private async Task OnAmClickedAsync()
     {
@@ -316,6 +350,11 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         return b.Build();
     }
 
+    /// <summary>
+    /// Handles the event when a day is clicked in the calendar view. This method updates the working value with the selected date, and if appropriate based on the component's configuration, submits the new value and closes the picker.
+    /// </summary>
+    /// <param name="dateTime">The date that was clicked.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     protected override async Task OnDayClickedAsync(DateTime dateTime)
     {
         await FocusAsync();
@@ -334,6 +373,13 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         }
     }
 
+    /// <summary>
+    /// Submits the current value asynchronously, triggering value change notifications and validation as appropriate.
+    /// </summary>
+    /// <remarks>The method does not perform any action if the control is in a read-only state or if the
+    /// working value is null. Upon successful submission, the method updates the value, invokes change notifications,
+    /// updates the displayed text, and initiates validation.</remarks>
+    /// <returns>A task that represents the asynchronous submit operation.</returns>
     protected override async Task SubmitAsync()
     {
         if (GetReadOnlyState())
@@ -352,6 +398,11 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         FieldChanged(_value);
     }
 
+    /// <summary>
+    /// Clears the selected date and time, resetting the component to its initial state. If <see cref="AutoClose"/> is <c>true</c>, the picker will also close after clearing the value.
+    /// </summary>
+    /// <param name="close">Indicates whether the picker should close after clearing the value.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     public override async Task ClearAsync(bool close = true)
     {
         await SetDateAsync(null, true);
@@ -360,6 +411,10 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
             await CloseAsync(false);
     }
 
+    /// <summary>
+    /// Gets the formatted date string for the title of the picker, based on the current working value, the component's value, or the current local date if neither is set. The date is formatted according to the culture settings and the specified format for the title.
+    /// </summary>
+    /// <returns>The formatted date string for the title of the picker.</returns>
     protected string GetTitleDateString()
     {
         var date = _workingValue
@@ -369,12 +424,28 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         return FormatTitleDate(date);
     }
 
+    /// <summary>
+    /// Calculates the first day of the month for the current calendar context.
+    /// </summary>
+    /// <remarks>The returned date is determined using the culture-specific calendar, which may affect the
+    /// calculation of the month's start depending on the culture in use.</remarks>
+    /// <returns>A <see cref="DateTime"/> representing the first day of the month, based on the current value, highlighted date,
+    /// or the current local date if neither is set.</returns>
     protected override DateTime GetCalendarStartOfMonth()
     {
         var date = ToDateTime(Value) ?? HighlightedDate ?? TimeProvider.GetLocalNow().Date;
         return date.StartOfMonth(GetCulture());
     }
 
+    /// <summary>
+    /// Calculates the calendar year corresponding to the specified date, adjusted according to the current value and
+    /// culture settings.
+    /// </summary>
+    /// <remarks>The result is determined using the calendar of the current culture. If the current value is
+    /// not set, the calculation uses the current local date.</remarks>
+    /// <param name="yearDate">The date for which to determine the calendar year. The calculation is based on the calendar associated with the
+    /// current culture.</param>
+    /// <returns>The calendar year as an integer, adjusted based on the current value and the specified date.</returns>
     protected override int GetCalendarYear(DateTime yearDate)
     {
         var date = ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
@@ -411,6 +482,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     {
         if (!FixYear.HasValue)
         {
+            _mode = PickerMode.Date;
             CurrentView = OpenTo.Year;
             StateHasChanged();
             _scrollToYearAfterRender = true;
@@ -565,15 +637,15 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     private string HourDialClassname =>
     new CssBuilder("mud-time-picker-dial")
         .AddClass("mud-time-picker-hour")
-        .AddClass("mud-time-picker-dial-out", _timeView != TimeView.Hours)
-        .AddClass("mud-time-picker-dial-hidden", _timeView != TimeView.Hours)
+        .AddClass("mud-time-picker-dial-out", CurrentView != OpenTo.Hours)
+        .AddClass("mud-time-picker-dial-hidden", CurrentView != OpenTo.Hours)
         .Build();
 
     private string MinuteDialClassname =>
         new CssBuilder("mud-time-picker-dial")
             .AddClass("mud-time-picker-minute")
-            .AddClass("mud-time-picker-dial-out", _timeView != TimeView.Minutes)
-            .AddClass("mud-time-picker-dial-hidden", _timeView != TimeView.Minutes)
+            .AddClass("mud-time-picker-dial-out", CurrentView != OpenTo.Minutes)
+            .AddClass("mud-time-picker-dial-hidden", CurrentView != OpenTo.Minutes)
             .Build();
 
     private string GetPointerRotation()
@@ -585,12 +657,12 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     {
         double deg = 0;
 
-        if (_timeView == TimeView.Hours)
+        if (CurrentView == OpenTo.Hours)
         {
             deg = _timeSet.Hour * 30 % 360;
         }
 
-        if (_timeView == TimeView.Minutes)
+        if (CurrentView == OpenTo.Minutes)
         {
             deg = _timeSet.Minute * 6 % 360;
         }
@@ -602,12 +674,12 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     {
         var height = 40;
 
-        if (_timeView == TimeView.Minutes)
+        if (CurrentView == OpenTo.Minutes)
         {
             height = 40;
         }
 
-        if (_timeView == TimeView.Hours)
+        if (CurrentView == OpenTo.Hours)
         {
             if (!AmPm && _timeSet.Hour > 0 && _timeSet.Hour < 13)
             {
@@ -624,7 +696,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     private string GetNumberColor(int value)
     {
-        if (_timeView == TimeView.Hours)
+        if (CurrentView == OpenTo.Hours)
         {
             var h = _timeSet.Hour;
 
@@ -642,37 +714,12 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
                 return $"mud-clock-number mud-theme-{Color.ToStringFast(true)}";
             }
         }
-        else if (_timeView == TimeView.Minutes && _timeSet.Minute == value)
+        else if (CurrentView == OpenTo.Minutes && _timeSet.Minute == value)
         {
             return $"mud-clock-number mud-theme-{Color.ToStringFast(true)}";
         }
 
         return "mud-clock-number";
-    }
-
-    private async Task OnHourSelected(int hour)
-    {
-        _timeSet.Hour = hour % 24;
-        SetTimePart(_timeSet.Hour, _timeSet.Minute);
-        _timeView = TimeView.Minutes;
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async Task OnMinuteSelected(int minute)
-    {
-        _timeSet.Minute = minute;
-
-        SetTimePart(_timeSet.Hour, _timeSet.Minute);
-
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private void ToggleMode()
-    {
-        _mode = _mode == PickerMode.Date ? PickerMode.Time : PickerMode.Date;
-
-        if (_mode == PickerMode.Time)
-            SyncTimeFromValue();
     }
 
     private string GetClockPointerColor()
@@ -708,7 +755,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     {
         PointerMoving = pointerMoving;
 
-        if (_timeView == TimeView.Minutes)
+        if (CurrentView == OpenTo.Minutes)
             _timeSet.Minute = RoundToStepInterval(value);
         else
             _timeSet.Hour = value;
@@ -725,15 +772,15 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         PointerMoving = false;
 
         // Clicking a stick will submit the time.
-        if (_timeView == TimeView.Minutes)
+        if (CurrentView == OpenTo.Minutes)
         {
             await SubmitAndCloseAsync();
         }
-        else if (_timeView == TimeView.Hours)
+        else if (CurrentView == OpenTo.Hours)
         {
             if (TimeEditMode == TimeEditMode.Normal)
             {
-                _timeView = TimeView.Minutes;
+                CurrentView = OpenTo.Minutes;
             }
             else if (TimeEditMode == TimeEditMode.OnlyHours)
             {
@@ -789,13 +836,13 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     private async Task OnHourClickAsync()
     {
-        _timeView = TimeView.Hours;
+        CurrentView = OpenTo.Hours;
         await FocusAsync();
     }
 
     private async Task OnMinutesClick()
     {
-        _timeView = TimeView.Minutes;
+        CurrentView = OpenTo.Minutes;
         await FocusAsync();
     }
 
@@ -810,6 +857,18 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
             await OnPmClickedAsync();
         }
         StateHasChanged();
+    }
+
+    private void HandleModeChange(PickerMode mode)
+    {
+        if (mode == PickerMode.Date)
+        {
+            CurrentView = OpenTo.Date;
+        }
+        else if (mode == PickerMode.Time)
+        {
+            CurrentView = OpenTo.Hours;
+        }
     }
 
     protected string GetFormattedYearString()
@@ -844,6 +903,52 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         StateHasChanged();
     }
 
+    protected override async Task OnOpenedAsync()
+    {
+        _mode = PickerMode.Date;
+        CurrentView = OpenTo.Hours;
+        await base.OnOpenedAsync();
+    }
+
+    /// <summary>
+    /// Sets the current view of the picker to the specified value.
+    /// </summary>
+    public void SetView(OpenTo view)
+    {
+        switch (view)
+        {
+            case OpenTo.Date:
+                _mode = PickerMode.Date;
+                CurrentView = OpenTo.Date;
+                break;
+
+            case OpenTo.Month:
+                _mode = PickerMode.Date;
+                CurrentView = OpenTo.Month;
+                break;
+
+            case OpenTo.Year:
+                _mode = PickerMode.Date;
+                CurrentView = OpenTo.Year;
+                break;
+
+            case OpenTo.Hours:
+                _mode = PickerMode.Time;
+                CurrentView = OpenTo.Hours;
+                break;
+
+            case OpenTo.Minutes:
+                _mode = PickerMode.Time;
+                CurrentView = OpenTo.Minutes;
+                break;
+        }
+
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources asynchronously.
+    /// </summary>
     protected override async ValueTask DisposeAsyncCore()
     {
         await base.DisposeAsyncCore();

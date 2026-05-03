@@ -2,10 +2,13 @@
 @namespace MudExtensions.Docs.Pages
 
 <ExamplePage Component="typeof(MudDateTimePicker<>)">
-    <ExampleCard ComponentName="DateTimePicker" ExampleName="DateTimePickerExample1" Title="Usage" Description="MudDateTimePicker automatically converts wheel values to DateTime?.">
+    <ExampleCard ComponentName="DateTimePicker" ExampleName="DateTimePickerExample1" Title="Usage" Description="MudDateTimePicker handles date and time selection itself.">
         <DateTimePickerExample1 />
     </ExampleCard>
-    <ExampleCard ComponentName="DateTimePicker" ExampleName="DateTimePickerExample2" Title="MinDate & MaxDate" Description="You can restrict available date with MinDate and MaxDate parameters.">
+    <ExampleCard ComponentName="DateTimePicker" ExampleName="DateTimePickerExample2" Title="Generic Types" Description="MudDateTimePicker supports DateTime and DateTimeOffset.">
         <DateTimePickerExample2 />
+    </ExampleCard>
+    <ExampleCard ComponentName="DateTimePicker" ExampleName="DateTimePickerExample3" Title="Action Buttons" Description="Submit strategy can be handled via Action Buttons and AutoClose parameter.">
+        <DateTimePickerExample3 />
     </ExampleCard>
 </ExamplePage>

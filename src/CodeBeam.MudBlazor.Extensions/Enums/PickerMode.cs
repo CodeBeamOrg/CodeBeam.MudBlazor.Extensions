@@ -1,8 +1,8 @@
-﻿namespace MudExtensions
+﻿namespace MudExtensions;
+
+#pragma warning disable CS1591
+public enum PickerMode
 {
-    public enum PickerMode
-    {
-        Date,
-        Time
-    }
+    Date,
+    Time
 }

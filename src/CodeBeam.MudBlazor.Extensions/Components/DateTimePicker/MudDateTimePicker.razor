@@ -16,15 +16,18 @@
                 {
                     <MudText>@GetTitleDateString()</MudText>
                 }
-                
-                <MudToggleGroup T="PickerMode" @bind-Value="_mode" Class="mud-date-time-toggle" SelectedClass="mud-date-time-mode-selected" Size="Size.Small">
-                    <MudToggleItem Value="PickerMode.Date" Class="mud-date-time-toggle-item">
-                        <MudIcon Icon="@Icons.Material.Filled.DateRange" Size="Size.Small" />
-                    </MudToggleItem>
-                    <MudToggleItem Value="PickerMode.Time" Class="mud-date-time-toggle-item">
-                        <MudIcon Icon="@Icons.Material.Filled.AccessTime" Size="Size.Small" />
-                    </MudToggleItem>
-                </MudToggleGroup>
+
+                @if (!IsDateOnly)
+                {
+                    <MudToggleGroup T="PickerMode" @bind-Value="_mode" @bind-Value:after="@(() => HandleModeChange(_mode))" Class="mud-date-time-toggle" SelectedClass="mud-date-time-mode-selected" Size="Size.Small">
+                        <MudToggleItem Value="PickerMode.Date" Class="mud-date-time-toggle-item">
+                            <MudIcon Icon="@Icons.Material.Filled.DateRange" Size="Size.Small" />
+                        </MudToggleItem>
+                        <MudToggleItem Value="PickerMode.Time" Class="mud-date-time-toggle-item">
+                            <MudIcon Icon="@Icons.Material.Filled.AccessTime" Size="Size.Small" />
+                        </MudToggleItem>
+                    </MudToggleGroup>
+                }
             </MudStack>
 
             <MudStack Class="mud-width-full" Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
@@ -43,10 +46,8 @@
                     @if (AmPm)
                     {
                         <MudToggleGroup @bind-Value="_timeHourFormat" @bind-Value:after="@(() => HourFormatChanged(_timeHourFormat))" Class="mud-date-time-toggle" SelectedClass="mud-date-time-mode-selected" Size="Size.Small">
-                            <MudToggleItem Value="@("am")" Text="AM" Class="mud-date-time-toggle-item">
-                            </MudToggleItem>
-                            <MudToggleItem Value="@("pm")" Text="PM" Class="mud-date-time-toggle-item">
-                            </MudToggleItem>
+                            <MudToggleItem Value="@("am")" Text="@AmText" Class="mud-date-time-toggle-item" />
+                            <MudToggleItem Value="@("pm")" Text="@PmText" Class="mud-date-time-toggle-item" />
                         </MudToggleGroup>
                     }
                 }
@@ -54,12 +55,9 @@
         </MudPickerToolbar>
 
         <MudPickerContent>
-            @if (_mode == PickerMode.Date)
+            @if (_mode == PickerMode.Date || IsDateOnly)
             {
-                <div id="@_mudPickerCalendarContentElementId"
-                     class="mud-picker-calendar-content @($"mud-picker-calendar-content-{MaxMonthColumns ?? DisplayMonths}")"
-                     @onmousedown:preventDefault="true">
-
+                <div id="@_mudPickerCalendarContentElementId" class="mud-picker-calendar-content @($"mud-picker-calendar-content-{MaxMonthColumns ?? DisplayMonths}")" @onmousedown:preventDefault="true">
                     @{
                         int dayId = 0;
                         var culture = GetCulture();
@@ -240,15 +238,10 @@
                                                 }
                                                 else
                                                 {
-                                                    <button type="button"
-                                                            disabled
-                                                            style="--day-id:1"
-                                                            class="mud-button-root mud-icon-button mud-ripple mud-ripple-icon mud-picker-calendar-day mud-day">
-
+                                                    <button type="button" disabled style="--day-id:1" class="mud-button-root mud-icon-button mud-ripple mud-ripple-icon mud-picker-calendar-day mud-day">
                                                         <p class="mud-typography mud-typography-body2 mud-inherit-text"></p>
                                                     </button>
                                                 }
-
                                                 wasMaxValue = day == calendar.MaxSupportedDateTime;
                                             }
                                         }
@@ -318,11 +311,8 @@
                                         var outer = (_i + 12) % 24;
 
                                         <div class="mud-picker-stick" style="@($"transform: rotateZ({_i * 30}deg);")">
-                                            <div class="mud-picker-stick-inner mud-hour" data-stick-value="@_i">
-                                            </div>
-
-                                            <div class="mud-picker-stick-outer mud-hour" data-stick-value="@outer">
-                                            </div>
+                                            <div class="mud-picker-stick-inner mud-hour" data-stick-value="@_i"></div>
+                                            <div class="mud-picker-stick-outer mud-hour" data-stick-value="@outer"></div>
                                         </div>
                                     }
                                 }
@@ -353,8 +343,6 @@
                     </div>
                 </div>
             }
-
         </MudPickerContent>
-
     </CascadingValue>;
 }

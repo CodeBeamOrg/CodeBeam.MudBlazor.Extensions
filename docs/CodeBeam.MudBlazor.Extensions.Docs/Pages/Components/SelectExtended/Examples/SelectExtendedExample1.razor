@@ -12,8 +12,6 @@
             <MudSelectExtended T="string" Label="Data Based" ItemCollection="_collection" Disabled="_disabled" Modal="@_modal" />
             <MudSelectExtended T="string" Label="Data Based" ItemCollection="_collection" Disabled="_disabled" Modal="@_modal" AddNullItem="true" AddedNullItemText="@_nullItemText" />
         </MudStack>
-
-        <MudDateTimePicker T="DateTimeOffset" @bind-Value="_selectedDate" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -30,6 +28,4 @@
     private bool _modal = true;
     private string[] _collection = new string[] { "Foo", "Bar", "Fizz", "Buzz" };
     private string? _nullItemText = "None";
-
-    private DateTimeOffset _selectedDate = DateTimeOffset.Now;
 }
