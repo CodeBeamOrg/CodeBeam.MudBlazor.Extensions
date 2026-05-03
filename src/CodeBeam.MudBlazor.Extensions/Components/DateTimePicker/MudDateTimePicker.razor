@@ -9,10 +9,48 @@
     protected override RenderFragment PickerContent =>
     @<CascadingValue Value="@this" IsFixed="true">
         <MudPickerToolbar Class="mud-picker-datepicker-toolbar" ShowToolbar="@ShowToolbar" Orientation="@Orientation" PickerVariant="@PickerVariant" Color="@Color" @onmousedown:preventDefault="true">
-            <MudButton Variant="Variant.Text" Color="Color.Inherit" Class="mud-button-year" OnClick="GoToSelectedYear">@GetFormattedYearString()</MudButton>
-            <MudButton Variant="Variant.Text" Color="Color.Inherit" Class="mud-button-date">@GetTitleDateString()</MudButton>
-            <MudToggleIconButton ToggledChanged="@ToggleMode" Icon="@Icons.Material.Filled.AccessTime" ToggledIcon="@Icons.Material.Filled.DateRange" Color="Color.Inherit" />
+            <MudStack Class="mud-width-full" Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                <MudButton Variant="Variant.Text" Color="Color.Inherit" Class="mud-button-year" OnClick="GoToSelectedYear">@GetFormattedYearString()</MudButton>
+                
+                @if (_mode == PickerMode.Time)
+                {
+                    <MudText>@GetTitleDateString()</MudText>
+                }
+                
+                <MudToggleGroup T="PickerMode" @bind-Value="_mode" Class="mud-date-time-toggle" SelectedClass="mud-date-time-mode-selected" Size="Size.Small">
+                    <MudToggleItem Value="PickerMode.Date" Class="mud-date-time-toggle-item">
+                        <MudIcon Icon="@Icons.Material.Filled.DateRange" Size="Size.Small" />
+                    </MudToggleItem>
+                    <MudToggleItem Value="PickerMode.Time" Class="mud-date-time-toggle-item">
+                        <MudIcon Icon="@Icons.Material.Filled.AccessTime" Size="Size.Small" />
+                    </MudToggleItem>
+                </MudToggleGroup>
+            </MudStack>
 
+            <MudStack Class="mud-width-full" Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                @if (_mode == PickerMode.Date)
+                {
+                    <MudButton Variant="Variant.Text" Color="Color.Inherit" Class="mud-button-date">@GetTitleDateString()</MudButton>
+                }
+                else
+                {
+                    <div class="d-flex align-center mud-ltr">
+                        <MudButton Size="Size.Small" Variant="@Variant.Text" Color="@Color.Inherit" Class="mud-button-date" OnClick="@OnHourClickAsync">@GetHourString()</MudButton>
+                        <MudText Typo="@Typo.h2" Class="mud-button-date" Style="font-size: 2.125rem">:</MudText>
+                        <MudButton Size="Size.Small" Variant="@Variant.Text" Color="@Color.Inherit" Class="mud-button-date" OnClick="@OnMinutesClick">@GetMinuteString()</MudButton>
+                    </div>
+                    
+                    @if (AmPm)
+                    {
+                        <MudToggleGroup @bind-Value="_timeHourFormat" @bind-Value:after="@(() => HourFormatChanged(_timeHourFormat))" Class="mud-date-time-toggle" SelectedClass="mud-date-time-mode-selected" Size="Size.Small">
+                            <MudToggleItem Value="@("am")" Text="AM" Class="mud-date-time-toggle-item">
+                            </MudToggleItem>
+                            <MudToggleItem Value="@("pm")" Text="PM" Class="mud-date-time-toggle-item">
+                            </MudToggleItem>
+                        </MudToggleGroup>
+                    }
+                }
+            </MudStack>
         </MudPickerToolbar>
 
         <MudPickerContent>
@@ -203,14 +241,13 @@
                                                 {
                                                     var selectedDay = !firstMonthFirstYear ? day : day.AddDays(-1);
 
-                                                // onpointerover = "@(async () => await HandleMouseoverOnPickerCalendarDayButton(tempId))"
+                                                    // onpointerover = "@(async () => await HandleMouseoverOnPickerCalendarDayButton(tempId))"
                                                     <button @key="@selectedDay"
                                                             type="button"
                                                             style="--day-id:@tempId"
                                                             class="mud-button-root mud-icon-button mud-ripple mud-ripple-icon mud-picker-calendar-day @GetDayClasses(tempMonth, selectedDay)"
                                                             @onclick="@(async () => await OnDayClickedAsync(selectedDay))"
                                                             @onclick:stopPropagation="true"
-                                                            
                                                             disabled="@IsDayDisabled(selectedDay)">
 
                                                         <p class="mud-typography mud-typography-body2 mud-inherit-text">
@@ -257,17 +294,14 @@
                                     @for (int i = 1; i <= 12; i++)
                                     {
                                         var _i = i;
-                                        var angle = (6 - i) * 30;
-                                        <MudText Class="@GetNumberColor(i)" Style="@GetTransform(angle, 109, 0, 5)">
-                                            @_i
-                                        </MudText>
+                                        var angle = (6 - _i) * 30;
+                                        <MudText Class="@GetNumberColor(_i)" Style="@GetTransform(angle, 109, 0, 5)">@_i</MudText>
                                     }
 
                                     @for (int i = 1; i <= 12; i++)
                                     {
                                         var _i = i;
-                                        <div class="mud-picker-stick mud-hour" style="@($"transform: rotateZ({_i * 30}deg);")" data-stick-value="@_i">
-                                        </div>
+                                        <div class="mud-picker-stick mud-hour" style="@($"transform: rotateZ({_i * 30}deg);")" data-stick-value="@_i"></div>
                                     }
                                 }
                                 else

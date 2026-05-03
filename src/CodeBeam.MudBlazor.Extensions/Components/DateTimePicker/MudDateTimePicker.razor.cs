@@ -27,8 +27,8 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     private DotNetObjectReference<MudDateTimePicker<T>> CreateDotNetObjectReference() => DotNetObjectReference.Create(this);
 
     private DateTime? _workingValue;
-
     private readonly SetTime _timeSet = new();
+    private string _timeHourFormat;
 
     private record SetTime
     {
@@ -176,16 +176,19 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     {
         _timeSet.Hour %= 12;
         await UpdateTimeAsync();
+        await FocusAsync();
     }
 
     private async Task OnPmClickedAsync()
     {
-        if (_timeSet.Hour < 12)
+        if (_timeSet.Hour <= 12)
+        {
             _timeSet.Hour += 12;
+        }
 
         _timeSet.Hour %= 24;
-
         await UpdateTimeAsync();
+        await FocusAsync();
     }
 
     private DateTimeOffset _lastSetTime = DateTimeOffset.MinValue;
@@ -265,8 +268,8 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         //}
 
         _value = FromDateTime(_workingValue);
-
         await SetTextAsync(ConvertSet(_value), false);
+        await ValueChanged.InvokeAsync(_value);
     }
 
     private void SetDatePart(DateTime date)
@@ -564,6 +567,16 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
             .AddClass("mud-time-picker-dial-hidden", _timeView != TimeView.Minutes)
             .Build();
 
+    protected string HoursButtonClassname =>
+            new CssBuilder("mud-timepicker-button")
+                .AddClass("mud-timepicker-toolbar-text", _timeView == TimeView.Minutes)
+                .Build();
+
+    protected string MinuteButtonClassname =>
+        new CssBuilder("mud-timepicker-button")
+            .AddClass("mud-timepicker-toolbar-text", _timeView == TimeView.Hours)
+            .Build();
+
     private string GetPointerRotation()
     {
         return $"rotateZ({GetDeg()}deg);";
@@ -745,6 +758,65 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
                 await CloseAsync(false);
             }
         }
+    }
+
+    /// <summary>
+    /// Gets the hour portion of the selected time.
+    /// </summary>
+    /// <returns>A two-character string depending on whether <see cref="AmPm"/> is set, or <c>--</c> if no value is set.</returns>
+    private string GetHourString()
+    {
+        if (_workingValue?.Hour == null)
+        {
+            return "--";
+        }
+
+        return _workingValue.Value.Hour.ToString("D2");
+    }
+
+    /// <summary>
+    /// Gets the minute portion of the selected time.
+    /// </summary>
+    /// <returns>A two-digit string for minutes, or <c>--</c> if no value is set.</returns>
+    private string GetMinuteString()
+    {
+        if (_workingValue?.Minute == null)
+        {
+            return "--";
+        }
+
+        return _workingValue.Value.Minute.ToString("D2");
+    }
+
+    private async Task OnHourClickAsync()
+    {
+        _timeView = TimeView.Hours;
+        await FocusAsync();
+    }
+
+    private async Task OnMinutesClick()
+    {
+        _timeView = TimeView.Minutes;
+        await FocusAsync();
+    }
+
+    private async Task HourFormatChanged(string value)
+    {
+        if (value == "am")
+        {
+            AmPm = true;
+            await OnAmClickedAsync();
+        }
+        else if (value == "pm")
+        {
+            AmPm = true;
+            await OnPmClickedAsync();
+        }
+        else if(value == "24")
+        {
+            AmPm = false;
+        }
+        StateHasChanged();
     }
 
     protected override async ValueTask DisposeAsyncCore()

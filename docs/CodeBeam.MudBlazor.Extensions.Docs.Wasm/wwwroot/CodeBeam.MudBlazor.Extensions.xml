@@ -1289,6 +1289,18 @@
             
             </summary>
         </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.GetHourString">
+            <summary>
+            Gets the hour portion of the selected time.
+            </summary>
+            <returns>A two-character string depending on whether <see cref="P:MudExtensions.MudDateTimePicker`1.AmPm"/> is set, or <c>--</c> if no value is set.</returns>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.GetMinuteString">
+            <summary>
+            Gets the minute portion of the selected time.
+            </summary>
+            <returns>A two-digit string for minutes, or <c>--</c> if no value is set.</returns>
+        </member>
         <member name="T:MudExtensions.MudDateWheelPicker">
             <summary>
             
