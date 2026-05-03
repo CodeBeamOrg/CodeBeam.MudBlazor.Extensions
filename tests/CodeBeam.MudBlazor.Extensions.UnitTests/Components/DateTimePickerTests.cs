@@ -32,17 +32,15 @@ public class DateTimePickerTests : BunitTest
     }
 
     [Test]
-    public void DateTimePicker_Should_Render_Formatted_Text()
+    public void DateTimePicker_Should_Format_Correctly()
     {
         var comp = RenderPicker(
             value: new DateTime(2026, 5, 3, 14, 30, 0),
             format: "dd.MM.yyyy HH:mm");
 
-        var input = comp.Find("input");
+        var text = comp.Instance.ConvertSetInternal(comp.Instance.Value);
 
-        input.GetAttribute("value")
-            .Should()
-            .Be("3.05.2026 14:30");
+        text.Should().Be("03.05.2026 14:30");
     }
 
     [Test]

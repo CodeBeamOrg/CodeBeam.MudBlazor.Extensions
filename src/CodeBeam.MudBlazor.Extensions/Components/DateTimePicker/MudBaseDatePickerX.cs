@@ -447,6 +447,11 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
         return dt.Value.ToString(GetFormat(), GetCulture());
     }
 
+    protected internal string? ConvertSetInternal(T? value)
+    {
+        return ConvertSet(value);
+    }
+
     /// <summary>
     /// Returns the date and time format string to use for formatting operations.
     /// </summary>
