@@ -1304,6 +1304,408 @@
             
             </summary>
         </member>
+        <member name="T:MudExtensions.MudBaseDatePickerX`1">
+            <summary>
+            Represents a base class for designing date picker components.
+            </summary>
+        </member>
+        <member name="F:MudExtensions.MudBaseDatePickerX`1._scrollToYearAfterRender">
+            <summary>
+            Is set to true to scroll to the actual year after the next render
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.HighlightedDate">
+            <summary>
+            Represents the currently selected date
+            </summary>
+            <remarks>
+            This date is highlighted in the UI
+            </remarks>
+        </member>
+        <member name="F:MudExtensions.MudBaseDatePickerX`1.CurrentView">
+            <summary>
+            Represents the current view state of the object.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudBaseDatePickerX`1.#ctor">
+            <summary>
+            Initializes a new instance of the MudBaseDatePickerX class.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.ScrollManager">
+            <summary>
+            Gets or sets the scroll manager used to control scrolling behavior within the component.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.JsApiService">
+            <summary>
+            Gets or sets the JavaScript interop service used to invoke JavaScript APIs from .NET code.
+            </summary>
+            <remarks>This property is typically provided by dependency injection in Blazor applications to enable
+            communication between .NET and JavaScript. It should be set by the framework and not manually assigned in most
+            scenarios.</remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.TimeProvider">
+            <summary>
+            Gets or sets the time provider used to obtain the current time within the component.
+            </summary>
+            <remarks>This property allows for abstraction of time-related operations, enabling easier testing and
+            customization of time sources. When overriding the default time behavior, provide a suitable implementation of
+            the TimeProvider.</remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.TimeZone">
+            <summary>
+            Time zone information used to convert the selected date and time to a specific time zone. If not set, the component will use the local time zone of the user's device. This property is particularly useful when you want to display or store the selected date and time in a different time zone than the user's local time zone.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.MaxDate">
+            <summary>
+            The maximum selectable date.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.MinDate">
+            <summary>
+            The minimum selectable date.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.OpenTo">
+            <summary>
+            The initial view to display.
+            </summary>
+            <remarks>
+            Defaults to <see cref="F:MudBlazor.OpenTo.Date"/>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.DateFormat">
+            <summary>
+            The format for selected dates.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.PickerMonth">
+            <summary>
+            The current month shown in the date picker.
+            </summary>
+            <remarks>
+            Defaults to the current month.<br />
+            When bound via <c>@bind-PickerMonth</c>, controls the initial month displayed.  This value is always the first day of a month.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.PickerMonthChanged">
+            <summary>
+            Occurs when <see cref="P:MudExtensions.MudBaseDatePickerX`1.PickerMonth"/> has changed.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.ClosingDelay">
+            <summary>
+            The delay, in milliseconds, before closing the picker after a value is selected.
+            </summary>
+            <remarks>
+            Defaults to <c>100</c>.<br />
+            This delay helps the user see that a date has been selected before the popover disappears.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.DisplayMonths">
+            <summary>
+            The number of months to display in the calendar.
+            </summary>
+            <remarks>
+            Defaults to <c>1</c>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.MaxMonthColumns">
+            <summary>
+            The maximum number of months allowed in one row.
+            </summary>
+            <remarks>
+            Defaults to <c>null</c>.<br />
+            When <c>null</c>, the <see cref="P:MudExtensions.MudBaseDatePickerX`1.DisplayMonths"/> is used.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.StartMonth">
+            <summary>
+            The start month when opening the picker.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.ShowWeekNumbers">
+            <summary>
+            Shows week numbers at the start of each week.
+            </summary>
+            <remarks>
+            Defaults to <c>false</c>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.TitleDateFormat">
+            <summary>
+            The format of the selected date in the title.
+            </summary>
+            <remarks>
+            Defaults to <c>ddd, dd MMM</c>.<br />
+            Supported date formats can be found here: <see href="https://learn.microsoft.com/dotnet/standard/base-types/standard-date-and-time-format-strings"/>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.AutoClose">
+            <summary>
+            Closes this picker when a value is selected.
+            </summary>
+            <remarks>
+            Defaults to <c>false</c>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.IsDateDisabledFunc">
+            <summary>
+            The function used to disable one or more dates.
+            </summary>
+            <remarks>
+            Defaults to <c>null</c>.<br />
+            When set, a date will be disabled if the function returns <c>true</c>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.AdditionalDateClassesFunc">
+            <summary>
+            The function which returns CSS classes for a date.
+            </summary>
+            <remarks>
+            Multiple classes must be separated by spaces.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.PreviousIcon">
+            <summary>
+            The icon for the button that navigates to the previous month or year.
+            </summary>
+            <remarks>
+            Defaults to <see cref="F:MudBlazor.Icons.Material.Filled.ChevronLeft"/>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.NextIcon">
+            <summary>
+            The icon for the button which navigates to the next month or year.
+            </summary>
+            <remarks>
+            Defaults to <see cref="F:MudBlazor.Icons.Material.Filled.ChevronRight"/>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.FixYear">
+            <summary>
+            The year to use, which cannot be changed.
+            </summary>
+            <remarks>
+            Defaults to <c>null</c>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.FixMonth">
+            <summary>
+            The month to use, which cannot be changed.
+            </summary>
+            <remarks>
+            Defaults to <c>null</c>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.FixDay">
+            <summary>
+            The day to use, which cannot be changed.
+            </summary>
+            <remarks>
+            Defaults to <c>null</c>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.IsDateOnly">
+            <summary>
+            True if the generic type T is DateOnly or nullable, false otherwise.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudBaseDatePickerX`1.ToDateTime(`0)">
+            <summary>
+            Generic conversion method to convert the generic type T to DateTime. Supports DateTime and DateTimeOffset.
+            </summary>
+            <param name="value">The value to convert.</param>
+            <returns>The converted DateTime value.</returns>
+            <exception cref="T:System.NotSupportedException">Thrown when the type T is not supported.</exception>
+        </member>
+        <member name="M:MudExtensions.MudBaseDatePickerX`1.FromDateTime(System.Nullable{System.DateTime})">
+            <summary>
+            Converts a nullable <see cref="T:System.DateTime"/> value to an instance of type <typeparamref name="T"/>, if supported.
+            </summary>
+            <remarks>If <typeparamref name="T"/> is <see cref="T:System.DateTimeOffset"/>, the local time zone offset is
+            applied to the converted value.</remarks>
+            <param name="date">The nullable <see cref="T:System.DateTime"/> value to convert. If <see langword="null"/>, the method returns the default
+            value for <typeparamref name="T"/>.</param>
+            <returns>An instance of type <typeparamref name="T"/> representing the specified date, or the default value for
+            <typeparamref name="T"/> if <paramref name="date"/> is <see langword="null"/>.</returns>
+            <exception cref="T:System.NotSupportedException">Thrown if <typeparamref name="T"/> is not <see cref="T:System.DateTime"/> or <see cref="T:System.DateTimeOffset"/>.</exception>
+        </member>
+        <member name="M:MudExtensions.MudBaseDatePickerX`1.OnInitialized">
+            <inheritdoc />
+        </member>
+        <member name="M:MudExtensions.MudBaseDatePickerX`1.OnAfterRenderAsync(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.IsTimeView">
+            <summary>
+            True if the current view is either hours or minutes, false otherwise.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudBaseDatePickerX`1.IsDateView">
+            <summary>
+            True if the current view is either date, month or year, false otherwise.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudBaseDatePickerX`1.GetFormat">
+            <summary>
+            Returns the date and time format string to use for formatting operations.
+            </summary>
+            <remarks>The returned format string is suitable for use with date and time formatting methods. If no
+            custom format is specified, the method combines the current culture's short date pattern with a 24-hour time
+            component.</remarks>
+            <returns>A format string representing the date and time pattern. If a custom format is set, that value is returned;
+            otherwise, a default pattern based on the current culture's short date pattern and a 24-hour time format is
+            used.</returns>
+        </member>
+        <member name="M:MudExtensions.MudBaseDatePickerX`1.ScrollToYearAsync(System.Nullable{System.DateTime})">
+            <summary>
+            Scrolls to the current year.
+            </summary>
+        </member>
+        <member name="T:MudExtensions.MudDateTimePicker`1">
+            <summary>
+            Provides date and time selection in a single component. The date and time can be submitted together or separately. The time selection is done through an interactive clock interface where the user can select hours and minutes by clicking or dragging a pointer.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.OnInitialized">
+            <inheritdoc />
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.OnParametersSet">
+            <inheritdoc />
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.OnAfterRenderAsync(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="P:MudExtensions.MudDateTimePicker`1.Value">
+            <summary>
+            The currently selected value.
+            </summary>
+            <remarks>
+            When this value changes, <see cref="P:MudExtensions.MudDateTimePicker`1.ValueChanged"/> occurs.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudDateTimePicker`1.ValueChanged">
+            <summary>
+            Occurs when <see cref="P:MudExtensions.MudDateTimePicker`1.Value"/> has changed.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudDateTimePicker`1.AmPm">
+            <summary>
+            Shows a 12-hour selection clock.
+            </summary>
+            <remarks>
+            Defaults to <c>false</c>.<br />
+            When <c>true</c>, hours 1-12 are displayed with an AM or PM marker.<br />
+            When <c>false</c>, hours 0-23 are displayed.<br />
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudDateTimePicker`1.MinuteSelectionStep">
+            <summary>
+            The step interval when selecting minutes.
+            </summary>
+            <remarks>
+            Defaults to <c>1</c>. For example: a value of <c>15</c> would allow minutes <c>0</c>, <c>15</c>, 
+            <c>30</c>, and <c>45</c> be selected.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudDateTimePicker`1.TimeEditMode">
+            <summary>
+            Controls which values can be edited.
+            </summary>
+            <remarks>
+            Defaults to <see cref="F:MudBlazor.TimeEditMode.Normal"/>.
+            </remarks>
+        </member>
+        <member name="P:MudExtensions.MudDateTimePicker`1.AmText">
+            <summary>
+            Gets or sets the text displayed for the AM period in a time picker or similar control.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudDateTimePicker`1.PmText">
+            <summary>
+            Gets or sets the text displayed for the post-meridiem (PM) indicator.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.OnDayClickedAsync(System.DateTime)">
+            <summary>
+            Handles the event when a day is clicked in the calendar view. This method updates the working value with the selected date, and if appropriate based on the component's configuration, submits the new value and closes the picker.
+            </summary>
+            <param name="dateTime">The date that was clicked.</param>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.SubmitAsync">
+            <summary>
+            Submits the current value asynchronously, triggering value change notifications and validation as appropriate.
+            </summary>
+            <remarks>The method does not perform any action if the control is in a read-only state or if the
+            working value is null. Upon successful submission, the method updates the value, invokes change notifications,
+            updates the displayed text, and initiates validation.</remarks>
+            <returns>A task that represents the asynchronous submit operation.</returns>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.ClearAsync(System.Boolean)">
+            <summary>
+            Clears the selected date and time, resetting the component to its initial state. If <see cref="!:AutoClose"/> is <c>true</c>, the picker will also close after clearing the value.
+            </summary>
+            <param name="close">Indicates whether the picker should close after clearing the value.</param>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.GetTitleDateString">
+            <summary>
+            Gets the formatted date string for the title of the picker, based on the current working value, the component's value, or the current local date if neither is set. The date is formatted according to the culture settings and the specified format for the title.
+            </summary>
+            <returns>The formatted date string for the title of the picker.</returns>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.GetCalendarStartOfMonth">
+            <summary>
+            Calculates the first day of the month for the current calendar context.
+            </summary>
+            <remarks>The returned date is determined using the culture-specific calendar, which may affect the
+            calculation of the month's start depending on the culture in use.</remarks>
+            <returns>A <see cref="T:System.DateTime"/> representing the first day of the month, based on the current value, highlighted date,
+            or the current local date if neither is set.</returns>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.GetCalendarYear(System.DateTime)">
+            <summary>
+            Calculates the calendar year corresponding to the specified date, adjusted according to the current value and
+            culture settings.
+            </summary>
+            <remarks>The result is determined using the calendar of the current culture. If the current value is
+            not set, the calculation uses the current local date.</remarks>
+            <param name="yearDate">The date for which to determine the calendar year. The calculation is based on the calendar associated with the
+            current culture.</param>
+            <returns>The calendar year as an integer, adjusted based on the current value and the specified date.</returns>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.GetHourString">
+            <summary>
+            Gets the hour portion of the selected time.
+            </summary>
+            <returns>A two-character string depending on whether <see cref="P:MudExtensions.MudDateTimePicker`1.AmPm"/> is set, or <c>--</c> if no value is set.</returns>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.GetMinuteString">
+            <summary>
+            Gets the minute portion of the selected time.
+            </summary>
+            <returns>A two-digit string for minutes, or <c>--</c> if no value is set.</returns>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.ScrollToYearAsync(System.Nullable{System.DateTime})">
+            <summary>
+            Scrolls to the current year.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.SetView(MudBlazor.OpenTo)">
+            <summary>
+            Sets the current view of the picker to the specified value.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.DisposeAsyncCore">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources asynchronously.
+            </summary>
+        </member>
         <member name="T:MudExtensions.MudDateWheelPicker">
             <summary>
             

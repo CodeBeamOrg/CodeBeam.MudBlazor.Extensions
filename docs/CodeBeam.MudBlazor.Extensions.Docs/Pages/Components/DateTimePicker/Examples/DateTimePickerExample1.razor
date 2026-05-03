@@ -1,0 +1,43 @@
+﻿@namespace MudExtensions.Docs.Examples
+@using MudBlazor.Extensions
+
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <MudDateTimePicker @bind-Value="_date" Editable="_editable" Label="Date" Clearable="_clearable" AmPm="_amPm"
+            ShowToolbar="_showToolbar" Variant="_variant" Color="_color" DateFormat="@_dateFormat" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="2">
+            <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant" Margin="Margin.Dense">
+                @foreach (Variant item in Enum.GetValues<Variant>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSwitchM3 @bind-Value="_editable" Color="Color.Secondary" Label="Editable" />
+            <MudSwitchM3 @bind-Value="_clearable" Color="Color.Secondary" Label="Clearable" />
+            <MudSwitchM3 @bind-Value="_showToolbar" Color="Color.Secondary" Label="Show Toolbar" />
+            <MudSwitchM3 @bind-Value="_amPm" Label="AmPm" Color="Color.Secondary" />
+            <MudSelect @bind-Value="_color" Variant="Variant.Outlined" Label="Color" Margin="Margin.Dense">
+                @foreach (Color item in Enum.GetValues<Color>())
+                {
+                    <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
+                }
+            </MudSelect>
+            <MudTextField @bind-Value="_dateFormat" Variant="Variant.Outlined" Label="Date Format" Margin="Margin.Dense" />
+            <MudButton OnClick="@(() => _date = DateTime.Now)">Set Today</MudButton>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private DateTime? _date = DateTime.Now;
+    private bool _editable = false;
+    private bool _showToolbar = true;
+    private Color _color = Color.Primary;
+    private string? _dateFormat;
+    private bool _clearable = false;
+    private Variant _variant = Variant.Outlined;
+    private bool _amPm = false;
+}

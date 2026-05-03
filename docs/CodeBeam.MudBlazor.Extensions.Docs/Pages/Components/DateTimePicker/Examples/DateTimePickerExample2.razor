@@ -1,0 +1,27 @@
+﻿@namespace MudExtensions.Docs.Examples
+@using MudBlazor.Extensions
+
+<MudGrid>
+    <MudItem xs="12" sm="8">
+        <MudDateTimePicker @bind-Value="_date" Editable="_editable" Label="DateTime" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
+        <MudDateTimePicker @bind-Value="_date2" Editable="_editable" Label="DateTimeOffset" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
+        <MudDateTimePicker @bind-Value="_date2" Editable="_editable" Label="TimeZone Istanbul" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary"
+                           TimeZone="@TimeZoneInfo.FindSystemTimeZoneById("Europe/Istanbul")" />
+        <MudDateTimePicker @bind-Value="_date3" Editable="_editable" Label="DateOnly" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudStack Spacing="2">
+            <MudSwitchM3 @bind-Value="_editable" Color="Color.Secondary" Label="Editable" />
+            <MudSwitchM3 @bind-Value="_clearable" Color="Color.Secondary" Label="Clearable" />
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private DateTime? _date = DateTime.Now;
+    private DateTimeOffset _date2 = DateTimeOffset.UtcNow;
+    private DateOnly _date3 = DateOnly.FromDateTime(DateTime.Now);
+    private bool _clearable = false;
+    private bool _editable = false;
+}
