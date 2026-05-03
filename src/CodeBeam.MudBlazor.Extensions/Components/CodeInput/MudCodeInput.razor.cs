@@ -31,9 +31,20 @@ namespace MudExtensions
         private readonly ParameterState<T?> _theValue;
         private readonly ParameterState<int> _count;
 
+        private bool _pendingSetValue;
+        private T? _pendingValue;
         private async Task OnValueChanged()
         {
-            await SetValueFromOutside(_theValue.Value);
+            _pendingValue = _theValue.Value;
+
+            if (_rendered)
+            {
+                await SetValueFromOutside(_pendingValue);
+            }
+            else
+            {
+                _pendingSetValue = true;
+            }
         }
 
         private async Task OnCountChanged()
@@ -270,13 +281,29 @@ namespace MudExtensions
             await _elementReferences[_lastFocusedIndex - 1].FocusAsync();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <inheritdoc />
         protected override void OnInitialized()
         {
             base.OnInitialized();
             SyncReferences();
+        }
+
+        private bool _rendered = false;
+        /// <inheritdoc />
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (firstRender)
+            {
+                _rendered = true;
+            }
+
+            if (_pendingSetValue)
+            {
+                _pendingSetValue = false;
+                await SetValueFromOutside(_pendingValue);
+            }
         }
 
         private void SyncReferences()
@@ -316,6 +343,9 @@ namespace MudExtensions
         /// <returns></returns>
         public async Task SetValueFromOutside(T? value)
         {
+            if (!_rendered)
+                return;
+
             string? val = ConvertSet(value);
             if (_count.Value < val?.Length)
             {
@@ -324,6 +354,9 @@ namespace MudExtensions
             await _theValue.SetValueAsync(base.ConvertGet(val));
             for (int i = 0; i < _count.Value; i++)
             {
+                if (_elementReferences[i] == null)
+                    continue;
+
                 if (i < val?.Length)
                 {
                     await _elementReferences[i].SetText(val[i].ToString());

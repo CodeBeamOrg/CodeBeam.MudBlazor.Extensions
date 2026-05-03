@@ -339,12 +339,12 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
         if (current?.Date == day.Date)
             return b.AddClass("mud-selected")
-                .AddClass($"mud-theme-{Color.ToStringFast(true)}")
+                .AddClass($"mud-theme-{Color.ToString().ToLowerInvariant()}")
                 .Build();
 
         if (day.Date == TimeProvider.GetLocalNow().Date)
             return b.AddClass("mud-current mud-button-outlined")
-                .AddClass($"mud-button-outlined-{Color.ToStringFast(true)} mud-{Color.ToStringFast(true)}-text")
+                .AddClass($"mud-button-outlined-{Color.ToString().ToLowerInvariant()} mud-{Color.ToString().ToLowerInvariant()}-text")
                 .Build();
 
         return b.Build();
@@ -711,12 +711,12 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
             if (h == value)
             {
-                return $"mud-clock-number mud-theme-{Color.ToStringFast(true)}";
+                return $"mud-clock-number mud-theme-{Color.ToString().ToLowerInvariant()}";
             }
         }
         else if (CurrentView == OpenTo.Minutes && _timeSet.Minute == value)
         {
-            return $"mud-clock-number mud-theme-{Color.ToStringFast(true)}";
+            return $"mud-clock-number mud-theme-{Color.ToString().ToLowerInvariant()}";
         }
 
         return "mud-clock-number";
@@ -725,21 +725,21 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     private string GetClockPointerColor()
     {
         return PointerMoving
-            ? $"mud-picker-time-clock-pointer mud-{Color.ToStringFast(true)}"
-            : $"mud-picker-time-clock-pointer mud-picker-time-clock-pointer-animation mud-{Color.ToStringFast(true)}";
+            ? $"mud-picker-time-clock-pointer mud-{Color.ToString().ToLowerInvariant()}"
+            : $"mud-picker-time-clock-pointer mud-picker-time-clock-pointer-animation mud-{Color.ToString().ToLowerInvariant()}";
     }
 
     private string GetClockPinColor()
     {
-        return $"mud-picker-time-clock-pin mud-{Color.ToStringFast(true)}";
+        return $"mud-picker-time-clock-pin mud-{Color.ToString().ToLowerInvariant()}";
     }
 
     private string GetClockPointerThumbColor()
     {
         var deg = GetDeg();
         return deg % 30 == 0
-            ? $"mud-picker-time-clock-pointer-thumb mud-onclock-text mud-onclock-primary mud-{Color.ToStringFast(true)}"
-            : $"mud-picker-time-clock-pointer-thumb mud-onclock-minute mud-{Color.ToStringFast(true)}-text";
+            ? $"mud-picker-time-clock-pointer-thumb mud-onclock-text mud-onclock-primary mud-{Color.ToString().ToLowerInvariant()}"
+            : $"mud-picker-time-clock-pointer-thumb mud-onclock-minute mud-{Color.ToString().ToLowerInvariant()}-text";
     }
 
     private static string GetTransform(double angle, double radius, double offsetX, double offsetY)
