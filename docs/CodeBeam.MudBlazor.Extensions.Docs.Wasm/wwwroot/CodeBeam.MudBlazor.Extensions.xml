@@ -354,9 +354,10 @@
             <returns></returns>
         </member>
         <member name="M:MudExtensions.MudCodeInput`1.OnInitialized">
-            <summary>
-            
-            </summary>
+            <inheritdoc />
+        </member>
+        <member name="M:MudExtensions.MudCodeInput`1.OnAfterRenderAsync(System.Boolean)">
+            <inheritdoc />
         </member>
         <member name="M:MudExtensions.MudCodeInput`1.SetValue">
             <summary>

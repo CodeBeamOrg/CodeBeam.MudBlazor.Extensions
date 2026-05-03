@@ -26,6 +26,7 @@
 - MudColorProvider
 - MudComboBox
 - MudCsvMapper
+- MudDateTimePicker
 - MudDateWheelPicker
 - MudFontPicker
 - MudGallery
