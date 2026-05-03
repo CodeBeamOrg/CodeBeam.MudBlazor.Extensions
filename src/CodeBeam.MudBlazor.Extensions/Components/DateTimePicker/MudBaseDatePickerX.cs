@@ -4,7 +4,7 @@ using MudBlazor.Extensions;
 using MudBlazor.State;
 using MudBlazor.Utilities;
 using System.Globalization;
-using System.Runtime.Serialization;
+using static MudBlazor.Colors;
 
 namespace MudExtensions
 {
@@ -12,6 +12,7 @@ namespace MudExtensions
     {
         internal readonly string _mudPickerCalendarContentElementId;
         private readonly ParameterState<string?> _formatState;
+        protected readonly string _componentId = Identifier.Create();
 
         protected MudBaseDatePickerX()
         {
@@ -72,6 +73,25 @@ namespace MudExtensions
             base.OnInitialized();
         }
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (firstRender)
+            {
+                _picker_month ??= GetCalendarStartOfMonth();
+            }
+
+            if (firstRender && CurrentView == OpenTo.Year)
+            {
+                ScrollToYearAsync().CatchAndLog();
+                return;
+            }
+
+            if (_scrollToYearAfterRender)
+                ScrollToYearAsync().CatchAndLog();
+        }
+
         [Inject] protected IScrollManager ScrollManager { get; set; } = null!;
         [Inject] private IJsApiService JsApiService { get; set; } = null!;
         [Inject] protected TimeProvider TimeProvider { get; set; } = null!;
@@ -91,6 +111,11 @@ namespace MudExtensions
         [Parameter] public DayOfWeek? FirstDayOfWeek { get; set; }
 
         internal DateTime? _picker_month;
+
+        /// <summary>
+        /// Is set to true to scroll to the actual year after the next render
+        /// </summary>
+        protected bool _scrollToYearAfterRender = false;
 
         [Parameter]
         public DateTime? PickerMonth
@@ -191,12 +216,6 @@ namespace MudExtensions
             return date?.ToString(TitleDateFormat, GetCulture()) ?? "";
         }
 
-        protected string GetFormattedYearString()
-        {
-            var selectedYear = HighlightedDate ?? GetMonthStart(0);
-            return selectedYear.Year.ToString();
-        }
-
         protected IEnumerable<string> GetAbbreviatedDayNames()
         {
             var culture = GetCulture();
@@ -251,6 +270,14 @@ namespace MudExtensions
             return calendar
                 .AddMonths(monthStartDate, month)
                 .EndOfMonth(culture);
+        }
+
+        /// <summary>
+        /// Scrolls to the current year.
+        /// </summary>
+        public virtual async Task ScrollToYearAsync(DateTime? date = null)
+        {
+            
         }
 
         //private ValueTask HandleMouseoverOnPickerCalendarDayButton(int tempId)

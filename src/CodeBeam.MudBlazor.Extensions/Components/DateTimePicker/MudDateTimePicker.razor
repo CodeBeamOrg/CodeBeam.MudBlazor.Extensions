@@ -85,11 +85,7 @@
                                     {
                                         var year = i;
 
-                                        <div class="mud-picker-year"
-                                             id="@(_componentId + year)"
-                                             @onclick="@(async () => await OnYearClickedAsync(year))"
-                                             @onclick:stopPropagation="true">
-
+                                        <div class="mud-picker-year" id="@(_componentId + year)" @onclick="@(async () => await OnYearClickedAsync(year))" @onclick:stopPropagation="true">
                                             <MudText Typo="@GetYearTypo(year)" Class="@GetYearClasses(year)">@year</MudText>
                                         </div>
                                     }
@@ -106,9 +102,7 @@
 
                                         @if (!FixYear.HasValue)
                                         {
-                                            <MudIconButton Icon="@PreviousIcon"
-                                                           OnClick="OnPreviousYearClick"
-                                                           Class="mud-flip-x-rtl" />
+                                            <MudIconButton Icon="@PreviousIcon" OnClick="OnPreviousYearClick" Class="mud-flip-x-rtl" />
 
                                             <button type="button"
                                                     class="mud-picker-slide-transition mud-picker-calendar-header-transition"
@@ -120,9 +114,7 @@
                                                 </MudText>
                                             </button>
 
-                                            <MudIconButton Icon="@NextIcon"
-                                                           OnClick="OnNextYearClick"
-                                                           Class="mud-flip-x-rtl" />
+                                            <MudIconButton Icon="@NextIcon" OnClick="OnNextYearClick" Class="mud-flip-x-rtl" />
                                         }
                                         else
                                         {
@@ -161,9 +153,7 @@
 
                                         @if (!FixMonth.HasValue)
                                         {
-                                            <MudIconButton Class="mud-picker-nav-button-prev mud-flip-x-rtl"
-                                                           Icon="@PreviousIcon"
-                                                           OnClick="@OnPreviousMonthClick" />
+                                            <MudIconButton Class="mud-picker-nav-button-prev mud-flip-x-rtl" Icon="@PreviousIcon" OnClick="@OnPreviousMonthClick" />
 
                                             <button type="button"
                                                     class="mud-picker-slide-transition mud-picker-calendar-header-transition mud-button-month"
@@ -175,15 +165,11 @@
                                                 </MudText>
                                             </button>
 
-                                            <MudIconButton Class="mud-picker-nav-button-next mud-flip-x-rtl"
-                                                           Icon="@NextIcon"
-                                                           OnClick="@OnNextMonthClick" />
+                                            <MudIconButton Class="mud-picker-nav-button-next mud-flip-x-rtl" Icon="@NextIcon" OnClick="@OnNextMonthClick" />
                                         }
                                         else
                                         {
-                                            <MudText Class="mud-picker-calendar-header-transition"
-                                                     Typo="Typo.body1"
-                                                     Align="Align.Center">
+                                            <MudText Class="mud-picker-calendar-header-transition" Typo="Typo.body1" Align="Align.Center">
                                                 @GetMonthName(tempMonth)
                                             </MudText>
                                         }
@@ -194,15 +180,13 @@
                                         @if (ShowWeekNumbers)
                                         {
                                             <div class="mud-picker-calendar-week">
-                                                <MudText Typo="Typo.caption"
-                                                         Class="mud-picker-calendar-week-text"></MudText>
+                                                <MudText Typo="Typo.caption" Class="mud-picker-calendar-week-text"></MudText>
                                             </div>
                                         }
 
                                         @foreach (var dayName in GetAbbreviatedDayNames())
                                         {
-                                            <MudText Typo="Typo.caption"
-                                                     Class="mud-day-label">
+                                            <MudText Typo="Typo.caption" Class="mud-day-label">
                                                 @dayName
                                             </MudText>
                                         }
@@ -224,8 +208,7 @@
                                             @if (ShowWeekNumbers)
                                             {
                                                 <div class="mud-picker-calendar-week">
-                                                    <MudText Typo="Typo.caption"
-                                                             Class="mud-picker-calendar-week-text">
+                                                    <MudText Typo="Typo.caption" Class="mud-picker-calendar-week-text">
                                                         @GetWeekNumber(tempMonth, tempWeek)
                                                     </MudText>
                                                 </div>

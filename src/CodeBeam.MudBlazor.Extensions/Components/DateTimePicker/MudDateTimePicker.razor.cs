@@ -19,8 +19,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         _dotNetReferenceLazy = new Lazy<DotNetObjectReference<MudDateTimePicker<T>>>(CreateDotNetObjectReference);
     }
 
-    private DateTime? _selectedDate;
-    private readonly string _componentId = Identifier.Create();
+    //private DateTime? _selectedDate;
     private string? _clockElementReferenceId;
     private readonly Lazy<DotNetObjectReference<MudDateTimePicker<T>>> _dotNetReferenceLazy;
 
@@ -49,12 +48,14 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     private TimeView _timeView = TimeView.Hours;
 
+    /// <inheritdoc />
     protected override void OnInitialized()
     {
         base.OnInitialized();
         _workingValue = ToDateTime(Value);
     }
 
+    /// <inheritdoc />
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
@@ -62,6 +63,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         SyncTimeFromValue();
     }
 
+    /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -260,16 +262,6 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
             _timeSet.Minute,
             0
         );
-
-        //if ((PickerVariant == PickerVariant.Static && PickerActions == null) ||
-        //    (PickerActions != null && AutoClose))
-        //{
-        //    await SubmitAsync();
-        //}
-
-        _value = FromDateTime(_workingValue);
-        await SetTextAsync(ConvertSet(_value), false);
-        await ValueChanged.InvokeAsync(_value);
     }
 
     private void SetDatePart(DateTime date)
@@ -309,9 +301,9 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         if (day < GetMonthStart(month) || day > GetMonthEnd(month))
             return b.AddClass("mud-hidden").Build();
 
-        var current = ToDateTime(Value);
+        var current = _workingValue ?? ToDateTime(Value);
 
-        if ((current?.Date == day.Date && _selectedDate == null) || _selectedDate?.Date == day.Date)
+        if (current?.Date == day.Date)
             return b.AddClass("mud-selected")
                 .AddClass($"mud-theme-{Color.ToStringFast(true)}")
                 .Build();
@@ -328,7 +320,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     {
         await FocusAsync();
 
-        _selectedDate = dateTime;
+        SetDatePart(dateTime);
 
         if (PickerActions == null || AutoClose || PickerVariant == PickerVariant.Static)
         {
@@ -347,12 +339,6 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         if (GetReadOnlyState())
             return;
 
-        if (_selectedDate != null)
-        {
-            SetDatePart(_selectedDate.Value);
-            _selectedDate = null;
-        }
-
         if (_workingValue == null)
             return;
 
@@ -368,16 +354,19 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     public override async Task ClearAsync(bool close = true)
     {
-        _selectedDate = null;
         await SetDateAsync(null, true);
 
         if (AutoClose)
             await CloseAsync(false);
     }
 
-    protected virtual string GetTitleDateString()
+    protected string GetTitleDateString()
     {
-        return FormatTitleDate(_selectedDate ?? ToDateTime(Value));
+        var date = _workingValue
+            ?? ToDateTime(Value)
+            ?? TimeProvider.GetLocalNow().Date;
+
+        return FormatTitleDate(date);
     }
 
     protected override DateTime GetCalendarStartOfMonth()
@@ -424,7 +413,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         {
             CurrentView = OpenTo.Year;
             StateHasChanged();
-            //_scrollToYearAfterRender = true;
+            _scrollToYearAfterRender = true;
         }
     }
 
@@ -442,6 +431,16 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     {
         var current = ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
         PickerMonth = new DateTime(year, current.Month, 1);
+
+        _workingValue = new DateTime(
+            year,
+            current.Month,
+            current.Day,
+            current.Hour,
+            current.Minute,
+            current.Second
+        );
+
         CurrentView = OpenTo.Month;
         return Task.CompletedTask;
     }
@@ -480,8 +479,18 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     protected Task OnMonthSelectedAsync(int month)
     {
-        var current = ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
+        var current = _workingValue ?? ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
         PickerMonth = new DateTime(current.Year, month, 1);
+
+        _workingValue = new DateTime(
+            current.Year,
+            month,
+            current.Day,
+            current.Hour,
+            current.Minute,
+            current.Second
+        );
+
         CurrentView = OpenTo.Date;
         return Task.CompletedTask;
     }
@@ -565,16 +574,6 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
             .AddClass("mud-time-picker-minute")
             .AddClass("mud-time-picker-dial-out", _timeView != TimeView.Minutes)
             .AddClass("mud-time-picker-dial-hidden", _timeView != TimeView.Minutes)
-            .Build();
-
-    protected string HoursButtonClassname =>
-            new CssBuilder("mud-timepicker-button")
-                .AddClass("mud-timepicker-toolbar-text", _timeView == TimeView.Minutes)
-                .Build();
-
-    protected string MinuteButtonClassname =>
-        new CssBuilder("mud-timepicker-button")
-            .AddClass("mud-timepicker-toolbar-text", _timeView == TimeView.Hours)
             .Build();
 
     private string GetPointerRotation()
@@ -804,18 +803,44 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     {
         if (value == "am")
         {
-            AmPm = true;
             await OnAmClickedAsync();
         }
         else if (value == "pm")
         {
-            AmPm = true;
             await OnPmClickedAsync();
         }
-        else if(value == "24")
-        {
-            AmPm = false;
-        }
+        StateHasChanged();
+    }
+
+    protected string GetFormattedYearString()
+    {
+        var date = _workingValue
+            ?? ToDateTime(Value)
+            ?? TimeProvider.GetLocalNow().Date;
+
+        return date.Year.ToString();
+    }
+
+    /// <summary>
+    /// Scrolls to the current year.
+    /// </summary>
+    public override async Task ScrollToYearAsync(DateTime? date = null)
+    {
+        var culture = GetCulture();
+        var calendar = culture.Calendar;
+
+        _scrollToYearAfterRender = false;
+
+        var dateTime =
+            date
+            ?? _workingValue
+            ?? ToDateTime(Value)
+            ?? TimeProvider.GetLocalNow().Date;
+
+        var id = $"{_componentId}{calendar.GetYear(dateTime)}";
+
+        await ScrollManager.ScrollToYearAsync(id);
+
         StateHasChanged();
     }
 
