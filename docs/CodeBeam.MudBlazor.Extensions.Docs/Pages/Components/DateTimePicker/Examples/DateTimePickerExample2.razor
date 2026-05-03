@@ -5,6 +5,8 @@
     <MudItem xs="12" sm="8">
         <MudDateTimePicker @bind-Value="_date" Editable="_editable" Label="DateTime" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
         <MudDateTimePicker @bind-Value="_date2" Editable="_editable" Label="DateTimeOffset" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
+        <MudDateTimePicker @bind-Value="_date2" Editable="_editable" Label="TimeZone Istanbul" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary"
+                           TimeZone="@TimeZoneInfo.FindSystemTimeZoneById("Europe/Istanbul")" />
         <MudDateTimePicker @bind-Value="_date3" Editable="_editable" Label="DateOnly" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
     </MudItem>
 

@@ -230,7 +230,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     private DateTimeOffset _lastSetTime = DateTimeOffset.MinValue;
     private const int DebounceTimeoutMs = 100;
 
-    protected async Task SetDateAsync(DateTime? date, bool updateValue)
+    protected internal async Task SetDateAsync(DateTime? date, bool updateValue)
     {
         var current = ToDateTime(_value);
 

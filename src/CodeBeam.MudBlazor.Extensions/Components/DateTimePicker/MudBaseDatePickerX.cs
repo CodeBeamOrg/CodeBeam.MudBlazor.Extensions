@@ -253,7 +253,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
     /// <param name="value">The value to convert.</param>
     /// <returns>The converted DateTime value.</returns>
     /// <exception cref="NotSupportedException">Thrown when the type T is not supported.</exception>
-    protected DateTime? ToDateTime(T? value)
+    protected internal DateTime? ToDateTime(T? value)
     {
         if (value == null)
             return null;
