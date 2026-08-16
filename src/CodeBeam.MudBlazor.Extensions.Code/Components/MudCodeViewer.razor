@@ -6,18 +6,25 @@
 
     @if (_header.Value)
     {
-        <div class="@HeaderClassname">
-            <span class="mud-codeviewer-language">
-                @Language.ToDescriptionString()
-            </span>
+        @if (HeaderContent != null)
+        {
+            @HeaderContent
+        }
+        else
+        {
+            <div class="@HeaderClassname">
+                <span class="mud-codeviewer-language">
+                    @Language.ToDescriptionString()
+                </span>
 
-            @if (ShowCopyButton)
-            {
-                <MudIconButton Icon="@_copyIcon" Size="Size.Small" Color="Color.Default" OnClick="HandleCopyButtonClickAsync" />
-            }
-        </div>
+                @if (ShowCopyButton)
+                {
+                    <MudIconButton Icon="@_copyIcon" Size="Size.Small" Color="Color.Default" OnClick="HandleCopyButtonClickAsync" />
+                }
+            </div>
 
-        <MudDivider />
+            <MudDivider />
+        }
     }
 
     <div class="mud-codeviewer-body">
