@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>9.0.0</Version>
+		<Version>9.1.0</Version>
 		<Title>CodeBeam.MudBlazor.Extensions.Code</Title>
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
@@ -30,7 +30,7 @@ https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="9.0.0-rc.1" />
+		<PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="9.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
