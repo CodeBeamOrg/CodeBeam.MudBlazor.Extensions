@@ -42,6 +42,11 @@ namespace MudExtensions
         public string? Name { get; set; } = "";
 
         /// <summary>
+        /// Aliases for the expected header. If any of the aliases match a CSV header, it will be considered a match.
+        /// </summary>
+        public IEnumerable<string>? Aliases { get; set; } = null;
+
+        /// <summary>
         /// 
         /// </summary>
         public bool Required { get; set; }
@@ -67,6 +72,7 @@ namespace MudExtensions
         public MudExpectedHeader()
         {
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -76,6 +82,7 @@ namespace MudExtensions
             Name = name;
             Required = false;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -86,6 +93,7 @@ namespace MudExtensions
             Name = name;
             Required = required;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -97,6 +105,21 @@ namespace MudExtensions
             Name = name;
             Required = required;
             AllowDefaultValue = allowDefaultValue;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="required"></param>
+        /// <param name="allowDefaultValue"></param>
+        /// <param name="aliases"></param>
+        public MudExpectedHeader(string? name, bool required = false, bool allowDefaultValue = false, IEnumerable<string>? aliases = null)
+        {
+            Name = name;
+            Required = required;
+            AllowDefaultValue = allowDefaultValue;
+            Aliases = aliases;
         }
     }
 
@@ -282,21 +305,35 @@ namespace MudExtensions
             using var csv = new CsvReader(reader, config);
             CsvContent = csv.GetRecords<dynamic>().Select(x => (IDictionary<string, object?>)x).ToList();
         }
+
+        /// <summary>
+        /// Matches the headers from the CSV content with the expected headers defined in the component. It first attempts an exact match, and if that fails, it tries to match using aliases. 
+        /// If no match is found, it adds the CSV field as an unmapped header.
+        /// </summary>
         private void MatchCsvHeadersWithExpectedHeaders()
         {
             var csvFields = CsvContent?.FirstOrDefault()?.Keys;
             foreach (var csvField in csvFields?? new List<string>())
             {
                 // You can add other matching try as FuzzySharp here
-                bool isMatched = TryExactMatch(csvField);
-
+                bool isMatched = TryExactMatch(csvField);        
                 if (isMatched) continue;
+
+                bool isAliasMatched = TryAliasMatch(csvField);
+                if (isAliasMatched) continue;
+
                 MudCsvHeaders.Add(new MudCsvHeader(csvField));
             }
 
             IsValid();
             
         }
+
+        /// <summary>
+        /// Tries to match a CSV field with the expected headers using an exact match.
+        /// </summary>
+        /// <param name="csvField">The CSV field to match.</param>
+        /// <returns>True if a match is found; otherwise, false.</returns>
         private bool TryExactMatch(string csvField)
         {
             foreach (var expectedField in ExpectedHeaders)
@@ -310,6 +347,27 @@ namespace MudExtensions
             }
             return false;
         }
+
+        /// <summary>
+        /// Tries to match a CSV field with the aliases of the expected headers.
+        /// </summary>
+        /// <param name="csvField">The CSV field to match.</param>
+        /// <returns>True if a match is found; otherwise, false.</returns>
+        private bool TryAliasMatch(string csvField)
+        {
+            foreach (var expectedField in ExpectedHeaders)
+            {
+                if (expectedField.Aliases == null) continue;
+                if (!expectedField.Aliases.Any(alias => string.Compare(alias, csvField, StringComparison.CurrentCultureIgnoreCase) == 0)) continue;
+                if (expectedField.MatchedFieldCount != 0) continue;
+
+                MudCsvHeaders.Add(new MudCsvHeader(csvField, expectedField.Name));
+                expectedField.MatchedFieldCount++;
+                return true;
+            }
+            return false;
+        }
+
         private async Task OnImport()
         {
             var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)

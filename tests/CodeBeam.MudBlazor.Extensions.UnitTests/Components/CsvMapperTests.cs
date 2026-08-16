@@ -67,6 +67,39 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
+        public void CsvHeaders_Should_Match_ExpectedHeaders_Aliases()
+        {
+            // Arrange
+            var expectedHeaders = new List<MudExpectedHeader>
+            {
+                new("Id", required: true, aliases: ["Identifier"]),
+                new("Name", required: false, aliases: ["FullName"])
+            };
+
+            var cut = Context.Render<MudCsvMapper>(p => p
+                .Add(x => x.ExpectedHeaders, expectedHeaders)
+            );
+
+            var csvContent = new List<IDictionary<string, object?>>
+            {
+                new Dictionary<string, object?>
+                {
+                    ["Identifier"] = 1,
+                    ["FullName"] = "Test"
+                }
+            };
+
+            cut.Instance.GetType()
+                .GetField("CsvContent", BindingFlags.NonPublic | BindingFlags.Instance)!
+                .SetValue(cut.Instance, csvContent);
+
+            InvokePrivate(cut.Instance, "MatchCsvHeadersWithExpectedHeaders");
+
+            expectedHeaders[0].MatchedFieldCount.Should().Be(1);
+            expectedHeaders[1].MatchedFieldCount.Should().Be(1);
+        }
+
+        [Test]
         public void Normalize_Should_Lowercase_And_Remove_Spaces_When_Enabled()
         {
             var cut = Context.Render<MudCsvMapper>(p => p
