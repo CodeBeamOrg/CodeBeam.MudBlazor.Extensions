@@ -80,6 +80,14 @@ public partial class MudCodeViewer : MudComponentBase
         .Build();
 
     /// <summary>
+    /// Gets the CSS class string used for the textarea element based on the line number display settings.
+    /// </summary>
+    private string TextAreaClass => new CssBuilder()
+        .AddClass("mud-codeviewer-textarea")
+        .AddClass("line-numbers", _showLineNumbers.Value)
+        .Build();
+
+    /// <summary>
     /// Gets or sets the code snippet to be displayed or processed by the component.
     /// </summary>
     [Parameter]
