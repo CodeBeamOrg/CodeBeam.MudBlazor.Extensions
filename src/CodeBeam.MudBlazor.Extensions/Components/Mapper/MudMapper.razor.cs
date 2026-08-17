@@ -248,6 +248,11 @@ namespace MudExtensions
             return item.MappedZone == identifier;
         }
 
+        /// <summary>
+        /// Determines whether a given source item is currently in the unassigned source pool.
+        /// </summary>
+        /// <param name="item">The source item to check.</param>
+        /// <returns>True if the item is in the unassigned source pool; otherwise, false.</returns>
         public static bool IsSourcePoolItem(MudMapperItem item)
         {
             return string.Equals(item.MappedZone, SourcePoolZoneIdentifier, StringComparison.OrdinalIgnoreCase);

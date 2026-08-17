@@ -3,7 +3,6 @@
 
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Forms
-@using MudExtensions.Utilities
 
 <div class="@Classname" style="@Style">
 
@@ -45,7 +44,9 @@
                 {
                     var required = item.Required;
                     var matched = item.MatchedFieldCount > 0;
-                    bool confirmed = _defaultValueHeaders?.ContainsKey(item.Name ?? string.Empty) == true && _defaultValueHeaders[item.Name ?? string.Empty].Confirmed;
+                    var headerKey = item.Name ?? string.Empty;
+                    var defaultValue = _defaultValueHeaders?.TryGetValue(headerKey, out var existing) == true ? existing : null;
+                    bool confirmed = defaultValue?.Confirmed == true;
 
                     <MudBadge Icon="@Icons.Material.Filled.Warning" Color="Color.Error" Overlap="true" Visible="@(required && !confirmed && !matched)">
                         <MudDropZone T="MudMapperItem" Identifier="@item.Name" DraggingClass="mud-alert-text-info"
@@ -75,8 +76,8 @@
                             }
                             @if (!matched && item.CreatingDefaultValue)
                             {
-                                <MudTextField Disabled="@(_defaultValueHeaders?[item.Name ?? string.Empty]?.Confirmed ?? false)" @bind-Value="_defaultValueHeaders[item.Name ?? string.Empty].DefaultValue" Required="@item.Required" RequiredError="@_requiredDefaultValueMessage" Style="margin-top: 10px" Label="Default Value" Variant="Variant.Text"></MudTextField>
-                                <MudButton OnClick="@(() => SubmitDefaultValue(item.Name))" ButtonType="ButtonType.Submit">@(_defaultValueHeaders[item.Name ?? string.Empty].Confirmed ? "Edit" : "Confirm")</MudButton>
+                                <MudTextField Disabled="@(defaultValue?.Confirmed ?? false)" @bind-Value="defaultValue!.DefaultValue" Required="@item.Required" RequiredError="@_requiredDefaultValueMessage" Style="margin-top: 10px" Label="Default Value" Variant="Variant.Text"></MudTextField>
+                                <MudButton OnClick="@(() => SubmitDefaultValue(item.Name))" ButtonType="ButtonType.Submit">@(defaultValue?.Confirmed == true ? "Edit" : "Confirm")</MudButton>
                             }
                         </MudDropZone>
                     </MudBadge>
