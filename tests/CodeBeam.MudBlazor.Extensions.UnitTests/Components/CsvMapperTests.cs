@@ -157,7 +157,7 @@ namespace MudExtensions.UnitTests.Components
 
             var headers = new List<MudMapperItem>
             {
-                new("A", "Source"),
+                new("A", MudMapper.SourcePoolZoneIdentifier),
                 new("B", "Mapped")
             };
 

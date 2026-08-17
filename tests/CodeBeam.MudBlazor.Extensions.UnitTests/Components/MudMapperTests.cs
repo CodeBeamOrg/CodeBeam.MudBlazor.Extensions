@@ -268,10 +268,10 @@ namespace MudExtensions.UnitTests.Components
                 .Add(x => x.TargetHeaders, headers)
                 .Add(x => x.SourceItems, sourceItems));
 
-            SimulateDrop(cut.Instance, sourceItems[0], "Source");
+            SimulateDrop(cut.Instance, sourceItems[0], MudMapper.SourcePoolZoneIdentifier);
 
             headers[0].MatchedFieldCount.Should().Be(0);
-            sourceItems[0].MappedZone.Should().Be("Source");
+            sourceItems[0].MappedZone.Should().Be(MudMapper.SourcePoolZoneIdentifier);
         }
 
         [Test]
