@@ -1,6 +1,7 @@
 using AwesomeAssertions;
 using Bunit;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using MudExtensions.Utilities;
 using System.Reflection;
@@ -119,6 +120,64 @@ namespace MudExtensions.UnitTests.Components
             var cut = Context.Render<MudMapper>(p => p.Add(x => x.LocalizedStrings, strings));
 
             cut.Markup.Should().Contain("No headers defined yet");
+        }
+
+        [Test]
+        public void ItemSelector_Should_Return_True_For_Matching_Item()
+        {
+            var item = new MudMapperItem("col1", "Id");
+            var method = typeof(MudMapper).GetMethod("ItemSelector", BindingFlags.NonPublic | BindingFlags.Static);
+
+            var result = (bool)method!.Invoke(null, new object[] { item, "Id" })!;
+
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void IsSourcePoolItem_Should_Return_True_For_Source_Pool_Items()
+        {
+            var item = new MudMapperItem("col1", MudMapper.SourcePoolZoneIdentifier);
+
+            MudMapper.IsSourcePoolItem(item).Should().BeTrue();
+        }
+
+        [Test]
+        public void OpenAddSection_Should_Set_Add_Section_Open()
+        {
+            var cut = Context.Render<MudMapper>();
+
+            InvokePrivate(cut.Instance, "OpenAddSection");
+
+            cut.Instance.GetType()
+                .GetField("_addSectionOpen", BindingFlags.NonPublic | BindingFlags.Instance)!
+                .GetValue(cut.Instance)
+                .Should().Be(true);
+        }
+
+        [Test]
+        public void OnSubmit_Should_Add_New_Target_Header_And_Default_Value()
+        {
+            var cut = Context.Render<MudMapper>();
+            SetPrivateMember(cut.Instance, "_model", new MudExpectedHeader("Age", required: false, allowDefaultValue: true));
+
+            InvokePrivateWithArgs(cut.Instance, "OnSubmit",
+                new[] { typeof(EditContext) },
+                new object[] { new EditContext(new object()) });
+
+            cut.Instance.TargetHeaders.Should().ContainSingle(x => x.Name == "Age");
+            cut.Instance.DefaultValues.Should().ContainKey("Age");
+        }
+
+        [Test]
+        public void OnIncludeUnmappedDataChanged_Should_Update_IncludeUnmappedData()
+        {
+            var cut = Context.Render<MudMapper>();
+
+            InvokePrivateWithArgs(cut.Instance, "OnIncludeUnmappedDataChanged",
+                new[] { typeof(bool) },
+                new object[] { true });
+
+            cut.Instance.IncludeUnmappedData.Should().BeTrue();
         }
 
         // -------------------------------------------------------------------------
