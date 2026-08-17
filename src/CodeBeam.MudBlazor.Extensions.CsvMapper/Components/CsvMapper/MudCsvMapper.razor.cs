@@ -1,4 +1,5 @@
-﻿using CsvHelper;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
@@ -6,256 +7,115 @@ using MudBlazor.Utilities;
 using MudExtensions.Utilities;
 using System.Globalization;
 using System.Text;
-using CsvHelper.Configuration;
 
 namespace MudExtensions
 {
     /// <summary>
-    /// 
+    /// Backward-compatibility alias for <see cref="MudMapperItem"/>.
     /// </summary>
-    public class ConfirmedDefaultValue
+    [Obsolete("MudCsvHeader has been renamed to MudMapperItem. Please update your code to use MudMapperItem and its MappedZone property instead of MappedField.")]
+    public class MudCsvHeader : MudMapperItem
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string? DefaultValue { get; set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool Confirmed { get; set; }
+        /// <inheritdoc/>
+        public MudCsvHeader(string? name, string? mappedField = "Source")
+            : base(name, mappedField) { }
     }
 
     /// <summary>
-    /// Default fields in your database
-    /// </summary>
-    public class MudExpectedHeader
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly string? RequiredCss = "border-color: var(--mud-palette-error); color: var(--mud-palette-error);";
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string? Name { get; set; } = "";
-
-        /// <summary>
-        /// Aliases for the expected header. If any of the aliases match a CSV header, it will be considered a match.
-        /// </summary>
-        public IEnumerable<string>? Aliases { get; set; } = null;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool Required { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool AllowDefaultValue { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool CreatingDefaultValue { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int MatchedFieldCount { get; set; } = 0;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public MudExpectedHeader()
-        {
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        public MudExpectedHeader(string? name)
-        {
-            Name = name;
-            Required = false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="required"></param>
-        public MudExpectedHeader(string? name, bool required = false)
-        {
-            Name = name;
-            Required = required;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="required"></param>
-        /// <param name="allowDefaultValue"></param>
-        public MudExpectedHeader(string? name, bool required = false, bool allowDefaultValue = false)
-        {
-            Name = name;
-            Required = required;
-            AllowDefaultValue = allowDefaultValue;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="required"></param>
-        /// <param name="allowDefaultValue"></param>
-        /// <param name="aliases"></param>
-        public MudExpectedHeader(string? name, bool required = false, bool allowDefaultValue = false, IEnumerable<string>? aliases = null)
-        {
-            Name = name;
-            Required = required;
-            AllowDefaultValue = allowDefaultValue;
-            Aliases = aliases;
-        }
-    }
-
-    /// <summary>
-    /// Header fields in your CSV File
-    /// </summary>
-    public class MudCsvHeader
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Name { get; set; } = "";
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string MappedField { get; set; } = "File";
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="mappedField"></param>
-        public MudCsvHeader(string? name, string? mappedField = "File")
-        {
-            Name = name ?? "";
-            MappedField = mappedField ?? "File";
-        }
-    }
-
-    /// <summary>
-    /// 
+    /// A component that combines a CSV file upload with a <see cref="MudMapper"/> to let users
+    /// map CSV columns onto expected target headers and produce a re-mapped CSV output.
     /// </summary>
     public partial class MudCsvMapper : MudComponentBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <summary>CSS class for the root element.</summary>
         protected string? Classname =>
            new CssBuilder("mud-csv-mapper")
            .AddClass(Class)
            .Build();
 
         /// <summary>
-        /// A class for provide all local strings at once.
+        /// A class to provide all localized strings at once.
         /// </summary>
         [Parameter]
         public CsvMapperLocalizedStrings LocalizedStrings { get; set; } = new();
 
         /// <summary>
-        /// Choose Table Column Headers
+        /// The expected target headers that CSV columns should be mapped onto.
         /// </summary>
         [Parameter]
         public List<MudExpectedHeader> ExpectedHeaders { get; set; } = new();
 
-        private bool _valid = false;
-
         /// <summary>
-        /// CsvFile as BrowserFile
+        /// The uploaded CSV file as a browser file reference.
         /// </summary>
         [Parameter]
         public IBrowserFile? CsvFile { get; set; } = null;
 
         /// <summary>
-        /// 
+        /// The raw bytes of the (re-mapped) CSV file after import.
         /// </summary>
         [Parameter]
         public byte[]? FileContentByte { get; set; }
 
         /// <summary>
-        /// Use this dictionary if you want to see what was mapped.
+        /// A dictionary of the mappings that were applied: key = target header name, value = original CSV column name.
         /// </summary>
         [Parameter]
         public Dictionary<string, string> CsvMapping { get; set; } = new();
 
         /// <summary>
-        /// 
+        /// Fires when the CSV has been successfully imported and re-mapped.
         /// </summary>
         [Parameter]
         public EventCallback<bool> OnImported { get; set; }
 
         /// <summary>
-        /// 
+        /// Whether to show the "Include unmapped data" toggle inside the mapper.
         /// </summary>
-        [Parameter] 
+        [Parameter]
         public bool ShowIncludeUnmappedData { get; set; }
 
         /// <summary>
-        /// 
+        /// Whether the user may create new target headers at runtime.
         /// </summary>
         [Parameter]
         public bool AllowCreateExpectedHeaders { get; set; }
 
         /// <summary>
-        /// 
+        /// When <c>true</c>, header names are normalised (lowercased, spaces and quotes stripped)
+        /// before being written to the output CSV.
         /// </summary>
         [Parameter]
         public bool NormalizeHeaders { get; set; }
 
         /// <summary>
-        /// 
+        /// The column delimiter used when reading and writing the CSV file. Defaults to <c>","</c>.
         /// </summary>
         [Parameter]
         public string Delimiter { get; set; } = ",";
 
-        [Inject] private IDialogService? _dialogService { get; set; }
         [Inject] private NavigationManager? _navigationManager { get; set; }
+
+        private MudMapper? _mapper;
+
+        private MudMapperLocalizedStrings _mapperLocalizedStrings => new()
+        {
+            SourceItems = "CSV File Headers",
+            TargetHeaders = LocalizedStrings.ExpectedHeaders,
+            DragHere = LocalizedStrings.DragHere,
+            DefineHeaders = LocalizedStrings.DefineHeaders
+        };
 
         private string DragClass = DefaultDragClass;
         private static readonly string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
-        private readonly string _requiredDefaultValueMessage = "Default value is required if no header is mapped";
-        private readonly string _expectedHeaderDropZoneWidth = "width: 180px;";
-        private List<string> FileNames = new ();
-        private List<MudCsvHeader> MudCsvHeaders = new();
+
+        private List<string> FileNames = new();
+        private List<MudMapperItem> _sourceItems = new();
         private List<IDictionary<string, object?>>? CsvContent;
-        private bool _includeUnmappedData;
-        private bool _importedComplete;
 
-        private MudExpectedHeader _model { get; set; } = new();
-        private bool _addSectionOpen;
-        private Dictionary<string, ConfirmedDefaultValue>? _defaultValueHeaders { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        protected override void OnInitialized()
-        {
-            _defaultValueHeaders = ExpectedHeaders.Where(x => x.AllowDefaultValue).ToDictionary(key => key.Name ?? "", val => new ConfirmedDefaultValue()
-            {
-                Confirmed = false,
-                DefaultValue = ""
-            });
-        }
         private async Task OnInputFileChanged(InputFileChangeEventArgs args)
         {
-            Reset();
+            ResetMapping();
             ClearDragClass();
             var files = args.GetMultipleFiles();
             foreach (var file in files)
@@ -267,14 +127,23 @@ namespace MudExtensions
                 CsvFile = files[0];
                 await ReadFile(files[0]);
                 CreateCsvContent();
-                MatchCsvHeadersWithExpectedHeaders();
+                MatchSourceItemsWithExpectedHeaders();
             }
         }
-        private void Reset()
+
+        private void ResetMapping()
         {
-            MudCsvHeaders = new();
-            ExpectedHeaders.ForEach(x => x.MatchedFieldCount = 0);
+            _sourceItems = new();
+            CsvMapping.Clear();
+            CsvContent = null;
+            FileContentByte = null;
+            _mapper?.ResetMapping();
+            foreach (var header in ExpectedHeaders)
+            {
+                header.MatchedFieldCount = 0;
+            }
         }
+
         private async Task ReadFile(IBrowserFile file)
         {
             long maxFileSize = 1024 * 1024 * 15;
@@ -284,56 +153,43 @@ namespace MudExtensions
             await using var newFileStream = file.OpenReadStream(maxFileSize);
 
             int bytesRead;
-            double totalRead = 0;
             while ((bytesRead = await newFileStream.ReadAsync(buffer)) != 0)
             {
-                totalRead += bytesRead;
                 await stream.WriteAsync(buffer, 0, bytesRead);
             }
             FileContentByte = stream.GetBuffer();
         }
+
         private void CreateCsvContent()
         {
-            using var reader = new StreamReader(new MemoryStream(FileContentByte ?? new byte[0]), Encoding.Default);
+            using var reader = new StreamReader(new MemoryStream(FileContentByte ?? Array.Empty<byte>()), Encoding.Default);
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 Delimiter = Delimiter,
                 IgnoreBlankLines = true,
                 HasHeaderRecord = true
             };
-            
+
             using var csv = new CsvReader(reader, config);
             CsvContent = csv.GetRecords<dynamic>().Select(x => (IDictionary<string, object?>)x).ToList();
         }
 
         /// <summary>
-        /// Matches the headers from the CSV content with the expected headers defined in the component. It first attempts an exact match, and if that fails, it tries to match using aliases. 
-        /// If no match is found, it adds the CSV field as an unmapped header.
+        /// Matches CSV column names against the expected headers (exact match first, then aliases).
+        /// Unmatched columns are left in the source pool.
         /// </summary>
-        private void MatchCsvHeadersWithExpectedHeaders()
+        private void MatchSourceItemsWithExpectedHeaders()
         {
+            _sourceItems = new List<MudMapperItem>();
             var csvFields = CsvContent?.FirstOrDefault()?.Keys;
-            foreach (var csvField in csvFields?? new List<string>())
+            foreach (var csvField in csvFields ?? new List<string>())
             {
-                // You can add other matching try as FuzzySharp here
-                bool isMatched = TryExactMatch(csvField);        
-                if (isMatched) continue;
-
-                bool isAliasMatched = TryAliasMatch(csvField);
-                if (isAliasMatched) continue;
-
-                MudCsvHeaders.Add(new MudCsvHeader(csvField));
+                if (TryExactMatch(csvField)) continue;
+                if (TryAliasMatch(csvField)) continue;
+                _sourceItems.Add(new MudMapperItem(csvField, MudMapper.SourcePoolZoneIdentifier));
             }
-
-            IsValid();
-            
         }
 
-        /// <summary>
-        /// Tries to match a CSV field with the expected headers using an exact match.
-        /// </summary>
-        /// <param name="csvField">The CSV field to match.</param>
-        /// <returns>True if a match is found; otherwise, false.</returns>
         private bool TryExactMatch(string csvField)
         {
             foreach (var expectedField in ExpectedHeaders)
@@ -341,18 +197,13 @@ namespace MudExtensions
                 if (string.Compare(expectedField.Name, csvField, StringComparison.CurrentCultureIgnoreCase) != 0) continue;
                 if (expectedField.MatchedFieldCount != 0) continue;
 
-                MudCsvHeaders.Add(new MudCsvHeader(csvField, expectedField.Name));
+                _sourceItems.Add(new MudMapperItem(csvField, expectedField.Name));
                 expectedField.MatchedFieldCount++;
                 return true;
             }
             return false;
         }
 
-        /// <summary>
-        /// Tries to match a CSV field with the aliases of the expected headers.
-        /// </summary>
-        /// <param name="csvField">The CSV field to match.</param>
-        /// <returns>True if a match is found; otherwise, false.</returns>
         private bool TryAliasMatch(string csvField)
         {
             foreach (var expectedField in ExpectedHeaders)
@@ -361,7 +212,7 @@ namespace MudExtensions
                 if (!expectedField.Aliases.Any(alias => string.Compare(alias, csvField, StringComparison.CurrentCultureIgnoreCase) == 0)) continue;
                 if (expectedField.MatchedFieldCount != 0) continue;
 
-                MudCsvHeaders.Add(new MudCsvHeader(csvField, expectedField.Name));
+                _sourceItems.Add(new MudMapperItem(csvField, expectedField.Name));
                 expectedField.MatchedFieldCount++;
                 return true;
             }
@@ -370,14 +221,19 @@ namespace MudExtensions
 
         private async Task OnImport()
         {
-            var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                PrepareHeaderForMatch = (header) => header.Header,
+                PrepareHeaderForMatch = header => header.Header,
                 Delimiter = Delimiter
             };
-            UpdateHeaderLineWithMatchedFields();
-            if(!_includeUnmappedData) RemoveUnmappedData();
+
+            UpdateHeadersWithMappedFields();
+
+            bool includeUnmapped = _mapper?.IncludeUnmappedData ?? false;
+            if (!includeUnmapped) RemoveUnmappedData();
+
             AddDefaultValues();
+
             await using (var writer = new StringWriter())
             await using (var csv = new CsvWriter(writer, config))
             {
@@ -387,46 +243,55 @@ namespace MudExtensions
                 var str = writer.ToString();
                 FileContentByte = Encoding.UTF8.GetBytes(str);
             }
+
             await OnImported.InvokeAsync();
-            await Task.Delay(100);
-            _importedComplete = true;
         }
-        private void UpdateHeaderLineWithMatchedFields()
+
+        private void UpdateHeadersWithMappedFields()
         {
-            foreach (var map in MudCsvHeaders)
+            var mappedItems = _sourceItems.Where(x => !MudMapper.IsSourcePoolItem(x));
+            foreach (var map in mappedItems)
             {
-                if (map.MappedField == "File") continue;
-                var normalizedMappedField = Normalize(map.MappedField);
+                var normalizedTarget = Normalize(map.MappedZone);
                 foreach (var row in CsvContent ?? new List<IDictionary<string, object?>>())
                 {
                     var temp = row[map.Name];
                     row.Remove(map.Name);
-                    row[normalizedMappedField] = temp;
+                    row[normalizedTarget] = temp;
                 }
-                CsvMapping.Add(map.MappedField, map.Name);
+                CsvMapping[map.MappedZone] = map.Name;
             }
         }
+
         private void AddDefaultValues()
         {
+            AddDefaultValues(_mapper?.DefaultValues);
+        }
+
+        internal void AddDefaultValues(IReadOnlyDictionary<string, ConfirmedDefaultValue>? defaultValues)
+        {
+            if (defaultValues == null) return;
+
             foreach (var record in CsvContent ?? new List<IDictionary<string, object?>>())
             {
-                foreach (var header in _defaultValueHeaders?.Where(header => header.Value.Confirmed) ?? new Dictionary<string, ConfirmedDefaultValue>())
+                foreach (var header in defaultValues.Where(h => h.Value.Confirmed))
                 {
-                    var normalizedDefaultHeader = Normalize(header.Key);
+                    var normalizedKey = Normalize(header.Key);
                     if (record.Keys.Contains(header.Key))
                         throw new Exception("Shouldn't happen");
-                    record[normalizedDefaultHeader] = header.Value.DefaultValue;
+                    record[normalizedKey] = header.Value.DefaultValue;
                 }
             }
         }
+
         private void RemoveUnmappedData()
         {
-            var unMappedHeaders = MudCsvHeaders.Where(x => x.MappedField == "File").Select(x => x.Name);
+            var unmappedNames = _sourceItems.Where(x => MudMapper.IsSourcePoolItem(x)).Select(x => x.Name);
             foreach (var record in CsvContent ?? new List<IDictionary<string, object?>>())
             {
-                foreach (var unMappedHeader in unMappedHeaders)
+                foreach (var name in unmappedNames)
                 {
-                    record.Remove(unMappedHeader);
+                    record.Remove(name);
                 }
             }
         }
@@ -435,96 +300,20 @@ namespace MudExtensions
         {
             return NormalizeHeaders ? str.Replace(" ", "").Replace("\"", "").ToLower() : str;
         }
-        /* handling board events */
-        private void OnDrop(MudItemDropInfo<MudCsvHeader> mudCSVField)
-        {
-            string? oldMappedField = mudCSVField.Item?.MappedField;
-            if (mudCSVField.Item != null)
-            {
-                mudCSVField.Item.MappedField = mudCSVField.DropzoneIdentifier;
-            }
-            DecrementOldMatchedFieldCount(oldMappedField);
-            IncrementNewMatchedFieldCount(mudCSVField.DropzoneIdentifier);
-            IsValid();
-        }
-        private void DecrementOldMatchedFieldCount(string? fieldName)
-        {
-            foreach (var expectedHeader in ExpectedHeaders.Where(expectedHeader => expectedHeader.Name == fieldName))
-            {
-                expectedHeader.MatchedFieldCount--;
-            }
-        }
-        private void IncrementNewMatchedFieldCount(string? fieldName)
-        {
-            foreach (var expectedHeader in ExpectedHeaders)
-            {
-                if (expectedHeader.Name == fieldName)
-                {
-                    expectedHeader.MatchedFieldCount++;
-                }
-            }
-        }
-        private void IsValid()
-        {
-            foreach (MudExpectedHeader requiredHeader in ExpectedHeaders.Where(i => i.Required))
-            {
-                if (MudCsvHeaders.Any(i => i.MappedField == requiredHeader.Name)) continue;
-                if (_defaultValueHeaders?.Any(x =>
-                        x.Key == requiredHeader.Name && x.Value.Confirmed) == true)
-                {
-                    continue;
-                }
-                _valid = false;
-                return;
-            }
-            _valid = true;
-        }
+
         private void SetDragClass()
         {
             DragClass = $"{DefaultDragClass} mud-border-primary";
         }
+
         private void ClearDragClass()
         {
             DragClass = DefaultDragClass;
         }
-        private static bool ItemSelector(MudCsvHeader item, string? identifier)
-        {
-            return item.MappedField == identifier;
-        }
-        private void OpenAddSection()
-        {
-            _addSectionOpen = true;
-        }
-        private void SubmitDefaultValue(string? name)
-        {
-            if (_defaultValueHeaders == null)
-            {
-                return;
-            }
-            if (!string.IsNullOrWhiteSpace(_defaultValueHeaders[name ?? ""].DefaultValue))
-            {
-                _defaultValueHeaders[name ?? ""].Confirmed = !_defaultValueHeaders[name ?? ""].Confirmed;
-                IsValid();
-            }
-        }
-        private void OnSubmit(EditContext context)
-        {
-            if (string.IsNullOrWhiteSpace(_model.Name)) return;
-            ExpectedHeaders.Add(_model);
-            if (_model.AllowDefaultValue)
-            {
-                _defaultValueHeaders?.Add(_model.Name, new ConfirmedDefaultValue()
-                {
-                    Confirmed = false,
-                    DefaultValue = ""
-                });
-            }
-            _model = new();
-            _addSectionOpen = false;
-        }
+
         private void ReloadPage()
         {
-            _navigationManager?.NavigateTo(_navigationManager.Uri, forceLoad:true);
+            _navigationManager?.NavigateTo(_navigationManager.Uri, forceLoad: true);
         }
     }
 }

@@ -60,7 +60,7 @@ namespace MudExtensions.UnitTests.Components
                 .GetField("CsvContent", BindingFlags.NonPublic | BindingFlags.Instance)!
                 .SetValue(cut.Instance, csvContent);
 
-            InvokePrivate(cut.Instance, "MatchCsvHeadersWithExpectedHeaders");
+            InvokePrivate(cut.Instance, "MatchSourceItemsWithExpectedHeaders");
 
             expectedHeaders[0].MatchedFieldCount.Should().Be(1);
             expectedHeaders[1].MatchedFieldCount.Should().Be(1);
@@ -93,7 +93,7 @@ namespace MudExtensions.UnitTests.Components
                 .GetField("CsvContent", BindingFlags.NonPublic | BindingFlags.Instance)!
                 .SetValue(cut.Instance, csvContent);
 
-            InvokePrivate(cut.Instance, "MatchCsvHeadersWithExpectedHeaders");
+            InvokePrivate(cut.Instance, "MatchSourceItemsWithExpectedHeaders");
 
             expectedHeaders[0].MatchedFieldCount.Should().Be(1);
             expectedHeaders[1].MatchedFieldCount.Should().Be(1);
@@ -141,9 +141,9 @@ namespace MudExtensions.UnitTests.Components
                 }
             };
 
-            SetPrivateMember(cut.Instance, "_defaultValueHeaders", defaults);
-
-            InvokePrivate(cut.Instance, "AddDefaultValues");
+            InvokePrivateWithArgs(cut.Instance, "AddDefaultValues",
+                new[] { typeof(IReadOnlyDictionary<string, ConfirmedDefaultValue>) },
+                new object[] { (IReadOnlyDictionary<string, ConfirmedDefaultValue>)defaults });
 
             csvContent[0].ContainsKey("Age").Should().BeTrue();
             csvContent[0]["Age"].Should().Be("18");
@@ -155,13 +155,13 @@ namespace MudExtensions.UnitTests.Components
         {
             var cut = Context.Render<MudCsvMapper>();
 
-            var headers = new List<MudCsvHeader>
+            var headers = new List<MudMapperItem>
             {
-                new("A", "File"),
+                new("A", "Source"),
                 new("B", "Mapped")
             };
 
-            SetPrivateMember(cut.Instance, "MudCsvHeaders", headers);
+            SetPrivateMember(cut.Instance, "_sourceItems", headers);
 
             var csvContent = new List<IDictionary<string, object?>>
             {
@@ -180,8 +180,35 @@ namespace MudExtensions.UnitTests.Components
             csvContent[0].ContainsKey("B").Should().BeTrue();
         }
 
+        [Test]
+        public void RemoveUnmappedData_Should_Not_Treat_Target_Header_Name_Source_As_Unmapped()
+        {
+            var cut = Context.Render<MudCsvMapper>();
 
+            var headers = new List<MudMapperItem>
+            {
+                new("A", "Source"),
+                new("B", MudMapper.SourcePoolZoneIdentifier)
+            };
 
+            SetPrivateMember(cut.Instance, "_sourceItems", headers);
+
+            var csvContent = new List<IDictionary<string, object?>>
+            {
+                new Dictionary<string, object?>
+                {
+                    ["A"] = 1,
+                    ["B"] = 2
+                }
+            };
+
+            SetPrivateMember(cut.Instance, "CsvContent", csvContent);
+
+            InvokePrivate(cut.Instance, "RemoveUnmappedData");
+
+            csvContent[0].ContainsKey("A").Should().BeTrue();
+            csvContent[0].ContainsKey("B").Should().BeFalse();
+        }
 
         private static void InvokePrivate(object instance, string methodName)
         {
@@ -190,6 +217,15 @@ namespace MudExtensions.UnitTests.Components
 
             method.Should().NotBeNull();
             method!.Invoke(instance, null);
+        }
+
+        private static void InvokePrivateWithArgs(object instance, string methodName, Type[] paramTypes, object[] args)
+        {
+            var method = instance.GetType()
+                .GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance, null, paramTypes, null);
+
+            method.Should().NotBeNull($"method '{methodName}' not found");
+            method!.Invoke(instance, args);
         }
 
         private static void SetPrivateMember(object instance, string name, object value)
