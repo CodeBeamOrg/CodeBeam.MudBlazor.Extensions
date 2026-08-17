@@ -1,0 +1,75 @@
+@namespace MudExtensions.Docs.Examples
+@inject ISnackbar Snackbar
+@using MudExtensions.Utilities
+
+<MudGrid>
+    <MudItem xs="12">
+        <MudText Typo="Typo.body2" Class="mb-2">
+            Required headers marked with <b>AllowDefaultValue</b> show a <b>+</b> button.
+            Click it to enter a fallback value when no source item is available to map.
+        </MudText>
+    </MudItem>
+    <MudItem xs="12">
+        <MudMapper @ref="_mapper"
+                   SourceItems="_sourceItems"
+                   TargetHeaders="_targetHeaders"
+                   ConfirmLabel="Save Mapping"
+                   OnConfirmed="OnConfirmed"
+                   OnReset="OnReset" />
+    </MudItem>
+    @if (_confirmed)
+    {
+        <MudItem xs="12">
+            <MudAlert Severity="Severity.Success" Elevation="0">
+                <MudText Typo="Typo.subtitle2" Class="mb-2">Confirmed Mapping</MudText>
+                @foreach (var item in _mapper?.SourceItems.Where(i => i.MappedZone != "Source") ?? [])
+                {
+                    <MudText Typo="Typo.body2">@item.Name → @item.MappedZone</MudText>
+                }
+                @foreach (var kv in _mapper?.DefaultValues?.Where(d => d.Value.Confirmed) ?? [])
+                {
+                    <MudText Typo="Typo.body2">
+                        (default) "@kv.Value.DefaultValue" → @kv.Key
+                    </MudText>
+                }
+            </MudAlert>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+    MudMapper? _mapper;
+    bool _confirmed;
+
+    // Intentionally fewer source items than target headers to demonstrate defaults
+    List<MudMapperItem> _sourceItems =
+    [
+        new("emp_name"),
+        new("emp_email"),
+    ];
+
+    List<MudExpectedHeader> _targetHeaders =
+    [
+        new("Name",       required: true),
+        new("Email",      required: true),
+        new("Department", required: true,  allowDefaultValue: true),
+        new("Start Date", required: false, allowDefaultValue: true),
+    ];
+
+    private void OnConfirmed()
+    {
+        _confirmed = true;
+        Snackbar.Add("Mapping saved!", Severity.Success);
+    }
+
+    private void OnReset()
+    {
+        _confirmed = false;
+        _sourceItems =
+        [
+            new("emp_name"),
+            new("emp_email"),
+        ];
+        _targetHeaders.ForEach(h => h.MatchedFieldCount = 0);
+    }
+}

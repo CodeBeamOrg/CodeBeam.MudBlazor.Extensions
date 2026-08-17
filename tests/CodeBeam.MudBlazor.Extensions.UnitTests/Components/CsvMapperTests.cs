@@ -60,7 +60,7 @@ namespace MudExtensions.UnitTests.Components
                 .GetField("CsvContent", BindingFlags.NonPublic | BindingFlags.Instance)!
                 .SetValue(cut.Instance, csvContent);
 
-            InvokePrivate(cut.Instance, "MatchCsvHeadersWithExpectedHeaders");
+            InvokePrivate(cut.Instance, "MatchSourceItemsWithExpectedHeaders");
 
             expectedHeaders[0].MatchedFieldCount.Should().Be(1);
             expectedHeaders[1].MatchedFieldCount.Should().Be(1);
@@ -93,7 +93,7 @@ namespace MudExtensions.UnitTests.Components
                 .GetField("CsvContent", BindingFlags.NonPublic | BindingFlags.Instance)!
                 .SetValue(cut.Instance, csvContent);
 
-            InvokePrivate(cut.Instance, "MatchCsvHeadersWithExpectedHeaders");
+            InvokePrivate(cut.Instance, "MatchSourceItemsWithExpectedHeaders");
 
             expectedHeaders[0].MatchedFieldCount.Should().Be(1);
             expectedHeaders[1].MatchedFieldCount.Should().Be(1);
@@ -141,9 +141,9 @@ namespace MudExtensions.UnitTests.Components
                 }
             };
 
-            SetPrivateMember(cut.Instance, "_defaultValueHeaders", defaults);
-
-            InvokePrivate(cut.Instance, "AddDefaultValues");
+            InvokePrivateWithArgs(cut.Instance, "AddDefaultValues",
+                new[] { typeof(IReadOnlyDictionary<string, ConfirmedDefaultValue>) },
+                new object[] { (IReadOnlyDictionary<string, ConfirmedDefaultValue>)defaults });
 
             csvContent[0].ContainsKey("Age").Should().BeTrue();
             csvContent[0]["Age"].Should().Be("18");
@@ -155,13 +155,13 @@ namespace MudExtensions.UnitTests.Components
         {
             var cut = Context.Render<MudCsvMapper>();
 
-            var headers = new List<MudCsvHeader>
+            var headers = new List<MudMapperItem>
             {
-                new("A", "File"),
+                new("A", MudMapper.SourcePoolZoneIdentifier),
                 new("B", "Mapped")
             };
 
-            SetPrivateMember(cut.Instance, "MudCsvHeaders", headers);
+            SetPrivateMember(cut.Instance, "_sourceItems", headers);
 
             var csvContent = new List<IDictionary<string, object?>>
             {
@@ -180,8 +180,90 @@ namespace MudExtensions.UnitTests.Components
             csvContent[0].ContainsKey("B").Should().BeTrue();
         }
 
+        [Test]
+        public void RemoveUnmappedData_Should_Not_Treat_Target_Header_Name_Source_As_Unmapped()
+        {
+            var cut = Context.Render<MudCsvMapper>();
 
+            var headers = new List<MudMapperItem>
+            {
+                new("A", "Source"),
+                new("B", MudMapper.SourcePoolZoneIdentifier)
+            };
 
+            SetPrivateMember(cut.Instance, "_sourceItems", headers);
+
+            var csvContent = new List<IDictionary<string, object?>>
+            {
+                new Dictionary<string, object?>
+                {
+                    ["A"] = 1,
+                    ["B"] = 2
+                }
+            };
+
+            SetPrivateMember(cut.Instance, "CsvContent", csvContent);
+
+            InvokePrivate(cut.Instance, "RemoveUnmappedData");
+
+            csvContent[0].ContainsKey("A").Should().BeTrue();
+            csvContent[0].ContainsKey("B").Should().BeFalse();
+        }
+
+        [Test]
+        public void ResetMapping_Should_Clear_Imported_State_And_Reset_Header_Counts()
+        {
+            var cut = Context.Render<MudCsvMapper>();
+            var expectedHeaders = new List<MudExpectedHeader> { new("Age") };
+            expectedHeaders[0].MatchedFieldCount = 2;
+
+            cut.Instance.ExpectedHeaders = expectedHeaders;
+            SetPrivateMember(cut.Instance, "_sourceItems", new List<MudMapperItem> { new("Name", "Name") });
+            SetPrivateMember(cut.Instance, "CsvContent", new List<IDictionary<string, object?>>
+            {
+                new Dictionary<string, object?> { ["Name"] = "Test" }
+            });
+            cut.Instance.FileContentByte = new byte[] { 1, 2, 3 };
+            cut.Instance.CsvMapping["Age"] = "Name";
+
+            InvokePrivate(cut.Instance, "ResetMapping");
+
+            cut.Instance.CsvMapping.Should().BeEmpty();
+            cut.Instance.FileContentByte.Should().BeNull();
+            expectedHeaders[0].MatchedFieldCount.Should().Be(0);
+
+            var sourceItemsField = cut.Instance.GetType().GetField("_sourceItems", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            sourceItemsField.GetValue(cut.Instance).Should().BeOfType<List<MudMapperItem>>()
+                .Which.Should().BeEmpty();
+
+            var csvContentField = cut.Instance.GetType().GetField("CsvContent", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            csvContentField.GetValue(cut.Instance).Should().BeNull();
+        }
+
+        [Test]
+        public void UpdateHeadersWithMappedFields_Should_Remap_And_Record_Mapping()
+        {
+            var cut = Context.Render<MudCsvMapper>();
+            cut.Instance.ExpectedHeaders = new List<MudExpectedHeader> { new("Name") };
+
+            var csvContent = new List<IDictionary<string, object?>>
+            {
+                new Dictionary<string, object?> { ["OriginalName"] = "Jane" }
+            };
+
+            SetPrivateMember(cut.Instance, "CsvContent", csvContent);
+            SetPrivateMember(cut.Instance, "_sourceItems", new List<MudMapperItem>
+            {
+                new("OriginalName", "Name")
+            });
+
+            InvokePrivate(cut.Instance, "UpdateHeadersWithMappedFields");
+
+            cut.Instance.CsvMapping["Name"].Should().Be("OriginalName");
+            csvContent[0].ContainsKey("Name").Should().BeTrue();
+            csvContent[0].ContainsKey("OriginalName").Should().BeFalse();
+            csvContent[0]["Name"].Should().Be("Jane");
+        }
 
         private static void InvokePrivate(object instance, string methodName)
         {
@@ -190,6 +272,28 @@ namespace MudExtensions.UnitTests.Components
 
             method.Should().NotBeNull();
             method!.Invoke(instance, null);
+        }
+
+        private static void InvokePrivateWithArgs(object instance, string methodName, Type[] paramTypes, object[] args)
+        {
+            var method = instance.GetType()
+                .GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance, null, paramTypes, null);
+
+            method.Should().NotBeNull($"method '{methodName}' not found");
+            method!.Invoke(instance, args);
+        }
+
+        private static async Task InvokePrivateAsync(object instance, string methodName)
+        {
+            var method = instance.GetType()
+                .GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
+
+            method.Should().NotBeNull();
+            var result = method!.Invoke(instance, null);
+            if (result is Task task)
+            {
+                await task;
+            }
         }
 
         private static void SetPrivateMember(object instance, string name, object value)

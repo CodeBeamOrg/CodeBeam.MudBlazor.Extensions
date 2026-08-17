@@ -3552,6 +3552,182 @@
             The child content.
             </summary>
         </member>
+        <member name="T:MudExtensions.ConfirmedDefaultValue">
+            <summary>
+            Represents a confirmed default value for a target header when no source item is mapped.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.ConfirmedDefaultValue.DefaultValue">
+            <summary>
+            The default value to use.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.ConfirmedDefaultValue.Confirmed">
+            <summary>
+            Whether the default value has been confirmed by the user.
+            </summary>
+        </member>
+        <member name="T:MudExtensions.MudExpectedHeader">
+            <summary>
+            Represents a target field that source items can be mapped onto.
+            </summary>
+        </member>
+        <member name="F:MudExtensions.MudExpectedHeader.RequiredCss">
+            <summary>
+            CSS applied to the drop zone when this required header has no match.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudExpectedHeader.Name">
+            <summary>
+            The name of the target header.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudExpectedHeader.Aliases">
+            <summary>
+            Aliases for the header. If any alias matches a source item name it is treated as a match.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudExpectedHeader.Required">
+            <summary>
+            Whether this header must be mapped before the user can confirm.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudExpectedHeader.AllowDefaultValue">
+            <summary>
+            Whether the user may supply a default value instead of mapping a source item.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudExpectedHeader.CreatingDefaultValue">
+            <summary>
+            Internal UI state: whether the default-value entry form is expanded.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudExpectedHeader.MatchedFieldCount">
+            <summary>
+            Number of source items currently mapped to this header.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudExpectedHeader.#ctor">
+            <summary>Initializes a new instance.</summary>
+        </member>
+        <member name="M:MudExtensions.MudExpectedHeader.#ctor(System.String)">
+            <summary>Initializes a new instance with the given name.</summary>
+        </member>
+        <member name="M:MudExtensions.MudExpectedHeader.#ctor(System.String,System.Boolean)">
+            <summary>Initializes a new instance with the given name and required flag.</summary>
+        </member>
+        <member name="M:MudExtensions.MudExpectedHeader.#ctor(System.String,System.Boolean,System.Boolean)">
+            <summary>Initializes a new instance with name, required and allowDefaultValue flags.</summary>
+        </member>
+        <member name="M:MudExtensions.MudExpectedHeader.#ctor(System.String,System.Boolean,System.Boolean,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>Initializes a new instance with all properties.</summary>
+        </member>
+        <member name="T:MudExtensions.MudMapperItem">
+            <summary>
+            Represents a source item that can be dragged onto a target header zone.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapperItem.Name">
+            <summary>
+            The display name of the source item.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapperItem.MappedZone">
+            <summary>
+            The identifier of the drop zone this item currently occupies.
+            Defaults to <c>"Source"</c> (the unassigned pool).
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudMapperItem.#ctor(System.String,System.String)">
+            <summary>Initializes a new instance.</summary>
+            <param name="name">Display name.</param>
+            <param name="mappedZone">Initial zone identifier; defaults to <c>"Source"</c>.</param>
+        </member>
+        <member name="T:MudExtensions.MudMapper">
+            <summary>
+            A standalone drag-and-drop field mapper component.
+            Allows users to map source items onto target headers without any file or CSV dependency.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.Classname">
+            <summary>CSS class for the root element.</summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.LocalizedStrings">
+            <summary>
+            Localized display strings for the component.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.TargetHeaders">
+            <summary>
+            The list of target headers that source items can be mapped onto.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.SourceItems">
+            <summary>
+            The source items available for mapping. Mutated in-place as the user drags items.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.AllowCreateTargetHeaders">
+            <summary>
+            Whether the user may create new target headers at runtime.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.ShowIncludeUnmappedData">
+            <summary>
+            Whether to show the "Include unmapped data" toggle.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.ConfirmLabel">
+            <summary>
+            Label for the confirm action button. Defaults to the value in <see cref="P:MudExtensions.MudMapper.LocalizedStrings"/>.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.ConfirmIcon">
+            <summary>
+            Icon for the confirm action button.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.OnConfirmed">
+            <summary>
+            Fires when the user clicks the confirm button and the mapping is valid.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.OnReset">
+            <summary>
+            Fires when the user clicks the reset button.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.IsConfirmed">
+            <summary>
+            Whether the user has already confirmed the mapping.
+            Controls whether the confirm button or the reset button is displayed.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.IsValid">
+            <summary>
+            Whether the current mapping satisfies all required target headers.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.IncludeUnmappedData">
+            <summary>
+            Whether source items that are not mapped to any target should be included in the output.
+            Readable after the user confirms.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudMapper.DefaultValues">
+            <summary>
+            The confirmed default values keyed by target header name.
+            Readable after the user confirms.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudMapper.OnInitialized">
+            <inheritdoc />
+        </member>
+        <member name="M:MudExtensions.MudMapper.ResetMapping">
+            <summary>
+            Resets mapping state so the component can be reused for a new set of source items.
+            </summary>
+        </member>
         <member name="T:MudExtensions.MudPage">
             <summary>
             
@@ -7187,6 +7363,11 @@
         <member name="T:MudExtensions.Utilities.CssProp">
             <summary>
             
+            </summary>
+        </member>
+        <member name="T:MudExtensions.Utilities.MudMapperLocalizedStrings">
+            <summary>
+            Localized strings for MudMapper.
             </summary>
         </member>
         <member name="T:MudExtensions.Utilities.MudTeleportManager">

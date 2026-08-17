@@ -1,0 +1,82 @@
+@namespace MudExtensions.Docs.Examples
+@inject ISnackbar Snackbar
+@using MudExtensions.Utilities
+
+<MudGrid>
+    <MudItem xs="12">
+        <MudText Typo="Typo.body2" Class="mb-2">
+            Use <b>Create Header</b> to add new target headers on the fly.
+            Toggle <b>Include unmapped data</b> to keep source items that have no target.
+        </MudText>
+    </MudItem>
+    <MudItem xs="12">
+        <MudMapper @ref="_mapper"
+                   SourceItems="_sourceItems"
+                   TargetHeaders="_targetHeaders"
+                   AllowCreateTargetHeaders="true"
+                   ShowIncludeUnmappedData="true"
+                   ConfirmLabel="Apply"
+                   OnConfirmed="OnConfirmed"
+                   OnReset="OnReset" />
+    </MudItem>
+    @if (_confirmed)
+    {
+        <MudItem xs="12">
+            <MudAlert Severity="Severity.Info" Elevation="0">
+                <MudText Typo="Typo.subtitle2" Class="mb-1">
+                    Result — Include unmapped: @(_mapper?.IncludeUnmappedData)
+                </MudText>
+                @foreach (var item in _mapper?.SourceItems ?? [])
+                {
+                    <MudText Typo="Typo.body2">
+                        @item.Name → @(item.MappedZone == "Source" ? "(unmapped)" : item.MappedZone)
+                    </MudText>
+                }
+            </MudAlert>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+    MudMapper? _mapper;
+    bool _confirmed;
+
+    List<MudMapperItem> _sourceItems =
+    [
+        new("product_id"),
+        new("product_name"),
+        new("unit_price"),
+        new("qty_in_stock"),
+        new("sku_code"),
+        new("category"),
+    ];
+
+    List<MudExpectedHeader> _targetHeaders =
+    [
+        new("Id",       required: true),
+        new("Name",     required: true),
+        new("Price"),
+        new("Stock"),
+    ];
+
+    private void OnConfirmed()
+    {
+        _confirmed = true;
+        Snackbar.Add("Mapping applied!", Severity.Info);
+    }
+
+    private void OnReset()
+    {
+        _confirmed = false;
+        _sourceItems =
+        [
+            new("product_id"),
+            new("product_name"),
+            new("unit_price"),
+            new("qty_in_stock"),
+            new("sku_code"),
+            new("category"),
+        ];
+        _targetHeaders.ForEach(h => h.MatchedFieldCount = 0);
+    }
+}
