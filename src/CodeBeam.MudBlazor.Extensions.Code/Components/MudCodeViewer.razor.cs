@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.State;
@@ -23,6 +23,7 @@ public partial class MudCodeViewer : MudComponentBase
     private readonly ParameterState<string?> _code;
     private readonly ParameterState<bool> _showLineNumbers;
     private readonly ParameterState<bool> _wrap;
+    private readonly ParameterState<bool> _editable;
     private readonly ParameterState<bool> _header;
     private readonly ParameterState<CodeLanguage> _language;
 
@@ -41,6 +42,9 @@ public partial class MudCodeViewer : MudComponentBase
             .WithChangeHandler(ParameterChanged);
         _wrap = registerScope.RegisterParameter<bool>(nameof(Wrap))
             .WithParameter(() => Wrap)
+            .WithChangeHandler(ParameterChanged);
+        _editable = registerScope.RegisterParameter<bool>(nameof(Editable))
+            .WithParameter(() => Editable)
             .WithChangeHandler(ParameterChanged);
         _header = registerScope.RegisterParameter<bool>(nameof(ShowHeader))
             .WithParameter(() => ShowHeader)
@@ -174,13 +178,13 @@ public partial class MudCodeViewer : MudComponentBase
             await RefreshAsync();
         }
 
-        if (Editable && !_tabEnabled)
+        if (_editable.Value && !_tabEnabled)
         {
             await JS.InvokeVoidAsync("MudCode.enableTabIndent", _textAreaRef);
             _tabEnabled = true;
         }
 
-        if (!Editable)
+        if (!_editable.Value)
         {
             _tabEnabled = false;
         }
