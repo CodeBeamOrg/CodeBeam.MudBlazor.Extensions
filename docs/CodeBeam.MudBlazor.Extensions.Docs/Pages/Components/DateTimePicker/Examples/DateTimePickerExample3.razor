@@ -3,14 +3,61 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudDateTimePicker @ref="_picker" @bind-Value="_date" Editable="_editable" Label="Date" Clearable="_clearable"
-            ShowToolbar="_showToolbar" Variant="_variant" Color="_color" DateFormat="@_dateFormat">
-            <PickerActions>
-        <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.ClearAsync())">Clear</MudButton>
-        <MudButton OnClick="@(() => _picker.CloseAsync(false))">Cancel</MudButton>
-        <MudButton Color="Color.Primary" OnClick="@(() => _picker.CloseAsync())">OK</MudButton>
-    </PickerActions>
-        </MudDateTimePicker>
+        <MudStack Spacing="2">
+            <MudDateTimePicker @ref="_dateTimePicker" @bind-Value="_dateTime" Editable="_editable" Label="DateTime" Clearable="_clearable"
+                               ShowToolbar="_showToolbar" Variant="_variant" Color="_color" DateFormat="@_dateFormat">
+                <PickerActions>
+                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _dateTimePicker.ClearAsync())">Clear</MudButton>
+                    <MudButton OnClick="@(() => _dateTimePicker.CloseAsync(false))">Cancel</MudButton>
+                    <MudButton Color="Color.Primary" OnClick="@(() => _dateTimePicker.CloseAsync())">OK</MudButton>
+                </PickerActions>
+            </MudDateTimePicker>
+
+            <MudDateTimePicker @ref="_nullableDateTimePicker" @bind-Value="_nullableDateTime" Editable="_editable" Label="DateTime?" Clearable="_clearable"
+                               ShowToolbar="_showToolbar" Variant="_variant" Color="_color" DateFormat="@_dateFormat">
+                <PickerActions>
+                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _nullableDateTimePicker.ClearAsync())">Clear</MudButton>
+                    <MudButton OnClick="@(() => _nullableDateTimePicker.CloseAsync(false))">Cancel</MudButton>
+                    <MudButton Color="Color.Primary" OnClick="@(() => _nullableDateTimePicker.CloseAsync())">OK</MudButton>
+                </PickerActions>
+            </MudDateTimePicker>
+
+            <MudDateTimePicker @ref="_dateTimeOffsetPicker" @bind-Value="_dateTimeOffset" Editable="_editable" Label="DateTimeOffset" Clearable="_clearable"
+                               ShowToolbar="_showToolbar" Variant="_variant" Color="_color" DateFormat="@_dateFormat">
+                <PickerActions>
+                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _dateTimeOffsetPicker.ClearAsync())">Clear</MudButton>
+                    <MudButton OnClick="@(() => _dateTimeOffsetPicker.CloseAsync(false))">Cancel</MudButton>
+                    <MudButton Color="Color.Primary" OnClick="@(() => _dateTimeOffsetPicker.CloseAsync())">OK</MudButton>
+                </PickerActions>
+            </MudDateTimePicker>
+
+            <MudDateTimePicker @ref="_nullableDateTimeOffsetPicker" @bind-Value="_nullableDateTimeOffset" Editable="_editable" Label="DateTimeOffset?" Clearable="_clearable"
+                               ShowToolbar="_showToolbar" Variant="_variant" Color="_color" DateFormat="@_dateFormat">
+                <PickerActions>
+                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _nullableDateTimeOffsetPicker.ClearAsync())">Clear</MudButton>
+                    <MudButton OnClick="@(() => _nullableDateTimeOffsetPicker.CloseAsync(false))">Cancel</MudButton>
+                    <MudButton Color="Color.Primary" OnClick="@(() => _nullableDateTimeOffsetPicker.CloseAsync())">OK</MudButton>
+                </PickerActions>
+            </MudDateTimePicker>
+
+            <MudDateTimePicker @ref="_dateOnlyPicker" @bind-Value="_dateOnly" Editable="_editable" Label="DateOnly" Clearable="_clearable"
+                               ShowToolbar="_showToolbar" Variant="_variant" Color="_color" DateFormat="@_dateFormat">
+                <PickerActions>
+                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _dateOnlyPicker.ClearAsync())">Clear</MudButton>
+                    <MudButton OnClick="@(() => _dateOnlyPicker.CloseAsync(false))">Cancel</MudButton>
+                    <MudButton Color="Color.Primary" OnClick="@(() => _dateOnlyPicker.CloseAsync())">OK</MudButton>
+                </PickerActions>
+            </MudDateTimePicker>
+
+            <MudDateTimePicker @ref="_nullableDateOnlyPicker" @bind-Value="_nullableDateOnly" Editable="_editable" Label="DateOnly?" Clearable="_clearable"
+                               ShowToolbar="_showToolbar" Variant="_variant" Color="_color" DateFormat="@_dateFormat">
+                <PickerActions>
+                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _nullableDateOnlyPicker.ClearAsync())">Clear</MudButton>
+                    <MudButton OnClick="@(() => _nullableDateOnlyPicker.CloseAsync(false))">Cancel</MudButton>
+                    <MudButton Color="Color.Primary" OnClick="@(() => _nullableDateOnlyPicker.CloseAsync())">OK</MudButton>
+                </PickerActions>
+            </MudDateTimePicker>
+        </MudStack>
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -32,15 +79,25 @@
                 }
             </MudSelect>
             <MudTextField @bind-Value="_dateFormat" Variant="Variant.Outlined" Label="Date Format" />
-            <MudButton OnClick="@(() => _date = DateTime.Now)">Set Today</MudButton>
+            <MudButton OnClick="SetCurrentValues">Set Current Values</MudButton>
         </MudStack>
     </MudItem>
 </MudGrid>
 
 @code {
-    private MudDateTimePicker<DateTime?> _picker = null!;
+    private MudDateTimePicker<DateTime> _dateTimePicker = null!;
+    private MudDateTimePicker<DateTime?> _nullableDateTimePicker = null!;
+    private MudDateTimePicker<DateTimeOffset> _dateTimeOffsetPicker = null!;
+    private MudDateTimePicker<DateTimeOffset?> _nullableDateTimeOffsetPicker = null!;
+    private MudDateTimePicker<DateOnly> _dateOnlyPicker = null!;
+    private MudDateTimePicker<DateOnly?> _nullableDateOnlyPicker = null!;
 
-    private DateTime? _date = DateTime.Now;
+    private DateTime _dateTime = DateTime.Now;
+    private DateTime? _nullableDateTime;
+    private DateTimeOffset _dateTimeOffset = DateTimeOffset.UtcNow;
+    private DateTimeOffset? _nullableDateTimeOffset;
+    private DateOnly _dateOnly = DateOnly.FromDateTime(DateTime.Now);
+    private DateOnly? _nullableDateOnly;
     private bool _editable = false;
     private bool _showToolbar = true;
     private bool _submitOnClose = true;
@@ -49,4 +106,16 @@
     private bool _isAdornmentEnd = true;
     private bool _clearable = false;
     private Variant _variant = Variant.Outlined;
+
+    private void SetCurrentValues()
+    {
+        _dateTime = DateTime.Now;
+        _nullableDateTime = DateTime.Now;
+        _dateTimeOffset = DateTimeOffset.UtcNow;
+        _nullableDateTimeOffset = DateTimeOffset.UtcNow;
+        _dateOnly = DateOnly.FromDateTime(DateTime.Now);
+        _nullableDateOnly = DateOnly.FromDateTime(DateTime.Now);
+    }
 }
+
+ 

@@ -107,7 +107,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
     /// The current month shown in the date picker.
     /// </summary>
     /// <remarks>
-    /// Defaults to the current month.<br />
+    /// Defaults to the current month.
     /// When bound via <c>@bind-PickerMonth</c>, controls the initial month displayed.  This value is always the first day of a month.
     /// </remarks>
     [Parameter]
@@ -133,7 +133,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
     /// The delay, in milliseconds, before closing the picker after a value is selected.
     /// </summary>
     /// <remarks>
-    /// Defaults to <c>100</c>.<br />
+    /// Defaults to <c>100</c>.
     /// This delay helps the user see that a date has been selected before the popover disappears.
     /// </remarks>
     [Parameter] public int ClosingDelay { get; set; } = 100;
@@ -150,7 +150,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
     /// The maximum number of months allowed in one row.
     /// </summary>
     /// <remarks>
-    /// Defaults to <c>null</c>.<br />
+    /// Defaults to <c>null</c>.
     /// When <c>null</c>, the <see cref="DisplayMonths"/> is used.
     /// </remarks>
     [Parameter] public int? MaxMonthColumns { get; set; }
@@ -172,7 +172,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
     /// The format of the selected date in the title.
     /// </summary>
     /// <remarks>
-    /// Defaults to <c>ddd, dd MMM</c>.<br />
+    /// Defaults to <c>ddd, dd MMM</c>.
     /// Supported date formats can be found here: <see href="https://learn.microsoft.com/dotnet/standard/base-types/standard-date-and-time-format-strings"/>.
     /// </remarks>
     [Parameter] public string TitleDateFormat { get; set; } = "ddd, dd MMM";
@@ -189,7 +189,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
     /// The function used to disable one or more dates.
     /// </summary>
     /// <remarks>
-    /// Defaults to <c>null</c>.<br />
+    /// Defaults to <c>null</c>.
     /// When set, a date will be disabled if the function returns <c>true</c>.
     /// </remarks>
     [Parameter] public Func<DateTime, bool> IsDateDisabledFunc { get; set; } = _ => false;
@@ -261,13 +261,13 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
         var tz = TimeZone ?? TimeZoneInfo.Local;
 
         if (value is DateTime dt)
-            return dt;
+            return dt == DateTime.MinValue ? null : dt;
 
         if (value is DateTimeOffset dto)
-            return TimeZoneInfo.ConvertTime(dto, tz).DateTime;
+            return dto == DateTimeOffset.MinValue ? null : TimeZoneInfo.ConvertTime(dto, tz).DateTime;
 
         if (value is DateOnly d)
-            return d.ToDateTime(TimeOnly.MinValue);
+            return d == DateOnly.MinValue ? null : d.ToDateTime(TimeOnly.MinValue);
 
         throw new NotSupportedException($"Type {typeof(T)} not supported");
     }

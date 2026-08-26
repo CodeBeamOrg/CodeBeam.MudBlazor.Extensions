@@ -44,6 +44,32 @@ public class DateTimePickerTests : BunitTest
     }
 
     [Test]
+    public void DateTimePicker_DateTime_Should_Render_Time()
+    {
+        var comp = RenderPicker(
+            value: new DateTime(2026, 5, 3, 14, 30, 0),
+            format: "dd.MM.yyyy HH:mm");
+
+        comp.Instance.ConvertSetInternal(comp.Instance.Value).Should().Be("03.05.2026 14:30");
+    }
+
+    [Test]
+    public void DateTimePicker_DateTimeNullable_Should_Render_Empty_When_Null()
+    {
+        var comp = RenderPicker<DateTime?>();
+
+        comp.Find("input").GetAttribute("value").Should().BeNullOrEmpty();
+    }
+
+    [Test]
+    public void DateTimePicker_Default_DateTime_Should_Render_Empty()
+    {
+        var comp = RenderPicker<DateTime>();
+
+        comp.Find("input").GetAttribute("value").Should().BeNullOrEmpty();
+    }
+
+    [Test]
     public void DateTimePicker_DateOnly_Should_Not_Render_Time()
     {
         var comp = Context.Render<MudDateTimePicker<DateOnly>>(p => p
@@ -54,7 +80,48 @@ public class DateTimePickerTests : BunitTest
     }
 
     [Test]
+    public void DateTimePicker_DateOnly_Should_Render_Date_Only()
+    {
+        var comp = RenderPicker(
+            value: new DateOnly(2026, 5, 3),
+            format: "dd.MM.yyyy");
+
+        comp.Instance.ConvertSetInternal(comp.Instance.Value).Should().Be("03.05.2026");
+    }
+
+    [Test]
+    public void DateTimePicker_Default_DateOnly_Should_Render_Empty()
+    {
+        var comp = RenderPicker<DateOnly>();
+
+        comp.Find("input").GetAttribute("value").Should().BeNullOrEmpty();
+    }
+
+    [Test]
+    public void DateTimePicker_DateOnlyNullable_Should_Render_Empty_When_Null()
+    {
+        var comp = RenderPicker<DateOnly?>();
+
+        comp.Find("input").GetAttribute("value").Should().BeNullOrEmpty();
+    }
+
+    [Test]
     public void DateTimePicker_DateTimeOffset_Should_Convert_Correctly()
+    {
+        DateTimeOffset value = new DateTimeOffset(2026, 5, 3, 10, 0, 0, TimeSpan.Zero);
+
+        var comp = Context.Render<MudDateTimePicker<DateTimeOffset>>(p => p
+            .Add(x => x.Value, value)
+            .Add(x => x.TimeZone, TimeZoneInfo.Utc)
+        );
+
+        var dt = comp.Instance.ToDateTime(value);
+
+        dt.Should().Be(new DateTime(2026, 5, 3, 10, 0, 0));
+    }
+
+    [Test]
+    public void DateTimePicker_DateTimeOffsetNullable_Should_Convert_Correctly()
     {
         DateTimeOffset? value = new DateTimeOffset(2026, 5, 3, 10, 0, 0, TimeSpan.Zero);
 
@@ -66,6 +133,22 @@ public class DateTimePickerTests : BunitTest
         var dt = comp.Instance.ToDateTime(value);
 
         dt.Should().Be(new DateTime(2026, 5, 3, 10, 0, 0));
+    }
+
+    [Test]
+    public void DateTimePicker_DateTimeOffsetNullable_Should_Render_Empty_When_Null()
+    {
+        var comp = RenderPicker<DateTimeOffset?>();
+
+        comp.Find("input").GetAttribute("value").Should().BeNullOrEmpty();
+    }
+
+    [Test]
+    public void DateTimePicker_Default_DateTimeOffset_Should_Render_Empty()
+    {
+        var comp = RenderPicker<DateTimeOffset>();
+
+        comp.Find("input").GetAttribute("value").Should().BeNullOrEmpty();
     }
 
     [Test]

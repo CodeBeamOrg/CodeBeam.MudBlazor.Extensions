@@ -3,11 +3,16 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8">
-        <MudDateTimePicker @bind-Value="_date" Editable="_editable" Label="DateTime" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
-        <MudDateTimePicker @bind-Value="_date2" Editable="_editable" Label="DateTimeOffset" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
-        <MudDateTimePicker @bind-Value="_date2" Editable="_editable" Label="TimeZone Istanbul" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary"
-                           TimeZone="@TimeZoneInfo.FindSystemTimeZoneById("Europe/Istanbul")" />
-        <MudDateTimePicker @bind-Value="_date3" Editable="_editable" Label="DateOnly" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
+        <MudStack Spacing="2">
+            <MudDateTimePicker @bind-Value="_dateTime" Editable="_editable" Label="DateTime" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
+            <MudDateTimePicker @bind-Value="_nullableDateTime" Editable="_editable" Label="DateTime?" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
+            <MudDateTimePicker @bind-Value="_dateTimeOffset" Editable="_editable" Label="DateTimeOffset" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
+            <MudDateTimePicker @bind-Value="_nullableDateTimeOffset" Editable="_editable" Label="DateTimeOffset?" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
+            <MudDateTimePicker @bind-Value="_dateTimeOffset" Editable="_editable" Label="TimeZone Istanbul" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary"
+                               TimeZone="@TimeZoneInfo.FindSystemTimeZoneById("Europe/Istanbul")" />
+            <MudDateTimePicker @bind-Value="_dateOnly" Editable="_editable" Label="DateOnly" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
+            <MudDateTimePicker @bind-Value="_nullableDateOnly" Editable="_editable" Label="DateOnly?" Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
+        </MudStack>
     </MudItem>
 
     <MudItem xs="12" sm="4">
@@ -19,9 +24,14 @@
 </MudGrid>
 
 @code {
-    private DateTime? _date = DateTime.Now;
-    private DateTimeOffset _date2 = DateTimeOffset.UtcNow;
-    private DateOnly _date3 = DateOnly.FromDateTime(DateTime.Now);
+    private DateTime _dateTime = DateTime.Now;
+    private DateTime? _nullableDateTime;
+    private DateTimeOffset _dateTimeOffset = DateTimeOffset.UtcNow;
+    private DateTimeOffset? _nullableDateTimeOffset;
+    private DateOnly _dateOnly = DateOnly.FromDateTime(DateTime.Now);
+    private DateOnly? _nullableDateOnly;
     private bool _clearable = false;
     private bool _editable = false;
 }
+
+ 
