@@ -271,13 +271,13 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
         var tz = TimeZone ?? TimeZoneInfo.Local;
 
         if (value is DateTime dt)
-            return dt == DateTime.MinValue ? null : dt;
+            return dt;
 
         if (value is DateTimeOffset dto)
-            return dto == DateTimeOffset.MinValue ? null : TimeZoneInfo.ConvertTime(dto, tz).DateTime;
+            return TimeZoneInfo.ConvertTime(dto, tz).DateTime;
 
         if (value is DateOnly d)
-            return d == DateOnly.MinValue ? null : d.ToDateTime(TimeOnly.MinValue);
+            return d.ToDateTime(TimeOnly.MinValue);
 
         throw new NotSupportedException($"Type {typeof(T)} not supported");
     }
