@@ -405,9 +405,9 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>A task that represents the asynchronous operation.</returns>
     public override async Task ClearAsync(bool close = true)
     {
-        await SetDateAsync(null, true);
+        await SetDateAsync(ToDateTime(ValueOnClear), true);
 
-        if (AutoClose)
+        if (AutoClose || close)
             await CloseAsync(false);
     }
 

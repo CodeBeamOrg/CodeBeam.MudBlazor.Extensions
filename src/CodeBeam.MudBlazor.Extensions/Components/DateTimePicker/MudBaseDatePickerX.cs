@@ -186,6 +186,16 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
     [Parameter] public bool AutoClose { get; set; }
 
     /// <summary>
+    /// The value to set when the clear button is clicked.
+    /// </summary>
+    /// <remarks>
+    /// Defaults to <c>default</c>.<br />
+    /// For nullable types, this will default to <c>null</c>. For non-nullable types, this will default to the minimum value.
+    /// </remarks>
+    [Parameter]
+    public T? ValueOnClear { get; set; } = default;
+
+    /// <summary>
     /// The function used to disable one or more dates.
     /// </summary>
     /// <remarks>
