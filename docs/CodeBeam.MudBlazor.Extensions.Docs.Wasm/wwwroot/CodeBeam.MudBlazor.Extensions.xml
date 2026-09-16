@@ -1452,15 +1452,6 @@
             Defaults to <c>false</c>.
             </remarks>
         </member>
-        <member name="P:MudExtensions.MudBaseDatePickerX`1.ValueOnClear">
-            <summary>
-            The value to set when the clear button is clicked.
-            </summary>
-            <remarks>
-            Defaults to <c>default</c>.<br />
-            For nullable types, this will default to <c>null</c>. For non-nullable types, this will default to the minimum value.
-            </remarks>
-        </member>
         <member name="P:MudExtensions.MudBaseDatePickerX`1.IsDateDisabledFunc">
             <summary>
             The function used to disable one or more dates.
@@ -1531,6 +1522,18 @@
             <returns>The converted DateTime value.</returns>
             <exception cref="T:System.NotSupportedException">Thrown when the type T is not supported.</exception>
         </member>
+        <member name="M:MudExtensions.MudBaseDatePickerX`1.GetEffectiveDateTime(`0)">
+            <summary>
+            Gets the effective <see cref="T:System.DateTime"/> representation of the specified value for picker state decisions.
+            </summary>
+            <remarks>
+            The default implementation performs a direct conversion via <see cref="M:MudExtensions.MudBaseDatePickerX`1.ToDateTime(`0)"/>.
+            Derived components can override this method to treat certain values as an empty picker state while leaving
+            the underlying conversion behavior unchanged.
+            </remarks>
+            <param name="value">The value to interpret for picker state.</param>
+            <returns>The effective <see cref="T:System.DateTime"/> for picker behavior, or <see langword="null"/> when the picker should behave as empty.</returns>
+        </member>
         <member name="M:MudExtensions.MudBaseDatePickerX`1.FromDateTime(System.Nullable{System.DateTime})">
             <summary>
             Converts a nullable <see cref="T:System.DateTime"/> value to an instance of type <typeparamref name="T"/>, if supported.
@@ -1580,6 +1583,23 @@
             Provides date and time selection in a single component. The date and time can be submitted together or separately. The time selection is done through an interactive clock interface where the user can select hours and minutes by clicking or dragging a pointer.
             </summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.IsEmptyNonNullableValue(`0)">
+            <summary>
+            Determines whether the specified value represents the empty picker state for a non-nullable date type.
+            </summary>
+            <param name="value">The value to evaluate.</param>
+            <returns><see langword="true"/> when <typeparamref name="T"/> is non-nullable and <paramref name="value"/> equals its default value; otherwise, <see langword="false"/>.</returns>
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.GetEffectiveDateTime(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:MudExtensions.MudDateTimePicker`1.GetEffectiveText(`0)">
+            <summary>
+            Gets the text representation for the specified value using the effective picker-state interpretation.
+            </summary>
+            <param name="value">The value to format.</param>
+            <returns>The formatted text for the value, or <see langword="null"/> when the picker should display an empty state.</returns>
         </member>
         <member name="M:MudExtensions.MudDateTimePicker`1.OnInitialized">
             <inheritdoc />
