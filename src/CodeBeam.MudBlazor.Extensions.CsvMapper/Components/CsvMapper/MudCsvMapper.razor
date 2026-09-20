@@ -20,7 +20,7 @@
         <MudFileUpload T="IBrowserFile" Accept=".csv" OnFilesChanged="OnInputFileChanged" Hidden="false" Class="flex-1 d-flex justify-center align-content-center my-2"
                        InputClass="absolute mud-width-full mud-height-full d-flex justify-center align-content-center overflow-hidden z-20" InputStyle="opacity:0"
                        @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass">
-            <ActivatorContent>
+            <CustomContent>
                 <MudPaper Outlined="true" Class="@("d-flex flex-column justify-center align-content-center mud-background-gray p-2 " + DragClass)">
                     <MudPaper Elevation="0" class="mud-transparent d-flex justify-center align-content-center">
                         <svg class="mud-icon-root" viewBox="0 0 24 24" height="75" width="75" style=" height:75px; width:175px;" aria-hidden="true">
@@ -43,7 +43,7 @@
                         }
                     </MudPaper>
                 </MudPaper>
-            </ActivatorContent>
+            </CustomContent>
         </MudFileUpload>
     </MudStack>
 
