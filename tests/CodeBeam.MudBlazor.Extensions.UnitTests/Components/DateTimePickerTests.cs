@@ -217,6 +217,25 @@ public class DateTimePickerTests : BunitTest
     }
 
     [Test]
+    public async Task DateTimePicker_Clear_With_ValueOnClear_DateTime_Should_Set_Custom_Value()
+    {
+        DateTime value = new DateTime(2026, 5, 3, 14, 30, 0);
+        var customClearValue = new DateTime(2025, 1, 1, 0, 0, 0);
+        var callback = EventCallback.Factory.Create<DateTime>(this, v => value = v);
+
+        var comp = Context.Render<MudDateTimePicker<DateTime>>(parameters =>
+        {
+            parameters.Add(p => p.Value, value);
+            parameters.Add(p => p.ValueChanged, callback);
+            parameters.Add(p => p.ValueOnClear, customClearValue);
+        });
+
+        await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
+
+        value.Should().Be(customClearValue);
+    }
+
+    [Test]
     public async Task DateTimePicker_Clear_With_ValueOnClear_DateOnly_Should_Set_Custom_Value()
     {
         DateOnly value = new DateOnly(2026, 5, 3);
