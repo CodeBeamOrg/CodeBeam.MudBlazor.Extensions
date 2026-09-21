@@ -9,14 +9,15 @@
             <MudDateTimePicker @bind-Value="_nullableDateTime" Editable="_editable" Label="DateTime?"
                                Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
 
-            <MudDateTimePicker @bind-Value="_dateTimeOffset" Editable="_editable" Label="DateTimeOffset"
+            <MudDateTimePicker @bind-Value="_dateTimeOffset" ValueOnClear="@DateTimeOffset.Now" Editable="_editable" Label="DateTimeOffset"
                                Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary" />
-            <MudDateTimePicker @bind-Value="_nullableDateTimeOffset" ValueOnClear="@(new DateTimeOffset(DateTime.Now))"
-                               Editable="_editable" Label="DateTimeOffset?" Clearable="_clearable" Variant="Variant.Outlined"
+            <MudDateTimePicker @bind-Value="_nullableDateTimeOffset" Editable="_editable" Label="DateTimeOffset?" Clearable="_clearable" Variant="Variant.Outlined"
                                Color="Color.Primary" />
-            <MudDateTimePicker @bind-Value="_dateTimeOffset" Editable="_editable" Label="TimeZone Istanbul"
+            <MudDateTimePicker @bind-Value="_istanbulDateTimeOffset"
+                               ValueOnClear="@TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, IstanbulTimeZone)"
+                               Editable="_editable" Label="TimeZone Istanbul"
                                Clearable="_clearable" Variant="Variant.Outlined" Color="Color.Primary"
-                               TimeZone="@TimeZoneInfo.FindSystemTimeZoneById("Europe/Istanbul")" />
+                               TimeZone="@IstanbulTimeZone" />
 
             <MudDateTimePicker @bind-Value="_dateOnly" ValueOnClear="@DateOnly.FromDateTime(DateTime.Now)"
                                Editable="_editable" Label="DateOnly" Clearable="_clearable" Variant="Variant.Outlined"
@@ -35,9 +36,11 @@
 </MudGrid>
 
 @code {
+    private static readonly TimeZoneInfo IstanbulTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Istanbul");
     private DateTime _dateTime = DateTime.Now;
     private DateTime? _nullableDateTime;
     private DateTimeOffset _dateTimeOffset = DateTimeOffset.UtcNow;
+    private DateTimeOffset _istanbulDateTimeOffset = TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, IstanbulTimeZone);
     private DateTimeOffset? _nullableDateTimeOffset;
     private DateOnly _dateOnly = DateOnly.FromDateTime(DateTime.Now);
     private DateOnly? _nullableDateOnly;
