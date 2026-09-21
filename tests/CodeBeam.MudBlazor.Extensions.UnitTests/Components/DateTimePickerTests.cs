@@ -217,11 +217,16 @@ public class DateTimePickerTests : BunitTest
     }
 
     [Test]
-    public async Task DateTimePicker_Clear_With_ValueOnClear_DateTime_Should_Set_Custom_Value()
+    public async Task DateTimePicker_Clear_With_ValueOnClear_DateTime_Should_Set_Configured_Value_On_First_Clear()
     {
         DateTime value = new DateTime(2026, 5, 3, 14, 30, 0);
         var customClearValue = new DateTime(2025, 1, 1, 0, 0, 0);
-        var callback = EventCallback.Factory.Create<DateTime>(this, v => value = v);
+        var valueChangedCount = 0;
+        var callback = EventCallback.Factory.Create<DateTime>(this, v =>
+        {
+            value = v;
+            valueChangedCount++;
+        });
 
         var comp = Context.Render<MudDateTimePicker<DateTime>>(parameters =>
         {
@@ -233,6 +238,43 @@ public class DateTimePickerTests : BunitTest
         await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
 
         value.Should().Be(customClearValue);
+        valueChangedCount.Should().Be(1);
+    }
+
+    [Test]
+    public async Task DateTimePicker_Clear_With_ValueOnClear_CurrentDateTime_Should_Set_Captured_Current_Value()
+    {
+        var currentDateTime = DateTime.Now;
+        DateTime value = currentDateTime.AddDays(-1);
+        var callback = EventCallback.Factory.Create<DateTime>(this, v => value = v);
+
+        var comp = Context.Render<MudDateTimePicker<DateTime>>(parameters =>
+        {
+            parameters.Add(p => p.Value, value);
+            parameters.Add(p => p.ValueChanged, callback);
+            parameters.Add(p => p.ValueOnClear, currentDateTime);
+        });
+
+        await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
+
+        value.Should().Be(currentDateTime);
+    }
+
+    [Test]
+    public async Task DateTimePicker_Clear_Without_ValueOnClear_DateTime_Should_Set_Default()
+    {
+        DateTime value = new DateTime(2026, 5, 3, 14, 30, 0);
+        var callback = EventCallback.Factory.Create<DateTime>(this, v => value = v);
+
+        var comp = Context.Render<MudDateTimePicker<DateTime>>(parameters =>
+        {
+            parameters.Add(p => p.Value, value);
+            parameters.Add(p => p.ValueChanged, callback);
+        });
+
+        await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
+
+        value.Should().Be(default(DateTime));
     }
 
     [Test]
@@ -252,6 +294,25 @@ public class DateTimePickerTests : BunitTest
         await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
 
         value.Should().Be(customClearValue);
+    }
+
+    [Test]
+    public async Task DateTimePicker_Clear_With_ValueOnClear_CurrentDate_Should_Set_Captured_Current_Date()
+    {
+        var currentDate = DateOnly.FromDateTime(DateTime.Now);
+        DateOnly value = currentDate.AddDays(-1);
+        var callback = EventCallback.Factory.Create<DateOnly>(this, v => value = v);
+
+        var comp = Context.Render<MudDateTimePicker<DateOnly>>(parameters =>
+        {
+            parameters.Add(p => p.Value, value);
+            parameters.Add(p => p.ValueChanged, callback);
+            parameters.Add(p => p.ValueOnClear, currentDate);
+        });
+
+        await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
+
+        value.Should().Be(currentDate);
     }
 
     [Test]
@@ -289,6 +350,26 @@ public class DateTimePickerTests : BunitTest
         await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
 
         value.Should().Be(customClearValue);
+    }
+
+    [Test]
+    public async Task DateTimePicker_Clear_With_ValueOnClear_CurrentDateTimeOffset_Should_Set_Captured_Current_Value()
+    {
+        var currentDateTimeOffset = DateTimeOffset.UtcNow;
+        DateTimeOffset value = currentDateTimeOffset.AddDays(-1);
+        var callback = EventCallback.Factory.Create<DateTimeOffset>(this, v => value = v);
+
+        var comp = Context.Render<MudDateTimePicker<DateTimeOffset>>(parameters =>
+        {
+            parameters.Add(p => p.Value, value);
+            parameters.Add(p => p.ValueChanged, callback);
+            parameters.Add(p => p.ValueOnClear, currentDateTimeOffset);
+            parameters.Add(p => p.TimeZone, TimeZoneInfo.Utc);
+        });
+
+        await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
+
+        value.Should().Be(currentDateTimeOffset);
     }
 
     [Test]
