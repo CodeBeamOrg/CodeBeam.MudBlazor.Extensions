@@ -273,6 +273,26 @@ public class DateTimePickerTests : BunitTest
     }
 
     [Test]
+    public async Task DateTimePicker_Clear_With_ValueOnClear_DateTimeOffsetNullable_Should_Set_Custom_Value()
+    {
+        DateTimeOffset? value = new DateTimeOffset(2026, 5, 3, 14, 30, 0, TimeSpan.Zero);
+        var customClearValue = new DateTimeOffset(2025, 1, 1, 10, 0, 0, TimeSpan.Zero);
+        var callback = EventCallback.Factory.Create<DateTimeOffset?>(this, v => value = v);
+
+        var comp = Context.Render<MudDateTimePicker<DateTimeOffset?>>(parameters =>
+        {
+            parameters.Add(p => p.Value, value);
+            parameters.Add(p => p.ValueChanged, callback);
+            parameters.Add(p => p.ValueOnClear, customClearValue);
+            parameters.Add(p => p.TimeZone, TimeZoneInfo.Utc);
+        });
+
+        await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
+
+        value.Should().Be(customClearValue);
+    }
+
+    [Test]
     public async Task DateTimePicker_Clear_Without_ValueOnClear_DateTimeOffset_Should_Set_Default()
     {
         DateTimeOffset value = new DateTimeOffset(2026, 5, 3, 14, 30, 0, TimeSpan.Zero);
