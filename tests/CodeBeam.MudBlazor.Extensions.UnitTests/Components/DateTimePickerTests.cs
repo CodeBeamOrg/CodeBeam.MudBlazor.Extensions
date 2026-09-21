@@ -24,21 +24,6 @@ public class DateTimePickerTests : BunitTest
         });
     }
 
-    private static async Task InvokePickerOpenedAsync<T>(IRenderedComponent<MudDateTimePicker<T>> comp)
-    {
-        var method = typeof(MudDateTimePicker<T>).BaseType!.GetMethod(
-            "OnPickerOpenedAsync",
-            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-
-        var task = (Task)method!.Invoke(comp.Instance, [])!;
-        await task;
-    }
-
-    private static DateTime GetCurrentMonthStart()
-    {
-        return new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-    }
-
     [Test]
     public void DateTimePicker_DefaultRender_Should_Render_Input()
     {
@@ -118,16 +103,6 @@ public class DateTimePickerTests : BunitTest
         var comp = RenderPicker<DateOnly?>();
 
         comp.Find("input").GetAttribute("value").Should().BeNullOrEmpty();
-    }
-
-    [Test]
-    public async Task DateTimePicker_Default_DateOnly_Should_Open_Current_Month()
-    {
-        var comp = RenderPicker<DateOnly>();
-
-        await comp.InvokeAsync(() => InvokePickerOpenedAsync(comp));
-
-        comp.Instance.PickerMonth.Should().Be(GetCurrentMonthStart());
     }
 
     [Test]
@@ -223,6 +198,44 @@ public class DateTimePickerTests : BunitTest
     }
 
     [Test]
+    public async Task DateTimePicker_Clear_With_ValueOnClear_Should_Set_Custom_Value_Nullable()
+    {
+        DateTime? value = new DateTime(2026, 5, 3, 14, 30, 0);
+        var customClearValue = new DateTime(2025, 1, 1, 0, 0, 0);
+        var callback = EventCallback.Factory.Create<DateTime?>(this, v => value = v);
+
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters =>
+        {
+            parameters.Add(p => p.Value, value);
+            parameters.Add(p => p.ValueChanged, callback);
+            parameters.Add(p => p.ValueOnClear, customClearValue);
+        });
+
+        await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
+
+        value.Should().Be(customClearValue);
+    }
+
+    [Test]
+    public async Task DateTimePicker_Clear_With_ValueOnClear_DateOnly_Should_Set_Custom_Value()
+    {
+        DateOnly value = new DateOnly(2026, 5, 3);
+        var customClearValue = new DateOnly(2025, 1, 1);
+        var callback = EventCallback.Factory.Create<DateOnly>(this, v => value = v);
+
+        var comp = Context.Render<MudDateTimePicker<DateOnly>>(parameters =>
+        {
+            parameters.Add(p => p.Value, value);
+            parameters.Add(p => p.ValueChanged, callback);
+            parameters.Add(p => p.ValueOnClear, customClearValue);
+        });
+
+        await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
+
+        value.Should().Be(customClearValue);
+    }
+
+    [Test]
     public async Task DateTimePicker_Clear_Without_ValueOnClear_DateOnly_Should_Set_Default()
     {
         DateOnly value = new DateOnly(2026, 5, 3);
@@ -240,21 +253,23 @@ public class DateTimePickerTests : BunitTest
     }
 
     [Test]
-    public async Task DateTimePicker_Clear_Without_ValueOnClear_DateOnly_Should_Open_Current_Month()
+    public async Task DateTimePicker_Clear_With_ValueOnClear_DateTimeOffset_Should_Set_Custom_Value()
     {
-        DateOnly value = new DateOnly(2026, 5, 3);
-        var callback = EventCallback.Factory.Create<DateOnly>(this, v => value = v);
+        DateTimeOffset value = new DateTimeOffset(2026, 5, 3, 14, 30, 0, TimeSpan.Zero);
+        var customClearValue = new DateTimeOffset(2025, 1, 1, 10, 0, 0, TimeSpan.Zero);
+        var callback = EventCallback.Factory.Create<DateTimeOffset>(this, v => value = v);
 
-        var comp = Context.Render<MudDateTimePicker<DateOnly>>(parameters =>
+        var comp = Context.Render<MudDateTimePicker<DateTimeOffset>>(parameters =>
         {
             parameters.Add(p => p.Value, value);
             parameters.Add(p => p.ValueChanged, callback);
+            parameters.Add(p => p.ValueOnClear, customClearValue);
+            parameters.Add(p => p.TimeZone, TimeZoneInfo.Utc);
         });
 
         await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
-        await comp.InvokeAsync(() => InvokePickerOpenedAsync(comp));
 
-        comp.Instance.PickerMonth.Should().Be(GetCurrentMonthStart());
+        value.Should().Be(customClearValue);
     }
 
     [Test]
@@ -273,5 +288,23 @@ public class DateTimePickerTests : BunitTest
         await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
 
         value.Should().Be(default(DateTimeOffset));
+    }
+
+    [Test]
+    public async Task DateTimePicker_Clear_With_ValueOnClear_Null_Nullable_Should_Set_Null()
+    {
+        DateTime? value = new DateTime(2026, 5, 3, 14, 30, 0);
+        var callback = EventCallback.Factory.Create<DateTime?>(this, v => value = v);
+
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters =>
+        {
+            parameters.Add(p => p.Value, value);
+            parameters.Add(p => p.ValueChanged, callback);
+            parameters.Add(p => p.ValueOnClear, null);
+        });
+
+        await comp.InvokeAsync(async () => await comp.Instance.ClearAsync(false));
+
+        value.Should().BeNull();
     }
 }

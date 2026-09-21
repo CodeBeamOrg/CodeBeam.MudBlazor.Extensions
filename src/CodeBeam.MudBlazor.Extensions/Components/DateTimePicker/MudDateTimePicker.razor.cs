@@ -43,38 +43,18 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     protected ElementReference ClockElementReference { get; private set; }
     private bool _amPm = false;
 
-    /// <summary>
-    /// Determines whether the specified value represents the empty picker state for a non-nullable date type.
-    /// </summary>
-    /// <param name="value">The value to evaluate.</param>
-    /// <returns><see langword="true"/> when <typeparamref name="T"/> is non-nullable and <paramref name="value"/> equals its default value; otherwise, <see langword="false"/>.</returns>
-    private static bool IsEmptyNonNullableValue(T? value)
-        => Nullable.GetUnderlyingType(typeof(T)) is null && EqualityComparer<T?>.Default.Equals(value, default);
-
-    /// <inheritdoc />
-    protected override DateTime? GetEffectiveDateTime(T? value)
-        => IsEmptyNonNullableValue(value) ? null : ToDateTime(value);
-
-    /// <summary>
-    /// Gets the text representation for the specified value using the effective picker-state interpretation.
-    /// </summary>
-    /// <param name="value">The value to format.</param>
-    /// <returns>The formatted text for the value, or <see langword="null"/> when the picker should display an empty state.</returns>
-    private string? GetEffectiveText(T? value)
-        => GetEffectiveDateTime(value) is null ? null : ConvertSet(value);
-
     /// <inheritdoc />
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        _workingValue = GetEffectiveDateTime(Value);
+        _workingValue = ToDateTime(Value);
     }
 
     /// <inheritdoc />
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        _workingValue = GetEffectiveDateTime(Value);
+        _workingValue = ToDateTime(Value);
         SyncTimeFromValue();
     }
 
@@ -117,7 +97,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     public T? Value
     {
         get => _value;
-        set => SetDateAsync(GetEffectiveDateTime(value), true).CatchAndLog();
+        set => SetDateAsync(ToDateTime(value), true).CatchAndLog();
     }
 
     /// <summary>
@@ -146,7 +126,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
             _amPm = value;
 
             Touched = true;
-            _ = SetTextAsync(GetEffectiveText(_value), false);
+            _ = SetTextAsync(ConvertSet(_value), false);
         }
     }
 
@@ -224,7 +204,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         }
         else
         {
-            await SetTextAsync(GetEffectiveText(_value), false);
+            await SetTextAsync(ConvertSet(_value), false);
         }
     }
 
@@ -252,7 +232,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     protected internal async Task SetDateAsync(DateTime? date, bool updateValue)
     {
-        var current = GetEffectiveDateTime(_value);
+        var current = ToDateTime(_value);
 
         if (current != null && date != null && date.Value.Kind == DateTimeKind.Unspecified)
         {
@@ -270,32 +250,31 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         {
             Touched = true;
 
+            HighlightedDate = date;
+
             if (date is not null && IsDateDisabledFunc(date.Value.Date))
             {
                 await SetTextAsync(null, false);
                 return;
             }
 
-            var converted = FromDateTime(date);
-            var effectiveDate = GetEffectiveDateTime(converted);
-
-            HighlightedDate = effectiveDate;
-            _value = converted;
-
-            if (effectiveDate is not null)
+            if (date is not null)
             {
                 var culture = GetCulture();
                 PickerMonth = new DateTime(
-                    culture.Calendar.GetYear(effectiveDate.Value),
-                    culture.Calendar.GetMonth(effectiveDate.Value),
+                    culture.Calendar.GetYear(date.Value),
+                    culture.Calendar.GetMonth(date.Value),
                     1,
                     culture.Calendar);
             }
 
+            var converted = FromDateTime(date);
+            _value = converted;
+
             if (updateValue)
             {
                 ResetConverterErrors();
-                await SetTextAsync(GetEffectiveText(_value), false);
+                await SetTextAsync(ConvertSet(_value), false);
             }
 
             await ValueChanged.InvokeAsync(_value);
@@ -356,7 +335,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         if (day < GetMonthStart(month) || day > GetMonthEnd(month))
             return b.AddClass("mud-hidden").Build();
 
-        var current = _workingValue ?? GetEffectiveDateTime(Value);
+        var current = _workingValue ?? ToDateTime(Value);
 
         if (current?.Date == day.Date)
             return b.AddClass("mud-selected")
@@ -414,7 +393,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         _value = converted;
 
         await ValueChanged.InvokeAsync(_value);
-        await SetTextAsync(GetEffectiveText(_value), false);
+        await SetTextAsync(ConvertSet(_value), false);
         await BeginValidateAsync();
         FieldChanged(_value);
     }
@@ -426,7 +405,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>A task that represents the asynchronous operation.</returns>
     public override async Task ClearAsync(bool close = true)
     {
-        await SetDateAsync(null, true);
+        await SetDateAsync(ToDateTime(ValueOnClear), true);
 
         if (AutoClose || close)
             await CloseAsync(false);
@@ -439,7 +418,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     protected string GetTitleDateString()
     {
         var date = _workingValue
-            ?? GetEffectiveDateTime(Value)
+            ?? ToDateTime(Value)
             ?? TimeProvider.GetLocalNow().Date;
 
         return FormatTitleDate(date);
@@ -454,7 +433,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// or the current local date if neither is set.</returns>
     protected override DateTime GetCalendarStartOfMonth()
     {
-        var date = GetEffectiveDateTime(Value) ?? HighlightedDate ?? TimeProvider.GetLocalNow().Date;
+        var date = ToDateTime(Value) ?? HighlightedDate ?? TimeProvider.GetLocalNow().Date;
         return date.StartOfMonth(GetCulture());
     }
 
@@ -469,7 +448,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>The calendar year as an integer, adjusted based on the current value and the specified date.</returns>
     protected override int GetCalendarYear(DateTime yearDate)
     {
-        var date = GetEffectiveDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
+        var date = ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
         var diff = GetCulture().Calendar.GetYear(date) - GetCulture().Calendar.GetYear(yearDate);
 
         return GetCulture().Calendar.GetYear(date) - diff;
@@ -522,7 +501,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     protected Task OnYearClickedAsync(int year)
     {
-        var current = GetEffectiveDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
+        var current = ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
         PickerMonth = new DateTime(year, current.Month, 1);
 
         _workingValue = new DateTime(
@@ -540,13 +519,13 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     protected Typo GetYearTypo(int year)
     {
-        var current = GetEffectiveDateTime(Value);
+        var current = ToDateTime(Value);
         return current?.Year == year ? Typo.h5 : Typo.body1;
     }
 
     protected string GetYearClasses(int year)
     {
-        var current = GetEffectiveDateTime(Value);
+        var current = ToDateTime(Value);
 
         return new CssBuilder("mud-picker-year-text")
             .AddClass("mud-selected", current?.Year == year)
@@ -572,7 +551,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     protected Task OnMonthSelectedAsync(int month)
     {
-        var current = _workingValue ?? GetEffectiveDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
+        var current = _workingValue ?? ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
         PickerMonth = new DateTime(current.Year, month, 1);
 
         _workingValue = new DateTime(
@@ -604,13 +583,13 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     protected Typo GetMonthTypo(int month)
     {
-        var current = GetEffectiveDateTime(Value);
+        var current = ToDateTime(Value);
         return current?.Month == month ? Typo.h6 : Typo.body2;
     }
 
     protected string GetMonthClasses(int month)
     {
-        var current = GetEffectiveDateTime(Value);
+        var current = ToDateTime(Value);
 
         return new CssBuilder()
             .AddClass("mud-selected", current?.Month == month)
@@ -895,7 +874,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     protected string GetFormattedYearString()
     {
         var date = _workingValue
-            ?? GetEffectiveDateTime(Value)
+            ?? ToDateTime(Value)
             ?? TimeProvider.GetLocalNow().Date;
 
         return date.Year.ToString();
@@ -914,7 +893,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         var dateTime =
             date
             ?? _workingValue
-            ?? GetEffectiveDateTime(Value)
+            ?? ToDateTime(Value)
             ?? TimeProvider.GetLocalNow().Date;
 
         var id = $"{_componentId}{calendar.GetYear(dateTime)}";

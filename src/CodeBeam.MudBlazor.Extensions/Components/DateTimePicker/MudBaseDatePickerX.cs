@@ -186,6 +186,16 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
     [Parameter] public bool AutoClose { get; set; }
 
     /// <summary>
+    /// The value to set when the clear button is clicked.
+    /// </summary>
+    /// <remarks>
+    /// Defaults to <c>default</c>.<br />
+    /// For nullable types, this will default to <c>null</c>. For non-nullable types, this will default to the minimum value.
+    /// </remarks>
+    [Parameter]
+    public T? ValueOnClear { get; set; } = default;
+
+    /// <summary>
     /// The function used to disable one or more dates.
     /// </summary>
     /// <remarks>
@@ -270,21 +280,6 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
             return d.ToDateTime(TimeOnly.MinValue);
 
         throw new NotSupportedException($"Type {typeof(T)} not supported");
-    }
-
-    /// <summary>
-    /// Gets the effective <see cref="DateTime"/> representation of the specified value for picker state decisions.
-    /// </summary>
-    /// <remarks>
-    /// The default implementation performs a direct conversion via <see cref="ToDateTime(T?)"/>.
-    /// Derived components can override this method to treat certain values as an empty picker state while leaving
-    /// the underlying conversion behavior unchanged.
-    /// </remarks>
-    /// <param name="value">The value to interpret for picker state.</param>
-    /// <returns>The effective <see cref="DateTime"/> for picker behavior, or <see langword="null"/> when the picker should behave as empty.</returns>
-    protected virtual DateTime? GetEffectiveDateTime(T? value)
-    {
-        return ToDateTime(value);
     }
 
     /// <summary>
@@ -377,15 +372,18 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
     {
         await base.OnPickerOpenedAsync();
 
-        var dateTime = GetEffectiveDateTime(_value) ?? GetCalendarStartOfMonth();
-        var culture = GetCulture();
-        var calendar = culture.Calendar;
+        var dateTime = ToDateTime(_value);
 
-        PickerMonth = new DateTime(
-            calendar.GetYear(dateTime),
-            calendar.GetMonth(dateTime),
-            1,
-            calendar);
+        if (dateTime.HasValue)
+        {
+            var culture = GetCulture();
+            var calendar = culture.Calendar;
+            PickerMonth = new DateTime(
+                calendar.GetYear(dateTime.Value),
+                calendar.GetMonth(dateTime.Value),
+                1,
+                calendar);
+        }
 
         CurrentView = OpenTo;
     }
