@@ -110,9 +110,9 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// Shows a 12-hour selection clock.
     /// </summary>
     /// <remarks>
-    /// Defaults to <c>false</c>.<br />
-    /// When <c>true</c>, hours 1-12 are displayed with an AM or PM marker.<br />
-    /// When <c>false</c>, hours 0-23 are displayed.<br />
+    /// Defaults to <c>false</c>.
+    /// When <c>true</c>, hours 1-12 are displayed with an AM or PM marker.
+    /// When <c>false</c>, hours 0-23 are displayed.
     /// </remarks>
     [Parameter]
     public bool AmPm
@@ -405,9 +405,9 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>A task that represents the asynchronous operation.</returns>
     public override async Task ClearAsync(bool close = true)
     {
-        await SetDateAsync(ToDateTime(ValueOnClear), true);
+        await SetDateAsync(null, true);
 
-        if (AutoClose || close)
+        if (AutoClose)
             await CloseAsync(false);
     }
 

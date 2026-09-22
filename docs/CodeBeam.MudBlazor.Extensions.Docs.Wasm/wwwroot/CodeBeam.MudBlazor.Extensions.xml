@@ -1452,15 +1452,6 @@
             Defaults to <c>false</c>.
             </remarks>
         </member>
-        <member name="P:MudExtensions.MudBaseDatePickerX`1.ValueOnClear">
-            <summary>
-            The value to set when the clear button is clicked.
-            </summary>
-            <remarks>
-            Defaults to <c>default</c>.<br />
-            For nullable types, this will default to <c>null</c>. For non-nullable types, this will default to the minimum value.
-            </remarks>
-        </member>
         <member name="P:MudExtensions.MudBaseDatePickerX`1.IsDateDisabledFunc">
             <summary>
             The function used to disable one or more dates.
@@ -1608,9 +1599,9 @@
             Shows a 12-hour selection clock.
             </summary>
             <remarks>
-            Defaults to <c>false</c>.<br />
-            When <c>true</c>, hours 1-12 are displayed with an AM or PM marker.<br />
-            When <c>false</c>, hours 0-23 are displayed.<br />
+            Defaults to <c>false</c>.
+            When <c>true</c>, hours 1-12 are displayed with an AM or PM marker.
+            When <c>false</c>, hours 0-23 are displayed.
             </remarks>
         </member>
         <member name="P:MudExtensions.MudDateTimePicker`1.MinuteSelectionStep">
