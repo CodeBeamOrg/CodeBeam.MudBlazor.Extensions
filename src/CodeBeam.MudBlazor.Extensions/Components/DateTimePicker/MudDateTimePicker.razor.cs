@@ -16,11 +16,12 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 {
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
 
-    [DynamicDependency(nameof(OnStickClick))]
-    [DynamicDependency(nameof(SelectTimeFromStick))]
+
     /// <summary>
     /// Initializes a new instance of the <see cref="MudDateTimePicker{T}"/> class.
     /// </summary>
+    [DynamicDependency(nameof(OnStickClick))]
+    [DynamicDependency(nameof(SelectTimeFromStick))]
     public MudDateTimePicker()
     {
         _dotNetReferenceLazy = new Lazy<DotNetObjectReference<MudDateTimePicker<T>>>(CreateDotNetObjectReference);
@@ -426,7 +427,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     }
 
     /// <summary>
-    /// Clears the selected date and time, resetting the component to its initial state. If <see cref="AutoClose"/> is <c>true</c>, the picker will also close after clearing the value.
+    /// Clears the selected date and time, resetting the component to its initial state. If <c>AutoClose</c> is <c>true</c>, the picker will also close after clearing the value.
     /// </summary>
     /// <param name="close">Indicates whether the picker should close after clearing the value.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
@@ -545,7 +546,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <summary>
     /// Gets the earliest selectable year.
     /// </summary>
-    /// <returns>The year from <see cref="MinDate"/>, or 1900 when no minimum is set.</returns>
+    /// <returns>The year from <c>MinDate</c>, or 1900 when no minimum is set.</returns>
     protected int GetMinYear()
     {
         return MinDate?.Year ?? 1900;
@@ -554,7 +555,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <summary>
     /// Gets the latest selectable year.
     /// </summary>
-    /// <returns>The year from <see cref="MaxDate"/>, or 2100 when no maximum is set.</returns>
+    /// <returns>The year from <c>MaxDate</c>, or 2100 when no maximum is set.</returns>
     protected int GetMaxYear()
     {
         return MaxDate?.Year ?? 2100;
@@ -881,13 +882,13 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         return $"transform: translate({x}px, {y}px);";
     }
 
-    [JSInvokable]
     /// <summary>
     /// Updates the working time from a clock-pointer movement.
     /// </summary>
     /// <param name="value">The hour or minute indicated by the clock pointer.</param>
     /// <param name="pointerMoving">Whether the pointer is currently being dragged.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
+    [JSInvokable]
     public async Task SelectTimeFromStick(int value, bool pointerMoving)
     {
         PointerMoving = pointerMoving;
@@ -902,12 +903,12 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         StateHasChanged();
     }
 
-    [JSInvokable]
     /// <summary>
     /// Handles a click on the clock pointer and advances or submits the time selection.
     /// </summary>
     /// <param name="value">The selected hour or minute.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
+    [JSInvokable]
     public async Task OnStickClick(int value)
     {
         // The pointer is up and not moving so animations can be enabled again.
