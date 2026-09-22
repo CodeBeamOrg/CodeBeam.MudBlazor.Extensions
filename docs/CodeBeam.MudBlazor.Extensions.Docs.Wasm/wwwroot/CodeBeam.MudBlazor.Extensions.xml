@@ -1387,7 +1387,7 @@
             The current month shown in the date picker.
             </summary>
             <remarks>
-            Defaults to the current month.<br />
+            Defaults to the current month.
             When bound via <c>@bind-PickerMonth</c>, controls the initial month displayed.  This value is always the first day of a month.
             </remarks>
         </member>
@@ -1401,7 +1401,7 @@
             The delay, in milliseconds, before closing the picker after a value is selected.
             </summary>
             <remarks>
-            Defaults to <c>100</c>.<br />
+            Defaults to <c>100</c>.
             This delay helps the user see that a date has been selected before the popover disappears.
             </remarks>
         </member>
@@ -1418,7 +1418,7 @@
             The maximum number of months allowed in one row.
             </summary>
             <remarks>
-            Defaults to <c>null</c>.<br />
+            Defaults to <c>null</c>.
             When <c>null</c>, the <see cref="P:MudExtensions.MudBaseDatePickerX`1.DisplayMonths"/> is used.
             </remarks>
         </member>
@@ -1440,7 +1440,7 @@
             The format of the selected date in the title.
             </summary>
             <remarks>
-            Defaults to <c>ddd, dd MMM</c>.<br />
+            Defaults to <c>ddd, dd MMM</c>.
             Supported date formats can be found here: <see href="https://learn.microsoft.com/dotnet/standard/base-types/standard-date-and-time-format-strings"/>.
             </remarks>
         </member>
@@ -1457,7 +1457,7 @@
             The function used to disable one or more dates.
             </summary>
             <remarks>
-            Defaults to <c>null</c>.<br />
+            Defaults to <c>null</c>.
             When set, a date will be disabled if the function returns <c>true</c>.
             </remarks>
         </member>
@@ -1599,9 +1599,9 @@
             Shows a 12-hour selection clock.
             </summary>
             <remarks>
-            Defaults to <c>false</c>.<br />
-            When <c>true</c>, hours 1-12 are displayed with an AM or PM marker.<br />
-            When <c>false</c>, hours 0-23 are displayed.<br />
+            Defaults to <c>false</c>.
+            When <c>true</c>, hours 1-12 are displayed with an AM or PM marker.
+            When <c>false</c>, hours 0-23 are displayed.
             </remarks>
         </member>
         <member name="P:MudExtensions.MudDateTimePicker`1.MinuteSelectionStep">

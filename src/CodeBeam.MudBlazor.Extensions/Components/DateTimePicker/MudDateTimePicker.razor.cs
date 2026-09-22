@@ -16,6 +16,10 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 {
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
 
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MudDateTimePicker{T}"/> class.
+    /// </summary>
     [DynamicDependency(nameof(OnStickClick))]
     [DynamicDependency(nameof(SelectTimeFromStick))]
     public MudDateTimePicker()
@@ -34,12 +38,25 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     private record SetTime
     {
+        /// <summary>
+        /// Gets or sets the selected hour.
+        /// </summary>
         public int Hour { get; set; }
+
+        /// <summary>
+        /// Gets or sets the selected minute.
+        /// </summary>
         public int Minute { get; set; }
     }
 
+    /// <summary>
+    /// Gets or sets whether the clock pointer is currently being dragged.
+    /// </summary>
     public bool PointerMoving { get; set; }
 
+    /// <summary>
+    /// Gets the element reference for the clock surface.
+    /// </summary>
     protected ElementReference ClockElementReference { get; private set; }
     private bool _amPm = false;
 
@@ -85,6 +102,9 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         _timeSet.Minute = _workingValue.Value.Minute;
     }
 
+    /// <summary>
+    /// The active picker mode.
+    /// </summary>
     protected PickerMode _mode = PickerMode.Date;
 
     /// <summary>
@@ -110,9 +130,9 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// Shows a 12-hour selection clock.
     /// </summary>
     /// <remarks>
-    /// Defaults to <c>false</c>.<br />
-    /// When <c>true</c>, hours 1-12 are displayed with an AM or PM marker.<br />
-    /// When <c>false</c>, hours 0-23 are displayed.<br />
+    /// Defaults to <c>false</c>.
+    /// When <c>true</c>, hours 1-12 are displayed with an AM or PM marker.
+    /// When <c>false</c>, hours 0-23 are displayed.
     /// </remarks>
     [Parameter]
     public bool AmPm
@@ -176,6 +196,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     [Parameter]
     public string PmText { get; set; } = "PM";
 
+    /// <inheritdoc />
     protected override async Task WriteTextAsync(string? text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -230,6 +251,12 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     private DateTimeOffset _lastSetTime = DateTimeOffset.MinValue;
     private const int DebounceTimeoutMs = 100;
 
+    /// <summary>
+    /// Sets the selected date and optionally updates the input text and bound value.
+    /// </summary>
+    /// <param name="date">The date to set, or <see langword="null"/> to clear the selection.</param>
+    /// <param name="updateValue">Whether to update the displayed text and reset conversion errors.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     protected internal async Task SetDateAsync(DateTime? date, bool updateValue)
     {
         var current = ToDateTime(_value);
@@ -326,6 +353,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         );
     }
 
+    /// <inheritdoc />
     protected override string GetDayClasses(int month, DateTime day)
     {
         var b = new CssBuilder("mud-day");
@@ -399,7 +427,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     }
 
     /// <summary>
-    /// Clears the selected date and time, resetting the component to its initial state. If <see cref="AutoClose"/> is <c>true</c>, the picker will also close after clearing the value.
+    /// Clears the selected date and time, resetting the component to its initial state. If <c>AutoClose</c> is <c>true</c>, the picker will also close after clearing the value.
     /// </summary>
     /// <param name="close">Indicates whether the picker should close after clearing the value.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
@@ -417,11 +445,26 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>The formatted date string for the title of the picker.</returns>
     protected string GetTitleDateString()
     {
-        var date = _workingValue
-            ?? ToDateTime(Value)
-            ?? TimeProvider.GetLocalNow().Date;
+        var date = GetPickerHeaderDate(_workingValue ?? ToDateTime(Value));
 
         return FormatTitleDate(date);
+    }
+
+    /// <summary>
+    /// Gets the date used in the picker header.
+    /// </summary>
+    /// <remarks>
+    /// A non-nullable date picker uses its default value as its cleared value. The header uses the current local date
+    /// as the picker reference date for that sentinel instead of presenting it as a selected value.
+    /// </remarks>
+    private DateTime GetPickerHeaderDate(DateTime? date)
+    {
+        var boundDate = ToDateTime(_value);
+
+        if (date is not null && (!IsDefaultValue(_value) || date != boundDate))
+            return date.Value;
+
+        return TimeProvider.GetLocalNow().Date;
     }
 
     /// <summary>
@@ -454,18 +497,31 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         return GetCulture().Calendar.GetYear(date) - diff;
     }
 
+    /// <summary>
+    /// Gets the localized name of a displayed month.
+    /// </summary>
+    /// <param name="month">The zero-based offset from the displayed month.</param>
+    /// <returns>The localized month name and year.</returns>
     protected string GetMonthName(int month)
     {
         var date = GetMonthStart(month);
         return date.ToString("MMMM yyyy", GetCulture());
     }
 
+    /// <summary>
+    /// Moves the calendar to the previous month.
+    /// </summary>
+    /// <returns>A completed task.</returns>
     protected Task OnPreviousMonthClick()
     {
         PickerMonth = GetMonthStart(0).AddMonths(-1);
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Moves the calendar to the next month.
+    /// </summary>
+    /// <returns>A completed task.</returns>
     protected Task OnNextMonthClick()
     {
         PickerMonth = GetMonthStart(0).AddMonths(1);
@@ -489,16 +545,29 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         }
     }
 
+    /// <summary>
+    /// Gets the earliest selectable year.
+    /// </summary>
+    /// <returns>The year from <c>MinDate</c>, or 1900 when no minimum is set.</returns>
     protected int GetMinYear()
     {
         return MinDate?.Year ?? 1900;
     }
 
+    /// <summary>
+    /// Gets the latest selectable year.
+    /// </summary>
+    /// <returns>The year from <c>MaxDate</c>, or 2100 when no maximum is set.</returns>
     protected int GetMaxYear()
     {
         return MaxDate?.Year ?? 2100;
     }
 
+    /// <summary>
+    /// Handles selection of a year in the calendar.
+    /// </summary>
+    /// <param name="year">The selected year.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     protected Task OnYearClickedAsync(int year)
     {
         var current = ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
@@ -517,12 +586,22 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Gets the typography style for a year.
+    /// </summary>
+    /// <param name="year">The year to evaluate.</param>
+    /// <returns>The typography style for the year.</returns>
     protected Typo GetYearTypo(int year)
     {
         var current = ToDateTime(Value);
         return current?.Year == year ? Typo.h5 : Typo.body1;
     }
 
+    /// <summary>
+    /// Gets the CSS classes for a year.
+    /// </summary>
+    /// <param name="year">The year to evaluate.</param>
+    /// <returns>The CSS classes for the year.</returns>
     protected string GetYearClasses(int year)
     {
         var current = ToDateTime(Value);
@@ -532,23 +611,40 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
             .Build();
     }
 
+    /// <summary>
+    /// Moves the calendar to the previous year.
+    /// </summary>
+    /// <returns>A completed task.</returns>
     protected Task OnPreviousYearClick()
     {
         PickerMonth = (PickerMonth ?? DateTime.Today).AddYears(-1);
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Moves the calendar to the next year.
+    /// </summary>
+    /// <returns>A completed task.</returns>
     protected Task OnNextYearClick()
     {
         PickerMonth = (PickerMonth ?? DateTime.Today).AddYears(1);
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Gets all month numbers used by the month-selection view.
+    /// </summary>
+    /// <returns>The month numbers from 1 through 12.</returns>
     protected IEnumerable<int> GetAllMonths()
     {
         return Enumerable.Range(1, 12);
     }
 
+    /// <summary>
+    /// Handles selection of a month in the calendar.
+    /// </summary>
+    /// <param name="month">The selected month number.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     protected Task OnMonthSelectedAsync(int month)
     {
         var current = _workingValue ?? ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
@@ -567,6 +663,11 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Determines whether every day in a month is outside the configured date range.
+    /// </summary>
+    /// <param name="month">The month number to evaluate.</param>
+    /// <returns><see langword="true"/> when the month is disabled; otherwise, <see langword="false"/>.</returns>
     protected bool IsMonthDisabled(int month)
     {
         if (!MinDate.HasValue && !MaxDate.HasValue)
@@ -581,12 +682,22 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
             || (MaxDate.HasValue && start > MaxDate.Value);
     }
 
+    /// <summary>
+    /// Gets the typography style for a month.
+    /// </summary>
+    /// <param name="month">The month number to evaluate.</param>
+    /// <returns>The typography style for the month.</returns>
     protected Typo GetMonthTypo(int month)
     {
         var current = ToDateTime(Value);
         return current?.Month == month ? Typo.h6 : Typo.body2;
     }
 
+    /// <summary>
+    /// Gets the CSS classes for a month.
+    /// </summary>
+    /// <param name="month">The month number to evaluate.</param>
+    /// <returns>The CSS classes for the month.</returns>
     protected string GetMonthClasses(int month)
     {
         var current = ToDateTime(Value);
@@ -596,11 +707,22 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
             .Build();
     }
 
+    /// <summary>
+    /// Gets the localized abbreviated name of a month.
+    /// </summary>
+    /// <param name="month">The month number.</param>
+    /// <returns>The abbreviated month name.</returns>
     protected string GetAbbreviatedMonthName(int month)
     {
         return GetCulture().DateTimeFormat.AbbreviatedMonthNames[month - 1];
     }
 
+    /// <summary>
+    /// Gets the culture-specific week number for a displayed calendar week.
+    /// </summary>
+    /// <param name="month">The zero-based offset from the displayed month.</param>
+    /// <param name="week">The zero-based week index.</param>
+    /// <returns>The week number.</returns>
     protected int GetWeekNumber(int month, int week)
     {
         var firstDay = GetWeek(month, week).First();
@@ -611,16 +733,28 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
             GetFirstDayOfWeek());
     }
 
+    /// <summary>
+    /// Gets the day-of-month text for a calendar date.
+    /// </summary>
+    /// <param name="date">The date to format.</param>
+    /// <returns>The localized day-of-month text.</returns>
     protected string GetCalendarDayOfMonth(DateTime date)
     {
         return date.Day.ToString(GetCulture());
     }
 
+    /// <summary>
+    /// Switches the picker to month selection.
+    /// </summary>
     protected void OnFormattedDateClick()
     {
         CurrentView = OpenTo.Month;
     }
 
+    /// <summary>
+    /// Switches the picker to month selection.
+    /// </summary>
+    /// <param name="month">The clicked month number.</param>
     protected void OnMonthClicked(int month)
     {
         CurrentView = OpenTo.Month;
@@ -750,6 +884,12 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         return $"transform: translate({x}px, {y}px);";
     }
 
+    /// <summary>
+    /// Updates the working time from a clock-pointer movement.
+    /// </summary>
+    /// <param name="value">The hour or minute indicated by the clock pointer.</param>
+    /// <param name="pointerMoving">Whether the pointer is currently being dragged.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [JSInvokable]
     public async Task SelectTimeFromStick(int value, bool pointerMoving)
     {
@@ -765,6 +905,11 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         StateHasChanged();
     }
 
+    /// <summary>
+    /// Handles a click on the clock pointer and advances or submits the time selection.
+    /// </summary>
+    /// <param name="value">The selected hour or minute.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [JSInvokable]
     public async Task OnStickClick(int value)
     {
@@ -792,6 +937,10 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         StateHasChanged();
     }
 
+    /// <summary>
+    /// Submits the working value and closes the picker when its configuration permits it.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     protected async Task SubmitAndCloseAsync()
     {
         if (PickerActions == null || AutoClose)
@@ -871,11 +1020,13 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         }
     }
 
+    /// <summary>
+    /// Gets the year displayed in the picker toolbar.
+    /// </summary>
+    /// <returns>The formatted year.</returns>
     protected string GetFormattedYearString()
     {
-        var date = _workingValue
-            ?? ToDateTime(Value)
-            ?? TimeProvider.GetLocalNow().Date;
+        var date = GetPickerHeaderDate(_workingValue ?? ToDateTime(Value));
 
         return date.Year.ToString();
     }
@@ -903,6 +1054,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         StateHasChanged();
     }
 
+    /// <inheritdoc />
     protected override async Task OnOpenedAsync()
     {
         _mode = PickerMode.Date;
