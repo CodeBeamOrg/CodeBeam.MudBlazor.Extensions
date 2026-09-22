@@ -13,6 +13,9 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
 {
     internal readonly string _mudPickerCalendarContentElementId;
     private readonly ParameterState<string?> _formatState;
+    /// <summary>
+    /// The unique identifier used to associate picker elements.
+    /// </summary>
     protected readonly string _componentId = Identifier.Create();
 
     internal DateTime? _picker_month;
@@ -306,6 +309,9 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
         throw new NotSupportedException($"Type {typeof(T)} not supported");
     }
 
+    /// <summary>
+    /// Validates that <typeparamref name="T"/> is a supported date type.
+    /// </summary>
     protected void ValidateType()
     {
         var t = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
@@ -341,6 +347,11 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
             ScrollToYearAsync().CatchAndLog();
     }
 
+    /// <summary>
+    /// Handles a change to the configured date format.
+    /// </summary>
+    /// <param name="newFormat">The newly configured date format.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     protected virtual Task DateFormatChangedAsync(string? newFormat) => Task.CompletedTask;
 
     private Task DateFormatChangedAsync(ParameterChangedEventArgs<string?> args) => DateFormatChangedAsync(args.Value);
@@ -358,6 +369,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
         || CurrentView == OpenTo.Month
         || CurrentView == OpenTo.Year;
 
+    /// <inheritdoc />
     protected override async Task OnPickerOpenedAsync()
     {
         await base.OnPickerOpenedAsync();
@@ -388,6 +400,11 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
         CurrentView = OpenTo;
     }
 
+    /// <summary>
+    /// Gets the first day of the month at the specified offset from the displayed month.
+    /// </summary>
+    /// <param name="month">The zero-based offset from the displayed month.</param>
+    /// <returns>The first day of the requested month.</returns>
     protected DateTime GetMonthStart(int month)
     {
         var culture = GetCulture();
@@ -397,6 +414,12 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
         return calendar.AddMonths(new DateTime(baseDate.Year, baseDate.Month, 1), month);
     }
 
+    /// <summary>
+    /// Gets the seven days displayed for a calendar week.
+    /// </summary>
+    /// <param name="month">The zero-based offset from the displayed month.</param>
+    /// <param name="index">The zero-based week index.</param>
+    /// <returns>The dates in the requested week.</returns>
     protected IEnumerable<DateTime> GetWeek(int month, int index)
     {
         if (index is < 0 or > 5)
@@ -413,6 +436,11 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
             yield return weekFirst.AddDays(i);
     }
 
+    /// <summary>
+    /// Determines whether a date is unavailable for selection.
+    /// </summary>
+    /// <param name="date">The date to evaluate.</param>
+    /// <returns><see langword="true"/> when the date is disabled; otherwise, <see langword="false"/>.</returns>
     protected virtual bool IsDayDisabled(DateTime date)
     {
         return date < MinDate ||
@@ -420,14 +448,35 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
                IsDateDisabledFunc(date);
     }
 
+    /// <summary>
+    /// Gets the CSS classes for a calendar day.
+    /// </summary>
+    /// <param name="month">The zero-based offset from the displayed month.</param>
+    /// <param name="day">The day to format.</param>
+    /// <returns>The CSS classes for the day.</returns>
     protected abstract string GetDayClasses(int month, DateTime day);
+
+    /// <summary>
+    /// Handles selection of a calendar day.
+    /// </summary>
+    /// <param name="dateTime">The selected date and time.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     protected abstract Task OnDayClickedAsync(DateTime dateTime);
 
+    /// <summary>
+    /// Formats a date for the picker title.
+    /// </summary>
+    /// <param name="date">The date to format.</param>
+    /// <returns>The formatted title, or an empty string when <paramref name="date"/> is <see langword="null"/>.</returns>
     protected string FormatTitleDate(DateTime? date)
     {
         return date?.ToString(TitleDateFormat, GetCulture()) ?? "";
     }
 
+    /// <summary>
+    /// Gets abbreviated day names ordered according to the configured first day of the week.
+    /// </summary>
+    /// <returns>The ordered abbreviated day names.</returns>
     protected IEnumerable<string> GetAbbreviatedDayNames()
     {
         var culture = GetCulture();
@@ -438,6 +487,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
         return Enumerable.Range(0, 7).Select(i => names[(i + firstDay) % 7]);
     }
 
+    /// <inheritdoc />
     protected override IConverter<T?, string?> GetDefaultConverter()
     {
         return new DefaultConverter<T?>
@@ -447,6 +497,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
         };
     }
 
+    /// <inheritdoc />
     protected override string? ConvertSet(T? value)
     {
         var dt = ToDateTime(value);
@@ -457,6 +508,11 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
         return dt.Value.ToString(GetFormat(), GetCulture());
     }
 
+    /// <summary>
+    /// Converts a picker value to its display text.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>The formatted text, or <see langword="null"/> when the value has no date representation.</returns>
     protected internal string? ConvertSetInternal(T? value)
     {
         return ConvertSet(value);
@@ -482,14 +538,33 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
         return $"{CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern} HH:mm";
     }
 
+    /// <summary>
+    /// Gets the initial month shown by the calendar.
+    /// </summary>
+    /// <returns>The first day of the initial month.</returns>
     protected abstract DateTime GetCalendarStartOfMonth();
+
+    /// <summary>
+    /// Gets the culture-specific calendar year for a date.
+    /// </summary>
+    /// <param name="yearDate">The date whose calendar year is required.</param>
+    /// <returns>The calendar year.</returns>
     protected abstract int GetCalendarYear(DateTime yearDate);
 
+    /// <summary>
+    /// Gets the first day of the calendar week.
+    /// </summary>
+    /// <returns>The configured first day of the week, or the culture default.</returns>
     protected DayOfWeek GetFirstDayOfWeek()
     {
         return FirstDayOfWeek ?? GetCulture().DateTimeFormat.FirstDayOfWeek;
     }
 
+    /// <summary>
+    /// Gets the last day of the month at the specified offset from the displayed month.
+    /// </summary>
+    /// <param name="month">The zero-based offset from the displayed month.</param>
+    /// <returns>The last day of the requested month.</returns>
     protected DateTime GetMonthEnd(int month)
     {
         var culture = GetCulture();
