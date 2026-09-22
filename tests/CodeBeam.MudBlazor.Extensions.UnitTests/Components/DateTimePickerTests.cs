@@ -2,6 +2,8 @@
 using Bunit;
 using Microsoft.AspNetCore.Components;
 
+using System.Reflection;
+
 namespace MudExtensions.UnitTests.Components;
 
 [TestFixture]
@@ -97,5 +99,50 @@ public class DateTimePickerTests : BunitTest
     {
         var comp = RenderPicker<DateTime?>();
         comp.Find("input").GetAttribute("value").Should().BeNullOrEmpty();
+    }
+
+    [Test]
+    public async Task DateTimePicker_DefaultDateTime_Should_Open_Current_Month()
+    {
+        await AssertDefaultValueOpensCurrentMonthAsync<DateTime>();
+    }
+
+    [Test]
+    public async Task DateTimePicker_DefaultDateOnly_Should_Open_Current_Month()
+    {
+        await AssertDefaultValueOpensCurrentMonthAsync<DateOnly>();
+    }
+
+    [Test]
+    public async Task DateTimePicker_DefaultDateTimeOffset_WithIstanbulTimeZone_Should_Open_Current_Month()
+    {
+        var istanbulTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Istanbul");
+        await AssertDefaultValueOpensCurrentMonthAsync<DateTimeOffset>(istanbulTimeZone);
+    }
+
+    private async Task AssertDefaultValueOpensCurrentMonthAsync<T>(TimeZoneInfo? timeZone = null)
+    {
+        var today = DateTime.Today;
+        var expectedMonth = new DateTime(today.Year, today.Month, 1);
+        var comp = Context.Render<MudDateTimePicker<T>>(parameters =>
+        {
+            parameters.Add(p => p.Value, default(T));
+
+            if (timeZone is not null)
+                parameters.Add(p => p.TimeZone, timeZone);
+        });
+
+        await InvokePickerOpenedAsync(comp.Instance);
+
+        comp.Instance.PickerMonth.Should().Be(expectedMonth);
+    }
+
+    private static Task InvokePickerOpenedAsync<T>(MudDateTimePicker<T> picker)
+    {
+        var method = typeof(MudBaseDatePickerX<T>).GetMethod(
+            "OnPickerOpenedAsync",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+
+        return (Task)method!.Invoke(picker, null)!;
     }
 }

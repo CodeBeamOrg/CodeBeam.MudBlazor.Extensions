@@ -251,6 +251,17 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
     protected internal bool IsDateOnly => (Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T)) == typeof(DateOnly);
 
     /// <summary>
+    /// Determines whether a non-nullable picker value is its default value.
+    /// </summary>
+    /// <param name="value">The value to evaluate.</param>
+    /// <returns><see langword="true"/> when <typeparamref name="T"/> is non-nullable and <paramref name="value"/> equals its default value; otherwise, <see langword="false"/>.</returns>
+    protected internal bool IsDefaultValue(T? value)
+    {
+        return Nullable.GetUnderlyingType(typeof(T)) is null &&
+               EqualityComparer<T?>.Default.Equals(value, default);
+    }
+
+    /// <summary>
     /// Generic conversion method to convert the generic type T to DateTime. Supports DateTime and DateTimeOffset.
     /// </summary>
     /// <param name="value">The value to convert.</param>
@@ -376,7 +387,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
 
         var dateTime = ToDateTime(_value);
 
-        if (dateTime.HasValue && dateTime.Value == default)
+        if (IsDefaultValue(_value))
         {
             var culture = GetCulture();
             var calendar = culture.Calendar;

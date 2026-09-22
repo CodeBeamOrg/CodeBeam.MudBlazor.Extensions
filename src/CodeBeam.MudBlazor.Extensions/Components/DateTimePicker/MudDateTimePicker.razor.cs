@@ -454,12 +454,14 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// Gets the date used in the picker header.
     /// </summary>
     /// <remarks>
-    /// A non-nullable date picker uses <see cref="DateTime.MinValue"/> as its cleared value. The header uses the
-    /// current local date as the picker reference date for that sentinel instead of presenting it as a selected value.
+    /// A non-nullable date picker uses its default value as its cleared value. The header uses the current local date
+    /// as the picker reference date for that sentinel instead of presenting it as a selected value.
     /// </remarks>
     private DateTime GetPickerHeaderDate(DateTime? date)
     {
-        if (date is not null && date.Value != DateTime.MinValue)
+        var boundDate = ToDateTime(_value);
+
+        if (date is not null && (!IsDefaultValue(_value) || date != boundDate))
             return date.Value;
 
         return TimeProvider.GetLocalNow().Date;
