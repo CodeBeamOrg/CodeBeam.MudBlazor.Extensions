@@ -417,11 +417,24 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>The formatted date string for the title of the picker.</returns>
     protected string GetTitleDateString()
     {
-        var date = _workingValue
-            ?? ToDateTime(Value)
-            ?? TimeProvider.GetLocalNow().Date;
+        var date = GetPickerHeaderDate(_workingValue ?? ToDateTime(Value));
 
         return FormatTitleDate(date);
+    }
+
+    /// <summary>
+    /// Gets the date used in the picker header.
+    /// </summary>
+    /// <remarks>
+    /// A non-nullable date picker uses <see cref="DateTime.MinValue"/> as its cleared value. The header uses the
+    /// current local date as the picker reference date for that sentinel instead of presenting it as a selected value.
+    /// </remarks>
+    private DateTime GetPickerHeaderDate(DateTime? date)
+    {
+        if (date is not null && date.Value != DateTime.MinValue)
+            return date.Value;
+
+        return TimeProvider.GetLocalNow().Date;
     }
 
     /// <summary>
@@ -873,9 +886,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
     protected string GetFormattedYearString()
     {
-        var date = _workingValue
-            ?? ToDateTime(Value)
-            ?? TimeProvider.GetLocalNow().Date;
+        var date = GetPickerHeaderDate(_workingValue ?? ToDateTime(Value));
 
         return date.Year.ToString();
     }

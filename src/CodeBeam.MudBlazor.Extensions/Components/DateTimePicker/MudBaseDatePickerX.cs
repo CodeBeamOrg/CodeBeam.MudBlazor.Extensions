@@ -364,23 +364,23 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
 
         var dateTime = ToDateTime(_value);
 
-        if (dateTime.HasValue)
-        {
-            var culture = GetCulture();
-            var calendar = culture.Calendar;
-            PickerMonth = new DateTime(
-                calendar.GetYear(dateTime.Value),
-                calendar.GetMonth(dateTime.Value),
-                1,
-                calendar);
-        }
-        else
+        if (dateTime.HasValue && dateTime.Value == default)
         {
             var culture = GetCulture();
             var calendar = culture.Calendar;
             PickerMonth = new DateTime(
                 calendar.GetYear(DateTime.Today),
                 calendar.GetMonth(DateTime.Today),
+                1,
+                calendar);
+        }
+        else if (dateTime.HasValue)
+        {
+            var culture = GetCulture();
+            var calendar = culture.Calendar;
+            PickerMonth = new DateTime(
+                calendar.GetYear(dateTime.Value),
+                calendar.GetMonth(dateTime.Value),
                 1,
                 calendar);
         }
