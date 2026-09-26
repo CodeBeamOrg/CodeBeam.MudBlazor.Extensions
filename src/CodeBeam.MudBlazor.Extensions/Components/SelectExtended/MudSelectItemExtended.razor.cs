@@ -198,7 +198,12 @@ namespace MudExtensions
         {
             try
             {
-                MudSelectExtended?.Remove(this);
+                if (MudSelectExtended is { } select)
+                {
+                    select.SelectionChangedFromOutside -= OnUpdateSelectionStateFromOutside;
+                    select.Remove(this);
+                }
+
                 ((MudSelectExtended<T?>?)_shadowParent)?.UnregisterShadowItem(this);
             }
             catch (Exception) { }
