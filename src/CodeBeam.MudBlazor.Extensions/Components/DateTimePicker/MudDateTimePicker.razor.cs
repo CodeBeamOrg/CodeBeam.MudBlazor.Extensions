@@ -299,7 +299,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
             var converted = FromDateTime(date);
             _value = converted;
-            
+
             if (updateValue)
             {
                 ResetConverterErrors();
