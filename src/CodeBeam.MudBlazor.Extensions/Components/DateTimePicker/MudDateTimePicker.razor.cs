@@ -64,14 +64,14 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        _workingValue = ToDateTime(Value);
+        _workingValue = BoundDateOrNull();
     }
 
     /// <inheritdoc />
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        _workingValue = ToDateTime(Value);
+        _workingValue = BoundDateOrNull();
         SyncTimeFromValue();
     }
 
@@ -106,6 +106,8 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// The active picker mode.
     /// </summary>
     protected PickerMode _mode = PickerMode.Date;
+
+    private DateTime? BoundDateOrNull() => IsDefaultValue(_value) ? null : ToDateTime(Value);
 
     /// <summary>
     /// The currently selected value.
@@ -297,7 +299,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
 
             var converted = FromDateTime(date);
             _value = converted;
-
+            
             if (updateValue)
             {
                 ResetConverterErrors();
@@ -363,7 +365,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         if (day < GetMonthStart(month) || day > GetMonthEnd(month))
             return b.AddClass("mud-hidden").Build();
 
-        var current = _workingValue ?? ToDateTime(Value);
+        var current = _workingValue ?? BoundDateOrNull();
 
         if (current?.Date == day.Date)
             return b.AddClass("mud-selected")
@@ -445,7 +447,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>The formatted date string for the title of the picker.</returns>
     protected string GetTitleDateString()
     {
-        var date = GetPickerHeaderDate(_workingValue ?? ToDateTime(Value));
+        var date = GetPickerHeaderDate(BoundDateOrNull() ?? _workingValue);
 
         return FormatTitleDate(date);
     }
@@ -464,6 +466,13 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         if (date is not null && (!IsDefaultValue(_value) || date != boundDate))
             return date.Value;
 
+        // Prefer MinDate, then PickerMonth, then local current date.
+        if (MinDate.HasValue)
+            return MinDate.Value;
+
+        if (PickerMonth.HasValue)
+            return PickerMonth.Value;
+
         return TimeProvider.GetLocalNow().Date;
     }
 
@@ -476,7 +485,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// or the current local date if neither is set.</returns>
     protected override DateTime GetCalendarStartOfMonth()
     {
-        var date = ToDateTime(Value) ?? HighlightedDate ?? TimeProvider.GetLocalNow().Date;
+        var date = BoundDateOrNull() ?? HighlightedDate ?? TimeProvider.GetLocalNow().Date;
         return date.StartOfMonth(GetCulture());
     }
 
@@ -491,7 +500,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>The calendar year as an integer, adjusted based on the current value and the specified date.</returns>
     protected override int GetCalendarYear(DateTime yearDate)
     {
-        var date = ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
+        var date = BoundDateOrNull() ?? TimeProvider.GetLocalNow().Date;
         var diff = GetCulture().Calendar.GetYear(date) - GetCulture().Calendar.GetYear(yearDate);
 
         return GetCulture().Calendar.GetYear(date) - diff;
@@ -570,7 +579,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>A task that represents the asynchronous operation.</returns>
     protected Task OnYearClickedAsync(int year)
     {
-        var current = ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
+        var current = BoundDateOrNull() ?? TimeProvider.GetLocalNow().Date;
         PickerMonth = new DateTime(year, current.Month, 1);
 
         _workingValue = new DateTime(
@@ -593,7 +602,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>The typography style for the year.</returns>
     protected Typo GetYearTypo(int year)
     {
-        var current = ToDateTime(Value);
+        var current = BoundDateOrNull();
         return current?.Year == year ? Typo.h5 : Typo.body1;
     }
 
@@ -604,7 +613,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>The CSS classes for the year.</returns>
     protected string GetYearClasses(int year)
     {
-        var current = ToDateTime(Value);
+        var current = BoundDateOrNull();
 
         return new CssBuilder("mud-picker-year-text")
             .AddClass("mud-selected", current?.Year == year)
@@ -647,7 +656,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>A task that represents the asynchronous operation.</returns>
     protected Task OnMonthSelectedAsync(int month)
     {
-        var current = _workingValue ?? ToDateTime(Value) ?? TimeProvider.GetLocalNow().Date;
+        var current = _workingValue ?? BoundDateOrNull() ?? TimeProvider.GetLocalNow().Date;
         PickerMonth = new DateTime(current.Year, month, 1);
 
         _workingValue = new DateTime(
@@ -689,7 +698,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>The typography style for the month.</returns>
     protected Typo GetMonthTypo(int month)
     {
-        var current = ToDateTime(Value);
+        var current = BoundDateOrNull();
         return current?.Month == month ? Typo.h6 : Typo.body2;
     }
 
@@ -700,7 +709,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>The CSS classes for the month.</returns>
     protected string GetMonthClasses(int month)
     {
-        var current = ToDateTime(Value);
+        var current = BoundDateOrNull();
 
         return new CssBuilder()
             .AddClass("mud-selected", current?.Month == month)
@@ -1026,7 +1035,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
     /// <returns>The formatted year.</returns>
     protected string GetFormattedYearString()
     {
-        var date = GetPickerHeaderDate(_workingValue ?? ToDateTime(Value));
+        var date = GetPickerHeaderDate(_workingValue ?? BoundDateOrNull());
 
         return date.Year.ToString();
     }
@@ -1044,7 +1053,7 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         var dateTime =
             date
             ?? _workingValue
-            ?? ToDateTime(Value)
+            ?? BoundDateOrNull()
             ?? TimeProvider.GetLocalNow().Date;
 
         var id = $"{_componentId}{calendar.GetYear(dateTime)}";
