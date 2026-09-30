@@ -327,8 +327,8 @@ namespace MudExtensions
         {
             foreach (var requiredHeader in TargetHeaders.Where(h => h.Required))
             {
-                if (SourceItems.Any(i => i.MappedZone == requiredHeader.Name)) continue;
-                if (_defaultValueHeaders?.Any(x => x.Key == requiredHeader.Name && x.Value.Confirmed) == true) continue;
+                if (SourceItems.Any(i => i.MappedZone.Equals(requiredHeader.Name, StringComparison.OrdinalIgnoreCase))) continue;
+                if (_defaultValueHeaders?.Any(x => x.Key.Equals(requiredHeader.Name, StringComparison.OrdinalIgnoreCase) && x.Value.Confirmed) == true) continue;
                 _valid = false;
                 return;
             }
