@@ -145,4 +145,82 @@ public class DateTimePickerTests : BunitTest
 
         return (Task)method!.Invoke(picker, null)!;
     }
+
+    [Test]
+    public void BoundDateOrNull_DefaultNonNullable_ReturnsNull()
+    {
+        var comp = Context.Render<MudDateTimePicker<DateTime>>(parameters => parameters.Add(p => p.Value, default(DateTime)));
+        var method = comp.Instance.GetType().GetMethod("BoundDateOrNull", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var result = (DateTime?)method.Invoke(comp.Instance, null);
+        result.Should().BeNull();
+    }
+
+    [Test]
+    public void BoundDateOrNull_ReturnsValue()
+    {
+        var date = new DateTime(2026, 5, 3);
+        var comp = Context.Render<MudDateTimePicker<DateTime>>(parameters => parameters.Add(p => p.Value, date));
+        var method = comp.Instance.GetType().GetMethod("BoundDateOrNull", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var result = (DateTime?)method.Invoke(comp.Instance, null);
+        result.Should().Be(date);
+    }
+
+    [Test]
+    public void GetPickerHeaderDate_PrefersMinDate()
+    {
+        var min = new DateTime(2020, 1, 1);
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, null).Add(p => p.MinDate, min));
+        var method = comp.Instance.GetType().GetMethod("GetPickerHeaderDate", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var result = (DateTime)method.Invoke(comp.Instance, new object?[] { null })!;
+        result.Should().Be(min.Date);
+    }
+
+    [Test]
+    public void GetPickerHeaderDate_PrefersPickerMonth()
+    {
+        var pm = new DateTime(2021, 6, 1);
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, null));
+        comp.Instance.PickerMonth = pm;
+        var method = comp.Instance.GetType().GetMethod("GetPickerHeaderDate", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var result = (DateTime)method.Invoke(comp.Instance, new object?[] { null })!;
+        result.Should().Be(pm);
+    }
+
+    [Test]
+    public void GetPickerHeaderDate_FallbackToToday()
+    {
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, null));
+        var method = comp.Instance.GetType().GetMethod("GetPickerHeaderDate", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var result = (DateTime)method.Invoke(comp.Instance, new object?[] { null })!;
+        result.Should().Be(DateTime.Today);
+    }
+
+    [Test]
+    public void GetTitleDateString_StableDuringTimeEdits()
+    {
+        var value = new DateTime(2026, 5, 3, 10, 0, 0);
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, value));
+        var methodTitle = comp.Instance.GetType().GetMethod("GetTitleDateString", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var before = (string)methodTitle.Invoke(comp.Instance, null)!;
+
+        var field = comp.Instance.GetType().GetField("_workingValue", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        field.SetValue(comp.Instance, new DateTime(2026, 5, 3, 22, 30, 0));
+
+        var after = (string)methodTitle.Invoke(comp.Instance, null)!;
+        after.Should().Be(before);
+    }
+
+    [Test]
+    public async Task ClearDoesNotChangePickerMonth()
+    {
+        var initial = new DateTime(2022, 5, 1);
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, (DateTime?)initial));
+        comp.Instance.PickerMonth = new DateTime(2022, 5, 1);
+
+        var method = comp.Instance.GetType().GetMethod("SetDateAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var task = (Task)method.Invoke(comp.Instance, new object?[] { null, true })!;
+        await task;
+
+        comp.Instance.PickerMonth.Should().Be(initial);
+    }
 }
