@@ -218,8 +218,11 @@ public class DateTimePickerTests : BunitTest
         comp.Instance.PickerMonth = new DateTime(2022, 5, 1);
 
         var method = comp.Instance.GetType().GetMethod("SetDateAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        var task = (Task)method.Invoke(comp.Instance, new object?[] { null, true })!;
-        await task;
+        await comp.InvokeAsync(async () =>
+        {
+            var t = (Task)method.Invoke(comp.Instance, new object?[] { null, true })!;
+            await t;
+        });
 
         comp.Instance.PickerMonth.Should().Be(initial);
     }
