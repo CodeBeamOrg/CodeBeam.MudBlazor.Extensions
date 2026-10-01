@@ -264,7 +264,7 @@ public class DateTimePickerTests : BunitTest
     {
         var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, null));
         var method = comp.Instance.GetType().GetMethod("SetTimePart", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        await comp.InvokeAsync(async () => await (Task)method.Invoke(comp.Instance, new object?[] { 9, 15 })!);
+        await comp.InvokeAsync(() => { method.Invoke(comp.Instance, new object?[] { 9, 15 }); return Task.CompletedTask; });
         var w = (DateTime?)comp.Instance.GetType().GetField("_workingValue", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(comp.Instance);
         w.Should().NotBeNull();
         w.Value.Hour.Should().Be(9);
