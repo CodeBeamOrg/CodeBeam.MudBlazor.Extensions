@@ -3,6 +3,7 @@ using Bunit;
 using Microsoft.AspNetCore.Components;
 
 using System.Reflection;
+using System.Linq;
 
 namespace MudExtensions.UnitTests.Components;
 
@@ -225,5 +226,109 @@ public class DateTimePickerTests : BunitTest
         });
 
         comp.Instance.PickerMonth.Should().Be(initial);
+    }
+
+    [Test]
+    public async Task SyncTimeFromValue_Sets_Zero_When_WorkingValueNull()
+    {
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, null));
+        var wfield = comp.Instance.GetType().GetField("_workingValue", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        wfield.SetValue(comp.Instance, null);
+        var method = comp.Instance.GetType().GetMethod("SyncTimeFromValue", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        await comp.InvokeAsync(() => method.Invoke(comp.Instance, null));
+        var ts = comp.Instance.GetType().GetField("_timeSet", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(comp.Instance)!;
+        var hour = (int)ts.GetType().GetProperty("Hour")!.GetValue(ts)!;
+        var minute = (int)ts.GetType().GetProperty("Minute")!.GetValue(ts)!;
+        hour.Should().Be(0);
+        minute.Should().Be(0);
+    }
+
+    [Test]
+    public async Task UpdateTimeAsync_Applies_TimeSet_To_WorkingValue()
+    {
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, null));
+        var tsField = comp.Instance.GetType().GetField("_timeSet", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var ts = tsField.GetValue(comp.Instance)!;
+        ts.GetType().GetProperty("Hour")!.SetValue(ts, 13);
+        ts.GetType().GetProperty("Minute")!.SetValue(ts, 45);
+        var method = comp.Instance.GetType().GetMethod("UpdateTimeAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        await comp.InvokeAsync(async () => await (Task)method.Invoke(comp.Instance, null)!);
+        var w = (DateTime?)comp.Instance.GetType().GetField("_workingValue", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(comp.Instance);
+        w.Should().NotBeNull();
+        w.Value.Hour.Should().Be(13);
+        w.Value.Minute.Should().Be(45);
+    }
+
+    [Test]
+    public async Task SetTimePart_Sets_WorkingValue_Hour_Minute()
+    {
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, null));
+        var method = comp.Instance.GetType().GetMethod("SetTimePart", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        await comp.InvokeAsync(async () => await (Task)method.Invoke(comp.Instance, new object?[] { 9, 15 })!);
+        var w = (DateTime?)comp.Instance.GetType().GetField("_workingValue", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(comp.Instance);
+        w.Should().NotBeNull();
+        w.Value.Hour.Should().Be(9);
+        w.Value.Minute.Should().Be(15);
+    }
+
+    [Test]
+    public async Task OnAmClickedAsync_And_OnPmClickedAsync_Adjust_Hour()
+    {
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, null));
+        var tsField = comp.Instance.GetType().GetField("_timeSet", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var ts = tsField.GetValue(comp.Instance)!;
+        ts.GetType().GetProperty("Hour")!.SetValue(ts, 13);
+        var am = comp.Instance.GetType().GetMethod("OnAmClickedAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        await comp.InvokeAsync(async () => await (Task)am.Invoke(comp.Instance, null)!);
+        var hourAfterAm = (int)ts.GetType().GetProperty("Hour")!.GetValue(ts)!;
+        hourAfterAm.Should().Be(1);
+
+        ts.GetType().GetProperty("Hour")!.SetValue(ts, 1);
+        var pm = comp.Instance.GetType().GetMethod("OnPmClickedAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        await comp.InvokeAsync(async () => await (Task)pm.Invoke(comp.Instance, null)!);
+        var hourAfterPm = (int)ts.GetType().GetProperty("Hour")!.GetValue(ts)!;
+        hourAfterPm.Should().Be(13);
+    }
+
+    [Test]
+    public async Task SelectTimeFromStick_And_OnStickClick_Work()
+    {
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, null));
+        // test minutes selection
+        var currentViewField = comp.Instance.GetType().GetField("CurrentView", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)!;
+        var enumType = currentViewField.FieldType;
+        var hours = Enum.Parse(enumType, "Hours");
+        var minutes = Enum.Parse(enumType, "Minutes");
+        currentViewField.SetValue(comp.Instance, minutes);
+        await comp.InvokeAsync(async () => await comp.Instance.SelectTimeFromStick(30, true));
+        var ts = comp.Instance.GetType().GetField("_timeSet", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(comp.Instance)!;
+        var minute = (int)ts.GetType().GetProperty("Minute")!.GetValue(ts)!;
+        minute.Should().Be(30);
+        comp.Instance.PointerMoving.Should().BeTrue();
+
+        // test hours selection and stick click behaviour
+        comp.Instance.GetType().GetField("CurrentView", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)!.SetValue(comp.Instance, hours);
+        await comp.InvokeAsync(async () => await comp.Instance.SelectTimeFromStick(5, false));
+        var hour = (int)ts.GetType().GetProperty("Hour")!.GetValue(ts)!;
+        hour.Should().Be(5);
+
+        await comp.InvokeAsync(async () => await comp.Instance.OnStickClick(5));
+        var currentView = comp.Instance.GetType().GetField("CurrentView", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(comp.Instance);
+        currentView.Should().Be(minutes);
+    }
+
+    [Test]
+    public async Task SubmitAsync_Updates_Value()
+    {
+        var comp = Context.Render<MudDateTimePicker<DateTime?>>(parameters => parameters.Add(p => p.Value, null));
+        var wfield = comp.Instance.GetType().GetField("_workingValue", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        wfield.SetValue(comp.Instance, new DateTime(2026, 6, 2, 11, 11, 0));
+        var method = comp.Instance.GetType().GetMethod("SubmitAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        await comp.InvokeAsync(async () => await (Task)method.Invoke(comp.Instance, null)!);
+        var value = comp.Instance.Value;
+        value.Should().NotBeNull();
+        var dt = (DateTime?)value;
+        dt.Value.Year.Should().Be(2026);
+        dt.Value.Hour.Should().Be(11);
     }
 }
