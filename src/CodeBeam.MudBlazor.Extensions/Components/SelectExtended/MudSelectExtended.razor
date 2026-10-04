@@ -1,4 +1,4 @@
-﻿@namespace MudExtensions
+@namespace MudExtensions
 @typeparam T
 @inherits MudBaseInputExtended<T>
 
@@ -159,12 +159,12 @@
             </MudInputControl>
         </div>
 
-        @*To Be Discussed as Second ShadowItems: Needed to render directly into select to has initial values*@
+        @*The hidden list only materializes selected ItemCollection values. It keeps selected item components available for presenters without defeating virtualization.*@
 
         <div style="display: none">
             <CascadingValue Value="@this" IsFixed="true">
-                <MudListExtended T="T" @bind-SelectedValue:set="@SetValueCoreAsync" @bind-SelectedValue:get="@ReadValue" @bind-SelectedValues="@SelectedValues" @bind-SelectedItem="@SelectedListItem" @bind-SelectedItems="@SelectedListItems"
-                                 Clickable="true" Color="@Color" Dense="@Dense" ItemCollection="@ItemCollection" Padding="@EnablePopoverPadding" EnableSelectedItemStyle="@EnableSelectedItemStyle"
+                <MudListExtended @key="Virtualize ? SelectedValues : null" T="T" @bind-SelectedValue:set="@SetValueCoreAsync" @bind-SelectedValue:get="@ReadValue" @bind-SelectedValues="@SelectedValues" @bind-SelectedItem="@SelectedListItem" @bind-SelectedItems="@SelectedListItems"
+                                 Clickable="true" Color="@Color" Dense="@Dense" ItemCollection="@GetShadowItemCollection()" Padding="@EnablePopoverPadding" EnableSelectedItemStyle="@EnableSelectedItemStyle"
                                  MultiSelection="@MultiSelection" MultiSelectionComponent="@MultiSelectionComponent" MultiSelectionAlign="@MultiSelectionAlign" SelectAll="@SelectAll" SelectAllPosition="@SelectAllPosition" SelectAllText="@SelectAllText"
                                  CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" IndeterminateIcon="@IndeterminateIcon" SelectValueOnTab="@SelectValueOnTab" Comparer="@Comparer" AddNullItem="@AddNullItem" AddedNullItemText="@AddedNullItemText"
                                  ItemTemplate="@ItemTemplate" ItemSelectedTemplate="@ItemSelectedTemplate" ItemDisabledTemplate="@ItemDisabledTemplate" SearchBox="@SearchBox" SearchBoxAutoFocus="@SearchBoxAutoFocus" SearchFunc="@SearchFunc" SearchBoxPlaceholder="@SearchBoxPlaceholder"
