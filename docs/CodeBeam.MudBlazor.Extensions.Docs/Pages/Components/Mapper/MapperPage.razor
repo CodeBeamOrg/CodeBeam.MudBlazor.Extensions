@@ -1,0 +1,19 @@
+@page "/mudmapper"
+@namespace MudExtensions.Docs.Pages
+
+<ExamplePage Component="typeof(MudMapper)">
+    <ExampleCard ComponentName="Mapper" ExampleName="MapperExample1" Title="Basic Mapping" AliasName="basic"
+                 Description="Drag source items onto target header zones. Required headers must be mapped before confirming.">
+        <MapperExample1 />
+    </ExampleCard>
+
+    <ExampleCard ComponentName="Mapper" ExampleName="MapperExample2" Title="Create Headers at Runtime" AliasName="create-headers"
+                 Description="AllowCreateTargetHeaders lets users define new target headers on the fly. ShowIncludeUnmappedData exposes a toggle to keep unmapped source items in the output.">
+        <MapperExample2 />
+    </ExampleCard>
+
+    <ExampleCard ComponentName="Mapper" ExampleName="MapperExample3" Title="Default Values" AliasName="default-values"
+                 Description="Headers with AllowDefaultValue let users supply a fallback value when no source item is available to map.">
+        <MapperExample3 />
+    </ExampleCard>
+</ExamplePage>

@@ -37,4 +37,5 @@
 		<EmbeddedResource Include="Pages/Components/**" />
 	</ItemGroup>
 
+
 </Project>

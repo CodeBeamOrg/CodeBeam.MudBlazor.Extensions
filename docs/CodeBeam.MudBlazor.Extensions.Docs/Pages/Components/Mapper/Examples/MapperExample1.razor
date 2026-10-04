@@ -1,0 +1,78 @@
+@namespace MudExtensions.Docs.Examples
+@inject ISnackbar Snackbar
+@using MudExtensions.Utilities
+
+<MudGrid>
+    <MudItem xs="12">
+        <MudText Typo="Typo.body2" Class="mb-2">
+            Drag the source columns onto the matching target fields. <b>Email</b> is required.
+        </MudText>
+    </MudItem>
+    <MudItem xs="12">
+        <MudMapper @ref="_mapper"
+                   SourceItems="_sourceItems"
+                   TargetHeaders="_targetHeaders"
+                   ConfirmLabel="Confirm Mapping"
+                   OnConfirmed="OnMappingConfirmed"
+                   OnReset="OnReset" />
+    </MudItem>
+    @if (_mappingSummary.Count > 0)
+    {
+        <MudItem xs="12">
+            <MudAlert Severity="Severity.Success" Elevation="0">
+                <MudText Typo="Typo.subtitle2" Class="mb-1">Mapping Result</MudText>
+                @foreach (var (target, source) in _mappingSummary)
+                {
+                    <MudText Typo="Typo.body2">@source → @target</MudText>
+                }
+            </MudAlert>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+    MudMapper? _mapper;
+    List<(string Target, string Source)> _mappingSummary = new();
+
+    List<MudMapperItem> _sourceItems =
+    [
+        new("email_addr"),
+        new("first_name"),
+        new("last_name"),
+        new("phone_num"),
+        new("zip_code"),
+    ];
+
+    List<MudExpectedHeader> _targetHeaders =
+    [
+        new("Email",      required: true),
+        new("First Name"),
+        new("Last Name"),
+        new("Phone"),
+    ];
+
+    private void OnMappingConfirmed()
+    {
+        _mappingSummary = _mapper?.SourceItems
+            .Where(i => i.MappedZone != "Source")
+            .Select(i => (i.MappedZone, i.Name))
+            .ToList() ?? [];
+
+        Snackbar.Add("Mapping confirmed!", Severity.Success);
+    }
+
+    private void OnReset()
+    {
+        _mappingSummary.Clear();
+        // Re-initialise source items so chips return to the source pool
+        _sourceItems =
+        [
+            new("email_addr"),
+            new("first_name"),
+            new("last_name"),
+            new("phone_num"),
+            new("zip_code"),
+        ];
+        _targetHeaders.ForEach(h => h.MatchedFieldCount = 0);
+    }
+}
