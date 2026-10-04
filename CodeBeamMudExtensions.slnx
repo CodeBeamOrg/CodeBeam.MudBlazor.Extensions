@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/CodeBeam.MudBlazor.Extensions.Benchmarks/CodeBeam.MudBlazor.Extensions.Benchmarks.csproj" />
+  </Folder>
   <Folder Name="/docs/">
     <Project Path="docs/CodeBeam.MudBlazor.Extensions.Docs.Server/CodeBeam.MudBlazor.Extensions.Docs.Server.csproj" />
     <Project Path="docs/CodeBeam.MudBlazor.Extensions.Docs.Wasm/CodeBeam.MudBlazor.Extensions.Docs.Wasm.csproj" />
