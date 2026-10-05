@@ -466,11 +466,11 @@ public partial class MudDateTimePicker<T> : MudBaseDatePickerX<T>
         if (date is not null && (!IsDefaultValue(_value) || date != boundDate))
             return date.Value;
 
-        // Prefer MinDate, then PickerMonth, then local current date.
+        // Prefer MinDate, then PickerMonth (only if explicitly set), then local current date.
         if (MinDate.HasValue)
             return MinDate.Value;
 
-        if (PickerMonth.HasValue)
+        if (PickerMonth.HasValue && _picker_month_set)
             return PickerMonth.Value;
 
         return TimeProvider.GetLocalNow().Date;

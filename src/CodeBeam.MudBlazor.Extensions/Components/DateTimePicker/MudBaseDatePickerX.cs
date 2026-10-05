@@ -19,6 +19,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
     protected readonly string _componentId = Identifier.Create();
 
     internal DateTime? _picker_month;
+    internal bool _picker_month_set;
 
     /// <summary>
     /// Is set to true to scroll to the actual year after the next render
@@ -122,6 +123,7 @@ public abstract partial class MudBaseDatePickerX<T> : MudPicker<T>
             if (value == _picker_month)
                 return;
             _picker_month = value;
+            _picker_month_set = true;
             InvokeAsync(StateHasChanged);
             PickerMonthChanged.InvokeAsync(value);
         }
