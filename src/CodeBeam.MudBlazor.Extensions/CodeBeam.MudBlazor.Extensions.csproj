@@ -58,7 +58,7 @@
 			<_Parameter1>CodeBeam.MudBlazor.Extensions.UnitTests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<None Include="Mud_Secondary.png">
 			<Pack>True</Pack>
