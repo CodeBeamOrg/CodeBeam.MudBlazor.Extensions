@@ -1,7 +1,6 @@
 services:
   mudextensions:
-    build:
-      context: .
+    image: ghcr.io/codebeamorg/codebeam.mudblazor.extensions:dev
     container_name: mudextensions
     restart: unless-stopped
     networks:
