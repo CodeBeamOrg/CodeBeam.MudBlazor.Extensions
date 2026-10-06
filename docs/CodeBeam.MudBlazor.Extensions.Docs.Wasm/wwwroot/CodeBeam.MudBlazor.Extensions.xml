@@ -3649,6 +3649,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:MudExtensions.MudListItemExtended`1.OnParametersSet">
+            <summary>
+            Re-applies selection state whenever a list item receives parameters.
+            Virtualized lists can reuse an existing component instance for a different value,
+            so selection cannot rely only on registration/scroll timing.
+            </summary>
+        </member>
         <member name="T:MudExtensions.MudListSubheaderExtended`1">
             <summary>
             
@@ -3979,8 +3986,15 @@
             Allows users to map source items onto target headers without any file or CSV dependency.
             </summary>
         </member>
+        <member name="F:MudExtensions.MudMapper.SourcePoolZoneIdentifier">
+            <summary>
+            The identifier for the drop zone that contains unassigned source items.
+            </summary>
+        </member>
         <member name="P:MudExtensions.MudMapper.Classname">
-            <summary>CSS class for the root element.</summary>
+            <summary>
+            CSS class for the root element.
+            </summary>
         </member>
         <member name="P:MudExtensions.MudMapper.LocalizedStrings">
             <summary>
@@ -4052,6 +4066,16 @@
         </member>
         <member name="M:MudExtensions.MudMapper.OnInitialized">
             <inheritdoc />
+        </member>
+        <member name="M:MudExtensions.MudMapper.OnParametersSet">
+            <inheritdoc />
+        </member>
+        <member name="M:MudExtensions.MudMapper.IsSourcePoolItem(MudExtensions.MudMapperItem)">
+            <summary>
+            Determines whether a given source item is currently in the unassigned source pool.
+            </summary>
+            <param name="item">The source item to check.</param>
+            <returns>True if the item is in the unassigned source pool; otherwise, false.</returns>
         </member>
         <member name="M:MudExtensions.MudMapper.ResetMapping">
             <summary>
@@ -5181,6 +5205,13 @@
             These attributes belong on the visible MudInputControl, not the hidden MudInputExtended.
             </summary>
             <returns>A dictionary containing only ARIA attributes</returns>
+        </member>
+        <member name="M:MudExtensions.MudSelectExtended`1.GetShadowItemCollection">
+            <summary>
+            Returns the values that must be materialized by the hidden list.
+            Non-virtualized selects preserve the existing full item registry behavior;
+            virtualized selects only materialize selected values that exist in the current item collection.
+            </summary>
         </member>
         <member name="T:MudExtensions.MudSelectItemExtended`1">
             <summary>
