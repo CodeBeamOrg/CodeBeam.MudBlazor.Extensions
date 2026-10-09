@@ -1,0 +1,20 @@
+@namespace MudExtensions.UnitTests.TestComponents
+
+<MudPopoverProvider />
+
+<MudSelectExtended T="string" Value="@Selected">
+    <MudSelectItemExtended T="string" Value="@ItemValue" Text="@ItemText" />
+</MudSelectExtended>
+
+@code {
+    private const string ItemValue = "one";
+
+    public string Selected { get; } = ItemValue;
+    public string ItemText { get; private set; } = "One";
+
+    public void RenameSelectedItem(string text)
+    {
+        ItemText = text;
+        StateHasChanged();
+    }
+}

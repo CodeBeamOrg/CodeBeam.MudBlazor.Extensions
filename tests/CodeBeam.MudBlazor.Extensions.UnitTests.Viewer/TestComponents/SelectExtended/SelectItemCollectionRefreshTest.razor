@@ -1,0 +1,18 @@
+@namespace MudExtensions.UnitTests.TestComponents
+
+<MudPopoverProvider />
+
+<MudSelectExtended T="string" ItemCollection="@Items" MultiSelection="true" />
+
+@code {
+    public List<string?> Items { get; } = Enumerable.Range(1, 5)
+        .Select(value => $"Item {value}")
+        .ToList<string?>();
+
+    public void AddMore()
+    {
+        var next = Items.Count + 1;
+        Items.AddRange(Enumerable.Range(next, 5).Select(value => $"Item {value}"));
+        StateHasChanged();
+    }
+}
