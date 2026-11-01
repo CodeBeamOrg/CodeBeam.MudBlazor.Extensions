@@ -273,7 +273,7 @@ namespace MudExtensions
         /// <returns></returns>
         public async Task Closed(MudChip<T> chip)
         {
-            if (Disabled || ReadOnly)
+            if (GetDisabledState() || GetReadOnlyState())
             {
                 return;
             }

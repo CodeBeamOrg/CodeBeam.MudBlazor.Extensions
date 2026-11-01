@@ -1,0 +1,21 @@
+@namespace MudExtensions.UnitTests.TestComponents
+
+<MudSwitch T="bool" @bind-Value="FormDisabled" Label="Form Disabled" Color="Color.Primary" />
+<MudSwitch T="bool" @bind-Value="FormReadOnly" Label="Form ReadOnly" Color="Color.Primary" />
+
+<MudForm Disabled="@FormDisabled" ReadOnly="@FormReadOnly">
+    <MudChipField T="string" @bind-Values="Values" Label="Chip Field" Variant="Variant.Outlined" />
+</MudForm>
+
+@code {
+    public static string __description__ = "Chips should respect the parent form's Disabled and ReadOnly state";
+
+    [Parameter]
+    public bool FormDisabled { get; set; }
+
+    [Parameter]
+    public bool FormReadOnly { get; set; }
+
+    [Parameter]
+    public List<string>? Values { get; set; } = new() { "first", "second" };
+}
