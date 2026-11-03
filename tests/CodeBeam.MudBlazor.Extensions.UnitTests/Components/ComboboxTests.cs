@@ -194,6 +194,77 @@ namespace MudExtensions.UnitTests.Components
             combobox.Instance.SelectedValues.Should().BeEquivalentTo(new HashSet<string>());
         }
 
+        /// <summary>
+        /// When SelectAll is enabled, selecting all items must invoke SelectedValuesChanged exactly once.
+        /// </summary>
+        [Test]
+        public void MultiSelect_SelectAllEnabled_SelectedValuesChangedOnce()
+        {
+            var comp = Context.Render<ComboBoxMultiSelectSelectAllEnabledSelectedValuesChanged>();
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            var menu = comp.Find("div.mud-popover");
+            var input = combobox.Find("div.mud-input-control");
+            input.Click();
+            comp.WaitForAssertion(() => menu.ClassList.Should().Contain("mud-popover-open"));
+
+            comp.FindAll("div.mud-combobox-item")[0].Click();
+
+            comp.WaitForAssertion(() => comp.Instance.Count.Should().Be(1));
+            combobox.Instance.SelectedValues.Should().HaveCount(1000);
+        }
+		/// <summary>
+		/// Deselecting all items after selecting all must invoke SelectedValuesChanged exactly once more.
+		/// </summary>
+		[Test]
+		public void MultiSelect_SelectAllEnabled_DeselectAll_SelectedValuesChangedOnce()
+		{
+			var comp = Context.Render<ComboBoxMultiSelectSelectAllEnabledSelectedValuesChanged>();
+			var combobox = comp.FindComponent<MudComboBox<string>>();
+			var menu = comp.Find("div.mud-popover");
+			combobox.Find("div.mud-input-control").Click();
+			comp.WaitForAssertion(() => menu.ClassList.Should().Contain("mud-popover-open"));
+			comp.FindAll("div.mud-combobox-item")[0].Click();
+			comp.WaitForAssertion(() => combobox.Instance.SelectedValues.Should().HaveCount(1000));
+
+			comp.FindAll("div.mud-combobox-item")[0].Click();
+
+			comp.WaitForAssertion(() => combobox.Instance.SelectedValues.Should().BeEmpty());
+			comp.Instance.Count.Should().Be(2);
+		}
+
+		/// <summary>
+		/// Selecting a single item in multi selection must invoke SelectedValuesChanged exactly once.
+		/// </summary>
+		[Test]
+		public void MultiSelect_SelectOneItem_SelectedValuesChangedOnce()
+		{
+			var comp = Context.Render<ComboBoxMultiSelectSelectOneSelectedValuesChanged>();
+			var combobox = comp.FindComponent<MudComboBox<string>>();
+			var menu = comp.Find("div.mud-popover");
+			combobox.Find("div.mud-input-control").Click();
+			comp.WaitForAssertion(() => menu.ClassList.Should().Contain("mud-popover-open"));
+
+			comp.FindAll("div.mud-combobox-item")[0].Click();
+
+			comp.WaitForAssertion(() => combobox.Instance.SelectedValues.Should().BeEquivalentTo(new[] { "A" }));
+			comp.Instance.Count.Should().Be(1);
+		}
+
+		/// <summary>
+		/// Closing a chip must invoke SelectedValuesChanged exactly once.
+		/// </summary>
+		[Test]
+		public void MultiSelect_ChipClosed_SelectedValuesChangedOnce()
+		{
+			var comp = Context.Render<ComboBoxMultiSelectChipCloseSelectedValuesChanged>();
+			var combobox = comp.FindComponent<MudComboBox<string>>();
+
+			comp.Find("button.mud-chip-close-button").Click();
+
+			comp.WaitForAssertion(() => combobox.Instance.SelectedValues.Should().HaveCount(1));
+			comp.Instance.Count.Should().Be(1);
+		}
+
         [Test]
         public async Task ComboBox_MultiSelectEditable()
         {

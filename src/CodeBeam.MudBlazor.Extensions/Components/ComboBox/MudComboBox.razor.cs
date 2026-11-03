@@ -625,7 +625,7 @@ namespace MudExtensions
 
                 _selectedValues = new HashSet<T?>(set, _comparer);
 
-                SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer)).CatchAndLog();
+                SelectedValuesChanged.InvokeAsync(_selectedValues).CatchAndLog();
                 ForceUpdateItems().CatchAndLog();
                 //Console.WriteLine("SelectedValues setter ended");
             }
@@ -1259,11 +1259,10 @@ namespace MudExtensions
                     DeselectAllItems();
                     await UpdateComboBoxValueAsync(item.Value, updateText: true, updateSearchString: true);
                 }
-                else if (SelectedValues?.Contains(item.Value) != true)
+                else if (SelectedValues is not null && SelectedValues.Contains(item.Value) != true)
                 {
                     await SetValueAndUpdateTextAsync(item.Value, false);
                     SelectedValues = SelectedValues.Append(item.Value);
-                    await SelectedValuesChanged.InvokeAsync(_selectedValues);
                     _allSelected = GetAllSelectedState();
 
                     //await Task.Delay(1);
@@ -1395,14 +1394,14 @@ namespace MudExtensions
         /// </summary>
         /// <param name="chip"></param>
         /// <returns></returns>
-        protected async Task ChipClosed(MudChip<T> chip)
+        protected Task ChipClosed(MudChip<T> chip)
         {
             if (chip is null || SelectedValues is null)
-                return;
+                return Task.CompletedTask;
 
             //SelectedValues = SelectedValues.Where(x => Converter.Set(x)?.ToString() != chip.Value?.ToString());
             SelectedValues = SelectedValues.Where(x => x?.Equals(chip.Value) == false);
-            await SelectedValuesChanged.InvokeAsync(SelectedValues);
+            return Task.CompletedTask;
         }
 
         private bool? _allSelected;
@@ -1412,26 +1411,19 @@ namespace MudExtensions
         /// <returns></returns>
         protected async Task SelectAllItems()
         {
-            if (_allSelected == null || _allSelected == false)
+            if (_allSelected != true)
             {
-                SelectedValues = new List<T>();
-                foreach (var item in Items.Where(x => x.Eligible))
-                {
-                    item.Selected = true;
-                    SelectedValues = SelectedValues.Append(item.Value);
-                }
-                await SelectedValuesChanged.InvokeAsync(SelectedValues);
+                var eligibleItems = Items.Where(x => x.Eligible).ToList();
+                foreach (var item in eligibleItems) item.Selected = true;
+                SelectedValues = [.. eligibleItems.Select(x => x.Value)];
                 await SetValueAndUpdateTextAsync(SelectedValues.LastOrDefault(), false);
                 _allSelected = true;
             }
             else
             {
-                foreach (var item in Items.Where(x => x.Selected))
-                {
-                    item.Selected = false;
-                }
+                var selectedItems = Items.Where(x => x.Selected).ToList();
+                foreach (var item in selectedItems) item.Selected = false;
                 SelectedValues = new HashSet<T?>(_comparer);
-                await SelectedValuesChanged.InvokeAsync(SelectedValues);
                 _allSelected = false;
             }
         }

@@ -1,0 +1,22 @@
+@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudComboBox T="string" MultiSelection ChipCloseable InputPresenter="ValuePresenter.Chip"
+    SelectedValues=@_selectedValues
+    SelectedValuesChanged=@SelectedValuesChanged>
+    <MudComboBoxItem T="string" Value="@("A")">A</MudComboBoxItem>
+    <MudComboBoxItem T="string" Value="@("B")">B</MudComboBoxItem>
+    <MudComboBoxItem T="string" Value="@("C")">C</MudComboBoxItem>
+</MudComboBox>
+
+@code {
+    IEnumerable<string> _selectedValues = new HashSet<string> { "A", "B" };
+    public int Count { get; private set; }
+
+    Task SelectedValuesChanged(IEnumerable<string> selectedValues)
+    {
+        _selectedValues = selectedValues;
+        Count++;
+        return Task.CompletedTask;
+    }
+}
