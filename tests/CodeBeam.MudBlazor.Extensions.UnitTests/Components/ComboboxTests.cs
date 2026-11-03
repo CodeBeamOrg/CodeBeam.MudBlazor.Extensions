@@ -172,6 +172,18 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
+        public void ComboBox_OpenCloseIconTest()
+        {
+            var comp = Context.Render<ComboBoxTest1>();
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+
+            combobox.FindComponents<MudIcon>().Should().ContainSingle(x => x.Instance.Icon == Icons.Material.Filled.ArrowDropDown);
+
+            combobox.Find("div.mud-input-control").Click();
+            comp.WaitForAssertion(() => combobox.FindComponents<MudIcon>().Should().ContainSingle(x => x.Instance.Icon == Icons.Material.Filled.ArrowDropUp));
+        }
+
+        [Test]
         public void MultiSelect_SelectAll()
         {
             var comp = Context.Render<ComboBoxMultiSelectTest2>();
