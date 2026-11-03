@@ -4597,6 +4597,12 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="M:MudExtensions.MudSelectExtended`1.GetSelectedPresentationItem">
+            <summary>
+            Resolves the selected option for ItemContent presentation without requiring that
+            option to have a currently rendered list-item component.
+            </summary>
+        </member>
         <member name="M:MudExtensions.MudSelectExtended`1.#ctor">
             <summary>
             
@@ -4612,12 +4618,7 @@
             
             </summary>
         </member>
-        <member name="F:MudExtensions.MudSelectExtended`1._valueLookup">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:MudExtensions.MudSelectExtended`1._shadowLookup">
+        <member name="F:MudExtensions.MudSelectExtended`1._elementReference">
             <summary>
             
             </summary>
@@ -5123,18 +5124,6 @@
             </summary>
             <param name="item"></param>
         </member>
-        <member name="M:MudExtensions.MudSelectExtended`1.RegisterShadowItem(MudExtensions.MudSelectItemExtended{`0})">
-            <summary>
-            
-            </summary>
-            <param name="item"></param>
-        </member>
-        <member name="M:MudExtensions.MudSelectExtended`1.UnregisterShadowItem(MudExtensions.MudSelectItemExtended{`0})">
-            <summary>
-            
-            </summary>
-            <param name="item"></param>
-        </member>
         <member name="M:MudExtensions.MudSelectExtended`1.SelectClearButtonClickHandlerAsync(Microsoft.AspNetCore.Components.Web.MouseEventArgs)">
             <summary>
             Extra handler for clearing selection.
@@ -5206,12 +5195,8 @@
             </summary>
             <returns>A dictionary containing only ARIA attributes</returns>
         </member>
-        <member name="M:MudExtensions.MudSelectExtended`1.GetShadowItemCollection">
-            <summary>
-            Returns the values that must be materialized by the hidden list.
-            Non-virtualized selects preserve the existing full item registry behavior;
-            virtualized selects only materialize selected values that exist in the current item collection.
-            </summary>
+        <member name="M:MudExtensions.MudSelectExtended`1.OnParametersSetAsync">
+            <inheritdoc />
         </member>
         <member name="T:MudExtensions.MudSelectItemExtended`1">
             <summary>
@@ -5225,7 +5210,8 @@
         </member>
         <member name="P:MudExtensions.MudSelectItemExtended`1.IMudSelectExtended">
             <summary>
-            The parent select component
+            The parent select component. Registration is reconciled in OnParametersSet so all
+            cascading parameters (including HideContent) have been applied before side effects run.
             </summary>
         </member>
         <member name="P:MudExtensions.MudSelectItemExtended`1.IsFunctional">
@@ -5289,6 +5275,9 @@
             
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:MudExtensions.MudSelectItemExtended`1.OnParametersSet">
+            <inheritdoc />
         </member>
         <member name="M:MudExtensions.MudSelectItemExtended`1.Dispose">
             <summary>
