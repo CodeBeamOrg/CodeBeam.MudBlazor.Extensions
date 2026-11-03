@@ -50,12 +50,12 @@
             @for (int i = 0; i < (MaxChips == 0 ? _valuesState.Value?.Count ?? 0 : (MaxChips < (_valuesState.Value?.Count ?? 0) ? MaxChips : _valuesState.Value?.Count ?? 0)); i++)
             {
                 int a = i;
-                <MudChip T="T" Class="@ClassChip" Style="@StyleChip" Ripple="false" Text="@(_valuesState.Value != null ? _valuesState.Value[a] : string.Empty)" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
+                <MudChip T="T" Class="@ClassChip" Style="@StyleChip" Ripple="false" Text="@(_valuesState.Value != null ? _valuesState.Value[a] : string.Empty)" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@GetDisabledState()" />
             }
         </MudChipSet>
         @if (_valuesState.Value != null && MaxChips != 0 && MaxChips < _valuesState.Value.Count)
         {
-            <MudChip T="T" Ripple="false" Text="@($"+{_valuesState.Value.Count - MaxChips}")" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@Disabled" />
+            <MudChip T="T" Ripple="false" Text="@($"+{_valuesState.Value.Count - MaxChips}")" Color="@ChipColor" Variant="@ChipVariant" Size="@ChipSize" Disabled="@GetDisabledState()" />
         }
     </DataVisualiser>
 

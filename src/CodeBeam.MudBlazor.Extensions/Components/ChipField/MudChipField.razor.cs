@@ -178,6 +178,9 @@ namespace MudExtensions
         /// <returns></returns>
         protected internal async Task HandleBeforeInput(BeforeInputEventArgs args)
         {
+            if (GetDisabledState() || GetReadOnlyState())
+                return;
+
             if (args.IsComposing)
             {
                 return;
@@ -273,7 +276,7 @@ namespace MudExtensions
         /// <returns></returns>
         public async Task Closed(MudChip<T> chip)
         {
-            if (Disabled || ReadOnly)
+            if (GetDisabledState() || GetReadOnlyState())
             {
                 return;
             }
