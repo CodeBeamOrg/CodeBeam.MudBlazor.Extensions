@@ -1,0 +1,24 @@
+﻿@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudComboBox T="string" MultiSelection SelectAll
+    SelectedValues=@_selectedValues 
+    SelectedValuesChanged=@SelectedValuesChanged>
+    @foreach (var character in guids)
+    {
+        <MudComboBoxItem T="string" Value="@character">@character</MudComboBoxItem>
+    }
+</MudComboBox>
+
+@code {
+    IEnumerable<string> _selectedValues = [];
+    public int Count { get; private set; }
+    string[] guids = [.. Enumerable.Range(0, 1000).Select(_ => Guid.NewGuid().ToString())];
+
+    Task SelectedValuesChanged(IEnumerable<string> selectedValues)
+    {
+        _selectedValues = selectedValues;
+        Count++;
+        return Task.CompletedTask;
+    }
+}
