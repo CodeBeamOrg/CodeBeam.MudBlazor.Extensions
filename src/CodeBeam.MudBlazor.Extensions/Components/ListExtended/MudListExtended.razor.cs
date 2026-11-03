@@ -704,22 +704,16 @@ namespace MudExtensions
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public override Task SetParametersAsync(ParameterView parameters)
+        public override async Task SetParametersAsync(ParameterView parameters)
         {
             if (_centralCommanderIsProcessing)
-            {
-                return Task.CompletedTask;
-            }
+                return;
 
-            if (MudSelectExtended != null || MudAutocomplete != null)
-            {
-                return Task.CompletedTask;
-            }
-
-            base.SetParametersAsync(parameters).CatchAndLog();
-
+            // Hosted lists still need normal Blazor parameter flow. Previously every parameter set
+            // after the select/autocomplete cascade became available was discarded, freezing
+            // ItemCollection and all other parent-driven parameters while the popover was open.
+            await base.SetParametersAsync(parameters);
             _setParametersDone = true;
-            return Task.CompletedTask;
         }
 
         /// <summary>

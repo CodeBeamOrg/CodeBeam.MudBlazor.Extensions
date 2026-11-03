@@ -11,7 +11,7 @@ namespace MudExtensions
     /// Select component with advanced features.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class MudSelectExtended<T> : MudBaseInputExtended<T>, IMudSelectExtended, IMudShadowSelectExtended
+    public partial class MudSelectExtended<T> : MudBaseInputExtended<T>, IMudSelectExtended
     {
 
         #region Constructor, Injected Services, Parameters, Fields
@@ -46,18 +46,12 @@ namespace MudExtensions
         /// <summary>
         /// 
         /// </summary>
-        protected Dictionary<T, MudSelectItemExtended<T?>> _valueLookup = new();
-        /// <summary>
-        /// 
-        /// </summary>
-        protected Dictionary<T, MudSelectItemExtended<T?>> _shadowLookup = new();
         private MudInputExtended<string> _elementReference = new();
         internal bool _isOpen;
         /// <summary>
         /// 
         /// </summary>
         protected internal string? _currentIcon { get; set; }
-        internal event Action<ICollection<T?>>? SelectionChangedFromOutside;
 
         /// <summary>
         /// 
@@ -578,7 +572,6 @@ namespace MudExtensions
                 }
                 _selectedValuesSetterStarted = true;
                 _selectedValues = new HashSet<T?>(set, _comparer);
-                SelectionChangedFromOutside?.Invoke(new HashSet<T?>(_selectedValues, _comparer));
                 if (!MultiSelection)
                 {
                     SetValueAndUpdateTextAsync(_selectedValues.FirstOrDefault()).CatchAndLog();
@@ -694,34 +687,43 @@ namespace MudExtensions
         /// <returns></returns>
         protected override Task UpdateTextPropertyAsync(bool updateValue)
         {
-            List<string?> textList = new List<string?>();
-            if (Items != null && Items.Any())
+            List<string?> textList = new();
+
+            if (ItemCollection != null)
             {
-                if (ItemCollection != null)
+                foreach (var selectedValue in SelectedValues ?? [])
                 {
-                    foreach (var val in SelectedValues ?? new List<T?>())
+                    if (TryGetCollectionValue(selectedValue, out var collectionValue))
                     {
-                        var collectionValue = ItemCollection.FirstOrDefault(x => x != null && (Comparer != null ? Comparer.Equals(x, val) : x.Equals(val)));
-                        if (collectionValue != null)
-                        {
-                            textList.Add(ConvertSet(collectionValue));
-                        }
+                        textList.Add(ConvertSet(collectionValue));
+                    }
+                    else if (!Strict)
+                    {
+                        textList.Add(ConvertSet(selectedValue));
                     }
                 }
-                else
+            }
+            else if (Items is { Count: > 0 })
+            {
+                foreach (var selectedValue in SelectedValues ?? [])
                 {
-                    foreach (var val in SelectedValues ?? new List<T?>())
+                    // Preserve the existing declarative-item behavior: when a non-strict external
+                    // selection is represented by a different object instance, present that selected
+                    // value through the converter even if the custom comparer maps it to an item.
+                    if (!Strict && !Items.Select(item => item.Value).Contains(selectedValue))
                     {
-                        if (!Strict && !Items.Select(x => x.Value).Contains(val))
-                        {
-                            textList.Add(ToStringFunc != null ? ToStringFunc(val) : ConvertSet(val));
-                            continue;
-                        }
-                        var item = Items.FirstOrDefault(x => x != null && (x.Value == null ? val == null : Comparer != null ? Comparer.Equals(x.Value, val) : x.Value.Equals(val)));
-                        if (item != null)
-                        {
-                            textList.Add(!string.IsNullOrEmpty(item.Text) ? item.Text : ConvertSet(item.Value));
-                        }
+                        textList.Add(ConvertSet(selectedValue));
+                        continue;
+                    }
+
+                    var item = FindRegisteredItem(selectedValue);
+                    if (item != null)
+                    {
+                        textList.Add(!string.IsNullOrEmpty(item.Text) ? item.Text : ConvertSet(item.Value));
+                    }
+                    else if (!Strict)
+                    {
+                        textList.Add(ConvertSet(selectedValue));
                     }
                 }
             }
@@ -736,20 +738,23 @@ namespace MudExtensions
                         selectedConvertedValues: SelectedValues?.ToList(),
                         multiSelectionTextFunc: MultiSelectionTextFunc, updateValue: updateValue);
                 }
-                else
-                {
-                    return SetTextAndUpdateValueAsync(string.Join(Delimiter, textList), updateValue: updateValue);
-                }
+
+                return SetTextAndUpdateValueAsync(string.Join(Delimiter, textList), updateValue: updateValue);
             }
-            else
+
+            if (ItemCollection != null)
             {
-                var item = Items?.FirstOrDefault(x => ReadValue == null ? x.Value == null : Comparer != null ? Comparer.Equals(ReadValue, x.Value) : ReadValue.Equals(x.Value));
-                if (item == null)
-                {
-                    return SetTextAndUpdateValueAsync(ConvertSet(ReadValue), false);
-                }
-                return SetTextAndUpdateValueAsync((!string.IsNullOrEmpty(item.Text) ? item.Text : ConvertSet(item.Value)), updateValue: updateValue);
+                return TryGetCollectionValue(ReadValue, out var collectionValue)
+                    ? SetTextAndUpdateValueAsync(ConvertSet(collectionValue), updateValue: updateValue)
+                    : SetTextAndUpdateValueAsync(ConvertSet(ReadValue), false);
             }
+
+            var registeredItem = FindRegisteredItem(ReadValue);
+            return registeredItem == null
+                ? SetTextAndUpdateValueAsync(ConvertSet(ReadValue), false)
+                : SetTextAndUpdateValueAsync(
+                    !string.IsNullOrEmpty(registeredItem.Text) ? registeredItem.Text : ConvertSet(registeredItem.Value),
+                    updateValue: updateValue);
         }
 
         private string? GetSelectTextPresenter()
@@ -824,10 +829,17 @@ namespace MudExtensions
                 await KeyInterceptorService.SubscribeAsync(_elementId, options, keyDown: HandleKeyDownAsync, keyUp: HandleKeyUpAsync);
 
                 await UpdateTextPropertyAsync(false);
+                _declarativePresentationDirty = false;
                 _list?.ForceUpdateItems();
-                SelectedListItem = Items.FirstOrDefault(x => x.Value != null && ReadValue != null && x.Value.Equals(ReadValue))?.ListItem;
                 StateHasChanged();
             }
+            else if (_declarativePresentationDirty)
+            {
+                _declarativePresentationDirty = false;
+                await UpdateTextPropertyAsync(false);
+                StateHasChanged();
+            }
+
             //Console.WriteLine("Select rendered");
             await base.OnAfterRenderAsync(firstRender);
         }
@@ -1072,12 +1084,37 @@ namespace MudExtensions
         /// <returns></returns>
         public async Task SelectOption(int index)
         {
+            if (ItemCollection != null)
+            {
+                if (AddNullItem)
+                {
+                    if (index == 0)
+                    {
+                        await SelectOption(default(T));
+                        return;
+                    }
+
+                    index--;
+                }
+
+                if (index < 0 || index >= ItemCollection.Count)
+                {
+                    if (!MultiSelection)
+                        await CloseMenu();
+                    return;
+                }
+
+                await SelectOption(ItemCollection.ElementAt(index));
+                return;
+            }
+
             if (index < 0 || index >= _items.Count)
             {
                 if (!MultiSelection)
                     await CloseMenu();
                 return;
             }
+
             await SelectOption(_items[index].Value);
         }
 
@@ -1136,24 +1173,18 @@ namespace MudExtensions
         {
             if (item == null)
                 return false;
-            bool? result = null;
-            if (!_items.Select(x => x.Value).Contains(item.Value))
+
+            var isSelected = IsSelectedPresentationValue(item.Value);
+
+            if (!_items.Contains(item) && FindRegisteredItem(item.Value) == null)
             {
                 _items.Add(item);
 
-                if (item.Value != null)
-                {
-                    _valueLookup[item.Value] = item;
-                    if (item.Value.Equals(ReadValue) && !MultiSelection)
-                        result = true;
-                }
+                if (isSelected)
+                    MarkDeclarativePresentationDirty();
             }
-            //UpdateSelectAllChecked();
-            if (!result.HasValue)
-            {
-                result = item.Value?.Equals(ReadValue);
-            }
-            return result == true;
+
+            return ValuesEqual(item.Value, ReadValue);
         }
 
         /// <summary>
@@ -1163,34 +1194,12 @@ namespace MudExtensions
         protected internal void Remove(MudSelectItemExtended<T?>? item)
         {
             if (item == null)
-            {
                 return;
-            }
-            _items.Remove(item);
-            if (item.Value != null)
-                _valueLookup.Remove(item.Value);
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        public void RegisterShadowItem(MudSelectItemExtended<T?>? item)
-        {
-            if (item == null || item.Value == null)
-                return;
-            _shadowLookup[item.Value] = item;
-        }
+            var wasSelected = IsSelectedPresentationValue(item.Value);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        public void UnregisterShadowItem(MudSelectItemExtended<T?>? item)
-        {
-            if (item == null || item.Value == null)
-                return;
-            _shadowLookup.Remove(item.Value);
+            if (_items.Remove(item) && wasSelected)
+                MarkDeclarativePresentationDirty();
         }
 
         #endregion
@@ -1248,15 +1257,11 @@ namespace MudExtensions
             {
                 if (Value == null)
                     return false;
-                //return _shadowLookup.TryGetValue(Value, out var _);
-                foreach (var value in Items?.Select(x => x.Value) ?? new List<T?>())
-                {
-                    if (Comparer != null ? Comparer.Equals(value, Value) : value?.Equals(Value) == true) //(Converter.Set(item.Value) == Converter.Set(Value))
-                    {
-                        return true;
-                    }
-                }
-                return false;
+
+                if (ItemCollection != null)
+                    return ItemCollection.Any(item => ValuesEqual(item, Value));
+
+                return Items?.Any(item => ValuesEqual(item.Value, Value)) == true;
             }
         }
 

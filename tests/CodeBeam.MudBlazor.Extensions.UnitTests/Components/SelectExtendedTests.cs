@@ -548,8 +548,8 @@ namespace MudExtensions.UnitTests.Components
             var selectElement = comp.Find("div.mud-input-control");
             selectElement.Click();
 
-            // Disabled item found twice because we have 2 shadow lists. Need to be discussed later
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-disabled-extended").Count.Should().Be(2));
+            // The disabled option should exist once in the visible list; there is no hidden duplicate tree.
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-list-item-disabled-extended").Count.Should().Be(1));
             comp.FindAll("div.mud-list-item-disabled-extended")[0].Click();
             comp.WaitForAssertion(() => select.Instance.GetState(x => x.Value).Should().BeNull());
         }
@@ -946,7 +946,7 @@ namespace MudExtensions.UnitTests.Components
             //Console.WriteLine(comp.Markup);
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
             // Nr 2 should be hilited
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(2));
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(1));
             comp.FindAll("div.mud-list-item-extended")[1].ToMarkup().Should().Contain("mud-selected-item");
             // now click an item and see the value change
             comp.FindAll("div.mud-list-item-extended")[0].Click();
@@ -956,7 +956,7 @@ namespace MudExtensions.UnitTests.Components
             comp.Find("div.mud-input-control").Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("mud-popover-open"));
             // Nr 1 should be hilited
-            comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(2));
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-selected-item").Count.Should().Be(1));
             comp.FindAll("div.mud-list-item-extended")[0].ToMarkup().Should().Contain("mud-selected-item");
             comp.Find("div.mud-input-control").Click();
             comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("mud-popover-open"));

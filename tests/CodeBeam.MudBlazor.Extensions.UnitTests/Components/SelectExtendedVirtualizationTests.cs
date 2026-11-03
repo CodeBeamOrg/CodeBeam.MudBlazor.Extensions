@@ -7,7 +7,7 @@ namespace MudExtensions.UnitTests.Components
     public class SelectExtendedVirtualizationTests : BunitTest
     {
         [Test]
-        public void VirtualizedItemCollection_ShadowListContainsOnlySelectedItems()
+        public void VirtualizedItemCollection_SelectionDoesNotRequireHiddenItems()
         {
             var items = Enumerable.Range(1, 4_000).Select(value => (int?)value).ToList();
             var selectedValues = new int?[] { 17, 3_999 };
@@ -18,8 +18,8 @@ namespace MudExtensions.UnitTests.Components
                 .Add(x => x.MultiSelection, true)
                 .Add(x => x.SelectedValues, selectedValues));
 
-            var shadowList = cut.Find("div[style='display: none']");
-            shadowList.QuerySelectorAll("div.mud-list-item-extended").Count().Should().Be(2);
+            cut.FindComponents<MudListExtended<int?>>().Should().BeEmpty();
+            cut.Instance.Items.Should().BeEmpty();
             cut.Instance.SelectedValues.Should().BeEquivalentTo(selectedValues);
         }
 
@@ -40,7 +40,7 @@ namespace MudExtensions.UnitTests.Components
         }
 
         [Test]
-        public void VirtualizedItemCollection_ChangedSelectionReplacesShadowItems()
+        public void VirtualizedItemCollection_ChangedSelectionUpdatesTextWithoutShadowItems()
         {
             var items = Enumerable.Range(1, 4_000).Select(value => (int?)value).ToList();
 
@@ -59,25 +59,18 @@ namespace MudExtensions.UnitTests.Components
                 .Add(x => x.MultiSelection, true)
                 .Add(x => x.SelectedValues, new int?[] { 3_999 }));
 
-            // Assert each layer independently so failures identify whether parameters, hidden
-            // components or the input presenter stopped following the selection.
             cut.WaitForAssertion(() =>
                 cut.Instance.SelectedValues.Should().BeEquivalentTo(new int?[] { 3_999 }));
 
-            cut.WaitForAssertion(() =>
-            {
-                var shadowList = cut.Find("div[style='display: none']");
-                shadowList.QuerySelectorAll("div.mud-list-item-extended").Count().Should().Be(1);
-                shadowList.TextContent.Should().Contain("3999");
-                shadowList.TextContent.Should().NotContain("17");
-            });
+            cut.FindComponents<MudListExtended<int?>>().Should().BeEmpty();
+            cut.Instance.Items.Should().BeEmpty();
 
             cut.WaitForAssertion(() =>
                 cut.Find("input").Attributes["value"]?.Value.Should().Be("3999"));
         }
 
         [Test]
-        public void VirtualizedItemCollection_ShadowListRespectsComparer()
+        public void VirtualizedItemCollection_ValuePresentationRespectsComparer()
         {
             var items = new List<TestValue?>
             {
@@ -95,9 +88,10 @@ namespace MudExtensions.UnitTests.Components
                 .Add(x => x.Comparer, new TestValueComparer())
                 .Add(x => x.ToStringFunc, value => value?.Name));
 
-            var shadowList = cut.Find("div[style='display: none']");
-            shadowList.QuerySelectorAll("div.mud-list-item-extended").Count().Should().Be(1);
-            shadowList.TextContent.Should().Contain("Two");
+            cut.FindComponents<MudListExtended<TestValue?>>().Should().BeEmpty();
+            cut.Instance.Items.Should().BeEmpty();
+            cut.WaitForAssertion(() =>
+                cut.Find("input").Attributes["value"]?.Value.Should().Be("Two"));
         }
 
         private sealed record TestValue(int Id, string Name);

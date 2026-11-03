@@ -2,19 +2,21 @@
 @typeparam T
 @inherits MudComponentBase
 
-@if (!HideContent)
+@if (HideContent)
 {
-    if (Nested)
-    {
-        <MudListItemExtended T="T" Class="@Class" Style="@Style" Text="@Text" InitiallyExpanded="@InitiallyExpanded" ExpandedChanged="HandleExpandedChanged">
-            <NestedList>
-                @ChildContent
-            </NestedList>
-        </MudListItemExtended>
-    }
-    else
-    {
-        <MudListSubheaderExtended Class="@Class" Style="@Style" T="T" Sticky="@Sticky">@Text</MudListSubheaderExtended>
-        @ChildContent
-    }
+    @* Preserve declarative child-item metadata without materializing list/group UI. *@
+    @ChildContent
+}
+else if (Nested)
+{
+    <MudListItemExtended T="T" Class="@Class" Style="@Style" Text="@Text" InitiallyExpanded="@InitiallyExpanded" ExpandedChanged="HandleExpandedChanged">
+        <NestedList>
+            @ChildContent
+        </NestedList>
+    </MudListItemExtended>
+}
+else
+{
+    <MudListSubheaderExtended Class="@Class" Style="@Style" T="T" Sticky="@Sticky">@Text</MudListSubheaderExtended>
+    @ChildContent
 }

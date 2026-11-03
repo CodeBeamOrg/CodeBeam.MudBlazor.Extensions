@@ -9,7 +9,7 @@ namespace MudExtensions.UnitTests.Components
     public class SelectExtendedVirtualizationSingleSelectionTests : BunitTest
     {
         [Test]
-        public void VirtualizedItemCollection_InitializedSingleSelectionUsesOneShadowItem()
+        public void VirtualizedItemCollection_InitializedSingleSelectionDoesNotNeedShadowItem()
         {
             var items = Enumerable.Range(1, 4_000).Select(value => (int?)value).ToList();
 
@@ -21,8 +21,8 @@ namespace MudExtensions.UnitTests.Components
             cut.WaitForAssertion(() =>
                 cut.Find("input").Attributes["value"]?.Value.Should().Be("3999"));
 
-            var shadowList = cut.Find("div[style='display: none']");
-            shadowList.QuerySelectorAll("div.mud-list-item-extended").Count().Should().Be(1);
+            cut.FindComponents<MudListExtended<int?>>().Should().BeEmpty();
+            cut.Instance.Items.Should().BeEmpty();
         }
 
         [Test]
@@ -42,8 +42,8 @@ namespace MudExtensions.UnitTests.Components
             cut.WaitForAssertion(() =>
                 cut.Markup.Should().Contain("Selected item 3999"));
 
-            var shadowList = cut.Find("div[style='display: none']");
-            shadowList.QuerySelectorAll("div.mud-list-item-extended").Count().Should().Be(1);
+            cut.FindComponents<MudListExtended<int?>>().Should().BeEmpty();
+            cut.Instance.Items.Should().BeEmpty();
         }
     }
 }

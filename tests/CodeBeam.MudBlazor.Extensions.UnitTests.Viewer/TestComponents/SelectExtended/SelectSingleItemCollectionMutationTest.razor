@@ -1,0 +1,32 @@
+@namespace MudExtensions.UnitTests.TestComponents
+
+<MudPopoverProvider />
+
+<MudSelectExtended T="MutableSelectItem"
+                   ItemCollection="@Items"
+                   Value="@Selected"
+                   ToStringFunc="@Format" />
+
+@code {
+    public List<MutableSelectItem?> Items { get; } =
+    [
+        new(1, "One"),
+        new(2, "Two"),
+        new(3, "Three")
+    ];
+
+    public MutableSelectItem Selected { get; }
+
+    public SelectSingleItemCollectionMutationTest()
+    {
+        Selected = Items[1]!;
+    }
+
+    private static string? Format(MutableSelectItem? item) => item?.Name;
+
+    public void RenameSelected(string name)
+    {
+        Selected.Name = name;
+        StateHasChanged();
+    }
+}
