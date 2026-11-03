@@ -1,0 +1,31 @@
+@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudComboBox T="string" @bind-Value="value" Highlight="@Highlight" HighlightClass="@HighlightClass" Required="@Required" RequiredError="Value is required"
+             Label="@Label" Placeholder="@Placeholder" HelperText="@HelperText" Bordered="@Bordered" Class="@ComboClass" Disabled="@Disabled">
+    <MudComboBoxItem Value="@("apple")" Text="Apple" />
+    <MudComboBoxItem Value="@("banana")" Text="Banana" />
+    <MudComboBoxItem Value="@("cherry")" Text="Cherry" Disabled="true" />
+</MudComboBox>
+
+@code {
+    string? value = null;
+
+    [Parameter] public bool Highlight { get; set; }
+
+    [Parameter] public string? HighlightClass { get; set; }
+
+    [Parameter] public bool Required { get; set; }
+
+    [Parameter] public string? Label { get; set; }
+
+    [Parameter] public string? Placeholder { get; set; }
+
+    [Parameter] public string? HelperText { get; set; }
+
+    [Parameter] public bool Bordered { get; set; }
+
+    [Parameter] public string? ComboClass { get; set; }
+
+    [Parameter] public bool Disabled { get; set; }
+}

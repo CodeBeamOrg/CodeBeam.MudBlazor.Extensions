@@ -1,0 +1,32 @@
+@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudComboBox T="string" @bind-Value="value" Editable="@Editable" MultiSelection="@MultiSelection" ShowCheckbox="@ShowCheckbox" Bordered="@Bordered"
+             SearchFunc="@SearchFunc" HighlightClass="@HighlightClass" Highlight="@Highlight">
+    <MudComboBoxItem Value="@("apple")" Text="Apple" OnClick="@(() => ClickCount++)" Class="item-apple" />
+    <MudComboBoxItem Value="@("banana")" Class="item-banana" Ripple="false" />
+    <MudComboBoxItem Value="@("cherry")" Text="Cherry" Disabled="true" Class="item-cherry" />
+    <MudComboBoxItem Value="@("date")" Class="item-date" TextColor="Color.Error">
+        <span class="item-child-marker">date content</span>
+    </MudComboBoxItem>
+</MudComboBox>
+
+@code {
+    string? value = null;
+
+    public int ClickCount { get; set; }
+
+    [Parameter] public bool Editable { get; set; }
+
+    [Parameter] public bool MultiSelection { get; set; }
+
+    [Parameter] public bool ShowCheckbox { get; set; } = true;
+
+    [Parameter] public bool Bordered { get; set; }
+
+    [Parameter] public bool Highlight { get; set; }
+
+    [Parameter] public string? HighlightClass { get; set; }
+
+    [Parameter] public Func<string?, string?, string?, bool>? SearchFunc { get; set; }
+}
