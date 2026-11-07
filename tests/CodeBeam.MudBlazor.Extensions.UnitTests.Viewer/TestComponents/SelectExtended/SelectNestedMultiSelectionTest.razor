@@ -1,0 +1,37 @@
+@namespace MudExtensions.UnitTests.TestComponents
+
+<MudPopoverProvider />
+
+<MudSelectExtended T="string" MultiSelection="true" Clearable="true"
+                   SelectedValues="SelectedValues" SelectedValuesChanged="OnSelectedValuesChanged">
+    <MudSelectItemGroupExtended T="string" Text="Station A" Nested="true" InitiallyExpanded="InitiallyExpanded">
+        <MudSelectItemExtended T="string" Value="@("electric")" Text="Electricity" />
+        <MudSelectItemExtended T="string" Value="@("flow")" Text="Flow" />
+        <MudSelectItemExtended T="string" Value="@("pressure")" Text="Pressure" />
+    </MudSelectItemGroupExtended>
+    <MudSelectItemGroupExtended T="string" Text="Station B" Nested="true" InitiallyExpanded="InitiallyExpanded">
+        <MudSelectItemExtended T="string" Value="@("temperature")" Text="Temperature" />
+    </MudSelectItemGroupExtended>
+</MudSelectExtended>
+
+@code {
+    [Parameter]
+    public bool InitiallyExpanded { get; set; } = true;
+
+    public IEnumerable<string> SelectedValues { get; private set; } = ["electric"];
+
+    public List<string[]> SelectionChanges { get; } = new();
+
+    public void SetSelectedValues(params string[] values)
+    {
+        SelectedValues = values;
+        StateHasChanged();
+    }
+
+    private void OnSelectedValuesChanged(IEnumerable<string>? values)
+    {
+        var snapshot = values?.ToArray() ?? [];
+        SelectedValues = snapshot;
+        SelectionChanges.Add(snapshot);
+    }
+}
