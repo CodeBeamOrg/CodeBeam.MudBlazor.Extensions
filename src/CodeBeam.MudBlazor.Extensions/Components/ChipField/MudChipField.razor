@@ -2,8 +2,9 @@
 @inherits MudTextFieldExtended<T>
 @typeparam T
 
-<MudTextFieldExtended @ref="_textFieldExtendedReference"
+<ChipFieldTextField @ref="_textFieldExtendedReference"
                       T="T"
+                      HasChips="@_hasChips"
                       Immediate="true"
                       OnKeyDown="HandleKeyDown"
                       OnKeyUp="HandleKeyUp"
@@ -63,4 +64,4 @@
         @AdornmentEnd
     </AdornmentEnd>
 
-</MudTextFieldExtended>
+</ChipFieldTextField>
