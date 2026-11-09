@@ -1,0 +1,16 @@
+@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudComboBox T="string" @bind-Value="value" ItemPresenter="ValuePresenter.ItemContent" InputPresenter="ValuePresenter.ItemContent">
+    <ItemTemplate Context="item">
+        <span class="item-template-marker">@item.Value</span>
+    </ItemTemplate>
+    <ChildContent>
+        <MudComboBoxItem Value="@("apple")"><span class="item-content-marker">apple content</span></MudComboBoxItem>
+        <MudComboBoxItem Value="@("banana")"><span class="item-content-marker">banana content</span></MudComboBoxItem>
+    </ChildContent>
+</MudComboBox>
+
+@code {
+    string? value = null;
+}

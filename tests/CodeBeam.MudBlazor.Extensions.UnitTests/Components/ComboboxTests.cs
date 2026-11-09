@@ -19,6 +19,7 @@ namespace MudExtensions.UnitTests.Components
 
         // Note: MudSelect doesn't guaranteed the consequences of changing Value if MultiSelection is true for now.
         // When this feature will add, just uncomment the testcase to test it. No need to write new test.
+        /// <summary>The initial Value is reflected in the combobox value and text.</summary>
         [Test]
         [TestCase(false)]
         //[TestCase(true)]
@@ -38,6 +39,7 @@ namespace MudExtensions.UnitTests.Components
 
         // Note: MudSelect doesn't guaranteed the consequences of changing SelectedValues if MultiSelection is false for now.
         // When this feature will add, just uncomment the testcase to test it. No need to write new test.
+        /// <summary>The initial SelectedValues are reflected in the combobox value, selection and text.</summary>
         [Test]
         //[TestCase(false)]
         [TestCase(true)]
@@ -55,6 +57,7 @@ namespace MudExtensions.UnitTests.Components
             combobox.Instance.GetState(x => x.Text).Should().Be("1");
         }
 
+        /// <summary>In multi selection, changing SelectedValues updates the selection but not Value or Text.</summary>
         [Test]
         public void ComboBox_ValueBubblingTest_MultiSelection()
         {
@@ -79,6 +82,7 @@ namespace MudExtensions.UnitTests.Components
         }
 
 
+        /// <summary>In multi selection, SelectedValuesChanged fires only when the selection actually changes.</summary>
         [Test]
         public async Task ComboBox_ValueChangeEventCountTest_MultiSelection()
         {
@@ -145,6 +149,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => @switch.Instance.GetState(x => x.Value).Should().Be(false));
         }
 
+        /// <summary>The clear button appears after a selection and clears the value when clicked.</summary>
         [Test]
         public async Task ComboBoxClearableTest()
         {
@@ -171,6 +176,292 @@ namespace MudExtensions.UnitTests.Components
             comp.Instance.ClearButtonClicked.Should().BeTrue();
         }
 
+        /// <summary>Clicking the input opens the menu and renders all items.</summary>
+        [Test]
+        public void ComboBox_ClickShouldRenderAllItems()
+        {
+            var comp = Context.Render<ComboBoxClearableTest>();
+
+            comp.Find("div.mud-input-control").Click();
+
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().Be(3));
+        }
+
+        /// <summary>Selecting an item closes the menu in single selection mode.</summary>
+        [Test]
+        public void ComboBox_SelectingItemShouldCloseMenu()
+        {
+            var comp = Context.Render<ComboBoxClearableTest>();
+            comp.Find("div.mud-input-control").Click();
+            comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().NotContain("d-none"));
+
+            comp.FindAll("div.mud-combobox-item")[0].Click();
+
+            comp.WaitForAssertion(() => comp.Find("div.mud-popover").ClassList.Should().Contain("d-none"));
+        }
+
+        /// <summary>Selecting an item sets the combobox text to the item's value.</summary>
+        [Test]
+        public void ComboBox_SelectingItemShouldSetText()
+        {
+            var comp = Context.Render<ComboBoxClearableTest>();
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            comp.Find("div.mud-input-control").Click();
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().BeGreaterThan(0));
+
+            comp.FindAll("div.mud-combobox-item")[2].Click();
+
+            comp.WaitForAssertion(() => combobox.Instance.GetState(x => x.Text).Should().Be("3"));
+        }
+
+        /// <summary>A disabled combobox does not open its menu when clicked.</summary>
+        [Test]
+        public void ComboBox_DisabledShouldNotOpenMenu()
+        {
+            var comp = Context.Render<ComboBoxClearableTest>();
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            combobox.Render(p => p.Add(x => x.Disabled, true));
+
+            comp.Find("div.mud-input-control").Click();
+
+            comp.Find("div.mud-popover").ClassList.Should().Contain("d-none");
+        }
+
+        /// <summary>A read-only combobox does not open its menu when clicked.</summary>
+        [Test]
+        public void ComboBox_ReadOnlyShouldNotOpenMenu()
+        {
+            var comp = Context.Render<ComboBoxClearableTest>();
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            combobox.Render(p => p.Add(x => x.ReadOnly, true));
+
+            comp.Find("div.mud-input-control").Click();
+
+            comp.Find("div.mud-popover").ClassList.Should().Contain("d-none");
+        }
+
+        /// <summary>The OnOpen callback fires once when the menu opens.</summary>
+        [Test]
+        public void ComboBox_OnOpenShouldFireWhenOpened()
+        {
+            var comp = Context.Render<ComboBoxOpenCloseCallbackTest>();
+
+            comp.Find("div.mud-input-control").Click();
+
+            comp.WaitForAssertion(() => comp.Instance.OpenCount.Should().Be(1));
+        }
+
+        /// <summary>The OnClose callback fires once when an item is selected and the menu closes.</summary>
+        [Test]
+        public void ComboBox_OnCloseShouldFireWhenItemSelected()
+        {
+            var comp = Context.Render<ComboBoxOpenCloseCallbackTest>();
+            comp.Find("div.mud-input-control").Click();
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().Be(2));
+
+            comp.FindAll("div.mud-combobox-item")[0].Click();
+
+            comp.WaitForAssertion(() => comp.Instance.CloseCount.Should().Be(1));
+        }
+
+        /// <summary>NoItemsContent is rendered when the search text matches no item.</summary>
+        [Test]
+        public async Task ComboBox_MultiSelectEditable_NoMatchShouldRenderNoItemsContent()
+        {
+            var comp = Context.Render<ComboBoxMultiSelectSearchTest>();
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            await comp.InvokeAsync(() => combobox.Find("div.mud-input-control").Click());
+            comp.WaitForAssertion(() => combobox.Instance.GetEnabledAndEligibleItems().Count.Should().Be(2));
+
+            await comp.InvokeAsync(() => combobox.Instance.HandleInternalValueChanged("zzz"));
+            await comp.InvokeAsync(() => combobox.Instance.ForceRenderItems());
+
+            comp.WaitForAssertion(() => comp.FindAll("span.no-items-marker").Count.Should().Be(1));
+        }
+
+        /// <summary>Searching in an editable multi-select combobox leaves only matching items eligible.</summary>
+        [Test]
+        public async Task ComboBox_MultiSelectEditable_MatchShouldFilterItems()
+        {
+            var comp = Context.Render<ComboBoxMultiSelectSearchTest>();
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            await comp.InvokeAsync(() => combobox.Find("div.mud-input-control").Click());
+            comp.WaitForAssertion(() => combobox.Instance.GetEnabledAndEligibleItems().Count.Should().Be(2));
+
+            await comp.InvokeAsync(() => combobox.Instance.HandleInternalValueChanged("app"));
+            await comp.InvokeAsync(() => combobox.Instance.ForceRenderItems());
+
+            comp.WaitForAssertion(() => combobox.Instance.GetEnabledAndEligibleItems().Count.Should().Be(1));
+        }
+
+        /// <summary>The Label parameter is rendered in a label element.</summary>
+        [Test]
+        public void ComboBox_LabelShouldBeRendered()
+        {
+            var comp = Context.Render<ComboBoxFeatureTest>(p => p.Add(x => x.Label, "My label"));
+
+            comp.FindAll("label").Should().Contain(x => x.TextContent.Contains("My label"));
+        }
+
+        /// <summary>The HelperText parameter is rendered in the markup.</summary>
+        [Test]
+        public void ComboBox_HelperTextShouldBeRendered()
+        {
+            var comp = Context.Render<ComboBoxFeatureTest>(p => p.Add(x => x.HelperText, "Helpful hint"));
+
+            comp.Markup.Should().Contain("Helpful hint");
+        }
+
+        /// <summary>A user-supplied CSS class is applied to the combobox.</summary>
+        [Test]
+        public void ComboBox_CustomClassShouldBeApplied()
+        {
+            var comp = Context.Render<ComboBoxFeatureTest>(p => p.Add(x => x.ComboClass, "my-custom-class"));
+
+            comp.FindAll("div.my-custom-class").Count.Should().BeGreaterThan(0);
+        }
+
+        /// <summary>Clicking a disabled item does not select it.</summary>
+        [Test]
+        [Ignore("Known bug: MudComboBoxItem.HandleOnClick does not check Disabled, so disabled items can be selected.")]
+        public void ComboBox_DisabledItemShouldNotBeSelectable()
+        {
+            var comp = Context.Render<ComboBoxFeatureTest>();
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            comp.Find("div.mud-input-control").Click();
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().Be(3));
+
+            comp.FindAll("div.mud-combobox-item")[2].Click();
+
+            combobox.Instance.GetState(x => x.Value).Should().BeNullOrEmpty();
+        }
+
+        /// <summary>Disabled items are excluded from the enabled and eligible item list.</summary>
+        [Test]
+        public void ComboBox_DisabledItemShouldNotBeEnabledAndEligible()
+        {
+            var comp = Context.Render<ComboBoxFeatureTest>();
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+
+            combobox.Instance.GetEnabledAndEligibleItems().Count.Should().Be(2);
+        }
+
+        /// <summary>An item's Text is displayed in the list instead of its raw value.</summary>
+        [Test]
+        public void ComboBox_ItemTextShouldBeUsedAsDisplayText()
+        {
+            var comp = Context.Render<ComboBoxFeatureTest>();
+            comp.Find("div.mud-input-control").Click();
+
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item")[0].TextContent.Should().Contain("Apple"));
+        }
+
+        /// <summary>A required combobox shows the required error when validated without a value.</summary>
+        [Test]
+        public async Task ComboBox_RequiredShouldShowErrorWhenValidatedWithoutValue()
+        {
+            var comp = Context.Render<ComboBoxFeatureTest>(p => p.Add(x => x.Required, true));
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+
+            await comp.InvokeAsync(() => combobox.Instance.ValidateAsync());
+
+            comp.WaitForAssertion(() => comp.Markup.Should().Contain("Value is required"));
+        }
+
+        /// <summary>A required combobox shows no error when validated with a selected value.</summary>
+        [Test]
+        public async Task ComboBox_RequiredShouldNotShowErrorWhenValueSelected()
+        {
+            var comp = Context.Render<ComboBoxFeatureTest>(p => p.Add(x => x.Required, true));
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            comp.Find("div.mud-input-control").Click();
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().Be(3));
+            comp.FindAll("div.mud-combobox-item")[0].Click();
+
+            await comp.InvokeAsync(() => combobox.Instance.ValidateAsync());
+
+            comp.WaitForAssertion(() => comp.Markup.Should().NotContain("Value is required"));
+        }
+
+        /// <summary>With Highlight enabled, the searched text is wrapped in a mark element.</summary>
+        [Test]
+        public async Task ComboBox_HighlightShouldMarkSearchedText()
+        {
+            var comp = Context.Render<ComboBoxFeatureTest>(p => p.Add(x => x.Highlight, true));
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            comp.Find("div.mud-input-control").Click();
+
+            await comp.InvokeAsync(() => combobox.Instance.HandleInternalValueChanged("app"));
+            await comp.InvokeAsync(() => combobox.Instance.ForceRenderItems());
+
+            comp.WaitForAssertion(() => comp.FindAll("mark").Count.Should().BeGreaterThan(0));
+        }
+
+        /// <summary>With Highlight disabled, no mark element is rendered.</summary>
+        [Test]
+        public void ComboBox_HighlightDisabledShouldNotRenderMark()
+        {
+            var comp = Context.Render<ComboBoxFeatureTest>();
+            comp.Find("div.mud-input-control").Click();
+
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().Be(3));
+            comp.FindAll("mark").Should().BeEmpty();
+        }
+
+        /// <summary>With EnableFilter false, all items stay eligible regardless of the search text.</summary>
+        [Test]
+        public async Task ComboBox_EnableFilterFalseShouldKeepAllItemsEligible()
+        {
+            var comp = Context.Render<ComboBoxFilterDisabledTest>();
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            await comp.InvokeAsync(() => combobox.Find("div.mud-input-control").Click());
+            comp.WaitForAssertion(() => combobox.Instance.GetEnabledAndEligibleItems().Count.Should().Be(2));
+
+            await comp.InvokeAsync(() => combobox.Instance.HandleInternalValueChanged("app"));
+            await comp.InvokeAsync(() => combobox.Instance.ForceRenderItems());
+
+            comp.WaitForAssertion(() => combobox.Instance.GetEnabledAndEligibleItems().Count.Should().Be(2));
+        }
+
+        /// <summary>An editable combobox filters items by the search text.</summary>
+        [Test]
+        public async Task ComboBox_EditableShouldFilterItemsBySearchText()
+        {
+            var comp = Context.Render<ComboBoxMultiSelectSearchTest>(p => p.Add(x => x.EnableFilter, true));
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            await comp.InvokeAsync(() => combobox.Find("div.mud-input-control").Click());
+
+            await comp.InvokeAsync(() => combobox.Instance.HandleInternalValueChanged("ban"));
+            await comp.InvokeAsync(() => combobox.Instance.ForceRenderItems());
+
+            comp.WaitForAssertion(() => combobox.Instance.GetEnabledAndEligibleItems().Select(x => x.Value).Should().BeEquivalentTo(new[] { "banana" }));
+        }
+
+        /// <summary>ItemTemplate is used to present the selected value.</summary>
+        [Test]
+        public async Task ComboBox_ItemTemplateShouldRenderForSelectedValue()
+        {
+            var comp = Context.Render<ComboBoxItemTemplateTest>();
+            var combobox = comp.FindComponent<MudComboBox<string>>();
+            comp.Find("div.mud-input-control").Click();
+            comp.WaitForAssertion(() => comp.FindAll("div.mud-combobox-item").Count.Should().Be(2));
+
+            comp.FindAll("div.mud-combobox-item")[0].Click();
+
+            await comp.WaitForAssertionAsync(() => comp.FindAll("span.item-template-marker").Count.Should().BeGreaterThan(0));
+        }
+
+        /// <summary>Item child content is rendered for each item in the list.</summary>
+        [Test]
+        public void ComboBox_ItemContentShouldRenderInList()
+        {
+            var comp = Context.Render<ComboBoxItemTemplateTest>();
+            comp.Find("div.mud-input-control").Click();
+
+            comp.WaitForAssertion(() => comp.FindAll("span.item-content-marker").Count.Should().Be(2));
+        }
+
+        /// <summary>The adornment icon switches between drop-down and drop-up when the menu opens.</summary>
         [Test]
         public void ComboBox_OpenCloseIconTest()
         {
@@ -183,6 +474,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => combobox.FindComponents<MudIcon>().Should().ContainSingle(x => x.Instance.Icon == Icons.Material.Filled.ArrowDropUp));
         }
 
+        /// <summary>Clicking the select-all item selects every item, and clicking it again deselects them all.</summary>
         [Test]
         public void MultiSelect_SelectAll()
         {
@@ -277,6 +569,7 @@ namespace MudExtensions.UnitTests.Components
 			comp.Instance.Count.Should().Be(1);
 		}
 
+        /// <summary>An editable multi-select combobox lists all four items, then only the two matching "t" after filtering.</summary>
         [Test]
         public async Task ComboBox_MultiSelectEditable()
         {
@@ -365,6 +658,7 @@ namespace MudExtensions.UnitTests.Components
             //Console.WriteLine(comp.Markup);
         }
 
+        /// <summary>Keyboard keys open and close the menu and select items in single selection mode, skipping disabled items.</summary>
         [Test]
         public async Task ComboBoxTest_KeyboardNavigation_SingleSelect()
         {
@@ -462,6 +756,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().Be("2"));
         }
 
+        /// <summary>With ToggleSelection enabled, pressing Enter on the selected item clears the value.</summary>
         [Test]
         public async Task ComboBoxTest_KeyboardNavigation_ToggleSelect()
         {
@@ -484,6 +779,7 @@ namespace MudExtensions.UnitTests.Components
             comp.WaitForAssertion(() => combobox.GetState(x => x.Value).Should().BeNull());
         }
 
+        /// <summary>Keyboard keys select, select all and toggle items in multi selection mode, and are ignored when disabled.</summary>
         [Test]
         public async Task ComboBoxTest_KeyboardNavigation_MultiSelect()
         {

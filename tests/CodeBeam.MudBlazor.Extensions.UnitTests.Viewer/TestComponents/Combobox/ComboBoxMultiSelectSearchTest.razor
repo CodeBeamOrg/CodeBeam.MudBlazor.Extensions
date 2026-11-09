@@ -1,0 +1,17 @@
+@namespace MudExtensions.UnitTests.TestComponents
+<MudPopoverProvider></MudPopoverProvider>
+
+<MudComboBox T="string" @bind-SelectedValues="values" MultiSelection="true" Editable="true" EnableFilter="@EnableFilter">
+    <NoItemsContent><span class="no-items-marker">Nothing here</span></NoItemsContent>
+    <ChildContent>
+        <MudComboBoxItem Value="@("apple")">apple</MudComboBoxItem>
+        <MudComboBoxItem Value="@("banana")">banana</MudComboBoxItem>
+    </ChildContent>
+</MudComboBox>
+
+@code {
+    IEnumerable<string> values = new HashSet<string>();
+
+    [Parameter]
+    public bool EnableFilter { get; set; } = true;
+}
