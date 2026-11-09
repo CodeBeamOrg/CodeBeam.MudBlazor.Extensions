@@ -513,7 +513,7 @@ namespace MudExtensions
         [Category(CategoryTypes.List.Selecting)]
         public T? SelectedValue
         {
-            get => _selectedValue;
+            get => ParentList != null ? ParentList.SelectedValue : _selectedValue;
             set
             {
                 if (Converter.Convert(_selectedValue) != Converter.Convert(default(T)) && !_firstRendered)
@@ -549,7 +549,7 @@ namespace MudExtensions
         {
             get
             {
-                return _selectedValues;
+                return ParentList != null ? ParentList.SelectedValues : _selectedValues;
             }
 
             set
