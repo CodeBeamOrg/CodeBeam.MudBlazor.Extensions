@@ -167,5 +167,32 @@ namespace MudExtensions.UnitTests.Components
 
             comp.FindAll(".mud-input-control.mud-input-required").Should().NotBeEmpty();
         }
+
+        [Test]
+        public async Task ChipField_Required_WithNullValues_ShouldBeInvalid()
+        {
+            var comp = Context.Render<ChipFieldRequiredTest>();
+
+            await comp.InvokeAsync(() => comp.Instance.Form!.Validate());
+
+            comp.Instance.Form!.IsValid.Should().BeFalse();
+            comp.Markup.Should().Contain("Add at least one chip");
+        }
+
+        [Test]
+        public async Task ChipFieldTextField_WithoutHasChips_ShouldValidateRequiredAgainstText()
+        {
+            var comp = Context.Render<ChipFieldTextField<string>>(opt =>
+            {
+                opt.Add(a => a.Required, true);
+            });
+
+            await comp.InvokeAsync(() => comp.Instance.ValidateAsync());
+            comp.Instance.HasErrors.Should().BeTrue();
+
+            comp.Find("input").Change("text");
+            await comp.InvokeAsync(() => comp.Instance.ValidateAsync());
+            comp.Instance.HasErrors.Should().BeFalse();
+        }
     }
 }
