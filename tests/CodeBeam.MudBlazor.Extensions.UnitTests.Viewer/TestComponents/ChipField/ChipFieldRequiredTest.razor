@@ -2,6 +2,7 @@
 
 <MudForm @ref="Form">
     <MudChipField T="string" @bind-Values="Values" Label="Chip Field" Required="true" RequiredError="Add at least one chip" Variant="Variant.Outlined" />
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => Form?.Validate())">Validate</MudButton>
 </MudForm>
 
 @code {
