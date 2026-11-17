@@ -48,7 +48,7 @@ public class ComponentsRenderTests : BunitTest
         catch (Exception ex)
         {
             Assert.Fail(
-                $"Component render FAILED: {componentType.FullName}\n" +
+                $"Component render FAILED: {componentType.FullName}\n{ex}" +
                 $"Exception: {ex.GetType().Name}\n" +
                 $"Message: {ex.Message}"
             );

@@ -17,15 +17,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
 
+      - name: Fetch benchmark commits
+        shell: bash
+        run: |
+          git fetch --no-tags origin \
+          7b5faf7ebb7666558d13c447313e9b09c92a110d \
+          e7020d49a824a371ab3f3450255f10d9cfad8783
+
+          git cat-file -e "7b5faf7ebb7666558d13c447313e9b09c92a110d^{commit}"
+          git cat-file -e "e7020d49a824a371ab3f3450255f10d9cfad8783^{commit}"
+
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: 11.0.x
 
       - name: Run upstream-to-PR1 structural probe
         shell: pwsh

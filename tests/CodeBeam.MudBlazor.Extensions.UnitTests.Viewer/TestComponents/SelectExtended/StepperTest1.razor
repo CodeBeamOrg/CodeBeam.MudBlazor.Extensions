@@ -69,7 +69,7 @@
 
     <MudItem xs="12" sm="4" Style="box-shadow: rgba(240, 46, 170, 0.4) -3px 3px;">
         <MudStack Spacing="4">
-            <MudNumericField @bind-Value="_activeIndex" Label="Change ActiveIndex" @bind-Value:after="(() => _stepper.SetActiveStepByIndex(_activeIndex))" Margin="Margin.Dense" />
+            <MudNumericField @bind-Value="_activeIndex" Label="Change ActiveIndex" @bind-Value:after="(() => _stepper.GoToStepAsync(_activeIndex))" Margin="Margin.Dense" />
             <MudCheckBox @bind-Value="_linear" Color="Color.Primary" Label="Linear" Dense="true" />
             <MudCheckBox @bind-Value="_animation" Color="Color.Primary" Label="Enable Animation" Dense="true" />
             <MudCheckBox @bind-Value="_showPreviousButton" Color="Color.Primary" Label="Enable Previous Step Action Button" Dense="true" />
@@ -140,7 +140,7 @@
                 _loading = true;
                 StateHasChanged();
                 await Task.Delay(1000);
-                await _form.Validate();
+                await _form.ValidateAsync();
                 _loading = false;
                 StateHasChanged();
                 return !_form.IsValid;
@@ -150,7 +150,7 @@
                 _loading = true;
                 StateHasChanged();
                 await Task.Delay(1000);
-                await _form2.Validate();
+                await _form2.ValidateAsync();
                 _loading = false;
                 StateHasChanged();
                 return !_form2.IsValid;

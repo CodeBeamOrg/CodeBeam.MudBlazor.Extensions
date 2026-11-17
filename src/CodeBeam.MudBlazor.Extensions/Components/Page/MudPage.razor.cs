@@ -5,7 +5,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using MudBlazor.Extensions;
 using MudBlazor.Utilities;
 
 namespace MudExtensions
@@ -43,18 +42,18 @@ namespace MudExtensions
         public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
-        /// Number of columns. Default is 4.
+        /// Number of columns. Default is 1.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Item.Appearance)]
-        public int Column { get; set; } = 4;
+        public int Column { get; set; } = 1;
 
         /// <summary>
-        /// Number of rows. Default is 4.
+        /// Number of rows. Default is 1.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.Item.Appearance)]
-        public int Row { get; set; } = 4;
+        public int Row { get; set; } = 1;
 
         /// <summary>
         /// Determines MudPage's height.

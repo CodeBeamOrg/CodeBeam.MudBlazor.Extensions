@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>9.1.1</Version>
+		<Version>9.14.0</Version>
 		<Title>CodeBeam.MudBlazor.Extensions.Code</Title>
 		<Authors>CodeBeam</Authors>
 		<Company>CodeBeam</Company>
@@ -30,7 +30,7 @@ https://www.nuget.org/packages/CodeBeam.MudBlazor.Extensions
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="9.1.0" />
+		<ProjectReference Include="..\CodeBeam.MudBlazor.Extensions\CodeBeam.MudBlazor.Extensions.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
