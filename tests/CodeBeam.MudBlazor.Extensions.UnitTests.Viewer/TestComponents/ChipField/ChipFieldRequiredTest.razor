@@ -1,0 +1,15 @@
+@namespace MudExtensions.UnitTests.TestComponents
+
+<MudForm @ref="Form">
+    <MudChipField T="string" @bind-Values="Values" Label="Chip Field" Required="true" RequiredError="Add at least one chip" Variant="Variant.Outlined" />
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => Form?.Validate())">Validate</MudButton>
+</MudForm>
+
+@code {
+    public static string __description__ = "A required chip field should be valid when it has chips, even if its text input is empty";
+
+    public MudForm? Form { get; private set; }
+
+    [Parameter]
+    public List<string>? Values { get; set; }
+}

@@ -21,9 +21,11 @@ namespace MudExtensions
             _valuesState = registerScope.RegisterParameter<List<string>?>(nameof(Values))
                 .WithParameter(() => Values)
                 .WithEventCallback(() => ValuesChanged);
+            _hasChips = () => HasValue(default);
         }
 
         private readonly ParameterState<List<string>?> _valuesState;
+        private readonly Func<bool> _hasChips;
 
         /// <summary>
         /// Protected classes.
@@ -284,6 +286,13 @@ namespace MudExtensions
             await ValuesChanged.InvokeAsync(_valuesState.Value);
             await _textFieldExtendedReference.FocusAsync();
         }
+
+        /// <summary>
+        /// The chip field has a value when it has at least one chip, so Required checks the chips instead of the typed text.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected override bool HasValue(T? value) => _valuesState.Value is { Count: > 0 };
 
         /// <summary>
         /// Clear the text field.
