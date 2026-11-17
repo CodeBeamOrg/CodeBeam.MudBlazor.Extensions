@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
+		<TargetFramework>net11.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>MudExtensions.Docs</RootNamespace>
@@ -13,8 +13,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.*" />
-		<PackageReference Include="MudBlazor" Version="9.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="11.0.*" />
+		<PackageReference Include="MudBlazor" Version="9.14.0" />
 	</ItemGroup>
 
 	<ItemGroup>

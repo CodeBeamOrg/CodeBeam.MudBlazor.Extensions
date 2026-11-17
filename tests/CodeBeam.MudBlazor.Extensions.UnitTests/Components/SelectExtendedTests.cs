@@ -379,7 +379,7 @@ namespace MudExtensions.UnitTests.Components
             //Console.WriteLine(comp.Markup);
             var select = comp.FindComponent<MudSelectExtended<string>>();
             string? text = null;
-            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.TextChanged, (Action<string>)(x => text = x)));
+            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.TextChanged, (Action<string?>)(x => text = x)));
             var menu = comp.Find("div.mud-popover");
             var input = comp.Find("div.mud-input-control");
             // check initial state
@@ -425,12 +425,12 @@ namespace MudExtensions.UnitTests.Components
             var eventCounter = 0;
             var textChangedCount = 0;
             var selectedValuesChangedCount = 0;
-            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.TextChanged, (Action<string>)(x =>
+            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.TextChanged, (Action<string?>)(x =>
             {
                 textChangedCount = eventCounter++;
                 text = x;
             })));
-            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.SelectedValuesChanged, (Action<IEnumerable<string>>)(x =>
+            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.SelectedValuesChanged, (Action<IEnumerable<string?>?>)(x =>
             {
                 selectedValuesChangedCount = eventCounter++;
                 selectedValues = x;
@@ -487,12 +487,12 @@ namespace MudExtensions.UnitTests.Components
             var textChangedCount = 0;
             var selectedValuesChangedCount = 0;
             select.Render(p => p.Add(x => x.MultiSelection, true));
-            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.TextChanged, (Action<string>)(x =>
+            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.TextChanged, (Action<string?>)(x =>
             {
                 textChangedCount = eventCounter++;
                 text = x;
             })));
-            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.SelectedValuesChanged, (Action<IEnumerable<string>>)(x =>
+            select.SetParametersAndRenderAsync(parameters => parameters.Add(s => s.SelectedValuesChanged, (Action<IEnumerable<string?>?>)(x =>
             {
                 selectedValuesChangedCount = eventCounter++;
                 selectedValues = x;

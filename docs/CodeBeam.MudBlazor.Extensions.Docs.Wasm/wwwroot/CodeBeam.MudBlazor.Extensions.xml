@@ -2351,53 +2351,233 @@
         </member>
         <member name="T:MudExtensions.MudFontPicker">
             <summary>
-            
+            A font picker based on MudAutocomplete.
             </summary>
         </member>
         <member name="P:MudExtensions.MudFontPicker.Font">
             <summary>
-            Selected font.
-            </summary>
-        </member>
-        <member name="P:MudExtensions.MudFontPicker.FontCollection">
-            <summary>
-            Fonts will show in popover. Default is Google latin font list.
-            </summary>
-        </member>
-        <member name="P:MudExtensions.MudFontPicker.RootImportUrl">
-            <summary>
-            The css import url for adding custom fonts. Default is google font url. Ex. 'https://font.something.com'
-            </summary>
-        </member>
-        <member name="P:MudExtensions.MudFontPicker.StaticInputText">
-            <summary>
-            If true, the input's label and text always use the theme font instead of font picker's value.
+            The selected font.
             </summary>
         </member>
         <member name="P:MudExtensions.MudFontPicker.FontChanged">
             <summary>
-            Fires on font changed.
+            Occurs when the selected font changes.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.FontCollection">
+            <summary>
+            The available fonts.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.RootImportUrl">
+            <summary>
+            The root URL used to import fonts.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.StaticInputText">
+            <summary>
+            Uses the theme font for the input text.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Label">
+            <summary>
+            The label displayed for the input.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Placeholder">
+            <summary>
+            The placeholder text displayed when the input is empty.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.PopoverClass">
+            <summary>
+            Additional CSS classes applied to the autocomplete popover.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Variant">
+            <summary>
+            The visual variant of the input.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Margin">
+            <summary>
+            The spacing around the input.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Dense">
+            <summary>
+            Reduces the vertical spacing of the input when enabled.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Required">
+            <summary>
+            Requires a value to be selected.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.RequiredError">
+            <summary>
+            The validation message displayed when a required value is missing.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Disabled">
+            <summary>
+            Prevents user interaction when enabled.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.ReadOnly">
+            <summary>
+            Prevents the user from modifying the selected value.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.FullWidth">
+            <summary>
+            Expands the input to fill the available width.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.AutoFocus">
+            <summary>
+            Automatically focuses the input after its initial render.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Immediate">
+            <summary>
+            Updates the input value immediately as the user types.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Underline">
+            <summary>
+            Displays the input underline when enabled.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.HelperText">
+            <summary>
+            Helper text displayed below the input.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.HelperTextOnFocus">
+            <summary>
+            Displays helper text only while the input has focus.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Counter">
+            <summary>
+            Displays a character counter when specified.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.MaxLength">
+            <summary>
+            The maximum number of characters allowed in the input.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.MaxItems">
+            <summary>
+            The maximum number of suggestions displayed in the dropdown.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.MinCharacters">
+            <summary>
+            The minimum number of characters required before searching.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.DebounceInterval">
+            <summary>
+            The delay, in milliseconds, before searching after the input changes.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Adornment">
+            <summary>
+            The position of the input adornment.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.AdornmentAriaLabel">
+            <summary>
+            The accessible label for the input adornment.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.AdornmentColor">
+            <summary>
+            The color of the input adornment.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.AdornmentIcon">
+            <summary>
+            The icon displayed in the input adornment.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.AdornmentText">
+            <summary>
+            The text displayed in the input adornment.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.IconSize">
+            <summary>
+            The size of the adornment icon.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.OnAdornmentClick">
+            <summary>
+            Occurs when the input adornment is clicked.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.SelectOnActivation">
+            <summary>
+            Selects the current input text when the input is activated.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.ResetValueOnEmptyText">
+            <summary>
+            Resets the selected value when the input text is cleared.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Clearable">
+            <summary>
+            Displays a button for clearing the selected value.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.SelectValueOnTab">
+            <summary>
+            Selects the highlighted suggestion when the Tab key is pressed.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.OnlyValidateIfDirty">
+            <summary>
+            Performs validation only after the input value has been modified.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Error">
+            <summary>
+            Indicates whether the input is in an error state.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.ErrorId">
+            <summary>
+            The ID of the element containing the validation error message.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.ErrorText">
+            <summary>
+            The validation error message displayed below the input.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.AnchorOrigin">
+            <summary>
+            The origin point used to anchor the autocomplete popover.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.TransformOrigin">
+            <summary>
+            The origin point used to position the autocomplete popover relative to its anchor.
             </summary>
         </member>
         <member name="M:MudExtensions.MudFontPicker.ImportFontStyleText(System.String)">
             <summary>
-            Import selected font automatically.
+            Returns the CSS import declaration for the specified font.
             </summary>
-            <param name="font"></param>
-            <returns></returns>
         </member>
         <member name="M:MudExtensions.MudFontPicker.ClearFont">
             <summary>
-            Clears selected font.
+            Clears the selected font.
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MudExtensions.MudFontPicker.SetFontValue(System.String)">
-            <summary>
-            
-            </summary>
-            <param name="font"></param>
-            <returns></returns>
         </member>
         <member name="T:MudExtensions.MudGallery">
             <summary>
@@ -4104,12 +4284,12 @@
         </member>
         <member name="P:MudExtensions.MudPage.Column">
             <summary>
-            Number of columns. Default is 4.
+            Number of columns. Default is 1.
             </summary>
         </member>
         <member name="P:MudExtensions.MudPage.Row">
             <summary>
-            Number of rows. Default is 4.
+            Number of rows. Default is 1.
             </summary>
         </member>
         <member name="P:MudExtensions.MudPage.FullScreen">

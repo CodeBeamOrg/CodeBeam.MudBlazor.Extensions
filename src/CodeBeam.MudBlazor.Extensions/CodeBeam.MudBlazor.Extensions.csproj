@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<Version>9.3.1</Version>
+		<Version>9.14.0</Version>
 		<Title>CodeBeam.MudBlazor.Extensions</Title>
 		<PackageId>CodeBeam.MudBlazor.Extensions</PackageId>
 		<Authors>CodeBeam</Authors>
@@ -41,7 +41,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MudBlazor" Version="9.0.0" />
+		<PackageReference Include="MudBlazor" Version="9.14.0" />
 	</ItemGroup>
 
 	<Target Name="MinifyMudExtensionsJs" AfterTargets="Build" Condition="'$(CI)' != 'true' AND '$(TargetFramework)' == 'net10.0' AND Exists('TScripts/MudExtensions.js')">
