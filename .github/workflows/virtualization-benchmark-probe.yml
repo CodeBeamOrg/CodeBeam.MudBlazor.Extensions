@@ -22,6 +22,16 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
 
+      - name: Fetch benchmark commits
+        shell: bash
+        run: |
+          git fetch --no-tags origin \
+          7b5faf7ebb7666558d13c447313e9b09c92a110d \
+          e7020d49a824a371ab3f3450255f10d9cfad8783
+
+          git cat-file -e "7b5faf7ebb7666558d13c447313e9b09c92a110d^{commit}"
+          git cat-file -e "e7020d49a824a371ab3f3450255f10d9cfad8783^{commit}"
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
