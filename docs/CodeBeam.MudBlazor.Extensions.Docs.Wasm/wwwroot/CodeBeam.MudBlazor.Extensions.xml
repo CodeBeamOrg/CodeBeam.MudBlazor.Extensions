@@ -2569,6 +2569,62 @@
             The origin point used to position the autocomplete popover relative to its anchor.
             </summary>
         </member>
+        <member name="P:MudExtensions.MudFontPicker.For">
+            <summary>
+            The model property used for form validation.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Validation">
+            <summary>
+            The validation rules applied to the selected font.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.Strict">
+            <summary>
+            Controls whether the autocomplete selection is restricted to
+            the available suggestions.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.OpenOnFocus">
+            <summary>
+            Opens the suggestions popover when the input receives focus.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.OuterClass">
+            <summary>
+            Additional CSS classes applied to the autocomplete's outer container.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.InputClass">
+            <summary>
+            Additional CSS classes applied to the autocomplete input.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.OnBlur">
+            <summary>
+            Occurs when the input loses focus.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.OnKeyDown">
+            <summary>
+            Occurs when a key is pressed in the input.
+            </summary>
+        </member>
+        <member name="P:MudExtensions.MudFontPicker.OnKeyUp">
+            <summary>
+            Occurs when a key is released in the input.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudFontPicker.FocusAsync">
+            <summary>
+            Sets focus to the font picker input.
+            </summary>
+        </member>
+        <member name="M:MudExtensions.MudFontPicker.ClearAsync">
+            <summary>
+            Clears the autocomplete selection and input text.
+            </summary>
+        </member>
         <member name="M:MudExtensions.MudFontPicker.ImportFontStyleText(System.String)">
             <summary>
             Returns the CSS import declaration for the specified font.

@@ -2,6 +2,7 @@
 @inherits MudComponentBase
 
 <MudAutocomplete T="string"
+                 @ref="_autocomplete"
                  Class="@Class"
                  Style="@InputStyle"
                  UserAttributes="@UserAttributes"
@@ -47,7 +48,16 @@
                  MinCharacters="@MinCharacters"
                  SelectValueOnTab="@SelectValueOnTab"
                  OnlyValidateIfDirty="@OnlyValidateIfDirty"
-                 ReadOnly="@ReadOnly">
+                 ReadOnly="@ReadOnly"
+                 For="@For"
+                 Validation="@Validation"
+                 Strict="@Strict"
+                 OpenOnFocus="@OpenOnFocus"
+                 OuterClass="@OuterClass"
+                 InputClass="@InputClass"
+                 OnBlur="@OnBlur"
+                 OnKeyDown="@OnKeyDown"
+                 OnKeyUp="@OnKeyUp">
     <ItemTemplate Context="font">
         <MudText Style="@($"font-family:\"{font}\" !important")">
             <style>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using MudExtensions.Utilities;
+using System.Linq.Expressions;
 
 namespace MudExtensions;
 
@@ -133,7 +134,7 @@ public partial class MudFontPicker : MudComponentBase
     /// <summary>
     /// The maximum number of suggestions displayed in the dropdown.
     /// </summary>
-    [Parameter] public int MaxItems { get; set; } = 10;
+    [Parameter] public int? MaxItems { get; set; } = 10;
 
     /// <summary>
     /// The minimum number of characters required before searching.
@@ -230,6 +231,82 @@ public partial class MudFontPicker : MudComponentBase
     /// </summary>
     [Parameter] public Origin TransformOrigin { get; set; } = Origin.TopCenter;
 
+    /// <summary>
+    /// The model property used for form validation.
+    /// </summary>
+    [Parameter]
+    public Expression<Func<string>>? For { get; set; }
+
+    /// <summary>
+    /// The validation rules applied to the selected font.
+    /// </summary>
+    [Parameter]
+    public object? Validation { get; set; }
+
+    /// <summary>
+    /// Controls whether the autocomplete selection is restricted to
+    /// the available suggestions.
+    /// </summary>
+    [Parameter]
+    public bool Strict { get; set; } = true;
+
+    /// <summary>
+    /// Opens the suggestions popover when the input receives focus.
+    /// </summary>
+    [Parameter]
+    public bool OpenOnFocus { get; set; } = true;
+
+    /// <summary>
+    /// Additional CSS classes applied to the autocomplete's outer container.
+    /// </summary>
+    [Parameter]
+    public string? OuterClass { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes applied to the autocomplete input.
+    /// </summary>
+    [Parameter]
+    public string? InputClass { get; set; }
+
+    /// <summary>
+    /// Occurs when the input loses focus.
+    /// </summary>
+    [Parameter]
+    public EventCallback<FocusEventArgs> OnBlur { get; set; }
+
+    /// <summary>
+    /// Occurs when a key is pressed in the input.
+    /// </summary>
+    [Parameter]
+    public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
+
+    /// <summary>
+    /// Occurs when a key is released in the input.
+    /// </summary>
+    [Parameter]
+    public EventCallback<KeyboardEventArgs> OnKeyUp { get; set; }
+
+    private MudAutocomplete<string>? _autocomplete;
+
+    /// <summary>
+    /// Sets focus to the font picker input.
+    /// </summary>
+    public ValueTask FocusAsync()
+    {
+        return _autocomplete?.FocusAsync() ?? ValueTask.CompletedTask;
+    }
+
+    /// <summary>
+    /// Clears the autocomplete selection and input text.
+    /// </summary>
+    public async Task ClearAsync()
+    {
+        if (_autocomplete is not null)
+            await _autocomplete.ClearAsync();
+        else
+            await SetFontValue(null);
+    }
+
     private string? InputStyle =>
         StaticInputText || string.IsNullOrWhiteSpace(Font)
             ? Style
@@ -252,10 +329,7 @@ public partial class MudFontPicker : MudComponentBase
     /// <summary>
     /// Clears the selected font.
     /// </summary>
-    public Task ClearFont()
-    {
-        return SetFontValue(null);
-    }
+    public Task ClearFont() => ClearAsync();
 
     private async Task SetFontValue(string? font)
     {
